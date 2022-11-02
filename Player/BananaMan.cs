@@ -2,34 +2,20 @@
 
 namespace Player {
     class BananaMan : MonoSingleton<BananaMan> {
-        private BananasDataScriptableObject _activeBanana;
-        public BananaType activeWeapon = BananaType.EMPTY_HAND;
+        public BananasDataScriptableObject activeBanana;
 
-        private TpsPlayerAnimator _tpsPlayerAnimator;
-
+        public BananaType activeBananaType = BananaType.EMPTY_HAND;
+        public TpsPlayerAnimator tpsPlayerAnimator;
+        
+        [SerializeField] public Transform shootingHand;
+        
         public bool isArmed;
-        public bool isShooting;
 
-        public int health;
-        public int resistance;
+        public float health;
+        public float resistance;
         
         private void Start() {
-            _tpsPlayerAnimator = GetComponentInChildren<Animator>().GetComponent<TpsPlayerAnimator>();
-        }
-
-        public void Switch_weapon(BananaType bananaType) {
-            activeWeapon = bananaType;
-
-            if (activeWeapon == BananaType.EMPTY_HAND) {
-                isArmed = false;
-                _tpsPlayerAnimator.SwitchToUnarmedLayer();
-            }
-            else {
-                isArmed = true;
-                _tpsPlayerAnimator.SwitchToArmedLayer();
-            }
-
-            WeaponsManager.Instance.SetActiveWeapon(bananaType);
+            tpsPlayerAnimator = GetComponentInChildren<Animator>().GetComponent<TpsPlayerAnimator>();
         }
     }
 }

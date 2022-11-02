@@ -5,22 +5,22 @@ public class Inventory : MonoSingleton<Inventory> {
     
     private void Start() {
         BananaManInventory = new Dictionary<BananaType, int> {
-            {BananaType.RED, 1},
-            {BananaType.BURRO, 0},
-            {BananaType.MATOKE, 0},
-            {BananaType.TINDOK, 0},
-            {BananaType.MANZANO, 0},
-            {BananaType.BARANGAN, 0},
-            {BananaType.BLUE_JAVA, 0},
-            {BananaType.PLANTAIN, 0},
-            {BananaType.RINO_HORN, 0},
-            {BananaType.CAVENDISH, 0},
-            {BananaType.GROS_MICHEL, 0},
-            {BananaType.LADY_FINGER, 0},
-            {BananaType.PISANG_RAJA, 0},
-            {BananaType.PRAYING_HANDS, 0},
-            {BananaType.GOLD_FINGER, 0},
-            {BananaType.NANJANGUD, 0},
+            {BananaType.RED, 60},
+            {BananaType.BURRO, 60},
+            {BananaType.MATOKE, 60},
+            {BananaType.TINDOK, 60},
+            {BananaType.MANZANO, 60},
+            {BananaType.BARANGAN, 60},
+            {BananaType.BLUE_JAVA, 60},
+            {BananaType.PLANTAIN, 60},
+            {BananaType.RINO_HORN, 60},
+            {BananaType.CAVENDISH, 60},
+            {BananaType.GROS_MICHEL, 60},
+            {BananaType.LADY_FINGER, 60},
+            {BananaType.PISANG_RAJA, 60},
+            {BananaType.PRAYING_HANDS, 60},
+            {BananaType.GOLD_FINGER, 60},
+            {BananaType.NANJANGUD, 60},
             {BananaType.EMPTY_HAND, 1}
         };
     }

@@ -9,8 +9,7 @@ namespace Player {
         private int _playerXMovementAnimationId;
         private int _playerJumpAnimationId;
 
-        private int _layerArmed;
-        private int _layerUnarmed;
+        private int _layerArmsOnly;
         
         private void Start() {
             _playerAnimator = GetComponent<Animator>();
@@ -18,8 +17,7 @@ namespace Player {
             _playerXMovementAnimationId = Animator.StringToHash("Movement X");
             _playerJumpAnimationId = Animator.StringToHash("JUMP");
 
-            _layerUnarmed = _playerAnimator.GetLayerIndex("Unarmed");
-            _layerArmed = _playerAnimator.GetLayerIndex("Armed");
+            _layerArmsOnly = _playerAnimator.GetLayerIndex("Arms Layer");
         }
     
         public void UpdateMovementAnimation(float movementIntensityZ, float movementIntensityX) {
@@ -31,15 +29,18 @@ namespace Player {
             _playerAnimator.SetTrigger(_playerJumpAnimationId);
         }
 
-        public void SwitchToUnarmedLayer() {
-            _playerAnimator.SetLayerWeight(_layerUnarmed, 1);
-            _playerAnimator.SetLayerWeight(_layerArmed, 0);
+        public void ThrowAnimation() {
+            _playerAnimator.SetLayerWeight(_layerArmsOnly, 1);
+            _playerAnimator.SetTrigger("throw");
+        }
+        
+        public void BananaNotFound() {
+            _playerAnimator.SetLayerWeight(_layerArmsOnly, 1);
+            _playerAnimator.SetTrigger("searching");
         }
 
-        public void SwitchToArmedLayer() {
-            _playerAnimator.SetLayerWeight(_layerUnarmed, 0);
-            _playerAnimator.SetLayerWeight(_layerArmed, 1);
+        public void ExitArmsOnlyLayer() {
+            _playerAnimator.SetLayerWeight(_layerArmsOnly, 0);
         }
-
     }
 }

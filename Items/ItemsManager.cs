@@ -1,4 +1,5 @@
-﻿using Enums;
+﻿using Bosses;
+using Enums;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -36,6 +37,10 @@ namespace Items {
                                 );
                             // TODO popup addedd quantity notification
                             // TODO change bananier state to baby bananier
+                            break;
+                        case ItemType.BOSS_FIGHT_LAUNCHER:
+                            GameManager.Instance.isBossFigthing = true;
+                            BossManager.Instance.StartBossFight();
                             break;
                     }
                 }

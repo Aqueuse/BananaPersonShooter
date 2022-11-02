@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using UI.InGame;
+using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
@@ -8,11 +9,14 @@ namespace UI {
         public GameObject gameMenu;
         public GameObject optionsMenu;
         public GameObject inventory;
+        public GameObject slotsPanel;
+        public GameObject HUDPanel;
 
         private CanvasGroup _homeMenuCanvasGroup;
         private CanvasGroup _gameMenuCanvasGroup;
         private CanvasGroup _optionsMenuCanvasGroup;
         private CanvasGroup _inventoryCanvasGroup;
+        private CanvasGroup _hudCanvasGroup;
         
         private GameObject _firstGameMenuItem;
         private GameObject _firstHomeMenuItem;
@@ -27,6 +31,7 @@ namespace UI {
             _gameMenuCanvasGroup = gameMenu.GetComponent<CanvasGroup>();
             _optionsMenuCanvasGroup = optionsMenu.GetComponent<CanvasGroup>();
             _inventoryCanvasGroup = inventory.GetComponent<CanvasGroup>();
+            _hudCanvasGroup = HUDPanel.GetComponent<CanvasGroup>();
 
             EventSystem.current.SetSelectedGameObject(_firstHomeMenuItem);
         }
@@ -92,11 +97,23 @@ namespace UI {
                 Focus_inventory();
             }
         }
-        
-        void Focus_inventory() {
+
+        public void Show_HUD() {
+            Set_active(_hudCanvasGroup, true);
+        }
+
+        public void Hide_HUD() {
+            Set_active(_hudCanvasGroup, false);
+        }
+
+        public void Focus_inventory() {
             EventSystem.current.SetSelectedGameObject(UInventory.Instance.lastselectedInventoryItem);
         }
-        
+
+        public void Focus_SlotsPanel() {
+            EventSystem.current.SetSelectedGameObject(slotsPanel);
+        }
+
         void Set_active(CanvasGroup canvasGroup, bool visible) {
             canvasGroup.alpha = visible ? 1 : 0;
             canvasGroup.interactable = visible;

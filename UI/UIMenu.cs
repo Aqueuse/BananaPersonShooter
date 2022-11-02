@@ -1,20 +1,22 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-public class UIMenu : MonoBehaviour {
-    [SerializeField] private GameObject[] tabs;
-    [SerializeField] private Image[] tabsButtons;
+namespace UI {
+    public class UIMenu : MonoBehaviour {
+        [SerializeField] private GameObject[] tabs;
+        [SerializeField] private Image[] tabsButtons;
 
-    [SerializeField] Color activatedColor;
-    [SerializeField] Color unactivatedColor;
+        [SerializeField] Color activatedColor;
+        [SerializeField] Color unactivatedColor;
     
-    public void Switch_to_Tab(int index) {
-        for (var i=0; i<tabs.Length; i++) {
-            tabs[i].SetActive(false);
-            tabsButtons[i].color = unactivatedColor;
-        }
+        public void Switch_to_Tab(int index) {
+            for (var i=0; i<tabs.Length; i++) {
+                tabs[i].SetActive(false);
+                tabsButtons[i].color = unactivatedColor;
+            }
         
-        tabs[index].SetActive(true);
-        tabsButtons[index].color = activatedColor;
+            tabs[index].SetActive(true);
+            tabsButtons[index].color = activatedColor;
+        }
     }
 }

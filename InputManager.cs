@@ -1,17 +1,55 @@
-﻿using UI;
+﻿using UI.InGame;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class InputManager : MonoSingleton<InputManager> {
-    public BananaType ShortCut1 = BananaType.EMPTY_HAND;
-    public BananaType ShortCut2 = BananaType.EMPTY_HAND;
-    public BananaType ShortCut3 = BananaType.EMPTY_HAND;
-    
-    public void Assigne_Weapon_To_Shortcut_1(InputAction.CallbackContext context) {
+    public void SwitchToLeftSlot(InputAction.CallbackContext context) {
         if (context.performed && GameManager.Instance.isPlaying) {
-            if (UIManager.Instance.inventory.GetComponent<CanvasGroup>().alpha > 0.5f) {
-                ShortCut1 = UIManager.Instance.selectedWeapon;
-            }
+            UISlotsManager.Instance.Select_Left_Slot();
+        }
+    }
+    
+    public void SwitchToRightSlot(InputAction.CallbackContext context) {
+        if (context.performed && GameManager.Instance.isPlaying) {
+            UISlotsManager.Instance.Select_Right_Slot();
+        }
+    }
+    
+    public void Scroll_Slots(InputAction.CallbackContext context) {
+        if (context.performed && GameManager.Instance.isPlaying) {
+            float scrollValue = context.ReadValue<Vector2>().y;
+            if (scrollValue < 0) UISlotsManager.Instance.Select_Left_Slot();
+            if (scrollValue > 0) UISlotsManager.Instance.Select_Right_Slot();
+        }
+    }
+    
+    public void Select_Slot_0(InputAction.CallbackContext context) {
+        if (context.performed && GameManager.Instance.isPlaying) {
+            UISlotsManager.Instance.Switch_To_Slot(0);
+        }
+    }
+
+    public void Select_Slot_1(InputAction.CallbackContext context) {
+        if (context.performed && GameManager.Instance.isPlaying) {
+            UISlotsManager.Instance.Switch_To_Slot(1);
+        }
+    }
+
+    public void Select_Slot_2(InputAction.CallbackContext context) {
+        if (context.performed && GameManager.Instance.isPlaying) {
+            UISlotsManager.Instance.Switch_To_Slot(2);
+        } 
+    }
+
+    public void Select_Slot_3(InputAction.CallbackContext context) {
+        if (context.performed && GameManager.Instance.isPlaying) {
+            UISlotsManager.Instance.Switch_To_Slot(3);
+        }
+    }
+
+    public void Select_Slot_4(InputAction.CallbackContext context) {
+        if (context.performed && GameManager.Instance.isPlaying) {
+            UISlotsManager.Instance.Switch_To_Slot(4);
         }
     }
 }

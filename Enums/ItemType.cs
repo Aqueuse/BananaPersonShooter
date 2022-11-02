@@ -1,6 +1,7 @@
 ﻿namespace Enums {
     public enum ItemType {
         DOOR,
-        REGIME
+        REGIME,
+        BOSS_FIGHT_LAUNCHER
     }
 }

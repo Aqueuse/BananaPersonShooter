@@ -19,15 +19,19 @@ public class GameManager : MonoSingleton<GameManager> {
     private Vector3 _lastPositionOnMap;
 
     public bool isPlaying;
+    public bool isBossFigthing = true;
     
     private void Start() {
         _bananaMan = BananaMan.Instance.gameObject;
         _cameraMain = Camera.main;
-
-        LoadPlayerPrefs();
     }
 
     void LoadPlayerPrefs() {
+        foreach (var bananaSlot in BananasTypeReference.Reference) {
+             Inventory.Instance.BananaManInventory[bananaSlot.Key] = PlayerPrefs.GetInt(bananaSlot.Key.ToString(), 0);
+        }
+        Inventory.Instance.BananaManInventory[BananaType.EMPTY_HAND] = 1;
+        
         var initialSpawnPosition = initialSpawnTransform.position;
         
         _lastPositionOnMap = new Vector3(
@@ -78,6 +82,10 @@ public class GameManager : MonoSingleton<GameManager> {
         PlayerPrefs.SetFloat("PlayerXPosition", playerPosition.x);
         PlayerPrefs.SetFloat("PlayerYPosition", playerPosition.y);
         PlayerPrefs.SetFloat("PlayerZPosition", playerPosition.z);
+        
+        foreach (var bananaSlot in Inventory.Instance.BananaManInventory) {
+            PlayerPrefs.SetInt(bananaSlot.Key.ToString(), bananaSlot.Value);
+        }
     }
 
     public void ReturnHome() {
@@ -86,6 +94,7 @@ public class GameManager : MonoSingleton<GameManager> {
         
         SwitchScene("Home", homeSpawnTransform.position);
         UIManager.Instance.Show_home_menu();
+        UIManager.Instance.Hide_HUD();
         
         Time.timeScale = 1; // reset the time scale to play animations in Home scene
 
@@ -99,6 +108,7 @@ public class GameManager : MonoSingleton<GameManager> {
 
     IEnumerator LoadScene(string sceneName, Vector3 spawnPoint) {
         AsyncOperation load = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Single);
+        if (sceneName.Equals("BossRoom")) isBossFigthing = false;
 
         // Wait until the asynchronous scene fully loads
         while (!load.isDone) {
@@ -108,9 +118,13 @@ public class GameManager : MonoSingleton<GameManager> {
         if (load.isDone) {
             SceneManager.SetActiveScene(SceneManager.GetSceneByName(sceneName));
             BananaMan.Instance.transform.position = spawnPoint;
-            
             ItemsManager.Instance.lootMessage.SetActive(false);
+            
             loadingScreen.SetActive(false);
+
+            if (sceneName != "Home") {
+                UIManager.Instance.Show_HUD();
+            }
 
             Set_Playing_State(sceneName != "Home");
         }
@@ -118,12 +132,13 @@ public class GameManager : MonoSingleton<GameManager> {
 
     void Set_Playing_State(bool isGamePlaying) {
         _cameraMain.GetComponent<ThirdPersonOrbitCamBasic>().enabled = isGamePlaying;
-
         _bananaMan.GetComponent<PlayerInput>().SwitchCurrentActionMap(isGamePlaying ? "Player" : "UI");
     }
 
     public void SwitchScene(string sceneName, Vector3 spawnPoint) {
         Set_Playing_State(false);
+        UIManager.Instance.Hide_HUD();
+        ItemsManager.Instance.lootMessage.SetActive(false);
         
         loadingScreen.SetActive(true);
         StartCoroutine(LoadScene(sceneName, spawnPoint));
