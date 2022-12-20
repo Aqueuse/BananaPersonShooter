@@ -12,12 +12,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9aa579ee7e77bb468bc13896355d2a8, type: 3}
   m_Name: LadyFingerBananaData
   m_EditorClassIdentifier: 
-  banana_name: Lady Finger
-  bananaDescription: Se divise en cinq bananes
+  bananaName: Lady Finger
+  sprite: {fileID: 21300000, guid: 2b806cf4313761348a254d668b606357, type: 3}
+  bananaDescription:
+  - Split in five bananas
+  - Se divise en cinq bananes
+  bananaEffects:
+  - circle damage
+  - "d\xE9g\xE2ts circulaires"
   regimeQuantity: 60
   damage: 1
-  damage_time: 0
+  damageTime: 0
   healthBonus: 1
   resistanceBonus: 1
   bananaType: 7
-  bananaEffect: 9
+  bananaEffect: 8

@@ -1,22 +1,35 @@
-﻿using UnityEngine;
-using UnityEngine.UI;
+﻿using TMPro;
+using UnityEngine;
 
 namespace UI {
-    public class UIOptionsMenu : MonoBehaviour {
-        [SerializeField] private GameObject[] tabs;
-        [SerializeField] private Image[] tabsButtons;
-
-        [SerializeField] Color activatedColor;
-        [SerializeField] Color unactivatedColor;
-    
-        public void Switch_to_Tab(int index) {
-            for (var i=0; i<tabs.Length; i++) {
-                tabs[i].SetActive(false);
-                tabsButtons[i].color = unactivatedColor;
-            }
+    public class UIOptionsMenu : MonoSingleton<UIOptionsMenu> {
+        [SerializeField] private GameObject saveMessage;
+        [SerializeField] private TextMeshProUGUI lastSaveTimestamp;
         
-            tabs[index].SetActive(true);
-            tabsButtons[index].color = activatedColor;
+        [SerializeField] private GameObject deleteSaveButton;
+        [SerializeField] private GameObject yesButton;
+        [SerializeField] private GameObject noButton;
+
+        public void SetActualDateAndHour(string timestanp) {
+            saveMessage.SetActive(true);
+            lastSaveTimestamp.text = timestanp;
+        }
+
+        public void EmptyDateAndHour() {
+            saveMessage.SetActive(false);
+            lastSaveTimestamp.text = "";
+        }
+
+        public void ResetGameState() {
+            deleteSaveButton.SetActive(false);
+            yesButton.SetActive(true);
+            noButton.SetActive(true);
+        }
+
+        public void HideConfirmationMessage() {
+            deleteSaveButton.SetActive(true);
+            yesButton.SetActive(false);
+            noButton.SetActive(false);
         }
     }
 }

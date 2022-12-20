@@ -12,12 +12,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9aa579ee7e77bb468bc13896355d2a8, type: 3}
   m_Name: PlantainBananaData
   m_EditorClassIdentifier: 
-  banana_name: Plantain
-  bananaDescription: Lance deux munitions
+  bananaName: Plantain
+  sprite: {fileID: 21300000, guid: 51fc44a1d27d82247a0e9c3000b13926, type: 3}
+  bananaDescription:
+  - Split in two ammo
+  - "Se s\xE9pare en deux munitions"
+  bananaEffects:
+  - Throw two bananas in a horizontal line
+  - Lance deux bananes sur une ligne horizontale
   regimeQuantity: 60
   damage: 2
-  damage_time: 0
+  damageTime: 0
   healthBonus: 1
   resistanceBonus: 1
-  bananaType: 12
-  bananaEffect: 8
+  bananaType: 13
+  bananaEffect: 7

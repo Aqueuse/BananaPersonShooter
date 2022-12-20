@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System;
+using Settings;
+using UnityEngine;
 using UnityEngine.InputSystem;
 
 // This class corresponds to the 3rd person camera features.
@@ -12,8 +14,8 @@ namespace Cameras {
         [SerializeField] private Vector3 camOffset; // Offset to relocate the camera related to the player position.
 
         [SerializeField] private float smooth ; // Speed of camera responsiveness.
-        [SerializeField] private float horizontalSensibility; // Horizontal turn speed.
-        [SerializeField] private float verticalSensibility; // Vertical turn speed.
+        public float horizontalSensibility; // Horizontal turn speed.
+        public float verticalSensibility; // Vertical turn speed.
         public float maxVerticalAngle = 30f; // Camera max clamp angle. 
         public float minVerticalAngle = -60f; // Camera min clamp angle.
         
@@ -29,6 +31,8 @@ namespace Cameras {
         private float _targetMaxVerticalAngle; // Custom camera max vertical clamp angle.
         private bool _isCustomOffset; // Boolean to determine whether or not a custom camera offset is being used.
 
+        public LayerMask layerMaskExcludeCollisionWithCamera;
+
         // Get the camera horizontal angle.
         public float GetH {
             get {
@@ -36,10 +40,14 @@ namespace Cameras {
             }
         }
 
-        void Awake() {
+        private void Start() {
             // Reference to the camera transform.
             _cam = transform;
 
+            // Vertical and Horizontal sensibility
+            horizontalSensibility = GameSettings.Instance.horizontalCameraSensibility;
+            verticalSensibility = GameSettings.Instance.verticalCameraSensibility;
+            
             // Set camera default position.
             _cam.position = player.position + Quaternion.identity * pivotOffset + Quaternion.identity * camOffset;
             _cam.rotation = Quaternion.identity;
@@ -58,6 +66,12 @@ namespace Cameras {
             if (camOffset.y > 0)
                 Debug.LogWarning("Vertical Cam Offset (Y) will be ignored during collisions!\n" +
                                  "It is recommended to set all vertical offset in Pivot Offset.");
+        }
+
+        private void OnEnable() {
+            // Vertical and Horizontal sensibility
+            horizontalSensibility = GameSettings.Instance.horizontalCameraSensibility;
+            verticalSensibility = GameSettings.Instance.verticalCameraSensibility;
         }
 
         void Update() {
@@ -164,8 +178,9 @@ namespace Cameras {
             // Cast target and direction.
             Vector3 target = player.position + pivotOffset;
             Vector3 direction = target - checkPos;
+            
             // If a raycast from the check position to the player hits something...
-            if (Physics.SphereCast(checkPos, 0.2f, direction, out RaycastHit hit, direction.magnitude)) {
+            if (Physics.SphereCast(checkPos, 0.2f, direction, out RaycastHit hit, direction.magnitude, layerMaskExcludeCollisionWithCamera)) {
                 // ... if it is not the player...
                 if (hit.transform != player && !hit.transform.GetComponent<Collider>().isTrigger) {
                     // This position isn't appropriate.
@@ -182,7 +197,7 @@ namespace Cameras {
             // Cast origin and direction.
             Vector3 origin = player.position + pivotOffset;
             Vector3 direction = checkPos - origin;
-            if (Physics.SphereCast(origin, 0.2f, direction, out RaycastHit hit, direction.magnitude)) {
+            if (Physics.SphereCast(origin, 0.2f, direction, out RaycastHit hit, direction.magnitude, layerMaskExcludeCollisionWithCamera)) {
                 if (hit.transform != player && hit.transform != transform &&
                     !hit.transform.GetComponent<Collider>().isTrigger) {
                     return false;

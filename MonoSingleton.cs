@@ -1,11 +1,10 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 /// <summary>
 /// Helper to create singleton, public class UneClasse : MonoSingleton<UneClasse>
 /// </summary>
 /// <typeparam name="T"></typeparam>
+///
 public abstract class MonoSingleton<T> : MonoBehaviour where T : MonoBehaviour
 {
     private static T _instance;
@@ -14,8 +13,8 @@ public abstract class MonoSingleton<T> : MonoBehaviour where T : MonoBehaviour
         get {
             // Instance requiered for the first time, we look for it
             if (_instance == null) {
-                Debug.Log(typeof(T).ToString() + " is NULL");
-                _instance = GameObject.FindObjectOfType(typeof(T)) as T;
+                Debug.Log(typeof(T) + " is NULL");
+                _instance = FindObjectOfType(typeof(T)) as T;
             }
 
             return _instance;
@@ -24,7 +23,7 @@ public abstract class MonoSingleton<T> : MonoBehaviour where T : MonoBehaviour
 
     private void Awake() {
         if (_instance != null && _instance != this) {
-            Destroy(this.gameObject);
+            Destroy(gameObject);
         }
         else {
             _instance = this as T;
@@ -34,4 +33,8 @@ public abstract class MonoSingleton<T> : MonoBehaviour where T : MonoBehaviour
     }
 
     public virtual void Init() { }
+
+    private void OnApplicationQuit() {
+        _instance = null;
+    }
 }

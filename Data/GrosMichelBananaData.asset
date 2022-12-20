@@ -12,11 +12,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9aa579ee7e77bb468bc13896355d2a8, type: 3}
   m_Name: GrosMichelBananaData
   m_EditorClassIdentifier: 
-  banana_name: Gros Michel
-  bananaDescription: "Grosse banane blind\xE9e"
+  bananaName: Gros Michel
+  sprite: {fileID: 21300000, guid: 31439fbe8779c6140ba78790fcf12553, type: 3}
+  bananaDescription:
+  - Big Heavy Banana
+  - "Grosse banane blind\xE9e"
+  bananaEffects:
+  - Much more damage, much more resistance
+  - "Beaucoup de d\xE9g\xE2ts, beaucoup plus de r\xE9sistance"
   regimeQuantity: 60
   damage: 2
-  damage_time: 0
+  damageTime: 0
   healthBonus: 1
   resistanceBonus: 2
   bananaType: 6

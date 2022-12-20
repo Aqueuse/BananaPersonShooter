@@ -1,35 +1,52 @@
-﻿using UnityEngine;
+﻿using Enums;
+using UI.InGame;
+using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace Player {
     class BananaMan : MonoSingleton<BananaMan> {
-        private BananasDataScriptableObject _activeBanana;
-        public BananaType activeWeapon = BananaType.EMPTY_HAND;
+        public BananasDataScriptableObject activeBanana;
 
-        private TpsPlayerAnimator _tpsPlayerAnimator;
-
+        public BananaType activeBananaType = BananaType.EMPTY_HAND;
+        public TpsPlayerAnimator tpsPlayerAnimator;
+        
         public bool isArmed;
-        public bool isShooting;
+        public bool isInAir;
 
-        public int health;
-        public int resistance;
+        public float health;
+        public float resistance;
         
         private void Start() {
-            _tpsPlayerAnimator = GetComponentInChildren<Animator>().GetComponent<TpsPlayerAnimator>();
+            tpsPlayerAnimator = GetComponentInChildren<Animator>().GetComponent<TpsPlayerAnimator>();
         }
 
-        public void Switch_weapon(BananaType bananaType) {
-            activeWeapon = bananaType;
+        public void GainHealth(InputAction.CallbackContext context) {
+            health += activeBanana.healthBonus;
+            resistance += activeBanana.resistanceBonus;
+            
+            UIVitals.Instance.Set_Health(health);
+            UIVitals.Instance.Set_Resistance(resistance);
+        }
 
-            if (activeWeapon == BananaType.EMPTY_HAND) {
-                isArmed = false;
-                _tpsPlayerAnimator.SwitchToUnarmedLayer();
+        public void TakeDamage(int damageAmount) {
+            if (resistance-damageAmount > 0) {
+                resistance -= damageAmount;
             }
+
             else {
-                isArmed = true;
-                _tpsPlayerAnimator.SwitchToArmedLayer();
+                resistance = 0;
+                health -= damageAmount;
             }
+            
+            UIVitals.Instance.Set_Health(health);
+            UIVitals.Instance.Set_Resistance(resistance);
 
-            WeaponsManager.Instance.SetActiveWeapon(bananaType);
+            if (health - damageAmount <= 0) {
+                UIVitals.Instance.Set_Health(0);
+                GameManager.Instance.Death();
+            }
+            
+            UIFace.Instance.GetHurted(health < 50);
         }
     }
 }

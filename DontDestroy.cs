@@ -8,7 +8,6 @@ public class DontDestroy : MonoBehaviour {
             Destroy(GameObject.FindWithTag("Global Container"));
         }
         
-        
         DontDestroyOnLoad(GameObject.FindWithTag("Global Container"));
     }
 }

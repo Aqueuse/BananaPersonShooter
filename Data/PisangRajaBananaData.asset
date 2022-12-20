@@ -12,12 +12,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9aa579ee7e77bb468bc13896355d2a8, type: 3}
   m_Name: PisangRajaBananaData
   m_EditorClassIdentifier: 
-  banana_name: Pisang Raja
-  bananaDescription: "Petite banane tr\xE8s \xE9paisse"
+  bananaName: Pisang Raja
+  sprite: {fileID: 21300000, guid: 6fdba3cd7fdc53c4d826500e4c7568ef, type: 3}
+  bananaDescription:
+  - Very brave little banana
+  - "Petite banane tr\xE8s courageuse"
+  bananaEffects:
+  - ordinary satiety, double healing
+  - "sati\xE9t\xE9 ordinaire, soin doubl\xE9"
   regimeQuantity: 60
   damage: 1
-  damage_time: 0
+  damageTime: 0
   healthBonus: 2
   resistanceBonus: 1
-  bananaType: 11
+  bananaType: 12
   bananaEffect: 0

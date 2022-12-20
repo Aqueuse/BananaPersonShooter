@@ -1,11 +1,12 @@
 ﻿using System.Collections.Generic;
+using Enums;
 using UnityEngine;
 
 public class BananasTypeReference : MonoBehaviour {
-    public static Dictionary<BananaType, int> Reference;
+    public static Dictionary<BananaType, int> reference;
 
     private void Start() {
-        Reference = new Dictionary<BananaType, int> {
+        reference = new Dictionary<BananaType, int> {
             {BananaType.BARANGAN, 0},
             {BananaType.BLUE_JAVA, 1},
             {BananaType.BURRO, 2},
@@ -16,13 +17,14 @@ public class BananasTypeReference : MonoBehaviour {
             {BananaType.LADY_FINGER, 7},
             {BananaType.MANZANO, 8},
             {BananaType.MATOKE, 9},
-            {BananaType.NANJANGUD, 10},
-            {BananaType.PISANG_RAJA, 11},
-            {BananaType.PLANTAIN, 12},
-            {BananaType.PRAYING_HANDS, 13},
-            {BananaType.RED, 14},
-            {BananaType.RINO_HORN, 15},
-            {BananaType.TINDOK, 16}
+            {BananaType.MUSA_VELUTINA, 10},
+            {BananaType.NANJANGUD, 11},
+            {BananaType.PISANG_RAJA, 12},
+            {BananaType.PLANTAIN, 13},
+            {BananaType.PRAYING_HANDS, 14},
+            {BananaType.RED, 15},
+            {BananaType.RINO_HORN, 16},
+            {BananaType.TINDOK, 17}
         };
     }
 }

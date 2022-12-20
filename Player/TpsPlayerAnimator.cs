@@ -3,23 +3,28 @@
 namespace Player {
     public class TpsPlayerAnimator : MonoBehaviour {
         private Animator _playerAnimator;
-        
-        //Animation String IDs
-        private int _playerZMovementAnimationId;
-        private int _playerXMovementAnimationId;
-        private int _playerJumpAnimationId;
+        private int _layerArmsOnly;
+        private int _focusLayer;
+        private int _freeMoveLayer;
 
-        private int _layerArmed;
-        private int _layerUnarmed;
+        //Animation String IDs
+        private readonly int _playerZMovementAnimationId = Animator.StringToHash("Movement Z");
+        private readonly int _playerXMovementAnimationId = Animator.StringToHash("Movement X");
+        private readonly int _playerThrowAnimationId = Animator.StringToHash("throw");
+        private readonly int _playerSearchAnimationId = Animator.StringToHash("searching");
         
+        private static readonly int JumpID = Animator.StringToHash("JUMP");
+        private static readonly int RollID = Animator.StringToHash("ROLL");
+        private static readonly int Getup = Animator.StringToHash("GETUP");
+        private static readonly int IsInAirID = Animator.StringToHash("IS IN AIR");
+        private static readonly int IsMovingID = Animator.StringToHash("IS MOVING");
+
         private void Start() {
             _playerAnimator = GetComponent<Animator>();
-            _playerZMovementAnimationId = Animator.StringToHash("Movement Z");
-            _playerXMovementAnimationId = Animator.StringToHash("Movement X");
-            _playerJumpAnimationId = Animator.StringToHash("JUMP");
+            _layerArmsOnly = _playerAnimator.GetLayerIndex("Arms Layer");
 
-            _layerUnarmed = _playerAnimator.GetLayerIndex("Unarmed");
-            _layerArmed = _playerAnimator.GetLayerIndex("Armed");
+            _focusLayer = _playerAnimator.GetLayerIndex("FOCUS");
+            _freeMoveLayer = _playerAnimator.GetLayerIndex("FREE MOVE");
         }
     
         public void UpdateMovementAnimation(float movementIntensityZ, float movementIntensityX) {
@@ -27,19 +32,50 @@ namespace Player {
             _playerAnimator.SetFloat(_playerXMovementAnimationId, movementIntensityX);
         }
 
+        public void ThrowAnimation() {
+            _playerAnimator.SetLayerWeight(_layerArmsOnly, 1);
+            _playerAnimator.SetTrigger(_playerThrowAnimationId);
+        }
+
         public void Jump() {
-            _playerAnimator.SetTrigger(_playerJumpAnimationId);
+            _playerAnimator.SetTrigger(JumpID);
         }
 
-        public void SwitchToUnarmedLayer() {
-            _playerAnimator.SetLayerWeight(_layerUnarmed, 1);
-            _playerAnimator.SetLayerWeight(_layerArmed, 0);
+        public void IsInAir(bool isInAir) {
+            _playerAnimator.SetBool(IsInAirID, isInAir);
         }
 
-        public void SwitchToArmedLayer() {
-            _playerAnimator.SetLayerWeight(_layerUnarmed, 0);
-            _playerAnimator.SetLayerWeight(_layerArmed, 1);
+        public void IsMoving(bool isMoving) {
+            _playerAnimator.SetBool(IsMovingID, isMoving);
         }
 
+        public void Roll() {
+            _playerAnimator.SetTrigger(RollID);
+        }
+
+        public void GetUp() {
+            _playerAnimator.SetTrigger(Getup);
+
+        }
+
+        public void FocusCamera(bool isFocusCam) {
+            if (isFocusCam) {
+                _playerAnimator.SetLayerWeight(_focusLayer, 1);
+                _playerAnimator.SetLayerWeight(_freeMoveLayer, 0);
+            }
+            else {
+                _playerAnimator.SetLayerWeight(_focusLayer, 0);
+                _playerAnimator.SetLayerWeight(_freeMoveLayer, 1);
+            }
+        }
+
+        public void BananaNotFound() {
+            _playerAnimator.SetLayerWeight(_layerArmsOnly, 1);
+            _playerAnimator.SetTrigger(_playerSearchAnimationId);
+        }
+
+        public void ExitArmsOnlyLayer() {
+            _playerAnimator.SetLayerWeight(_layerArmsOnly, 0);
+        }
     }
 }

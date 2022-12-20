@@ -12,11 +12,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9aa579ee7e77bb468bc13896355d2a8, type: 3}
   m_Name: EmptyHandData
   m_EditorClassIdentifier: 
-  banana_name: 
-  bananaDescription: Vos mains
+  bananaName: Empty hands
+  sprite: {fileID: 0}
+  bananaDescription:
+  - Your hands
+  - Vos mains
+  bananaEffects:
+  - Allow to rebuild the world
+  - Permettent de rebatir le monde
   regimeQuantity: 60
   damage: 0
-  damage_time: 0
+  damageTime: 0
   healthBonus: 0
   resistanceBonus: 0
   bananaType: 4

@@ -12,11 +12,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9aa579ee7e77bb468bc13896355d2a8, type: 3}
   m_Name: CavendishBananaData
   m_EditorClassIdentifier: 
-  banana_name: Cavendish
-  bananaDescription: La banane de base
+  bananaName: Cavendish
+  sprite: {fileID: 21300000, guid: 78d734baad5807a468cd9ec3100c26b8, type: 3}
+  bananaDescription:
+  - The basic banana
+  - La banane de base
+  bananaEffects:
+  - No particular effect, just tasty
+  - Aucun effet particulier, juste savoureuse
   regimeQuantity: 60
   damage: 1
-  damage_time: 0
+  damageTime: 0
   healthBonus: 1
   resistanceBonus: 1
   bananaType: 3

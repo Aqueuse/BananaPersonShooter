@@ -1,4 +1,6 @@
-﻿enum GameState {
-    HOME,
-    PLAY
+﻿namespace Enums {
+    enum GameState {
+        HOME,
+        PLAY
+    }
 }

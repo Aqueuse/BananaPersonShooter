@@ -12,12 +12,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9aa579ee7e77bb468bc13896355d2a8, type: 3}
   m_Name: ManzanoBananaData
   m_EditorClassIdentifier: 
-  banana_name: Manzano
-  bananaDescription: Petite grenade
+  bananaName: Manzano
+  sprite: {fileID: 21300000, guid: 3a5430ed90fc95043baf76a87f11f5fb, type: 3}
+  bananaDescription:
+  - small grenade
+  - Petite grenade
+  bananaEffects:
+  - small grenade, explode at the impact, which destabilizes monkeys for a few seconds
+  - "petite grenade, explose \xE0 l\u2019impact, ce qui d\xE9stabilise les singes
+    quelques secondes"
   regimeQuantity: 60
   damage: 1.5
-  damage_time: 0
+  damageTime: 0
   healthBonus: 1
   resistanceBonus: 1
   bananaType: 8
-  bananaEffect: 5
+  bananaEffect: 4

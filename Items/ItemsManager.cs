@@ -1,4 +1,6 @@
-﻿using Enums;
+﻿using Bosses;
+using Enums;
+using UI.InGame;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -30,12 +32,16 @@ namespace Items {
                             LeaveInteraction();
                             break;
                         case ItemType.REGIME:
-                            Inventory.Instance.AddQuantity(
-                                _interactedObject.GetComponent<Regime>().bananasDataScriptableObject.bananaType, 
-                                _interactedObject.GetComponent<Regime>().bananasDataScriptableObject.regimeQuantity
-                                );
-                            // TODO popup addedd quantity notification
+                            var bananaType = _interactedObject.GetComponent<Regime>().bananasDataScriptableObject.bananaType;
+                            var quantity = _interactedObject.GetComponent<Regime>().bananasDataScriptableObject
+                                .regimeQuantity;
+
+                            Inventory.Instance.AddQuantity(bananaType, quantity);
+                            UIQueuedMessages.Instance.AddMessage("+ "+quantity+" "+bananaType.ToString().ToLower()+" bananas");
                             // TODO change bananier state to baby bananier
+                            break;
+                        case ItemType.BOSS_FIGHT_LAUNCHER:
+                            BossManager.Instance.StartBossFight(BossType.KELSAIK);
                             break;
                     }
                 }
@@ -50,9 +56,17 @@ namespace Items {
         void ShowLootMessage() {
             lootMessage.SetActive(true);
         }
-        
+
+        private void OnTriggerEnter(Collider other) {
+            if (other.gameObject.layer == _itemsLayerMask.value && GameManager.Instance.isGamePlaying) {
+                if (other.gameObject.GetComponent<Item>().itemType == ItemType.BOSS_FIGHT_LAUNCHER) {
+                    UIFace.Instance.GetIntrigued();
+                }
+            }
+        }
+
         private void OnTriggerStay(Collider other) {
-            if (other.gameObject.layer == _itemsLayerMask.value) {
+            if (other.gameObject.layer == _itemsLayerMask.value && GameManager.Instance.isGamePlaying) {
                 if (other.gameObject != _interactedObject) {
                     ShowLootMessage();
                     Interact(other.gameObject);

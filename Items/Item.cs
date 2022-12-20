@@ -1,5 +1,8 @@
 ﻿using Enums;
 using UnityEngine;
-public class Item : MonoBehaviour {
-    public ItemType itemType;
+
+namespace Items {
+    public class Item : MonoBehaviour {
+        public ItemType itemType;
+    }
 }
