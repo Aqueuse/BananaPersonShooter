@@ -25,17 +25,17 @@ namespace Settings {
         
         private FullScreenMode _fullScreenMode;
 
-        private string isFullscreen;
-        private int resolution;
-        private string isVsync;
+        private string _isFullscreen;
+        private int _resolution;
+        private string _isVsync;
 
         public float horizontalCameraSensibility = 0.1f;
         public float verticalCameraSensibility = 0.1f;
         
         private InputActionRebindingExtensions.RebindingOperation _rebindingOperation;
-        private InputAction inputAction;
+        private InputAction _inputAction;
         
-        private string keymapBinding;
+        private string _keymapBinding;
         public int languageIndexSelected;
 
         private void Start() {
@@ -50,12 +50,12 @@ namespace Settings {
             AudioManager.Instance.ambianceLevel = PlayerPrefs.GetFloat("ambianceLevel", 0.1f);
             AudioManager.Instance.effectsLevel = PlayerPrefs.GetFloat("effectsLevel", 0.1f);
 
-            isFullscreen = PlayerPrefs.GetString("isFullscreen", "false");
-            isVsync = PlayerPrefs.GetString("isVSync", "false");
-            resolution = PlayerPrefs.GetInt("resolution", 3);
+            _isFullscreen = PlayerPrefs.GetString("isFullscreen", "false");
+            _isVsync = PlayerPrefs.GetString("isVSync", "false");
+            _resolution = PlayerPrefs.GetInt("resolution", 3);
 
             languageIndexSelected = PlayerPrefs.GetInt("language", 1);
-            keymapBinding = PlayerPrefs.GetString("keymap_binding", null);
+            _keymapBinding = PlayerPrefs.GetString("keymap_binding", null);
 
             horizontalCameraSensibility = PlayerPrefs.GetFloat("LookSensibility", 0.1f);
             verticalCameraSensibility = horizontalCameraSensibility;
@@ -64,21 +64,21 @@ namespace Settings {
             SetAmbianceVolume(AudioManager.Instance.ambianceLevel);
             SetEffectVolume(AudioManager.Instance.effectsLevel);
             
-            BananaMan.Instance.GetComponent<PlayerInput>().actions.LoadBindingOverridesFromJson(keymapBinding);
+            BananaMan.Instance.GetComponent<PlayerInput>().actions.LoadBindingOverridesFromJson(_keymapBinding);
             LocalizationSettings.SelectedLocale = LocalizationSettings.AvailableLocales.Locales[languageIndexSelected];
         
             // reflects values on UI 
-            ToggleFullscreen(isFullscreen.Equals("true"));
-            ToggleVSync(isVsync.Equals("true"));
-            SetResolution(resolution);
+            ToggleFullscreen(_isFullscreen.Equals("true"));
+            ToggleVSync(_isVsync.Equals("true"));
+            SetResolution(_resolution);
 
             musicLevelSlider.value = AudioManager.Instance.musicLevel;
             ambianceLevelSlider.value = AudioManager.Instance.ambianceLevel;
             effectsLevelSlider.value = AudioManager.Instance.effectsLevel;
 
-            fullScreenToggle.isOn = isFullscreen.Equals("true");
-            vsyncToggle.isOn = isVsync.Equals("true");
-            resolutionDropDown.value = resolution;
+            fullScreenToggle.isOn = _isFullscreen.Equals("true");
+            vsyncToggle.isOn = _isVsync.Equals("true");
+            resolutionDropDown.value = _resolution;
         
             languageDropDown.value = languageIndexSelected;
         }
@@ -118,13 +118,13 @@ namespace Settings {
         public void SetResolution(int gameResolution) {
             switch (gameResolution) {
                 case 0:
-                    Screen.SetResolution(1024, 768, _fullScreenMode, Screen.currentResolution.refreshRate);
+                    Screen.SetResolution(1024, 768, _fullScreenMode, Screen.currentResolution.refreshRateRatio);
                     break;
                 case 1:
-                    Screen.SetResolution(1280, 720, _fullScreenMode, Screen.currentResolution.refreshRate);
+                    Screen.SetResolution(1280, 720, _fullScreenMode, Screen.currentResolution.refreshRateRatio);
                     break;
                 case 2:
-                    Screen.SetResolution(1920, 1080, _fullScreenMode, Screen.currentResolution.refreshRate);
+                    Screen.SetResolution(1920, 1080, _fullScreenMode, Screen.currentResolution.refreshRateRatio);
                     break;
             }
             PlayerPrefs.SetInt("resolution", gameResolution);
