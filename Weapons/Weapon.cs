@@ -9,7 +9,7 @@ namespace Weapons {
 
         private void OnTriggerEnter(Collider other) {
             if (GameManager.Instance.isFigthing && other.gameObject.CompareTag("Boss")) {
-                BossManager.Instance.GetActiveBoss().GetComponent<Boss>().AddSatiety(BananaMan.Instance.activeBanana.damage);
+                BossManager.Instance.GetActiveBoss().GetComponent<Boss>().AddSatiety(BananaMan.Instance.activeItem.damage);
                 DestroyMe();
             }
         }

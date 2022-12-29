@@ -14,6 +14,10 @@ namespace Player {
             if (stateInfo.IsTag("roll") || stateInfo.IsName("standing jump end") || stateInfo.IsName("jump when sprint end")) {
                 BananaMan.Instance.GetComponent<PlayerController>().isRolling = false;
             }
+
+            if (stateInfo.IsName("standing jump end")) {
+                BananaMan.Instance.tpsPlayerAnimator.IsGrounded(true);
+            }
         }
 
         public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {

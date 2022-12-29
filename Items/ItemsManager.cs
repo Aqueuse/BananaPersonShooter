@@ -1,5 +1,9 @@
-﻿using Bosses;
+﻿using Audio;
+using Bosses;
+using Dialogues;
 using Enums;
+using Player;
+using UI;
 using UI.InGame;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -22,6 +26,7 @@ namespace Items {
         public void Validate(InputAction.CallbackContext context) {
             if (context.performed) {
                 if (_interactedObject != null) {
+                    AudioManager.Instance.PlayEffect(EffectType.BUTTON_ITERACTION);
                     ItemType itemType = _interactedObject.GetComponent<Item>().itemType;
 
                     switch (itemType) {
@@ -32,7 +37,7 @@ namespace Items {
                             LeaveInteraction();
                             break;
                         case ItemType.REGIME:
-                            var bananaType = _interactedObject.GetComponent<Regime>().bananasDataScriptableObject.bananaType;
+                            var bananaType = _interactedObject.GetComponent<Regime>().bananasDataScriptableObject.itemThrowableType;
                             var quantity = _interactedObject.GetComponent<Regime>().bananasDataScriptableObject
                                 .regimeQuantity;
 
@@ -42,6 +47,16 @@ namespace Items {
                             break;
                         case ItemType.BOSS_FIGHT_LAUNCHER:
                             BossManager.Instance.StartBossFight(BossType.KELSAIK);
+                            break;
+                        case ItemType.MINI_CHIMP:
+                            DialogueSystem.Instance.interact_with_minichimp(_interactedObject);
+                            break;
+                        case ItemType.MOVER:
+                            Mover.Instance.Acquire();
+                            Destroy(_interactedObject);
+                            break;
+                        case ItemType.MINI_CHIMP_BUILD_STATION:
+                            UIManager.Instance.Show_Hide_minichimp_plateform_builder_interface(true);
                             break;
                     }
                 }

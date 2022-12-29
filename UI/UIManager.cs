@@ -1,4 +1,8 @@
-﻿using UI.InGame;
+﻿using Building;
+using Dialogues;
+using UI.InGame;
+using UI.InGame.Inventory;
+using UI.InGame.PlateformBuilder;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
@@ -11,8 +15,9 @@ namespace UI {
         [SerializeField] private CanvasGroup bananapediaMenuCanvasGroup;
         [SerializeField] private CanvasGroup creditsMenuCanvasGroup;
         [SerializeField] private CanvasGroup deathMenuCanvasGroup;
-
-        [SerializeField] private PlayerInput playerInput;
+        [SerializeField] private CanvasGroup dialoguesCanvasGroup;
+        [SerializeField] private CanvasGroup rocksQuantityCanvasGroup;
+        [SerializeField] private CanvasGroup miniChimpPlateformBuilderCanvasGroup;
         
         public GameObject inventory;
         public GameObject slotsPanel;
@@ -36,12 +41,12 @@ namespace UI {
 
 
         public void Hide_menus(InputAction.CallbackContext context) {
-            if (context.performed && GameManager.Instance.isInGame) {
-                Set_active(_inventoryCanvasGroup, false);
-                Set_active(gameMenuCanvasGroup, false);
-                Set_active(optionsMenuCanvasGroup, false);
-                GameManager.Instance.PauseGame(false);
-            }
+            Set_active(_inventoryCanvasGroup, false);
+            Set_active(gameMenuCanvasGroup, false);
+            Set_active(optionsMenuCanvasGroup, false);
+            Set_active(miniChimpPlateformBuilderCanvasGroup, false);
+
+            GameManager.Instance.PauseGame(false);
         }
         
         public void Show_home_menu() {
@@ -134,7 +139,6 @@ namespace UI {
         }
 
         public void HideSubPanels() {
-            Debug.Log("coincoin");
             Hide_options_menu();
             Hide_Bananapedia();
             Hide_Credits();
@@ -142,6 +146,13 @@ namespace UI {
 
         public void Show_game_menu(InputAction.CallbackContext context) {
             if (context.performed && GameManager.Instance.isInGame) {
+                if (context.performed && GameManager.Instance.isInGame) {
+                    if (dialoguesCanvasGroup.alpha > 0) {
+                        DialogueSystem.Instance.Hide_Dialogue();
+                        return;
+                    }
+                }
+
                 if (_inventoryCanvasGroup.alpha < 1f) {
                     Set_active(gameMenuCanvasGroup, true);
                     EventSystem.current.SetSelectedGameObject(_firstGameMenuItem);
@@ -188,12 +199,25 @@ namespace UI {
         public void Hide_death_Panel() {
             Set_active(deathMenuCanvasGroup, false);
         }
-        
-        void Set_active(CanvasGroup canvasGroup, bool visible) {
+
+        public void Show_Hide_Rocks_Quantity(bool isVisible) {
+            Set_active(rocksQuantityCanvasGroup, isVisible);
+        }
+
+        public void Show_Hide_minichimp_plateform_builder_interface(bool isVisible) {
+            Set_active(miniChimpPlateformBuilderCanvasGroup, isVisible);
+
+            if (isVisible) {
+                UIBuildInventoryLeft.Instance.RefreshInventoySlots();
+                GameManager.Instance.PauseGame(true);
+                EventSystem.current.SetSelectedGameObject(miniChimpPlateformBuilderCanvasGroup.gameObject);
+            }
+        }
+
+        public void Set_active(CanvasGroup canvasGroup, bool visible) {
             canvasGroup.alpha = visible ? 1 : 0;
             canvasGroup.interactable = visible;
             canvasGroup.blocksRaycasts = visible;
         }
-
     }
 }

@@ -5,6 +5,7 @@ using Player;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Localization.Settings;
+using UnityEngine.Rendering;
 using UnityEngine.UI;
 
 namespace Settings {
@@ -37,12 +38,14 @@ namespace Settings {
         
         private string _keymapBinding;
         public int languageIndexSelected;
-
+        
         private void Start() {
             Application.targetFrameRate = 60; // fix the framerate to prevent crash on some GPU
 
             // 1 = match monitor refresh rate. 0 = Don't use vsync: use targetFrameRate instead.
             QualitySettings.vSyncCount = 0;
+            
+            GraphicsSettings.useScriptableRenderPipelineBatching = true;
         }
 
         public void LoadSettings() {
@@ -65,7 +68,7 @@ namespace Settings {
             SetEffectVolume(AudioManager.Instance.effectsLevel);
             
             BananaMan.Instance.GetComponent<PlayerInput>().actions.LoadBindingOverridesFromJson(_keymapBinding);
-            LocalizationSettings.SelectedLocale = LocalizationSettings.AvailableLocales.Locales[languageIndexSelected];
+            Invoke(nameof(SetLanguage), 2);
         
             // reflects values on UI 
             ToggleFullscreen(_isFullscreen.Equals("true"));
@@ -81,6 +84,10 @@ namespace Settings {
             resolutionDropDown.value = _resolution;
         
             languageDropDown.value = languageIndexSelected;
+        }
+
+        void SetLanguage() {
+            LocalizationSettings.SelectedLocale = LocalizationSettings.AvailableLocales.Locales[languageIndexSelected];
         }
 
         public void SetEffectVolume(float level) {

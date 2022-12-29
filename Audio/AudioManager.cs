@@ -85,6 +85,7 @@ namespace Audio {
 
             audioVoicesSource.clip = audioData.clip[Random.Range(0, audioData.clip.Length)];
             audioVoicesSource.volume = audioData.volume * effectsLevel;
+            audioVoicesSource.loop = true;
 
             audioVoicesSource.Play();
         }

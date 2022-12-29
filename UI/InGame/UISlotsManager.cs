@@ -19,10 +19,8 @@ namespace UI.InGame {
                 uiSlotsScript.SetUnselectedWeaponSlot();
             }
             uiSlotsScripts[_selectSlotIndex].SetSelectedWeaponSlot();
-
-           BananaMan.Instance.isArmed = BananaMan.Instance.activeBananaType != BananaType.EMPTY_HAND;
-
-           UICrosshair.Instance.SetCrosshair(BananaMan.Instance.activeBananaType);
+            
+           UICrosshair.Instance.SetCrosshair(BananaMan.Instance.activeItemThrowableType);
         }
 
         public void Select_Left_Slot() {
@@ -43,10 +41,9 @@ namespace UI.InGame {
             return uiSlotsScripts[_selectSlotIndex];
         }
 
-        public void AssignToSelectedSlot(BananaType bananaType) {
-            Get_Selected_Slot().SetSlot(bananaType);
-            BananaMan.Instance.isArmed = bananaType != BananaType.EMPTY_HAND;
-            UICrosshair.Instance.SetCrosshair(bananaType);
+        public void AssignToSelectedSlot(ItemThrowableType itemThrowableType) {
+            Get_Selected_Slot().SetSlot(itemThrowableType);
+            UICrosshair.Instance.SetCrosshair(itemThrowableType);
         }
     }
 }

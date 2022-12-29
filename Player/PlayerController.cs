@@ -15,7 +15,7 @@ namespace Player {
         public bool isRolling;
         private bool _isRagdoll;
         public bool canMove = true;
-
+        
         private TpsPlayerAnimator _tpsPlayerAnimatorScript;
         private Animator _playerAnimator;
         private Rigidbody _rigidbody;
@@ -49,7 +49,9 @@ namespace Player {
 
                 var inputAngle = Vector2.SignedAngle(Vector2.up, new Vector2(-_rawInputMovement.x, _rawInputMovement.z));
 
-                if (!isFocusCamera) {  // rotate follow the input
+                var playerPosition = transform.position;
+
+                if (!isFocusCamera && !BananaMan.Instance.isGrabingMover) {  // rotate follow the input
                     if (_rawInputMovement != Vector3.zero) {
                         _rigidbody.rotation = Quaternion.AngleAxis(inputAngle, Vector3.up) * cameraRotation;
                     }
@@ -59,22 +61,22 @@ namespace Player {
                 }
                 
                 var moveToRotate = cameraRotation * _rawInputMovement * (baseMovementSpeed * Time.fixedDeltaTime);
-                _rigidbody.MovePosition(transform.position + new Vector3(moveToRotate.x, 0, moveToRotate.z));
+                _rigidbody.MovePosition(playerPosition + new Vector3(moveToRotate.x, 0, moveToRotate.z));
                 
                 _tpsPlayerAnimatorScript.UpdateMovementAnimation(_rawInputMovement.z * baseMovementSpeed,
                     _rawInputMovement.x * baseMovementSpeed);
 
                 // is the player moving ?
-                _currentPosition = transform.position;
+                _currentPosition = playerPosition;
                 _tpsPlayerAnimatorScript.IsMoving(_currentPosition != _lastPosition);
                 _lastPosition = _currentPosition;
- 
+                
                 UIFace.Instance.MoveFaceAnimation(_rawInputMovement.magnitude);
             }
         }
-
-        public void FocusCamera(InputAction.CallbackContext value) {
-            if (value.performed) {
+        
+        public void FocusCamera(InputAction.CallbackContext context) {
+            if (context.performed) {
                 if (!isFocusCamera) {
                     _tpsPlayerAnimatorScript.FocusCamera(true);
                     isFocusCamera = true;
@@ -85,18 +87,36 @@ namespace Player {
                 isFocusCamera = false;
             }
         }
+
+        public void FreeCamera() {
+            _tpsPlayerAnimatorScript.FocusCamera(false);
+            isFocusCamera = false;
+        }
         
         public void PlayerJump(InputAction.CallbackContext value) {
-            if (value.performed && !_isRagdoll && !BananaMan.Instance.isInAir) {
-                if (isFocusCamera && _rawInputMovement.z >= 0 || !isFocusCamera) {
-                    BananaMan.Instance.isInAir = true;
-                    _tpsPlayerAnimatorScript.Jump();
+            if (value.performed) {
+                if (!BananaMan.Instance.isInAir) {
+                    if (!_isRagdoll) {
+                        if (!isFocusCamera) {
+                            BananaMan.Instance.isInAir = true;
+                            _tpsPlayerAnimatorScript.Jump();
+                            PlayerVerticalImpulse();
+                        }
+                        else {
+                            if (_rawInputMovement.z >= 0) {
+                                BananaMan.Instance.isInAir = true;
+                                _tpsPlayerAnimatorScript.Jump();
+                                PlayerVerticalImpulse();
+                            }
+                        }
+                    }
                 }
             }
         }
 
         public void PlayerVerticalImpulse() {
             _rigidbody.AddForce(0, JumpImpulse, 0, ForceMode.Impulse);
+            BananaMan.Instance.isInAir = true;
         }
 
         public void PlayerRoll(InputAction.CallbackContext value) {

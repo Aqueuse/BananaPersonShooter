@@ -6,6 +6,7 @@ namespace Player {
         private int _layerArmsOnly;
         private int _focusLayer;
         private int _freeMoveLayer;
+        private int _moverLayer;
 
         //Animation String IDs
         private readonly int _playerZMovementAnimationId = Animator.StringToHash("Movement Z");
@@ -18,6 +19,7 @@ namespace Player {
         private static readonly int Getup = Animator.StringToHash("GETUP");
         private static readonly int IsInAirID = Animator.StringToHash("IS IN AIR");
         private static readonly int IsMovingID = Animator.StringToHash("IS MOVING");
+        private static readonly int IsGroundedID = Animator.StringToHash("IS GROUNDED");
 
         private void Start() {
             _playerAnimator = GetComponent<Animator>();
@@ -25,6 +27,7 @@ namespace Player {
 
             _focusLayer = _playerAnimator.GetLayerIndex("FOCUS");
             _freeMoveLayer = _playerAnimator.GetLayerIndex("FREE MOVE");
+            _moverLayer = _playerAnimator.GetLayerIndex("MOVER");
         }
     
         public void UpdateMovementAnimation(float movementIntensityZ, float movementIntensityX) {
@@ -37,12 +40,22 @@ namespace Player {
             _playerAnimator.SetTrigger(_playerThrowAnimationId);
         }
 
+        public void GrabMover() {
+            _playerAnimator.SetLayerWeight(_focusLayer, 0);
+            _playerAnimator.SetLayerWeight(_freeMoveLayer, 0);
+            _playerAnimator.SetLayerWeight(_moverLayer, 1);
+        }
+        
         public void Jump() {
             _playerAnimator.SetTrigger(JumpID);
         }
 
         public void IsInAir(bool isInAir) {
             _playerAnimator.SetBool(IsInAirID, isInAir);
+        }
+        
+        public void IsGrounded(bool isGrounded) {
+            _playerAnimator.SetBool(IsGroundedID, isGrounded);
         }
 
         public void IsMoving(bool isMoving) {
@@ -55,23 +68,19 @@ namespace Player {
 
         public void GetUp() {
             _playerAnimator.SetTrigger(Getup);
-
         }
 
         public void FocusCamera(bool isFocusCam) {
             if (isFocusCam) {
-                _playerAnimator.SetLayerWeight(_focusLayer, 1);
                 _playerAnimator.SetLayerWeight(_freeMoveLayer, 0);
+                _playerAnimator.SetLayerWeight(_moverLayer, 0);
+                _playerAnimator.SetLayerWeight(_focusLayer, 1);
             }
             else {
                 _playerAnimator.SetLayerWeight(_focusLayer, 0);
+                _playerAnimator.SetLayerWeight(_moverLayer, 0);
                 _playerAnimator.SetLayerWeight(_freeMoveLayer, 1);
             }
-        }
-
-        public void BananaNotFound() {
-            _playerAnimator.SetLayerWeight(_layerArmsOnly, 1);
-            _playerAnimator.SetTrigger(_playerSearchAnimationId);
         }
 
         public void ExitArmsOnlyLayer() {

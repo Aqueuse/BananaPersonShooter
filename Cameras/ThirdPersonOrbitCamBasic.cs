@@ -1,14 +1,17 @@
-﻿using System;
-using Settings;
+﻿using Settings;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 // This class corresponds to the 3rd person camera features.
 namespace Cameras {
-    public class ThirdPersonOrbitCamBasic : MonoBehaviour {
+    public class ThirdPersonOrbitCamBasic : MonoSingleton<ThirdPersonOrbitCamBasic> {
         public Transform player; // Player's reference.
+        
+        public bool canRotate = true; // telecommand tjhe camera to look other gameObjects
+        private bool isLookingTarget;
+        private GameObject lookingTarget;
+        
         [SerializeField] private Vector3 pivotOffset; // Offset to repoint the camera.
-    
         Vector2 _lookPosition;
     
         [SerializeField] private Vector3 camOffset; // Offset to relocate the camera related to the player position.
@@ -75,44 +78,61 @@ namespace Cameras {
         }
 
         void Update() {
-            // Get mouse movement to orbit the camera.
-            _angleH += _lookPosition.x * horizontalSensibility;
-            _angleV += _lookPosition.y * verticalSensibility;
-            
-            // Set vertical movement limit.
-            _angleV = Mathf.Clamp(_angleV, minVerticalAngle, _targetMaxVerticalAngle);
-            
-            // Set camera orientation.
-            Quaternion camYRotation = Quaternion.Euler(0, _angleH, 0);
-            Quaternion aimRotation = Quaternion.Euler(-_angleV, _angleH, 0);
-            _cam.rotation = aimRotation;
+            if (canRotate) {
+                // Get mouse movement to orbit the camera.
+                _angleH += _lookPosition.x * horizontalSensibility;
+                _angleV += _lookPosition.y * verticalSensibility;
+                
+                // Set vertical movement limit.
+                _angleV = Mathf.Clamp(_angleV, minVerticalAngle, _targetMaxVerticalAngle);
+                
+                // Set camera orientation.
+                Quaternion camYRotation = Quaternion.Euler(0, _angleH, 0);
+                Quaternion aimRotation = Quaternion.Euler(-_angleV, _angleH, 0);
+                _cam.rotation = aimRotation;
 
-            // Set FOV.
-            _cam.GetComponent<Camera>().fieldOfView =
-                Mathf.Lerp(_cam.GetComponent<Camera>().fieldOfView, _targetFOV, Time.deltaTime);
+                // Set FOV.
+                _cam.GetComponent<Camera>().fieldOfView =
+                    Mathf.Lerp(_cam.GetComponent<Camera>().fieldOfView, _targetFOV, Time.deltaTime);
 
-            // Test for collision with the environment based on current camera position.
-            Vector3 baseTempPosition = player.position + camYRotation * _targetPivotOffset;
-            Vector3 noCollisionOffset = _targetCamOffset;
-            while (noCollisionOffset.magnitude >= 0.2f) {
-                if (DoubleViewingPosCheck(baseTempPosition + aimRotation * noCollisionOffset))
-                    break;
-                noCollisionOffset -= noCollisionOffset.normalized * 0.2f;
+                // Test for collision with the environment based on current camera position.
+                Vector3 baseTempPosition = player.position + camYRotation * _targetPivotOffset;
+                Vector3 noCollisionOffset = _targetCamOffset;
+                while (noCollisionOffset.magnitude >= 0.2f) {
+                    if (DoubleViewingPosCheck(baseTempPosition + aimRotation * noCollisionOffset))
+                        break;
+                    noCollisionOffset -= noCollisionOffset.normalized * 0.2f;
+                }
+
+                if (noCollisionOffset.magnitude < 0.2f)
+                    noCollisionOffset = Vector3.zero;
+
+                // No intermediate position for custom offsets, go to 1st person.
+                bool customOffsetCollision = _isCustomOffset && noCollisionOffset.sqrMagnitude < _targetCamOffset.sqrMagnitude;
+
+                // Repostition the camera.
+                _smoothPivotOffset = Vector3.Lerp(_smoothPivotOffset, customOffsetCollision ? pivotOffset : _targetPivotOffset,
+                    smooth * Time.deltaTime);
+                _smoothCamOffset = Vector3.Lerp(_smoothCamOffset, customOffsetCollision ? Vector3.zero : noCollisionOffset,
+                    smooth * Time.deltaTime);
+
+                _cam.position = player.position + camYRotation * _smoothPivotOffset + aimRotation * _smoothCamOffset;
             }
+            
+            else if (isLookingTarget) {
+                transform.LookAt(lookingTarget.transform);
+            }
+        }
 
-            if (noCollisionOffset.magnitude < 0.2f)
-                noCollisionOffset = Vector3.zero;
+        public void LookTarget(GameObject target) {
+            canRotate = false;
+            lookingTarget = target;
+            isLookingTarget = true;
+        }
 
-            // No intermediate position for custom offsets, go to 1st person.
-            bool customOffsetCollision = _isCustomOffset && noCollisionOffset.sqrMagnitude < _targetCamOffset.sqrMagnitude;
-
-            // Repostition the camera.
-            _smoothPivotOffset = Vector3.Lerp(_smoothPivotOffset, customOffsetCollision ? pivotOffset : _targetPivotOffset,
-                smooth * Time.deltaTime);
-            _smoothCamOffset = Vector3.Lerp(_smoothCamOffset, customOffsetCollision ? Vector3.zero : noCollisionOffset,
-                smooth * Time.deltaTime);
-
-            _cam.position = player.position + camYRotation * _smoothPivotOffset + aimRotation * _smoothCamOffset;
+        public void UnlockTarget() {
+            isLookingTarget = false;
+            canRotate = true;
         }
 
         public void Rotate(InputAction.CallbackContext context) {

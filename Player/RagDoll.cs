@@ -25,9 +25,5 @@ namespace Player {
 
             _isRagDoll = active;
         }
-
-        public Transform GetRootTransform() {
-            return root;
-        }
     }
 }

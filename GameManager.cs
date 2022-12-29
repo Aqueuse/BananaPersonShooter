@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Linq;
 using Audio;
 using Cameras;
 using Enums;
@@ -7,6 +8,7 @@ using Player;
 using Settings;
 using UI;
 using UI.InGame;
+using UI.Menus;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
@@ -51,52 +53,22 @@ public class GameManager : MonoSingleton<GameManager> {
         _lastMap = PlayerPrefs.GetString("Last Map", "Map01");
         
         // inventory
-        foreach (var bananaSlot in BananasTypeReference.reference) {
+        foreach (var bananaSlot in Inventory.Instance.bananaManInventory.ToList()) {
             Inventory.Instance.bananaManInventory[bananaSlot.Key] = PlayerPrefs.GetInt(bananaSlot.Key.ToString(), 0);
         }
-        Inventory.Instance.bananaManInventory[BananaType.EMPTY_HAND] = 1;
+        
+        // Has Mover ?
+        BananaMan.Instance.hasMover = PlayerPrefs.GetString("HasMover").Equals("true");
 
         // health and resistance
         BananaMan.Instance.health = PlayerPrefs.GetFloat("health", 100);
         BananaMan.Instance.resistance = PlayerPrefs.GetFloat("resistance", 100);
-        
-        UIVitals.Instance.Set_Health(BananaMan.Instance.health);
-        UIVitals.Instance.Set_Resistance(BananaMan.Instance.resistance);
-    }
 
-    public void ResetPlayerState() {
-        UIOptionsMenu.Instance.HideConfirmationMessage();
-        
-        // position
-        var initialSpawnPosition = initialSpawnTransform.position;
-
-        _lastPositionOnMap = initialSpawnPosition;
-        _lastMap =  "Map01";
-        
-        // inventory
-        foreach (var bananaSlot in BananasTypeReference.reference) {
-            Inventory.Instance.bananaManInventory[bananaSlot.Key] = 0;
-        }
-        Inventory.Instance.bananaManInventory[BananaType.EMPTY_HAND] = 1;
-
-        // health and resistance
-        BananaMan.Instance.health = 100;
-        BananaMan.Instance.resistance = 100;
-        
+        // refects values in UI
         UIVitals.Instance.Set_Health(BananaMan.Instance.health);
         UIVitals.Instance.Set_Resistance(BananaMan.Instance.resistance);
         
-        UIOptionsMenu.Instance.EmptyDateAndHour();
-
-        BananaMan.Instance.transform.position = initialSpawnPosition;
-        ReturnHome();
-
-        // lock maps
-        // remove deplaceur
-        // reinit mini chimps quests
-        // reinit spaceship state
-        // reinit central workstation state
-        // reinit assets positions on maps
+        Mover.Instance.SetRocketsQuantity(Inventory.Instance.bananaManInventory[ItemThrowableType.ROCKET]);
     }
 
     public void Play() {
@@ -120,7 +92,47 @@ public class GameManager : MonoSingleton<GameManager> {
         isInGame = true;
         isGamePlaying = true;
     }
-    
+
+    public void ResetPlayerState() {
+        UIOptionsMenu.Instance.HideConfirmationMessage();
+        
+        // position
+        var initialSpawnPosition = initialSpawnTransform.position;
+
+        _lastPositionOnMap = initialSpawnPosition;
+        _lastMap =  "Map01";
+        
+        // inventory
+        foreach (var bananaSlot in Inventory.Instance.bananaManInventory.ToList()) {
+            Inventory.Instance.bananaManInventory[bananaSlot.Key] = 0;
+        }
+        
+        BananaMan.Instance.hasMover = false;
+        PlayerPrefs.SetString("HasMover", "false");
+
+        // health and resistance
+        BananaMan.Instance.health = 100;
+        BananaMan.Instance.resistance = 100;
+
+        UIVitals.Instance.Set_Health(BananaMan.Instance.health);
+        UIVitals.Instance.Set_Resistance(BananaMan.Instance.resistance);
+        
+        UIOptionsMenu.Instance.EmptyDateAndHour();
+
+        BananaMan.Instance.transform.position = initialSpawnPosition;
+        
+        SavePlayerGameState();
+        
+        ReturnHome();
+
+        // lock maps
+        // remove deplaceur
+        // reinit mini chimps quests
+        // reinit spaceship state
+        // reinit central workstation state
+        // reinit assets positions on maps
+    }
+
     public void PauseGame(bool pause) {
         if (pause) {
             Time.timeScale = 0;
@@ -151,10 +163,14 @@ public class GameManager : MonoSingleton<GameManager> {
         foreach (var bananaSlot in Inventory.Instance.bananaManInventory) {
             PlayerPrefs.SetInt(bananaSlot.Key.ToString(), bananaSlot.Value);
         }
+        
+        //has mover ?
+        PlayerPrefs.SetString("HasMover", BananaMan.Instance.hasMover.ToString());
 
         // health and resistance
         PlayerPrefs.SetFloat("health", BananaMan.Instance.health);
         PlayerPrefs.SetFloat("resistance", BananaMan.Instance.resistance);
+        
         
         // update the text in option with the actual date and hour
         UIOptionsMenu.Instance.SetActualDateAndHour(System.DateTime.Now.Date.ToString("MM/dd/yyyy h:mm:ss"));

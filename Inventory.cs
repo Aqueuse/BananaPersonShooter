@@ -2,42 +2,44 @@
 using Enums;
 
 public class Inventory : MonoSingleton<Inventory> {
-    public Dictionary<BananaType, int> bananaManInventory;
+    public Dictionary<ItemThrowableType, int> bananaManInventory;
     
     private void Start() {
-        bananaManInventory = new Dictionary<BananaType, int> {
-            {BananaType.RED, 60},
-            {BananaType.BURRO, 60},
-            {BananaType.MATOKE, 60},
-            {BananaType.TINDOK, 60},
-            {BananaType.MANZANO, 60},
-            {BananaType.BARANGAN, 60},
-            {BananaType.BLUE_JAVA, 60},
-            {BananaType.PLANTAIN, 60},
-            {BananaType.RINO_HORN, 60},
-            {BananaType.CAVENDISH, 60},
-            {BananaType.GROS_MICHEL, 60},
-            {BananaType.LADY_FINGER, 60},
-            {BananaType.PISANG_RAJA, 60},
-            {BananaType.PRAYING_HANDS, 60},
-            {BananaType.GOLD_FINGER, 60},
-            {BananaType.NANJANGUD, 60},
-            {BananaType.EMPTY_HAND, 1}
+        bananaManInventory = new Dictionary<ItemThrowableType, int> {
+            {ItemThrowableType.BARANGAN, 0},
+            {ItemThrowableType.BLUE_JAVA, 0},
+            {ItemThrowableType.BURRO, 0},
+            {ItemThrowableType.CAVENDISH, 0},
+            {ItemThrowableType.GOLD_FINGER, 0},
+            {ItemThrowableType.GROS_MICHEL, 0},
+            {ItemThrowableType.LADY_FINGER, 0},
+            {ItemThrowableType.MANZANO, 0},
+            {ItemThrowableType.MATOKE, 0},
+            {ItemThrowableType.MUSA_VELUTINA, 0},
+            {ItemThrowableType.NANJANGUD, 0},
+            {ItemThrowableType.PISANG_RAJA, 0},
+            {ItemThrowableType.PLANTAIN, 0},
+            {ItemThrowableType.PRAYING_HANDS, 0},
+            {ItemThrowableType.RED, 0},
+            {ItemThrowableType.RINO_HORN, 0},
+            {ItemThrowableType.TINDOK, 0},
+            {ItemThrowableType.ROCKET, 0},
+            {ItemThrowableType.PLATEFORM_CAVENDISH, 0}
         };
     }
 
-    public void AddQuantity(BananaType bananaType, int quantity) {
-        bananaManInventory[bananaType] += quantity;
+    public void AddQuantity(ItemThrowableType itemThrowableType, int quantity) {
+        bananaManInventory[itemThrowableType] += quantity;
     }
 
-    public int GetQuantity(BananaType bananaType) {
-        return bananaManInventory[bananaType];
+    public int GetQuantity(ItemThrowableType itemThrowableType) {
+        return bananaManInventory[itemThrowableType];
     }
 
-    public void RemoveQuantity(BananaType bananaType, int quantity) {
-        if (bananaManInventory[bananaType] > quantity) bananaManInventory[bananaType] -= quantity;
+    public void RemoveQuantity(ItemThrowableType itemThrowableType, int quantity) {
+        if (bananaManInventory[itemThrowableType] > quantity) bananaManInventory[itemThrowableType] -= quantity;
         else {
-            bananaManInventory[bananaType] = 0;
+            bananaManInventory[itemThrowableType] = 0;
         }
     }
 }

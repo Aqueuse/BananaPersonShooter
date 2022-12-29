@@ -5,24 +5,25 @@ using UnityEngine.InputSystem;
 
 namespace Player {
     class BananaMan : MonoSingleton<BananaMan> {
-        public BananasDataScriptableObject activeBanana;
+        public BananasDataScriptableObject activeItem;
 
-        public BananaType activeBananaType = BananaType.EMPTY_HAND;
+        public ItemThrowableType activeItemThrowableType;
         public TpsPlayerAnimator tpsPlayerAnimator;
         
-        public bool isArmed;
         public bool isInAir;
+        public bool isGrabingMover;
 
         public float health;
         public float resistance;
+        public bool hasMover;
         
         private void Start() {
             tpsPlayerAnimator = GetComponentInChildren<Animator>().GetComponent<TpsPlayerAnimator>();
         }
 
         public void GainHealth(InputAction.CallbackContext context) {
-            health += activeBanana.healthBonus;
-            resistance += activeBanana.resistanceBonus;
+            health += activeItem.healthBonus;
+            resistance += activeItem.resistanceBonus;
             
             UIVitals.Instance.Set_Health(health);
             UIVitals.Instance.Set_Resistance(resistance);

@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9aa579ee7e77bb468bc13896355d2a8, type: 3}
+  m_Name: BlueJavaBananaData
+  m_EditorClassIdentifier: 
+  bananaName: Blue java
+  sprite: {fileID: 21300000, guid: 45711768726f01d4390c97b88d867934, type: 3}
+  description:
+  - Frosted banana
+  - "Banane givr\xE9e"
+  effects:
+  - Creates an area of ice that slows down monkeys for 10 seconds
+  - "Cr\xE9e une zone de glace qui ralenti les singes pendant 10 secondes"
+  regimeQuantity: 60
+  damage: 1
+  damageTime: 0
+  healthBonus: 0.5
+  resistanceBonus: 1
+  itemThrowableType: 1
+  bananaEffect: 3

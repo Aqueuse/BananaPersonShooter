@@ -11,8 +11,8 @@ namespace UI {
         [SerializeField] private TextMeshProUGUI effectsText;
 
         public void OnClick() {
-            descriptionText.text = bananasDataScriptableObject.bananaDescription[GameSettings.Instance.languageIndexSelected];
-            effectsText.text = bananasDataScriptableObject.bananaEffects[GameSettings.Instance.languageIndexSelected];
+            descriptionText.text = bananasDataScriptableObject.description[GameSettings.Instance.languageIndexSelected];
+            effectsText.text = bananasDataScriptableObject.effects[GameSettings.Instance.languageIndexSelected];
             image.sprite = bananasDataScriptableObject.sprite;
         }
     }
