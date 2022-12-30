@@ -13,19 +13,10 @@ MonoBehaviour:
   m_Name: First_MiniChimp_Interact_Data
   m_EditorClassIdentifier: Assembly-CSharp::DialogueDataScriptableObject
   dialogue:
-  - 'Oh, interesting! A robot banana! What a technological marvel!
-
-    ...
-
-    Hey,
-    wouldn''t you help me fix this damn station?
-
-    ...
-
-    Take this mover and
-    bring me back the pieces left of this ruin. I can exchange them to you for some
-    platforms.'
-  - "oh mais \xE7a alors, un robot banane ! On arr\xEAte pas le progr\xE8s.\r\n...\r\nEh,
-    tu voudrais pas m'aider \xE0 r\xE9parer cette station pourrie ? \r\n...\r\nPrend
-    ce d\xE9placeur et ram\xE8ne moi des bouts de ruine avec. Je te les\r\n\xE9change
-    contre des plateformes."
+  - "Oh, interesting! A robot banana! What a technological marvel!\n\nHey, wouldn't
+    you help me fix this damn station?\n\nTake this mover on the table and bring
+    me back rocks and bananas. \nI can exchange them to you for some platforms."
+  - "Oh mais \xE7a alors, un robot banane !\r\n\r\nEh, tu voudrais pas m'aider \xE0
+    r\xE9parer cette station pourrie ? \r\n\r\nPrend le d\xE9placeur sur la table
+    et ram\xE8ne moi des rochers\net des bananes. Je te les \xE9change contre des
+    plateformes."

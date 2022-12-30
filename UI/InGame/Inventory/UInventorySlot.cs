@@ -8,11 +8,11 @@ using UnityEngine.EventSystems;
 
 namespace UI.InGame.Inventory {
     public class UInventorySlot : MonoBehaviour, ISelectHandler {
-        [SerializeField] private ItemThrowableType itemThrowableType;
+        public ItemThrowableType itemThrowableType;
+        public ItemThrowableCategory itemThrowableCategory;
+
         [SerializeField] private GameObject quantityText;
-
-        [SerializeField] private ItemThrowableCategory itemThrowableCategory;
-
+        
         public void OnSelect(BaseEventData eventData) {
             SetDescription();
 
@@ -20,13 +20,28 @@ namespace UI.InGame.Inventory {
                 case ItemThrowableCategory.BANANA:
                     BananaMan.Instance.activeItem = ScriptableObjectManager.Instance.GetBananaScriptableObject(itemThrowableType);
                     BananaMan.Instance.activeItemThrowableType = itemThrowableType;
+                    BananaMan.Instance.activeItemThrowableCategory = itemThrowableCategory;
             
                     UInventory.Instance.lastselectedInventoryItem = gameObject;
             
-                    UISlotsManager.Instance.AssignToSelectedSlot(itemThrowableType);
+                    UISlotsManager.Instance.AssignToSelectedSlot(itemThrowableType, itemThrowableCategory);
                     break;
                 case ItemThrowableCategory.PLATEFORM:
-                    Debug.Log("to be continued");
+                    BananaMan.Instance.activeItemThrowableCategory = itemThrowableCategory;
+                    BananaMan.Instance.activeItemThrowableType = itemThrowableType;
+            
+                    UInventory.Instance.lastselectedInventoryItem = gameObject;
+            
+                    UISlotsManager.Instance.AssignToSelectedSlot(itemThrowableType, itemThrowableCategory);
+                    break;
+                case ItemThrowableCategory.ROCKET:
+                    BananaMan.Instance.activeItemThrowableCategory = itemThrowableCategory;
+                    BananaMan.Instance.activeItemThrowableType = itemThrowableType;
+
+                    UInventory.Instance.lastselectedInventoryItem = gameObject;
+
+                    UICrosshair.Instance.SetCrosshair(itemThrowableType, itemThrowableCategory);
+                    UISlotsManager.Instance.AssignToSelectedSlot(itemThrowableType, itemThrowableCategory);
                     break;
             }
         }

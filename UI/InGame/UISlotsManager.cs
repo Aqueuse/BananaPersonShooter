@@ -1,26 +1,42 @@
 ﻿using System.Collections.Generic;
+using Data;
 using Enums;
 using Player;
-using UnityEngine;
+using UI.InGame.Inventory;
 
 namespace UI.InGame {
     public class UISlotsManager : MonoSingleton<UISlotsManager> {
-        [SerializeField] private List<UISlot> uiSlotsScripts;
-        
+        public List<UISlot> uiSlotsScripts;
+
+        public Dictionary<int, int> slotsMappingToInventory;
+
         private int _selectSlotIndex = 2;
 
-        public List<UISlot> GetUISlotsScript() {
-            return uiSlotsScripts;
+        private void Start() {
+            slotsMappingToInventory = new Dictionary<int, int>(5) {
+                {0, 0},
+                {1, 0},
+                {2, 0},
+                {3, 0},
+                {4, 0}
+            };
         }
-        
+
         public void Switch_To_Slot(int index) {
             _selectSlotIndex = index;
             foreach (var uiSlotsScript in uiSlotsScripts) {
                 uiSlotsScript.SetUnselectedWeaponSlot();
             }
-            uiSlotsScripts[_selectSlotIndex].SetSelectedWeaponSlot();
             
-           UICrosshair.Instance.SetCrosshair(BananaMan.Instance.activeItemThrowableType);
+            if (Get_Selected_Slot().itemThrowableCategory == ItemThrowableCategory.BANANA) {
+                BananaMan.Instance.activeItem = ScriptableObjectManager.Instance.GetBananaScriptableObject(uiSlotsScripts[_selectSlotIndex].itemThrowableType);
+            }
+
+            uiSlotsScripts[_selectSlotIndex].SetSelectedWeaponSlot();
+            BananaMan.Instance.activeItemThrowableType = uiSlotsScripts[_selectSlotIndex].itemThrowableType;
+            BananaMan.Instance.activeItemThrowableCategory = uiSlotsScripts[_selectSlotIndex].itemThrowableCategory;
+
+            UICrosshair.Instance.SetCrosshair(BananaMan.Instance.activeItemThrowableType, BananaMan.Instance.activeItemThrowableCategory);
         }
 
         public void Select_Left_Slot() {
@@ -41,9 +57,11 @@ namespace UI.InGame {
             return uiSlotsScripts[_selectSlotIndex];
         }
 
-        public void AssignToSelectedSlot(ItemThrowableType itemThrowableType) {
-            Get_Selected_Slot().SetSlot(itemThrowableType);
-            UICrosshair.Instance.SetCrosshair(itemThrowableType);
+        public void AssignToSelectedSlot(ItemThrowableType itemThrowableType, ItemThrowableCategory itemThrowableCategory) {
+            slotsMappingToInventory[_selectSlotIndex] = UInventory.Instance.GetSlotIndex(itemThrowableType);
+            
+            Get_Selected_Slot().SetSlot(itemThrowableType, itemThrowableCategory);
+            UICrosshair.Instance.SetCrosshair(itemThrowableType, itemThrowableCategory);
         }
     }
 }

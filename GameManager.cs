@@ -1,13 +1,16 @@
 ﻿using System.Collections;
 using System.Linq;
 using Audio;
+using Building;
 using Cameras;
+using Data;
 using Enums;
 using Items;
 using Player;
 using Settings;
 using UI;
 using UI.InGame;
+using UI.InGame.Inventory;
 using UI.Menus;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -60,6 +63,29 @@ public class GameManager : MonoSingleton<GameManager> {
         // Has Mover ?
         BananaMan.Instance.hasMover = PlayerPrefs.GetString("HasMover").Equals("true");
 
+        // slots
+        UInventory.Instance.ActivateAllInventory();  // activate temporally all the inventory to find the index of slots
+        
+        foreach (var slot in UISlotsManager.Instance.slotsMappingToInventory.ToList()) {
+            var itemType = UInventory.Instance.GetItemThrowableTypeByIndex(PlayerPrefs.GetInt("inventorySlot"+slot.Key));
+            var itemCategory = UInventory.Instance.GetItemThrowableCategoryByIndex(PlayerPrefs.GetInt("inventorySlot"+slot.Key));
+            
+            UISlotsManager.Instance.slotsMappingToInventory[slot.Key] = PlayerPrefs.GetInt("inventorySlot"+slot.Key);
+            UISlotsManager.Instance.uiSlotsScripts[slot.Key].SetSlot(itemType, itemCategory);
+            UISlotsManager.Instance.uiSlotsScripts[slot.Key].SetSprite(UInventory.Instance.GetItemSprite(itemType));
+        }
+        
+        // active item type, category, banana
+        var activeItemType = UInventory.Instance.GetItemThrowableTypeByIndex(PlayerPrefs.GetInt("activeItem"));
+        var activeItemCategory = UInventory.Instance.GetItemThrowableCategoryByIndex(PlayerPrefs.GetInt("activeItem"));
+
+        if (activeItemCategory == ItemThrowableCategory.BANANA) {
+            BananaMan.Instance.activeItem = ScriptableObjectManager.Instance.GetBananaScriptableObject(activeItemType);
+        }
+
+        BananaMan.Instance.activeItemThrowableType = activeItemType;
+        BananaMan.Instance.activeItemThrowableCategory = activeItemCategory;
+
         // health and resistance
         BananaMan.Instance.health = PlayerPrefs.GetFloat("health", 100);
         BananaMan.Instance.resistance = PlayerPrefs.GetFloat("resistance", 100);
@@ -109,6 +135,21 @@ public class GameManager : MonoSingleton<GameManager> {
         
         BananaMan.Instance.hasMover = false;
         PlayerPrefs.SetString("HasMover", "false");
+        
+        // active itemType and Category
+        BananaMan.Instance.activeItemThrowableType = ItemThrowableType.ROCKET;
+        BananaMan.Instance.activeItemThrowableCategory = ItemThrowableCategory.ROCKET;
+        
+        // active item
+        PlayerPrefs.SetInt("activeItem", UInventory.Instance.GetSlotIndex(ItemThrowableType.ROCKET));
+
+        // slots
+        foreach (var slot in UISlotsManager.Instance.slotsMappingToInventory) {
+            PlayerPrefs.SetInt("inventorySlot"+slot.Key, 0);
+        }
+        foreach (var instanceUISlotsScript in UISlotsManager.Instance.uiSlotsScripts) {
+            instanceUISlotsScript.SetSlot(ItemThrowableType.ROCKET, ItemThrowableCategory.ROCKET);
+        }
 
         // health and resistance
         BananaMan.Instance.health = 100;
@@ -126,7 +167,6 @@ public class GameManager : MonoSingleton<GameManager> {
         ReturnHome();
 
         // lock maps
-        // remove deplaceur
         // reinit mini chimps quests
         // reinit spaceship state
         // reinit central workstation state
@@ -159,13 +199,22 @@ public class GameManager : MonoSingleton<GameManager> {
         PlayerPrefs.SetFloat("PlayerYPosition", playerPosition.y);
         PlayerPrefs.SetFloat("PlayerZPosition", playerPosition.z);
 
-        // bananas in inventory        
+        // bananas in inventory
         foreach (var bananaSlot in Inventory.Instance.bananaManInventory) {
             PlayerPrefs.SetInt(bananaSlot.Key.ToString(), bananaSlot.Value);
         }
         
         //has mover ?
         PlayerPrefs.SetString("HasMover", BananaMan.Instance.hasMover.ToString());
+
+        // slots state
+        foreach (var slot in UISlotsManager.Instance.slotsMappingToInventory) {
+            PlayerPrefs.SetInt("inventorySlot"+slot.Key, slot.Value);
+        }
+        
+        // active item
+        UInventory.Instance.ActivateAllInventory();
+        PlayerPrefs.SetInt("activeItem", UInventory.Instance.GetSlotIndex(BananaMan.Instance.activeItemThrowableType));
 
         // health and resistance
         PlayerPrefs.SetFloat("health", BananaMan.Instance.health);

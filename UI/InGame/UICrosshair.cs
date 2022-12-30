@@ -5,6 +5,8 @@ using UnityEngine.UI;
 namespace UI.InGame {
     public class UICrosshair : MonoSingleton<UICrosshair> {
         [SerializeField] private GenericDictionary<ItemThrowableType, Image> crosshairs;
+        [SerializeField] private Image moverCrosshair;
+        
         private CanvasGroup _canvasGroup;
         private Color crosshairColor;
 
@@ -12,15 +14,28 @@ namespace UI.InGame {
             _canvasGroup = GetComponent<CanvasGroup>();
         }
     
-        public void SetCrosshair(ItemThrowableType itemThrowableType) {
+        public void SetCrosshair(ItemThrowableType itemThrowableType, ItemThrowableCategory itemThrowableCategory) {
             foreach (var crosshair in crosshairs) {
                 crosshairColor = crosshair.Value.color;
                 crosshairColor.a = 0f;
                 crosshair.Value.color = crosshairColor;
             }
 
+            moverCrosshair.color = crosshairColor;
+
             crosshairColor.a = 1f;
-            crosshairs[itemThrowableType].color = crosshairColor;
+
+            if (itemThrowableCategory == ItemThrowableCategory.BANANA) {
+                crosshairs[itemThrowableType].color = crosshairColor;
+            }
+
+            if (itemThrowableCategory == ItemThrowableCategory.ROCKET) {
+                crosshairs[ItemThrowableType.ROCKET].color = crosshairColor;
+            }
+
+            if (itemThrowableCategory == ItemThrowableCategory.PLATEFORM) {
+                moverCrosshair.color = crosshairColor;
+            }
         }
 
         public void ShowHideCrosshairs(bool isVisible) {

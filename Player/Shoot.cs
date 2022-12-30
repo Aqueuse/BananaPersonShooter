@@ -10,11 +10,13 @@ namespace Player {
 
         public void ShootAction(InputAction.CallbackContext context) {
             var lastSelectedThrowableItem = BananaMan.Instance.activeItemThrowableType;
-            
-            if (context.performed && GameManager.Instance.isGamePlaying && lastSelectedThrowableItem != ItemThrowableType.PLATEFORM_CAVENDISH && lastSelectedThrowableItem != ItemThrowableType.ROCKET) {
-                if (Inventory.Instance.GetQuantity(lastSelectedThrowableItem) > 0) {
-                    // animation throw banana
-                    BananaMan.Instance.tpsPlayerAnimator.ThrowAnimation();
+            var lastSelectedThrowableCategory = BananaMan.Instance.activeItemThrowableCategory;
+
+            if (context.performed && GameManager.Instance.isGamePlaying) {
+                if (lastSelectedThrowableCategory == ItemThrowableCategory.BANANA) {
+                    if (Inventory.Instance.GetQuantity(lastSelectedThrowableItem) > 0 && !BananaMan.Instance.isGrabingMover) {
+                        BananaMan.Instance.tpsPlayerAnimator.ThrowAnimation();
+                    }
                 }
             }
         }

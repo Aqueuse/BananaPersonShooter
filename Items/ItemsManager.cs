@@ -1,5 +1,6 @@
 ﻿using Audio;
 using Bosses;
+using Building;
 using Dialogues;
 using Enums;
 using Player;
@@ -52,6 +53,7 @@ namespace Items {
                             DialogueSystem.Instance.interact_with_minichimp(_interactedObject);
                             break;
                         case ItemType.MOVER:
+                            BananaMan.Instance.advancementType = AdvancementType.OTHER;
                             Mover.Instance.Acquire();
                             Destroy(_interactedObject);
                             break;

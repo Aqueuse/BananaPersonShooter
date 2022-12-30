@@ -4,7 +4,6 @@ using Cameras;
 using Enums;
 using Player;
 using Settings;
-using UI;
 using UI.InGame;
 using UnityEngine;
 
@@ -16,27 +15,19 @@ namespace Dialogues {
         [SerializeField] private UIDialogueSystem uiDialogueSystem;
 
         private int ritournelleCount;
-
-        private AdvancementType advancementType = AdvancementType.DEMO;
     
         public void interact_with_minichimp(GameObject miniChimp) {
             BananaMan.Instance.GetComponent<PlayerController>().canMove = false;
             AudioManager.Instance.PlayVoice(VoiceType.MINICHIMP);
             ThirdPersonOrbitCamBasic.Instance.canRotate = false;
-
-            if (advancementType == AdvancementType.DEMO) {
-                advancementType = AdvancementType.OTHER;
-                Show_dialogue(dialoguesData[AdvancementType.DEMO]);
-                return;
-            }
-
-            if (advancementType == AdvancementType.NEW_PLAYER) {
-                advancementType = AdvancementType.OTHER;
+            
+            if (BananaMan.Instance.advancementType == AdvancementType.FIRST_MINICHIMP_INTERACT) {
+                BananaMan.Instance.advancementType = AdvancementType.OTHER;
                 Show_dialogue(dialoguesData[AdvancementType.FIRST_MINICHIMP_INTERACT]);
                 return;
             }
 
-            if (advancementType == AdvancementType.OTHER) {
+            if (BananaMan.Instance.advancementType == AdvancementType.OTHER) {
                 Show_ritournelle();
             }
         }

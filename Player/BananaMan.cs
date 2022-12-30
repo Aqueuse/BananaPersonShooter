@@ -5,10 +5,11 @@ using UnityEngine.InputSystem;
 
 namespace Player {
     class BananaMan : MonoSingleton<BananaMan> {
-        public BananasDataScriptableObject activeItem;
-
-        public ItemThrowableType activeItemThrowableType;
         public TpsPlayerAnimator tpsPlayerAnimator;
+
+        public BananasDataScriptableObject activeItem;
+        public ItemThrowableType activeItemThrowableType = ItemThrowableType.ROCKET;
+        public ItemThrowableCategory activeItemThrowableCategory = ItemThrowableCategory.ROCKET;
         
         public bool isInAir;
         public bool isGrabingMover;
@@ -16,7 +17,8 @@ namespace Player {
         public float health;
         public float resistance;
         public bool hasMover;
-        
+        public AdvancementType advancementType = AdvancementType.FIRST_MINICHIMP_INTERACT;
+
         private void Start() {
             tpsPlayerAnimator = GetComponentInChildren<Animator>().GetComponent<TpsPlayerAnimator>();
         }
