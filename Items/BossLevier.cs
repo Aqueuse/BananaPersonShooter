@@ -1,12 +1,12 @@
-﻿using Bosses;
-using Enums;
+﻿using Enums;
+using Monkeys;
 using UnityEngine;
 
 public class BossLevier : MonoBehaviour {
-    [SerializeField] private BossType bossType;
+    [SerializeField] private MonkeyType monkeyType;
 
     public void ActivateBoss() {
-        BossManager.Instance.activeBossType = bossType;
-        BossManager.Instance.StartBossFight(bossType);
+        MonkeyManager.Instance.activeMonkeyType = monkeyType;
+        MonkeyManager.Instance.StartBossFight(monkeyType);
     }
 }

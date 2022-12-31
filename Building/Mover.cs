@@ -21,12 +21,14 @@ namespace Building {
 
         public GameObject activePlateform;
 
+        public bool isPlateformPlaced;
+
         private void Start() {
             _playerController = BananaMan.Instance.GetComponent<PlayerController>();
         }
 
         void Update() {
-            if (BananaMan.Instance.isGrabingMover && !activePlateform.GetComponent<Plateform>().isPlaced) {
+            if (BananaMan.Instance.isGrabingMover) {
                 deplaceur.transform.LookAt(moverTarget.transform, Vector3.up);
                 
                 if (Physics.Raycast(deplaceur.transform.position, deplaceur.transform.forward, out RaycastHit raycastHit)) {

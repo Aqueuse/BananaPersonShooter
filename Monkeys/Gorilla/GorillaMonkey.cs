@@ -4,15 +4,19 @@ using UnityEngine;
 using UnityEngine.AI;
 using Random = UnityEngine.Random;
 
-    namespace Bosses.Gorilla {
-        public class GorillaBoss : MonoBehaviour {
+    namespace Monkeys.Gorilla {
+        enum GorillaAttackType {
+            SHOCKWAVE,
+            CATCHPLAYER,
+            TOURBISMASH
+        }
+        
+        public class GorillaMonkey : MonoBehaviour {
             [SerializeField] private GameObject shockWavePrefab;
             [SerializeField] private Transform gorillaHandRight;
             [SerializeField] private Transform gorillaHandLeft;
             [SerializeField] private NavMeshAgent navMeshAgent;
-            
-            private Boss _bossClass;
-        
+
             private Vector3 _gorillaHandLeftPosition;
             private Vector3 _gorillaHandRightPosition;
 
@@ -56,7 +60,6 @@ using Random = UnityEngine.Random;
 
             private void Start() {
                 _animator = GetComponent<Animator>();
-                _bossClass = GetComponent<Boss>();
 
                 _nearPlayerAttack = new List<int> {Roar, Flex, Tourbismash};
                 _mediumPlayerAttack = new List<int> {Punch, PunchRight, Swip, SwipRight};
@@ -67,7 +70,7 @@ using Random = UnityEngine.Random;
             }
 
             private void Update() {
-                if (!_bossClass.isSatieted && GameManager.Instance.isFigthing) {
+                if (MonkeyManager.Instance.monkeyState == MonkeyState.STARVED) {
                     var bananaManPosition = BananaMan.Instance.transform.position;
                     Vector3 bananaManPositionXY = new Vector3(bananaManPosition.x, 0, bananaManPosition.z);
                 
@@ -75,7 +78,7 @@ using Random = UnityEngine.Random;
                         navMeshAgent.SetDestination(bananaManPositionXY);
 
                         if (navMeshAgent.remainingDistance <= 7) _gorillaAttackType = GorillaAttackType.TOURBISMASH;
-                        if (navMeshAgent.remainingDistance > 7 && navMeshAgent.remainingDistance <= 10) _gorillaAttackType = GorillaAttackType.CATCHPLAYER;
+                        if (navMeshAgent.remainingDistance is > 7 and <= 10) _gorillaAttackType = GorillaAttackType.CATCHPLAYER;
                         if (navMeshAgent.remainingDistance >= 13) _gorillaAttackType = GorillaAttackType.SHOCKWAVE;
                     }
 
@@ -96,6 +99,10 @@ using Random = UnityEngine.Random;
                                 break;
                         }
                     }
+                    SynchronizeAnimatorAndAgent();
+                }
+
+                if (MonkeyManager.Instance.monkeyState == MonkeyState.HUNGRY) {
                     SynchronizeAnimatorAndAgent();
                 }
             }
@@ -153,13 +160,7 @@ using Random = UnityEngine.Random;
             }
 
             /////  DAMAGES ////
-
-            public void TakeStunDamage() {
-            }
-
-            public void SlowByIce() {
-            }
-
+            
             public void BeAttracted() {
             }
         }

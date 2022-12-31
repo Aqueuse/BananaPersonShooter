@@ -1,8 +1,8 @@
 ﻿using Audio;
-using Bosses;
 using Building;
 using Dialogues;
 using Enums;
+using Monkeys;
 using Player;
 using UI;
 using UI.InGame;
@@ -47,7 +47,7 @@ namespace Items {
                             // TODO change bananier state to baby bananier
                             break;
                         case ItemType.BOSS_FIGHT_LAUNCHER:
-                            BossManager.Instance.StartBossFight(BossType.KELSAIK);
+                            MonkeyManager.Instance.StartBossFight(MonkeyType.KELSAIK);
                             break;
                         case ItemType.MINI_CHIMP:
                             DialogueSystem.Instance.interact_with_minichimp(_interactedObject);

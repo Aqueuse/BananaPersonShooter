@@ -8,26 +8,20 @@ namespace Building {
         [SerializeField] private Material ghostValidMaterial;
         [SerializeField] private Material ghostUnvalidMaterial;
 
+        [SerializeField] private MeshRenderer turbineMeshRenderer;
+
         private MeshRenderer _meshRenderer;
 
         public bool isValid;
-        public bool isPlaced;
 
         private void Start() {
             _boxCollider = GetComponent<BoxCollider>();
             _meshRenderer = GetComponent<MeshRenderer>();
 
             isValid = true;
-            isPlaced = false;
+            Mover.Instance.isPlateformPlaced = false;
         }
         
-        public void SetGhostState(bool isGhost) {
-            if (isGhost) {
-                _boxCollider.isTrigger = true;
-                _meshRenderer.material = ghostUnvalidMaterial;
-            }
-        }
-
         public void SetValid() {
             _meshRenderer.material = ghostValidMaterial;
         }
@@ -37,20 +31,21 @@ namespace Building {
         }
 
         public void SetNormal() {
-            isPlaced = true;
+            Mover.Instance.isPlateformPlaced = true;
             _boxCollider.isTrigger = false;
             _meshRenderer.material = plateformMaterial;
+            turbineMeshRenderer.enabled = true;
         }
         
         private void OnTriggerStay(Collider other) {
-            if (other.CompareTag("MoverUnvalid") && !isPlaced) {
+            if (other.CompareTag("MoverUnvalid") && !Mover.Instance.isPlateformPlaced) {
                 isValid = false;
                 SetUnvalid();
             }
         }
 
         private void OnTriggerExit(Collider other) {
-            if (other.CompareTag("MoverUnvalid") && !isPlaced) {
+            if (other.CompareTag("MoverUnvalid") && !Mover.Instance.isPlateformPlaced) {
                 isValid = true;
                 SetValid();
             }

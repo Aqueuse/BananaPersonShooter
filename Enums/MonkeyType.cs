@@ -1,5 +1,5 @@
 ﻿namespace Enums {
-    public enum BossType {
+    public enum MonkeyType {
         KELSAIK
     }
 }

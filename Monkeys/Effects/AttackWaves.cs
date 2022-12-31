@@ -2,7 +2,7 @@
 using Player;
 using UnityEngine;
 
-namespace Bosses.BossEffects {
+namespace Monkeys.Effects {
     public class AttackWaves : MonoBehaviour {
         [SerializeField] private float speed;
 

@@ -1,7 +1,8 @@
-﻿using Bosses;
+﻿using Monkeys;
 using Player;
 using UI.InGame;
 using UnityEngine;
+using UnityEngine.AI;
 
 namespace Weapons {
     public class Weapon : MonoBehaviour {
@@ -9,7 +10,7 @@ namespace Weapons {
 
         private void OnTriggerEnter(Collider other) {
             if (GameManager.Instance.isFigthing && other.gameObject.CompareTag("Boss")) {
-                BossManager.Instance.GetActiveBoss().GetComponent<Boss>().AddSatiety(BananaMan.Instance.activeItem.damage);
+                MonkeyManager.Instance.GetActiveBoss().GetComponent<Monkey>().AddSatiety(BananaMan.Instance.activeItem.damage);
                 DestroyMe();
             }
         }
@@ -24,6 +25,8 @@ namespace Weapons {
             else {
                 transform.gameObject.GetComponent<MeshRenderer>().enabled = false;
                 transform.GetChild(0).GetComponent<MeshRenderer>().enabled = true;
+
+                MonkeyManager.Instance.GetActiveBoss().GetComponent<NavMeshAgent>().SetDestination(transform.position);
             
                 Invoke(nameof(DestroyMe), 10);
             }

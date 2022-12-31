@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Bosses.Gorilla {
+namespace Monkeys.Gorilla {
     public class GorillaAnimationBehaviour : StateMachineBehaviour {
         public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
             if (stateInfo.IsTag("GorillaAttack")) {
@@ -11,7 +11,7 @@ namespace Bosses.Gorilla {
 
 
         public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
-            var gorilla = GameObject.FindWithTag("Boss").GetComponent<GorillaBoss>();
+            var gorilla = GameObject.FindWithTag("Boss").GetComponent<GorillaMonkey>();
  
             if (stateInfo.IsTag("GorillaAttack")) {
                 gorilla.isAttackingPlayer = false;

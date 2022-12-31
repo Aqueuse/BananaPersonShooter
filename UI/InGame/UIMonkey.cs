@@ -2,7 +2,7 @@
 using UnityEngine.UI;
 
 namespace UI.InGame {
-    public class UIBoss : MonoBehaviour {
+    public class UIMonkey : MonoBehaviour {
 
         public void Add_Satiety(float satietyValue) {
             GetComponent<Slider>().value = satietyValue;

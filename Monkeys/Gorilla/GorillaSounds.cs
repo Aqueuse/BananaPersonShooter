@@ -1,7 +1,7 @@
 using Audio;
 using UnityEngine;
 
-namespace Bosses.Gorilla {
+namespace Monkeys.Gorilla {
     public class GorillaSounds : MonoBehaviour {
         [SerializeField] private AudioDataScriptableObject gorillaQuickRoarSounds;
         [SerializeField] private AudioDataScriptableObject boomSound;

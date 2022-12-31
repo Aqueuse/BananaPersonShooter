@@ -1,14 +1,18 @@
-﻿using UnityEngine;
+﻿using System;
+using Enums;
+using UI.InGame;
+using UnityEngine;
 
-namespace Bosses {
-    public class Boss : MonoBehaviour {
+namespace Monkeys {
+    public class Monkey : MonoBehaviour {
+        [SerializeField] private UIMonkey associatedUI;
+        
         public float maxSatiety;
         private float _satiety;
 
         private bool _isRunningToPlayer;
         private bool _isAttackingPlayer;
         private bool _isCatchingPlayer;
-        public bool isSatieted;
 
         private bool _isNearPlayer;
 
@@ -17,17 +21,24 @@ namespace Bosses {
         
         private void Start() {
             _combatPhaseFactor = 3 / maxSatiety;
-            BossManager.Instance.associatedUI.SetMaxSatiety(maxSatiety);
+            
+            associatedUI.SetMaxSatiety(maxSatiety);
+
+            _satiety = maxSatiety;
+        }
+
+        private void Update() {
+            if (_satiety < 20) {
+                MonkeyManager.Instance.monkeyState = MonkeyState.STARVED;
+            }
         }
 
         public void AddSatiety(float addedSatietyValue) {
-            Debug.Log(_satiety);
-            
             _satiety += addedSatietyValue;
-            BossManager.Instance.associatedUI.Add_Satiety(_satiety);
+            associatedUI.Add_Satiety(_satiety);
             
             if (_satiety >= maxSatiety) {
-                BossManager.Instance.Win();
+                MonkeyManager.Instance.GetHappy();
             }
             
             _combatPhase = Mathf.CeilToInt(_combatPhaseFactor * _satiety);
