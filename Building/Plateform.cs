@@ -1,3 +1,4 @@
+using Enums;
 using UnityEngine;
 
 namespace Building {
@@ -10,6 +11,8 @@ namespace Building {
 
         [SerializeField] private MeshRenderer turbineMeshRenderer;
 
+        public ItemThrowableType platformType;
+        
         private MeshRenderer _meshRenderer;
 
         public bool isValid;
@@ -19,7 +22,6 @@ namespace Building {
             _meshRenderer = GetComponent<MeshRenderer>();
 
             isValid = true;
-            Mover.Instance.isPlateformPlaced = false;
         }
         
         public void SetValid() {
@@ -31,21 +33,20 @@ namespace Building {
         }
 
         public void SetNormal() {
-            Mover.Instance.isPlateformPlaced = true;
             _boxCollider.isTrigger = false;
             _meshRenderer.material = plateformMaterial;
             turbineMeshRenderer.enabled = true;
         }
-        
+
         private void OnTriggerStay(Collider other) {
-            if (other.CompareTag("MoverUnvalid") && !Mover.Instance.isPlateformPlaced) {
+            if (other.CompareTag("MoverUnvalid")) {
                 isValid = false;
                 SetUnvalid();
             }
         }
 
         private void OnTriggerExit(Collider other) {
-            if (other.CompareTag("MoverUnvalid") && !Mover.Instance.isPlateformPlaced) {
+            if (other.CompareTag("MoverUnvalid")) {
                 isValid = true;
                 SetValid();
             }

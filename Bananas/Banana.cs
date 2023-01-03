@@ -4,8 +4,8 @@ using UI.InGame;
 using UnityEngine;
 using UnityEngine.AI;
 
-namespace Weapons {
-    public class Weapon : MonoBehaviour {
+namespace Bananas {
+    public class Banana : MonoBehaviour {
         public BananasDataScriptableObject bananasDataScriptableObject;
 
         private void OnTriggerEnter(Collider other) {

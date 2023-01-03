@@ -42,7 +42,7 @@ namespace Monkeys {
         public void SpawnMonkey(MonkeyType monkeyType) {
             if (monkeyType == MonkeyType.KELSAIK) {
                 NavMeshTriangulation navMeshTriangulation = NavMesh.CalculateTriangulation();
-
+                
                 int vertexIndex = Random.Range(0, navMeshTriangulation.vertices.Length);
                 
                 // instanciate monkey

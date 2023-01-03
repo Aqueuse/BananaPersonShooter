@@ -1,6 +1,4 @@
-﻿using Building;
-using Dialogues;
-using UI.InGame;
+﻿using Dialogues;
 using UI.InGame.Inventory;
 using UI.InGame.PlateformBuilder;
 using UnityEngine;
@@ -16,7 +14,7 @@ namespace UI {
         [SerializeField] private CanvasGroup creditsMenuCanvasGroup;
         [SerializeField] private CanvasGroup deathMenuCanvasGroup;
         [SerializeField] private CanvasGroup dialoguesCanvasGroup;
-        [SerializeField] private CanvasGroup rocksQuantityCanvasGroup;
+        [SerializeField] private CanvasGroup moverUICanvasGroup;
         [SerializeField] private CanvasGroup miniChimpPlateformBuilderCanvasGroup;
         
         public GameObject inventory;
@@ -200,8 +198,8 @@ namespace UI {
             Set_active(deathMenuCanvasGroup, false);
         }
 
-        public void Show_Hide_Rocks_Quantity(bool isVisible) {
-            Set_active(rocksQuantityCanvasGroup, isVisible);
+        public void Show_Hide_Mover_UI(bool isVisible) {
+            Set_active(moverUICanvasGroup, isVisible);
         }
 
         public void Show_Hide_minichimp_plateform_builder_interface(bool isVisible) {

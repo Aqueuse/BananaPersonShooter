@@ -15,7 +15,7 @@ using Random = UnityEngine.Random;
             [SerializeField] private GameObject shockWavePrefab;
             [SerializeField] private Transform gorillaHandRight;
             [SerializeField] private Transform gorillaHandLeft;
-            [SerializeField] private NavMeshAgent navMeshAgent;
+            private NavMeshAgent navMeshAgent;
 
             private Vector3 _gorillaHandLeftPosition;
             private Vector3 _gorillaHandRightPosition;
@@ -60,6 +60,7 @@ using Random = UnityEngine.Random;
 
             private void Start() {
                 _animator = GetComponent<Animator>();
+                navMeshAgent = GetComponent<NavMeshAgent>();
 
                 _nearPlayerAttack = new List<int> {Roar, Flex, Tourbismash};
                 _mediumPlayerAttack = new List<int> {Punch, PunchRight, Swip, SwipRight};

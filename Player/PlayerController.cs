@@ -7,13 +7,18 @@ using UnityEngine.InputSystem;
 namespace Player {
 
     public class PlayerController : MonoBehaviour {
-        [Header("Movement Settings")] public float baseMovementSpeed = 6f;
-        public float sprintMovementSpeed = 9f;
-        private const float JumpImpulse = 400f;
+        private CharacterController _characterController;
+        
+        public float baseMovementSpeed = 6f;
+        public float sprintMovementSpeed;
+        private const float Gravity = -10f;
+        private const float JumpHeight = 1f;
 
         public bool isFocusCamera;
         public bool isRolling;
         private bool _isRagdoll;
+        private bool isJumping;
+        
         public bool canMove = true;
         
         private TpsPlayerAnimator _tpsPlayerAnimatorScript;
@@ -26,46 +31,65 @@ namespace Player {
         //Stored Values
         private Vector3 _rawInputMovement;
         private Transform _mainCameraTransform;
+        private Vector3 _moveToRotate;
         private Vector3 _lastPosition;
         private Vector3 _currentPosition;
+        private Quaternion cameraRotation;
 
+        private float jumpCounter;
+        
         private void Start() {
             _tpsPlayerAnimatorScript = gameObject.GetComponent<TpsPlayerAnimator>();
             _playerAnimator = gameObject.GetComponent<Animator>();
             _ragDoll = gameObject.GetComponent<RagDoll>();
             _rigidbody = GetComponent<Rigidbody>();
+            _characterController = GetComponent<CharacterController>();
+
+            jumpCounter = 0f;
 
             if (Camera.main != null) _mainCameraTransform = Camera.main.transform;
         }
 
-        private void FixedUpdate() {
+        private void Update() {
             if (_isRagdoll) {
                 _damageCounter++;
             }
 
             if (GameManager.Instance.isGamePlaying && !_isRagdoll && canMove) {
-                Quaternion cameraRotation = new Quaternion(0, _mainCameraTransform.transform.rotation.y, 0,
-                    _mainCameraTransform.rotation.w).normalized;
-
+                cameraRotation = new Quaternion(0, _mainCameraTransform.transform.rotation.y, 0,
+                _mainCameraTransform.rotation.w).normalized;
+            
                 var inputAngle = Vector2.SignedAngle(Vector2.up, new Vector2(-_rawInputMovement.x, _rawInputMovement.z));
-
+                
                 var playerPosition = transform.position;
-
+                
                 if (!isFocusCamera && !BananaMan.Instance.isGrabingMover) {  // rotate follow the input
                     if (_rawInputMovement != Vector3.zero) {
-                        _rigidbody.rotation = Quaternion.AngleAxis(inputAngle, Vector3.up) * cameraRotation;
+                        transform.rotation = Quaternion.AngleAxis(inputAngle, Vector3.up) * cameraRotation;
                     }
                 }
                 else {   // rotate strictly follow the camera 
-                    _rigidbody.rotation = cameraRotation;
+                    transform.rotation = cameraRotation;
                 }
                 
-                var moveToRotate = cameraRotation * _rawInputMovement * (baseMovementSpeed * Time.fixedDeltaTime);
-                _rigidbody.MovePosition(playerPosition + new Vector3(moveToRotate.x, 0, moveToRotate.z));
+                _moveToRotate = cameraRotation * _rawInputMovement * (baseMovementSpeed * Time.deltaTime);
+                
+                if (jumpCounter < JumpHeight && isJumping) {
+                    jumpCounter += Time.deltaTime;
+                    _moveToRotate.y += 5 * Time.deltaTime;
+                    BananaMan.Instance.isInAir = true;
+                }
+                else {
+                    jumpCounter = 0f;
+                    _moveToRotate.y += Gravity * Time.deltaTime;
+                    isJumping = false;
+                }
+                
+                _characterController.Move(_moveToRotate);
                 
                 _tpsPlayerAnimatorScript.UpdateMovementAnimation(_rawInputMovement.z * baseMovementSpeed,
                     _rawInputMovement.x * baseMovementSpeed);
-
+                
                 // is the player moving ?
                 _currentPosition = playerPosition;
                 _tpsPlayerAnimatorScript.IsMoving(_currentPosition != _lastPosition);
@@ -96,29 +120,22 @@ namespace Player {
         public void PlayerJump(InputAction.CallbackContext value) {
             if (value.performed) {
                 if (!BananaMan.Instance.isInAir) {
-                    if (!_isRagdoll) {
-                        if (!isFocusCamera) {
+                    if (!_isRagdoll && !isFocusCamera) {
+                        BananaMan.Instance.isInAir = true;
+                        _tpsPlayerAnimatorScript.Jump();
+                        isJumping = true;
+                    }
+                    else {
+                        if (_rawInputMovement.z >= 0) {
                             BananaMan.Instance.isInAir = true;
                             _tpsPlayerAnimatorScript.Jump();
-                            PlayerVerticalImpulse();
-                        }
-                        else {
-                            if (_rawInputMovement.z >= 0) {
-                                BananaMan.Instance.isInAir = true;
-                                _tpsPlayerAnimatorScript.Jump();
-                                PlayerVerticalImpulse();
-                            }
+                            isJumping = true;
                         }
                     }
                 }
             }
         }
-
-        public void PlayerVerticalImpulse() {
-            _rigidbody.AddForce(0, JumpImpulse, 0, ForceMode.Impulse);
-            BananaMan.Instance.isInAir = true;
-        }
-
+        
         public void PlayerRoll(InputAction.CallbackContext value) {
             if (value.performed) {
                 _tpsPlayerAnimatorScript.Roll();

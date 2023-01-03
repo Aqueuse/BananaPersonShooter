@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Linq;
 using Audio;
-using Building;
 using Cameras;
 using Data;
 using Enums;
@@ -93,8 +92,6 @@ public class GameManager : MonoSingleton<GameManager> {
         // refects values in UI
         UIVitals.Instance.Set_Health(BananaMan.Instance.health);
         UIVitals.Instance.Set_Resistance(BananaMan.Instance.resistance);
-        
-        Mover.Instance.SetRocketsQuantity(Inventory.Instance.bananaManInventory[ItemThrowableType.ROCKET]);
     }
 
     public void Play() {
@@ -316,7 +313,9 @@ public class GameManager : MonoSingleton<GameManager> {
 
         if (load.isDone) {
             SceneManager.SetActiveScene(SceneManager.GetSceneByName(sceneName));
+            BananaMan.Instance.GetComponent<CharacterController>().enabled = false;
             BananaMan.Instance.transform.position = spawnPoint;
+            BananaMan.Instance.GetComponent<CharacterController>().enabled = true;
             ItemsManager.Instance.lootMessage.SetActive(false);
             
             loadingScreen.SetActive(false);

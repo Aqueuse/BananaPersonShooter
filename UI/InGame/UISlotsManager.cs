@@ -39,6 +39,14 @@ namespace UI.InGame {
             UICrosshair.Instance.SetCrosshair(BananaMan.Instance.activeItemThrowableType, BananaMan.Instance.activeItemThrowableCategory);
         }
 
+        public void RefreshQuantityInQuickSlot(ItemThrowableType itemThrowableType) {
+            foreach (var uiSlotsScript in uiSlotsScripts) {
+                if (uiSlotsScript.itemThrowableType == itemThrowableType) {
+                    uiSlotsScript.SetAmmoQuantity(global::Inventory.Instance.bananaManInventory[itemThrowableType].ToString());
+                }
+            }
+        }
+
         public void Select_Left_Slot() {
             if (_selectSlotIndex > 0) {
                 _selectSlotIndex--;

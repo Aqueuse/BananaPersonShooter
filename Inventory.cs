@@ -1,11 +1,11 @@
-﻿using System.Collections.Generic;
-using Enums;
+﻿using Enums;
+using UI.InGame;
 
 public class Inventory : MonoSingleton<Inventory> {
-    public Dictionary<ItemThrowableType, int> bananaManInventory;
+    public GenericDictionary<ItemThrowableType, int> bananaManInventory;
     
     private void Start() {
-        bananaManInventory = new Dictionary<ItemThrowableType, int> {
+        bananaManInventory = new GenericDictionary<ItemThrowableType, int> {
             {ItemThrowableType.BARANGAN, 0},
             {ItemThrowableType.BLUE_JAVA, 0},
             {ItemThrowableType.BURRO, 0},
@@ -30,6 +30,7 @@ public class Inventory : MonoSingleton<Inventory> {
 
     public void AddQuantity(ItemThrowableType itemThrowableType, int quantity) {
         bananaManInventory[itemThrowableType] += quantity;
+        UISlotsManager.Instance.RefreshQuantityInQuickSlot(itemThrowableType);
     }
 
     public int GetQuantity(ItemThrowableType itemThrowableType) {
