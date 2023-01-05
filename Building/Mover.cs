@@ -146,7 +146,7 @@ namespace Building {
 
                                 Inventory.Instance.RemoveQuantity(lastSelectedThrowableItem, 1);
                                 UISlotsManager.Instance.Get_Selected_Slot()
-                                    .SetAmmoQuantity(Inventory.Instance.GetQuantity(lastSelectedThrowableItem).ToString());
+                                    .SetAmmoQuantity(Inventory.Instance.GetQuantity(lastSelectedThrowableItem));
                             }
                             else {
                                 Destroy(activePlateform);
@@ -162,12 +162,14 @@ namespace Building {
         public void ThrowBanana(InputAction.CallbackContext context) {
             if (context.performed && GameManager.Instance.isGamePlaying) {
                 if (_moverContext == MoverContext.PUT && BananaMan.Instance.isGrabingMover && Inventory.Instance.GetQuantity(BananaMan.Instance.activeItemThrowableType) > 0) {
-                    var banana = Instantiate(weaponsGameObjects[BananaMan.Instance.activeItem.itemThrowableType], null);
+                    var banana = Instantiate(weaponsGameObjects[BananaMan.Instance.activeItem.itemThrowableType], launchingBananaPoint.transform.position, Quaternion.identity, null);
 
                     // Instantiate Banana of this type
                     // throw it with good speed forward the player
-                    banana.transform.position = launchingBananaPoint.transform.position;
-                    banana.GetComponent<Rigidbody>().AddForce(BananaMan.Instance.transform.forward * 50, ForceMode.Impulse);
+                    banana.transform.SetParent(null);
+                    
+//                    banana.transform.position = launchingBananaPoint.transform.position;
+                    banana.GetComponent<Rigidbody>().AddForce(BananaMan.Instance.transform.forward * 100, ForceMode.Impulse);
                     AmmoReduce();
                 } 
             }
@@ -203,7 +205,7 @@ namespace Building {
 
             var newAmmoQuantity = Inventory.Instance.bananaManInventory[activeWeaponData.itemThrowableType];
 
-            UISlotsManager.Instance.Get_Selected_Slot().SetAmmoQuantity(newAmmoQuantity.ToString());
+            UISlotsManager.Instance.Get_Selected_Slot().SetAmmoQuantity(newAmmoQuantity);
         }
     }
 }

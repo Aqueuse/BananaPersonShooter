@@ -42,7 +42,7 @@ namespace UI.InGame {
         public void RefreshQuantityInQuickSlot(ItemThrowableType itemThrowableType) {
             foreach (var uiSlotsScript in uiSlotsScripts) {
                 if (uiSlotsScript.itemThrowableType == itemThrowableType) {
-                    uiSlotsScript.SetAmmoQuantity(global::Inventory.Instance.bananaManInventory[itemThrowableType].ToString());
+                    uiSlotsScript.SetAmmoQuantity(global::Inventory.Instance.bananaManInventory[itemThrowableType]);
                 }
             }
         }
@@ -66,6 +66,12 @@ namespace UI.InGame {
         }
 
         public void AssignToSelectedSlot(ItemThrowableType itemThrowableType, ItemThrowableCategory itemThrowableCategory) {
+            foreach (var uiSlot in uiSlotsScripts) {
+                if (uiSlot.itemThrowableType == itemThrowableType) {
+                    uiSlot.EmptySlot();
+                }
+            }
+            
             slotsMappingToInventory[_selectSlotIndex] = UInventory.Instance.GetSlotIndex(itemThrowableType);
             
             Get_Selected_Slot().SetSlot(itemThrowableType, itemThrowableCategory);

@@ -20,25 +20,30 @@ namespace UI.InGame {
             _white = Color.white;
             _transparent = _white;
             _transparent.a = 0;
+
+            itemThrowableType = ItemThrowableType.ROCKET;
+            itemThrowableCategory = ItemThrowableCategory.ROCKET;
         }
         
         public void SetSlot(ItemThrowableType slotItemThrowableType, ItemThrowableCategory slotItemThrowableCategory) {
             itemThrowableType = slotItemThrowableType;
             itemThrowableCategory = slotItemThrowableCategory;
             
-            if (itemThrowableCategory == ItemThrowableCategory.ROCKET) {
-                iconImage.sprite = null;
-                quantityText.text = "";
-                iconImage.color = _transparent;
-            }
-
-            else {
+            if (itemThrowableCategory != ItemThrowableCategory.ROCKET) {
                 iconImage.sprite = UInventory.Instance.lastselectedInventoryItem.transform.GetChild(0).GetComponentInChildren<Image>().sprite;
-                SetAmmoQuantity(global::Inventory.Instance.GetQuantity(itemThrowableType).ToString());
+                SetAmmoQuantity(global::Inventory.Instance.GetQuantity(itemThrowableType));
                 iconImage.color = _white;
             }
         }
-    
+
+        public void EmptySlot() {
+            itemThrowableType = ItemThrowableType.ROCKET;
+            itemThrowableCategory = ItemThrowableCategory.ROCKET;
+            iconImage.sprite = null;
+            quantityText.text = "";
+            iconImage.color = _transparent;
+        }
+
         public void SetSelectedWeaponSlot() {
             favoriteBackground.sizeDelta = new Vector2(125f, 125f);
         }
@@ -47,8 +52,8 @@ namespace UI.InGame {
             favoriteBackground.sizeDelta = new Vector2(100f, 100f);
         }
 
-        public void SetAmmoQuantity(string quantity) {
-            quantityText.text = quantity;
+        public void SetAmmoQuantity(int quantity) {
+            quantityText.text = quantity > 999 ? "999+" : quantity.ToString();
         }
 
         public void SetSprite(Sprite sprite) {

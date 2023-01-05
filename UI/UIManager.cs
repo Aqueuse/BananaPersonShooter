@@ -39,12 +39,23 @@ namespace UI {
 
 
         public void Hide_menus(InputAction.CallbackContext context) {
-            Set_active(_inventoryCanvasGroup, false);
-            Set_active(gameMenuCanvasGroup, false);
-            Set_active(optionsMenuCanvasGroup, false);
-            Set_active(miniChimpPlateformBuilderCanvasGroup, false);
+            if (GameManager.Instance.isInGame) {
+                Set_active(_inventoryCanvasGroup, false);
+                Set_active(gameMenuCanvasGroup, false);
+                Set_active(optionsMenuCanvasGroup, false);
+                Set_active(miniChimpPlateformBuilderCanvasGroup, false);
+                Set_active(bananapediaMenuCanvasGroup, false);
 
-            GameManager.Instance.PauseGame(false);
+                GameManager.Instance.PauseGame(false);
+            }
+
+            else {
+                Set_active(optionsMenuCanvasGroup, false);
+                Set_active(bananapediaMenuCanvasGroup, false);
+                Set_active(creditsMenuCanvasGroup, false);
+                
+                Set_active(homeMenuCanvasGroup, true);
+            }
         }
         
         public void Show_home_menu() {

@@ -16,7 +16,7 @@ public class InputManager : MonoSingleton<InputManager> {
     }
     
     public void Scroll_Slots(InputAction.CallbackContext context) {
-        if (context.performed && GameManager.Instance.isGamePlaying) {
+        if (context.performed && GameManager.Instance.isInGame) {
             float scrollValue = context.ReadValue<Vector2>().y;
             if (scrollValue < 0) UISlotsManager.Instance.Select_Left_Slot();
             if (scrollValue > 0) UISlotsManager.Instance.Select_Right_Slot();

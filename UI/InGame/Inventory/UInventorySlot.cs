@@ -4,50 +4,33 @@ using Player;
 using Settings;
 using TMPro;
 using UnityEngine;
-using UnityEngine.EventSystems;
 
 namespace UI.InGame.Inventory {
-    public class UInventorySlot : MonoBehaviour, ISelectHandler {
+    public class UInventorySlot : MonoBehaviour {
         public ItemThrowableType itemThrowableType;
         public ItemThrowableCategory itemThrowableCategory;
 
         [SerializeField] private GameObject quantityText;
         
-        public void OnSelect(BaseEventData eventData) {
+        public void AssignToSlot() {
             SetDescription();
-
-            switch (itemThrowableCategory) {
-                case ItemThrowableCategory.BANANA:
-                    BananaMan.Instance.activeItem = ScriptableObjectManager.Instance.GetBananaScriptableObject(itemThrowableType);
-                    BananaMan.Instance.activeItemThrowableType = itemThrowableType;
-                    BananaMan.Instance.activeItemThrowableCategory = itemThrowableCategory;
             
-                    UInventory.Instance.lastselectedInventoryItem = gameObject;
+            BananaMan.Instance.activeItemThrowableCategory = itemThrowableCategory;
+            BananaMan.Instance.activeItemThrowableType = itemThrowableType;
             
-                    UISlotsManager.Instance.AssignToSelectedSlot(itemThrowableType, itemThrowableCategory);
-                    break;
-                case ItemThrowableCategory.PLATEFORM:
-                    BananaMan.Instance.activeItemThrowableCategory = itemThrowableCategory;
-                    BananaMan.Instance.activeItemThrowableType = itemThrowableType;
+            UInventory.Instance.lastselectedInventoryItem = gameObject;
             
-                    UInventory.Instance.lastselectedInventoryItem = gameObject;
+            if (itemThrowableCategory == ItemThrowableCategory.BANANA) {
+                BananaMan.Instance.activeItem = ScriptableObjectManager.Instance.GetBananaScriptableObject(itemThrowableType);
+            }
             
-                    UISlotsManager.Instance.AssignToSelectedSlot(itemThrowableType, itemThrowableCategory);
-                    break;
-                case ItemThrowableCategory.ROCKET:
-                    BananaMan.Instance.activeItemThrowableCategory = itemThrowableCategory;
-                    BananaMan.Instance.activeItemThrowableType = itemThrowableType;
-
-                    UInventory.Instance.lastselectedInventoryItem = gameObject;
-
-                    UICrosshair.Instance.SetCrosshair(itemThrowableType, itemThrowableCategory);
-                    UISlotsManager.Instance.AssignToSelectedSlot(itemThrowableType, itemThrowableCategory);
-                    break;
+            if (itemThrowableCategory != ItemThrowableCategory.ROCKET) {
+                UISlotsManager.Instance.AssignToSelectedSlot(itemThrowableType, itemThrowableCategory);
             }
         }
         
         public void SetQuantity(int quantity) {
-            quantityText.GetComponent<TextMeshProUGUI>().text = quantity.ToString();
+            quantityText.GetComponent<TextMeshProUGUI>().text = quantity > 999 ? "999+" : quantity.ToString();
         }
 
         public void SetDescription() {

@@ -11,7 +11,7 @@ namespace Player {
         
         public float baseMovementSpeed = 6f;
         public float sprintMovementSpeed;
-        private const float Gravity = -10f;
+        private const float Gravity = -15f;
         private const float JumpHeight = 1f;
 
         public bool isFocusCamera;
@@ -49,7 +49,7 @@ namespace Player {
 
             if (Camera.main != null) _mainCameraTransform = Camera.main.transform;
         }
-
+        
         private void Update() {
             if (_isRagdoll) {
                 _damageCounter++;
@@ -143,12 +143,14 @@ namespace Player {
         }
 
         public void PlayerMovement(InputAction.CallbackContext callbackContext) {
+            if (BananaMan.Instance.isInAir) return;
+            
             Vector2 inputMovement = callbackContext.ReadValue<Vector2>();
             _rawInputMovement = new Vector3(inputMovement.x, 0, inputMovement.y); // Y en input => Z pour le player (forward)
         }
 
         public void PlayerSprint(InputAction.CallbackContext value) {
-            if (value.performed) {
+            if (value.performed && !BananaMan.Instance.isInAir) {
                 baseMovementSpeed = sprintMovementSpeed;
             }
 
