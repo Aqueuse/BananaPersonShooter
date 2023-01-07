@@ -12,6 +12,7 @@ namespace Player {
         public ItemThrowableCategory activeItemThrowableCategory = ItemThrowableCategory.ROCKET;
         
         public bool isInAir;
+        public bool isInWater;
         public bool isGrabingMover;
 
         public float health;
@@ -24,11 +25,17 @@ namespace Player {
         }
 
         public void GainHealth(InputAction.CallbackContext context) {
-            health += activeItem.healthBonus;
-            resistance += activeItem.resistanceBonus;
+            if (activeItemThrowableCategory == ItemThrowableCategory.BANANA && context.performed) {
+                if (Inventory.Instance.bananaManInventory[activeItemThrowableType] > 0) {
+                    health += activeItem.healthBonus;
+                    resistance += activeItem.resistanceBonus;
+
+                    Inventory.Instance.RemoveQuantity(activeItemThrowableType, 1);
             
-            UIVitals.Instance.Set_Health(health);
-            UIVitals.Instance.Set_Resistance(resistance);
+                    UIVitals.Instance.Set_Health(health);
+                    UIVitals.Instance.Set_Resistance(resistance);
+                }
+            }
         }
 
         public void TakeDamage(int damageAmount) {

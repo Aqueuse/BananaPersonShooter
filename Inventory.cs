@@ -42,5 +42,6 @@ public class Inventory : MonoSingleton<Inventory> {
         else {
             bananaManInventory[itemThrowableType] = 0;
         }
+        UISlotsManager.Instance.RefreshQuantityInQuickSlot(itemThrowableType);
     }
 }

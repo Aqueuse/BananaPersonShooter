@@ -31,10 +31,13 @@ namespace Player {
         //Stored Values
         private Vector3 _rawInputMovement;
         private Transform _mainCameraTransform;
-        private Vector3 _moveToRotate;
+        private Vector3 _movement;
         private Vector3 _lastPosition;
         private Vector3 _currentPosition;
         private Quaternion cameraRotation;
+
+        private float inputAngle;
+        private Vector3 playerPosition;        
 
         private float jumpCounter;
         
@@ -59,10 +62,10 @@ namespace Player {
                 cameraRotation = new Quaternion(0, _mainCameraTransform.transform.rotation.y, 0,
                 _mainCameraTransform.rotation.w).normalized;
             
-                var inputAngle = Vector2.SignedAngle(Vector2.up, new Vector2(-_rawInputMovement.x, _rawInputMovement.z));
-                
-                var playerPosition = transform.position;
-                
+                inputAngle = Vector2.SignedAngle(Vector2.up, new Vector2(-_rawInputMovement.x, _rawInputMovement.z));
+
+                playerPosition = transform.position;
+
                 if (!isFocusCamera && !BananaMan.Instance.isGrabingMover) {  // rotate follow the input
                     if (_rawInputMovement != Vector3.zero) {
                         transform.rotation = Quaternion.AngleAxis(inputAngle, Vector3.up) * cameraRotation;
@@ -72,20 +75,20 @@ namespace Player {
                     transform.rotation = cameraRotation;
                 }
                 
-                _moveToRotate = cameraRotation * _rawInputMovement * (baseMovementSpeed * Time.deltaTime);
+                _movement = cameraRotation * _rawInputMovement * (baseMovementSpeed * Time.deltaTime);
                 
                 if (jumpCounter < JumpHeight && isJumping) {
                     jumpCounter += Time.deltaTime;
-                    _moveToRotate.y += 5 * Time.deltaTime;
+                    _movement.y += 5 * Time.deltaTime;
                     BananaMan.Instance.isInAir = true;
                 }
                 else {
                     jumpCounter = 0f;
-                    _moveToRotate.y += Gravity * Time.deltaTime;
+                    _movement.y += Gravity * Time.deltaTime;
                     isJumping = false;
                 }
                 
-                _characterController.Move(_moveToRotate);
+                _characterController.Move(_movement);
                 
                 _tpsPlayerAnimatorScript.UpdateMovementAnimation(_rawInputMovement.z * baseMovementSpeed,
                     _rawInputMovement.x * baseMovementSpeed);
@@ -143,10 +146,9 @@ namespace Player {
         }
 
         public void PlayerMovement(InputAction.CallbackContext callbackContext) {
-            if (BananaMan.Instance.isInAir) return;
-            
             Vector2 inputMovement = callbackContext.ReadValue<Vector2>();
-            _rawInputMovement = new Vector3(inputMovement.x, 0, inputMovement.y); // Y en input => Z pour le player (forward)
+            _rawInputMovement = new Vector3(inputMovement.x, 0,inputMovement.y); // Y en input => Z pour le player (forward)
+            _rawInputMovement = Vector3.ClampMagnitude(_rawInputMovement, 1); // clamp the speed in diagonal
         }
 
         public void PlayerSprint(InputAction.CallbackContext value) {
