@@ -5,5 +5,6 @@ using UnityEngine;
 public enum ItemThrowableCategory {
     BANANA,
     ROCKET,
-    PLATEFORM
+    PLATEFORM,
+    EMPTY
 }

@@ -22,7 +22,7 @@ namespace Player {
                 rgb.collisionDetectionMode = active ? CollisionDetectionMode.ContinuousSpeculative : CollisionDetectionMode.Discrete;
                 rgb.isKinematic = !active;
             }
-
+            
             _isRagDoll = active;
         }
     }

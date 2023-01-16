@@ -24,7 +24,7 @@ namespace Building.PlateformsEffects {
             upPosition = initialPosition + Vector3.up * 100;
         }
 
-        private void Update() {
+        private void FixedUpdate() {
             if (isActive) {
                 step =  speed * Time.deltaTime; // calculate distance to move
 

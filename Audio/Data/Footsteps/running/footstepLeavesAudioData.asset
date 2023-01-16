@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 34852139ae771484289135c8cc860b89, type: 3}
+  m_Name: footstepLeavesAudioData
+  m_EditorClassIdentifier: 
+  clip:
+  - {fileID: 8300000, guid: 5787f9b870bfb5947a21e6b1f41d17a5, type: 3}
+  - {fileID: 8300000, guid: 76e13808bb28e5a45b6945b7d8fd6e42, type: 3}
+  - {fileID: 8300000, guid: 50d101bc76e922e468e6a2bc55ddeb91, type: 3}
+  - {fileID: 8300000, guid: c066128fd4d15184f8ef988fe0aaae1c, type: 3}
+  - {fileID: 8300000, guid: f02f9dab50df3de42a73d005f15b2f30, type: 3}
+  clipWithIntro: {fileID: 0}
+  IsLooping: 0
+  volume: 0.192

@@ -17,6 +17,7 @@
         RED,
         RINO_HORN,
         TINDOK,
+        EMPTY,
         ROCKET,
         PLATEFORM_CAVENDISH
     }

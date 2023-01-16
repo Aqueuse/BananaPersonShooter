@@ -5,7 +5,8 @@ namespace Enums {
         AMBIANCE,
         MUSIC,
         EFFECT,
-        VOICE
+        VOICE,
+        FOOTSTEPS
     }
 }
 

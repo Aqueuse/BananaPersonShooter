@@ -7,7 +7,7 @@ namespace Data {
         [SerializeField] private GenericDictionary<ItemThrowableType, BananasDataScriptableObject> bananasDataScriptableObject;
         [SerializeField] private GenericDictionary<ItemThrowableType, PlateformDataScriptableObject> plateformDataScriptableObject;
         [SerializeField] private RocketDataScriptableObject rocketDataScriptableObject;
-
+        
         public string GetDescription(ItemThrowableType itemThrowableType, int langageIndex) {
             if (itemThrowableType == ItemThrowableType.ROCKET) {
                 return rocketDataScriptableObject.description[langageIndex];
@@ -31,6 +31,5 @@ namespace Data {
         public GenericDictionary<ItemThrowableType, int> GetPlateformCost(ItemThrowableType itemThrowableType) {
             return plateformDataScriptableObject[itemThrowableType].Cost;
         }
-
     }
 }

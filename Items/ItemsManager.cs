@@ -7,92 +7,68 @@ using Player;
 using UI;
 using UI.InGame;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 namespace Items {
     public class ItemsManager : MonoSingleton<ItemsManager> {
         private GameObject _interactedObject;
-        private LayerMask _itemsLayerMask;
+        private int _itemsLayerMask = 1 << 8;
 
         public GameObject lootMessage;
-
-        private void Start() {
-            _itemsLayerMask = LayerMask.NameToLayer("Items");
-        }
-
-        void Interact(GameObject objectInteracted) {
-            _interactedObject = objectInteracted;
-        }
-
-        public void Validate(InputAction.CallbackContext context) {
-            if (context.performed) {
-                if (_interactedObject != null) {
-                    AudioManager.Instance.PlayEffect(EffectType.BUTTON_ITERACTION);
-                    ItemType itemType = _interactedObject.GetComponent<Item>().itemType;
-
-                    switch (itemType) {
-                        case ItemType.DOOR:
-                            Transform spawnPoint = _interactedObject.GetComponent<Door>().spawnPoint;
-                            GameManager.Instance.SwitchScene(_interactedObject.GetComponent<Door>().destinationMap,
-                                spawnPoint.position);
-                            LeaveInteraction();
-                            break;
-                        case ItemType.REGIME:
-                            var bananaType = _interactedObject.GetComponent<Regime>().bananasDataScriptableObject.itemThrowableType;
-                            var quantity = _interactedObject.GetComponent<Regime>().bananasDataScriptableObject
-                                .regimeQuantity;
-
-                            Inventory.Instance.AddQuantity(bananaType, quantity);
-                            UIQueuedMessages.Instance.AddMessage("+ "+quantity+" "+bananaType.ToString().ToLower()+" bananas");
-                            // TODO change bananier state to baby bananier
-                            break;
-                        case ItemType.BOSS_FIGHT_LAUNCHER:
-                            MonkeyManager.Instance.StartBossFight(MonkeyType.KELSAIK);
-                            break;
-                        case ItemType.MINI_CHIMP:
-                            DialogueSystem.Instance.interact_with_minichimp(_interactedObject);
-                            break;
-                        case ItemType.MOVER:
-                            BananaMan.Instance.advancementType = AdvancementType.OTHER;
-                            Mover.Instance.Acquire();
-                            Destroy(_interactedObject);
-                            break;
-                        case ItemType.MINI_CHIMP_BUILD_STATION:
-                            UIManager.Instance.Show_Hide_minichimp_plateform_builder_interface(true);
-                            break;
+        
+        private void Update() {
+            if (GameManager.Instance.isGamePlaying) {
+                if (Physics.Raycast(transform.position, transform.forward,  out RaycastHit raycastHit, 10, _itemsLayerMask)) {
+                    if (raycastHit.transform.gameObject != _interactedObject) {
+                        lootMessage.SetActive(true);
+                        _interactedObject = raycastHit.transform.gameObject;
                     }
                 }
-            }
-        }
-
-        void LeaveInteraction() {
-            _interactedObject = null;
-            lootMessage.SetActive(false);
-        }
-
-        void ShowLootMessage() {
-            lootMessage.SetActive(true);
-        }
-
-        private void OnTriggerEnter(Collider other) {
-            if (other.gameObject.layer == _itemsLayerMask.value && GameManager.Instance.isGamePlaying) {
-                if (other.gameObject.GetComponent<Item>().itemType == ItemType.BOSS_FIGHT_LAUNCHER) {
-                    UIFace.Instance.GetIntrigued();
+                else {
+                    _interactedObject = null;
+                    lootMessage.SetActive(false);
                 }
             }
         }
 
-        private void OnTriggerStay(Collider other) {
-            if (other.gameObject.layer == _itemsLayerMask.value && GameManager.Instance.isGamePlaying) {
-                if (other.gameObject != _interactedObject) {
-                    ShowLootMessage();
-                    Interact(other.gameObject);
+        public void Validate() {
+            if (_interactedObject != null) {
+                AudioManager.Instance.PlayEffect(EffectType.BUTTON_ITERACTION);
+                ItemType itemType = _interactedObject.GetComponent<Item>().itemType;
+
+                switch (itemType) {
+                    case ItemType.DOOR:
+                        Transform spawnPoint = _interactedObject.GetComponent<Door>().spawnPoint;
+                        GameManager.Instance.SwitchScene(_interactedObject.GetComponent<Door>().destinationMap,
+                            spawnPoint.position);
+                        _interactedObject = null;
+                        lootMessage.SetActive(false);
+                        break;
+                    case ItemType.REGIME:
+                        var bananaType = _interactedObject.GetComponent<Regime>().bananasDataScriptableObject.itemThrowableType;
+                        var quantity = _interactedObject.GetComponent<Regime>().bananasDataScriptableObject
+                            .regimeQuantity;
+
+                        Inventory.Instance.AddQuantity(bananaType, quantity);
+                        UIQueuedMessages.Instance.AddMessage("+ "+quantity+" "+bananaType.ToString().ToLower()+" bananas");
+                        // TODO change bananier state to baby bananier
+                        break;
+                    case ItemType.BOSS_FIGHT_LAUNCHER:
+                        MonkeyManager.Instance.StartBossFight(MonkeyType.KELSAIK);
+                        break;
+                    case ItemType.MINI_CHIMP:
+                        DialogueSystem.Instance.interact_with_minichimp(_interactedObject);
+                        break;
+                    case ItemType.MOVER:
+                        BananaMan.Instance.advancementType = AdvancementType.OTHER;
+                        Mover.Instance.Acquire();
+                        Destroy(_interactedObject);
+                        break;
+                    case ItemType.MINI_CHIMP_BUILD_STATION:
+                        if (!BananaMan.Instance.hasMover) Mover.Instance.Acquire();
+                        UIManager.Instance.Show_Hide_minichimp_plateform_builder_interface(true);
+                        break;
                 }
             }
-        }
-
-        private void OnTriggerExit(Collider other) {
-            LeaveInteraction();
         }
     }
 }

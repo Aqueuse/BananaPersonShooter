@@ -7,7 +7,6 @@ using UnityEngine.AI;
 namespace Bananas {
     public class Banana : MonoBehaviour {
         public BananasDataScriptableObject bananasDataScriptableObject;
-        private bool isBananaSkin;
 
         private void OnTriggerEnter(Collider other) {
             if (GameManager.Instance.isFigthing && other.gameObject.CompareTag("Boss")) {
@@ -22,9 +21,10 @@ namespace Bananas {
                 transform.gameObject.GetComponent<MeshRenderer>().enabled = false;
                 transform.GetChild(0).GetComponent<MeshRenderer>().enabled = true;
 
-                MonkeyManager.Instance.GetActiveBoss().GetComponent<NavMeshAgent>().SetDestination(transform.position);
-                isBananaSkin = true;
-
+                if (GameManager.Instance.isInCorolle) {
+                    MonkeyManager.Instance.GetActiveBoss().GetComponent<NavMeshAgent>().SetDestination(transform.position);
+                }
+                
                 Invoke(nameof(DestroyMe), 10);
             }
 

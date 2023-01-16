@@ -1,6 +1,7 @@
-﻿using Settings;
+﻿using Input;
+using Settings;
 using UnityEngine;
-using UnityEngine.InputSystem;
+// ReSharper disable All
 
 // This class corresponds to the 3rd person camera features.
 namespace Cameras {
@@ -16,7 +17,6 @@ namespace Cameras {
     
         [SerializeField] private Vector3 camOffset; // Offset to relocate the camera related to the player position.
 
-        [SerializeField] private float smooth ; // Speed of camera responsiveness.
         public float horizontalSensibility; // Horizontal turn speed.
         public float verticalSensibility; // Vertical turn speed.
         public float maxVerticalAngle = 30f; // Camera max clamp angle. 
@@ -25,14 +25,11 @@ namespace Cameras {
         private float _angleH; // Float to store camera horizontal angle related to mouse movement.
         private float _angleV; // Float to store camera vertical angle related to mouse movement.
         private Transform _cam; // This transform.
-        private Vector3 _smoothPivotOffset; // Camera current pivot offset on interpolation.
-        private Vector3 _smoothCamOffset; // Camera current offset on interpolation.
         private Vector3 _targetPivotOffset; // Camera pivot offset target to iterpolate.
         private Vector3 _targetCamOffset; // Camera offset target to interpolate.
         private float _defaultFOV; // Default camera Field of View.
         private float _targetFOV; // Target camera Field of View.
         private float _targetMaxVerticalAngle; // Custom camera max vertical clamp angle.
-        private bool _isCustomOffset; // Boolean to determine whether or not a custom camera offset is being used.
 
         public LayerMask layerMaskExcludeCollisionWithCamera;
 
@@ -56,8 +53,6 @@ namespace Cameras {
             _cam.rotation = Quaternion.identity;
 
             // Set up references and default values.
-            _smoothPivotOffset = pivotOffset;
-            _smoothCamOffset = camOffset;
             _defaultFOV = _cam.GetComponent<Camera>().fieldOfView;
             _angleH = player.eulerAngles.y;
 
@@ -80,8 +75,8 @@ namespace Cameras {
         void Update() {
             if (canRotate) {
                 // Get mouse movement to orbit the camera.
-                _angleH += _lookPosition.x * horizontalSensibility;
-                _angleV += _lookPosition.y * verticalSensibility;
+                _angleH += GameActions.Instance.look.x * horizontalSensibility;
+                _angleV += GameActions.Instance.look.y * verticalSensibility;
                 
                 // Set vertical movement limit.
                 _angleV = Mathf.Clamp(_angleV, minVerticalAngle, _targetMaxVerticalAngle);
@@ -92,31 +87,9 @@ namespace Cameras {
                 _cam.rotation = aimRotation;
 
                 // Set FOV.
-                _cam.GetComponent<Camera>().fieldOfView =
-                    Mathf.Lerp(_cam.GetComponent<Camera>().fieldOfView, _targetFOV, Time.deltaTime);
-
-                // Test for collision with the environment based on current camera position.
-                Vector3 baseTempPosition = player.position + camYRotation * _targetPivotOffset;
-                Vector3 noCollisionOffset = _targetCamOffset;
-                while (noCollisionOffset.magnitude >= 0.2f) {
-                    if (DoubleViewingPosCheck(baseTempPosition + aimRotation * noCollisionOffset))
-                        break;
-                    noCollisionOffset -= noCollisionOffset.normalized * 0.2f;
-                }
-
-                if (noCollisionOffset.magnitude < 0.2f)
-                    noCollisionOffset = Vector3.zero;
-
-                // No intermediate position for custom offsets, go to 1st person.
-                bool customOffsetCollision = _isCustomOffset && noCollisionOffset.sqrMagnitude < _targetCamOffset.sqrMagnitude;
-
-                // Repostition the camera.
-                _smoothPivotOffset = Vector3.Lerp(_smoothPivotOffset, customOffsetCollision ? pivotOffset : _targetPivotOffset,
-                    smooth * Time.deltaTime);
-                _smoothCamOffset = Vector3.Lerp(_smoothCamOffset, customOffsetCollision ? Vector3.zero : noCollisionOffset,
-                    smooth * Time.deltaTime);
-
-                _cam.position = player.position + camYRotation * _smoothPivotOffset + aimRotation * _smoothCamOffset;
+                _cam.GetComponent<Camera>().fieldOfView = Mathf.Lerp(_cam.GetComponent<Camera>().fieldOfView, _targetFOV, Time.deltaTime);
+                
+                _cam.position = player.position + camYRotation * pivotOffset + aimRotation * camOffset;
             }
             
             else if (isLookingTarget) {
@@ -134,23 +107,17 @@ namespace Cameras {
             isLookingTarget = false;
             canRotate = true;
         }
-
-        public void Rotate(InputAction.CallbackContext context) {
-            _lookPosition = context.action.ReadValue<Vector2>();
-        }
-
+        
         // Set camera offsets to custom values.
         public void SetTargetOffsets(Vector3 newPivotOffset, Vector3 newCamOffset) {
             _targetPivotOffset = newPivotOffset;
             _targetCamOffset = newCamOffset;
-            _isCustomOffset = true;
         }
 
         // Reset camera offsets to default values.
         void ResetTargetOffsets() {
             _targetPivotOffset = pivotOffset;
             _targetCamOffset = camOffset;
-            _isCustomOffset = false;
         }
 
         // Reset the camera vertical offset.
@@ -225,11 +192,6 @@ namespace Cameras {
             }
 
             return true;
-        }
-
-        // Get camera magnitude.
-        public float GetCurrentPivotMagnitude(Vector3 finalPivotOffset) {
-            return Mathf.Abs((finalPivotOffset - _smoothPivotOffset).magnitude);
         }
     }
 }

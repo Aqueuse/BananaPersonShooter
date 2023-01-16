@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 34852139ae771484289135c8cc860b89, type: 3}
+  m_Name: footstepSandAudioData
+  m_EditorClassIdentifier: 
+  clip:
+  - {fileID: 8300000, guid: ae058cd5aa1befb47b17eac766e2e9a4, type: 3}
+  - {fileID: 8300000, guid: 9d4c3df2f17f5264190cb31d5f3462f3, type: 3}
+  - {fileID: 8300000, guid: d1383d97d558d7649afa8d2932200da7, type: 3}
+  - {fileID: 8300000, guid: 60aa25f6575e37540bce238f81feb29f, type: 3}
+  - {fileID: 8300000, guid: a32fdc6becfd17246821a1827fa0eeb4, type: 3}
+  clipWithIntro: {fileID: 0}
+  IsLooping: 0
+  volume: 0.192

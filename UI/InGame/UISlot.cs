@@ -1,4 +1,5 @@
-﻿using Enums;
+﻿using System.Net.Mime;
+using Enums;
 using TMPro;
 using UI.InGame.Inventory;
 using UnityEngine;
@@ -6,50 +7,54 @@ using UnityEngine.UI;
 
 namespace UI.InGame {
     public class UISlot : MonoBehaviour {
-        [SerializeField] private RectTransform favoriteBackground;
         [SerializeField] private Image iconImage;
+        [SerializeField] private Image colorImage;
         [SerializeField] private TextMeshProUGUI quantityText;
     
-        private Color _white;
-        private Color _transparent;
+        [SerializeField] private Color unactive;
+        [SerializeField] private Color active;
+        
+        private Color transparent = Color.white;
+        private Color visible = Color.white;
         
         public ItemThrowableType itemThrowableType;
         public ItemThrowableCategory itemThrowableCategory;
 
         private void Start() {
-            _white = Color.white;
-            _transparent = _white;
-            _transparent.a = 0;
+            itemThrowableType = ItemThrowableType.EMPTY;
+            itemThrowableCategory = ItemThrowableCategory.EMPTY;
 
-            itemThrowableType = ItemThrowableType.ROCKET;
-            itemThrowableCategory = ItemThrowableCategory.ROCKET;
+            transparent.a = 0f;
+            visible.a = 100f;
         }
         
         public void SetSlot(ItemThrowableType slotItemThrowableType, ItemThrowableCategory slotItemThrowableCategory) {
             itemThrowableType = slotItemThrowableType;
             itemThrowableCategory = slotItemThrowableCategory;
             
-            if (itemThrowableCategory != ItemThrowableCategory.ROCKET) {
+            if (itemThrowableCategory != ItemThrowableCategory.EMPTY) {
                 iconImage.sprite = UInventory.Instance.lastselectedInventoryItem.transform.GetChild(0).GetComponentInChildren<Image>().sprite;
+                iconImage.color = visible;
                 SetAmmoQuantity(global::Inventory.Instance.GetQuantity(itemThrowableType));
-                iconImage.color = _white;
+            }
+            else {
+                EmptySlot();
             }
         }
 
         public void EmptySlot() {
-            itemThrowableType = ItemThrowableType.ROCKET;
-            itemThrowableCategory = ItemThrowableCategory.ROCKET;
-            iconImage.sprite = null;
+            itemThrowableType = ItemThrowableType.EMPTY;
+            itemThrowableCategory = ItemThrowableCategory.EMPTY;
+            iconImage.color = transparent;
             quantityText.text = "";
-            iconImage.color = _transparent;
         }
 
         public void SetSelectedWeaponSlot() {
-            favoriteBackground.sizeDelta = new Vector2(125f, 125f);
+            colorImage.color = active;
         }
 
         public void SetUnselectedWeaponSlot() {
-            favoriteBackground.sizeDelta = new Vector2(100f, 100f);
+            colorImage.color = unactive;
         }
 
         public void SetAmmoQuantity(int quantity) {

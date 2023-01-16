@@ -6,6 +6,8 @@ public class Inventory : MonoSingleton<Inventory> {
     
     private void Start() {
         bananaManInventory = new GenericDictionary<ItemThrowableType, int> {
+            { ItemThrowableType.EMPTY, 0},
+            {ItemThrowableType.ROCKET, 0},
             {ItemThrowableType.BARANGAN, 0},
             {ItemThrowableType.BLUE_JAVA, 0},
             {ItemThrowableType.BURRO, 0},
@@ -23,7 +25,6 @@ public class Inventory : MonoSingleton<Inventory> {
             {ItemThrowableType.RED, 0},
             {ItemThrowableType.RINO_HORN, 0},
             {ItemThrowableType.TINDOK, 0},
-            {ItemThrowableType.ROCKET, 0},
             {ItemThrowableType.PLATEFORM_CAVENDISH, 0}
         };
     }

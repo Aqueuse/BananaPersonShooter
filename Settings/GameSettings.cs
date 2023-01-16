@@ -1,9 +1,8 @@
 using Audio;
 using Cameras;
 using Enums;
-using Player;
+using Input;
 using UnityEngine;
-using UnityEngine.InputSystem;
 using UnityEngine.Localization.Settings;
 using UnityEngine.Rendering;
 using UnityEngine.UI;
@@ -19,7 +18,6 @@ namespace Settings {
 
         [SerializeField] private TMPro.TMP_Dropdown resolutionDropDown;
         [SerializeField] private KeymapRebinding[] keymapRebindings;
-        [SerializeField] private KeymapWasdRebinding[] keymapWasdRebindings;
         [SerializeField] private TMPro.TMP_Dropdown languageDropDown;
 
         [SerializeField] private ThirdPersonOrbitCamBasic thirdPersonOrbitCamBasic;
@@ -29,12 +27,10 @@ namespace Settings {
         private string _isFullscreen;
         private int _resolution;
         private string _isVsync;
+        public bool isKeyRebinding;
 
-        public float horizontalCameraSensibility = 0.1f;
-        public float verticalCameraSensibility = 0.1f;
-        
-        private InputActionRebindingExtensions.RebindingOperation _rebindingOperation;
-        private InputAction _inputAction;
+        public float horizontalCameraSensibility;
+        public float verticalCameraSensibility;
         
         private string _keymapBinding;
         public int languageIndexSelected;
@@ -60,15 +56,16 @@ namespace Settings {
             languageIndexSelected = PlayerPrefs.GetInt("language", 1);
             _keymapBinding = PlayerPrefs.GetString("keymap_binding", null);
 
-            horizontalCameraSensibility = PlayerPrefs.GetFloat("LookSensibility", 0.1f);
+            horizontalCameraSensibility = PlayerPrefs.GetFloat("LookSensibility", 0.5f);
             verticalCameraSensibility = horizontalCameraSensibility;
 
             SetMusicVolume(AudioManager.Instance.musicLevel);
             SetAmbianceVolume(AudioManager.Instance.ambianceLevel);
             SetEffectVolume(AudioManager.Instance.effectsLevel);
             
-            BananaMan.Instance.GetComponent<PlayerInput>().actions.LoadBindingOverridesFromJson(_keymapBinding);
-            Invoke(nameof(SetLanguage), 2);
+            InverseCameraVerticalAxis(PlayerPrefs.GetString("isCameraVerticalAxisInverted", "False").Equals("True"));
+            
+            Invoke(nameof(SetLanguage), 1);
         
             // reflects values on UI 
             ToggleFullscreen(_isFullscreen.Equals("true"));
@@ -148,17 +145,21 @@ namespace Settings {
                 thirdPersonOrbitCamBasic.verticalSensibility = sensibility / 5;
             }
         }
-        
-        public void ResetAllBindings() {
-            foreach (var keymapRebinding in keymapRebindings) {
-                keymapRebinding.ResetBinding();
-            }
 
-            foreach (var keymapWasdRebinding in keymapWasdRebindings) {
-                keymapWasdRebinding.ResetBinding();
-            }
-            
-            PlayerPrefs.SetString("keymap_binding", BananaMan.Instance.GetComponent<PlayerInput>().actions.SaveBindingOverridesAsJson());
+        public void InverseCameraVerticalAxis(bool isCameraInverted) {
+            GameActions.Instance.isCameraInverted = isCameraInverted;
+            PlayerPrefs.SetString("isCameraVerticalAxisInverted", isCameraInverted.ToString());            
         }
+
+        // public void ResetAllBindings() {
+        //     foreach (var keymapRebinding in keymapRebindings) {
+        //         keymapRebinding.ResetBinding();
+        //     }
+        //
+        //     foreach (var keymapWasdRebinding in keymapWasdRebindings) {
+        //         keymapWasdRebinding.ResetBinding();
+        //     }
+        //     
+        // }
     }
 }

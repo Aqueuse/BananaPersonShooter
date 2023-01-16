@@ -1,9 +1,12 @@
 ﻿using Dialogues;
+using Enums;
+using Input;
+using Settings;
 using UI.InGame.Inventory;
 using UI.InGame.PlateformBuilder;
+using UI.Menus;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.InputSystem;
 
 namespace UI {
     public class UIManager : MonoSingleton<UIManager> {
@@ -17,36 +20,45 @@ namespace UI {
         [SerializeField] private CanvasGroup moverUICanvasGroup;
         [SerializeField] private CanvasGroup miniChimpPlateformBuilderCanvasGroup;
         
-        public GameObject inventory;
         public GameObject slotsPanel;
         public GameObject hudPanel;
 
-        private CanvasGroup _inventoryCanvasGroup;
         private CanvasGroup _hudCanvasGroup;
+
+        [SerializeField] private Animator interfaceAnimator;
         
         private GameObject _firstGameMenuItem;
         private GameObject _firstHomeMenuItem;
-        
+        private static readonly int ShowInventoryID = Animator.StringToHash("SHOW INVENTORY");
+
         private void Start() { 
             _firstGameMenuItem = gameMenuCanvasGroup.transform.GetChild(0).gameObject;
             _firstHomeMenuItem = homeMenuCanvasGroup.transform.GetChild(0).gameObject;
 
-            _inventoryCanvasGroup = inventory.GetComponent<CanvasGroup>();
             _hudCanvasGroup = hudPanel.GetComponent<CanvasGroup>();
             
             EventSystem.current.SetSelectedGameObject(_firstHomeMenuItem);
         }
 
 
-        public void Hide_menus(InputAction.CallbackContext context) {
+        public void Hide_menus() {
+            if (GameSettings.Instance.isKeyRebinding) return;
+            
             if (GameManager.Instance.isInGame) {
-                Set_active(_inventoryCanvasGroup, false);
                 Set_active(gameMenuCanvasGroup, false);
                 Set_active(optionsMenuCanvasGroup, false);
                 Set_active(miniChimpPlateformBuilderCanvasGroup, false);
                 Set_active(bananapediaMenuCanvasGroup, false);
 
+                if (interfaceAnimator.GetBool(ShowInventoryID)) {
+                    interfaceAnimator.SetBool(ShowInventoryID, false);
+                }
+
                 GameManager.Instance.PauseGame(false);
+                
+                if (dialoguesCanvasGroup.alpha > 0) {
+                    DialogueSystem.Instance.Hide_Dialogue();
+                }
             }
 
             else {
@@ -77,6 +89,8 @@ namespace UI {
                 Set_active(optionsMenuCanvasGroup, true);
                 Set_active(homeMenuCanvasGroup, false);
             }
+            
+            EventSystem.current.SetSelectedGameObject(UIMenu.Instance.GetFirstTab(), null);
         }
 
         public void Hide_options_menu() {
@@ -153,16 +167,9 @@ namespace UI {
             Hide_Credits();
         }
 
-        public void Show_game_menu(InputAction.CallbackContext context) {
-            if (context.performed && GameManager.Instance.isInGame) {
-                if (context.performed && GameManager.Instance.isInGame) {
-                    if (dialoguesCanvasGroup.alpha > 0) {
-                        DialogueSystem.Instance.Hide_Dialogue();
-                        return;
-                    }
-                }
-
-                if (_inventoryCanvasGroup.alpha < 1f) {
+        public void Show_game_menu() {
+            if (GameManager.Instance.isInGame) {
+                if (!interfaceAnimator.GetBool(ShowInventoryID)) {
                     Set_active(gameMenuCanvasGroup, true);
                     EventSystem.current.SetSelectedGameObject(_firstGameMenuItem);
                     GameManager.Instance.PauseGame(true);
@@ -176,15 +183,24 @@ namespace UI {
 
         /// IN GAME ///
         
-        public void Show_inventory(InputAction.CallbackContext context) {
-            if (context.performed && GameManager.Instance.isInGame && gameMenuCanvasGroup.alpha == 0f) {
-                if (GameManager.Instance.isInGame) UInventory.Instance.RefreshUInventory();
-                Set_active(_inventoryCanvasGroup, true);
-                GameManager.Instance.PauseGame(true);
-                Focus_inventory();
+        public void Show_Hide_inventory() {
+            if (GameManager.Instance.isInGame && gameMenuCanvasGroup.alpha == 0f) {
+                if (!interfaceAnimator.GetBool(ShowInventoryID)) {
+                    interfaceAnimator.SetBool(ShowInventoryID, true);
+
+                    UInventory.Instance.RefreshUInventory();
+                    Focus_inventory();
+//                    GameManager.Instance.PauseGame(true);
+                    InputManager.Instance.SwitchContext(GameContext.UI);
+                }
+                else {
+                    interfaceAnimator.SetBool(ShowInventoryID, false);
+                    InputManager.Instance.SwitchContext(GameContext.GAME);
+                    GameManager.Instance.PauseGame(false);
+                }
             }
         }
-
+        
         public void Show_HUD() {
             Set_active(_hudCanvasGroup, true);
         }

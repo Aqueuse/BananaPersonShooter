@@ -30,7 +30,7 @@ namespace Monkeys.Effects {
 
         private void OnTriggerEnter(Collider other) {
             if (other.CompareTag("Player")) {
-                BananaMan.Instance.GetComponent<PlayerController>().PlayerRagdollAgainstCollider(GetComponent<MeshCollider>(), 100);
+                BananaMan.Instance.GetComponent<BananaMan>().RagdollAgainstCollider(GetComponent<MeshCollider>(), 100);
             }
         }
     }

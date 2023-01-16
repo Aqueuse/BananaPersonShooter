@@ -12,7 +12,6 @@ namespace Player {
         private readonly int _playerZMovementAnimationId = Animator.StringToHash("Movement Z");
         private readonly int _playerXMovementAnimationId = Animator.StringToHash("Movement X");
         private readonly int _playerThrowAnimationId = Animator.StringToHash("throw");
-        private readonly int _playerSearchAnimationId = Animator.StringToHash("searching");
         
         private static readonly int JumpID = Animator.StringToHash("JUMP");
         private static readonly int RollID = Animator.StringToHash("ROLL");

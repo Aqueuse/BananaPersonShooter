@@ -22,9 +22,10 @@ namespace UI.InGame.Inventory {
             
             if (itemThrowableCategory == ItemThrowableCategory.BANANA) {
                 BananaMan.Instance.activeItem = ScriptableObjectManager.Instance.GetBananaScriptableObject(itemThrowableType);
+                UISlotsManager.Instance.AssignToSelectedSlot(itemThrowableType, itemThrowableCategory);
             }
-            
-            if (itemThrowableCategory != ItemThrowableCategory.ROCKET) {
+
+            else {
                 UISlotsManager.Instance.AssignToSelectedSlot(itemThrowableType, itemThrowableCategory);
             }
         }

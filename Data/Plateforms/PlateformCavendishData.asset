@@ -19,11 +19,11 @@ MonoBehaviour:
   description:
   - A plateform that move vertically
   - "Une plateforme qui se d\xE9place \xE0 la verticale"
-  itemThrowableType: 18
+  itemThrowableType: 19
   Cost:
     list:
     - Key: 3
       Value: 2
-    - Key: 17
+    - Key: 18
       Value: 2
     keyCollision: 0

@@ -25,7 +25,7 @@ namespace UI.InGame.Inventory {
 
             foreach (var inventoryItem in inventory) {
                 if (inventoryItem.Value > 0) {
-                    inventorySlots[inventoryItem.Key].SetActive(true);                   
+                    inventorySlots[inventoryItem.Key].SetActive(true);
                     inventorySlots[inventoryItem.Key].GetComponent<UInventorySlot>().SetQuantity(inventoryItem.Value);
                 }
 

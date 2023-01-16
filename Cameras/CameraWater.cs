@@ -1,20 +1,18 @@
-using Player;
 using UnityEngine;
 
 namespace Cameras {
     public class CameraWater : MonoBehaviour {
+        [SerializeField] private MeshRenderer aquaticPlaneMeshRenderer;
+        
         private void OnTriggerEnter(Collider other) {
             if (LayerMask.LayerToName(other.gameObject.layer).Equals("Water")) {
-                GetComponent<MeshRenderer>().enabled = true;
-                // BananaMan.Instance.isInWater = true;
-                // BananaMan.Instance.GetComponent<PlayerController>().baseMovementSpeed = 6f;
+                aquaticPlaneMeshRenderer.GetComponent<MeshRenderer>().enabled = true;
             }
         }
 
         private void OnTriggerExit(Collider other) {
             if (LayerMask.LayerToName(other.gameObject.layer).Equals("Water")) {
-                GetComponent<MeshRenderer>().enabled = false;
-                // BananaMan.Instance.isInWater = false;
+                aquaticPlaneMeshRenderer.GetComponent<MeshRenderer>().enabled = false;
             }
         }
     }
