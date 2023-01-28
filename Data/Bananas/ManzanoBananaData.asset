@@ -22,7 +22,7 @@ MonoBehaviour:
   - "petite grenade, explose \xE0 l'impact, ce qui d\xE9stabilise les singes quelques
     secondes"
   regimeQuantity: 60
-  damage: 1.5
+  sasiety: 5
   damageTime: 0
   healthBonus: 1
   resistanceBonus: 1

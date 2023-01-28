@@ -35,7 +35,7 @@ namespace UI.InGame.Inventory {
         }
 
         public void SetDescription() {
-            UInventory.Instance.itemDescription.text = ScriptableObjectManager.Instance.GetDescription(itemThrowableType, GameSettings.Instance.languageIndexSelected);
+            UInventory.Instance.itemDescription.text = ScriptableObjectManager.Instance.GetDescription(itemThrowableCategory, itemThrowableType, GameSettings.Instance.languageIndexSelected);
         }
     }
 }

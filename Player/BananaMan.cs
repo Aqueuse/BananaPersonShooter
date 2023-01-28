@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using Audio;
-using Cameras;
 using Enums;
+using HoaxGames;
 using UI.InGame;
 using UnityEngine;
 
@@ -12,8 +12,8 @@ namespace Player {
         private Rigidbody _rigidbody;
 
         public BananasDataScriptableObject activeItem;
-        public ItemThrowableType activeItemThrowableType = ItemThrowableType.ROCKET;
-        public ItemThrowableCategory activeItemThrowableCategory = ItemThrowableCategory.ROCKET;
+        public ItemThrowableType activeItemThrowableType = ItemThrowableType.DEBRIS;
+        public ItemThrowableCategory activeItemThrowableCategory = ItemThrowableCategory.CRAFTABLE;
         
         public bool isInAir;
         public bool isInWater;
@@ -23,7 +23,6 @@ namespace Player {
 
         public float health;
         public float resistance;
-        public bool hasMover;
         public AdvancementType advancementType = AdvancementType.FIRST_MINICHIMP_INTERACT;
         private int _damageCounter;
 
@@ -42,12 +41,14 @@ namespace Player {
 
         private void Update() {
             if (GameManager.Instance.isInGame) {
+                isInAir = !GetComponent<FootIK>().getGroundedResult().isGrounded;
+                
                 if (isInAir && !isRagdoll) {
                     if (transform.position.y < lastY) {
                         _fallCounter+= Time.deltaTime;
                     
                         if (_fallCounter > 1f) {
-                            Ragdoll();
+                            //Ragdoll();
                         }
                     }
                 }
@@ -56,8 +57,15 @@ namespace Player {
                 }
             }
         }
-        
-        public void Ragdoll() {
+
+        public void IsInAir(bool isBananaManInAir) {
+            isInAir = isBananaManInAir;
+            tpsPlayerAnimator.IsInAir(isBananaManInAir);
+            tpsPlayerAnimator.IsGrounded(!isBananaManInAir);
+            lastY = transform.position.y;
+        }
+
+        private void Ragdoll() {
             _damageCounter = 0;
             isRagdoll = true;
 
@@ -106,7 +114,6 @@ namespace Player {
             _playerController.canMove = true;
 
             tpsPlayerAnimator.enabled = true;
-            _playerController.mainCameraTransform.GetComponent<ThirdPersonOrbitCamBasic>().enabled = true;
             UIFace.Instance.Die(false);
             UIFace.Instance.GetHurted(health < 50);
         }
@@ -125,7 +132,7 @@ namespace Player {
             }
         }
 
-        public void TakeDamage(int damageAmount) {
+        private void TakeDamage(int damageAmount) {
             if (resistance-damageAmount > 0) {
                 resistance -= damageAmount;
             }
@@ -157,6 +164,5 @@ namespace Player {
         public void PlayFootstep() {
             AudioManager.Instance.PlayFootStepOneShot();
         }
-
     }
 }

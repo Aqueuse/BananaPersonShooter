@@ -21,7 +21,7 @@ MonoBehaviour:
   - No particular effect, just tasty
   - Aucun effet particulier, juste savoureuse
   regimeQuantity: 60
-  damage: 1
+  sasiety: 5
   damageTime: 0
   healthBonus: 1
   resistanceBonus: 1

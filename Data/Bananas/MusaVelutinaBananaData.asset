@@ -22,7 +22,7 @@ MonoBehaviour:
   - "\"Cr\xE9e une zone o\xF9 les singes arr\xEAtent de se battre pendant quelques\r\n   
     secondes"
   regimeQuantity: 60
-  damage: 0
+  sasiety: 5
   damageTime: 0
   healthBonus: 1
   resistanceBonus: 1

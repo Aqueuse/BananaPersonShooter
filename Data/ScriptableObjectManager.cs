@@ -1,20 +1,19 @@
 using Enums;
-using Settings;
 using UnityEngine;
 
 namespace Data {
     public class ScriptableObjectManager : MonoSingleton<ScriptableObjectManager> {
         [SerializeField] private GenericDictionary<ItemThrowableType, BananasDataScriptableObject> bananasDataScriptableObject;
-        [SerializeField] private GenericDictionary<ItemThrowableType, PlateformDataScriptableObject> plateformDataScriptableObject;
-        [SerializeField] private RocketDataScriptableObject rocketDataScriptableObject;
+        [SerializeField] private PlateformDataScriptableObject plateformDataScriptableObject;
+        [SerializeField] private DebrisDataScriptableObject debrisDataScriptableObject;
         
-        public string GetDescription(ItemThrowableType itemThrowableType, int langageIndex) {
-            if (itemThrowableType == ItemThrowableType.ROCKET) {
-                return rocketDataScriptableObject.description[langageIndex];
+        public string GetDescription(ItemThrowableCategory itemThrowableCategory, ItemThrowableType itemThrowableType, int langageIndex) {
+            if (itemThrowableType == ItemThrowableType.DEBRIS) {
+                return debrisDataScriptableObject.description[langageIndex];
             }
 
-            if (itemThrowableType.ToString().Contains("PLATEFORM")) {
-                return plateformDataScriptableObject[itemThrowableType].description[langageIndex];
+            if (itemThrowableCategory == ItemThrowableCategory.PLATEFORM) {
+                return plateformDataScriptableObject.description[langageIndex];
             }
 
             return bananasDataScriptableObject[itemThrowableType].description[langageIndex];
@@ -23,13 +22,9 @@ namespace Data {
         public BananasDataScriptableObject GetBananaScriptableObject(ItemThrowableType itemThrowableType) {
             return bananasDataScriptableObject[itemThrowableType];
         }
-
-        public string GetPlateformName(ItemThrowableType itemThrowableType) {
-            return plateformDataScriptableObject[itemThrowableType].plateformName[GameSettings.Instance.languageIndexSelected];
-        }
         
-        public GenericDictionary<ItemThrowableType, int> GetPlateformCost(ItemThrowableType itemThrowableType) {
-            return plateformDataScriptableObject[itemThrowableType].Cost;
+        public GenericDictionary<ItemThrowableType, int> GetPlateformCost() {
+            return plateformDataScriptableObject.Cost;
         }
     }
 }

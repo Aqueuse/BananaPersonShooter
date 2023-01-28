@@ -19,9 +19,9 @@ namespace Audio {
         [SerializeField] private GenericDictionary<MusicType, AudioDataScriptableObject> audioMusicsDictionnary;
         [SerializeField] private GenericDictionary<FootStepType, AudioDataScriptableObject> audioFootStepsDictionnary;
 
-        public float musicLevel = 0.5f;
-        public float ambianceLevel = 0.5f;
-        public float effectsLevel = 0.5f;
+        public float musicLevel = 0.1f;
+        public float ambianceLevel = 0.1f;
+        public float effectsLevel = 0.1f;
 
         private bool isAlreadyPlaying;
         public FootStepType footStepType;
@@ -77,20 +77,20 @@ namespace Audio {
         }
 
         public void PlayAmbiance(AmbianceType ambianceType) {
-            var audioData = audioAmbianceDictionnary[ambianceType]; 
-        
-            audioAmbianceSource.clip = audioData.clip[Random.Range(0, audioData.clip.Length)];
-            audioAmbianceSource.volume = audioData.volume * ambianceLevel;
+            var audioData = audioAmbianceDictionnary[ambianceType];
 
+            audioAmbianceSource.volume = ambianceLevel;
+            audioAmbianceSource.clip = audioData.clip[Random.Range(0, audioData.clip.Length)];
             audioAmbianceSource.loop = true;
+            
             audioAmbianceSource.Play();
         }
 
         public void PlayEffect(EffectType effectType) {
             var audioData = audioEffectsDictionnary[effectType]; 
     
+            audioEffectsSource.volume = effectsLevel;
             audioEffectsSource.clip = audioData.clip[Random.Range(0, audioData.clip.Length)];
-            audioEffectsSource.volume = audioData.volume * effectsLevel;
             audioEffectsSource.loop = audioData.IsLooping;
 
             audioEffectsSource.Play();
@@ -100,8 +100,8 @@ namespace Audio {
             if (!isAlreadyPlaying) {
                 var audioData = audioEffectsDictionnary[effectType]; 
     
+                audioEffectsSource.volume = effectsLevel;
                 audioEffectsSource.clip = audioData.clip[Random.Range(0, audioData.clip.Length)];
-                audioEffectsSource.volume = audioData.volume * effectsLevel;
                 audioEffectsSource.loop = true;
 
                 audioEffectsSource.Play();
@@ -111,28 +111,31 @@ namespace Audio {
 
         public void PlayVoice(VoiceType voiceType) {
             var audioData = audioVoicesDictionnary[voiceType];
-
+            
+            audioVoicesSource.volume = effectsLevel-0.2f;
             audioVoicesSource.clip = audioData.clip[Random.Range(0, audioData.clip.Length)];
-            audioVoicesSource.volume = audioData.volume * effectsLevel;
             audioVoicesSource.loop = true;
 
             audioVoicesSource.Play();
         }
 
         public void PlayFootStepOneShot() {
-            var audioData = audioFootStepsDictionnary[footStepType];
-            
-            audioFootstepsSource.volume = audioData.volume * effectsLevel;
-            if (!audioFootstepsSource.isPlaying)
-                audioFootstepsSource.PlayOneShot(audioData.clip[Random.Range(0, audioData.clip.Length)]);
+            if (GameManager.Instance.isGamePlaying) {
+                var audioData = audioFootStepsDictionnary[footStepType];
+                if (!audioFootstepsSource.isPlaying) {
+                    audioFootstepsSource.volume = effectsLevel-0.2f;
+                    audioFootstepsSource.PlayOneShot(audioData.clip[Random.Range(0, audioData.clip.Length)]);
+                }
+            }
         }
 
         public void PlayFootstep() {
-            var audioData = audioFootStepsDictionnary[footStepType];
-            
-            audioFootstepsSource.volume = audioData.volume * effectsLevel;
-            audioFootstepsSource.clip = audioData.clip[Random.Range(0, audioData.clip.Length)]; 
-            audioFootstepsSource.Play();
+            if (GameManager.Instance.isGamePlaying) {
+                var audioData = audioFootStepsDictionnary[footStepType];
+                audioFootstepsSource.volume = effectsLevel-0.2f;
+                audioFootstepsSource.clip = audioData.clip[Random.Range(0, audioData.clip.Length)]; 
+                audioFootstepsSource.Play();
+            }
         }
         
         public void SetVolume(AudioSourcesType audioSourcesType, float level) {
@@ -148,13 +151,16 @@ namespace Audio {
                 case AudioSourcesType.EFFECT:
                     effectsLevel = level;
                     audioEffectsSource.volume = effectsLevel;
-                    PlayEffect(EffectType.BUTTON_ITERACTION);
                     break;
                 case AudioSourcesType.VOICE:
                     effectsLevel = level;
                     audioEffectsSource.volume = effectsLevel;
                     break;
             }
+        }
+
+        public void TestEffectLevel() {
+            PlayEffect(EffectType.BUTTON_ITERACTION);
         }
     }
 }

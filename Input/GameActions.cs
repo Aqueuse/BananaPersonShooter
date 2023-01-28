@@ -1,4 +1,5 @@
 ﻿using Building;
+using Enums;
 using Items;
 using Player;
 using UI;
@@ -7,9 +8,6 @@ using UnityEngine;
 
 namespace Input {
     public class GameActions : MonoSingleton<GameActions> {
-        public Vector2 look;
-        public Vector2 gamepadRightStick;
-        
         public Vector2 move;
 
         public Vector2 scrollSlotsValue;
@@ -24,21 +22,18 @@ namespace Input {
 
         public bool leftClickActivated;
 
-        public bool isCameraInverted;
-
         private void Start() {
-            look = new Vector2();
             move = new Vector2();
 
             scrollSlotsValue = new Vector2();
 
             _playerController = BananaMan.Instance.GetComponent<PlayerController>();
 
-            isCameraInverted = false;
+            _leftTriggerActivated = false;
+            rightTriggerActivated = false;
         }
 
         private void Update() {
-            Look();
             Move();
             Jump();
             Run();
@@ -46,7 +41,6 @@ namespace Input {
             Eat();
             
             Interact();
-            FocusCamera();
             Show_Inventory();
             PauseGame();
 
@@ -54,28 +48,15 @@ namespace Input {
             SwitchToUpperSlot();
             SwitchToLowerSlot();
             
+            SwitchToSlotIndex0();
+            SwitchToSlotIndex1();
+            SwitchToSlotIndex2();
+            SwitchToSlotIndex3();
+            
             Aspire();
             Shoot();
         }
-
-        private void Look() {
-            look.x = UnityEngine.Input.GetAxis("Mouse X") * 5;
-
-            if (isCameraInverted) {
-                look.y = -UnityEngine.Input.GetAxis("Mouse Y") * 5;
-            }
-
-            else {
-                look.y = UnityEngine.Input.GetAxis("Mouse Y") * 5;
-            }
-
-            
-            gamepadRightStick.x = UnityEngine.Input.GetAxis("Right Stick X") * 200;
-            gamepadRightStick.y = UnityEngine.Input.GetAxis("Right Stick Y") * 200;
-            
-            if (gamepadRightStick != Vector2.zero) look = gamepadRightStick;
-        }
-
+        
         private void Move() {
             // if (!BananaMan.Instance.isRagdoll) {
                 move.x = UnityEngine.Input.GetAxis("Horizontal");
@@ -88,7 +69,7 @@ namespace Input {
         }
 
         private void Jump() {
-            if (UnityEngine.Input.GetKeyDown(KeyCode.Space) || UnityEngine.Input.GetKeyDown(KeyCode.Joystick1Button0)) {
+            if (UnityEngine.Input.GetKeyDown(KeyCode.Space) || UnityEngine.Input.GetKeyDown(KeyCode.JoystickButton0)) {
                 _playerController.PlayerJump();
             }
         }
@@ -96,31 +77,31 @@ namespace Input {
         private void Run() {
             if (
                 UnityEngine.Input.GetKeyDown(KeyCode.LeftShift) || 
-                UnityEngine.Input.GetKeyDown(KeyCode.Joystick1Button4) ||
-                UnityEngine.Input.GetKeyDown(KeyCode.Joystick1Button8)
+                UnityEngine.Input.GetKeyDown(KeyCode.JoystickButton4) ||
+                UnityEngine.Input.GetKeyDown(KeyCode.JoystickButton8)
                 ) {
                 _playerController.PlayerSprint();
             }
 
-            if (UnityEngine.Input.GetKeyUp(KeyCode.LeftShift) || UnityEngine.Input.GetKeyUp(KeyCode.Joystick1Button4)) {
+            if (UnityEngine.Input.GetKeyUp(KeyCode.LeftShift) || UnityEngine.Input.GetKeyUp(KeyCode.JoystickButton4)) {
                 _playerController.PlayerStopSprint();
             }
         }
 
         private void Roll() {
-            if (UnityEngine.Input.GetKeyDown(KeyCode.LeftControl) || UnityEngine.Input.GetKeyDown(KeyCode.Joystick1Button1)) {
+            if (UnityEngine.Input.GetKeyDown(KeyCode.LeftControl) || UnityEngine.Input.GetKeyDown(KeyCode.JoystickButton1)) {
                 _playerController.PlayerRoll();
             }
         }
 
         private void Eat() {
-            if (UnityEngine.Input.GetKeyDown(KeyCode.R) || UnityEngine.Input.GetKeyDown(KeyCode.Joystick1Button3)) {
+            if (UnityEngine.Input.GetKeyDown(KeyCode.R) || UnityEngine.Input.GetKeyDown(KeyCode.JoystickButton3)) {
                 BananaMan.Instance.GainHealth();
             }
         }
 
         private void Interact() {
-            if (UnityEngine.Input.GetKeyDown(KeyCode.E) || UnityEngine.Input.GetKeyDown(KeyCode.Joystick1Button2)) {
+            if (UnityEngine.Input.GetKeyDown(KeyCode.E) || UnityEngine.Input.GetKeyDown(KeyCode.JoystickButton2)) {
                 ItemsManager.Instance.Validate();
             }
         }
@@ -131,17 +112,6 @@ namespace Input {
             }
         }
 
-        private void FocusCamera() {
-            if (UnityEngine.Input.GetKeyDown(KeyCode.F) || UnityEngine.Input.GetKeyDown(KeyCode.JoystickButton9)) {
-                if (!_playerController.isFocusCamera) {
-                    _playerController.FocusCamera();
-                }
-                else {
-                    _playerController.FreeCamera();
-                }
-            }
-        }
-
         private void PauseGame() {
             if (UnityEngine.Input.GetKeyDown(KeyCode.Escape) || UnityEngine.Input.GetKeyDown(KeyCode.JoystickButton7)) {
                 UIManager.Instance.Show_game_menu();
@@ -149,19 +119,19 @@ namespace Input {
         }
 
         private void SwitchToUpperSlot() {
-            if (UnityEngine.Input.GetAxis("DpadHorizontal") > 0 && !_scrolledUp) {
+            if (UnityEngine.Input.GetAxis("DpadVertical") > 0 && !_scrolledUp) {
                 UISlotsManager.Instance.Select_Upper_Slot();
                 _scrolledUp = true;
             }
 
-            if (UnityEngine.Input.GetAxis("DpadHorizontal") == 0) {
+            if (UnityEngine.Input.GetAxis("DpadVertical") == 0) {
                 _scrolledUp = false;
                 _scrolledDown = false;
             }
         }
     
         private void SwitchToLowerSlot() {
-            if (UnityEngine.Input.GetAxis("DpadHorizontal") < 0 && !_scrolledDown) {
+            if (UnityEngine.Input.GetAxis("DpadVertical") < 0 && !_scrolledDown) {
                 UISlotsManager.Instance.Select_Lower_Slot();
                 _scrolledDown = true;
             }
@@ -175,44 +145,86 @@ namespace Input {
             if (scrollValue > 0) UISlotsManager.Instance.Select_Lower_Slot();
         }
 
-        public void Aspire() {
-            if (UnityEngine.Input.GetKeyDown(KeyCode.Mouse1) && BananaMan.Instance.hasMover) {
+        private void Aspire() {
+            if (UnityEngine.Input.GetKeyDown(KeyCode.Mouse1)) {
                 MoverGet.Instance.StartToGet();
             }
 
-            if (UnityEngine.Input.GetKeyUp(KeyCode.Mouse1) && BananaMan.Instance.hasMover) {
+            if (UnityEngine.Input.GetKeyUp(KeyCode.Mouse1)) {
                 MoverGet.Instance.CancelGet();
             }
 
-            if (UnityEngine.Input.GetAxis("LeftTrigger") >= 0.9 && !_leftTriggerActivated && BananaMan.Instance.hasMover) {
+            if (UnityEngine.Input.GetAxis("LeftTrigger") <= -0.1 && !_leftTriggerActivated) {
                 _leftTriggerActivated = true;
                 MoverGet.Instance.StartToGet();
             }
 
-            if (UnityEngine.Input.GetAxis("LeftTrigger") <= 0.1 && _leftTriggerActivated && BananaMan.Instance.hasMover)  {
+            if (UnityEngine.Input.GetAxis("LeftTrigger") >= 0 && _leftTriggerActivated)  {
                 _leftTriggerActivated = false;
                 MoverGet.Instance.CancelGet();
             }
         }
 
-        public void Shoot() {
-            if (UnityEngine.Input.GetKeyDown(KeyCode.Mouse0) && BananaMan.Instance.hasMover) {
-                leftClickActivated = true;
-                MoverPut.Instance.StartToPut();
+        private void SwitchToSlotIndex0() {
+            if (UnityEngine.Input.GetKeyDown(KeyCode.Alpha1)) {
+                UISlotsManager.Instance.Switch_to_Slot_Index(0);
+            }
+        }
+
+        private void SwitchToSlotIndex1() {
+            if (UnityEngine.Input.GetKeyDown(KeyCode.Alpha2)) {
+                UISlotsManager.Instance.Switch_to_Slot_Index(1);
+            }
+        }
+        
+        private void SwitchToSlotIndex2() {
+            if (UnityEngine.Input.GetKeyDown(KeyCode.Alpha3)) {
+                UISlotsManager.Instance.Switch_to_Slot_Index(2);
+            }
+        }
+        
+        private void SwitchToSlotIndex3() {
+            if (UnityEngine.Input.GetKeyDown(KeyCode.Alpha4)) {
+                UISlotsManager.Instance.Switch_to_Slot_Index(3);
+            }
+        }
+        
+        private void Shoot() {
+            if (BananaMan.Instance.activeItemThrowableCategory == ItemThrowableCategory.BANANA) {
+                if (UnityEngine.Input.GetKeyDown(KeyCode.Mouse0)) {
+                    leftClickActivated = true;
+                    MoverPut.Instance.LoadingGun();
+                }
+
+                if (UnityEngine.Input.GetKeyUp(KeyCode.Mouse0)) {
+                    Mover.Instance.CancelMover();
+                }
+
+                if (UnityEngine.Input.GetAxis("RightTrigger") != 0 && !rightTriggerActivated) {
+                    rightTriggerActivated = true;
+                    MoverPut.Instance.LoadingGun();
+                }
+
+                if (UnityEngine.Input.GetAxis("RightTrigger") == 0 && rightTriggerActivated)  {
+                    Mover.Instance.CancelMover();
+                    rightTriggerActivated = false;
+                }
             }
 
-            if (UnityEngine.Input.GetKeyUp(KeyCode.Mouse0) && BananaMan.Instance.hasMover) {
-                leftClickActivated = false;
-                MoverPut.Instance.ValidatePut();
-            }
+            if (BananaMan.Instance.activeItemThrowableCategory == ItemThrowableCategory.PLATEFORM) {
+                if (UnityEngine.Input.GetKeyDown(KeyCode.Mouse0)) {
+                    leftClickActivated = true;
+                    SlotSwitch.Instance.ValidatePlateform();
+                }
+                
+                if (UnityEngine.Input.GetAxis("RightTrigger") != 0 && !rightTriggerActivated) {
+                    rightTriggerActivated = true;
+                    SlotSwitch.Instance.ValidatePlateform();
+                }
 
-            if (UnityEngine.Input.GetAxis("RightTrigger") >= 0.9 && !rightTriggerActivated && BananaMan.Instance.hasMover) {
-                rightTriggerActivated = true;
-                MoverPut.Instance.StartToPut();
-            }
-
-            if (UnityEngine.Input.GetAxis("RightTrigger") <= 0.1 && rightTriggerActivated && BananaMan.Instance.hasMover)  {
-                rightTriggerActivated = false;
+                if (UnityEngine.Input.GetAxis("RightTrigger") == 0 && rightTriggerActivated) {
+                    rightTriggerActivated = false;
+                }
             }
         }
     }

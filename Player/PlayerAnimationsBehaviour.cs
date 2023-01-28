@@ -13,6 +13,11 @@ namespace Player {
 
             if (stateInfo.IsTag("roll") || stateInfo.IsName("standing jump end") || stateInfo.IsName("jump when sprint end")) {
                 BananaMan.Instance.GetComponent<PlayerController>().isRolling = false;
+
+                BananaMan.Instance.GetComponent<CharacterController>().height = 1.82f;
+                BananaMan.Instance.GetComponent<CharacterController>().center = new Vector3(0, 0.88f, 0);
+
+                BananaMan.Instance.GetComponent<CapsuleCollider>().height = 1.85f;
             }
 
             if (stateInfo.IsName("standing jump end")) {

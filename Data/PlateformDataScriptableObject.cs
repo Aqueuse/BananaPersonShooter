@@ -3,7 +3,6 @@ using UnityEngine;
 
 [CreateAssetMenu (fileName = "Data", menuName = "ScriptableObjects/plateformDataScriptableObject", order = 2)]
 public class PlateformDataScriptableObject : ScriptableObject {
-    public string[] plateformName;
     public Sprite sprite;
     [Multiline] public string[] description;
 

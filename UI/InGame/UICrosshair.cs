@@ -25,10 +25,14 @@ namespace UI.InGame {
 
             crosshairColor.a = 1f;
 
-            if (itemThrowableCategory == ItemThrowableCategory.BANANA) {
+            if (itemThrowableCategory == ItemThrowableCategory.BANANA && itemThrowableType == ItemThrowableType.CAVENDISH) {
                 crosshairs[itemThrowableType].color = crosshairColor;
             }
-            
+
+            if (itemThrowableCategory == ItemThrowableCategory.EMPTY) {
+                crosshairs[itemThrowableType].color = crosshairColor;
+            }
+
             if (itemThrowableCategory == ItemThrowableCategory.PLATEFORM) {
                 moverCrosshair.color = crosshairColor;
             }

@@ -1,5 +1,4 @@
-﻿using System.Net.Mime;
-using Enums;
+﻿using Enums;
 using TMPro;
 using UI.InGame.Inventory;
 using UnityEngine;
@@ -26,6 +25,8 @@ namespace UI.InGame {
 
             transparent.a = 0f;
             visible.a = 100f;
+            
+            EmptySlot();
         }
         
         public void SetSlot(ItemThrowableType slotItemThrowableType, ItemThrowableCategory slotItemThrowableCategory) {
@@ -33,7 +34,7 @@ namespace UI.InGame {
             itemThrowableCategory = slotItemThrowableCategory;
             
             if (itemThrowableCategory != ItemThrowableCategory.EMPTY) {
-                iconImage.sprite = UInventory.Instance.lastselectedInventoryItem.transform.GetChild(0).GetComponentInChildren<Image>().sprite;
+                iconImage.sprite = UInventory.Instance.GetItemSprite(itemThrowableType);
                 iconImage.color = visible;
                 SetAmmoQuantity(global::Inventory.Instance.GetQuantity(itemThrowableType));
             }
@@ -58,7 +59,10 @@ namespace UI.InGame {
         }
 
         public void SetAmmoQuantity(int quantity) {
-            quantityText.text = quantity > 999 ? "999+" : quantity.ToString();
+            if (quantity == 0) EmptySlot();
+            else {
+                quantityText.text = quantity > 999 ? "999+" : quantity.ToString();
+            }
         }
 
         public void SetSprite(Sprite sprite) {

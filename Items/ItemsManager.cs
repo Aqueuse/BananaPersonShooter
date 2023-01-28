@@ -2,22 +2,21 @@
 using Building;
 using Dialogues;
 using Enums;
-using Monkeys;
-using Player;
 using UI;
 using UI.InGame;
 using UnityEngine;
+using UnityEngine.Localization.Settings;
 
 namespace Items {
     public class ItemsManager : MonoSingleton<ItemsManager> {
         private GameObject _interactedObject;
-        private int _itemsLayerMask = 1 << 8;
+        private const int ItemsLayerMask = 1 << 8;
 
         public GameObject lootMessage;
         
         private void Update() {
             if (GameManager.Instance.isGamePlaying) {
-                if (Physics.Raycast(transform.position, transform.forward,  out RaycastHit raycastHit, 10, _itemsLayerMask)) {
+                if (Physics.Raycast(transform.position, transform.forward,  out RaycastHit raycastHit, 10, ItemsLayerMask)) {
                     if (raycastHit.transform.gameObject != _interactedObject) {
                         lootMessage.SetActive(true);
                         _interactedObject = raycastHit.transform.gameObject;
@@ -48,24 +47,28 @@ namespace Items {
                         var quantity = _interactedObject.GetComponent<Regime>().bananasDataScriptableObject
                             .regimeQuantity;
 
-                        Inventory.Instance.AddQuantity(bananaType, quantity);
-                        UIQueuedMessages.Instance.AddMessage("+ "+quantity+" "+bananaType.ToString().ToLower()+" bananas");
-                        // TODO change bananier state to baby bananier
+                        Inventory.Instance.AddQuantity(bananaType, ItemThrowableCategory.BANANA, quantity);
+                        UIQueuedMessages.Instance.AddMessage(
+                            "+ "+
+                            quantity+" "+
+                            LocalizationSettings.StringDatabase.GetTable("bananes").GetEntry(bananaType.ToString().ToLower()).GetLocalizedString());
+                        
+                        _interactedObject.GetComponent<Regime>().GrabBananas();
                         break;
                     case ItemType.BOSS_FIGHT_LAUNCHER:
-                        MonkeyManager.Instance.StartBossFight(MonkeyType.KELSAIK);
+                        MapManager.Instance.StartBossFight(MonkeyType.KELSAIK);
                         break;
                     case ItemType.MINI_CHIMP:
                         DialogueSystem.Instance.interact_with_minichimp(_interactedObject);
                         break;
-                    case ItemType.MOVER:
-                        BananaMan.Instance.advancementType = AdvancementType.OTHER;
-                        Mover.Instance.Acquire();
-                        Destroy(_interactedObject);
-                        break;
                     case ItemType.MINI_CHIMP_BUILD_STATION:
-                        if (!BananaMan.Instance.hasMover) Mover.Instance.Acquire();
                         UIManager.Instance.Show_Hide_minichimp_plateform_builder_interface(true);
+                        break;
+                    case ItemType.FOUNDRY:
+                        Foundry.Instance.Load_One_More_Debris();
+                        break;
+                    case ItemType.INGOT_FOUNDRY_BOX:
+                        Foundry.Instance.Give_Ingots_To_Player();
                         break;
                 }
             }

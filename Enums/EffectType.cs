@@ -5,6 +5,8 @@ namespace Enums {
         FOMP,
         ROCK_SLIDE,
         LOADING_GUN_PUT,
-        THROW_BANANA
+        THROW_BANANA,
+        INGOT_CREATED,
+        PRINTER
     }
 }

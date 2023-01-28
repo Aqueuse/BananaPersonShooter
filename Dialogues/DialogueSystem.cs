@@ -19,7 +19,6 @@ namespace Dialogues {
         public void interact_with_minichimp(GameObject miniChimp) {
             BananaMan.Instance.GetComponent<PlayerController>().canMove = false;
             AudioManager.Instance.PlayVoice(VoiceType.MINICHIMP);
-            ThirdPersonOrbitCamBasic.Instance.canRotate = false;
             
             if (BananaMan.Instance.advancementType == AdvancementType.FIRST_MINICHIMP_INTERACT) {
                 BananaMan.Instance.advancementType = AdvancementType.OTHER;
@@ -46,7 +45,6 @@ namespace Dialogues {
             AudioManager.Instance.StopAudioSource(AudioSourcesType.VOICE);
             uiDialogueSystem.hide_dialogue();
             BananaMan.Instance.GetComponent<PlayerController>().canMove = true;
-            ThirdPersonOrbitCamBasic.Instance.canRotate = true;
         }
     }
 }

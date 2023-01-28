@@ -21,7 +21,7 @@ MonoBehaviour:
   - More nourishing, more resistance
   - "Plus nourrissante, plus de r\xE9sistance"
   regimeQuantity: 60
-  damage: 1.5
+  sasiety: 5
   damageTime: 0
   healthBonus: 1
   resistanceBonus: 2

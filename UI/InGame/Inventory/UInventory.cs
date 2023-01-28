@@ -11,7 +11,7 @@ namespace UI.InGame.Inventory {
 
         [SerializeField] private GenericDictionary<ItemThrowableType, GameObject> inventorySlots;
         [SerializeField] private GameObject firstInventoryItem;
-
+        
         private Dictionary<ItemThrowableType, int> itemsIndexByType;
 
         public GameObject lastselectedInventoryItem;
@@ -58,8 +58,11 @@ namespace UI.InGame.Inventory {
         }
 
         public Sprite GetItemSprite(ItemThrowableType itemThrowableType) {
+            ActivateAllInventory();
+            
             foreach (UInventorySlot inventorySlot in transform.GetComponentsInChildren<UInventorySlot>()) {
                 if (inventorySlot.itemThrowableType == itemThrowableType) {
+                    RefreshUInventory();
                     return inventorySlot.GetComponent<RectTransform>().GetChild(0).GetComponentInChildren<Image>().sprite;
                 }
             }

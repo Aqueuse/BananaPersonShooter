@@ -21,7 +21,7 @@ MonoBehaviour:
   - ordinary nourishing, double healing
   - "sati\xE9t\xE9 ordinaire, soins doubl\xE9s"
   regimeQuantity: 60
-  damage: 1
+  sasiety: 5
   damageTime: 0
   healthBonus: 2
   resistanceBonus: 1

@@ -1,5 +1,7 @@
-public enum MonkeyState {
-    STARVED,
-    HUNGRY,
-    HAPPY
+namespace Enums {
+    public enum MonkeyState {
+        ANGRY,
+        SAD,
+        HAPPY
+    }
 }

@@ -4,6 +4,7 @@ using Enums;
 using UI.InGame;
 using UI.InGame.PlateformBuilder;
 using UnityEngine;
+using UnityEngine.Localization.Settings;
 
 namespace Building {
     public class Convertor : MonoSingleton<Convertor> {
@@ -14,19 +15,18 @@ namespace Building {
         private Inventory _inventory;
         private Dictionary<ItemThrowableType, int> leftsideContentDictionnary;
 
-        // 2 rockets + 2 banana = 1 plateform
+        // 2 debris + 2 banana = 1 plateform
 
         public void ShowPossiblesConversions() {
             CheckLeftSideSelectedItems();
             UnSelectAll();
 
-            if (leftsideContentDictionnary.ContainsKey(ItemThrowableType.ROCKET) &&
-                leftsideContentDictionnary.ContainsKey(ItemThrowableType.CAVENDISH)) {
-                if (leftsideContentDictionnary[ItemThrowableType.ROCKET] >= 2 && leftsideContentDictionnary[ItemThrowableType.CAVENDISH] >= 2) {
-                    plateforms["plateformCavendish1"].SetActive(true);
+            if (leftsideContentDictionnary.ContainsKey(ItemThrowableType.INGOT)) {
+                if (leftsideContentDictionnary[ItemThrowableType.INGOT] >= 2) {
+                    plateforms["plateform1"].SetActive(true);
                 }
-                if (leftsideContentDictionnary[ItemThrowableType.ROCKET] >= 10 && leftsideContentDictionnary[ItemThrowableType.CAVENDISH] >= 10) {
-                    plateforms["plateformCavendish5"].SetActive(true);
+                if (leftsideContentDictionnary[ItemThrowableType.INGOT] >= 10) {
+                    plateforms["plateform5"].SetActive(true);
                 }
             }
         }
@@ -46,16 +46,13 @@ namespace Building {
         }
 
         public void GiveToPlayer(UIBuildInventorySlotRight uInventorySlot) {
-            Inventory.Instance.bananaManInventory[uInventorySlot.itemThrowableType] += uInventorySlot.quantity;
+            Inventory.Instance.AddQuantity(uInventorySlot.itemThrowableType, ItemThrowableCategory.PLATEFORM, uInventorySlot.quantity);
             
-            var message = "+ "+uInventorySlot.quantity+" " +ScriptableObjectManager.Instance.GetPlateformName(uInventorySlot.itemThrowableType);
+            var message = "+ "+uInventorySlot.quantity+" " +LocalizationSettings.Instance.GetStringDatabase().GetLocalizedString("platform");
             UIQueuedMessages.Instance.AddMessage(message);
             
-            foreach (var ingredient in ScriptableObjectManager.Instance.GetPlateformCost(uInventorySlot.itemThrowableType)) {
-                Inventory.Instance.bananaManInventory[ingredient.Key] -= ingredient.Value*uInventorySlot.quantity;
-                if (Inventory.Instance.bananaManInventory[ingredient.Key] < 0) {
-                    Inventory.Instance.bananaManInventory[ingredient.Key] = 0;
-                }
+            foreach (var ingredient in ScriptableObjectManager.Instance.GetPlateformCost()) {
+                Inventory.Instance.RemoveQuantity( ingredient.Key, ingredient.Value*uInventorySlot.quantity);
             }
             
             UIBuildInventoryLeft.Instance.RefreshInventoySlots();

@@ -1,10 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public enum ItemThrowableCategory {
-    BANANA,
-    ROCKET,
-    PLATEFORM,
-    EMPTY
+namespace Enums {
+    public enum ItemThrowableCategory {
+        BANANA,
+        CRAFTABLE,
+        PLATEFORM,
+        EMPTY
+    }
 }

@@ -21,7 +21,7 @@ MonoBehaviour:
   - slow down time for 5 seconds
   - ralenti le temps pendant 5 secondes
   regimeQuantity: 60
-  damage: 0
+  sasiety: 5
   damageTime: 0
   healthBonus: 1
   resistanceBonus: 1

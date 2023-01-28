@@ -1,3 +1,5 @@
+using Bananas;
+using Building.PlateformsEffects;
 using Enums;
 using UnityEngine;
 
@@ -8,9 +10,7 @@ namespace Building {
         [SerializeField] private Material plateformMaterial;
         [SerializeField] private Material ghostValidMaterial;
         [SerializeField] private Material ghostUnvalidMaterial;
-
-        [SerializeField] private MeshRenderer turbineMeshRenderer;
-
+        
         public ItemThrowableType platformType;
         
         private MeshRenderer _meshRenderer;
@@ -34,19 +34,34 @@ namespace Building {
 
         public void SetNormal() {
             _boxCollider.isTrigger = false;
-            _meshRenderer.material = plateformMaterial;
-            turbineMeshRenderer.enabled = true;
+            ResetMaterial();
         }
 
+        public void ResetMaterial() {
+            _meshRenderer.material = plateformMaterial;
+        }
+
+        private void OnTriggerEnter(Collider other) {
+            if (other.CompareTag("Banana")) {
+                switch (other.GetComponent<Banana>().bananasDataScriptableObject.itemThrowableType) {
+                    case ItemThrowableType.CAVENDISH:
+                        GetComponent<MeshRenderer>().material = other.GetComponent<MeshRenderer>().sharedMaterials[0];
+                        GetComponent<UpDownEffect>().Activate();
+                        break;
+                }
+            }
+        }
+
+
         private void OnTriggerStay(Collider other) {
-            if (other.CompareTag("MoverUnvalid")) {
+            if (other.CompareTag("MoverUnvalid") && _boxCollider.isTrigger) {
                 isValid = false;
                 SetUnvalid();
             }
         }
 
         private void OnTriggerExit(Collider other) {
-            if (other.CompareTag("MoverUnvalid")) {
+            if (other.CompareTag("MoverUnvalid") && _boxCollider.isTrigger) {
                 isValid = true;
                 SetValid();
             }

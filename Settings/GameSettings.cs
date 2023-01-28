@@ -1,7 +1,6 @@
 using Audio;
-using Cameras;
+using Cinemachine;
 using Enums;
-using Input;
 using UnityEngine;
 using UnityEngine.Localization.Settings;
 using UnityEngine.Rendering;
@@ -20,7 +19,9 @@ namespace Settings {
         [SerializeField] private KeymapRebinding[] keymapRebindings;
         [SerializeField] private TMPro.TMP_Dropdown languageDropDown;
 
-        [SerializeField] private ThirdPersonOrbitCamBasic thirdPersonOrbitCamBasic;
+        [SerializeField] private CinemachineFreeLook playerCamera;
+        [SerializeField] private CinemachineFreeLook shootCamera;
+        [SerializeField] private Slider lookSensibilitySlider;
         
         private FullScreenMode _fullScreenMode;
 
@@ -29,11 +30,9 @@ namespace Settings {
         private string _isVsync;
         public bool isKeyRebinding;
 
-        public float horizontalCameraSensibility;
-        public float verticalCameraSensibility;
-        
         private string _keymapBinding;
         public int languageIndexSelected;
+        private float _lookSensibility;
         
         private void Start() {
             Application.targetFrameRate = 60; // fix the framerate to prevent crash on some GPU
@@ -49,38 +48,45 @@ namespace Settings {
             AudioManager.Instance.ambianceLevel = PlayerPrefs.GetFloat("ambianceLevel", 0.1f);
             AudioManager.Instance.effectsLevel = PlayerPrefs.GetFloat("effectsLevel", 0.1f);
 
-            _isFullscreen = PlayerPrefs.GetString("isFullscreen", "false");
-            _isVsync = PlayerPrefs.GetString("isVSync", "false");
+            _isFullscreen = PlayerPrefs.GetString("isFullscreen", "True");
+            _isVsync = PlayerPrefs.GetString("isVSync", "True");
             _resolution = PlayerPrefs.GetInt("resolution", 3);
 
             languageIndexSelected = PlayerPrefs.GetInt("language", 1);
             _keymapBinding = PlayerPrefs.GetString("keymap_binding", null);
 
-            horizontalCameraSensibility = PlayerPrefs.GetFloat("LookSensibility", 0.5f);
-            verticalCameraSensibility = horizontalCameraSensibility;
-
             SetMusicVolume(AudioManager.Instance.musicLevel);
             SetAmbianceVolume(AudioManager.Instance.ambianceLevel);
             SetEffectVolume(AudioManager.Instance.effectsLevel);
             
+            _lookSensibility = PlayerPrefs.GetFloat("LookSensibility", 0.3f);
             InverseCameraVerticalAxis(PlayerPrefs.GetString("isCameraVerticalAxisInverted", "False").Equals("True"));
+            SetLookSensibility(_lookSensibility);
             
             Invoke(nameof(SetLanguage), 1);
         
             // reflects values on UI 
-            ToggleFullscreen(_isFullscreen.Equals("true"));
-            ToggleVSync(_isVsync.Equals("true"));
+            ToggleFullscreen(_isFullscreen.Equals("True"));
+            ToggleVSync(_isVsync.Equals("True"));
             SetResolution(_resolution);
 
             musicLevelSlider.value = AudioManager.Instance.musicLevel;
             ambianceLevelSlider.value = AudioManager.Instance.ambianceLevel;
             effectsLevelSlider.value = AudioManager.Instance.effectsLevel;
 
-            fullScreenToggle.isOn = _isFullscreen.Equals("true");
-            vsyncToggle.isOn = _isVsync.Equals("true");
+            fullScreenToggle.isOn = _isFullscreen.Equals("True");
+            vsyncToggle.isOn = _isVsync.Equals("True");
             resolutionDropDown.value = _resolution;
-        
+
+            lookSensibilitySlider.value = _lookSensibility;
+    
             languageDropDown.value = languageIndexSelected;
+        }
+
+        public void ResetOptions() {
+            PlayerPrefs.DeleteAll(); // temporaly reset the player prefs on launch while in the building of the beta
+            
+            LoadSettings();
         }
 
         void SetLanguage() {
@@ -102,7 +108,7 @@ namespace Settings {
 
         public void SetAmbianceVolume(float level) {
             AudioManager.Instance.SetVolume(AudioSourcesType.AMBIANCE, level);
-
+            
             PlayerPrefs.SetFloat("ambianceLevel", level);
         }
 
@@ -110,13 +116,13 @@ namespace Settings {
             Screen.fullScreenMode = isGameFullscreen ? FullScreenMode.ExclusiveFullScreen : FullScreenMode.Windowed;
             _fullScreenMode = Screen.fullScreenMode;
 
-            PlayerPrefs.SetString("isFullscreen", isGameFullscreen ? "true" : "false");
+            PlayerPrefs.SetString("isFullscreen", isGameFullscreen ? "True" : "False");
         }
 
         public void ToggleVSync(bool isGameVsync) {
             QualitySettings.vSyncCount = isGameVsync ? 1 : 0;
 
-            PlayerPrefs.SetString("isVSync", isGameVsync ? "true" : "false");
+            PlayerPrefs.SetString("isVSync", isGameVsync ? "True" : "False");
         }
 
         public void SetResolution(int gameResolution) {
@@ -135,19 +141,19 @@ namespace Settings {
         }
 
         public void SetLookSensibility(float sensibility) {
-            horizontalCameraSensibility = sensibility;
-            verticalCameraSensibility = sensibility;
+            playerCamera.m_YAxis.m_MaxSpeed = sensibility;
+            playerCamera.m_XAxis.m_MaxSpeed = sensibility * 400;
             
-            PlayerPrefs.SetFloat("LookSensibility", sensibility);
+            shootCamera.m_YAxis.m_MaxSpeed = sensibility/1.3f;
+            shootCamera.m_XAxis.m_MaxSpeed = sensibility * 400/1.3f;
 
-            if (thirdPersonOrbitCamBasic.isActiveAndEnabled) {
-                thirdPersonOrbitCamBasic.horizontalSensibility = sensibility / 5;
-                thirdPersonOrbitCamBasic.verticalSensibility = sensibility / 5;
-            }
+            _lookSensibility = sensibility;
+            
+            PlayerPrefs.SetFloat("LookSensibility", _lookSensibility);
         }
 
         public void InverseCameraVerticalAxis(bool isCameraInverted) {
-            GameActions.Instance.isCameraInverted = isCameraInverted;
+            playerCamera.m_YAxis.m_InvertInput = isCameraInverted;
             PlayerPrefs.SetString("isCameraVerticalAxisInverted", isCameraInverted.ToString());            
         }
 

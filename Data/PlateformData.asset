@@ -10,20 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0119049540c79ee41a8e7e7e933367b3, type: 3}
-  m_Name: PlateformCavendishData
+  m_Name: PlateformData
   m_EditorClassIdentifier: 
-  plateformName:
-  - cavendish plateform
-  - plateforme cavendish
   sprite: {fileID: 21300000, guid: 73042722187975d4e8d0de6bcf3eb7db, type: 3}
   description:
-  - A plateform that move vertically
-  - "Une plateforme qui se d\xE9place \xE0 la verticale"
-  itemThrowableType: 19
+  - A plateform that can be feed with bananas
+  - "Une plateforme qui peut \xEAtre aliment\xE9e en bananes"
+  itemThrowableType: 20
   Cost:
     list:
-    - Key: 3
-      Value: 2
-    - Key: 18
+    - Key: 19
       Value: 2
     keyCollision: 0

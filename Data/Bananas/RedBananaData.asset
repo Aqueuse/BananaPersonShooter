@@ -21,7 +21,7 @@ MonoBehaviour:
   - creates a zone of fire for 15 seconds that repels monkeys
   - "cr\xE9e une zone de feu pendant 15 secondes qui repousse les singes"
   regimeQuantity: 60
-  damage: 1
+  sasiety: 5
   damageTime: 0
   healthBonus: 0.5
   resistanceBonus: 1

@@ -21,7 +21,7 @@ MonoBehaviour:
   - Throw two bananas in a horizontal line
   - Lance deux bananes sur une ligne horizontale
   regimeQuantity: 60
-  damage: 2
+  sasiety: 5
   damageTime: 0
   healthBonus: 1
   resistanceBonus: 1

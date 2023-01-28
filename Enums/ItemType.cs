@@ -4,7 +4,8 @@
         REGIME,
         BOSS_FIGHT_LAUNCHER,
         MINI_CHIMP,
-        MOVER,
-        MINI_CHIMP_BUILD_STATION
+        MINI_CHIMP_BUILD_STATION,
+        FOUNDRY,
+        INGOT_FOUNDRY_BOX
     }
 }

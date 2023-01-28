@@ -6,6 +6,8 @@ namespace Monkeys.Gorilla {
         [SerializeField] private AudioDataScriptableObject gorillaQuickRoarSounds;
         [SerializeField] private AudioDataScriptableObject boomSound;
 
+        [SerializeField] private AudioClip[] gorillaSadSounds;
+
         private AudioSource _audioSource;
 
         void Start() {
@@ -23,6 +25,22 @@ namespace Monkeys.Gorilla {
             _audioSource.volume = boomSound.volume;
             _audioSource.Play();
         }
+
+        public void PlaySadMonkeySounds() {
+            Invoke(nameof(GorillaRitournelle), Random.Range(5, 15));
+        }
+        
+        private void GorillaRitournelle() {
+            float randomTime = Random.Range(10, 20);
+        
+            foreach (var gorillaSadSound in gorillaSadSounds) {
+                _audioSource.clip = gorillaSadSounds[Random.Range(0, gorillaSadSounds.Length)];
+                _audioSource.Play();
+            }
+        
+            Invoke(nameof(GorillaRitournelle), randomTime);
+        }
+
 
     }
 }

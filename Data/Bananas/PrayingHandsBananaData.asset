@@ -21,7 +21,7 @@ MonoBehaviour:
   - explodes then splits into 10 bananas which in turn explode
   - "explose puis se divise en 10 bananes qui explosent \xE0 leur tour"
   regimeQuantity: 60
-  damage: 1
+  sasiety: 5
   damageTime: 0
   healthBonus: 1
   resistanceBonus: 1

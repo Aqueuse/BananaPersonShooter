@@ -5,6 +5,7 @@ namespace Enums {
         WOOD,
         ROCK,
         WATER,
-        DIRT
+        DIRT,
+        SNOW
     }
 }

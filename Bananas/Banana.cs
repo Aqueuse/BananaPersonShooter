@@ -10,7 +10,7 @@ namespace Bananas {
 
         private void OnTriggerEnter(Collider other) {
             if (GameManager.Instance.isFigthing && other.gameObject.CompareTag("Boss")) {
-                MonkeyManager.Instance.GetActiveBoss().GetComponent<Monkey>().AddSatiety(BananaMan.Instance.activeItem.damage);
+                MapManager.Instance.GetActiveBoss().GetComponent<Monkey>().Feed(BananaMan.Instance.activeItem.sasiety);
                 DestroyMe();
             }
         }
@@ -21,8 +21,8 @@ namespace Bananas {
                 transform.gameObject.GetComponent<MeshRenderer>().enabled = false;
                 transform.GetChild(0).GetComponent<MeshRenderer>().enabled = true;
 
-                if (GameManager.Instance.isInCorolle) {
-                    MonkeyManager.Instance.GetActiveBoss().GetComponent<NavMeshAgent>().SetDestination(transform.position);
+                if (!GameManager.Instance.isInCorolle) {
+                    MapManager.Instance.GetActiveBoss().GetComponent<NavMeshAgent>().SetDestination(transform.position);
                 }
                 
                 Invoke(nameof(DestroyMe), 10);

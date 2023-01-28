@@ -12,18 +12,13 @@ namespace UI {
     public class UIManager : MonoSingleton<UIManager> {
         [SerializeField] private CanvasGroup homeMenuCanvasGroup;
         [SerializeField] private CanvasGroup gameMenuCanvasGroup;
-        [SerializeField] private CanvasGroup optionsMenuCanvasGroup;
+        public CanvasGroup optionsMenuCanvasGroup;
         [SerializeField] private CanvasGroup bananapediaMenuCanvasGroup;
         [SerializeField] private CanvasGroup creditsMenuCanvasGroup;
         [SerializeField] private CanvasGroup deathMenuCanvasGroup;
         [SerializeField] private CanvasGroup dialoguesCanvasGroup;
-        [SerializeField] private CanvasGroup moverUICanvasGroup;
         [SerializeField] private CanvasGroup miniChimpPlateformBuilderCanvasGroup;
-        
-        public GameObject slotsPanel;
-        public GameObject hudPanel;
-
-        private CanvasGroup _hudCanvasGroup;
+        [SerializeField] private CanvasGroup hudCanvasGroup;
 
         [SerializeField] private Animator interfaceAnimator;
         
@@ -34,8 +29,6 @@ namespace UI {
         private void Start() { 
             _firstGameMenuItem = gameMenuCanvasGroup.transform.GetChild(0).gameObject;
             _firstHomeMenuItem = homeMenuCanvasGroup.transform.GetChild(0).gameObject;
-
-            _hudCanvasGroup = hudPanel.GetComponent<CanvasGroup>();
             
             EventSystem.current.SetSelectedGameObject(_firstHomeMenuItem);
         }
@@ -90,7 +83,7 @@ namespace UI {
                 Set_active(homeMenuCanvasGroup, false);
             }
             
-            EventSystem.current.SetSelectedGameObject(UIMenu.Instance.GetFirstTab(), null);
+            EventSystem.current.SetSelectedGameObject(UIOptionsMenu.Instance.GetFirstTab(), null);
         }
 
         public void Hide_options_menu() {
@@ -176,21 +169,16 @@ namespace UI {
                 }
             }
         }
-
-        public void Hide_game_menu() {
-            Set_active(gameMenuCanvasGroup, false);
-        }
-
+        
         /// IN GAME ///
         
         public void Show_Hide_inventory() {
             if (GameManager.Instance.isInGame && gameMenuCanvasGroup.alpha == 0f) {
-                if (!interfaceAnimator.GetBool(ShowInventoryID)) {
+                if (!Is_Inventory_Visible()) {
                     interfaceAnimator.SetBool(ShowInventoryID, true);
 
                     UInventory.Instance.RefreshUInventory();
                     Focus_inventory();
-//                    GameManager.Instance.PauseGame(true);
                     InputManager.Instance.SwitchContext(GameContext.UI);
                 }
                 else {
@@ -200,33 +188,29 @@ namespace UI {
                 }
             }
         }
-        
+
+        public bool Is_Inventory_Visible() {
+            return interfaceAnimator.GetBool(ShowInventoryID);
+        }
+
         public void Show_HUD() {
-            Set_active(_hudCanvasGroup, true);
+            Set_active(hudCanvasGroup, true);
         }
 
         public void Hide_HUD() {
-            Set_active(_hudCanvasGroup, false);
+            Set_active(hudCanvasGroup, false);
         }
 
         void Focus_inventory() {
             EventSystem.current.SetSelectedGameObject(UInventory.Instance.lastselectedInventoryItem);
         }
-
-        public void Focus_SlotsPanel() {
-            EventSystem.current.SetSelectedGameObject(slotsPanel);
-        }
-
+        
         public void Show_death_Panel() {
             Set_active(deathMenuCanvasGroup, true);
         }
 
         public void Hide_death_Panel() {
             Set_active(deathMenuCanvasGroup, false);
-        }
-
-        public void Show_Hide_Mover_UI(bool isVisible) {
-            Set_active(moverUICanvasGroup, isVisible);
         }
 
         public void Show_Hide_minichimp_plateform_builder_interface(bool isVisible) {

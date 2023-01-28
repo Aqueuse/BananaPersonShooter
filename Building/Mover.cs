@@ -1,54 +1,45 @@
-using Enums;
+using Cameras;
 using Player;
 using UI.InGame;
 using UnityEngine;
 
 namespace Building {
-    public enum MoverContext {
-        GET,
-        PUT
-    }
-
     public class Mover : MonoSingleton<Mover> {
-        [SerializeField] private UIMover uiMover;
+        public GameObject bananaGun;
+        [SerializeField] private GameObject bananaGunInBack;
+        
+        private PlayerController _playerController;
 
         public bool wasFocus;
-    
-        public MoverContext moverContext;
-    
+        
         private void Start() {
-            moverContext = MoverContext.GET;
+            _playerController = BananaMan.Instance.GetComponent<PlayerController>();
             BananaMan.Instance.isGrabingMover = false;
         }
         
-        /// HELPERS
-        public void Acquire() {
-            BananaMan.Instance.hasMover = true;
-            PlayerPrefs.SetString("HasMover", "true");
+        public void GrabMover() {
+            bananaGun.SetActive(true);
+            bananaGunInBack.SetActive(false);
+
+            BananaMan.Instance.isGrabingMover = true;
+
+            BananaMan.Instance.tpsPlayerAnimator.GrabMover();
+            wasFocus = _playerController.isFocusCamera;
+            MainCamera.Instance.Switch_To_Shoot_Target();
+            
+            UICrosshair.Instance.SetCrosshair(BananaMan.Instance.activeItemThrowableType, BananaMan.Instance.activeItemThrowableCategory);
         }
 
-        public void SwitchMoverContextUI(MoverContext newMoverContext) {
-            uiMover.SwitchGetPut(newMoverContext);
-        }
+        public void CancelMover() {
+            bananaGun.SetActive(false);
+            bananaGunInBack.SetActive(true);
 
-        public void AmmoReduce() {
-            BananasDataScriptableObject activeWeaponData = BananaMan.Instance.activeItem;
+            BananaMan.Instance.isGrabingMover = false;
 
-            switch (activeWeaponData.bananaEffect) {
-                case BananaEffect.TWO_SPLIT:
-                    Inventory.Instance.RemoveQuantity(activeWeaponData.itemThrowableType, 2);
-                    break;
-                case BananaEffect.FIVE_SPLIT:
-                    Inventory.Instance.RemoveQuantity(activeWeaponData.itemThrowableType, 5);
-                    break;
-                default:
-                    Inventory.Instance.RemoveQuantity(activeWeaponData.itemThrowableType, 1);
-                    break;
-            }
-
-            var newAmmoQuantity = Inventory.Instance.bananaManInventory[activeWeaponData.itemThrowableType];
-
-            UISlotsManager.Instance.Get_Selected_Slot().SetAmmoQuantity(newAmmoQuantity);
+            BananaMan.Instance.tpsPlayerAnimator.FocusCamera(wasFocus);
+            MainCamera.Instance.Switch_To_TPS_Target();
+            
+            UICrosshair.Instance.SetCrosshair(BananaMan.Instance.activeItemThrowableType, BananaMan.Instance.activeItemThrowableCategory);
         }
     }
 }

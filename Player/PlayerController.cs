@@ -44,8 +44,7 @@ namespace Player {
         
         private void Update() {
             if (GameManager.Instance.isGamePlaying && canMove) {
-                cameraRotation = new Quaternion(0, mainCameraTransform.transform.rotation.y, 0,
-                mainCameraTransform.rotation.w).normalized;
+                cameraRotation = new Quaternion(0, mainCameraTransform.transform.rotation.y, 0, mainCameraTransform.rotation.w).normalized;
                 
                 _rawInputMovement = new Vector3(GameActions.Instance.move.x, 0,GameActions.Instance.move.y); // Y en input => Z pour le player (forward)
                 _rawInputMovement = Vector3.ClampMagnitude(_rawInputMovement, 1); // clamp the speed in diagonal
@@ -100,11 +99,6 @@ namespace Player {
             _tpsPlayerAnimatorScript.FocusCamera(false);
             isFocusCamera = false;
         }
-
-        public void FreeCamera() {
-            _tpsPlayerAnimatorScript.FocusCamera(false);
-            isFocusCamera = false;
-        }
         
         public void PlayerJump() {
             if (!BananaMan.Instance.isInAir && !isRolling) {
@@ -126,6 +120,10 @@ namespace Player {
         public void PlayerRoll() {
             if (!BananaMan.Instance.isInAir) {
                 _tpsPlayerAnimatorScript.Roll();
+                GetComponent<CharacterController>().height = 1;
+                GetComponent<CharacterController>().center = new Vector3(0, 0.44f, 0);
+                
+                GetComponent<CapsuleCollider>().height = 0.90f;
             }
         }
         

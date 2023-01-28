@@ -12,7 +12,7 @@ public class BananasDataScriptableObject : ScriptableObject {
     // Game
     public int regimeQuantity;
 
-    public float damage;
+    public float sasiety;
     public float damageTime;
 
     public float healthBonus;

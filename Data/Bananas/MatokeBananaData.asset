@@ -21,7 +21,7 @@ MonoBehaviour:
   - banana platform, add a platform on some surfaces (inorganic)
   - banane plateforme, ajoute une plateforme sur certaines surfaces (non organiques)
   regimeQuantity: 60
-  damage: 0.3
+  sasiety: 5
   damageTime: 0
   healthBonus: 0.5
   resistanceBonus: 1

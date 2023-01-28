@@ -4,28 +4,27 @@ using UnityEngine;
 
 namespace Player {
     public class SurfaceDetector : MonoSingleton<SurfaceDetector> {
-        private int _layerMask;
-        private Vector3 bananaManPosition;
-
         [SerializeField] private GenericDictionary<Material, FootStepType> basicFootStepTypesByMaterial;
-
         [SerializeField] GenericDictionary<Material, FootStepType> terrainFootStepTypeByMaterial;
+
+        private int _layerMask;
 
         private void Start() {
             _layerMask = 1 << 9;
         }
 
-        void Update() {
-            if (GameManager.Instance.isGamePlaying) {
-                if (Physics.CheckSphere(transform.position, 0.25f, _layerMask)) {
-                    BananaMan.Instance.isInAir = false;
-                    BananaMan.Instance.tpsPlayerAnimator.IsInAir(false);
-                    BananaMan.Instance.tpsPlayerAnimator.IsGrounded(true);
-                    BananaMan.Instance.lastY = BananaMan.Instance.transform.position.y;
-
+        private void Update() {
+                if (!BananaMan.Instance.isInAir && GameManager.Instance.isGamePlaying) {
                     if (Physics.Raycast(transform.position, -transform.up, out RaycastHit raycastHit, 5, layerMask:_layerMask)) {
                         if (raycastHit.transform.GetComponent<Renderer>().sharedMaterials.Length <= 2) {
-                            AudioManager.Instance.footStepType = basicFootStepTypesByMaterial[raycastHit.transform.GetComponent<Renderer>().sharedMaterials[0]];
+                            if (!basicFootStepTypesByMaterial.ContainsKey(raycastHit.transform.GetComponent<Renderer>()
+                                    .sharedMaterials[0])) {
+                                AudioManager.Instance.footStepType = FootStepType.ROCK;
+                            }
+
+                            else {
+                                AudioManager.Instance.footStepType = basicFootStepTypesByMaterial[raycastHit.transform.GetComponent<Renderer>().sharedMaterials[0]];
+                            }
                         }
 
                         else {
@@ -34,13 +33,6 @@ namespace Player {
                         }
                     }
                 }
-
-                else {
-                    BananaMan.Instance.isInAir = true;
-                    BananaMan.Instance.tpsPlayerAnimator.IsInAir(true);
-                    BananaMan.Instance.tpsPlayerAnimator.IsGrounded(false);
-                }
-            }
         }
 
         private Material GetSurfaceTypeFromMaterial(GameObject obj, int triangleIndex) {

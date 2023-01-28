@@ -1,10 +1,12 @@
 ﻿using System.Collections;
 using Audio;
 using Cameras;
+using Cinemachine;
 using Enums;
 using Input;
 using Items;
 using Player;
+using Save;
 using Settings;
 using UI;
 using UI.InGame;
@@ -15,11 +17,12 @@ using UnityEngine.Video;
 public class GameManager : MonoSingleton<GameManager> {
     [SerializeField] private GameObject loadingScreen;
     [SerializeField] private Transform homeSpawnTransform;
-    
+    [SerializeField] private Transform commandRoomSpawnTransform;
+
     private Camera _cameraMain;
     private GameObject _bananaSplashVideo;
-
-
+    private CinemachineFreeLook playerCamera;
+    
     public bool isInGame;
     public bool isGamePlaying;
     public bool isInCorolle;
@@ -27,19 +30,20 @@ public class GameManager : MonoSingleton<GameManager> {
     
     private void Start() {
         _cameraMain = Camera.main;
-        if (_cameraMain != null) _bananaSplashVideo = _cameraMain.GetComponent<MainCamera>().bananaSplashVideo;
+        if (_cameraMain != null) {
+            _bananaSplashVideo = _cameraMain.GetComponent<MainCamera>().bananaSplashVideo;
+            playerCamera = _cameraMain.GetComponent<CinemachineFreeLook>();
+        }
+
         BananaMan.Instance.GetComponent<RagDoll>().SetRagDoll(false);
         
         GameSettings.Instance.LoadSettings();
-        GameSettings.Instance.SetMusicVolume(PlayerPrefs.GetFloat("musicLevel", 0.2f));
         AudioManager.Instance.PlayMusic(MusicType.HOME, false);
     }
 
 
     public void Play() {
-        //PlayerPrefs.DeleteAll(); // temporaly reset the player prefs on launch while in the building of the beta
-
-        GameSave.Instance.LoadPlayerGameState();
+        GameSave.Instance.LoadGameData();
         
         // hide menu lancement
         UIManager.Instance.Hide_home_menu();
@@ -77,7 +81,7 @@ public class GameManager : MonoSingleton<GameManager> {
         isInGame = false;
 
         _cameraMain.clearFlags = CameraClearFlags.SolidColor;
-        GameSave.Instance.SavePlayerGameState();
+        GameSave.Instance.SaveGameData();
         
         SwitchScene("Home", homeSpawnTransform.position);
         UIManager.Instance.Show_home_menu();
@@ -96,10 +100,8 @@ public class GameManager : MonoSingleton<GameManager> {
     }
 
     void Set_Playing_State(bool isPlaying) {
-        _cameraMain.GetComponent<ThirdPersonOrbitCamBasic>().enabled = isPlaying;
-
         InputManager.Instance.SwitchContext(isPlaying ? GameContext.GAME : GameContext.UI);
-
+            playerCamera.enabled = isPlaying;
         isGamePlaying = isPlaying;
     }
 
@@ -118,7 +120,6 @@ public class GameManager : MonoSingleton<GameManager> {
             _bananaSplashVideo.GetComponent<MeshRenderer>().enabled = true;
             _bananaSplashVideo.GetComponent<VideoPlayer>().Play();
 
-            _cameraMain.GetComponent<ThirdPersonOrbitCamBasic>().enabled = false;
             BananaMan.Instance.GetComponent<BananaMan>().Die();
             UIFace.Instance.Die(true);
             AudioManager.Instance.PlayEffect(EffectType.BANANASPLASH);
@@ -131,7 +132,7 @@ public class GameManager : MonoSingleton<GameManager> {
         }
     }
 
-    public void ReturnToGameAfterDeath() {  // onclick
+    public void ReturnToGameAfterDeath() {
         isFigthing = false;
         isGamePlaying = true;
         Set_Playing_State(false);
@@ -147,11 +148,17 @@ public class GameManager : MonoSingleton<GameManager> {
         BananaMan.Instance.GetComponent<BananaMan>().ResetToPlayable();
 
         // Switch scene to last scene
-        GameSave.Instance.LoadPlayerGameState();
+        GameSave.Instance.LoadGameData();
         loadingScreen.SetActive(true);
         StartCoroutine(LoadScene(GameSave.Instance.lastMap, GameSave.Instance.lastPositionOnMap));
     }
-    
+
+    public void Teleport_To_Command_Room() {
+        // show TP VFX on banana man
+        UIManager.Instance.Show_Hide_inventory();
+        SwitchScene("commandRoom", commandRoomSpawnTransform.position);
+    }
+
     /// SCENES SWITCH ///
     
     IEnumerator LoadScene(string sceneName, Vector3 spawnPoint) {
@@ -175,9 +182,10 @@ public class GameManager : MonoSingleton<GameManager> {
                 UIManager.Instance.Show_HUD();
                 isInGame = true;
                 isGamePlaying = true;
-                isInCorolle = false;
                 BananaMan.Instance.GetComponent<CharacterController>().enabled = true;
             }
+
+            isInCorolle = sceneName.Equals("Corolle");
 
             Set_Playing_State(sceneName != "Home");
             

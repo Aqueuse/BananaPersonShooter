@@ -21,7 +21,7 @@ MonoBehaviour:
   - Creates an area of ice that slows down monkeys for 10 seconds
   - "Cr\xE9e une zone de glace qui ralenti les singes pendant 10 secondes"
   regimeQuantity: 60
-  damage: 1
+  sasiety: 5
   damageTime: 0
   healthBonus: 0.5
   resistanceBonus: 1

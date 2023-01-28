@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Enums;
 using Player;
 using UnityEngine;
 using UnityEngine.AI;
@@ -13,12 +14,13 @@ using Random = UnityEngine.Random;
         
         public class GorillaMonkey : MonoBehaviour {
             [SerializeField] private GameObject shockWavePrefab;
-            [SerializeField] private Transform gorillaHandRight;
-            [SerializeField] private Transform gorillaHandLeft;
+            public Transform gorillaHandRight;
+            public Transform gorillaHandLeft;
             private NavMeshAgent navMeshAgent;
+            private Monkey _monkey;
 
-            private Vector3 _gorillaHandLeftPosition;
-            private Vector3 _gorillaHandRightPosition;
+            private Vector3 gorillaHandLeftPosition;
+            private Vector3 gorillaHandRightPosition;
 
             private Animator _animator;
 
@@ -61,6 +63,7 @@ using Random = UnityEngine.Random;
             private void Start() {
                 _animator = GetComponent<Animator>();
                 navMeshAgent = GetComponent<NavMeshAgent>();
+                _monkey = GetComponent<Monkey>();
 
                 _nearPlayerAttack = new List<int> {Roar, Flex, Tourbismash};
                 _mediumPlayerAttack = new List<int> {Punch, PunchRight, Swip, SwipRight};
@@ -68,10 +71,12 @@ using Random = UnityEngine.Random;
 
                 navMeshAgent.updatePosition = false;
                 navMeshAgent.updateRotation = true;
+
+                navMeshAgent.velocity = new Vector3(4, 4, 4);
             }
 
             private void Update() {
-                if (MonkeyManager.Instance.monkeyState == MonkeyState.STARVED) {
+                if (_monkey.monkeyState == MonkeyState.ANGRY) {
                     var bananaManPosition = BananaMan.Instance.transform.position;
                     Vector3 bananaManPositionXY = new Vector3(bananaManPosition.x, 0, bananaManPosition.z);
                 
@@ -103,8 +108,11 @@ using Random = UnityEngine.Random;
                     SynchronizeAnimatorAndAgent();
                 }
 
-                if (MonkeyManager.Instance.monkeyState == MonkeyState.HUNGRY) {
+                if (_monkey.monkeyState == MonkeyState.SAD) {
                     SynchronizeAnimatorAndAgent();
+                    if (navMeshAgent.remainingDistance < 10) {
+                        navMeshAgent.SetDestination(RandomNavmeshLocation(1000));
+                    }
                 }
             }
 
@@ -152,10 +160,10 @@ using Random = UnityEngine.Random;
             }
 
             public void CreateShockWave() {
-                _gorillaHandLeftPosition = gorillaHandLeft.position;
-                _gorillaHandRightPosition = gorillaHandRight.position;
+                gorillaHandLeftPosition = gorillaHandLeft.position;
+                gorillaHandRightPosition = gorillaHandRight.position;
 
-                var leftSpawnPosition = new Vector3(_gorillaHandLeftPosition.x, 0.5f, _gorillaHandLeftPosition.z);
+                var leftSpawnPosition = new Vector3(gorillaHandLeftPosition.x, 0.5f, gorillaHandLeftPosition.z);
 
                 Instantiate(shockWavePrefab, leftSpawnPosition, Quaternion.identity);
             }
@@ -163,6 +171,21 @@ using Random = UnityEngine.Random;
             /////  DAMAGES ////
             
             public void BeAttracted() {
+            }
+            
+            
+            private void OnTriggerEnter(Collider other) {
+                GetComponent<Monkey>().Feed(BananaMan.Instance.activeItem.sasiety);
+            }
+            
+            private Vector3 RandomNavmeshLocation(float radius) {
+                Vector3 randomDirection = Random.insideUnitSphere * radius;
+                randomDirection += transform.position;
+                Vector3 finalPosition = Vector3.zero;
+                if (NavMesh.SamplePosition(randomDirection, out NavMeshHit navMeshHit, radius, 1)) {
+                    finalPosition = navMeshHit.position;
+                }
+                return finalPosition;
             }
         }
     }

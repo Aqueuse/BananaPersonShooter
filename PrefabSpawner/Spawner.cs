@@ -1,3 +1,4 @@
+using Building;
 using Random = UnityEngine.Random;
 using UnityEngine;
 
@@ -30,13 +31,20 @@ namespace PrefabSpawner {
                     
                 if (Physics.Raycast(randomPosition, Vector3.down, out RaycastHit raycastHit)) {
                     if (raycastHit.transform.tag.Equals("vegetationMask")) {
-                        var spawnedPrefab = Instantiate(prefabs[Random.Range(0, prefabs.Length)], raycastHit.point, Quaternion.identity, deplacables.transform);
+                        var prefabIndex = Random.Range(0, prefabs.Length);
+                        
+                        var spawnedPrefab = Instantiate(prefabs[prefabIndex], raycastHit.point, Quaternion.identity, deplacables.transform);
                         spawnedPrefab.transform.rotation = new Quaternion(0, Random.Range(-1, 1), 0, 1f);
+
+                        if (spawnedPrefab.GetComponent<Debris>() != null) {
+                            spawnedPrefab.GetComponent<Debris>().prefabIndex = prefabIndex;
+                        }
+
                         _treesCounter++;
                     }
                 }
             }
-            Debug.Log("spawned "+_treesCounter+ " trees");
+            Debug.Log("spawned "+_treesCounter);
         }
         
         private Vector3 RandomVector3(Vector3 min, Vector3 max) {
@@ -47,6 +55,8 @@ namespace PrefabSpawner {
             foreach (Transform prefab in deplacables.transform) {
                 DestroyImmediate(prefab.gameObject);
             }
+
+            Debug.Log(deplacables.GetComponentsInChildren<Transform>().Length);
         }
     }
 }
