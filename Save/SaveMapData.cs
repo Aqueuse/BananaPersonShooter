@@ -1,9 +1,25 @@
 using System.IO;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
-namespace Data {
+namespace Save {
     public class SaveMapData : MonoSingleton<SaveMapData> {
         private string[] debrisDatas;
+
+        public void DeleteSaves() {
+            var appPath = Path.GetDirectoryName(Application.persistentDataPath);
+            if (appPath != null) {
+                var mapDataSavesPath = Path.Combine(appPath, "MAPDATA");
+
+                foreach (var mapData in GameSave.Instance.mapDatasBySceneNames) {
+                    if (mapData.Value.hasDebris) {
+                        string savefilePath = Path.Combine(mapDataSavesPath, mapData.Key.ToUpper() + "_debris.data");
+
+                        File.Delete(savefilePath);
+                    }
+                }
+            }
+        }
 
         public void Save(Vector3[] debrisPosition, Quaternion[] debrisRotation, int[] debrisIndex) {
             debrisDatas = new string[debrisPosition.Length];
@@ -19,7 +35,7 @@ namespace Data {
                 if(!File.Exists(mapDataSavesPath))
                     Directory.CreateDirectory(mapDataSavesPath);
 
-                string savefilePath = Path.Combine(mapDataSavesPath, "MAP01_debris.data");
+                string savefilePath = Path.Combine(mapDataSavesPath, SceneManager.GetActiveScene().name.ToUpper()+"_debris.data");
 
                 using StreamWriter streamWriter = new StreamWriter(savefilePath, append:false);
 

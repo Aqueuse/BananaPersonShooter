@@ -3,6 +3,7 @@ using Enums;
 using Player;
 using Settings;
 using TMPro;
+using UI.InGame.QuickSlots;
 using UnityEngine;
 
 namespace UI.InGame.Inventory {

@@ -9,7 +9,7 @@ namespace Monkeys {
         public UIMonkey associatedUI;
         
         private float _maxHappiness;
-        public float happiness = 50;
+        public float happiness;
         public MonkeyState monkeyState;
 
         public float sasiety;
@@ -21,7 +21,7 @@ namespace Monkeys {
         private bool _isNearPlayer;
 
         private void Start() {
-            monkeyState = MonkeyState.SAD;
+            sasiety = 20;
             MapManager.Instance.RecalculateHapiness();
             associatedUI.SetSliderValue(happiness, monkeyState);
         }

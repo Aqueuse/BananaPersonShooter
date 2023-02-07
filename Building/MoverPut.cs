@@ -3,6 +3,7 @@ using Enums;
 using Input;
 using Player;
 using UI.InGame;
+using UI.InGame.QuickSlots;
 using UnityEngine;
 
 namespace Building {

@@ -1,7 +1,9 @@
 ﻿using UI;
 using UI.InGame;
+using UI.InGame.QuickSlots;
 using UI.Menus;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace Input {
     public class UIActions : MonoSingleton<UIActions> {
@@ -9,15 +11,39 @@ namespace Input {
         private bool _scrolledDown;
         
         public Vector2 scrollSlotsValue;
+
+        public EventTrigger selectedTrigger;
+        PointerEventData pointer;
+
+        private float counter;
+        private float slowDownValue;
         
+        private void Start() {
+            pointer = new PointerEventData(EventSystem.current);
+            slowDownValue = 0.15f;
+        }
+
         private void Update() {
+            Activate();
             Escape();
-            Hide_Inventory();
-            SwitchToUpperSlot();
-            SwitchToLowerSlot();
-            Scroll_Slots();
             Scroll_Left_Options_Tab();
             Scroll_Right_Options_Tab();
+
+            Scroll_Down_Button();
+            Scroll_Up_Button();
+
+            if (GameManager.Instance.isInGame) {
+                Hide_Inventory();
+                SwitchToUpperSlot();
+                SwitchToLowerSlot();
+                Scroll_Slots();
+            }
+        }
+
+        private void Activate() {
+            if (UnityEngine.Input.GetKeyDown(KeyCode.Return) || UnityEngine.Input.GetKeyDown(KeyCode.JoystickButton0)) {
+                ExecuteEvents.Execute(selectedTrigger.gameObject, pointer, ExecuteEvents.pointerDownHandler);
+            }
         }
 
         private void Escape() {
@@ -57,11 +83,61 @@ namespace Input {
                 }
             }
         }
+        
+        private void Scroll_Up_Button() {
+            if (UnityEngine.Input.GetAxis("Vertical") > 0 && !_scrolledUp) {
+                _scrolledUp = true;
 
+                if (!GameManager.Instance.isInGame) {
+                    UIHomeMenu.Instance.SwitchToUpButton();
+                }
+
+                else {
+                    counter+=Time.deltaTime;
+                    if (counter > slowDownValue) {
+                        counter = 0;
+                        UiGameMenu.Instance.SwitchToUpButton();
+                    }
+                }
+            }
+
+            if (UnityEngine.Input.GetAxis("Vertical") == 0) {
+                _scrolledUp = false;
+                _scrolledDown = false;
+            }
+        }
+
+        private void Scroll_Down_Button() {
+            if (UnityEngine.Input.GetAxis("Vertical") < 0 && !_scrolledDown) {
+                _scrolledDown = true;
+
+                if (!GameManager.Instance.isInGame) {
+                    UIHomeMenu.Instance.SwitchToDownButton();
+                }
+
+                else {
+                    counter+=Time.deltaTime;
+                    if (counter > slowDownValue) {
+                        counter = 0;
+                        UiGameMenu.Instance.SwitchToDownButton();
+                    }
+                }
+            }
+            
+            if (UnityEngine.Input.GetAxis("Vertical") == 0) {
+                _scrolledUp = false;
+                _scrolledDown = false;
+            }
+        }
+        
         private void SwitchToUpperSlot() {
             if (UnityEngine.Input.GetAxis("DpadVertical") > 0 && !_scrolledUp) {
-                UISlotsManager.Instance.Select_Upper_Slot();
-                _scrolledUp = true;
+                counter+=Time.deltaTime;
+                if (counter > slowDownValue) {
+                    counter = 0;
+                    UISlotsManager.Instance.Select_Upper_Slot();
+                    _scrolledUp = true;
+                }
             }
 
             if (UnityEngine.Input.GetAxis("DpadVertical") == 0) {
@@ -72,18 +148,21 @@ namespace Input {
     
         private void SwitchToLowerSlot() {
             if (UnityEngine.Input.GetAxis("DpadVertical") < 0 && !_scrolledDown) {
-                UISlotsManager.Instance.Select_Lower_Slot();
-                _scrolledDown = true;
+                counter+=Time.deltaTime;
+                if (counter > slowDownValue) {
+                    counter = 0;
+                    UISlotsManager.Instance.Select_Lower_Slot();
+                    _scrolledDown = true;
+                }
             }
         }
     
-        public void Scroll_Slots() {
+        private void Scroll_Slots() {
             scrollSlotsValue = UnityEngine.Input.mouseScrollDelta;
             
-            float scrollValue = scrollSlotsValue.y;
+            var scrollValue = scrollSlotsValue.y;
             if (scrollValue < 0) UISlotsManager.Instance.Select_Upper_Slot();
             if (scrollValue > 0) UISlotsManager.Instance.Select_Lower_Slot();
         }
-
     }
 }

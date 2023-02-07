@@ -3,7 +3,7 @@ using Enums;
 using Items;
 using Player;
 using UI;
-using UI.InGame;
+using UI.InGame.QuickSlots;
 using UnityEngine;
 
 namespace Input {
@@ -137,7 +137,7 @@ namespace Input {
             }
         }
     
-        public void Scroll_Slots() {
+        private void Scroll_Slots() {
             scrollSlotsValue = UnityEngine.Input.mouseScrollDelta;
             
             float scrollValue = scrollSlotsValue.y;

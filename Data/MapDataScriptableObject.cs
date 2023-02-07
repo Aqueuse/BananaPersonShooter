@@ -13,6 +13,8 @@ namespace Data {
         public MonkeyType MonkeyType;
         public float monkeySasiety;
 
+        public float cleanliness;
+
         public bool hasDebris;
     }
 }

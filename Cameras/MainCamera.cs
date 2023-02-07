@@ -2,20 +2,43 @@
 using UnityEngine;
 
 namespace Cameras {
-    public class MainCamera : MonoSingleton<MainCamera> {
-        public GameObject bananaSplashVideo;
+    enum CameraStyle {
+        TPS,
+        SHOOT
+    }
 
+    public class MainCamera : MonoSingleton<MainCamera> {
         [SerializeField] private CinemachineFreeLook cinemachineFreeLook;
-        [SerializeField] private CinemachineFreeLook cinemachineShootFreeLook;
+        public GameObject bananaSplashVideo;
+        private CameraStyle cameraStyle;
+
+        private float blending;
+        private float blendingSpeed;
+
+        private void Start() {
+            cameraStyle = CameraStyle.TPS;
+            blending = 0;
+            blendingSpeed = 1.5f;
+        }
+
+        private void Update() {
+            if (cameraStyle == CameraStyle.SHOOT && cinemachineFreeLook.GetComponentInChildren<CinemachineCameraOffset>().m_Offset.x < 1) {
+                blending += Time.deltaTime * blendingSpeed;
+                cinemachineFreeLook.GetComponentInChildren<CinemachineCameraOffset>().m_Offset.x = blending;
+            }
+
+            if (cameraStyle == CameraStyle.TPS && cinemachineFreeLook.GetComponentInChildren<CinemachineCameraOffset>().m_Offset.x > 0) {
+                blending -= Time.deltaTime * blendingSpeed;
+                cinemachineFreeLook.GetComponentInChildren<CinemachineCameraOffset>().m_Offset.x = blending;
+            }
+        }
 
         public void Switch_To_TPS_Target() {
-            cinemachineFreeLook.enabled = true;
-            cinemachineShootFreeLook.enabled = false;
+            cameraStyle = CameraStyle.TPS;
         }
 
         public void Switch_To_Shoot_Target() {
-            cinemachineFreeLook.enabled = false;
-            cinemachineShootFreeLook.enabled = true;
+            cameraStyle = CameraStyle.SHOOT;
         }
     }
 }

@@ -23,10 +23,6 @@ namespace Player {
             if (stateInfo.IsName("standing jump end")) {
                 BananaMan.Instance.tpsPlayerAnimator.IsGrounded(true);
             }
-
-            if (stateInfo.IsTag("slide left interface")) {
-                GameManager.Instance.PauseGame(true);
-            }
         }
 
         public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {

@@ -1,6 +1,7 @@
 ﻿using Enums;
 using Player;
 using UI.InGame;
+using UI.InGame.QuickSlots;
 
 public class Inventory : MonoSingleton<Inventory> {
     public GenericDictionary<ItemThrowableType, int> bananaManInventory;

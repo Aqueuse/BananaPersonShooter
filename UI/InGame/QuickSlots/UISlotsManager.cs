@@ -3,7 +3,7 @@ using Building;
 using Enums;
 using UI.InGame.Inventory;
 
-namespace UI.InGame {
+namespace UI.InGame.QuickSlots {
     public class UISlotsManager : MonoSingleton<UISlotsManager> {
         public GenericDictionary<int, int> slotsMappingToInventory;
         public List<UISlot> uiSlotsScripts;

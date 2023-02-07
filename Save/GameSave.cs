@@ -6,8 +6,10 @@ using Enums;
 using Player;
 using UI.InGame;
 using UI.InGame.Inventory;
+using UI.InGame.QuickSlots;
 using UI.Menus;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Save {
     public class GameSave : MonoSingleton<GameSave> {
@@ -19,7 +21,7 @@ namespace Save {
 
         public Transform initialSpawnTransform;
 
-        public string lastMap = "map01";
+        public string lastMap = "COMMANDROOM";
         public Vector3 lastPositionOnMap;
         
         private GameObject debrisContainer;
@@ -34,7 +36,8 @@ namespace Save {
             SavePositionAndLastMap();
             SaveActiveItem();
             SaveMonkeysSatiety();
-            SaveDebrisPositionAndRotation();
+            
+            if (GameManager.Instance.isInGame && mapDatasBySceneNames[SceneManager.GetActiveScene().name.ToUpper()].hasDebris) SaveDebrisPositionAndRotation();
             
             // update the text in option with the actual date and hour
             UIOptionsMenu.Instance.SetActualDateAndHour(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
@@ -47,6 +50,7 @@ namespace Save {
             LoadPositionAndLastMap();
             LoadActiveItem();
             LoadMonkeysSatiety();
+            
             LoadMapData.Instance.Load();
         }
 
@@ -63,6 +67,8 @@ namespace Save {
             BananaMan.Instance.transform.position = initialSpawnTransform.position;
         
             SaveGameData();
+            SaveMapData.Instance.DeleteSaves();
+            
             UIOptionsMenu.Instance.HideConfirmationMessage();
             
             GameManager.Instance.ReturnHome();
@@ -167,14 +173,14 @@ namespace Save {
                 PlayerPrefs.GetFloat("PlayerZPosition", initialSpawnPosition.z)
             );
 
-            lastMap = PlayerPrefs.GetString("Last Map", "Map01");
+            lastMap = PlayerPrefs.GetString("Last Map", "COMMANDROOM");
         }
 
         private void ResetPositionAndLastMap() {
             var initialSpawnPosition = initialSpawnTransform.position;
 
             lastPositionOnMap = initialSpawnPosition;
-            lastMap =  "map01";
+            lastMap =  "COMMANDROOM";
         }
 
 
@@ -251,6 +257,8 @@ namespace Save {
             debrisContainer.tag = "debrisContainer";
 
             var mapData = mapDatasBySceneNames[sceneName];
+            
+            Debug.Log(sceneName);
             
             for (var i=0; i<mapDatasBySceneNames[sceneName].debrisIndex.Length; i++) {
                 var debris = Instantiate(debrisPrefab[mapData.debrisIndex[i]], debrisContainer.transform, true);

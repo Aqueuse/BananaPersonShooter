@@ -4,7 +4,7 @@ using MiniChimps;
 using Monkeys;
 using Monkeys.Gorilla;
 using Save;
-using UI.InGame;
+using UI.InGame.Statistics;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.SceneManagement;
@@ -22,14 +22,16 @@ public class MapManager : MonoSingleton<MapManager> {
     public int maxDebrisQuantity;
     private int _actualDebrisQuantity;
 
-    private void Start() {
-        activeMonkeyType = MonkeyType.KELSAIK;
-        SpawnMonkey(activeMonkeyType);
+    private string sceneName;
 
+    private void Start() {
+        sceneName = SceneManager.GetActiveScene().name.ToUpper();
         maxDebrisQuantity = 28;
+
+        SpawnMonkey(activeMonkeyType);
         
-        GameSave.Instance.RespawnDebrisOnMap(SceneManager.GetActiveScene().name);
-        
+        if (LoadMapData.Instance.HasData()) GameSave.Instance.RespawnDebrisOnMap(sceneName);
+
         RecalculateHapiness();
     }
     
@@ -38,8 +40,11 @@ public class MapManager : MonoSingleton<MapManager> {
             
         cleanliness = 50-((_actualDebrisQuantity /(float)maxDebrisQuantity)*50);
         activeMonkey.happiness = activeMonkey.sasiety + cleanliness;
+
+        GameSave.Instance.mapDatasBySceneNames[sceneName].cleanliness = cleanliness;
+        GameSave.Instance.mapDatasBySceneNames[sceneName].monkeySasiety = activeMonkey.sasiety;
         
-        UIStatistics.Instance.Refresh_Map_Statistics(activeMonkey.sasiety, cleanliness);
+        UIStatistics.Instance.Refresh_Map_Statistics(activeMonkeyType);
         
         if (activeMonkey.happiness < 20 && activeMonkey.monkeyState != MonkeyState.ANGRY) {
             activeMonkey.monkeyState = MonkeyState.ANGRY;

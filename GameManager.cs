@@ -41,7 +41,6 @@ public class GameManager : MonoSingleton<GameManager> {
         AudioManager.Instance.PlayMusic(MusicType.HOME, false);
     }
 
-
     public void Play() {
         GameSave.Instance.LoadGameData();
         
@@ -62,14 +61,14 @@ public class GameManager : MonoSingleton<GameManager> {
 
     public void PauseGame(bool pause) {
         if (pause) {
-            Time.timeScale = 0;
+//            Time.timeScale = 0;
             Cursor.visible = true;
             Cursor.lockState = CursorLockMode.None;
             Set_Playing_State(false);
         }
 
         if (!pause) {
-            Time.timeScale = 1;
+//            Time.timeScale = 1;
             Cursor.visible = false;
             Cursor.lockState = CursorLockMode.Locked;
             Set_Playing_State(true);
@@ -101,7 +100,7 @@ public class GameManager : MonoSingleton<GameManager> {
 
     void Set_Playing_State(bool isPlaying) {
         InputManager.Instance.SwitchContext(isPlaying ? GameContext.GAME : GameContext.UI);
-            playerCamera.enabled = isPlaying;
+        playerCamera.enabled = isPlaying;
         isGamePlaying = isPlaying;
     }
 
@@ -156,14 +155,16 @@ public class GameManager : MonoSingleton<GameManager> {
     public void Teleport_To_Command_Room() {
         // show TP VFX on banana man
         UIManager.Instance.Show_Hide_inventory();
-        SwitchScene("commandRoom", commandRoomSpawnTransform.position);
+        SwitchScene("COMMANDROOM", commandRoomSpawnTransform.position);
     }
 
     /// SCENES SWITCH ///
     
     IEnumerator LoadScene(string sceneName, Vector3 spawnPoint) {
         AsyncOperation load = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Single);
-        isInCorolle = sceneName.Equals("Corolle"); 
+        if (LoadMapData.Instance.HasData()) LoadMapData.Instance.Load();
+        
+        isInCorolle = sceneName.Equals("COROLLE"); 
         
         // Wait until the asynchronous scene fully loads
         while (!load.isDone) {
@@ -184,9 +185,7 @@ public class GameManager : MonoSingleton<GameManager> {
                 isGamePlaying = true;
                 BananaMan.Instance.GetComponent<CharacterController>().enabled = true;
             }
-
-            isInCorolle = sceneName.Equals("Corolle");
-
+            
             Set_Playing_State(sceneName != "Home");
             
             // Ambiance and music sounds
@@ -196,17 +195,17 @@ public class GameManager : MonoSingleton<GameManager> {
                     AudioManager.Instance.PlayMusic(MusicType.HOME, false);
                     break;
                 
-                case "Map01":
+                case "MAP01":
                     AudioManager.Instance.PlayAmbiance(AmbianceType.MAP01);
                     AudioManager.Instance.PlayMusic(MusicType.MAP01, false);
                     break;
                     
-                case "Corolle":
+                case "COROLLE":
                     AudioManager.Instance.PlayAmbiance(AmbianceType.MAP01);
                     AudioManager.Instance.PlayMusic(MusicType.MAP01, false);
                     break;
                 
-                case "BossRoom":
+                case "COMMANDROOM":
                     AudioManager.Instance.StopAudioSource(AudioSourcesType.AMBIANCE);
                     AudioManager.Instance.StopAudioSource(AudioSourcesType.MUSIC);
                     break;

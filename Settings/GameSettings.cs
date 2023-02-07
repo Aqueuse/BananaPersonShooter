@@ -20,7 +20,6 @@ namespace Settings {
         [SerializeField] private TMPro.TMP_Dropdown languageDropDown;
 
         [SerializeField] private CinemachineFreeLook playerCamera;
-        [SerializeField] private CinemachineFreeLook shootCamera;
         [SerializeField] private Slider lookSensibilitySlider;
         
         private FullScreenMode _fullScreenMode;
@@ -63,7 +62,7 @@ namespace Settings {
             InverseCameraVerticalAxis(PlayerPrefs.GetString("isCameraVerticalAxisInverted", "False").Equals("True"));
             SetLookSensibility(_lookSensibility);
             
-            Invoke(nameof(SetLanguage), 1);
+            Invoke(nameof(SetLanguage), 0.2f);
         
             // reflects values on UI 
             ToggleFullscreen(_isFullscreen.Equals("True"));
@@ -144,9 +143,6 @@ namespace Settings {
             playerCamera.m_YAxis.m_MaxSpeed = sensibility;
             playerCamera.m_XAxis.m_MaxSpeed = sensibility * 400;
             
-            shootCamera.m_YAxis.m_MaxSpeed = sensibility/1.3f;
-            shootCamera.m_XAxis.m_MaxSpeed = sensibility * 400/1.3f;
-
             _lookSensibility = sensibility;
             
             PlayerPrefs.SetFloat("LookSensibility", _lookSensibility);
