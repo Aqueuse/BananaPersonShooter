@@ -21,14 +21,14 @@ namespace UI.Menus {
         }
 
         public void Play() {
-            GameManager.Instance.Play();
+            GameManager.Instance.Play("auto_save");
         }
 
         public void Quit() {
             GameManager.Instance.Quit();
         }
 
-        public void SwitchToDownButton() {
+        public void SwitchToRightButton() {
             if (_selectedButton < homeMenuButtons.Length-1) {
                 _selectedButton++;
             }
@@ -36,7 +36,7 @@ namespace UI.Menus {
             SetActivatedButton(homeMenuButtons[_selectedButton]);
         }
 
-        public void SwitchToUpButton() {
+        public void SwitchToLeftButton() {
             if (_selectedButton > 0) {
                 _selectedButton--;
             }

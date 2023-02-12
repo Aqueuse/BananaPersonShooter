@@ -22,7 +22,7 @@ namespace UI.Menus {
             GameManager.Instance.ReturnHome();
         }
 
-        public void SwitchToDownButton() {
+        public void SwitchToRightButton() {
             if (_selectedButton < gameMenuButtons.Length-1) {
                 _selectedButton++;
             }
@@ -30,7 +30,7 @@ namespace UI.Menus {
             SetActivatedButton(gameMenuButtons[_selectedButton]);
         }
 
-        public void SwitchToUpButton() {
+        public void SwitchToLeftButton() {
             if (_selectedButton > 0) {
                 _selectedButton--;
             }

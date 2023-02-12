@@ -9,7 +9,10 @@ namespace Input {
     public class UIActions : MonoSingleton<UIActions> {
         private bool _scrolledUp;
         private bool _scrolledDown;
-        
+
+        private bool _scrolledLeft;
+        private bool _scrolledRight;
+
         public Vector2 scrollSlotsValue;
 
         public EventTrigger selectedTrigger;
@@ -29,8 +32,8 @@ namespace Input {
             Scroll_Left_Options_Tab();
             Scroll_Right_Options_Tab();
 
-            Scroll_Down_Button();
-            Scroll_Up_Button();
+            Scroll_Right_Button();
+            Scroll_Left_Button();
 
             if (GameManager.Instance.isInGame) {
                 Hide_Inventory();
@@ -84,49 +87,49 @@ namespace Input {
             }
         }
         
-        private void Scroll_Up_Button() {
-            if (UnityEngine.Input.GetAxis("Vertical") > 0 && !_scrolledUp) {
-                _scrolledUp = true;
+        private void Scroll_Left_Button() {
+            if (UnityEngine.Input.GetAxis("Horizontal") < 0 && !_scrolledLeft) {
+                _scrolledLeft = true;
 
                 if (!GameManager.Instance.isInGame) {
-                    UIHomeMenu.Instance.SwitchToUpButton();
+                    UIHomeMenu.Instance.SwitchToLeftButton();
                 }
 
                 else {
                     counter+=Time.deltaTime;
                     if (counter > slowDownValue) {
                         counter = 0;
-                        UiGameMenu.Instance.SwitchToUpButton();
+                        UiGameMenu.Instance.SwitchToLeftButton();
                     }
                 }
             }
 
-            if (UnityEngine.Input.GetAxis("Vertical") == 0) {
-                _scrolledUp = false;
-                _scrolledDown = false;
+            if (UnityEngine.Input.GetAxis("Horizontal") == 0) {
+                _scrolledLeft = false;
+                _scrolledRight = false;
             }
         }
 
-        private void Scroll_Down_Button() {
-            if (UnityEngine.Input.GetAxis("Vertical") < 0 && !_scrolledDown) {
-                _scrolledDown = true;
+        private void Scroll_Right_Button() {
+            if (UnityEngine.Input.GetAxis("Horizontal") > 0 && !_scrolledRight) {
+                _scrolledRight = true;
 
                 if (!GameManager.Instance.isInGame) {
-                    UIHomeMenu.Instance.SwitchToDownButton();
+                    UIHomeMenu.Instance.SwitchToRightButton();
                 }
 
                 else {
                     counter+=Time.deltaTime;
                     if (counter > slowDownValue) {
                         counter = 0;
-                        UiGameMenu.Instance.SwitchToDownButton();
+                        UiGameMenu.Instance.SwitchToRightButton();
                     }
                 }
             }
             
-            if (UnityEngine.Input.GetAxis("Vertical") == 0) {
-                _scrolledUp = false;
-                _scrolledDown = false;
+            if (UnityEngine.Input.GetAxis("Horizontal") == 0) {
+                _scrolledLeft = false;
+                _scrolledRight = false;
             }
         }
         

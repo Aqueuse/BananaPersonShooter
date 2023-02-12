@@ -28,30 +28,32 @@ namespace Building.PlateformsEffects {
         }
 
         private void FixedUpdate() {
-            if (isActive && _upDownCount > 0) {
-                step =  speed * Time.deltaTime; // calculate distance to move
+            if (GameManager.Instance.isGamePlaying) {
+                if (isActive && _upDownCount > 0) {
+                    step =  speed * Time.deltaTime; // calculate distance to move
 
-                if (Vector3.Distance(transform.position, initialPosition) <= 1f) {
-                    _plateformVerticalState = PlateformVerticalState.UP;
-                    _upDownCount--;
-                }
+                    if (Vector3.Distance(transform.position, initialPosition) <= 1f) {
+                        _plateformVerticalState = PlateformVerticalState.UP;
+                        _upDownCount--;
+                    }
 
-                if (Vector3.Distance(transform.position, upPosition) <= 1f) {
-                    _plateformVerticalState = PlateformVerticalState.DOWN;
-                }
+                    if (Vector3.Distance(transform.position, upPosition) <= 1f) {
+                        _plateformVerticalState = PlateformVerticalState.DOWN;
+                    }
                 
-                if (_plateformVerticalState == PlateformVerticalState.UP) {
-                    transform.position = Vector3.MoveTowards(transform.position, upPosition, step);
-                }
+                    if (_plateformVerticalState == PlateformVerticalState.UP) {
+                        transform.position = Vector3.MoveTowards(transform.position, upPosition, step);
+                    }
                 
-                if (_plateformVerticalState == PlateformVerticalState.DOWN) {
-                    transform.position = Vector3.MoveTowards(transform.position, initialPosition, step);
+                    if (_plateformVerticalState == PlateformVerticalState.DOWN) {
+                        transform.position = Vector3.MoveTowards(transform.position, initialPosition, step);
+                    }
                 }
-            }
 
-            if (isActive && _upDownCount <= 0) {
-                isActive = false;
-                GetComponent<Plateform>().ResetMaterial();
+                if (isActive && _upDownCount <= 0) {
+                    isActive = false;
+                    GetComponent<Plateform>().ResetMaterial();
+                }
             }
         }
 

@@ -4,6 +4,7 @@ using Input;
 using Settings;
 using UI.InGame.Inventory;
 using UI.InGame.PlateformBuilder;
+using UI.Save;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -12,6 +13,7 @@ namespace UI {
         public CanvasGroup homeMenuCanvasGroup;
         public CanvasGroup gameMenuCanvasGroup;
         public CanvasGroup optionsMenuCanvasGroup;
+        [SerializeField] private CanvasGroup loadMenuCanvasGroup;
         [SerializeField] private CanvasGroup bananapediaMenuCanvasGroup;
         [SerializeField] private CanvasGroup creditsMenuCanvasGroup;
         [SerializeField] private CanvasGroup deathMenuCanvasGroup;
@@ -31,10 +33,12 @@ namespace UI {
             if (GameSettings.Instance.isKeyRebinding) return;
             
             if (GameManager.Instance.isInGame) {
-                Set_active(gameMenuCanvasGroup, false);
+                Set_active(loadMenuCanvasGroup, false);
                 Set_active(optionsMenuCanvasGroup, false);
-                Set_active(miniChimpPlateformBuilderCanvasGroup, false);
                 Set_active(bananapediaMenuCanvasGroup, false);
+
+                Set_active(gameMenuCanvasGroup, false);
+                Set_active(miniChimpPlateformBuilderCanvasGroup, false);
 
                 if (interfaceAnimator.GetBool(ShowInventoryID)) {
                     interfaceAnimator.SetBool(ShowInventoryID, false);
@@ -48,33 +52,46 @@ namespace UI {
             }
 
             else {
+                Set_active(loadMenuCanvasGroup, false);
                 Set_active(optionsMenuCanvasGroup, false);
                 Set_active(bananapediaMenuCanvasGroup, false);
                 Set_active(creditsMenuCanvasGroup, false);
-                
-                Set_active(homeMenuCanvasGroup, true);
             }
         }
         
         public void Show_home_menu() {
+            Set_active(optionsMenuCanvasGroup, false);
+            Set_active(bananapediaMenuCanvasGroup, false);
+            Set_active(creditsMenuCanvasGroup, false);
+
             Set_active(homeMenuCanvasGroup, true);
             Set_active(gameMenuCanvasGroup, false);
+            
             UIActions.Instance.selectedTrigger = homeMenuCanvasGroup.GetComponentsInChildren<EventTrigger>()[0];
         }
 
         public void Hide_home_menu() {
+            Set_active(loadMenuCanvasGroup, false);
+            Set_active(optionsMenuCanvasGroup, false);
+            Set_active(bananapediaMenuCanvasGroup, false);
+            Set_active(creditsMenuCanvasGroup, false);
+
             Set_active(homeMenuCanvasGroup, false);
         }
 
+        public void Show_Load_menu() {
+            Set_active(loadMenuCanvasGroup, true);
+            Set_active(optionsMenuCanvasGroup, false);
+            Set_active(bananapediaMenuCanvasGroup, false);
+            Set_active(creditsMenuCanvasGroup, false);
+            UISave.Instance.newSaveButton.SetActive(GameManager.Instance.isInGame);
+        }
+
         public void Show_options_menu() {
-            if (GameManager.Instance.isInGame) {
-                Set_active(optionsMenuCanvasGroup, true);
-                Set_active(gameMenuCanvasGroup, false);
-            }
-            else {
-                Set_active(optionsMenuCanvasGroup, true);
-                Set_active(homeMenuCanvasGroup, false);
-            }
+            Set_active(loadMenuCanvasGroup, false);
+            Set_active(optionsMenuCanvasGroup, true);
+            Set_active(bananapediaMenuCanvasGroup, false);
+            Set_active(creditsMenuCanvasGroup, false);
         }
 
         public void Hide_options_menu() {
@@ -82,24 +99,15 @@ namespace UI {
                 Set_active(optionsMenuCanvasGroup, false);
                 Set_active(gameMenuCanvasGroup, true);
             }
-
-            else {
-                Set_active(optionsMenuCanvasGroup, false);
-                Set_active(homeMenuCanvasGroup, true);
-            }
         }
 
         public void Show_Bananapedia() {
             UIBananapedia.Instance.SelectFirstBananapediaEntry();
 
-            if (GameManager.Instance.isInGame) {
-                Set_active(bananapediaMenuCanvasGroup, true);
-                Set_active(gameMenuCanvasGroup, false);
-            }
-            else {
-                Set_active(bananapediaMenuCanvasGroup, true);
-                Set_active(homeMenuCanvasGroup, false);
-            }
+            Set_active(loadMenuCanvasGroup, false);
+            Set_active(optionsMenuCanvasGroup, false);
+            Set_active(bananapediaMenuCanvasGroup, true);
+            Set_active(creditsMenuCanvasGroup, false);
         }
 
         public void Hide_Bananapedia() {
@@ -107,38 +115,28 @@ namespace UI {
                 Set_active(bananapediaMenuCanvasGroup, false);
                 Set_active(gameMenuCanvasGroup, true);
             }
-
-            else {
-                Set_active(bananapediaMenuCanvasGroup, false);
-                Set_active(homeMenuCanvasGroup, true);
-            }
         }
 
         public void Show_Credits() {
             creditsMenuCanvasGroup.GetComponent<InfinityScroll.InfinityScroll>().enabled = true;
             creditsMenuCanvasGroup.GetComponent<InfinityScroll.InfinityScroll>().value = 0.13f;
             
-            if (GameManager.Instance.isInGame) {
-                Set_active(creditsMenuCanvasGroup, true);
-                Set_active(gameMenuCanvasGroup, false);
-            }
-            else {
-                Set_active(creditsMenuCanvasGroup, true);
-                Set_active(homeMenuCanvasGroup, false);
-            }
+            Set_active(loadMenuCanvasGroup, false);
+            Set_active(optionsMenuCanvasGroup, false);
+            Set_active(bananapediaMenuCanvasGroup, false);
+            Set_active(creditsMenuCanvasGroup, true);
         }
 
         public void Hide_Credits() {
             creditsMenuCanvasGroup.GetComponent<InfinityScroll.InfinityScroll>().enabled = false;
 
             if (GameManager.Instance.isInGame) {
+                Set_active(loadMenuCanvasGroup, false);
+                Set_active(optionsMenuCanvasGroup, false);
+                Set_active(bananapediaMenuCanvasGroup, false);
                 Set_active(creditsMenuCanvasGroup, false);
-                Set_active(gameMenuCanvasGroup, true);
-            }
 
-            else {
-                Set_active(creditsMenuCanvasGroup, false);
-                Set_active(homeMenuCanvasGroup, true);
+                Set_active(gameMenuCanvasGroup, true);
             }
         }
 

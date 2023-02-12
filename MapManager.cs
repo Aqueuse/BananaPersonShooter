@@ -30,19 +30,21 @@ public class MapManager : MonoSingleton<MapManager> {
 
         SpawnMonkey(activeMonkeyType);
         
-        if (LoadMapData.Instance.HasData()) GameSave.Instance.RespawnDebrisOnMap(sceneName);
+        GameLoad.Instance.RespawnDebrisOnMap(sceneName);
 
-        RecalculateHapiness();
+        if (activeMonkeyType != MonkeyType.NONE && !sceneName.Equals("INITIALHOME")) {
+            RecalculateHapiness();
+        }
     }
     
     public void RecalculateHapiness() {
         _actualDebrisQuantity = GameObject.FindGameObjectWithTag("debrisContainer").GetComponentInChildren<Transform>().childCount;
             
-        cleanliness = 50-((_actualDebrisQuantity /(float)maxDebrisQuantity)*50);
+        cleanliness = 50-(_actualDebrisQuantity /(float)maxDebrisQuantity)*50;
         activeMonkey.happiness = activeMonkey.sasiety + cleanliness;
 
-        GameSave.Instance.mapDatasBySceneNames[sceneName].cleanliness = cleanliness;
-        GameSave.Instance.mapDatasBySceneNames[sceneName].monkeySasiety = activeMonkey.sasiety;
+        GameData.Instance.mapDatasBySceneNames[sceneName].cleanliness = cleanliness;
+        GameData.Instance.mapDatasBySceneNames[sceneName].monkeySasiety = activeMonkey.sasiety;
         
         UIStatistics.Instance.Refresh_Map_Statistics(activeMonkeyType);
         
@@ -70,7 +72,7 @@ public class MapManager : MonoSingleton<MapManager> {
         }
     }
         
-    public GameObject GetActiveBoss() {
+    public GameObject GetActiveMonkey() {
         return activeMonkey.gameObject;
     }
         

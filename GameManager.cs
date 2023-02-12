@@ -1,4 +1,6 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
+using System.Globalization;
 using Audio;
 using Cameras;
 using Cinemachine;
@@ -17,7 +19,7 @@ using UnityEngine.Video;
 public class GameManager : MonoSingleton<GameManager> {
     [SerializeField] private GameObject loadingScreen;
     [SerializeField] private Transform homeSpawnTransform;
-    [SerializeField] private Transform commandRoomSpawnTransform;
+    [SerializeField] private GenericDictionary<string, Transform> teleportSpawnPointBySceneName;
 
     private Camera _cameraMain;
     private GameObject _bananaSplashVideo;
@@ -41,8 +43,8 @@ public class GameManager : MonoSingleton<GameManager> {
         AudioManager.Instance.PlayMusic(MusicType.HOME, false);
     }
 
-    public void Play() {
-        GameSave.Instance.LoadGameData();
+    public void Play(string saveUuid) {
+        GameLoad.Instance.LoadGameData(saveUuid);
         
         // hide menu lancement
         UIManager.Instance.Hide_home_menu();
@@ -52,35 +54,32 @@ public class GameManager : MonoSingleton<GameManager> {
 
         // Switch scene to last scene
         loadingScreen.SetActive(true);
-        StartCoroutine(LoadScene(GameSave.Instance.lastMap, GameSave.Instance.lastPositionOnMap));
+        StartCoroutine(LoadScene(GameData.Instance.bananaManSavedData.last_map, GameData.Instance.lastPositionOnMap));
         
         _cameraMain.clearFlags = CameraClearFlags.Skybox;
-        BananaMan.Instance.transform.position = GameSave.Instance.lastPositionOnMap;
     }
-
 
     public void PauseGame(bool pause) {
         if (pause) {
-//            Time.timeScale = 0;
             Cursor.visible = true;
             Cursor.lockState = CursorLockMode.None;
             Set_Playing_State(false);
         }
 
         if (!pause) {
-//            Time.timeScale = 1;
             Cursor.visible = false;
             Cursor.lockState = CursorLockMode.Locked;
             Set_Playing_State(true);
         }
     }
-
     
     public void ReturnHome() {
         isInGame = false;
 
         _cameraMain.clearFlags = CameraClearFlags.SolidColor;
-        GameSave.Instance.SaveGameData();
+        var date = DateTime.ParseExact(DateTime.Now.ToString("U"), "U", CultureInfo.CurrentCulture).ToString(CultureInfo.CurrentCulture);
+
+        GameSave.Instance.SaveGameData("auto_save", date);
         
         SwitchScene("Home", homeSpawnTransform.position);
         UIManager.Instance.Show_home_menu();
@@ -147,22 +146,22 @@ public class GameManager : MonoSingleton<GameManager> {
         BananaMan.Instance.GetComponent<BananaMan>().ResetToPlayable();
 
         // Switch scene to last scene
-        GameSave.Instance.LoadGameData();
+        GameLoad.Instance.LoadGameData("auto_save");
         loadingScreen.SetActive(true);
-        StartCoroutine(LoadScene(GameSave.Instance.lastMap, GameSave.Instance.lastPositionOnMap));
+        StartCoroutine(LoadScene(GameData.Instance.bananaManSavedData.last_map, GameData.Instance.lastPositionOnMap));
     }
 
-    public void Teleport_To_Command_Room() {
+    public void Teleport(string sceneName) {
         // show TP VFX on banana man
         UIManager.Instance.Show_Hide_inventory();
-        SwitchScene("COMMANDROOM", commandRoomSpawnTransform.position);
+        SwitchScene(sceneName, teleportSpawnPointBySceneName[sceneName].position);
     }
 
     /// SCENES SWITCH ///
     
     IEnumerator LoadScene(string sceneName, Vector3 spawnPoint) {
         AsyncOperation load = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Single);
-        if (LoadMapData.Instance.HasData()) LoadMapData.Instance.Load();
+        //if (LoadData.Instance.HasMapData()) LoadData.Instance.LoadMapDataByUuid();
         
         isInCorolle = sceneName.Equals("COROLLE"); 
         
@@ -172,12 +171,15 @@ public class GameManager : MonoSingleton<GameManager> {
         }
 
         if (load.isDone) {
+            GameData.Instance.bananaManSavedData.last_map = sceneName;
+            
             SceneManager.SetActiveScene(SceneManager.GetSceneByName(sceneName));
             BananaMan.Instance.GetComponent<CharacterController>().enabled = false;
             BananaMan.Instance.transform.position = spawnPoint;
             ItemsManager.Instance.lootMessage.SetActive(false);
             
             loadingScreen.SetActive(false);
+            
 
             if (sceneName != "Home") {
                 UIManager.Instance.Show_HUD();
@@ -221,6 +223,6 @@ public class GameManager : MonoSingleton<GameManager> {
         loadingScreen.SetActive(true);
         StartCoroutine(LoadScene(sceneName, spawnPoint));
 
-        GameSave.Instance.lastMap = sceneName;
+        GameData.Instance.bananaManSavedData.last_map = sceneName;
     }
 }

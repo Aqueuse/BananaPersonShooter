@@ -23,11 +23,11 @@ namespace UI.InGame {
         }
 
         void Update() {
-            if (Vector3.Dot(_mainCamera.transform.forward, _faceCanvas.transform.forward) > 0) {
-                _faceCanvasGroup.alpha = 0;
-            }
-
-            else _faceCanvasGroup.alpha = 1;
+            // if (Vector3.Dot(_mainCamera.transform.forward, _faceCanvas.transform.forward) > 0) {
+            //     _faceCanvasGroup.alpha = 0;
+            // }
+            //
+            // else _faceCanvasGroup.alpha = 1;
         }
 
         public void MoveFaceAnimation(float speed) {

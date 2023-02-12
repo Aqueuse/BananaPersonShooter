@@ -160,7 +160,7 @@ namespace Audio {
         }
 
         public void TestEffectLevel() {
-            PlayEffect(EffectType.BUTTON_ITERACTION);
+            PlayEffect(EffectType.BUTTON_INTERACTION);
         }
     }
 }

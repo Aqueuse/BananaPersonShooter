@@ -1,5 +1,4 @@
 using Save;
-using Settings;
 using UnityEngine;
 
 namespace Player {
@@ -7,7 +6,7 @@ namespace Player {
         private void OnTriggerEnter(Collider other) {
             if (other.tag.Equals("Player")) {
                 GameManager.Instance.Death();
-                BananaMan.Instance.gameObject.transform.position = GameSave.Instance.lastPositionOnMap;
+                BananaMan.Instance.gameObject.transform.position = GameData.Instance.lastPositionOnMap;
             }
         }
     }

@@ -1,10 +1,5 @@
 ﻿using UnityEngine;
 
-/// <summary>
-/// Helper to create singleton, public class UneClasse : MonoSingleton<UneClasse>
-/// </summary>
-/// <typeparam name="T"></typeparam>
-///
 public abstract class MonoSingleton<T> : MonoBehaviour where T : MonoBehaviour
 {
     private static T _instance;

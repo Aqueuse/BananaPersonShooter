@@ -31,7 +31,7 @@ namespace Items {
 
         public void Validate() {
             if (_interactedObject != null) {
-                AudioManager.Instance.PlayEffect(EffectType.BUTTON_ITERACTION);
+                AudioManager.Instance.PlayEffect(EffectType.BUTTON_INTERACTION);
                 ItemType itemType = _interactedObject.GetComponent<Item>().itemType;
 
                 switch (itemType) {

@@ -16,5 +16,7 @@ MonoBehaviour:
   debrisPosition: []
   debrisRotation: []
   debrisIndex: 
+  MonkeyType: 0
   monkeySasiety: 0
+  cleanliness: 0
   hasDebris: 1

@@ -8,7 +8,7 @@ namespace Audio {
         private AudioDataScriptableObject _audioDataScriptableObject;
 
         private void Start() {
-            _audioDataScriptableObject = AudioManager.Instance.audioEffectsDictionnary[EffectType.BUTTON_ITERACTION];
+            _audioDataScriptableObject = AudioManager.Instance.audioEffectsDictionnary[EffectType.BUTTON_INTERACTION];
             _audioClip = _audioDataScriptableObject.clip[0];
         }
 
