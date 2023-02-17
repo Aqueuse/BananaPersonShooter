@@ -1,12 +1,11 @@
-using Enums;
 using UnityEngine;
 
 namespace UI.InGame.Statistics {
     public class UIStatisticsSlot : MonoBehaviour {
-        [SerializeField] private MonkeyType monkeyType;
+        [SerializeField] private string mapName;
         
         public void OnClick() {
-            UIStatistics.Instance.Refresh_Map_Statistics(monkeyType);
+            UIStatistics.Instance.Refresh_Map_Statistics(mapName);
         }
     }
 }

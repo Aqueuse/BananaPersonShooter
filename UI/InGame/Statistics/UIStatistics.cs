@@ -1,5 +1,4 @@
-using Data;
-using Enums;
+using Game;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -13,12 +12,13 @@ namespace UI.InGame.Statistics {
         [SerializeField] private GameObject cleanness;
         [SerializeField] private GameObject happiness;
 
-        public void Refresh_Map_Statistics(MonkeyType monkeyType) {
+        public void Refresh_Map_Statistics(string sceneName) {
             sasiety.SetActive(true);
             cleanness.SetActive(true);
             happiness.SetActive(true);
+
+            var mapData = MapsManager.Instance.mapBySceneName[sceneName];
             
-            var mapData = ScriptableObjectManager.Instance.GetMapData(monkeyType);
             satietySlider.value = mapData.monkeySasiety;
             cleanlinessSlider.value = mapData.cleanliness;
             

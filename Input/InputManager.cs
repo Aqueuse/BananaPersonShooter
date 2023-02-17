@@ -1,23 +1,26 @@
 using Enums;
+using Input.UIActions;
 
 namespace Input {
     public class InputManager : MonoSingleton<InputManager> {
         private GameActions _gameActions;
-        private UIActions _uiActions;
+        private UISchemaSwitcher _uiSchemaSwitcher;
+
+        public UISchemaSwitchType uiSchemaContext;
 
         void Start() {
             _gameActions = GetComponent<GameActions>();
-            _uiActions = GetComponent<UIActions>();
+            _uiSchemaSwitcher = GetComponent<UISchemaSwitcher>();
         }
 
         public void SwitchContext(GameContext newGameContext) {
             if (newGameContext == GameContext.UI) {
                 _gameActions.enabled = false;
-                _uiActions.enabled = true;
+                _uiSchemaSwitcher.SwitchUISchema(uiSchemaContext);
             }
             else {
                 _gameActions.enabled = true;
-                _uiActions.enabled = false;
+                _uiSchemaSwitcher.DisableAllUISchemas();
             }
         }
     }

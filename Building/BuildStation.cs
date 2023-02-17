@@ -1,21 +1,26 @@
 using System.Collections.Generic;
 using Data;
 using Enums;
+using Game;
+using Input;
+using UI;
 using UI.InGame;
-using UI.InGame.PlateformBuilder;
+using UI.InGame.BuildStation;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.Localization.Settings;
 
 namespace Building {
-    public class Convertor : MonoSingleton<Convertor> {
-        [SerializeField] private GameObject leftslideContent;
+    public class BuildStation : MonoSingleton<BuildStation> {
+        [SerializeField] private CanvasGroup miniChimpPlateformBuilderCanvasGroup;
 
         [SerializeField] private GenericDictionary<string, GameObject> plateforms;
+        [SerializeField] private GameObject leftslideContent;
         
         private Inventory _inventory;
         private Dictionary<ItemThrowableType, int> leftsideContentDictionnary;
 
-        // 2 debris + 2 banana = 1 plateform
+        // 2 ingots = 1 plateform
 
         public void ShowPossiblesConversions() {
             CheckLeftSideSelectedItems();
@@ -30,6 +35,20 @@ namespace Building {
                 }
             }
         }
+        
+        public void ShowBuildStationInterface() {
+            UIManager.Instance.Set_active(miniChimpPlateformBuilderCanvasGroup, true);
+            UIBuildStationInventoryLeft.Instance.RefreshInventoySlots();
+            
+            InputManager.Instance.uiSchemaContext = UISchemaSwitchType.BUILDSTATION;
+            GameManager.Instance.PauseGame(true);
+            EventSystem.current.SetSelectedGameObject(miniChimpPlateformBuilderCanvasGroup.gameObject);
+        }
+
+        public void HideBuildStationInterface() {
+            UIManager.Instance.Set_active(miniChimpPlateformBuilderCanvasGroup, false);
+            GameManager.Instance.PauseGame(false);
+        }
 
         // search wich items are selected in the left panel
         private void CheckLeftSideSelectedItems() {
@@ -37,7 +56,7 @@ namespace Building {
             
             foreach (RectTransform child in leftslideContent.GetComponent<RectTransform>()) {
                 if (child.gameObject.activeInHierarchy) {
-                    var uiLeftSlot = child.GetComponent<UIBuildInventorySlotLeft>();
+                    var uiLeftSlot = child.GetComponent<UIBuildStationInventorySlotLeft>();
                     if (uiLeftSlot.toggle.isOn) {
                         leftsideContentDictionnary.Add(uiLeftSlot.itemThrowableType, Inventory.Instance.bananaManInventory[uiLeftSlot.itemThrowableType]);
                     }
@@ -45,17 +64,17 @@ namespace Building {
             }
         }
 
-        public void GiveToPlayer(UIBuildInventorySlotRight uInventorySlot) {
-            Inventory.Instance.AddQuantity(uInventorySlot.itemThrowableType, ItemThrowableCategory.PLATEFORM, uInventorySlot.quantity);
+        public void GiveToPlayer(UIBuildStationInventorySlotRight uStationInventorySlot) {
+            Inventory.Instance.AddQuantity(uStationInventorySlot.itemThrowableType, ItemThrowableCategory.PLATEFORM, uStationInventorySlot.quantity);
             
-            var message = "+ "+uInventorySlot.quantity+" " +LocalizationSettings.Instance.GetStringDatabase().GetLocalizedString("platform");
+            var message = "+ "+uStationInventorySlot.quantity+" " +LocalizationSettings.Instance.GetStringDatabase().GetLocalizedString("platform");
             UIQueuedMessages.Instance.AddMessage(message);
             
             foreach (var ingredient in ScriptableObjectManager.Instance.GetPlateformCost()) {
-                Inventory.Instance.RemoveQuantity( ingredient.Key, ingredient.Value*uInventorySlot.quantity);
+                Inventory.Instance.RemoveQuantity( ingredient.Key, ingredient.Value*uStationInventorySlot.quantity);
             }
             
-            UIBuildInventoryLeft.Instance.RefreshInventoySlots();
+            UIBuildStationInventoryLeft.Instance.RefreshInventoySlots();
             ShowPossiblesConversions();
         }
 

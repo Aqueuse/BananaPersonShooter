@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using Audio;
 using Enums;
+using Game;
 using HoaxGames;
 using UI.InGame;
 using UnityEngine;
@@ -17,7 +18,7 @@ namespace Player {
         
         public bool isInAir;
         public bool isInWater;
-        public bool isGrabingMover;
+        public bool isGrabingBananaGun;
         private RagDoll _ragDoll;
         public bool isRagdoll;
 
@@ -164,5 +165,6 @@ namespace Player {
         public void PlayFootstep() {
             AudioManager.Instance.PlayFootStepOneShot();
         }
+
     }
 }

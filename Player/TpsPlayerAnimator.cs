@@ -39,7 +39,7 @@ namespace Player {
             _playerAnimator.SetTrigger(_playerThrowAnimationId);
         }
 
-        public void GrabMover() {
+        public void GrabBananaGun() {
             _playerAnimator.SetLayerWeight(_focusLayer, 0);
             _playerAnimator.SetLayerWeight(_freeMoveLayer, 0);
             _playerAnimator.SetLayerWeight(_moverLayer, 1);

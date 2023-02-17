@@ -5,8 +5,8 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace UI.InGame.PlateformBuilder {
-    public class UIBuildInventorySlotLeft : MonoBehaviour {
+namespace UI.InGame.BuildStation {
+    public class UIBuildStationInventorySlotLeft : MonoBehaviour {
         [SerializeField] private TextMeshProUGUI quantityText;
         [SerializeField] private TextMeshProUGUI descriptionText;
 
@@ -19,7 +19,7 @@ namespace UI.InGame.PlateformBuilder {
         }
 
         public void SetQuantity(int quantity) {
-            quantityText.text = global::Inventory.Instance.bananaManInventory[itemThrowableType].ToString();
+            quantityText.text = Game.Inventory.Instance.bananaManInventory[itemThrowableType].ToString();
         }
     }
 }

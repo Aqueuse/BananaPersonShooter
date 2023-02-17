@@ -1,5 +1,6 @@
 using Audio;
 using Enums;
+using Game;
 using UI.InGame;
 using UnityEngine;
 using UnityEngine.Localization.Settings;
@@ -30,7 +31,9 @@ namespace Building {
                 if (_dissolve < dissolved) {
                     Inventory.Instance.AddQuantity(itemThrowableType, itemThrowableCategory, 1);
                     AudioManager.Instance.StopAudioSource(AudioSourcesType.EFFECT);
-                    MapManager.Instance.Clean();
+                    MapsManager.Instance.currentMap.Clean();
+                    MapsManager.Instance.currentMap.SaveDataOnMap();
+                    
                     UIQueuedMessages.Instance.AddMessage(
                         "+ 1 "+
                         LocalizationSettings.Instance.GetStringDatabase().GetLocalizedString("debris"));

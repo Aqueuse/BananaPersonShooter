@@ -1,4 +1,5 @@
 ﻿using Enums;
+using Game;
 using Monkeys;
 using Player;
 using UI.InGame;
@@ -11,7 +12,7 @@ namespace Bananas {
 
         private void OnTriggerEnter(Collider other) {
             if (GameManager.Instance.isFigthing && other.gameObject.CompareTag("Boss")) {
-                MapManager.Instance.GetActiveMonkey().GetComponent<Monkey>().Feed(BananaMan.Instance.activeItem.sasiety);
+                MapsManager.Instance.currentMap.GetActiveMonkey().GetComponent<Monkey>().Feed(BananaMan.Instance.activeItem.sasiety);
                 DestroyMe();
             }
         }
@@ -22,8 +23,8 @@ namespace Bananas {
                 transform.gameObject.GetComponent<MeshRenderer>().enabled = false;
                 transform.GetChild(0).GetComponent<MeshRenderer>().enabled = true;
 
-                if (MapManager.Instance.activeMonkeyType != MonkeyType.NONE) {
-                    MapManager.Instance.GetActiveMonkey().GetComponent<NavMeshAgent>().SetDestination(transform.position);
+                if (MapsManager.Instance.currentMap.activeMonkeyType != MonkeyType.NONE) {
+                    MapsManager.Instance.currentMap.GetActiveMonkey().GetComponent<NavMeshAgent>().SetDestination(transform.position);
                 }
                 
                 Invoke(nameof(DestroyMe), 10);

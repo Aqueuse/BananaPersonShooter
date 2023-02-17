@@ -1,11 +1,12 @@
-﻿using UnityEngine;
+﻿using Game;
+using UnityEngine;
 
 namespace Monkeys.Gorilla {
     public class GorillaAnimationBehaviour : StateMachineBehaviour {
         public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
             if (stateInfo.IsTag("GorillaAttack")) {
-                MapManager.Instance.activeMonkey.GetComponent<GorillaMonkey>().gorillaHandLeft.GetComponent<SphereCollider>().enabled = true;
-                MapManager.Instance.activeMonkey.GetComponent<GorillaMonkey>().gorillaHandRight.GetComponent<SphereCollider>().enabled = true;
+                MapsManager.Instance.currentMap.activeMonkey.GetComponent<GorillaMonkey>().gorillaHandLeft.GetComponent<SphereCollider>().enabled = true;
+                MapsManager.Instance.currentMap.activeMonkey.GetComponent<GorillaMonkey>().gorillaHandRight.GetComponent<SphereCollider>().enabled = true;
             }
         }
 
@@ -15,8 +16,8 @@ namespace Monkeys.Gorilla {
  
             if (stateInfo.IsTag("GorillaAttack")) {
                 gorilla.isAttackingPlayer = false;
-                MapManager.Instance.activeMonkey.GetComponent<GorillaMonkey>().gorillaHandLeft.GetComponent<SphereCollider>().enabled = false;
-                MapManager.Instance.activeMonkey.GetComponent<GorillaMonkey>().gorillaHandRight.GetComponent<SphereCollider>().enabled = false;
+                MapsManager.Instance.currentMap.activeMonkey.GetComponent<GorillaMonkey>().gorillaHandLeft.GetComponent<SphereCollider>().enabled = false;
+                MapsManager.Instance.currentMap.activeMonkey.GetComponent<GorillaMonkey>().gorillaHandRight.GetComponent<SphereCollider>().enabled = false;
             }
 
             if (stateInfo.IsName("tourbismash")) {

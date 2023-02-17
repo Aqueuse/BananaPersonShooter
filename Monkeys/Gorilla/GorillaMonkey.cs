@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Enums;
+using Game;
 using Player;
 using UnityEngine;
 using UnityEngine.AI;
@@ -61,8 +62,8 @@ namespace Monkeys.Gorilla {
         private List<int> _farPlayerAttack;
 
         private void Start() {
-            _animator = GetComponent<Animator>();
             navMeshAgent = GetComponent<NavMeshAgent>();
+            _animator = GetComponent<Animator>();
             _monkey = GetComponent<Monkey>();
 
             _nearPlayerAttack = new List<int> { Roar, Flex, Tourbismash };
@@ -121,7 +122,9 @@ namespace Monkeys.Gorilla {
         }
 
         private void OnAnimatorMove() {
-            transform.position = navMeshAgent.nextPosition;
+            if (navMeshAgent != null) {
+                transform.position = navMeshAgent.nextPosition;
+            }
         }
 
         private void SynchronizeAnimatorAndAgent() {

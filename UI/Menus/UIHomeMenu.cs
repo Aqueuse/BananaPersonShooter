@@ -1,4 +1,4 @@
-﻿using Input;
+﻿using Game;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -13,30 +13,22 @@ namespace UI.Menus {
         private Image[] homeMenuButtons;
         private int _selectedButton;
 
+        public EventTrigger selectedTrigger;
+        
         private void Start() {
             _selectedButton = 0;
              homeMenuButtons = GetComponentsInChildren<Image>();
-
-             UIActions.Instance.selectedTrigger = homeMenuButtons[_selectedButton].GetComponent<EventTrigger>();
         }
 
-        public void Play() {
-            GameManager.Instance.Play("auto_save");
+        public void NewGame() {
+            GameManager.Instance.New_Game();
         }
 
         public void Quit() {
             GameManager.Instance.Quit();
         }
 
-        public void SwitchToRightButton() {
-            if (_selectedButton < homeMenuButtons.Length-1) {
-                _selectedButton++;
-            }
-            
-            SetActivatedButton(homeMenuButtons[_selectedButton]);
-        }
-
-        public void SwitchToLeftButton() {
+        public void SwitchToLeftHomeMenuButton() {
             if (_selectedButton > 0) {
                 _selectedButton--;
             }
@@ -44,6 +36,14 @@ namespace UI.Menus {
             SetActivatedButton(homeMenuButtons[_selectedButton]);
         }
 
+        public void SwitchToRightHomeMenuButton() {
+            if (_selectedButton < homeMenuButtons.Length-1) {
+                _selectedButton++;
+            }
+            
+            SetActivatedButton(homeMenuButtons[_selectedButton]);
+        }
+        
         public void SetActivatedButton(Image buttonImage) {
             foreach (var image in homeMenuButtons) {
                 image.color = unactivatedColor;
@@ -52,7 +52,8 @@ namespace UI.Menus {
 
             buttonImage.color = activatedColor;
             buttonImage.GetComponentInChildren<TextMeshProUGUI>().color = activatedTextColor;
-            UIActions.Instance.selectedTrigger = homeMenuButtons[_selectedButton].GetComponent<EventTrigger>();
+
+            selectedTrigger = buttonImage.GetComponent<EventTrigger>();
         }
     }
 }

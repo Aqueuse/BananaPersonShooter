@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using Game;
 using Newtonsoft.Json;
 using Save.Templates;
 using UI.Save;
@@ -32,15 +33,13 @@ namespace Save {
 
             foreach (var folder in saveFolders) {
                 string saveDataFile = Path.Combine(folder, "data.json");
-                string map01DataFile = Path.Combine(folder, "MAP01.json");
                 string playerDataFile = Path.Combine(folder, "player.json");
                 
-                if (File.Exists(saveDataFile) && File.Exists(map01DataFile) && File.Exists(playerDataFile)) {
+                if (File.Exists(saveDataFile) && File.Exists(playerDataFile)) {
                     SavedData savedData = JsonConvert.DeserializeObject<SavedData>(File.ReadAllText(saveDataFile));
                     
                     if (savedData.uuid != null) {
                         UISave.Instance.AppendSaveSlot(savedData.uuid);
-                        
                     }
                 }
             }
@@ -51,19 +50,20 @@ namespace Save {
             
             var savefilePath = Path.Combine(savePath, "data.json");
             string savedDataString = File.ReadAllText(savefilePath);
-                    
+
             return JsonConvert.DeserializeObject<SavedData>(savedDataString);
         }
 
-        public Sprite GetSavedThumbailByUuid(string saveUuid) {
-            savePath = GetSavePathByUuid(saveUuid);
-            string screenshotFilePath = Path.Combine(savePath, "screenshot.png");
+        public string GetsaveNameByUuid(string saveUuid) {
+            savePath = Path.Combine(savesPath, saveUuid);
             
-            var bytes = File.ReadAllBytes(screenshotFilePath);
-            Texture2D texture2D = new Texture2D(2, 2);
-            texture2D.LoadImage(bytes);
-            
-            return Sprite.Create(texture2D, new Rect(0, 0, texture2D.width, texture2D.height), new Vector2(0.5f, 0.5f));
+            var savefilePath = Path.Combine(savePath, "data.json");
+
+            if (File.Exists(savefilePath)) {
+                string savedDataString = File.ReadAllText(savefilePath);
+                return JsonConvert.DeserializeObject<SavedData>(savedDataString).saveName;
+            }
+            return "new save";
         }
 
         public BananaManSavedData GetPlayerDataByUuid(string saveUuid) {
@@ -89,57 +89,58 @@ namespace Save {
             }
         }
         
-        public MAP01SavedData GetMap01DataByUuid(string saveUuid) {
+        public MAPSavedData GetMapDataByUuid(string saveUuid, string mapName) {
             savePath = Path.Combine(savesPath, saveUuid);
+            var mapSavePath = Path.Combine(savePath, "MAPS");
 
             if (Directory.Exists(savePath)) {
-                var savefilePath = Path.Combine(savePath, "MAP01.json");
+                var savefilePath = Path.Combine(mapSavePath, mapName+".json");
 
-                string playerDataString = File.ReadAllText(savefilePath);
+                string mapDataString = File.ReadAllText(savefilePath);
 
-                return JsonConvert.DeserializeObject<MAP01SavedData>(playerDataString);
+                return JsonConvert.DeserializeObject<MAPSavedData>(mapDataString);
             }
 
             else {
                 var date = DateTime.ParseExact(DateTime.Now.ToString("U"), "U", CultureInfo.CurrentCulture);
                 SaveData.Instance.Save(saveUuid, date.ToString(CultureInfo.CurrentCulture));
                 
-                var savefilePath = Path.Combine(savePath, "MAP01.json");
+                var savefilePath = Path.Combine(savePath, mapName+".json");
 
                 string map01DataString = File.ReadAllText(savefilePath);
 
-                return JsonConvert.DeserializeObject<MAP01SavedData>(map01DataString);
+                return JsonConvert.DeserializeObject<MAPSavedData>(map01DataString);
             }
         }
-        
-        public void LoadMapDataByUuid(string saveUuid) {
+
+        public void LoadMapDebrisDataByUuid(string saveUuid) {
             savePath = Path.Combine(savesPath, saveUuid);
             
             var saveMapDatasPath = Path.Combine(savePath, "MAPDATA");
             
-            foreach (var mapData in GameData.Instance.mapDatasBySceneNames) {
-                if (mapData.Value.hasDebris) {
-                    string savefilePath = Path.Combine(saveMapDatasPath, mapData.Key.ToUpper()+"_debris.data");
+            foreach (var map in MapsManager.Instance.mapBySceneName) {
+                if (map.Value.hasDebris && map.Value.isDiscovered) {
+                    var loadfilePath = Path.Combine(saveMapDatasPath, map.Key.ToUpper()+"_debris.data");
+                    
+                    if (File.Exists(loadfilePath)) {
+                        using StreamReader streamReader = new StreamReader(loadfilePath);
 
-                    if (File.Exists(savefilePath)) {
-                        using StreamReader streamReader = new StreamReader(savefilePath);
-
-                        List<string> debrisData = new List<string>();
+                        var debrisData = new List<string>();
 
                         while (!streamReader.EndOfStream) {
                             debrisData.Add(streamReader.ReadLine());
                         }
 
-                        GameData.Instance.mapDatasBySceneNames[mapData.Key.ToUpper()].debrisPosition = new Vector3[debrisData.Count];
-                        GameData.Instance.mapDatasBySceneNames[mapData.Key.ToUpper()].debrisRotation = new Quaternion[debrisData.Count];
-                        GameData.Instance.mapDatasBySceneNames[mapData.Key.ToUpper()].debrisIndex = new int[debrisData.Count];
+                        MapsManager.Instance.mapBySceneName[map.Key].debrisPosition = new Vector3[debrisData.Count];
+                        MapsManager.Instance.mapBySceneName[map.Key].debrisRotation = new Quaternion[debrisData.Count];
+                        MapsManager.Instance.mapBySceneName[map.Key].debrisIndex = new int[debrisData.Count];
 
                         for (var i=0; i<debrisData.Count; i++) {
                             var dataSplit = debrisData[i].Split("/");
                 
-                            GameData.Instance.mapDatasBySceneNames[mapData.Key.ToUpper()].debrisPosition[i] = Vector3FromString(dataSplit[0]);
-                            GameData.Instance.mapDatasBySceneNames[mapData.Key.ToUpper()].debrisRotation[i] = QuaternionFromString(dataSplit[1]);
-                            GameData.Instance.mapDatasBySceneNames[mapData.Key.ToUpper()].debrisIndex[i] = int.Parse(dataSplit[2]);
+                            MapsManager.Instance.mapBySceneName[map.Key].debrisPosition[i] = Vector3FromString(dataSplit[0]);
+                            MapsManager.Instance.mapBySceneName[map.Key].debrisRotation[i] = QuaternionFromString(dataSplit[1]);
+                            MapsManager.Instance.mapBySceneName[map.Key].debrisIndex[i] = int.Parse(dataSplit[2]);
                         }
                     }
                 }

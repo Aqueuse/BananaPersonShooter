@@ -36,7 +36,7 @@ namespace UI.InGame {
             if (itemThrowableCategory != ItemThrowableCategory.EMPTY) {
                 iconImage.sprite = UInventory.Instance.GetItemSprite(itemThrowableType);
                 iconImage.color = visible;
-                SetAmmoQuantity(global::Inventory.Instance.GetQuantity(itemThrowableType));
+                SetAmmoQuantity(global::Game.Inventory.Instance.GetQuantity(itemThrowableType));
             }
             else {
                 EmptySlot();

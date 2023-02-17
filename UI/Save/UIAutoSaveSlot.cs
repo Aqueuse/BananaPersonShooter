@@ -3,6 +3,7 @@ using System.Globalization;
 using System.IO;
 using Audio;
 using Enums;
+using Game;
 using Save;
 using TMPro;
 using UnityEngine;
@@ -45,7 +46,7 @@ namespace UI.Save {
 
         public void Load() {
             Unselect();
-            GameManager.Instance.Play("auto_save");
+            GameManager.Instance.Play("auto_save", false);
         }
 
         public void AutoSave() {

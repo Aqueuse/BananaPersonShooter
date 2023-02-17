@@ -1,9 +1,8 @@
-﻿using Dialogues;
-using Enums;
+﻿using Enums;
+using Game;
 using Input;
 using Settings;
 using UI.InGame.Inventory;
-using UI.InGame.PlateformBuilder;
 using UI.Save;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -17,16 +16,17 @@ namespace UI {
         [SerializeField] private CanvasGroup bananapediaMenuCanvasGroup;
         [SerializeField] private CanvasGroup creditsMenuCanvasGroup;
         [SerializeField] private CanvasGroup deathMenuCanvasGroup;
-        [SerializeField] private CanvasGroup dialoguesCanvasGroup;
-        [SerializeField] private CanvasGroup miniChimpPlateformBuilderCanvasGroup;
         [SerializeField] private CanvasGroup hudCanvasGroup;
-
+        
         [SerializeField] private Animator interfaceAnimator;
         
         private static readonly int ShowInventoryID = Animator.StringToHash("SHOW INVENTORY");
 
+        public bool isOnMenu;
+        
         private void Start() {
-            UIActions.Instance.selectedTrigger = homeMenuCanvasGroup.GetComponentsInChildren<EventTrigger>()[0];
+            InputManager.Instance.uiSchemaContext = UISchemaSwitchType.HOME_MENU;
+            isOnMenu = false;
         }
 
         public void Hide_menus() {
@@ -38,17 +38,12 @@ namespace UI {
                 Set_active(bananapediaMenuCanvasGroup, false);
 
                 Set_active(gameMenuCanvasGroup, false);
-                Set_active(miniChimpPlateformBuilderCanvasGroup, false);
 
                 if (interfaceAnimator.GetBool(ShowInventoryID)) {
                     interfaceAnimator.SetBool(ShowInventoryID, false);
                 }
 
                 GameManager.Instance.PauseGame(false);
-                
-                if (dialoguesCanvasGroup.alpha > 0) {
-                    DialogueSystem.Instance.Hide_Dialogue();
-                }
             }
 
             else {
@@ -57,6 +52,8 @@ namespace UI {
                 Set_active(bananapediaMenuCanvasGroup, false);
                 Set_active(creditsMenuCanvasGroup, false);
             }
+
+            isOnMenu = false;
         }
         
         public void Show_home_menu() {
@@ -67,7 +64,7 @@ namespace UI {
             Set_active(homeMenuCanvasGroup, true);
             Set_active(gameMenuCanvasGroup, false);
             
-            UIActions.Instance.selectedTrigger = homeMenuCanvasGroup.GetComponentsInChildren<EventTrigger>()[0];
+            isOnMenu = false;
         }
 
         public void Hide_home_menu() {
@@ -77,6 +74,7 @@ namespace UI {
             Set_active(creditsMenuCanvasGroup, false);
 
             Set_active(homeMenuCanvasGroup, false);
+            isOnMenu = true;
         }
 
         public void Show_Load_menu() {
@@ -85,6 +83,7 @@ namespace UI {
             Set_active(bananapediaMenuCanvasGroup, false);
             Set_active(creditsMenuCanvasGroup, false);
             UISave.Instance.newSaveButton.SetActive(GameManager.Instance.isInGame);
+            isOnMenu = true;
         }
 
         public void Show_options_menu() {
@@ -92,6 +91,7 @@ namespace UI {
             Set_active(optionsMenuCanvasGroup, true);
             Set_active(bananapediaMenuCanvasGroup, false);
             Set_active(creditsMenuCanvasGroup, false);
+            isOnMenu = true;
         }
 
         public void Hide_options_menu() {
@@ -99,6 +99,7 @@ namespace UI {
                 Set_active(optionsMenuCanvasGroup, false);
                 Set_active(gameMenuCanvasGroup, true);
             }
+            isOnMenu = false;
         }
 
         public void Show_Bananapedia() {
@@ -108,6 +109,7 @@ namespace UI {
             Set_active(optionsMenuCanvasGroup, false);
             Set_active(bananapediaMenuCanvasGroup, true);
             Set_active(creditsMenuCanvasGroup, false);
+            isOnMenu = true;
         }
 
         public void Hide_Bananapedia() {
@@ -115,6 +117,7 @@ namespace UI {
                 Set_active(bananapediaMenuCanvasGroup, false);
                 Set_active(gameMenuCanvasGroup, true);
             }
+            isOnMenu = false;
         }
 
         public void Show_Credits() {
@@ -125,6 +128,7 @@ namespace UI {
             Set_active(optionsMenuCanvasGroup, false);
             Set_active(bananapediaMenuCanvasGroup, false);
             Set_active(creditsMenuCanvasGroup, true);
+            isOnMenu = true;
         }
 
         public void Hide_Credits() {
@@ -138,28 +142,34 @@ namespace UI {
 
                 Set_active(gameMenuCanvasGroup, true);
             }
+            isOnMenu = false;
         }
 
         public void Show_game_menu() {
             if (GameManager.Instance.isInGame) {
                 if (!interfaceAnimator.GetBool(ShowInventoryID)) {
                     Set_active(gameMenuCanvasGroup, true);
-                    GameManager.Instance.PauseGame(true);
-                    UIActions.Instance.selectedTrigger = gameMenuCanvasGroup.GetComponentsInChildren<EventTrigger>()[0];
                 }
             }
         }
-        
+
+        public void Hide_Game_Menu() {
+            Set_active(gameMenuCanvasGroup, false);
+        }
+
         /// IN GAME ///
         
-        public void Show_Hide_inventory() {
+        public void Show_Hide_interface() {
             if (GameManager.Instance.isInGame && gameMenuCanvasGroup.alpha == 0f) {
-                if (!Is_Inventory_Visible()) {
+                if (!Is_Interface_Visible()) {
                     interfaceAnimator.SetBool(ShowInventoryID, true);
+                    
+                    InputManager.Instance.uiSchemaContext = UISchemaSwitchType.INVENTAIRE;
                     InputManager.Instance.SwitchContext(GameContext.UI);
+                    
                     UInventory.Instance.RefreshUInventory();
                     GameManager.Instance.PauseGame(true);
-                    Focus_inventory();
+                    Focus_interface();
                 }
                 else {
                     InputManager.Instance.SwitchContext(GameContext.GAME);
@@ -169,7 +179,7 @@ namespace UI {
             }
         }
 
-        public bool Is_Inventory_Visible() {
+        private bool Is_Interface_Visible() {
             return interfaceAnimator.GetBool(ShowInventoryID);
         }
 
@@ -181,7 +191,7 @@ namespace UI {
             Set_active(hudCanvasGroup, false);
         }
 
-        void Focus_inventory() {
+        void Focus_interface() {
             EventSystem.current.SetSelectedGameObject(UInventory.Instance.lastselectedInventoryItem);
         }
         
@@ -191,16 +201,6 @@ namespace UI {
 
         public void Hide_death_Panel() {
             Set_active(deathMenuCanvasGroup, false);
-        }
-
-        public void Show_Hide_minichimp_plateform_builder_interface(bool isVisible) {
-            Set_active(miniChimpPlateformBuilderCanvasGroup, isVisible);
-
-            if (isVisible) {
-                UIBuildInventoryLeft.Instance.RefreshInventoySlots();
-                GameManager.Instance.PauseGame(true);
-                EventSystem.current.SetSelectedGameObject(miniChimpPlateformBuilderCanvasGroup.gameObject);
-            }
         }
 
         public void Set_active(CanvasGroup canvasGroup, bool visible) {

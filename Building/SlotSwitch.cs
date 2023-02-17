@@ -34,29 +34,29 @@ namespace Building {
                     break;
                 
                 case ItemThrowableCategory.PLATEFORM:
-                    if (global::Inventory.Instance.bananaManInventory[BananaMan.Instance.activeItemThrowableType] > 0) {
+                    if (global::Game.Inventory.Instance.bananaManInventory[BananaMan.Instance.activeItemThrowableType] > 0) {
                         activePlateform = Instantiate(
                             original: plateformPrefab,
                             position: plateformSpawnerPoint.transform.position,
                             rotation: plateformSpawnerPoint.transform.localRotation);
                     }
-                    Mover.Instance.CancelMover();
+                    BananaGun.Instance.CancelMover();
                     break;
                 
                 case ItemThrowableCategory.EMPTY:
-                    Mover.Instance.CancelMover();
+                    BananaGun.Instance.CancelMover();
                     break;
             }
         }
 
         public void ValidatePlateform() {
-            var plateformQuantityInInventory = global::Inventory.Instance.GetQuantity(BananaMan.Instance.activeItemThrowableType);
+            var plateformQuantityInInventory = global::Game.Inventory.Instance.GetQuantity(BananaMan.Instance.activeItemThrowableType);
             
             if (BananaMan.Instance.activeItemThrowableCategory == ItemThrowableCategory.PLATEFORM && activePlateform != null) {
                 if (activePlateform.GetComponent<Plateform>().isValid && plateformQuantityInInventory > 0) {
                     plateformQuantityInInventory--;
                     
-                    global::Inventory.Instance.RemoveQuantity(BananaMan.Instance.activeItemThrowableType, 1);
+                    global::Game.Inventory.Instance.RemoveQuantity(BananaMan.Instance.activeItemThrowableType, 1);
                     UISlotsManager.Instance.Get_Selected_Slot().SetAmmoQuantity(plateformQuantityInInventory);
 
                     activePlateform.GetComponent<Plateform>().SetNormal();

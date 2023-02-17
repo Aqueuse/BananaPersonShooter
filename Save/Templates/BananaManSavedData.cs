@@ -6,9 +6,9 @@ namespace Save.Templates {
         public float health = 100;
         public float resistance = 100;
 
-        public float xWorldPosition = -1019.6099853515625f;
-        public float yWorldPosition = 1.169921875f;
-        public float zworldPosition = -2645.9099121f;
+        public float xWorldPosition = -1022.773f;
+        public float yWorldPosition = 0.809f;
+        public float zworldPosition = -2651.568f;
         
         public string last_map = "COMMANDROOM";
         public int active_item = 0;

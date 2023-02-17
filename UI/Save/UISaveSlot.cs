@@ -1,8 +1,7 @@
-using System;
-using System.Globalization;
 using System.IO;
 using Audio;
 using Enums;
+using Game;
 using Save;
 using TMPro;
 using UnityEngine;
@@ -41,6 +40,8 @@ namespace UI.Save {
             saveButtonGameObject.SetActive(false);
             renameButtonGameObject.SetActive(false);
             deleteButtonGameObject.SetActive(false);
+            yesButton.SetActive(false);
+            noButton.SetActive(false);
             textPanel.SetActive(true);
         }
 
@@ -55,34 +56,43 @@ namespace UI.Save {
                 saveButtonGameObject.SetActive(true);
             }
         }
-
+        
         public void Load() {
             AudioManager.Instance.PlayEffect(EffectType.BUTTON_INTERACTION);
-            GameManager.Instance.Play(saveUuid);
+            GameManager.Instance.Play(saveUuid, false);
         }
-        
-        public void UpdateToExistingSave(string existingSaveUuid) {
+
+        public void SetToExistingSave(string existingSaveUuid) {
+            saveUuid = existingSaveUuid;
             AudioManager.Instance.PlayEffect(EffectType.BUTTON_INTERACTION);
 
             var savedData = LoadData.Instance.GetSavedDataByUuid(existingSaveUuid);
-
-            saveUuid = existingSaveUuid;
             
             saveName.text = savedData.saveName;
             saveDate.text = savedData.lastSavedDate;
+            
+            UpdateThumbail();
+        }
+
+        public void UpdateToExistingSave() {
+            AudioManager.Instance.PlayEffect(EffectType.BUTTON_INTERACTION);
+
+            var savedData = LoadData.Instance.GetSavedDataByUuid(saveUuid);
+            
+            saveName.text = savedData.saveName;
+            saveDate.text = savedData.lastSavedDate;
+            
+            GameSave.Instance.SaveGameData(saveUuid);
 
             UpdateThumbail();
         }
 
-        public void UpdateToNewSave() {
+        public void UpdateToNewSave(string newSaveUuid, string date) {
             AudioManager.Instance.PlayEffect(EffectType.BUTTON_INTERACTION);
 
-            var date = DateTime.ParseExact(DateTime.Now.ToString("U"), "U", CultureInfo.CurrentCulture).ToString(CultureInfo.CurrentCulture);
+            saveUuid = newSaveUuid;
             saveDate.text = date;
 
-            if (saveUuid.Length == 0) saveUuid = DateTime.Now.ToString("yyyyMMddHHmmss");
-
-            GameSave.Instance.SaveGameData(saveUuid, date);
             UpdateThumbail();
         }
 

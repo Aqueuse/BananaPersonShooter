@@ -1,34 +1,57 @@
     using System;
 using E7.Introloop;
 using Enums;
-using UnityEngine;
+    using Game;
+    using UnityEngine;
 using Random = UnityEngine.Random;
 
 namespace Audio {
     public class AudioManager : MonoSingleton<AudioManager> {
         [SerializeField] private AudioSource audioEffectsSource;
-        [SerializeField] private AudioSource audioVoicesSource;
         [SerializeField] private AudioSource audioAmbianceSource;
         [SerializeField] private AudioSource audioMusicsSource;
         [SerializeField] private AudioSource audioFootstepsSource;
         [SerializeField] private IntroloopPlayer audioIntroLoopMusicSource; // beautifully handle lopped music with intro
 
         [SerializeField] public GenericDictionary<EffectType, AudioDataScriptableObject> audioEffectsDictionnary;
-        [SerializeField] private GenericDictionary<VoiceType, AudioDataScriptableObject> audioVoicesDictionnary;
         [SerializeField] private GenericDictionary<AmbianceType, AudioDataScriptableObject> audioAmbianceDictionnary;
         [SerializeField] private GenericDictionary<MusicType, AudioDataScriptableObject> audioMusicsDictionnary;
         [SerializeField] private GenericDictionary<FootStepType, AudioDataScriptableObject> audioFootStepsDictionnary;
 
+        
+        
         public float musicLevel = 0.1f;
         public float ambianceLevel = 0.1f;
         public float effectsLevel = 0.1f;
 
-        private bool isAlreadyPlaying;
         public FootStepType footStepType;
 
         private void Start() {
-            isAlreadyPlaying = false;
             audioFootstepsSource.loop = false;
+        }
+
+        public void SetMusiqueBySceneName(string sceneName) {
+            switch (sceneName) {
+                case "HOME":
+                    StopAudioSource(AudioSourcesType.AMBIANCE);
+                    PlayMusic(MusicType.HOME, false);
+                    break;
+                
+                case "MAP01":
+                    PlayAmbiance(AmbianceType.MAP01);
+                    PlayMusic(MusicType.MAP01, false);
+                    break;
+                    
+                case "COROLLE":
+                    PlayAmbiance(AmbianceType.MAP01);
+                    PlayMusic(MusicType.MAP01, false);
+                    break;
+                
+                case "COMMANDROOM":
+                    StopAudioSource(AudioSourcesType.AMBIANCE);
+                    StopAudioSource(AudioSourcesType.MUSIC);
+                    break;
+            }  // 7 secondes 955  / 39 secondes 775
         }
 
         public void StopAudioSource(AudioSourcesType audioSourceType) {
@@ -44,17 +67,12 @@ namespace Audio {
                 case AudioSourcesType.EFFECT:
                     audioEffectsSource.Stop();
                     break;
-                case AudioSourcesType.VOICE:
-                    audioVoicesSource.Stop();
-                    break;
                 case AudioSourcesType.FOOTSTEPS:
                     audioFootstepsSource.Stop();
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(audioSourceType), audioSourceType, null);
             }
-
-            isAlreadyPlaying = false;
         }
 
         public void PlayMusic(MusicType type, bool hasIntro) {
@@ -76,7 +94,7 @@ namespace Audio {
             }
         }
 
-        public void PlayAmbiance(AmbianceType ambianceType) {
+        private void PlayAmbiance(AmbianceType ambianceType) {
             var audioData = audioAmbianceDictionnary[ambianceType];
 
             audioAmbianceSource.volume = ambianceLevel;
@@ -95,30 +113,7 @@ namespace Audio {
 
             audioEffectsSource.Play();
         }
-
-        public void PlayLoopedEffect(EffectType effectType) {
-            if (!isAlreadyPlaying) {
-                var audioData = audioEffectsDictionnary[effectType]; 
-    
-                audioEffectsSource.volume = effectsLevel;
-                audioEffectsSource.clip = audioData.clip[Random.Range(0, audioData.clip.Length)];
-                audioEffectsSource.loop = true;
-
-                audioEffectsSource.Play();
-                isAlreadyPlaying = true;
-            }
-        }
-
-        public void PlayVoice(VoiceType voiceType) {
-            var audioData = audioVoicesDictionnary[voiceType];
-            
-            audioVoicesSource.volume = effectsLevel-0.2f;
-            audioVoicesSource.clip = audioData.clip[Random.Range(0, audioData.clip.Length)];
-            audioVoicesSource.loop = true;
-
-            audioVoicesSource.Play();
-        }
-
+        
         public void PlayFootStepOneShot() {
             if (GameManager.Instance.isGamePlaying) {
                 var audioData = audioFootStepsDictionnary[footStepType];

@@ -6,7 +6,6 @@ namespace Data {
         [SerializeField] private GenericDictionary<ItemThrowableType, BananasDataScriptableObject> bananasDataScriptableObject;
         [SerializeField] private PlateformDataScriptableObject plateformDataScriptableObject;
         [SerializeField] private DebrisDataScriptableObject debrisDataScriptableObject;
-        [SerializeField] private GenericDictionary<MonkeyType, MapDataScriptableObject> mapDataByMonkeyType;
 
         public string GetDescription(ItemThrowableCategory itemThrowableCategory, ItemThrowableType itemThrowableType, int langageIndex) {
             if (itemThrowableType == ItemThrowableType.DEBRIS) {
@@ -26,10 +25,6 @@ namespace Data {
         
         public GenericDictionary<ItemThrowableType, int> GetPlateformCost() {
             return plateformDataScriptableObject.Cost;
-        }
-
-        public MapDataScriptableObject GetMapData(MonkeyType monkeyType) {
-            return mapDataByMonkeyType[monkeyType];
         }
     }
 }

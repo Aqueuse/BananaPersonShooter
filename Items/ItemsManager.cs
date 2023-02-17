@@ -1,8 +1,7 @@
 ﻿using Audio;
 using Building;
-using Dialogues;
 using Enums;
-using UI;
+using Game;
 using UI.InGame;
 using UnityEngine;
 using UnityEngine.Localization.Settings;
@@ -37,8 +36,7 @@ namespace Items {
                 switch (itemType) {
                     case ItemType.DOOR:
                         Transform spawnPoint = _interactedObject.GetComponent<Door>().spawnPoint;
-                        GameManager.Instance.SwitchScene(_interactedObject.GetComponent<Door>().destinationMap,
-                            spawnPoint.position);
+                        ScenesSwitch.Instance.SwitchScene(_interactedObject.GetComponent<Door>().destinationMap.ToUpper(), spawnPoint.position, false);
                         _interactedObject = null;
                         lootMessage.SetActive(false);
                         break;
@@ -56,13 +54,13 @@ namespace Items {
                         _interactedObject.GetComponent<Regime>().GrabBananas();
                         break;
                     case ItemType.BOSS_FIGHT_LAUNCHER:
-                        MapManager.Instance.StartBossFight(MonkeyType.KELSAIK);
+                        MapsManager.Instance.currentMap.StartBossFight(MonkeyType.KELSAIK);
                         break;
                     case ItemType.MINI_CHIMP:
-                        DialogueSystem.Instance.interact_with_minichimp(_interactedObject);
+//                        DialogueSystem.Instance.interact_with_minichimp(_interactedObject);
                         break;
                     case ItemType.MINI_CHIMP_BUILD_STATION:
-                        UIManager.Instance.Show_Hide_minichimp_plateform_builder_interface(true);
+                        BuildStation.Instance.ShowBuildStationInterface();
                         break;
                     case ItemType.FOUNDRY:
                         Foundry.Instance.Load_One_More_Debris();

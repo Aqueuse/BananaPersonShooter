@@ -4,7 +4,7 @@ using Player;
 using UnityEngine;
 
 namespace Building {
-    public class MoverGet : MonoSingleton<MoverGet> {
+    public class BananaGunGet : MonoSingleton<BananaGunGet> {
         [SerializeField] private GameObject moverTarget;
         private GameObject targetedGameObject;
         
@@ -14,15 +14,22 @@ namespace Building {
         private bool isAspiring;
         
         void Update() {
-            if (isAspiring && BananaMan.Instance.isGrabingMover) {
-                Mover.Instance.bananaGun.transform.LookAt(moverTarget.transform, Vector3.up);
+            if (isAspiring && BananaMan.Instance.isGrabingBananaGun) {
+                BananaGun.Instance.bananaGun.transform.LookAt(moverTarget.transform, Vector3.up);
 
-                if (Physics.Raycast(Mover.Instance.bananaGun.transform.position, Mover.Instance.bananaGun.transform.forward, out RaycastHit raycastHit, 20, Layermask)) {
+                if (Physics.Raycast(BananaGun.Instance.bananaGun.transform.position, BananaGun.Instance.bananaGun.transform.forward, out RaycastHit raycastHit, 20, Layermask)) {
                     if (raycastHit.transform.GetComponent<Debris>() != null) {
                         targetedGameObject = raycastHit.transform.gameObject;
                         var debrisClass = targetedGameObject.GetComponent<Debris>(); 
 
                         debrisClass.DissolveMe();
+                        AudioManager.Instance.PlayEffect(EffectType.DESINTEGRATION);
+                    }
+                    if (raycastHit.transform.GetComponent<Plateform>() != null) {
+                        targetedGameObject = raycastHit.transform.gameObject;
+                        var platformClass = targetedGameObject.GetComponent<Plateform>(); 
+
+                        platformClass.DissolveMe();
                         AudioManager.Instance.PlayEffect(EffectType.DESINTEGRATION);
                     }
                 }
@@ -31,7 +38,7 @@ namespace Building {
 
         public void StartToGet() {
             isAspiring = true;
-            Mover.Instance.GrabMover();
+            BananaGun.Instance.GrabMover();
         }
 
         public void CancelGet() {
@@ -39,7 +46,7 @@ namespace Building {
             
             AudioManager.Instance.StopAudioSource(AudioSourcesType.EFFECT);
 
-            Mover.Instance.CancelMover();
+            BananaGun.Instance.CancelMover();
         }
     }
 }

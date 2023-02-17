@@ -1,4 +1,4 @@
-﻿using Input;
+﻿using Game;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -13,13 +13,15 @@ namespace UI.Menus {
         private Image[] gameMenuButtons;
         private int _selectedButton;
 
+        public EventTrigger selectedTrigger;
+
         private void Start() {
             _selectedButton = 0;
             gameMenuButtons = GetComponentsInChildren<Image>();
         }
         
         public void Quit() {
-            GameManager.Instance.ReturnHome();
+            ScenesSwitch.Instance.ReturnHome();
         }
 
         public void SwitchToRightButton() {
@@ -46,7 +48,8 @@ namespace UI.Menus {
 
             buttonImage.color = activatedColor;
             buttonImage.GetComponentInChildren<TextMeshProUGUI>().color = activatedTextColor;
-            UIActions.Instance.selectedTrigger = buttonImage.GetComponent<EventTrigger>();
+            
+            selectedTrigger = buttonImage.GetComponent<EventTrigger>();
         }
     }
 }

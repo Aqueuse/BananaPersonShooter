@@ -1,4 +1,5 @@
 ﻿using Enums;
+using Game;
 using Player;
 using UI.InGame;
 using UnityEngine;
@@ -22,7 +23,7 @@ namespace Monkeys {
 
         private void Start() {
             sasiety = 20;
-            MapManager.Instance.RecalculateHapiness();
+            MapsManager.Instance.currentMap.RecalculateHapiness();
             associatedUI.SetSliderValue(happiness, monkeyState);
         }
 
@@ -30,7 +31,7 @@ namespace Monkeys {
             if (happiness <= 50) {
                 GetComponent<NavMeshAgent>().SetDestination(BananaMan.Instance.transform.position);
                 sasiety += addedBananaValue;
-                MapManager.Instance.RecalculateHapiness();
+                MapsManager.Instance.currentMap.RecalculateHapiness();
                 associatedUI.SetSliderValue(happiness, monkeyState);
             }
         }

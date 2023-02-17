@@ -22,14 +22,14 @@ namespace UI.InGame.QuickSlots {
         public void RefreshQuantityInQuickSlot(ItemThrowableType itemThrowableType) {
             foreach (var uiSlotsScript in uiSlotsScripts) {
                 if (uiSlotsScript.itemThrowableType == itemThrowableType) {
-                    uiSlotsScript.SetAmmoQuantity(global::Inventory.Instance.bananaManInventory[itemThrowableType]);
+                    uiSlotsScript.SetAmmoQuantity(global::Game.Inventory.Instance.bananaManInventory[itemThrowableType]);
                 }
 
                 if (uiSlotsScript.itemThrowableType == ItemThrowableType.EMPTY) {
                     uiSlotsScript.EmptySlot();
                 }
 
-                if (global::Inventory.Instance.GetQuantity(uiSlotsScript.itemThrowableType) <= 0) {
+                if (global::Game.Inventory.Instance.GetQuantity(uiSlotsScript.itemThrowableType) <= 0) {
                     uiSlotsScript.EmptySlot();
                 }
             }

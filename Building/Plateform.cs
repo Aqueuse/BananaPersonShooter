@@ -1,34 +1,65 @@
+using Audio;
 using Bananas;
 using Building.PlateformsEffects;
 using Enums;
+using Game;
+using UI.InGame;
 using UnityEngine;
+using UnityEngine.Localization.Settings;
 
 namespace Building {
     public class Plateform : MonoBehaviour {
-        private BoxCollider _boxCollider;
-
         [SerializeField] private Material plateformMaterial;
         [SerializeField] private Material ghostValidMaterial;
         [SerializeField] private Material ghostUnvalidMaterial;
         
-        public ItemThrowableType platformType;
-        
-        private MeshRenderer _meshRenderer;
+        [SerializeField] private float dissolved;
 
         public bool isValid;
 
+        private BoxCollider _boxCollider;
+        private MeshRenderer _meshRenderer;
+        
+        private static readonly int DissolveProperty = Shader.PropertyToID("Cutoff_Height");
+        private float _dissolve;
+
+        private bool isDissolving;
+        
         private void Start() {
             _boxCollider = GetComponent<BoxCollider>();
             _meshRenderer = GetComponent<MeshRenderer>();
 
             isValid = true;
+            _dissolve = 1.5f;
+        }
+
+        private void Update() {
+            if (isDissolving) {
+                _dissolve -= Time.deltaTime;
+                GetComponent<MeshRenderer>().materials[0].SetFloat(DissolveProperty, _dissolve);
+                
+                if (_dissolve < dissolved) {
+                    Inventory.Instance.AddQuantity(ItemThrowableType.PLATEFORM, ItemThrowableCategory.PLATEFORM, 1);
+                    AudioManager.Instance.StopAudioSource(AudioSourcesType.EFFECT);
+                    // MapManager.Instance.Clean();
+                    // MapManager.Instance.SaveDataOnScriptableObject();
+                    UIQueuedMessages.Instance.AddMessage(
+                        "+ 1 "+
+                        LocalizationSettings.Instance.GetStringDatabase().GetLocalizedString("platform"));
+                    Destroy(gameObject);
+                }
+            }
         }
         
-        public void SetValid() {
+        public void DissolveMe() {
+            isDissolving = true;
+        }
+        
+        private void SetValid() {
             _meshRenderer.material = ghostValidMaterial;
         }
 
-        public void SetUnvalid() {
+        private void SetUnvalid() {
             _meshRenderer.material = ghostUnvalidMaterial;
         }
 

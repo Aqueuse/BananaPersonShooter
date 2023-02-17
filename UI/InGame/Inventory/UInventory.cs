@@ -21,7 +21,7 @@ namespace UI.InGame.Inventory {
         }
 
         public void RefreshUInventory() {
-            var inventory = global::Inventory.Instance.bananaManInventory;
+            var inventory = global::Game.Inventory.Instance.bananaManInventory;
 
             foreach (var inventoryItem in inventory) {
                 if (inventoryItem.Value > 0) {

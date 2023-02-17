@@ -31,7 +31,7 @@ namespace Settings {
 
         private string _keymapBinding;
         public int languageIndexSelected;
-        private float _lookSensibility;
+        public float lookSensibility;
         
         private void Start() {
             Application.targetFrameRate = 60; // fix the framerate to prevent crash on some GPU
@@ -54,13 +54,14 @@ namespace Settings {
             languageIndexSelected = PlayerPrefs.GetInt("language", 1);
             _keymapBinding = PlayerPrefs.GetString("keymap_binding", null);
 
+            lookSensibility = PlayerPrefs.GetFloat("LookSensibility", 0.6f);
+            
             SetMusicVolume(AudioManager.Instance.musicLevel);
             SetAmbianceVolume(AudioManager.Instance.ambianceLevel);
             SetEffectVolume(AudioManager.Instance.effectsLevel);
             
-            _lookSensibility = PlayerPrefs.GetFloat("LookSensibility", 0.3f);
             InverseCameraVerticalAxis(PlayerPrefs.GetString("isCameraVerticalAxisInverted", "False").Equals("True"));
-            SetLookSensibility(_lookSensibility);
+            SetLookSensibility(lookSensibility);
             
             Invoke(nameof(SetLanguage), 0.2f);
         
@@ -77,7 +78,7 @@ namespace Settings {
             vsyncToggle.isOn = _isVsync.Equals("True");
             resolutionDropDown.value = _resolution;
 
-            lookSensibilitySlider.value = _lookSensibility;
+            lookSensibilitySlider.value = lookSensibility;
     
             languageDropDown.value = languageIndexSelected;
         }
@@ -142,10 +143,9 @@ namespace Settings {
         public void SetLookSensibility(float sensibility) {
             playerCamera.m_YAxis.m_MaxSpeed = sensibility;
             playerCamera.m_XAxis.m_MaxSpeed = sensibility * 400;
-            
-            _lookSensibility = sensibility;
-            
-            PlayerPrefs.SetFloat("LookSensibility", _lookSensibility);
+
+            lookSensibility = sensibility;
+            PlayerPrefs.SetFloat("LookSensibility", lookSensibility);
         }
 
         public void InverseCameraVerticalAxis(bool isCameraInverted) {

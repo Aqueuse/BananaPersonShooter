@@ -1,12 +1,11 @@
 using System.IO;
+using Game;
 using Newtonsoft.Json;
 using Save.Templates;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 namespace Save {
     public class SaveData : MonoSingleton<SaveData> {
-        [SerializeField] private GameObject screenshotCameraGameObject;
         private string[] debrisDatas;
 
         private string appPath;
@@ -38,6 +37,7 @@ namespace Save {
             if (!Directory.Exists(savePath)) {
                 Directory.CreateDirectory(savePath);
                 Directory.CreateDirectory(Path.Combine(savePath, "MAPDATA"));
+                Directory.CreateDirectory(Path.Combine(savePath, "MAPS"));
                 
                 savedData = new SavedData {
                     uuid = saveUuid,
@@ -49,23 +49,33 @@ namespace Save {
             else {
                 savedData = new SavedData {
                     uuid = saveUuid,
-                    saveName = LoadData.Instance.GetSavedDataByUuid(saveUuid).saveName,
+                    saveName = LoadData.Instance.GetsaveNameByUuid(saveUuid),
                     lastSavedDate = saveDate
                 };
             }
             
             var jsonSavedData = JsonConvert.SerializeObject(savedData);
-            var jsonbananaManSavedData = JsonConvert.SerializeObject(GameData.Instance.bananaManSavedData);
-            var jsonMap01SavedData = JsonConvert.SerializeObject(GameData.Instance.map01SavedData);
-            
+            var jsonbananaManSavedData = JsonConvert.SerializeObject(GameData.Instance.BananaManSavedData);
+
             string savefilePath = Path.Combine(savePath, "data.json");
             File.WriteAllText(savefilePath, jsonSavedData);
-            
+
+            savefilePath = Path.Combine(savePath, "MAPS");
+
+            foreach (var map in GameData.Instance.mapSavedDatasByMapName) {
+                // synchronize data beetween classes and templates
+                map.Value.isDiscovered = MapsManager.Instance.mapBySceneName[map.Key].isDiscovered;
+                map.Value.cleanliness = MapsManager.Instance.mapBySceneName[map.Key].cleanliness;
+                map.Value.monkey_sasiety = MapsManager.Instance.mapBySceneName[map.Key].monkeySasiety;
+                
+                var jsonMapSavedData = JsonConvert.SerializeObject(GameData.Instance.mapSavedDatasByMapName[map.Key]);
+                var mapSavefilePath = Path.Combine(savefilePath, map.Key+".json");
+                File.WriteAllText(mapSavefilePath, jsonMapSavedData);
+            }
+
             savefilePath = Path.Combine(savePath, "player.json");
             File.WriteAllText(savefilePath, jsonbananaManSavedData);
             
-            savefilePath = Path.Combine(savePath, "MAP01.json");
-            File.WriteAllText(savefilePath, jsonMap01SavedData);
 
             string screenshotFilePath = Path.Combine(savePath, "screenshot.png");
             SaveCameraView(screenshotFilePath);
@@ -84,8 +94,7 @@ namespace Save {
         }
 
         void SaveCameraView(string path) {
-            screenshotCameraGameObject.SetActive(true);
-            var screenshotCamera = screenshotCameraGameObject.GetComponent<Camera>();
+            var screenshotCamera = GameManager.Instance.cameraMain;
             RenderTexture screenTexture = new RenderTexture(150, 150, 16);
             screenshotCamera.targetTexture = screenTexture;
             RenderTexture.active = screenTexture;
@@ -95,10 +104,10 @@ namespace Save {
             RenderTexture.active = null;
             byte[] byteArray = renderedTexture.EncodeToPNG();
             File.WriteAllBytes(path, byteArray);
-            screenshotCameraGameObject.SetActive(false);
+            screenshotCamera.targetTexture = null;
         }
         
-        public void SaveMapDataByUuid(Vector3[] debrisPosition, Quaternion[] debrisRotation, int[] debrisIndex, string saveUuid) {
+        public void SaveMapDataByUuid(Vector3[] debrisPosition, Quaternion[] debrisRotation, int[] debrisIndex, string mapName, string saveUuid) {
             var savePath = Path.Combine(savesPath, saveUuid);
             var mapDataSavesPath = Path.Combine(savePath, "MAPDATA");
 
@@ -112,7 +121,7 @@ namespace Save {
                 debrisDatas[i] = debrisPosition[i] + "/" + debrisRotation[i] + "/" + debrisIndex[i];
             }
             
-            string savefilePath = Path.Combine(mapDataSavesPath, SceneManager.GetActiveScene().name.ToUpper()+"_debris.data");
+            string savefilePath = Path.Combine(mapDataSavesPath, mapName+"_debris.data");
 
             using StreamWriter streamWriter = new StreamWriter(savefilePath, append:false);
 

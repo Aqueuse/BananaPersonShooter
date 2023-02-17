@@ -1,4 +1,5 @@
-﻿using Input;
+﻿using Game;
+using Input;
 using UI.InGame;
 using UnityEngine;
 
@@ -53,7 +54,7 @@ namespace Player {
 
                 playerPosition = transform.position;
 
-                if (!isFocusCamera && !BananaMan.Instance.isGrabingMover) {  // rotate follow the input
+                if (!isFocusCamera && !BananaMan.Instance.isGrabingBananaGun) {  // rotate follow the input
                     if (_rawInputMovement != Vector3.zero) {
                         transform.rotation = Quaternion.AngleAxis(inputAngle, Vector3.up) * cameraRotation;
                     }

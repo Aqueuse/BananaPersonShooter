@@ -1,53 +1,30 @@
-using System;
-using System.Globalization;
-using System.IO;
 using System.Linq;
-using Building;
-using Data;
 using Enums;
+using Game;
 using Player;
 using Save.Templates;
 using UI.InGame;
-using UI.InGame.Inventory;
 using UI.InGame.QuickSlots;
-using UI.Save;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 namespace Save {
     public class GameReset : MonoSingleton<GameReset> {
-        [SerializeField] private GameObject[] debrisPrefab;
-
         private Vector3[] debrisPosition;
         private Quaternion[] debrisRotation;
         private int[] debrisPrefabIndex;
-
-        public Transform initialSpawnTransform;
-
-        public string lastMap = "COMMANDROOM";
-        public Vector3 lastPositionOnMap;
-
+        
         private GameObject debrisContainer;
-
-        public GenericDictionary<String, MapDataScriptableObject> mapDatasBySceneNames;
-
+        
         private BananaManSavedData bananaManSavedData;
-        private MAP01SavedData map01SavedData;
+        private MAPSavedData mapSavedData;
 
-        public void ResetGameData(string saveUuid) {
+        public void ResetGameData() {
             ResetInventory();
             ResetSlots();
             ResetBananaManVitals();
             ResetPositionAndLastMap();
             ResetActiveItem();
             ResetMonkeysSasiety();
-
-            BananaMan.Instance.transform.position = initialSpawnTransform.position;
-
-            var date = DateTime.ParseExact(DateTime.Now.ToString("U"), "U", CultureInfo.CurrentCulture).ToString(CultureInfo.CurrentCulture);
-            GameSave.Instance.SaveGameData(saveUuid, date);
-
-            GameManager.Instance.ReturnHome();
 
             // lock maps
             // reinit mini chimps quests
@@ -58,12 +35,13 @@ namespace Save {
         private void ResetInventory() {
             foreach (var bananaSlot in Inventory.Instance.bananaManInventory.ToList()) {
                 Inventory.Instance.bananaManInventory[bananaSlot.Key] = 0;
+                GameData.Instance.BananaManSavedData.inventory[bananaSlot.Key.ToString()] = 0;
             }
         }
 
         private void ResetSlots() {
-            foreach (var slot in UISlotsManager.Instance.slotsMappingToInventory) {
-                PlayerPrefs.SetInt("inventorySlot" + slot.Key, 0);
+            foreach (var slot in GameData.Instance.BananaManSavedData.slots.ToList()) {
+                GameData.Instance.BananaManSavedData.slots["inventorySlot" + slot.Key] = 0;
             }
 
             foreach (UISlot uiSlot in UISlotsManager.Instance.uiSlotsScripts) {
@@ -77,30 +55,28 @@ namespace Save {
 
             UIVitals.Instance.Set_Health(BananaMan.Instance.health);
             UIVitals.Instance.Set_Resistance(BananaMan.Instance.resistance);
+
+            GameData.Instance.BananaManSavedData.health = 100;
+            GameData.Instance.BananaManSavedData.resistance = 100;
         }
 
         private void ResetPositionAndLastMap() {
-            var initialSpawnPosition = initialSpawnTransform.position;
-
-            lastPositionOnMap = initialSpawnPosition;
-            lastMap = "COMMANDROOM";
+            GameData.Instance.lastPositionOnMap = ScenesSwitch.Instance.teleportSpawnPointBySceneName["COMMANDROOM"].position;
+            GameData.Instance.BananaManSavedData.last_map = "COMMANDROOM";
+            BananaMan.Instance.transform.position = GameData.Instance.lastPositionOnMap;
         }
 
         private void ResetActiveItem() {
             BananaMan.Instance.activeItemThrowableType = ItemThrowableType.EMPTY;
             BananaMan.Instance.activeItemThrowableCategory = ItemThrowableCategory.EMPTY;
 
-            PlayerPrefs.SetInt("activeItem", UInventory.Instance.GetSlotIndex(ItemThrowableType.EMPTY));
+            GameData.Instance.BananaManSavedData.active_item = 0;
         }
 
         private void ResetMonkeysSasiety() {
-            foreach (var mapData in mapDatasBySceneNames) {
+            foreach (var mapData in MapsManager.Instance.mapBySceneName) {
                 mapData.Value.monkeySasiety = 50;
-                PlayerPrefs.SetFloat(mapData.Value.MonkeyType.ToString().ToUpper(), mapData.Value.monkeySasiety);
             }
         }
-
-        /////////////////// DEBRIS ///////////////////////
     }
 }
-        

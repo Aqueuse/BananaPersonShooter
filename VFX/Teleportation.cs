@@ -1,83 +1,91 @@
 using UnityEngine;
 
 namespace VFX {
-    enum TeleportState {
+    public enum TeleportState {
         VISIBLE,
-        INVISIBLE
+        INVISIBLE,
+        DISAPPEAR,
+        REAPPEAR
     }
     
-    public class Teleportation : MonoBehaviour {
+    public class Teleportation : MonoSingleton<Teleportation> {
         [SerializeField] private Material[] materialsToDissolve;
-
         [SerializeField] private float shaderSpeed;
-
-        [SerializeField] private float dissolveFactor;
-
         [SerializeField] private RectTransform faceCanvasTransform;
+
+        public TeleportState teleportState;
         
         private static readonly int CutoffHeight = Shader.PropertyToID("Cutoff_Height");
+        private float dissolveFactor;
 
         private ParticleSystem teleportParticleSystem;
-        private TeleportState teleportState;
-        ParticleSystem.ShapeModule shape;
+        private ParticleSystem.ShapeModule shape;
 
         private void Start() {
+            dissolveFactor = 2f;
             teleportState = TeleportState.VISIBLE;
         }
 
         private void Update() {
-            if (teleportState == TeleportState.VISIBLE && dissolveFactor < 2) {
-                ReappearVertical();
+            if (teleportState == TeleportState.REAPPEAR &&  dissolveFactor < 2) {
+                dissolveFactor += Time.deltaTime * shaderSpeed;
+
+                foreach (var material in materialsToDissolve) {
+                    material.SetFloat(CutoffHeight, dissolveFactor);
+                }
+            }
+
+            if (teleportState == TeleportState.REAPPEAR &&  dissolveFactor >= 2) {
+                teleportState = TeleportState.VISIBLE;
+                Show_Face_Canvas();
             }
             
-            if (teleportState == TeleportState.INVISIBLE && dissolveFactor > -3.23f) {
-                DisappearVertical();
+            if (teleportState == TeleportState.DISAPPEAR && dissolveFactor > -3.23f) {
+                dissolveFactor -= Time.deltaTime * shaderSpeed;
+
+                foreach (var material in materialsToDissolve) {
+                    material.SetFloat(CutoffHeight, dissolveFactor);
+                }
+            }
+
+            if (teleportState == TeleportState.DISAPPEAR && dissolveFactor <= -3.23f) {
+                teleportState = TeleportState.INVISIBLE;
             }
         }
 
         // dissolve factor : -3.23 = totally invisible
         // dissolve factor : 2 = totally visible
-
-        private void DisappearVertical() {
-            dissolveFactor -= Time.deltaTime * shaderSpeed;
-
-            foreach (var material in materialsToDissolve) {
-                material.SetFloat(CutoffHeight, dissolveFactor);
-            }
-        }
-        
-        private void ReappearVertical() {
-            dissolveFactor += Time.deltaTime * shaderSpeed;
-
-            foreach (var material in materialsToDissolve) {
-                material.SetFloat(CutoffHeight, dissolveFactor);
-            }
-        }
         
         public void TeleportUp() {
             teleportParticleSystem = GetComponent<ParticleSystem>();
             shape = teleportParticleSystem.shape;
 
             teleportParticleSystem.Play();
-            teleportState = TeleportState.INVISIBLE;
+            teleportState = TeleportState.DISAPPEAR;
             dissolveFactor = 2;
+
+            foreach (var material in materialsToDissolve) {
+                material.SetFloat(CutoffHeight, dissolveFactor);
+            }
             
             shape.rotation = new Vector3(0, 0, 0);
-            
-            Invoke(nameof(Hide_Face_Canvas), 1);
+
+            Hide_Face_Canvas();
         }
-        
+
         public void TeleportDown() {
             teleportParticleSystem = GetComponent<ParticleSystem>();
             shape = teleportParticleSystem.shape;
 
             teleportParticleSystem.Play();
-            teleportState = TeleportState.VISIBLE;
+            teleportState = TeleportState.REAPPEAR;
             dissolveFactor = -3.23f;
+            
+            foreach (var material in materialsToDissolve) {
+                material.SetFloat(CutoffHeight, dissolveFactor);
+            }
 
             shape.rotation = new Vector3(0, 180, 0);
-            
-            Invoke(nameof(Show_Face_Canvas), 1);
         }
 
         private void Show_Face_Canvas() {

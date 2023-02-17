@@ -1,3 +1,4 @@
+using Game;
 using UnityEngine;
 
 namespace Player {

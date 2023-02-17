@@ -1,5 +1,6 @@
 ﻿using Building;
 using Enums;
+using Game;
 using Items;
 using Player;
 using UI;
@@ -108,12 +109,14 @@ namespace Input {
 
         private void Show_Inventory() {
             if (UnityEngine.Input.GetKeyDown(KeyCode.I) || UnityEngine.Input.GetKeyDown(KeyCode.JoystickButton6)) {
-                UIManager.Instance.Show_Hide_inventory();
+                UIManager.Instance.Show_Hide_interface();
             }
         }
 
         private void PauseGame() {
             if (UnityEngine.Input.GetKeyDown(KeyCode.Escape) || UnityEngine.Input.GetKeyDown(KeyCode.JoystickButton7)) {
+                InputManager.Instance.uiSchemaContext = UISchemaSwitchType.GAME_MENU;
+                GameManager.Instance.PauseGame(true);
                 UIManager.Instance.Show_game_menu();
             }
         }
@@ -147,21 +150,21 @@ namespace Input {
 
         private void Aspire() {
             if (UnityEngine.Input.GetKeyDown(KeyCode.Mouse1)) {
-                MoverGet.Instance.StartToGet();
+                BananaGunGet.Instance.StartToGet();
             }
 
             if (UnityEngine.Input.GetKeyUp(KeyCode.Mouse1)) {
-                MoverGet.Instance.CancelGet();
+                BananaGunGet.Instance.CancelGet();
             }
 
             if (UnityEngine.Input.GetAxis("LeftTrigger") <= -0.1 && !_leftTriggerActivated) {
                 _leftTriggerActivated = true;
-                MoverGet.Instance.StartToGet();
+                BananaGunGet.Instance.StartToGet();
             }
 
             if (UnityEngine.Input.GetAxis("LeftTrigger") >= 0 && _leftTriggerActivated)  {
                 _leftTriggerActivated = false;
-                MoverGet.Instance.CancelGet();
+                BananaGunGet.Instance.CancelGet();
             }
         }
 
@@ -193,20 +196,20 @@ namespace Input {
             if (BananaMan.Instance.activeItemThrowableCategory == ItemThrowableCategory.BANANA) {
                 if (UnityEngine.Input.GetKeyDown(KeyCode.Mouse0)) {
                     leftClickActivated = true;
-                    MoverPut.Instance.LoadingGun();
+                    BananaGunPut.Instance.LoadingGun();
                 }
 
                 if (UnityEngine.Input.GetKeyUp(KeyCode.Mouse0)) {
-                    Mover.Instance.CancelMover();
+                    BananaGun.Instance.CancelMover();
                 }
 
                 if (UnityEngine.Input.GetAxis("RightTrigger") != 0 && !rightTriggerActivated) {
                     rightTriggerActivated = true;
-                    MoverPut.Instance.LoadingGun();
+                    BananaGunPut.Instance.LoadingGun();
                 }
 
                 if (UnityEngine.Input.GetAxis("RightTrigger") == 0 && rightTriggerActivated)  {
-                    Mover.Instance.CancelMover();
+                    BananaGun.Instance.CancelMover();
                     rightTriggerActivated = false;
                 }
             }

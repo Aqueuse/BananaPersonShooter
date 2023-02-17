@@ -1,3 +1,6 @@
+using System;
+using System.Globalization;
+using Save;
 using UnityEngine;
 
 namespace UI.Save {
@@ -13,21 +16,25 @@ namespace UI.Save {
             }
         }
         
-        public void CreateNewSave() {
+        public void CreateNewSave(string saveUuid) {
+            var date = DateTime.ParseExact(DateTime.Now.ToString("U"), "U", CultureInfo.CurrentCulture).ToString(CultureInfo.CurrentCulture);
+            if (saveUuid.Length == 0) saveUuid = DateTime.Now.ToString("yyyyMMddHHmmss");
+
+            GameSave.Instance.SaveGameData(saveUuid);
+
             var save = Instantiate(savePrefab, transform);
-            save.GetComponent<UISaveSlot>().UpdateToNewSave();
+            save.GetComponent<UISaveSlot>().UpdateToNewSave(saveUuid, date);
         }
         
         public void AppendSaveSlot(string saveUuid) {
             if (saveUuid == "auto_save") {
                 var save = Instantiate(autosavePrefab, transform);
                 save.GetComponent<UIAutoSaveSlot>().saveUuid = saveUuid;
-                save.GetComponent<UIAutoSaveSlot>().AutoSave();
             }
 
             else {
                 var save = Instantiate(savePrefab, transform);
-                save.GetComponent<UISaveSlot>().UpdateToExistingSave(saveUuid);
+                save.GetComponent<UISaveSlot>().SetToExistingSave(saveUuid);
             }
         }
     }

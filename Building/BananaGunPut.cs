@@ -1,20 +1,20 @@
 using Audio;
 using Enums;
+using Game;
 using Input;
 using Player;
-using UI.InGame;
 using UI.InGame.QuickSlots;
 using UnityEngine;
 
 namespace Building {
-    public class MoverPut : MonoSingleton<MoverPut> {
+    public class BananaGunPut : MonoSingleton<BananaGunPut> {
         [SerializeField] private GameObject launchingBananaPoint;
         [SerializeField] private GenericDictionary<ItemThrowableType, GameObject> weaponsGameObjects;
 
         public void LoadingGun() {
             var lastSelectedThrowableCategory = BananaMan.Instance.activeItemThrowableCategory;
 
-            Mover.Instance.GrabMover();
+            BananaGun.Instance.GrabMover();
 
             if (lastSelectedThrowableCategory == ItemThrowableCategory.BANANA) {
                 AudioManager.Instance.PlayEffect(EffectType.LOADING_GUN_PUT);
