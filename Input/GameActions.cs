@@ -5,6 +5,7 @@ using Items;
 using Player;
 using UI;
 using UI.InGame.QuickSlots;
+using UI.Tutorials;
 using UnityEngine;
 
 namespace Input {
@@ -44,6 +45,7 @@ namespace Input {
             Interact();
             Show_Inventory();
             PauseGame();
+            ShowTutorial();
 
             Scroll_Slots();
             SwitchToUpperSlot();
@@ -108,7 +110,7 @@ namespace Input {
         }
 
         private void Show_Inventory() {
-            if (UnityEngine.Input.GetKeyDown(KeyCode.I) || UnityEngine.Input.GetKeyDown(KeyCode.JoystickButton6)) {
+            if (UnityEngine.Input.GetKeyDown(KeyCode.I) || UnityEngine.Input. GetAxis("DpadHorizontal") < 0) {
                 UIManager.Instance.Show_Hide_interface();
             }
         }
@@ -118,6 +120,14 @@ namespace Input {
                 InputManager.Instance.uiSchemaContext = UISchemaSwitchType.GAME_MENU;
                 GameManager.Instance.PauseGame(true);
                 UIManager.Instance.Show_game_menu();
+            }
+        }
+
+        private void ShowTutorial() {
+            if (UnityEngine.Input.GetKeyDown(KeyCode.H) || UnityEngine.Input.GetKeyDown(KeyCode.JoystickButton6)) {
+                InputManager.Instance.uiSchemaContext = UISchemaSwitchType.TUTORIAL;
+                GameManager.Instance.PauseGame(true);
+                TutorialsManager.Instance.Show_Help();
             }
         }
 
@@ -214,7 +224,7 @@ namespace Input {
                 }
             }
 
-            if (BananaMan.Instance.activeItemThrowableCategory == ItemThrowableCategory.PLATEFORM) {
+            if (BananaMan.Instance.activeItemThrowableType == ItemThrowableType.PLATEFORM) {
                 if (UnityEngine.Input.GetKeyDown(KeyCode.Mouse0)) {
                     leftClickActivated = true;
                     SlotSwitch.Instance.ValidatePlateform();

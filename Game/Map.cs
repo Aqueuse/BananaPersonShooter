@@ -106,7 +106,6 @@ namespace Game {
         }
         
         public void StartBossFight(MonkeyType monkeyType) {
-            GameManager.Instance.isFigthing = true;
             AudioManager.Instance.PlayMusic(MusicType.BOSS, true);
 
             activeMonkeyType = monkeyType;

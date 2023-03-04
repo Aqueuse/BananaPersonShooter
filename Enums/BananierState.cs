@@ -1,5 +1,5 @@
 namespace Enums {
-    enum BananierState {
+    public enum BananierState {
         BABY,
         YOUNG,
         MATURE

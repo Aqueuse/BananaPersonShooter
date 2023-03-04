@@ -1,11 +1,9 @@
 ﻿using UnityEngine;
 
-
 namespace UI.InGame {
     public class UIFace : MonoSingleton<UIFace> {
-        private Canvas _faceCanvas;
-        private CanvasGroup _faceCanvasGroup;
-        private Camera _mainCamera;
+        [SerializeField] private GameObject facePlane;
+        
         private Animator _faceAnimator;
         private static readonly int Move = Animator.StringToHash("MOVE");
         private static readonly int Hurted = Animator.StringToHash("HURTED");
@@ -16,20 +14,11 @@ namespace UI.InGame {
         private static readonly int GooglyEyes = Animator.StringToHash("GOOGLY_EYES");
 
         private void Start() {
-            _faceCanvas = GetComponent<Canvas>();
-            _faceCanvasGroup = GetComponent<CanvasGroup>();
-            _mainCamera = Camera.main;
             _faceAnimator = GetComponent<Animator>();
+            
+            GetComponent<CanvasRenderer>().SetMesh(facePlane.GetComponent<MeshFilter>().mesh);
         }
-
-        void Update() {
-            // if (Vector3.Dot(_mainCamera.transform.forward, _faceCanvas.transform.forward) > 0) {
-            //     _faceCanvasGroup.alpha = 0;
-            // }
-            //
-            // else _faceCanvasGroup.alpha = 1;
-        }
-
+        
         public void MoveFaceAnimation(float speed) {
             _faceAnimator.SetFloat(Move, speed);
         }

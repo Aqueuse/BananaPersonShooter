@@ -6,6 +6,8 @@ namespace Save.Templates {
         public float health = 100;
         public float resistance = 100;
 
+        public AdvancementState advancementState = AdvancementState.NEW_GAME;
+        
         public float xWorldPosition = -1022.773f;
         public float yWorldPosition = 0.809f;
         public float zworldPosition = -2651.568f;

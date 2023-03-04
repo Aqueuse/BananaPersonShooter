@@ -20,15 +20,16 @@ namespace Game {
         public GameObject loadingScreen;
         private CinemachineFreeLook playerCamera;
     
-        public bool isInGame;
         public bool isGamePlaying;
-        public bool isFigthing;
-        public bool isNewGame;
+        
+        public GameContext gameContext;
         
         private void Start() {
             if (cameraMain != null) {
                 playerCamera = cameraMain.GetComponentInChildren<CinemachineFreeLook>();
             }
+
+            gameContext = GameContext.IN_HOME;
 
             BananaMan.Instance.GetComponent<RagDoll>().SetRagDoll(false);
         
@@ -36,11 +37,18 @@ namespace Game {
             AudioManager.Instance.PlayMusic(MusicType.HOME, false);
 
             InputManager.Instance.uiSchemaContext = UISchemaSwitchType.HOME_MENU;
-            InputManager.Instance.SwitchContext(GameContext.UI);
+            InputManager.Instance.SwitchContext(InputContext.UI);
+
+            // isInGame = false;
+            // isGamePlaying = false;
+            // isOnDialogue = false;
+            // isFigthing = false;
         }
         
         public void New_Game() {
             UIManager.Instance.Hide_home_menu();
+            StartScreen.Instance.enabled = false;
+            
             Cinematiques.Instance.Play(CinematiqueType.NEW_GAME);
         }
 
@@ -55,8 +63,6 @@ namespace Game {
             BananaGun.Instance.bananaGunInBack.SetActive(false);
             UIManager.Instance.Hide_HUD();
             
-            isNewGame = true;
-
             Play(GameData.Instance.currentSaveUuid, true);
         }
         
@@ -78,17 +84,17 @@ namespace Game {
             if (pause) {
                 Cursor.visible = true;
                 Cursor.lockState = CursorLockMode.None;
-                InputManager.Instance.SwitchContext(GameContext.UI);
+                InputManager.Instance.SwitchContext(InputContext.UI);
 
                 MainCamera.Instance.Set0Sensibility();
-
+                
                 isGamePlaying = false;
             }
 
             if (!pause) {
                 Cursor.visible = false;
                 Cursor.lockState = CursorLockMode.Locked;
-                InputManager.Instance.SwitchContext(GameContext.GAME);
+                InputManager.Instance.SwitchContext(InputContext.GAME);
                 
                 MainCamera.Instance.SetNormalSensibility();
                 
@@ -113,7 +119,7 @@ namespace Game {
         
                 Cursor.visible = true;
                 Cursor.lockState = CursorLockMode.None;
-                InputManager.Instance.SwitchContext(GameContext.UI);
+                InputManager.Instance.SwitchContext(InputContext.UI);
                 MainCamera.Instance.Set0Sensibility();
             
                 UIManager.Instance.Show_death_Panel();

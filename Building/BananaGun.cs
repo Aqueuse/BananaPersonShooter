@@ -1,4 +1,5 @@
 using Cameras;
+using Enums;
 using Player;
 using UI.InGame;
 using UnityEngine;
@@ -17,7 +18,7 @@ namespace Building {
             BananaMan.Instance.isGrabingBananaGun = false;
         }
         
-        public void GrabMover() {
+        public void GrabBananaGun() {
             bananaGun.SetActive(true);
             bananaGunInBack.SetActive(false);
 
@@ -27,7 +28,7 @@ namespace Building {
             wasFocus = _playerController.isFocusCamera;
             MainCamera.Instance.Switch_To_Shoot_Target();
             
-            UICrosshair.Instance.SetCrosshair(BananaMan.Instance.activeItemThrowableType, BananaMan.Instance.activeItemThrowableCategory);
+            UICrosshair.Instance.SetCrosshair(ItemThrowableType.CAVENDISH);
         }
 
         public void CancelMover() {
@@ -38,8 +39,6 @@ namespace Building {
 
             BananaMan.Instance.tpsPlayerAnimator.FocusCamera(wasFocus);
             MainCamera.Instance.Switch_To_TPS_Target();
-            
-            UICrosshair.Instance.SetCrosshair(BananaMan.Instance.activeItemThrowableType, BananaMan.Instance.activeItemThrowableCategory);
         }
     }
 }

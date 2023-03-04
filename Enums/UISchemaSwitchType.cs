@@ -13,6 +13,7 @@ namespace Enums {
         STATISTIQUES,
         BUILDSTATION,
         DIALOGUES,
-        TUTORIAL
+        TUTORIAL,
+        CINEMATIQUE
     }
 }

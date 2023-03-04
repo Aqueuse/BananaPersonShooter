@@ -14,13 +14,13 @@ namespace Save {
         
         public GameObject debrisContainer;
 
-        public GenericDictionary<string, MAPSavedData> mapSavedDatasByMapName;
+        public GenericDictionary<string, MapSavedData> mapSavedDatasByMapName;
 
         private void Start() {
-            mapSavedDatasByMapName = new GenericDictionary<string, MAPSavedData>();
+            mapSavedDatasByMapName = new GenericDictionary<string, MapSavedData>();
             
             foreach (var map in MapsManager.Instance.mapBySceneName) {
-                mapSavedDatasByMapName.Add(map.Key, new MAPSavedData());
+                mapSavedDatasByMapName.Add(map.Key, new MapSavedData());
             }
         }
     }

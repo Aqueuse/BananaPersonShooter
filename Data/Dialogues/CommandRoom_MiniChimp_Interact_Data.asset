@@ -1,0 +1,44 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 11d02683049a08e40adc8f990c25f778, type: 3}
+  m_Name: CommandRoom_MiniChimp_Interact_Data
+  m_EditorClassIdentifier: 
+  dialogue:
+    list:
+    - Key: 0
+      Value:
+      - Have you seen those big screens on the walls? They offer a perfect view of
+        the disastrous state of each zone.
+      - "Tu as vu ces grands \xE9crans sur les murs ? Ils offrent une vue parfaite
+        sur l'\xE9tat d\xE9sastreux de chaque zone."
+    - Key: 1
+      Value:
+      - Interact with them to highlight debris and banana trees.
+      - "Interagis avec pour mettre en surbrillance les d\xE9bris et les bananiers."
+    - Key: 2
+      Value:
+      - You can also use these screens to teleport to the entrance of each zone.
+      - "Tu peux aussi utiliser ces \xE9crans pour te t\xE9l\xE9porter \xE0 l'entr\xE9e
+        de chaque zone."
+    - Key: 3
+      Value:
+      - 'There''s also a summary of information for each zone in the interface of
+        your banana gun. In the statistics tab. '
+      - "Il y a \xE9galement un r\xE9sum\xE9 des informations de chaque zone dans
+        l'interface de ton pisto-banane. Dans l'onglet statistiques."
+    - Key: 4
+      Value:
+      - That should save you from having to come back here all the time. Although
+        I'm starting to enjoy your company!
+      - "\xC7a devrait t'\xE9viter de devoir revenir ici tout le temps. Bien que
+        je commence \xE0 appr\xE9cier ta compagnie !"
+    keyCollision: 0

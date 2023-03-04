@@ -47,7 +47,7 @@ namespace Input.UIActions {
         }
         
         private void Hide_Interface() {
-            if (UnityEngine.Input.GetKeyDown(KeyCode.I) || UnityEngine.Input.GetKeyDown(KeyCode.JoystickButton6)) {
+            if (UnityEngine.Input.GetKeyDown(KeyCode.I) || UnityEngine.Input.GetAxis("DpadHorizontal") > 0) {
                 UIManager.Instance.Show_Hide_interface();
             }
         }

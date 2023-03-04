@@ -3,7 +3,6 @@ using Enums;
 using Game;
 using Player;
 using Save.Templates;
-using UI.InGame;
 using UI.InGame.QuickSlots;
 using UnityEngine;
 
@@ -16,18 +15,19 @@ namespace Save {
         private GameObject debrisContainer;
         
         private BananaManSavedData bananaManSavedData;
-        private MAPSavedData mapSavedData;
+        private MapSavedData mapSavedData;
 
         public void ResetGameData() {
             ResetInventory();
             ResetSlots();
             ResetBananaManVitals();
+            ResetAdvancementType();
+            
             ResetPositionAndLastMap();
             ResetActiveItem();
             ResetMonkeysSasiety();
 
             // lock maps
-            // reinit mini chimps quests
             // reinit spaceship state
             // reinit assets positions on maps
         }
@@ -53,9 +53,6 @@ namespace Save {
             BananaMan.Instance.health = 100;
             BananaMan.Instance.resistance = 100;
 
-            UIVitals.Instance.Set_Health(BananaMan.Instance.health);
-            UIVitals.Instance.Set_Resistance(BananaMan.Instance.resistance);
-
             GameData.Instance.BananaManSavedData.health = 100;
             GameData.Instance.BananaManSavedData.resistance = 100;
         }
@@ -64,6 +61,10 @@ namespace Save {
             GameData.Instance.lastPositionOnMap = ScenesSwitch.Instance.teleportSpawnPointBySceneName["COMMANDROOM"].position;
             GameData.Instance.BananaManSavedData.last_map = "COMMANDROOM";
             BananaMan.Instance.transform.position = GameData.Instance.lastPositionOnMap;
+        }
+
+        private void ResetAdvancementType() {
+            GameData.Instance.BananaManSavedData.advancementState = AdvancementState.NEW_GAME;
         }
 
         private void ResetActiveItem() {

@@ -6,7 +6,6 @@ using Data;
 using Enums;
 using Game;
 using Player;
-using UI.InGame;
 using UI.InGame.Inventory;
 using UI.InGame.QuickSlots;
 using UI.Save;
@@ -65,9 +64,6 @@ namespace Save {
         private void LoadBananaManVitals() {
             BananaMan.Instance.health = GameData.Instance.BananaManSavedData.health;
             BananaMan.Instance.resistance = GameData.Instance.BananaManSavedData.resistance;
-
-            UIVitals.Instance.Set_Health(BananaMan.Instance.health);
-            UIVitals.Instance.Set_Resistance(BananaMan.Instance.resistance);
         }
 
         private void LoadPositionAndLastMap() {
@@ -91,7 +87,7 @@ namespace Save {
 
         private void LoadMonkeysSatiety() {
             foreach (var mapData in MapsManager.Instance.mapBySceneName) {
-                // TODO : add other monkeys and other maps
+                // add other monkeys and other maps
                 mapData.Value.monkeySasiety = GameData.Instance.mapSavedDatasByMapName[mapData.Key].monkey_sasiety;
             }
         }

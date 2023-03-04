@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 11d02683049a08e40adc8f990c25f778, type: 3}
+  m_Name: Forge_MiniChimp_Interact_Data
+  m_EditorClassIdentifier: 
+  dialogue:
+    list:
+    - Key: 0
+      Value:
+      - My colleague told me about you. You need platforms? Alright.
+      - "Mon coll\xE8gue m'a parl\xE9 de toi. Il te faut des plateformes ? Bien."
+    - Key: 1
+      Value:
+      - Start by putting these debris in the foundry to turn them into ingots.
+      - "Commence par placer ces d\xE9bris dans la fonderie pour en faire des lingots."
+    - Key: 2
+      Value:
+      - Then, you can use these ingots in the 3D printer to create your platforms.
+      - "Ensuite, tu pourra utiliser ces lingots dans l'imprimante 3D pour cr\xE9er
+        tes plateformes."
+    keyCollision: 0

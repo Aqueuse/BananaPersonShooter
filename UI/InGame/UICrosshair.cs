@@ -4,38 +4,20 @@ using UnityEngine.UI;
 
 namespace UI.InGame {
     public class UICrosshair : MonoSingleton<UICrosshair> {
-        [SerializeField] private GenericDictionary<ItemThrowableType, Image> crosshairs;
-        [SerializeField] private Image moverCrosshair;
+        [SerializeField] private GenericDictionary<ItemThrowableType, Image> crosshairsByItemType;
         
         private CanvasGroup _canvasGroup;
-        private Color crosshairColor;
 
         private void Start() {
             _canvasGroup = GetComponent<CanvasGroup>();
         }
     
-        public void SetCrosshair(ItemThrowableType itemThrowableType, ItemThrowableCategory itemThrowableCategory) {
-            foreach (var crosshair in crosshairs) {
-                crosshairColor = crosshair.Value.color;
-                crosshairColor.a = 0f;
-                crosshair.Value.color = crosshairColor;
+        public void SetCrosshair(ItemThrowableType itemThrowableType) {
+            foreach (var crosshair in crosshairsByItemType) {
+                crosshair.Value.enabled = false;
             }
 
-            moverCrosshair.color = crosshairColor;
-
-            crosshairColor.a = 1f;
-
-            if (itemThrowableCategory == ItemThrowableCategory.BANANA && itemThrowableType == ItemThrowableType.CAVENDISH) {
-                crosshairs[itemThrowableType].color = crosshairColor;
-            }
-
-            if (itemThrowableCategory == ItemThrowableCategory.EMPTY) {
-                crosshairs[itemThrowableType].color = crosshairColor;
-            }
-
-            if (itemThrowableCategory == ItemThrowableCategory.PLATEFORM) {
-                moverCrosshair.color = crosshairColor;
-            }
+            crosshairsByItemType[itemThrowableType].enabled = true;
         }
 
         public void ShowHideCrosshairs(bool isVisible) {

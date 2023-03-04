@@ -10,7 +10,7 @@ namespace MiniChimps {
         }
 
         public void PlayMiniChimpVoice(AudioClip audioClip) {
-            miniChimpAudioSource.volume = AudioManager.Instance.effectsLevel-0.2f;
+            miniChimpAudioSource.volume = AudioManager.Instance.voicesLevel;
             miniChimpAudioSource.clip = audioClip;
             miniChimpAudioSource.loop = false;
 

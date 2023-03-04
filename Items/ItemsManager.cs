@@ -1,5 +1,7 @@
 ﻿using Audio;
 using Building;
+using Building.Plateforms;
+using Dialogues;
 using Enums;
 using Game;
 using UI.InGame;
@@ -10,37 +12,39 @@ namespace Items {
     public class ItemsManager : MonoSingleton<ItemsManager> {
         private GameObject _interactedObject;
         private const int ItemsLayerMask = 1 << 8;
-
-        public GameObject lootMessage;
         
         private void Update() {
-            if (GameManager.Instance.isGamePlaying) {
+            if (GameManager.Instance.isGamePlaying && GameManager.Instance.gameContext == GameContext.IN_GAME) {
                 if (Physics.Raycast(transform.position, transform.forward,  out RaycastHit raycastHit, 10, ItemsLayerMask)) {
-                    if (raycastHit.transform.gameObject != _interactedObject) {
-                        lootMessage.SetActive(true);
-                        _interactedObject = raycastHit.transform.gameObject;
-                    }
+                    _interactedObject = raycastHit.transform.gameObject;
+                    UIinGameManager.Instance.HideAllUIsinGame();
+                    _interactedObject.GetComponent<UICanvasItemsStatic>().ShowUI();
                 }
                 else {
-                    _interactedObject = null;
-                    lootMessage.SetActive(false);
+                    if (_interactedObject != null) {
+                        UIinGameManager.Instance.HideAllUIsinGame();
+                        _interactedObject = null;
+                    }
                 }
             }
         }
 
+
         public void Validate() {
             if (_interactedObject != null) {
-                AudioManager.Instance.PlayEffect(EffectType.BUTTON_INTERACTION);
-                ItemType itemType = _interactedObject.GetComponent<Item>().itemType;
+                ItemStaticType itemStaticType = _interactedObject.GetComponent<ItemStatic>().itemStaticType;
 
-                switch (itemType) {
-                    case ItemType.DOOR:
+                switch (itemStaticType) {
+                    case ItemStaticType.DOOR:
+                        AudioManager.Instance.PlayEffect(EffectType.BUTTON_INTERACTION);
+                        
                         Transform spawnPoint = _interactedObject.GetComponent<Door>().spawnPoint;
                         ScenesSwitch.Instance.SwitchScene(_interactedObject.GetComponent<Door>().destinationMap.ToUpper(), spawnPoint.position, false);
                         _interactedObject = null;
-                        lootMessage.SetActive(false);
                         break;
-                    case ItemType.REGIME:
+                    case ItemStaticType.REGIME:
+                        AudioManager.Instance.PlayEffect(EffectType.BUTTON_INTERACTION);
+
                         var bananaType = _interactedObject.GetComponent<Regime>().bananasDataScriptableObject.itemThrowableType;
                         var quantity = _interactedObject.GetComponent<Regime>().bananasDataScriptableObject
                             .regimeQuantity;
@@ -53,20 +57,21 @@ namespace Items {
                         
                         _interactedObject.GetComponent<Regime>().GrabBananas();
                         break;
-                    case ItemType.BOSS_FIGHT_LAUNCHER:
-                        MapsManager.Instance.currentMap.StartBossFight(MonkeyType.KELSAIK);
+                    case ItemStaticType.MINI_CHIMP:
+                        DialoguesManager.Instance.SetActiveMiniChimp(_interactedObject);
+                        SimpleInteraction.Instance.StartSimpleInteraction();
                         break;
-                    case ItemType.MINI_CHIMP:
-//                        DialogueSystem.Instance.interact_with_minichimp(_interactedObject);
-                        break;
-                    case ItemType.MINI_CHIMP_BUILD_STATION:
+                    case ItemStaticType.BUILD_STATION:
                         BuildStation.Instance.ShowBuildStationInterface();
                         break;
-                    case ItemType.FOUNDRY:
+                    case ItemStaticType.FOUNDRY:
                         Foundry.Instance.Load_One_More_Debris();
                         break;
-                    case ItemType.INGOT_FOUNDRY_BOX:
+                    case ItemStaticType.INGOT_FOUNDRY_BOX:
                         Foundry.Instance.Give_Ingots_To_Player();
+                        break;
+                    case ItemStaticType.GRABBABLE:
+                        _interactedObject.GetComponent<GrabbableItem>().GrabPrintedItem();
                         break;
                 }
             }

@@ -1,4 +1,5 @@
 ﻿using Enums;
+using UI.InGame;
 using UnityEngine;
 
 namespace Items {
@@ -6,21 +7,17 @@ namespace Items {
         [SerializeField] private GenericDictionary<BananierState, GameObject> bananiersPrefabByState;
 
         public BananasDataScriptableObject bananasDataScriptableObject;
+        public BananierState bananierState;
         
-        public int activeBananierState;
-
-        private void Start() {
-            activeBananierState = 2;
-        }
-
         public void GrabBananas() {
             gameObject.layer = LayerMask.NameToLayer("Terrain");
+            GetComponent<UICanvasItemsStatic>().HideUI();
             
             foreach (var bananier in bananiersPrefabByState) {
                 bananier.Value.SetActive(bananier.Key == BananierState.BABY);
             }
 
-            activeBananierState = 0;
+            bananierState = BananierState.BABY;
 
             Invoke(nameof(Grown_young_bananier), 60);
         }
@@ -30,19 +27,20 @@ namespace Items {
                 bananier.Value.SetActive(bananier.Key == BananierState.YOUNG);
             }
 
-            activeBananierState = 1;
-            
+            bananierState = BananierState.YOUNG;
+
             Invoke(nameof(Grown_mature_bananier), 60);
         }
         
         private void Grown_mature_bananier() {
             gameObject.layer = LayerMask.NameToLayer("Items");
+            GetComponent<UICanvasItemsStatic>().ShowUI();
 
             foreach (var bananier in bananiersPrefabByState) {
                 bananier.Value.SetActive(bananier.Key == BananierState.MATURE);
             }
-
-            activeBananierState = 2;
+            
+            bananierState = BananierState.MATURE;
         }
     }
 }

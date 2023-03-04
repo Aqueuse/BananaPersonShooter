@@ -2,7 +2,6 @@
 using Game;
 using Monkeys;
 using Player;
-using UI.InGame;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -11,7 +10,7 @@ namespace Bananas {
         public BananasDataScriptableObject bananasDataScriptableObject;
 
         private void OnTriggerEnter(Collider other) {
-            if (GameManager.Instance.isFigthing && other.gameObject.CompareTag("Boss")) {
+            if (other.gameObject.CompareTag("Boss")) {
                 MapsManager.Instance.currentMap.GetActiveMonkey().GetComponent<Monkey>().Feed(BananaMan.Instance.activeItem.sasiety);
                 DestroyMe();
             }
@@ -33,7 +32,6 @@ namespace Bananas {
             else {
                 if (!collision.gameObject.CompareTag("Player")) {
                     BananaMan.Instance.resistance += 1;
-                    UIVitals.Instance.Set_Resistance(BananaMan.Instance.resistance);
                     DestroyMe();
                 }
             }

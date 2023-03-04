@@ -20,7 +20,7 @@ MonoBehaviour:
   effects:
   - aphrodisiac grenade, attracts monkeys during a few seconds
   - Grenade aphrodisiaque, attire les singes pendant quelques secondes
-  regimeQuantity: 60
+  regimeQuantity: 30
   sasiety: 5
   damageTime: 0
   healthBonus: 0.5

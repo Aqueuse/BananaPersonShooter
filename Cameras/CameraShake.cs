@@ -21,7 +21,7 @@ namespace Cameras {
             StartCoroutine(ShakeCoroutine(duration, amount));
         }
 
-        public IEnumerator ShakeCoroutine(float duration, float amount) {
+        private IEnumerator ShakeCoroutine(float duration, float amount) {
             while (duration > 0) {
                 transform.localPosition = _originalPos + Random.insideUnitSphere * amount;
 

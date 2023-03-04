@@ -36,7 +36,7 @@ namespace Game {
             bananaManInventory[itemThrowableType] += quantity;
             UISlotsManager.Instance.RefreshQuantityInQuickSlot(itemThrowableType);
         
-            UISlotsManager.Instance.TryToPutOnSlotManager(itemThrowableType, itemThrowableCategory);
+            UISlotsManager.Instance.TryToPutOnSlot(itemThrowableType, itemThrowableCategory);
         }
 
         public int GetQuantity(ItemThrowableType itemThrowableType) {

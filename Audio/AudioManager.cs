@@ -10,6 +10,7 @@ namespace Audio {
         [SerializeField] private AudioSource audioEffectsSource;
         [SerializeField] private AudioSource audioAmbianceSource;
         [SerializeField] private AudioSource audioMusicsSource;
+        
         [SerializeField] private AudioSource audioFootstepsSource;
         [SerializeField] private IntroloopPlayer audioIntroLoopMusicSource; // beautifully handle lopped music with intro
 
@@ -23,6 +24,7 @@ namespace Audio {
         public float musicLevel = 0.1f;
         public float ambianceLevel = 0.1f;
         public float effectsLevel = 0.1f;
+        public float voicesLevel = 0.1f;
 
         public FootStepType footStepType;
 
@@ -148,8 +150,7 @@ namespace Audio {
                     audioEffectsSource.volume = effectsLevel;
                     break;
                 case AudioSourcesType.VOICE:
-                    effectsLevel = level;
-                    audioEffectsSource.volume = effectsLevel;
+                    voicesLevel = level;
                     break;
             }
         }

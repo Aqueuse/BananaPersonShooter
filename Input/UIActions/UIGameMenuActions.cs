@@ -1,4 +1,6 @@
-﻿using UI;
+﻿using Enums;
+using Game;
+using UI;
 using UI.Menus;
 using UnityEngine;
 using UnityEngine.EventSystems;

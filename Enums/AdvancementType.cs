@@ -1,5 +1,0 @@
-enum AdvancementType {
-    FIRST_MINICHIMP_INTERACT,
-    FIRST_PLATEFORM_BUILD,
-    OTHER
-}

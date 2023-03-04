@@ -8,10 +8,6 @@ using UnityEngine.Localization.Settings;
 namespace Building {
     public class Debris : MonoBehaviour {
         [SerializeField] private float dissolved;
-        
-        public ItemThrowableCategory itemThrowableCategory;
-        public ItemThrowableType itemThrowableType;
-        
         public int prefabIndex;
 
         private static readonly int DissolveProperty = Shader.PropertyToID("Cutoff_Height");
@@ -29,7 +25,7 @@ namespace Building {
                 GetComponent<MeshRenderer>().materials[0].SetFloat(DissolveProperty, _dissolve);
                 
                 if (_dissolve < dissolved) {
-                    Inventory.Instance.AddQuantity(itemThrowableType, itemThrowableCategory, 1);
+                    Inventory.Instance.AddQuantity(ItemThrowableType.DEBRIS, ItemThrowableCategory.CRAFTABLE, 1);
                     AudioManager.Instance.StopAudioSource(AudioSourcesType.EFFECT);
                     MapsManager.Instance.currentMap.Clean();
                     MapsManager.Instance.currentMap.SaveDataOnMap();

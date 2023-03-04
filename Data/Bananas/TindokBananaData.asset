@@ -21,7 +21,7 @@ MonoBehaviour:
   - No nutritional value but will cling to walls, platforms and tree trunks
   - Aucune valeur nutritive mais permet de s'accrocher aux murs, aux plateformes
     et aux troncs des arbres
-  regimeQuantity: 60
+  regimeQuantity: 30
   sasiety: 5
   damageTime: 0
   healthBonus: 1

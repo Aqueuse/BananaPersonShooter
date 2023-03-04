@@ -1,4 +1,7 @@
+using Audio;
 using Cinemachine;
+using Enums;
+using Input.UIActions;
 using UnityEngine;
 using UnityEngine.Video;
 
@@ -9,6 +12,8 @@ namespace Game {
         [SerializeField] private Material videoMaterial;
         [SerializeField] private Material transparentVideoMaterial;
 
+        [SerializeField] private GameObject skipCinematiqueGameObject;
+        
         private VideoPlayer cinematiqueVideoPlayer;
         private MeshRenderer meshRenderer;
         private CinemachineVirtualCamera cinematiqueCamera;
@@ -28,6 +33,11 @@ namespace Game {
         }
 
         public void Play(CinematiqueType playedCinematiqueType) {
+            cinematiqueVideoPlayer.enabled = true;
+            skipCinematiqueGameObject.SetActive(true);
+            UISchemaSwitcher.Instance.SwitchUISchema(UISchemaSwitchType.CINEMATIQUE);
+            GameManager.Instance.gameContext = GameContext.IN_CINEMATIQUE;
+
             cinematiqueType = playedCinematiqueType;
             cinematiqueCamera.Priority = 100;
             meshRenderer.material = playedCinematiqueType == CinematiqueType.DEATH ? transparentVideoMaterial : videoMaterial;
@@ -35,14 +45,34 @@ namespace Game {
             cinematiqueVideoPlayer.clip = cinematiquesVideoClipsByType[playedCinematiqueType];
             cinematiqueVideoPlayer.frame = 0;
             cinematiqueVideoPlayer.Play();
+            
+            AudioManager.Instance.StopAudioSource(AudioSourcesType.MUSIC);
         }
 
-        void EndReached(VideoPlayer videoPlayer) {
+        public void Pause() {
+            cinematiqueVideoPlayer.Pause();
+        }
+
+        public void Unpause() {
+            cinematiqueVideoPlayer.Play();
+            UISchemaSwitcher.Instance.SwitchUISchema(UISchemaSwitchType.CINEMATIQUE);
+        }
+
+        public void Skip() {
             cinematiqueCamera.Priority = 3;
+            skipCinematiqueGameObject.SetActive(false);
+
+            cinematiqueVideoPlayer.enabled = false;
+            
+            //cinematiqueVideoPlayer.Stop();
 
             if (cinematiqueType == CinematiqueType.NEW_GAME) {
                 GameManager.Instance.Start_New_Game();
             }
+        }
+
+        void EndReached(VideoPlayer videoPlayer) {
+            Skip();
         }
     }
 }

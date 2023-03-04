@@ -87,25 +87,44 @@ namespace UI.InGame.QuickSlots {
             slotsMappingToInventory[selectedSlotIndex] = UInventory.Instance.GetSlotIndex(itemThrowableType);
             
             Get_Selected_Slot().SetSlot(itemThrowableType, itemThrowableCategory);
-            UICrosshair.Instance.SetCrosshair(itemThrowableType, itemThrowableCategory);
         }
 
-        public void TryToPutOnSlotManager(ItemThrowableType itemThrowableType, ItemThrowableCategory itemThrowableCategory) {
-            foreach (var uiSlot in uiSlotsScripts) {
-                if (uiSlot.itemThrowableType == itemThrowableType) {
-                    uiSlot.SetSlot(itemThrowableType, itemThrowableCategory);
-                    return;
-                }
+        public void TryToPutOnSlot(ItemThrowableType itemThrowableType, ItemThrowableCategory itemThrowableCategory) {
+            if (IsAlreadyInQuickSlot(itemThrowableType)) {
+                GetSlotWithItemType(itemThrowableType).SetSlot(itemThrowableType, itemThrowableCategory);
+            }
 
-                if (uiSlot.itemThrowableType == ItemThrowableType.EMPTY) {
-                    uiSlot.SetSlot(itemThrowableType, itemThrowableCategory);
-                    return;
+            else {
+                foreach (var uiSlot in uiSlotsScripts) {
+                    if (uiSlot.itemThrowableType == ItemThrowableType.EMPTY) {
+                        uiSlot.SetSlot(itemThrowableType, itemThrowableCategory);
+                        return;
+                    }
                 }
             }
+        }
+
+        private bool IsAlreadyInQuickSlot(ItemThrowableType itemThrowableType) {
+            foreach (var uiSlot in uiSlotsScripts) {
+                if (uiSlot.itemThrowableType == itemThrowableType) {
+                    return true;
+                }
+            }
+            return false;
         }
         
         public UISlot Get_Selected_Slot() {
             return uiSlotsScripts[selectedSlotIndex];
+        }
+
+        private UISlot GetSlotWithItemType(ItemThrowableType itemThrowableType) {
+            foreach (var uiSlot in uiSlotsScripts) {
+                if (uiSlot.itemThrowableType == itemThrowableType) {
+                    return uiSlot;
+                }
+            }
+
+            return null;
         }
 
         public ItemThrowableType Get_Selected_Slot_Type() {

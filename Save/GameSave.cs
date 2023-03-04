@@ -63,7 +63,7 @@ namespace Save {
 
         private void SaveMonkeysSatiety() {
             foreach (var map in MapsManager.Instance.mapBySceneName) {
-                // TODO : add other monkeys and other maps
+                // add other monkeys and other maps
                 GameData.Instance.mapSavedDatasByMapName[map.Key].monkey_sasiety = map.Value.monkeySasiety;
             }
         }

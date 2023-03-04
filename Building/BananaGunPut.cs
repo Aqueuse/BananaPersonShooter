@@ -3,6 +3,7 @@ using Enums;
 using Game;
 using Input;
 using Player;
+using UI.InGame;
 using UI.InGame.QuickSlots;
 using UnityEngine;
 
@@ -11,12 +12,22 @@ namespace Building {
         [SerializeField] private GameObject launchingBananaPoint;
         [SerializeField] private GenericDictionary<ItemThrowableType, GameObject> weaponsGameObjects;
 
+        [SerializeField] private GameObject moverTarget;
+
+        private void Update() {
+            if (BananaMan.Instance.isGrabingBananaGun) {
+                BananaGun.Instance.bananaGun.transform.LookAt(moverTarget.transform, Vector3.up);
+            }
+        }
+
         public void LoadingGun() {
             var lastSelectedThrowableCategory = BananaMan.Instance.activeItemThrowableCategory;
 
-            BananaGun.Instance.GrabMover();
-
             if (lastSelectedThrowableCategory == ItemThrowableCategory.BANANA) {
+                BananaGun.Instance.GrabBananaGun();
+                UICrosshair.Instance.SetCrosshair(ItemThrowableType.CAVENDISH);
+                UICrosshair.Instance.ShowHideCrosshairs(true);
+
                 AudioManager.Instance.PlayEffect(EffectType.LOADING_GUN_PUT);
                 Invoke(nameof(ThrowBanana), 1f);
             }
@@ -32,9 +43,10 @@ namespace Building {
                     banana.transform.SetParent(null);
 
                     // throw it with good speed forward the player
-                    banana.GetComponent<Rigidbody>().AddForce(BananaMan.Instance.transform.forward * 100, ForceMode.Impulse);
+                    banana.GetComponent<Rigidbody>().AddForce(GameManager.Instance.cameraMain.transform.forward * 200, ForceMode.Impulse);
                     AudioManager.Instance.PlayEffect(EffectType.THROW_BANANA);
                     AmmoReduce();
+                    UICrosshair.Instance.ShowHideCrosshairs(false);
                 }
             }
         }

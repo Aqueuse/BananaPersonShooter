@@ -1,10 +1,8 @@
 using System.Collections;
 using Audio;
-using Building;
 using Cameras;
 using Enums;
 using Input;
-using Items;
 using Player;
 using Save;
 using UI;
@@ -34,22 +32,24 @@ namespace Game {
                 BananaMan.Instance.transform.position = spawnPoint;
 
                 GameManager.Instance.loadingScreen.SetActive(false);
-                
+
                 if (sceneName.ToUpper() == "HOME") {
                     GameManager.Instance.cameraMain.clearFlags = CameraClearFlags.SolidColor;
                     Cursor.visible = true;
                     Cursor.lockState = CursorLockMode.None;
                     
                     InputManager.Instance.uiSchemaContext = UISchemaSwitchType.HOME_MENU;
-                    InputManager.Instance.SwitchContext(GameContext.UI);
+                    InputManager.Instance.SwitchContext(InputContext.UI);
 
                     GameManager.Instance.isGamePlaying = false;
-                    GameManager.Instance.isInGame = false;
-                    
+                    GameManager.Instance.gameContext = GameContext.IN_HOME;
+
                     UIManager.Instance.Hide_Game_Menu();
                     UIManager.Instance.Show_home_menu();
 
                     MainCamera.Instance.Set0Sensibility();
+
+//                    StartScreen.Instance.enabled = true;
 
                     BananaMan.Instance.GetComponent<CharacterController>().enabled = false;
                     BananaMan.Instance.GetComponent<PlayerController>().canMove = false;
@@ -69,23 +69,30 @@ namespace Game {
 
                     Cursor.visible = false;
                     Cursor.lockState = CursorLockMode.Locked;
-                    InputManager.Instance.SwitchContext(GameContext.GAME);
+                    
+                    InputManager.Instance.SwitchContext(InputContext.GAME);
+                    GameManager.Instance.gameContext = GameContext.IN_GAME;
+                    GameManager.Instance.isGamePlaying = true;
                     
                     UIManager.Instance.Hide_Game_Menu();
                     UIManager.Instance.Hide_home_menu();
-                    
-                    GameManager.Instance.isInGame = true;
-                    GameManager.Instance.isGamePlaying = true;
+
+                    if (GameData.Instance.BananaManSavedData.advancementState == AdvancementState.NEW_GAME) {
+                        GameManager.Instance.isGamePlaying = false;
+                    }
+                    else {
+                        UIManager.Instance.Show_HUD();
+                    }
                     
                     MainCamera.Instance.Return_back_To_Player();
                     MainCamera.Instance.SetNormalSensibility();
                     
                     BananaMan.Instance.GetComponent<CharacterController>().enabled = true;
                     BananaMan.Instance.GetComponent<PlayerController>().canMove = true;
+
+                    if (isTeleporting) Teleportation.Instance.TeleportDown();
                 }
 
-                if (isTeleporting) Teleportation.Instance.TeleportDown();
-                
                 AudioManager.Instance.SetMusiqueBySceneName(sceneName);
             }
         }
@@ -100,8 +107,7 @@ namespace Game {
             }
 
             UIManager.Instance.Hide_HUD();
-            UIManager.Instance.Hide_menus();
-            ItemsManager.Instance.lootMessage.SetActive(false);
+            UIManager.Instance.Hide_home_menu();
             
             // prevent banana man to fall while loading scene
             BananaMan.Instance.GetComponent<PlayerController>().canMove = false;

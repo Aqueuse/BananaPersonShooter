@@ -76,6 +76,8 @@ namespace Building {
         }
 
         public void Give_Ingots_To_Player() {
+            if (ingotsQuantity == 0) return;
+            
             Inventory.Instance.AddQuantity(ItemThrowableType.INGOT, ItemThrowableCategory.CRAFTABLE, ingotsQuantity);
             UIQueuedMessages.Instance.AddMessage(
                 "+ "+

@@ -13,8 +13,8 @@ namespace Player {
         private Rigidbody _rigidbody;
 
         public BananasDataScriptableObject activeItem;
-        public ItemThrowableType activeItemThrowableType = ItemThrowableType.DEBRIS;
-        public ItemThrowableCategory activeItemThrowableCategory = ItemThrowableCategory.CRAFTABLE;
+        public ItemThrowableType activeItemThrowableType = ItemThrowableType.EMPTY;
+        public ItemThrowableCategory activeItemThrowableCategory = ItemThrowableCategory.EMPTY;
         
         public bool isInAir;
         public bool isInWater;
@@ -24,7 +24,6 @@ namespace Player {
 
         public float health;
         public float resistance;
-        public AdvancementType advancementType = AdvancementType.FIRST_MINICHIMP_INTERACT;
         private int _damageCounter;
 
         public float lastY;
@@ -41,7 +40,7 @@ namespace Player {
         }
 
         private void Update() {
-            if (GameManager.Instance.isInGame) {
+            if (GameManager.Instance.gameContext == GameContext.IN_GAME) {
                 isInAir = !GetComponent<FootIK>().getGroundedResult().isGrounded;
                 
                 if (isInAir && !isRagdoll) {
@@ -126,9 +125,6 @@ namespace Player {
                     resistance += activeItem.resistanceBonus;
 
                     Inventory.Instance.RemoveQuantity(activeItemThrowableType, 1);
-            
-                    UIVitals.Instance.Set_Health(health);
-                    UIVitals.Instance.Set_Resistance(resistance);
                 }
             }
         }
@@ -143,11 +139,7 @@ namespace Player {
                 health -= damageAmount;
             }
             
-            UIVitals.Instance.Set_Health(health);
-            UIVitals.Instance.Set_Resistance(resistance);
-
             if (health - damageAmount <= 0) {
-                UIVitals.Instance.Set_Health(0);
                 GameManager.Instance.Death();
             }
             

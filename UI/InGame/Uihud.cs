@@ -1,4 +1,6 @@
+using Game;
 using TMPro;
+using UI.InGame.Statistics;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -25,6 +27,8 @@ namespace UI.InGame {
         }
 
         public void Switch_To_Statistics() {
+            UIStatistics.Instance.Refresh_Map_Statistics("MAP01");
+            
             UIManager.Instance.Set_active(inventoryCanvasGroup, false);
             UIManager.Instance.Set_active(statisticsCanvasGroup, true);
 

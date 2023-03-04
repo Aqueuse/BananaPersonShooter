@@ -1,21 +1,17 @@
+using Data.Craftables;
 using Enums;
 using UnityEngine;
 
 namespace Data {
     public class ScriptableObjectManager : MonoSingleton<ScriptableObjectManager> {
         [SerializeField] private GenericDictionary<ItemThrowableType, BananasDataScriptableObject> bananasDataScriptableObject;
-        [SerializeField] private PlateformDataScriptableObject plateformDataScriptableObject;
-        [SerializeField] private DebrisDataScriptableObject debrisDataScriptableObject;
-
+        [SerializeField] private GenericDictionary<ItemThrowableType, CraftableDataScriptableObject> craftablesDataScriptableObject;
+        
         public string GetDescription(ItemThrowableCategory itemThrowableCategory, ItemThrowableType itemThrowableType, int langageIndex) {
-            if (itemThrowableType == ItemThrowableType.DEBRIS) {
-                return debrisDataScriptableObject.description[langageIndex];
+            if (itemThrowableCategory == ItemThrowableCategory.CRAFTABLE) {
+                return craftablesDataScriptableObject[itemThrowableType].description[langageIndex];
             }
-
-            if (itemThrowableCategory == ItemThrowableCategory.PLATEFORM) {
-                return plateformDataScriptableObject.description[langageIndex];
-            }
-
+            
             return bananasDataScriptableObject[itemThrowableType].description[langageIndex];
         }
 
@@ -23,8 +19,12 @@ namespace Data {
             return bananasDataScriptableObject[itemThrowableType];
         }
         
-        public GenericDictionary<ItemThrowableType, int> GetPlateformCost() {
-            return plateformDataScriptableObject.Cost;
+        public int GetCraftCost(ItemThrowableType itemThrowableType, int quantity) {
+            return craftablesDataScriptableObject[itemThrowableType].cost*quantity;
+        }
+
+        public ItemThrowableType GetCraftIngredient(ItemThrowableType itemThrowableType) {
+            return craftablesDataScriptableObject[itemThrowableType].rawMaterial;
         }
     }
 }

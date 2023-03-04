@@ -4,7 +4,7 @@ using UI.InGame.Inventory;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace UI.InGame {
+namespace UI.InGame.QuickSlots {
     public class UISlot : MonoBehaviour {
         [SerializeField] private Image iconImage;
         [SerializeField] private Image colorImage;
@@ -24,7 +24,7 @@ namespace UI.InGame {
             itemThrowableCategory = ItemThrowableCategory.EMPTY;
 
             transparent.a = 0f;
-            visible.a = 100f;
+            visible.a = 64f;
             
             EmptySlot();
         }
@@ -33,10 +33,10 @@ namespace UI.InGame {
             itemThrowableType = slotItemThrowableType;
             itemThrowableCategory = slotItemThrowableCategory;
             
-            if (itemThrowableCategory != ItemThrowableCategory.EMPTY) {
+            if (itemThrowableType != ItemThrowableType.EMPTY) {
                 iconImage.sprite = UInventory.Instance.GetItemSprite(itemThrowableType);
                 iconImage.color = visible;
-                SetAmmoQuantity(global::Game.Inventory.Instance.GetQuantity(itemThrowableType));
+                SetAmmoQuantity(Game.Inventory.Instance.GetQuantity(itemThrowableType));
             }
             else {
                 EmptySlot();
@@ -46,6 +46,7 @@ namespace UI.InGame {
         public void EmptySlot() {
             itemThrowableType = ItemThrowableType.EMPTY;
             itemThrowableCategory = ItemThrowableCategory.EMPTY;
+            
             iconImage.color = transparent;
             quantityText.text = "";
         }

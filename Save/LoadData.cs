@@ -89,7 +89,7 @@ namespace Save {
             }
         }
         
-        public MAPSavedData GetMapDataByUuid(string saveUuid, string mapName) {
+        public MapSavedData GetMapDataByUuid(string saveUuid, string mapName) {
             savePath = Path.Combine(savesPath, saveUuid);
             var mapSavePath = Path.Combine(savePath, "MAPS");
 
@@ -98,7 +98,7 @@ namespace Save {
 
                 string mapDataString = File.ReadAllText(savefilePath);
 
-                return JsonConvert.DeserializeObject<MAPSavedData>(mapDataString);
+                return JsonConvert.DeserializeObject<MapSavedData>(mapDataString);
             }
 
             else {
@@ -109,7 +109,7 @@ namespace Save {
 
                 string map01DataString = File.ReadAllText(savefilePath);
 
-                return JsonConvert.DeserializeObject<MAPSavedData>(map01DataString);
+                return JsonConvert.DeserializeObject<MapSavedData>(map01DataString);
             }
         }
 

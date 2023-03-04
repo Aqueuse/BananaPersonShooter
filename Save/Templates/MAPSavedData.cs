@@ -1,7 +1,7 @@
 namespace Save.Templates {
-    public class MAPSavedData {
+    public class MapSavedData {
         public bool isDiscovered = false;
-        public float monkey_sasiety = 50;
-        public float cleanliness = 0;
+        public float monkey_sasiety = 0;
+        public float cleanliness = 30;
     }
 }

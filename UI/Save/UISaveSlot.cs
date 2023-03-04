@@ -52,7 +52,7 @@ namespace UI.Save {
             deleteButtonGameObject.SetActive(true);
             textPanel.SetActive(false);
 
-            if (GameManager.Instance.isInGame) {
+            if (GameManager.Instance.gameContext == GameContext.IN_GAME) {
                 saveButtonGameObject.SetActive(true);
             }
         }

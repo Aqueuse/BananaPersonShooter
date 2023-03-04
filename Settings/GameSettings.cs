@@ -44,8 +44,9 @@ namespace Settings {
 
         public void LoadSettings() {
             AudioManager.Instance.musicLevel = PlayerPrefs.GetFloat("musicLevel", 0.1f);
-            AudioManager.Instance.ambianceLevel = PlayerPrefs.GetFloat("ambianceLevel", 0.1f);
+            AudioManager.Instance.voicesLevel = PlayerPrefs.GetFloat("voicesLevel", 0.1f);
             AudioManager.Instance.effectsLevel = PlayerPrefs.GetFloat("effectsLevel", 0.1f);
+            AudioManager.Instance.ambianceLevel = PlayerPrefs.GetFloat("ambianceLevel", 0.1f);
 
             _isFullscreen = PlayerPrefs.GetString("isFullscreen", "True");
             _isVsync = PlayerPrefs.GetString("isVSync", "True");
@@ -93,17 +94,23 @@ namespace Settings {
             LocalizationSettings.SelectedLocale = LocalizationSettings.AvailableLocales.Locales[languageIndexSelected];
         }
 
-        public void SetEffectVolume(float level) {
-            AudioManager.Instance.SetVolume(AudioSourcesType.EFFECT, level);
-            AudioManager.Instance.SetVolume(AudioSourcesType.VOICE, level);
         
-            PlayerPrefs.SetFloat("effectsLevel", level);
-        }
-
         public void SetMusicVolume(float level) {
             AudioManager.Instance.SetVolume(AudioSourcesType.MUSIC, level);
 
             PlayerPrefs.SetFloat("musicLevel", level);
+        }
+
+        public void SetVoicesVolume(float level) {
+            AudioManager.Instance.SetVolume(AudioSourcesType.VOICE, level);
+
+            PlayerPrefs.SetFloat("voiceLevel", level);
+        }
+
+        public void SetEffectVolume(float level) {
+            AudioManager.Instance.SetVolume(AudioSourcesType.EFFECT, level);
+        
+            PlayerPrefs.SetFloat("effectsLevel", level);
         }
 
         public void SetAmbianceVolume(float level) {
@@ -149,8 +156,8 @@ namespace Settings {
         }
 
         public void InverseCameraVerticalAxis(bool isCameraInverted) {
-            playerCamera.m_YAxis.m_InvertInput = isCameraInverted;
-            PlayerPrefs.SetString("isCameraVerticalAxisInverted", isCameraInverted.ToString());            
+            playerCamera.m_YAxis.m_InvertInput = !isCameraInverted; // Cinemachine is naturally inverted
+            PlayerPrefs.SetString("isCameraVerticalAxisInverted", isCameraInverted.ToString());
         }
 
         // public void ResetAllBindings() {
