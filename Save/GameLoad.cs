@@ -2,17 +2,33 @@ using System;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using Building;
+using Building.Plateforms;
 using Data;
 using Enums;
 using Game;
+using Items;
 using Player;
-using UI.InGame.Inventory;
+using UI;
+using UI.InGame;
 using UI.InGame.QuickSlots;
 using UI.Save;
 using UnityEngine;
 
 namespace Save {
     public class GameLoad : MonoSingleton<GameLoad> {
+        public void LoadLastSave() {
+            GameManager.Instance.loadingScreen.SetActive(true);
+            UIManager.Instance.Hide_death_Panel();
+            Death.Instance.HideDeath();
+            
+            if (GameData.Instance.currentSaveUuid == null) ScenesSwitch.Instance.ReturnHome();
+            else {
+                
+                GameManager.Instance.Play(GameData.Instance.currentSaveUuid, false);
+            }
+        }
+        
         public void LoadGameData(string saveUuid) {
             GameData.Instance.currentSaveUuid = saveUuid;
             
@@ -23,7 +39,7 @@ namespace Save {
                 UISave.Instance.AppendSaveSlot(saveUuid);
             }
 
-            GameData.Instance.BananaManSavedData = LoadData.Instance.GetPlayerDataByUuid(saveUuid);
+            GameData.Instance.bananaManSavedData = LoadData.Instance.GetPlayerDataByUuid(saveUuid);
             
             LoadInventory();
             LoadSlots();
@@ -35,47 +51,41 @@ namespace Save {
             LoadMapsData();
             
             LoadData.Instance.LoadMapDebrisDataByUuid(saveUuid);
+            LoadData.Instance.LoadMapPlateformsDataByUuid(saveUuid);
         }
 
         private void LoadInventory() {
             foreach (var bananaSlot in Inventory.Instance.bananaManInventory.ToList()) {
                 Inventory.Instance.bananaManInventory[bananaSlot.Key] =
-                    GameData.Instance.BananaManSavedData.inventory[bananaSlot.Key.ToString()];
+                    GameData.Instance.bananaManSavedData.inventory[bananaSlot.Key.ToString()];
             }
         }
 
         private void LoadSlots() {
-            UInventory.Instance.ActivateAllInventory();  // activate temporally all the inventory to find the index of slots
-
-            foreach (var slot in UISlotsManager.Instance.slotsMappingToInventory.ToList()) {
-                var itemType = UInventory.Instance.GetItemThrowableTypeByIndex(GameData.Instance.BananaManSavedData.slots["inventorySlot"+slot.Key]);
-                var itemCategory = UInventory.Instance.GetItemThrowableCategoryByIndex(GameData.Instance.BananaManSavedData.slots["inventorySlot"+slot.Key]);
-
-                if (Inventory.Instance.bananaManInventory[itemType] > 0) {
-                    UISlotsManager.Instance.slotsMappingToInventory[slot.Key] = GameData.Instance.BananaManSavedData.slots["inventorySlot"+slot.Key];
-                    UISlotsManager.Instance.uiSlotsScripts[slot.Key].SetSlot(itemType, itemCategory);
-                    UISlotsManager.Instance.uiSlotsScripts[slot.Key].SetSprite(UInventory.Instance.GetItemSprite(itemType));
-                }
+            for (var i = 0; i < UISlotsManager.Instance.uiSlotsScripts.Count; i++) {
+                var itemType = (ItemThrowableType)Enum.Parse(typeof(ItemThrowableType), GameData.Instance.bananaManSavedData.slots[i]);
+                
+                UISlotsManager.Instance.uiSlotsScripts[i].SetSlot(itemType);
+                UISlotsManager.Instance.uiSlotsScripts[i].SetAmmoQuantity(Inventory.Instance.GetQuantity(itemType));
+                UISlotsManager.Instance.uiSlotsScripts[i].SetSprite(ItemsManager.Instance.itemsDataScriptableObject.itemSpriteByItemType[itemType]);
             }
-
-            UInventory.Instance.ActivateAllInventory();  // activate temporally all the inventory to find the index of slots
         }
 
         private void LoadBananaManVitals() {
-            BananaMan.Instance.health = GameData.Instance.BananaManSavedData.health;
-            BananaMan.Instance.resistance = GameData.Instance.BananaManSavedData.resistance;
+            BananaMan.Instance.health = GameData.Instance.bananaManSavedData.health;
+            BananaMan.Instance.resistance = GameData.Instance.bananaManSavedData.resistance;
         }
 
         private void LoadPositionAndLastMap() {
              GameData.Instance.lastPositionOnMap = new Vector3(
-                GameData.Instance.BananaManSavedData.xWorldPosition,
-                GameData.Instance.BananaManSavedData.yWorldPosition,
-                GameData.Instance.BananaManSavedData.zworldPosition);
+                GameData.Instance.bananaManSavedData.xWorldPosition,
+                GameData.Instance.bananaManSavedData.yWorldPosition,
+                GameData.Instance.bananaManSavedData.zworldPosition);
         }
         
         private void LoadActiveItem() {
-            var activeItemType = UInventory.Instance.GetItemThrowableTypeByIndex(GameData.Instance.BananaManSavedData.active_item);
-            var activeItemCategory = UInventory.Instance.GetItemThrowableCategoryByIndex(GameData.Instance.BananaManSavedData.active_item);
+            var activeItemType = GameData.Instance.bananaManSavedData.activeItem;
+            var activeItemCategory = ItemsManager.Instance.itemsDataScriptableObject.itemsThrowableCategoriesByType[activeItemType];
 
             if (activeItemCategory == ItemThrowableCategory.BANANA) {
                 BananaMan.Instance.activeItem = ScriptableObjectManager.Instance.GetBananaScriptableObject(activeItemType);
@@ -96,28 +106,47 @@ namespace Save {
 
         private void LoadMapsData() {
             foreach (var map in MapsManager.Instance.mapBySceneName) {
-                GameData.Instance.mapSavedDatasByMapName[map.Key] = LoadData.Instance.GetMapDataByUuid(GameData.Instance.currentSaveUuid, map.Key);
+                var savedMapData = LoadData.Instance.GetMapDataByUuid(GameData.Instance.currentSaveUuid, map.Key);
+                
+                GameData.Instance.mapSavedDatasByMapName[map.Key] = savedMapData;
+                
+                MapsManager.Instance.mapBySceneName[map.Key].isDiscovered = savedMapData.isDiscovered;
+                MapsManager.Instance.mapBySceneName[map.Key].isShowingDebris = savedMapData.isShowingDebris;
+                MapsManager.Instance.mapBySceneName[map.Key].isShowingBananaTrees = savedMapData.isShowingBananaTrees;
             }
         }
 
         public void RespawnDebrisOnMap() {
-            if (GameObject.FindGameObjectWithTag("debrisContainer") != null) {
-                var mapData = MapsManager.Instance.currentMap;
+            var mapData = MapsManager.Instance.currentMap;
 
-                if (mapData.debrisIndex.Length != 0) {
-                    GameData.Instance.debrisContainer = GameObject.FindGameObjectWithTag("debrisContainer");
-                    Destroy(GameData.Instance.debrisContainer);
+            Destroy(MapItems.Instance.debrisContainer);
 
-                    GameData.Instance.debrisContainer = new GameObject("debris");
-                    GameData.Instance.debrisContainer.transform.parent = null;
-                    GameData.Instance.debrisContainer.tag = "debrisContainer";
-
-                    for (var i=0; i<mapData.debrisIndex.Length; i++) {
-                        var debris = Instantiate(GameData.Instance.debrisPrefab[mapData.debrisIndex[i]], GameData.Instance.debrisContainer.transform, true);
-                        debris.transform.position = mapData.debrisPosition[i];
-                        debris.transform.rotation = mapData.debrisRotation[i];
-                    }
+            MapItems.Instance.debrisContainer = new GameObject("debris") {
+                transform = {
+                    parent = MapItems.Instance.transform
                 }
+            };
+
+            for (var i=0; i<mapData.debrisIndex.Length; i++) {
+                var debris = Instantiate(GameData.Instance.debrisPrefab[mapData.debrisIndex[i]], MapItems.Instance.debrisContainer.transform, true);
+                debris.transform.position = mapData.debrisPosition[i];
+                debris.transform.rotation = mapData.debrisRotation[i];
+            }
+            
+            UIinGameManager.Instance.SetHiddablesVisibility();
+        }
+
+        public void RespawnPlateformsOnMap() {
+            var mapData = MapsManager.Instance.currentMap;
+
+            for (var i = 0; i < mapData.plateformsPosition.Count; i++) {
+                var plateforme = Instantiate(GameData.Instance.plateformPrefab, MapItems.Instance.plateformsContainer.transform, true);
+                plateforme.transform.position = mapData.plateformsPosition[i];
+
+                var plateformClass = plateforme.GetComponent<Plateform>();
+                var plateformType = mapData.plateformsTypes[i];
+                
+                plateformClass.RespawnPlateform(plateformType);
             }
         }
     }

@@ -1,11 +1,10 @@
 namespace Enums {
     public enum EffectType {
-        BANANASPLASH,
-        BUTTON_INTERACTION,
-        DESINTEGRATION,
-        LOADING_GUN_PUT,
-        THROW_BANANA,
-        INGOT_CREATED,
-        PRINTER
+        BANANASPLASH = 0,
+        BUTTON_INTERACTION = 1,
+        DESINTEGRATION = 2,
+        THROW_BANANA = 3,
+        GRAB_BANANAS = 4,
+        OPEN_DOOR = 5
     }
 }

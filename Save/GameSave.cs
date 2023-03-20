@@ -1,8 +1,8 @@
 using System;
 using System.Globalization;
+using Enums;
 using Game;
 using Player;
-using UI.InGame.Inventory;
 using UI.InGame.QuickSlots;
 using UI.Save;
 
@@ -24,41 +24,47 @@ namespace Save {
             SavePosition();
             SaveActiveItem();
             SaveMonkeysSatiety();
-
+            
             SaveDebrisPositionAndRotationByUuid(saveUuid);
+            SavePlateformsPositionAndTypeByUuid(saveUuid);
 
             SaveData.Instance.Save(saveUuid, date);
         }
 
         private void SaveInventory() {
             foreach (var inventorySlot in Inventory.Instance.bananaManInventory) {
-                GameData.Instance.BananaManSavedData.inventory[inventorySlot.Key.ToString()] = inventorySlot.Value;
+                GameData.Instance.bananaManSavedData.inventory[inventorySlot.Key.ToString()] = inventorySlot.Value;
             }
         }
 
         private void SaveSlots() {
-            foreach (var slot in UISlotsManager.Instance.slotsMappingToInventory) {
-                GameData.Instance.BananaManSavedData.slots["inventorySlot" + slot.Key] = slot.Value;
+        GameData.Instance.bananaManSavedData.slots = new() {
+                ItemThrowableType.EMPTY.ToString(), 
+                ItemThrowableType.EMPTY.ToString(), 
+                ItemThrowableType.EMPTY.ToString(), 
+                ItemThrowableType.EMPTY.ToString() 
+            };
+            
+            for (int i = 0; i < UISlotsManager.Instance.uiSlotsScripts.Count; i++) {
+                GameData.Instance.bananaManSavedData.slots[i] =
+                    UISlotsManager.Instance.uiSlotsScripts[i].itemThrowableType.ToString();
             }
         }
 
         private void SaveBananaManVitals() {
-            GameData.Instance.BananaManSavedData.health = BananaMan.Instance.health; 
-            GameData.Instance.BananaManSavedData.resistance = BananaMan.Instance.resistance; 
+            GameData.Instance.bananaManSavedData.health = BananaMan.Instance.health; 
+            GameData.Instance.bananaManSavedData.resistance = BananaMan.Instance.resistance; 
         }
 
         private void SavePosition() {
             GameData.Instance.lastPositionOnMap = BananaMan.Instance.transform.position;
-            GameData.Instance.BananaManSavedData.xWorldPosition = GameData.Instance.lastPositionOnMap.x;
-            GameData.Instance.BananaManSavedData.yWorldPosition = GameData.Instance.lastPositionOnMap.y;
-            GameData.Instance.BananaManSavedData.zworldPosition = GameData.Instance.lastPositionOnMap.z;
+            GameData.Instance.bananaManSavedData.xWorldPosition = GameData.Instance.lastPositionOnMap.x;
+            GameData.Instance.bananaManSavedData.yWorldPosition = GameData.Instance.lastPositionOnMap.y;
+            GameData.Instance.bananaManSavedData.zworldPosition = GameData.Instance.lastPositionOnMap.z;
         }
 
         private void SaveActiveItem() {
-            UInventory.Instance.ActivateAllInventory();
-
-            GameData.Instance.BananaManSavedData.active_item =
-                UInventory.Instance.GetSlotIndex(BananaMan.Instance.activeItemThrowableType); 
+            GameData.Instance.bananaManSavedData.activeItem = BananaMan.Instance.activeItemThrowableType;
         }
 
         private void SaveMonkeysSatiety() {
@@ -73,7 +79,7 @@ namespace Save {
         private void SaveDebrisPositionAndRotationByUuid(string saveUuid) {
             foreach (var map in MapsManager.Instance.mapBySceneName) {
                 if (map.Value.hasDebris && map.Value.debrisIndex.Length != 0) {
-                    SaveData.Instance.SaveMapDataByUuid(
+                    SaveData.Instance.SaveMapDebrisDataByUuid(
                         map.Value.debrisPosition,
                         map.Value.debrisRotation,
                         map.Value.debrisIndex,
@@ -81,6 +87,14 @@ namespace Save {
                         saveUuid
                     );
                 }
+            }
+        }
+        
+        /////////////////// PLATEFORMS ///////////////////////
+
+        private void SavePlateformsPositionAndTypeByUuid(string saveUuid) {
+            foreach (var map in MapsManager.Instance.mapBySceneName) {
+                SaveData.Instance.SaveMapPlateformsDataByUuid(map.Value.plateformsPosition, map.Value.plateformsTypes, map.Key, saveUuid);
             }
         }
     }

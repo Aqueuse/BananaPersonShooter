@@ -1,4 +1,4 @@
 public enum CinematiqueType {
-    NEW_GAME,
-    DEATH
+    NEW_GAME = 0,
+    DEATH = 1
 }

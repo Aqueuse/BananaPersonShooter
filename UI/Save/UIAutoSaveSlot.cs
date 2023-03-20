@@ -27,7 +27,7 @@ namespace UI.Save {
         }
 
         public void Select() {
-            AudioManager.Instance.PlayEffect(EffectType.BUTTON_INTERACTION);
+            AudioManager.Instance.PlayEffect(EffectType.BUTTON_INTERACTION, 0);
             UISave.Instance.UnselectAll();
             activatedMask.SetActive(true);
         }
@@ -39,7 +39,7 @@ namespace UI.Save {
         }
 
         public void ShowSaveOptions() {
-            AudioManager.Instance.PlayEffect(EffectType.BUTTON_INTERACTION);
+            AudioManager.Instance.PlayEffect(EffectType.BUTTON_INTERACTION, 0);
             loadButtonGameObject.SetActive(true);
             textPanel.SetActive(false);
         }

@@ -16,6 +16,7 @@ namespace Input {
         public void SwitchContext(InputContext newInputContext) {
             if (newInputContext == InputContext.UI) {
                 _gameActions.enabled = false;
+                
                 _uiSchemaSwitcher.SwitchUISchema(uiSchemaContext);
             }
             else {

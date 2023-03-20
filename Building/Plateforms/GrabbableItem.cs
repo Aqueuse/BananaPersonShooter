@@ -7,7 +7,7 @@ using UnityEngine.Localization.Settings;
 
 namespace Building.Plateforms {
     public class GrabbableItem : MonoBehaviour {
-        [SerializeField] private CraftableDataScriptableObject craftableDataScriptableObject;
+        public CraftableDataScriptableObject craftableDataScriptableObject;
         [SerializeField] private TextMeshProUGUI quantityText;
 
         public int quantity;
@@ -23,7 +23,7 @@ namespace Building.Plateforms {
         }
 
         public void GrabPrintedItem() {
-            Inventory.Instance.AddQuantity(craftableDataScriptableObject.itemThrowableType, craftableDataScriptableObject.itemThrowableCategory, quantity);
+            Inventory.Instance.AddQuantity(craftableDataScriptableObject.itemThrowableType, quantity);
 
             if (quantity == 1) {
                 var message = "+ "+quantity+" " +LocalizationSettings.Instance.GetStringDatabase().GetLocalizedString("platform");

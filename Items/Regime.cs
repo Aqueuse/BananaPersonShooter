@@ -8,10 +8,16 @@ namespace Items {
 
         public BananasDataScriptableObject bananasDataScriptableObject;
         public BananierState bananierState;
-        
+
+        private UICanvasItemsStatic _uiCanvasItemsStatic;
+
+        private void Start() {
+            _uiCanvasItemsStatic = GetComponentInChildren<UICanvasItemsStatic>();
+        }
+
         public void GrabBananas() {
             gameObject.layer = LayerMask.NameToLayer("Terrain");
-            GetComponent<UICanvasItemsStatic>().HideUI();
+            _uiCanvasItemsStatic.HideUI();
             
             foreach (var bananier in bananiersPrefabByState) {
                 bananier.Value.SetActive(bananier.Key == BananierState.BABY);
@@ -34,7 +40,7 @@ namespace Items {
         
         private void Grown_mature_bananier() {
             gameObject.layer = LayerMask.NameToLayer("Items");
-            GetComponent<UICanvasItemsStatic>().ShowUI();
+            _uiCanvasItemsStatic.ShowUI();
 
             foreach (var bananier in bananiersPrefabByState) {
                 bananier.Value.SetActive(bananier.Key == BananierState.MATURE);

@@ -2,10 +2,10 @@ using UnityEngine;
 
 namespace VFX {
     public enum TeleportState {
-        VISIBLE,
-        INVISIBLE,
-        DISAPPEAR,
-        REAPPEAR
+        VISIBLE = 0,
+        INVISIBLE = 1,
+        DISAPPEAR = 2,
+        REAPPEAR = 3
     }
     
     public class Teleportation : MonoSingleton<Teleportation> {

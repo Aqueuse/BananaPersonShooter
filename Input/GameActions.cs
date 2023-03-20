@@ -1,4 +1,5 @@
 ﻿using Building;
+using Cameras;
 using Enums;
 using Game;
 using Items;
@@ -7,6 +8,7 @@ using UI;
 using UI.InGame.QuickSlots;
 using UI.Tutorials;
 using UnityEngine;
+using ItemsManager = Items.ItemsManager;
 
 namespace Input {
     public class GameActions : MonoSingleton<GameActions> {
@@ -58,6 +60,8 @@ namespace Input {
             
             Aspire();
             Shoot();
+            
+            ZoomDezoomCamera();
         }
         
         private void Move() {
@@ -239,6 +243,32 @@ namespace Input {
                     rightTriggerActivated = false;
                 }
             }
+        }
+        
+        private void ZoomDezoomCamera() {
+            scrollSlotsValue = UnityEngine.Input.mouseScrollDelta;
+
+            float scrollValue = scrollSlotsValue.y;
+
+            if (UnityEngine.Input.GetKey(KeyCode.LeftShift) && scrollValue > 0) {
+                MainCamera.Instance.ZoomCamera();
+            }
+
+            if (UnityEngine.Input.GetKey(KeyCode.LeftShift) && scrollValue < 0) {
+                MainCamera.Instance.DezoomCamera();
+            }
+
+            if (UnityEngine.Input.GetKey(KeyCode.JoystickButton8) && UnityEngine.Input.GetAxis("Right Stick Y") > 0) {
+                MainCamera.Instance.ZoomCamera();
+            }
+
+            if (UnityEngine.Input.GetKey(KeyCode.JoystickButton8) && UnityEngine.Input.GetAxis("Right Stick Y") < 0) {
+                MainCamera.Instance.DezoomCamera();
+            }
+        }
+
+        private void OnDisable() {
+            BananaMan.Instance.GetComponent<PlayerController>().ResetPlayer();
         }
     }
 }

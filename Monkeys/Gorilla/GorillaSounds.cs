@@ -8,22 +8,19 @@ namespace Monkeys.Gorilla {
 
         [SerializeField] private AudioClip[] gorillaSadSounds;
 
-        private AudioSource _audioSource;
-
-        void Start() {
-            _audioSource = GetComponent<AudioSource>();
-        }
-
+        [SerializeField] private AudioSource _audioVocalSource;
+        [SerializeField] private AudioSource _audioFootstepsSource;
+        
         public void PlayQuickRoarSound() {
-            _audioSource.clip = gorillaQuickRoarSounds.clip[Random.Range(0, gorillaQuickRoarSounds.clip.Length)];
-            _audioSource.volume = gorillaQuickRoarSounds.volume;
-            _audioSource.Play();
+            _audioVocalSource.clip = gorillaQuickRoarSounds.clip[Random.Range(0, gorillaQuickRoarSounds.clip.Length)];
+            _audioVocalSource.volume = gorillaQuickRoarSounds.volume;
+            _audioVocalSource.Play();
         }
 
         public void PlayBoomSound() {
-            _audioSource.clip = boomSound.clip[0];
-            _audioSource.volume = boomSound.volume;
-            _audioSource.Play();
+            _audioVocalSource.clip = boomSound.clip[0];
+            _audioVocalSource.volume = boomSound.volume;
+            _audioVocalSource.Play();
         }
 
         public void PlaySadMonkeySounds() {
@@ -34,13 +31,15 @@ namespace Monkeys.Gorilla {
             float randomTime = Random.Range(10, 20);
         
             foreach (var gorillaSadSound in gorillaSadSounds) {
-                _audioSource.clip = gorillaSadSounds[Random.Range(0, gorillaSadSounds.Length)];
-                _audioSource.Play();
+                _audioVocalSource.clip = gorillaSadSounds[Random.Range(0, gorillaSadSounds.Length)];
+                _audioVocalSource.Play();
             }
         
             Invoke(nameof(GorillaRitournelle), randomTime);
         }
 
-
+        public void GorillaFootstep() {
+            
+        }
     }
 }

@@ -5,31 +5,38 @@ using Game;
 using Input;
 using TMPro;
 using UI;
+using UI.InGame;
 using UI.InGame.BuildStation;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.Localization.Settings;
 
 namespace Building {
     public class BuildStation : MonoSingleton<BuildStation> {
         [SerializeField] private CanvasGroup miniChimpPlateformBuilderCanvasGroup;
+        [SerializeField] private UICanvasItemsStatic buildStationUiCanvasItemsStatic;
+        
         [SerializeField] private TextMeshProUGUI costQuantityText;
+        [SerializeField] private TextMeshProUGUI ingredientText;
 
         [SerializeField] private GenericDictionary<string, GameObject> craftablesUIitems;
         [SerializeField] private GenericDictionary<ItemThrowableType, GameObject> grabbableItemsByType;
-
-        private Animator buildStationAnimator;
         
-        private ItemThrowableType activeItemType;
-        private int quantityToPrint;
-        private ItemThrowableType rawMaterial;
+        private Animator _buildStationAnimator;
+        private AudioSource _audioBuildstationSource;
         
-        private int costByUnit;
+        private ItemThrowableType _activeItemType;
+        private int _quantityToPrint;
+        private ItemThrowableType _rawMaterial;
         
-        private GameObject printedItemGameObject;
+        private int _totalCost;
+        
+        private GameObject _printedItemGameObject;
         private static readonly int PrintTrigger = Animator.StringToHash("PRINT");
-
+        
         private void Start() {
-            buildStationAnimator = GetComponent<Animator>();
+            _buildStationAnimator = GetComponent<Animator>();
+            _audioBuildstationSource = GetComponentInChildren<AudioSource>();
         }
 
         public void ShowBuildStationInterface() {
@@ -62,39 +69,49 @@ namespace Building {
         }
         
         public void SetActivePrint(UIBuildStationInventorySlot uiStationInventorySlot) {
-            activeItemType = uiStationInventorySlot.itemThrowableType;
-            quantityToPrint += uiStationInventorySlot.quantity;
+            _activeItemType = uiStationInventorySlot.itemThrowableType;
+            _rawMaterial = ScriptableObjectManager.Instance.GetCraftIngredient(_activeItemType);
 
-            rawMaterial = ScriptableObjectManager.Instance.GetCraftIngredient(activeItemType);
-            costByUnit = ScriptableObjectManager.Instance.GetCraftCost(activeItemType, 1);
+            ingredientText.text = LocalizationSettings.Instance.GetStringDatabase().GetLocalizedString(_rawMaterial.ToString().ToLower());
+            _totalCost = ScriptableObjectManager.Instance.GetCraftCost(_activeItemType, uiStationInventorySlot.quantity);
+            costQuantityText.text = "("+_totalCost+")";
             
-            costQuantityText.text = ScriptableObjectManager.Instance.GetCraftCost(activeItemType, quantityToPrint).ToString();
+            if (Inventory.Instance.bananaManInventory[_rawMaterial] >= _quantityToPrint+ScriptableObjectManager.Instance.GetCraftCost(_activeItemType, uiStationInventorySlot.quantity)) {
+                _quantityToPrint = uiStationInventorySlot.quantity;
+            }
         }
 
         public void Print() {
-            if (quantityToPrint > 0) {
-                Inventory.Instance.RemoveQuantity(rawMaterial, costByUnit*quantityToPrint);
-                buildStationAnimator.SetTrigger(PrintTrigger);
-            
+            if (_quantityToPrint > 0) {
+                Inventory.Instance.RemoveQuantity(_rawMaterial, _totalCost);
+                _buildStationAnimator.SetTrigger(PrintTrigger);
+                _audioBuildstationSource.Play();
+
                 HideBuildStationInterface();
+                buildStationUiCanvasItemsStatic.gameObject.layer = LayerMask.NameToLayer("Default");
+                buildStationUiCanvasItemsStatic.HideUI();
             }
         }
         
         public void AddToStack() {
-            if (printedItemGameObject == null) {
-                printedItemGameObject = Instantiate(grabbableItemsByType[activeItemType]);
+            if (_printedItemGameObject == null) {
+                _printedItemGameObject = Instantiate(grabbableItemsByType[_activeItemType]);
             }
 
-            printedItemGameObject.GetComponent<GrabbableItem>().AddQuantity(1);
-            quantityToPrint--;
+            _printedItemGameObject.GetComponent<GrabbableItem>().AddQuantity(1);
+            _quantityToPrint--;
             
-            if (quantityToPrint > 0) {
-                buildStationAnimator.SetTrigger(PrintTrigger);
+            if (_quantityToPrint > 0) {
+                _buildStationAnimator.SetTrigger(PrintTrigger);
+            }
+            else {
+                _audioBuildstationSource.Stop();
             }
         }
 
         public void RemovePlatform() {
-            Destroy(printedItemGameObject);
+            Destroy(_printedItemGameObject);
+            buildStationUiCanvasItemsStatic.gameObject.layer = LayerMask.NameToLayer("Items");
         }
 
         private void UnSelectAll() {

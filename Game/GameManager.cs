@@ -9,7 +9,6 @@ using Player;
 using Save;
 using Settings;
 using UI;
-using UI.InGame;
 using UI.Save;
 using UnityEngine;
 
@@ -18,7 +17,7 @@ namespace Game {
         [SerializeField] public Camera cameraMain;
 
         public GameObject loadingScreen;
-        private CinemachineFreeLook playerCamera;
+        private CinemachineFreeLook _playerCamera;
     
         public bool isGamePlaying;
         
@@ -26,14 +25,14 @@ namespace Game {
         
         private void Start() {
             if (cameraMain != null) {
-                playerCamera = cameraMain.GetComponentInChildren<CinemachineFreeLook>();
+                _playerCamera = cameraMain.GetComponentInChildren<CinemachineFreeLook>();
             }
 
             gameContext = GameContext.IN_HOME;
 
             BananaMan.Instance.GetComponent<RagDoll>().SetRagDoll(false);
         
-            GameSettings.Instance.LoadSettings();
+            GameSettings.Instance.LoadSettings(); 
             AudioManager.Instance.PlayMusic(MusicType.HOME, false);
 
             InputManager.Instance.uiSchemaContext = UISchemaSwitchType.HOME_MENU;
@@ -75,9 +74,9 @@ namespace Game {
             loadingScreen.SetActive(true);
             
             cameraMain.clearFlags = CameraClearFlags.Skybox;
-            playerCamera.Priority = 10;
+            _playerCamera.Priority = 10;
             
-            ScenesSwitch.Instance.SwitchScene(GameData.Instance.BananaManSavedData.last_map, GameData.Instance.lastPositionOnMap, newGame);
+            ScenesSwitch.Instance.SwitchScene(GameData.Instance.bananaManSavedData.lastMap, GameData.Instance.lastPositionOnMap, newGame);
         }
 
         public void PauseGame(bool pause) {
@@ -87,6 +86,8 @@ namespace Game {
                 InputManager.Instance.SwitchContext(InputContext.UI);
 
                 MainCamera.Instance.Set0Sensibility();
+                
+                if (MapsManager.Instance.currentMap.activeMonkeyType != MonkeyType.NONE) MapsManager.Instance.currentMap.activeMonkey.PauseMonkey();
                 
                 isGamePlaying = false;
             }
@@ -98,32 +99,15 @@ namespace Game {
                 
                 MainCamera.Instance.SetNormalSensibility();
                 
+                if (MapsManager.Instance.currentMap.activeMonkeyType != MonkeyType.NONE) MapsManager.Instance.currentMap.activeMonkey.UnpauseMonkey();
+
                 isGamePlaying = true;
             }
         }
 
         public void Quit() {
+            GameSettings.Instance.prefs.Save();
             Application.Quit();
-        }
-    
-        public void Death() {
-            if (isGamePlaying) {
-                isGamePlaying = false;
-            
-                Cinematiques.Instance.Play(CinematiqueType.DEATH);
-                
-                BananaMan.Instance.GetComponent<BananaMan>().Die();
-                UIFace.Instance.Die(true);
-                AudioManager.Instance.PlayEffect(EffectType.BANANASPLASH);
-                AudioManager.Instance.PlayMusic(MusicType.DEATH, false);
-        
-                Cursor.visible = true;
-                Cursor.lockState = CursorLockMode.None;
-                InputManager.Instance.SwitchContext(InputContext.UI);
-                MainCamera.Instance.Set0Sensibility();
-            
-                UIManager.Instance.Show_death_Panel();
-            }
         }
     }
 }

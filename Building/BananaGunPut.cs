@@ -28,11 +28,16 @@ namespace Building {
                 UICrosshair.Instance.SetCrosshair(ItemThrowableType.CAVENDISH);
                 UICrosshair.Instance.ShowHideCrosshairs(true);
 
-                AudioManager.Instance.PlayEffect(EffectType.LOADING_GUN_PUT);
-                Invoke(nameof(ThrowBanana), 1f);
+                Invoke(nameof(ThrowBanana), 0.3f);
             }
         }
-        
+
+        public void CancelThrow() {
+            AudioManager.Instance.StopAudioSource(AudioSourcesType.EFFECT);
+            CancelInvoke(nameof(ThrowBanana));
+            UICrosshair.Instance.ShowHideCrosshairs(false);
+        }
+
         public void ThrowBanana() {
             if (Inventory.Instance.GetQuantity(BananaMan.Instance.activeItemThrowableType) > 0) {
                 if (GameActions.Instance.leftClickActivated || GameActions.Instance.rightTriggerActivated) {
@@ -44,9 +49,10 @@ namespace Building {
 
                     // throw it with good speed forward the player
                     banana.GetComponent<Rigidbody>().AddForce(GameManager.Instance.cameraMain.transform.forward * 200, ForceMode.Impulse);
-                    AudioManager.Instance.PlayEffect(EffectType.THROW_BANANA);
+                    AudioManager.Instance.PlayEffect(EffectType.THROW_BANANA, 0);
                     AmmoReduce();
-                    UICrosshair.Instance.ShowHideCrosshairs(false);
+                    
+                    Invoke(nameof(ThrowBanana), 1f);
                 }
             }
         }

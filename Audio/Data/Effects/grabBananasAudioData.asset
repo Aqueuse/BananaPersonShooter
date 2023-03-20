@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 34852139ae771484289135c8cc860b89, type: 3}
-  m_Name: rockSlideAudioData
+  m_Name: grabBananasAudioData
   m_EditorClassIdentifier: 
   clip:
-  - {fileID: 8300000, guid: 083be5719b4b63f468ea4cf4477fafd8, type: 3}
-  clipWithIntro: {fileID: 11400000, guid: cb038626058d81c4c869a138c161d5a1, type: 2}
+  - {fileID: 8300000, guid: 303d44c8d6ec943a38df8ec10b19d9c7, type: 3}
+  clipWithIntro: {fileID: 0}
   IsLooping: 0
-  volume: 0.458
+  volume: 0

@@ -1,6 +1,8 @@
+using System.Collections.Generic;
 using System.Linq;
 using Audio;
 using Building;
+using Building.Plateforms;
 using Enums;
 using MiniChimps;
 using Monkeys;
@@ -19,45 +21,50 @@ namespace Game {
 
         private Vector3 _bananaManDirectionToCenter;
         public Monkey activeMonkey;
-    
+
         public int maxDebrisQuantity;
         private int _actualDebrisQuantity;
-    
+
         public Vector3[] debrisPosition;
         public Quaternion[] debrisRotation;
         public int[] debrisIndex;
 
+        public List<Vector3> plateformsPosition;
+        public List<PlateformType> plateformsTypes;
+        
         public float monkeySasiety;
 
         public bool hasDebris;
         public bool isDiscovered;
 
         public string mapName;
-        
+
+        public bool isShowingDebris;
+        public bool isShowingBananaTrees;
+
         private void Start() {
-            isDiscovered = false;
             maxDebrisQuantity = 28;
         }
-    
+
         public void RecalculateHapiness() {
-            _actualDebrisQuantity = GameObject.FindGameObjectWithTag("debrisContainer").GetComponentInChildren<Transform>().childCount;
-            
+            _actualDebrisQuantity = MapItems.Instance.debrisContainer.GetComponentsInChildren<Debris>().Length;
+
             cleanliness = 50-(_actualDebrisQuantity /(float)maxDebrisQuantity)*50;
             activeMonkey.happiness = activeMonkey.sasiety + cleanliness;
-            
+
             UIStatistics.Instance.Refresh_Map_Statistics(MapsManager.Instance.currentMap.mapName);
-        
+
             if (activeMonkey.happiness < 20 && activeMonkey.monkeyState != MonkeyState.ANGRY) {
                 activeMonkey.monkeyState = MonkeyState.ANGRY;
                 HautParleurs.Instance.PlayHappinessLevelClip(MonkeyState.ANGRY);
             }
-            
-            if (activeMonkey.happiness is >= 20 and < 30 && activeMonkey.monkeyState != MonkeyState.SAD) {
+
+            if (activeMonkey.happiness is >= 20 and < 60 && activeMonkey.monkeyState != MonkeyState.SAD) {
                 activeMonkey.monkeyState = MonkeyState.SAD;
                 activeMonkey.GetComponent<GorillaSounds>().PlaySadMonkeySounds();
                 HautParleurs.Instance.PlayHappinessLevelClip(MonkeyState.SAD);
             }
-            
+
             if (activeMonkey.happiness >= 60 && activeMonkey.monkeyState != MonkeyState.HAPPY) {
                 activeMonkey.monkeyState = MonkeyState.HAPPY;
                 HautParleurs.Instance.PlayHappinessLevelClip(MonkeyState.HAPPY);
@@ -71,40 +78,53 @@ namespace Game {
             }
         }
 
-        public void SaveDataOnMap() {
-            var map = MapsManager.Instance.currentMap;
+        public void RefreshDebrisDataMap() {
+            if (MapItems.Instance == null) return;
 
-            if (activeMonkeyType != MonkeyType.NONE) {
-                map.monkeySasiety = activeMonkey.sasiety;
-                map.cleanliness = cleanliness;
-            }
+            if (MapsManager.Instance.currentMap.hasDebris) {
+                var debrisClass = MapItems.Instance.debrisContainer.gameObject.GetComponentsInChildren<Debris>();
 
-            if (GameObject.FindGameObjectWithTag("debrisContainer") != null) {
-                var debrisTransforms = GameObject.FindGameObjectWithTag("debrisContainer")
-                    .GetComponentsInChildren<Transform>().ToList();
-                
-                debrisTransforms.RemoveAt(0);
-                
-                var mapDebrisPrefabIndex = new int[debrisTransforms.Count];
-                var mapDebrisPosition = new Vector3[debrisTransforms.Count];
-                var mapDebrisRotation = new Quaternion[debrisTransforms.Count];
+                var mapDebrisPrefabIndex = new int[debrisClass.Length];
+                var mapDebrisPosition = new Vector3[debrisClass.Length];
+                var mapDebrisRotation = new Quaternion[debrisClass.Length];
 
-                for (var i = 0; i < debrisTransforms.Count; i++) {
-                    mapDebrisPrefabIndex[i] = debrisTransforms[i].GetComponent<Debris>().prefabIndex;
-                    mapDebrisPosition[i] = debrisTransforms[i].position;
-                    mapDebrisRotation[i] = debrisTransforms[i].rotation;
+                for (var i = 0; i < debrisClass.Length; i++) {
+                    mapDebrisPrefabIndex[i] = debrisClass[i].GetComponent<Debris>().prefabIndex;
+                    mapDebrisPosition[i] = debrisClass[i].gameObject.transform.position;
+                    mapDebrisRotation[i] = debrisClass[i].gameObject.transform.rotation;
                 }
 
-                map.debrisIndex = mapDebrisPrefabIndex;
-                map.debrisPosition = mapDebrisPosition;
-                map.debrisRotation = mapDebrisRotation;
+                debrisIndex = mapDebrisPrefabIndex;
+                debrisPosition = mapDebrisPosition;
+                debrisRotation = mapDebrisRotation;
             }
         }
 
+        public void RefreshMonkeyDataMap() {
+            if (activeMonkeyType != MonkeyType.NONE) {
+                monkeySasiety = activeMonkey.sasiety;
+            }
+        }
+
+        public void RefreshPlateformsDataMap() {
+            if (MapItems.Instance == null) return;
+            
+            var plateformsClass =
+                MapItems.Instance.plateformsContainer.gameObject.GetComponentsInChildren<Plateform>().ToList();
+
+            plateformsPosition = new List<Vector3>();
+            plateformsTypes = new List<PlateformType>();
+            
+            for (var i = 0; i < plateformsClass.Count; i++) {
+                plateformsPosition.Add(plateformsClass[i].initialPosition);
+                plateformsTypes.Add(plateformsClass[i].plateformType);
+            }
+        }
+        
         public GameObject GetActiveMonkey() {
             return activeMonkey.gameObject;
         }
-        
+
         public void StartBossFight(MonkeyType monkeyType) {
             AudioManager.Instance.PlayMusic(MusicType.BOSS, true);
 

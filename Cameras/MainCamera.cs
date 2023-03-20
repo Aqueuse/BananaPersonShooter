@@ -4,50 +4,56 @@ using UnityEngine;
 
 namespace Cameras {
     enum CameraStyle {
-        TPS,
-        SHOOT
+        TPS = 0,
+        SHOOT = 1
     }
 
     public class MainCamera : MonoSingleton<MainCamera> {
         [SerializeField] private CinemachineFreeLook cinemachineFreeLook;
         [SerializeField] private CinemachineVirtualCamera dialogueCamera;
-        private CameraStyle cameraStyle;
+       private CameraStyle _cameraStyle;
 
-        private float blending;
-        private float blendingSpeed;
+       private CinemachineCameraOffset _cinemachineCameraOffset;
+
+        private float _blending;
+        private float _blendingSpeed;
 
         private void Start() {
-            cameraStyle = CameraStyle.TPS;
-            blending = 0;
-            blendingSpeed = 1.5f;
+            _cinemachineCameraOffset = cinemachineFreeLook.GetComponentInChildren<CinemachineCameraOffset>();
+            
+            _cameraStyle = CameraStyle.TPS;
+            _blending = 0;
+            _blendingSpeed = 1.5f;
         }
 
         private void Update() {
-            if (cameraStyle == CameraStyle.SHOOT && cinemachineFreeLook.GetComponentInChildren<CinemachineCameraOffset>().m_Offset.x < 1) {
-                blending += Time.deltaTime * blendingSpeed;
-                cinemachineFreeLook.GetComponentInChildren<CinemachineCameraOffset>().m_Offset.x = blending;
+            if (_cameraStyle == CameraStyle.SHOOT && _cinemachineCameraOffset.m_Offset.x < 1) {
+                _blending += Time.deltaTime * _blendingSpeed;
+                _cinemachineCameraOffset.m_Offset.x = _blending;
             }
 
-            if (cameraStyle == CameraStyle.TPS && cinemachineFreeLook.GetComponentInChildren<CinemachineCameraOffset>().m_Offset.x > 0) {
-                blending -= Time.deltaTime * blendingSpeed;
-                cinemachineFreeLook.GetComponentInChildren<CinemachineCameraOffset>().m_Offset.x = blending;
+            if (_cameraStyle == CameraStyle.TPS && _cinemachineCameraOffset.m_Offset.x > 0) {
+                _blending -= Time.deltaTime * _blendingSpeed;
+                _cinemachineCameraOffset.m_Offset.x = _blending;
             }
         }
 
         public void Switch_To_TPS_Target() {
-            cameraStyle = CameraStyle.TPS;
+            _cameraStyle = CameraStyle.TPS;
         }
 
         public void Switch_To_Shoot_Target() {
-            cameraStyle = CameraStyle.SHOOT;
+            _cameraStyle = CameraStyle.SHOOT;
         }
 
-        public void SwitchToDialogueCamera() {
+        public void SwitchToDialogueCamera(Transform target) {
             dialogueCamera.Priority = 14;
+            dialogueCamera.LookAt = target;
         }
 
         public void SwitchToFreeLookCamera() {
             dialogueCamera.Priority = 3;
+            dialogueCamera.LookAt = null;
         }
 
         public void Return_back_To_Player() {
@@ -65,6 +71,23 @@ namespace Cameras {
         public void SetNormalSensibility() {
             cinemachineFreeLook.m_YAxis.m_MaxSpeed = GameSettings.Instance.lookSensibility;
             cinemachineFreeLook.m_XAxis.m_MaxSpeed = GameSettings.Instance.lookSensibility * 400;
+        }
+        
+        public void ZoomCamera() {
+            if (_cinemachineCameraOffset.m_Offset.z > 0) return;
+            
+            if (_cinemachineCameraOffset.m_Offset.z <= 0) {
+                _cinemachineCameraOffset.m_Offset.z += 0.1f;
+            }
+        }
+        
+        public void DezoomCamera() {
+            if (_cinemachineCameraOffset.m_Offset.z < -1.9f) return;
+            
+            // DEZOOM MAX = -1.39
+            if (_cinemachineCameraOffset.m_Offset.z >= -1.9f) {
+                _cinemachineCameraOffset.m_Offset.z -= 0.1f;
+            }
         }
     }
 }

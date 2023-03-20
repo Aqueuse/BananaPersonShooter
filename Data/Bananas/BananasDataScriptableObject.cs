@@ -20,4 +20,6 @@ public class BananasDataScriptableObject : ScriptableObject {
 
     public ItemThrowableType itemThrowableType;
     public BananaEffect bananaEffect;
+
+    public Material bananaMaterial;
 }

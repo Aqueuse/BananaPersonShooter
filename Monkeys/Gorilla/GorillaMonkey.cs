@@ -8,9 +8,9 @@ using Random = UnityEngine.Random;
 
 namespace Monkeys.Gorilla {
     enum GorillaAttackType {
-        SHOCKWAVE,
-        CATCHPLAYER,
-        TOURBISMASH
+        SHOCKWAVE = 0,
+        CATCHPLAYER = 1,
+        TOURBISMASH = 2
     }
 
     public class GorillaMonkey : MonoBehaviour {

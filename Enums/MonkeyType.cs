@@ -1,6 +1,6 @@
 ﻿namespace Enums {
     public enum MonkeyType {
-        NONE,
-        KELSAIK
+        NONE = 0,
+        KELSAIK = 1
     }
 }

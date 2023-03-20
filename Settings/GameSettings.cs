@@ -1,6 +1,7 @@
 using Audio;
 using Cinemachine;
 using Enums;
+using Save;
 using UnityEngine;
 using UnityEngine.Localization.Settings;
 using UnityEngine.Rendering;
@@ -21,6 +22,9 @@ namespace Settings {
 
         [SerializeField] private CinemachineFreeLook playerCamera;
         [SerializeField] private Slider lookSensibilitySlider;
+
+        [SerializeField] private Toggle horizontalCameraInversionToggle;
+        [SerializeField] private Toggle verticalCameraInversionToggle;
         
         private FullScreenMode _fullScreenMode;
 
@@ -32,6 +36,11 @@ namespace Settings {
         private string _keymapBinding;
         public int languageIndexSelected;
         public float lookSensibility;
+
+        private bool _isCameraVerticallyInverted;
+        private bool _isCameraHorizontallyInverted;
+
+        public JsonPlayerPrefs prefs;
         
         private void Start() {
             Application.targetFrameRate = 60; // fix the framerate to prevent crash on some GPU
@@ -43,34 +52,40 @@ namespace Settings {
         }
 
         public void LoadSettings() {
-            AudioManager.Instance.musicLevel = PlayerPrefs.GetFloat("musicLevel", 0.1f);
-            AudioManager.Instance.voicesLevel = PlayerPrefs.GetFloat("voicesLevel", 0.1f);
-            AudioManager.Instance.effectsLevel = PlayerPrefs.GetFloat("effectsLevel", 0.1f);
-            AudioManager.Instance.ambianceLevel = PlayerPrefs.GetFloat("ambianceLevel", 0.1f);
+            prefs = new JsonPlayerPrefs(SaveData.Instance.gamePath + "/preferences.json");
+            
+            AudioManager.Instance.musicLevel = prefs.GetFloat("musicLevel", 0.1f);
+            AudioManager.Instance.voicesLevel = prefs.GetFloat("voicesLevel", 0.1f);
+            AudioManager.Instance.effectsLevel = prefs.GetFloat("effectsLevel", 0.1f);
+            AudioManager.Instance.ambianceLevel = prefs.GetFloat("ambianceLevel", 0.1f);
 
-            _isFullscreen = PlayerPrefs.GetString("isFullscreen", "True");
-            _isVsync = PlayerPrefs.GetString("isVSync", "True");
-            _resolution = PlayerPrefs.GetInt("resolution", 3);
+            _isFullscreen = prefs.GetString("isFullscreen", "False");
+            _isVsync = prefs.GetString("isVSync", "True");
+            _resolution = prefs.GetInt("resolution", 3);
+            
+            languageIndexSelected = prefs.GetInt("language", 1);
+            _keymapBinding = prefs.GetString("keymap_binding", null);
 
-            languageIndexSelected = PlayerPrefs.GetInt("language", 1);
-            _keymapBinding = PlayerPrefs.GetString("keymap_binding", null);
+            lookSensibility = prefs.GetFloat("LookSensibility", 0.6f);
 
-            lookSensibility = PlayerPrefs.GetFloat("LookSensibility", 0.6f);
+            _isCameraVerticallyInverted = prefs.GetString("isCameraVerticalAxisInverted", "False").Equals("True");
+            _isCameraHorizontallyInverted = prefs.GetString("isCameraHorizontalAxisInverted", "False").Equals("True"); 
             
             SetMusicVolume(AudioManager.Instance.musicLevel);
             SetAmbianceVolume(AudioManager.Instance.ambianceLevel);
             SetEffectVolume(AudioManager.Instance.effectsLevel);
             
-            InverseCameraVerticalAxis(PlayerPrefs.GetString("isCameraVerticalAxisInverted", "False").Equals("True"));
+            InverseCameraVerticalAxis(_isCameraVerticallyInverted);
+            InverseCameraHorizontalAxis(_isCameraHorizontallyInverted);
             SetLookSensibility(lookSensibility);
             
             Invoke(nameof(SetLanguage), 0.2f);
         
-            // reflects values on UI 
             ToggleFullscreen(_isFullscreen.Equals("True"));
             ToggleVSync(_isVsync.Equals("True"));
             SetResolution(_resolution);
 
+            // reflects values on UI 
             musicLevelSlider.value = AudioManager.Instance.musicLevel;
             ambianceLevelSlider.value = AudioManager.Instance.ambianceLevel;
             effectsLevelSlider.value = AudioManager.Instance.effectsLevel;
@@ -80,56 +95,61 @@ namespace Settings {
             resolutionDropDown.value = _resolution;
 
             lookSensibilitySlider.value = lookSensibility;
+
+            horizontalCameraInversionToggle.isOn = _isCameraHorizontallyInverted;
+            verticalCameraInversionToggle.isOn = _isCameraVerticallyInverted;
     
             languageDropDown.value = languageIndexSelected;
+            
+            prefs.Save();
         }
 
         public void ResetOptions() {
-            PlayerPrefs.DeleteAll(); // temporaly reset the player prefs on launch while in the building of the beta
+            prefs.DeleteAll(); // temporaly reset the player prefs on launch while in the building of the beta
             
             LoadSettings();
         }
 
         void SetLanguage() {
             LocalizationSettings.SelectedLocale = LocalizationSettings.AvailableLocales.Locales[languageIndexSelected];
+            prefs.SetInt("language", languageIndexSelected);
         }
 
-        
         public void SetMusicVolume(float level) {
             AudioManager.Instance.SetVolume(AudioSourcesType.MUSIC, level);
 
-            PlayerPrefs.SetFloat("musicLevel", level);
+            prefs.SetFloat("musicLevel", level);
         }
 
         public void SetVoicesVolume(float level) {
             AudioManager.Instance.SetVolume(AudioSourcesType.VOICE, level);
 
-            PlayerPrefs.SetFloat("voiceLevel", level);
+            prefs.SetFloat("voiceLevel", level);
         }
 
         public void SetEffectVolume(float level) {
             AudioManager.Instance.SetVolume(AudioSourcesType.EFFECT, level);
         
-            PlayerPrefs.SetFloat("effectsLevel", level);
+            prefs.SetFloat("effectsLevel", level);
         }
 
         public void SetAmbianceVolume(float level) {
             AudioManager.Instance.SetVolume(AudioSourcesType.AMBIANCE, level);
             
-            PlayerPrefs.SetFloat("ambianceLevel", level);
+            prefs.SetFloat("ambianceLevel", level);
         }
 
         public void ToggleFullscreen(bool isGameFullscreen) {
             Screen.fullScreenMode = isGameFullscreen ? FullScreenMode.ExclusiveFullScreen : FullScreenMode.Windowed;
             _fullScreenMode = Screen.fullScreenMode;
 
-            PlayerPrefs.SetString("isFullscreen", isGameFullscreen ? "True" : "False");
+            prefs.SetString("isFullscreen", isGameFullscreen ? "True" : "False");
         }
 
         public void ToggleVSync(bool isGameVsync) {
             QualitySettings.vSyncCount = isGameVsync ? 1 : 0;
 
-            PlayerPrefs.SetString("isVSync", isGameVsync ? "True" : "False");
+            prefs.SetString("isVSync", isGameVsync ? "True" : "False");
         }
 
         public void SetResolution(int gameResolution) {
@@ -144,7 +164,7 @@ namespace Settings {
                     Screen.SetResolution(1920, 1080, _fullScreenMode, Screen.currentResolution.refreshRateRatio);
                     break;
             }
-            PlayerPrefs.SetInt("resolution", gameResolution);
+            prefs.SetInt("resolution", gameResolution);
         }
 
         public void SetLookSensibility(float sensibility) {
@@ -152,12 +172,17 @@ namespace Settings {
             playerCamera.m_XAxis.m_MaxSpeed = sensibility * 400;
 
             lookSensibility = sensibility;
-            PlayerPrefs.SetFloat("LookSensibility", lookSensibility);
+            prefs.SetFloat("LookSensibility", lookSensibility);
         }
 
         public void InverseCameraVerticalAxis(bool isCameraInverted) {
             playerCamera.m_YAxis.m_InvertInput = !isCameraInverted; // Cinemachine is naturally inverted
-            PlayerPrefs.SetString("isCameraVerticalAxisInverted", isCameraInverted.ToString());
+            prefs.SetString("isCameraVerticalAxisInverted", isCameraInverted.ToString());
+        }
+
+        public void InverseCameraHorizontalAxis(bool isCameraInverted) {
+            playerCamera.m_XAxis.m_InvertInput = isCameraInverted; // Cinemachine is naturally inverted
+            prefs.SetString("isCameraHorizontalAxisInverted", isCameraInverted.ToString());
         }
 
         // public void ResetAllBindings() {

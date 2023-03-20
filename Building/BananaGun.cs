@@ -32,6 +32,8 @@ namespace Building {
         }
 
         public void CancelMover() {
+            BananaGunPut.Instance.CancelThrow();
+            
             bananaGun.SetActive(false);
             bananaGunInBack.SetActive(true);
 

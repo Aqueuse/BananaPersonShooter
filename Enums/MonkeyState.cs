@@ -1,7 +1,7 @@
 namespace Enums {
     public enum MonkeyState {
-        ANGRY,
-        SAD,
-        HAPPY
+        ANGRY = 0,
+        SAD = 1,
+        HAPPY = 2
     }
 }

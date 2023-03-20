@@ -1,7 +1,7 @@
 namespace Enums {
     public enum BananierState {
-        BABY,
-        YOUNG,
-        MATURE
+        BABY = 0,
+        YOUNG = 1,
+        MATURE = 2
     }
 }

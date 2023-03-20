@@ -16,4 +16,4 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 0e8a2847ffcdbe8478625ea80d76469c, type: 3}
   clipWithIntro: {fileID: 0}
   IsLooping: 0
-  volume: 0.225
+  volume: 1

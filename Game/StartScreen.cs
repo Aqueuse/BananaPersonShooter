@@ -1,3 +1,5 @@
+using System.Collections;
+using Tweaks;
 using UI;
 using UnityEngine;
 using UnityEngine.AI;
@@ -28,12 +30,17 @@ namespace Game {
         private void Update() {
             if (UnityEngine.Input.GetMouseButtonDown(0) && !UIManager.Instance.isOnMenu) {
                 Ray ray = GameManager.Instance.cameraMain.ScreenPointToRay(UnityEngine.Input.mousePosition);
-
                 Vector3 direction = ray.GetPoint(1) - ray.GetPoint(0);
-
                 GameObject spawnedBanana = Instantiate(bananaPrefab, ray.GetPoint(2), Quaternion.LookRotation(direction));
                 spawnedBanana.GetComponent<Rigidbody>().velocity = spawnedBanana.transform.forward * 10f;
             }
+            else if(UnityEngine.Input.GetMouseButtonDown(1)  && !UIManager.Instance.isOnMenu) {
+				Ray ray = GameManager.Instance.cameraMain.ScreenPointToRay(UnityEngine.Input.mousePosition);
+				Vector3 direction = ray.GetPoint(1) - ray.GetPoint(0);
+				GameObject spawnedBanana = Instantiate(bananaPrefab, ray.GetPoint(2), Quaternion.LookRotation(direction));
+				spawnedBanana.AddComponent<TrailRendererRandom>();
+				spawnedBanana.GetComponent<Rigidbody>().velocity = spawnedBanana.transform.forward * 10f;
+			}
         }
         
         private void SpawnCinematiqueMonkey() {

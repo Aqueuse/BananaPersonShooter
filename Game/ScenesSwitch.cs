@@ -16,7 +16,7 @@ namespace Game {
         [SerializeField] private GameObject teleportationGameObject;
         
         public GenericDictionary<string, Transform> teleportSpawnPointBySceneName;
-
+        
         private IEnumerator LoadScene(string sceneName, Vector3 spawnPoint, bool isTeleporting) {
             AsyncOperation load = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Single);
         
@@ -26,13 +26,10 @@ namespace Game {
             }
 
             if (load.isDone) {
-                GameData.Instance.BananaManSavedData.last_map = sceneName;
                 SceneManager.SetActiveScene(SceneManager.GetSceneByName(sceneName));
                 
                 BananaMan.Instance.transform.position = spawnPoint;
-
-                GameManager.Instance.loadingScreen.SetActive(false);
-
+                
                 if (sceneName.ToUpper() == "HOME") {
                     GameManager.Instance.cameraMain.clearFlags = CameraClearFlags.SolidColor;
                     Cursor.visible = true;
@@ -49,23 +46,22 @@ namespace Game {
 
                     MainCamera.Instance.Set0Sensibility();
 
-//                    StartScreen.Instance.enabled = true;
-
                     BananaMan.Instance.GetComponent<CharacterController>().enabled = false;
                     BananaMan.Instance.GetComponent<PlayerController>().canMove = false;
                     BananaMan.Instance.GetComponent<BananaMan>().ResetToPlayable();
                 }
 
                 else {
-                    MapsManager.Instance.currentMap = MapsManager.Instance.mapBySceneName[sceneName];
-                    MapsManager.Instance.currentMap.isDiscovered = true;
+                    GameData.Instance.bananaManSavedData.lastMap = sceneName;
 
                     if (MapsManager.Instance.currentMap.activeMonkeyType != MonkeyType.NONE) {
                         MapsManager.Instance.currentMap.SpawnMonkey();
                         MapsManager.Instance.currentMap.RecalculateHapiness();
+                        MapsManager.Instance.currentMap.RefreshMonkeyDataMap();
                     }
                     
-                    if (MapsManager.Instance.currentMap.hasDebris) GameLoad.Instance.RespawnDebrisOnMap();
+                    if (MapsManager.Instance.currentMap.hasDebris && MapsManager.Instance.currentMap.isDiscovered) GameLoad.Instance.RespawnDebrisOnMap();
+                    GameLoad.Instance.RespawnPlateformsOnMap();
 
                     Cursor.visible = false;
                     Cursor.lockState = CursorLockMode.Locked;
@@ -77,8 +73,12 @@ namespace Game {
                     UIManager.Instance.Hide_Game_Menu();
                     UIManager.Instance.Hide_home_menu();
 
-                    if (GameData.Instance.BananaManSavedData.advancementState == AdvancementState.NEW_GAME) {
+                    if (GameData.Instance.bananaManSavedData.advancementState == AdvancementState.NEW_GAME) {
                         GameManager.Instance.isGamePlaying = false;
+
+                        InputManager.Instance.uiSchemaContext = UISchemaSwitchType.DIALOGUES;
+                        InputManager.Instance.SwitchContext(InputContext.UI);
+                        GameManager.Instance.gameContext = GameContext.IN_DIALOGUE;
                     }
                     else {
                         UIManager.Instance.Show_HUD();
@@ -92,19 +92,17 @@ namespace Game {
 
                     if (isTeleporting) Teleportation.Instance.TeleportDown();
                 }
+                
+                GameManager.Instance.loadingScreen.SetActive(false);
 
                 AudioManager.Instance.SetMusiqueBySceneName(sceneName);
             }
         }
     
         public void SwitchScene(string sceneName, Vector3 spawnPoint, bool isTeleporting) {
-            if (!SceneManager.GetActiveScene().name.Equals("INITIALHOME") && 
-                !SceneManager.GetActiveScene().name.Equals("HOME")) {
-                
-                MapsManager.Instance.currentMap.SaveDataOnMap();
+            GameManager.Instance.loadingScreen.SetActive(true);
 
-                if (sceneName.ToUpper() != "HOME") MapsManager.Instance.currentMap = MapsManager.Instance.mapBySceneName[sceneName];
-            }
+            MapsManager.Instance.currentMap = MapsManager.Instance.mapBySceneName[sceneName];
 
             UIManager.Instance.Hide_HUD();
             UIManager.Instance.Hide_home_menu();
@@ -113,13 +111,12 @@ namespace Game {
             BananaMan.Instance.GetComponent<PlayerController>().canMove = false;
             BananaMan.Instance.GetComponent<CharacterController>().enabled = false;
         
-            GameManager.Instance.loadingScreen.SetActive(true);
             StartCoroutine(LoadScene(sceneName, spawnPoint, isTeleporting));
         }
 
         
         public void ReturnHome() {
-            GameSave.Instance.SaveGameData(GameData.Instance.currentSaveUuid);
+            if (GameData.Instance.currentSaveUuid != null) GameSave.Instance.SaveGameData(GameData.Instance.currentSaveUuid);
         
             SwitchScene("HOME", homeSpawnTransform.position, false);
         }
@@ -130,6 +127,7 @@ namespace Game {
 
             Teleportation.Instance.TeleportUp();
             UIManager.Instance.Show_Hide_interface();
+            
             SwitchScene(sceneName.ToUpper(), teleportSpawnPointBySceneName[sceneName].position, true);
         }
     }

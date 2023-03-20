@@ -12,10 +12,10 @@ namespace Save.Templates {
         public float yWorldPosition = 0.809f;
         public float zworldPosition = -2651.568f;
         
-        public string last_map = "COMMANDROOM";
-        public int active_item = 0;
+        public string lastMap = "COMMANDROOM";
+        public ItemThrowableType activeItem = ItemThrowableType.EMPTY;
         
-        public Dictionary<string, int> inventory = new Dictionary<string, int> {
+        public Dictionary<string, int> inventory = new() {
             {ItemThrowableType.EMPTY.ToString(), 0},
             {ItemThrowableType.DEBRIS.ToString(), 0},
             {ItemThrowableType.INGOT.ToString(), 0},
@@ -39,11 +39,6 @@ namespace Save.Templates {
             {ItemThrowableType.PLATEFORM.ToString(), 0}
         };
         
-        public Dictionary<string, int> slots = new Dictionary<string, int> {
-            { "inventorySlot0", 0},
-            { "inventorySlot1", 0},
-            { "inventorySlot2", 0},
-            { "inventorySlot3", 0}
-        };
+        public List<string> slots = new List<string>();
     }
 }

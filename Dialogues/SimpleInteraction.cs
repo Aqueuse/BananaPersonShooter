@@ -22,7 +22,7 @@ namespace Dialogues {
             
             DialoguesManager.Instance.StartDialogue();
 
-            MainCamera.Instance.SwitchToDialogueCamera();
+            MainCamera.Instance.SwitchToDialogueCamera(DialoguesManager.Instance.activeMiniChimp.transform);
             PlayMiniChimpDialogue();
         }
         

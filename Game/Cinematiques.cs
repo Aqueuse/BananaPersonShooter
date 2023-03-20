@@ -35,6 +35,7 @@ namespace Game {
         public void Play(CinematiqueType playedCinematiqueType) {
             cinematiqueVideoPlayer.enabled = true;
             skipCinematiqueGameObject.SetActive(true);
+
             UISchemaSwitcher.Instance.SwitchUISchema(UISchemaSwitchType.CINEMATIQUE);
             GameManager.Instance.gameContext = GameContext.IN_CINEMATIQUE;
 
@@ -50,21 +51,22 @@ namespace Game {
         }
 
         public void Pause() {
-            cinematiqueVideoPlayer.Pause();
+			if (cinematiqueVideoPlayer.enabled)
+				cinematiqueVideoPlayer.Pause();
         }
 
         public void Unpause() {
-            cinematiqueVideoPlayer.Play();
+            if(cinematiqueVideoPlayer.enabled)
+                cinematiqueVideoPlayer.Play();
             UISchemaSwitcher.Instance.SwitchUISchema(UISchemaSwitchType.CINEMATIQUE);
         }
 
         public void Skip() {
             cinematiqueCamera.Priority = 3;
+            
             skipCinematiqueGameObject.SetActive(false);
 
             cinematiqueVideoPlayer.enabled = false;
-            
-            //cinematiqueVideoPlayer.Stop();
 
             if (cinematiqueType == CinematiqueType.NEW_GAME) {
                 GameManager.Instance.Start_New_Game();

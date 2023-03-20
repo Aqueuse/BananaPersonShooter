@@ -268,37 +268,37 @@ namespace HoaxGames
 
         public enum IkHintComputationStrategy
         {
-            IK_HINT_POSITION_BASED,
-            BONE_BASED,
-            BONE_BASED_WITH_FEET_DIRECTION_INFLUENCE
+            IK_HINT_POSITION_BASED = 0,
+            BONE_BASED = 1,
+            BONE_BASED_WITH_FEET_DIRECTION_INFLUENCE = 2
         }
 
         public enum InterpolationMethod
         {
-            LERP,
-            SMOOTH_DAMP
+            LERP = 0,
+            SMOOTH_DAMP = 1
         }
 
         public enum SlopeLeaningType
         {
-            DISABLED,
-            SURFACE_ANGLE_DETECTED_BY_GROUNDED_CHECK,
-            AVERAGE_SURFACE_ANGLE_DETECTED_BY_FEETS,
-            HEIGHT_OFFSET_DETECTED_BY_FEETS
+            DISABLED = 0,
+            SURFACE_ANGLE_DETECTED_BY_GROUNDED_CHECK = 1,
+            AVERAGE_SURFACE_ANGLE_DETECTED_BY_FEETS = 2,
+            HEIGHT_OFFSET_DETECTED_BY_FEETS = 3
         }
 
         public enum Axis
         {
-            X_AXIS,
-            Y_AXIS,
-            Z_AXIS
+            X_AXIS = 0,
+            Y_AXIS = 1,
+            Z_AXIS = 2
         }
 
         public enum ValidationType
         {
-            CHECK_IS_GROUNDED,
-            FORCE_VALID,
-            FORCE_INVALID
+            CHECK_IS_GROUNDED = 0,
+            FORCE_VALID = 1,
+            FORCE_INVALID = 2
         }
 
         public virtual InterpolationMethod getIkInterpolationMethod() { return m_ikInterpolationMethod; }

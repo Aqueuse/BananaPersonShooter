@@ -27,3 +27,4 @@ MonoBehaviour:
   resistanceBonus: 1
   itemThrowableType: 3
   bananaEffect: 0
+  bananaMaterial: {fileID: 2100000, guid: 73186142afac6d0478fbea52a72bfc77, type: 2}

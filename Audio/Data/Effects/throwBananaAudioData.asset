@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 34852139ae771484289135c8cc860b89, type: 3}
-  m_Name: loadingBananaGun_loading_sequenceAudioData
+  m_Name: throwBananaAudioData
   m_EditorClassIdentifier: 
   clip:
-  - {fileID: 8300000, guid: 719c2f2179521c745a5be9adbf1d74f8, type: 3}
+  - {fileID: 8300000, guid: af7c7a46541c343b495812ae2b3c5d28, type: 3}
   clipWithIntro: {fileID: 0}
   IsLooping: 0
   volume: 0.691

@@ -2,7 +2,6 @@ using Audio;
 using Building;
 using Cameras;
 using Enums;
-using Game;
 using MiniChimps;
 using Save;
 using UI;
@@ -17,21 +16,21 @@ namespace Dialogues {
         [SerializeField] private GameObject startInteractionMiniChimp;
         [SerializeField] private GameObject commandRoomMiniChimp;
         
-        private int startInteractionMiniChimpDialoguesLength;
+        private int _startInteractionMiniChimpDialoguesLength;
 
         public bool isShowingBananaGun;
 
-        private int dialogueIndex;
+        private int _dialogueIndex;
         
         private void Start() {
-            if (GameData.Instance.BananaManSavedData.advancementState == AdvancementState.NEW_GAME) {
-                dialogueIndex = 0;
+            if (GameData.Instance.bananaManSavedData.advancementState == AdvancementState.NEW_GAME) {
+                _dialogueIndex = 0;
                 isShowingBananaGun = false;
                 
-                startInteractionMiniChimpDialoguesLength = startInteractionMiniChimp.GetComponent<MiniChimp>()
+                _startInteractionMiniChimpDialoguesLength = startInteractionMiniChimp.GetComponent<MiniChimp>()
                     .subtitlesDataScriptableObject.dialogue.Count;
                 
-                Invoke(nameof(StartFirstInteraction), 3f);
+                BeginInteraction();
             }
         }
 
@@ -45,12 +44,13 @@ namespace Dialogues {
             }
         }
 
-        private void StartFirstInteraction() {
+        private void BeginInteraction() {
             DialoguesManager.Instance.SetActiveMiniChimp(startInteractionMiniChimp);
             DialoguesManager.Instance.StartDialogue();
 
-            MainCamera.Instance.SwitchToDialogueCamera();
-            PlayMiniChimpDialogue();
+            MainCamera.Instance.SwitchToDialogueCamera(startInteractionMiniChimp.transform);
+            
+            Invoke(nameof(PlayMiniChimpDialogue), 1);
         }
 
         private void ShowRotatingBananaGunPanel() {
@@ -62,7 +62,7 @@ namespace Dialogues {
 
         public void HideRotatingBananaGunPanel() {
             isShowingBananaGun = false;
-            AudioManager.Instance.PlayEffect(EffectType.BUTTON_INTERACTION);
+            AudioManager.Instance.PlayEffect(EffectType.BUTTON_INTERACTION, 0);
             UIManager.Instance.Set_active(rotatingBananaGunCanvasGroup, false);
             
             UIManager.Instance.Show_HUD();
@@ -71,28 +71,28 @@ namespace Dialogues {
             
             DialoguesManager.Instance.dialoguePanel.SetActive(true);
             
-            dialogueIndex++;
-            DialoguesManager.Instance.PlayMiniChimpDialogue(dialogueIndex);
+            _dialogueIndex++;
+            DialoguesManager.Instance.PlayMiniChimpDialogue(_dialogueIndex);
         }
         
         private void PlayMiniChimpDialogue() {
-            if (dialogueIndex == 3) {
+            if (_dialogueIndex == 3) {
                 ShowRotatingBananaGunPanel();
                 return;
             }
 
-            if (dialogueIndex >= startInteractionMiniChimpDialoguesLength) {
+            if (_dialogueIndex >= _startInteractionMiniChimpDialoguesLength) {
                 QuitDialogue();
             }
 
             else {
-                DialoguesManager.Instance.PlayMiniChimpDialogue(dialogueIndex);
-                dialogueIndex++;
+                DialoguesManager.Instance.PlayMiniChimpDialogue(_dialogueIndex);
+                _dialogueIndex++;
             }
         }
 
         private void QuitDialogue() {
-            GameData.Instance.BananaManSavedData.advancementState = AdvancementState.GET_BANANAGUN;
+            GameData.Instance.bananaManSavedData.advancementState = AdvancementState.GET_BANANAGUN;
 
             DialoguesManager.Instance.QuitDialogue();
             

@@ -1,8 +1,9 @@
 using Building.Plateforms;
 using Data;
 using Enums;
+using Game;
+using Items;
 using Player;
-using UI.InGame;
 using UI.InGame.QuickSlots;
 using UnityEngine;
 
@@ -11,21 +12,20 @@ namespace Building {
         [SerializeField] private GameObject plateformPrefab;
         [SerializeField] private GameObject plateformSpawnerPoint;
 
-        private GameObject activePlateform;
-
-
+        private GameObject _activePlateform;
+        
         void FixedUpdate() {
-            if (BananaMan.Instance.activeItemThrowableType == ItemThrowableType.PLATEFORM && activePlateform != null) {
-                activePlateform.transform.position = plateformSpawnerPoint.transform.position;
+            if (BananaMan.Instance.activeItemThrowableType == ItemThrowableType.PLATEFORM && _activePlateform != null) {
+                _activePlateform.transform.position = plateformSpawnerPoint.transform.position;
             }
         }
 
         public void SwitchSlot(UISlot slot) {
             BananaMan.Instance.activeItemThrowableType = slot.itemThrowableType;
-            BananaMan.Instance.activeItemThrowableCategory = slot.itemThrowableCategory;
+            BananaMan.Instance.activeItemThrowableCategory = ItemsManager.Instance.itemsDataScriptableObject.itemsThrowableCategoriesByType[slot.itemThrowableType];
             
             // remove plateform ghost if it exist
-            if (activePlateform != null) Destroy(activePlateform);
+            if (_activePlateform != null) Destroy(_activePlateform);
 
             switch (BananaMan.Instance.activeItemThrowableCategory) {
                 case ItemThrowableCategory.BANANA:
@@ -35,11 +35,13 @@ namespace Building {
                 case ItemThrowableCategory.CRAFTABLE:
                     if (BananaMan.Instance.activeItemThrowableType == ItemThrowableType.PLATEFORM) {
                         if (global::Game.Inventory.Instance.bananaManInventory[BananaMan.Instance.activeItemThrowableType] > 0) {
-                            activePlateform = Instantiate(
+                            _activePlateform = Instantiate(
                                 original: plateformPrefab,
                                 position: plateformSpawnerPoint.transform.position,
                                 rotation: plateformSpawnerPoint.transform.localRotation);
                         }
+
+                        _activePlateform.transform.parent = MapItems.Instance.plateformsContainer.transform;
                         BananaGun.Instance.CancelMover();
                     }
                     break;
@@ -53,15 +55,18 @@ namespace Building {
         public void ValidatePlateform() {
             var plateformQuantityInInventory = global::Game.Inventory.Instance.GetQuantity(BananaMan.Instance.activeItemThrowableType);
             
-            if (BananaMan.Instance.activeItemThrowableType == ItemThrowableType.PLATEFORM && activePlateform != null) {
-                if (activePlateform.GetComponent<Plateform>().isValid && plateformQuantityInInventory > 0) {
+            if (BananaMan.Instance.activeItemThrowableType == ItemThrowableType.PLATEFORM && _activePlateform != null) {
+                if (_activePlateform.GetComponent<Plateform>().isValid && plateformQuantityInInventory > 0) {
                     plateformQuantityInInventory--;
                     
                     global::Game.Inventory.Instance.RemoveQuantity(BananaMan.Instance.activeItemThrowableType, 1);
                     UISlotsManager.Instance.Get_Selected_Slot().SetAmmoQuantity(plateformQuantityInInventory);
             
-                    activePlateform.GetComponent<Plateform>().SetNormal();
-                    activePlateform = null;
+                    MapsManager.Instance.currentMap.RefreshPlateformsDataMap();
+
+                    _activePlateform.GetComponent<Plateform>().SetNormal();
+                    _activePlateform = null;
+
                 }
             }
         }

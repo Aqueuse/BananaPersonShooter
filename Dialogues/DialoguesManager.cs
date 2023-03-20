@@ -22,11 +22,11 @@ namespace Dialogues {
             BananaMan.Instance.GetComponent<PlayerController>().canMove = false;
 
             GameManager.Instance.isGamePlaying = false;
-            GameManager.Instance.gameContext = GameContext.IN_DIALOGUE;
 
             InputManager.Instance.uiSchemaContext = UISchemaSwitchType.DIALOGUES;
             InputManager.Instance.SwitchContext(InputContext.UI);
-
+            
+            GameManager.Instance.gameContext = GameContext.IN_DIALOGUE;
             dialoguePanel.SetActive(true);
         }
 

@@ -1,6 +1,4 @@
-﻿using Enums;
-using Game;
-using UI;
+﻿using UI;
 using UI.Menus;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -13,10 +11,10 @@ namespace Input.UIActions {
         private bool _scrolledLeft;
         private bool _scrolledRight;
 
-        PointerEventData pointer;
+        PointerEventData _pointer;
 
         private void Start() {
-            pointer = new PointerEventData(EventSystem.current);
+            _pointer = new PointerEventData(EventSystem.current);
         }
 
         private void Update() {
@@ -29,7 +27,7 @@ namespace Input.UIActions {
 
         private void Activate() {
             if (UnityEngine.Input.GetKeyDown(KeyCode.Return) || UnityEngine.Input.GetKeyDown(KeyCode.JoystickButton0)) {
-                ExecuteEvents.Execute(UiGameMenu.Instance.selectedTrigger.gameObject, pointer, ExecuteEvents.pointerDownHandler);
+                ExecuteEvents.Execute(UiGameMenu.Instance.selectedTrigger.gameObject, _pointer, ExecuteEvents.pointerDownHandler);
             }
         }
 

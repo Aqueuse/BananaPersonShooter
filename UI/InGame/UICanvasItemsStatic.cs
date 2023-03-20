@@ -1,31 +1,39 @@
+using Cameras;
+using Enums;
+using Game;
+using Input;
 using Player;
 using UnityEngine;
 
 namespace UI.InGame {
     public class UICanvasItemsStatic : MonoBehaviour {
         [SerializeField] private GameObject uIinGame;
+        [SerializeField] private bool canRotate;
         
-        private bool isPlayerInZone;
-        
+        private bool _isPlayerInZone;
+
         private void Start() {
-            isPlayerInZone = false;
+            _isPlayerInZone = false;
         }
 
         private void Update() {
-            if (!isPlayerInZone) return;
+            if (!_isPlayerInZone || !canRotate) return;
             
-            var bananaManPosition = BananaMan.Instance.transform.position;
-            uIinGame.transform.LookAt(new Vector3(bananaManPosition.x, transform.position.y, bananaManPosition.z));
+            var mainCameraPosition = MainCamera.Instance.transform.position;
+            transform.LookAt(mainCameraPosition);
         }
 
         public void ShowUI() {
-            uIinGame.SetActive(true);
-            isPlayerInZone = true;
+            if (GameManager.Instance.gameContext != GameContext.IN_DIALOGUE &&
+                InputManager.Instance.uiSchemaContext != UISchemaSwitchType.GAME_MENU) {
+                uIinGame.SetActive(true);
+                _isPlayerInZone = true;
+            }
         }
 
         public void HideUI() {
             uIinGame.SetActive(false);
-            isPlayerInZone = false;
+            _isPlayerInZone = false;
         }
     }
 }

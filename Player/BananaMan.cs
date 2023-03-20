@@ -7,12 +7,26 @@ using UI.InGame;
 using UnityEngine;
 
 namespace Player {
-    class BananaMan : MonoSingleton<BananaMan> {
-        public TpsPlayerAnimator tpsPlayerAnimator;
+    class BananaMan : MonoBehaviour{
+
+		public static BananaMan Instance;
+		private void Awake()
+		{
+			if (Instance == null)
+			{
+				Instance = this;
+			}
+			else
+			{
+				Destroy(this.gameObject);
+			}
+		}
+		public TpsPlayerAnimator tpsPlayerAnimator;
         private PlayerController _playerController;
         private Rigidbody _rigidbody;
+        private FootIK _ik;
 
-        public BananasDataScriptableObject activeItem;
+		public BananasDataScriptableObject activeItem;
         public ItemThrowableType activeItemThrowableType = ItemThrowableType.EMPTY;
         public ItemThrowableCategory activeItemThrowableCategory = ItemThrowableCategory.EMPTY;
         
@@ -34,18 +48,19 @@ namespace Player {
             _playerController = GetComponent<PlayerController>();
             _ragDoll = gameObject.GetComponent<RagDoll>();
             _rigidbody = GetComponent<Rigidbody>();
-            
-            lastY = 0;
+            _ik = GetComponent<FootIK>();
+
+			lastY = 0;
             _fallCounter = 0;
         }
 
         private void Update() {
             if (GameManager.Instance.gameContext == GameContext.IN_GAME) {
-                isInAir = !GetComponent<FootIK>().getGroundedResult().isGrounded;
+                isInAir = !_ik.getGroundedResult().isGrounded;
                 
                 if (isInAir && !isRagdoll) {
                     if (transform.position.y < lastY) {
-                        _fallCounter+= Time.deltaTime;
+                        _fallCounter += Time.deltaTime;
                     
                         if (_fallCounter > 1f) {
                             //Ragdoll();
@@ -140,7 +155,7 @@ namespace Player {
             }
             
             if (health - damageAmount <= 0) {
-                GameManager.Instance.Death();
+                Death.Instance.Die();
             }
             
             UIFace.Instance.GetHurted(health < 50);
@@ -157,6 +172,5 @@ namespace Player {
         public void PlayFootstep() {
             AudioManager.Instance.PlayFootStepOneShot();
         }
-
     }
 }

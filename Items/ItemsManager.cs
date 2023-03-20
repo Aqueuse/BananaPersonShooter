@@ -1,6 +1,7 @@
 ﻿using Audio;
 using Building;
 using Building.Plateforms;
+using Data;
 using Dialogues;
 using Enums;
 using Game;
@@ -12,23 +13,26 @@ namespace Items {
     public class ItemsManager : MonoSingleton<ItemsManager> {
         private GameObject _interactedObject;
         private const int ItemsLayerMask = 1 << 8;
-        
+
+        private ItemStaticType _interactedItemStaticType;
+        public ItemsDataScriptableObject itemsDataScriptableObject;
+
         private void Update() {
             if (GameManager.Instance.isGamePlaying && GameManager.Instance.gameContext == GameContext.IN_GAME) {
                 if (Physics.Raycast(transform.position, transform.forward,  out RaycastHit raycastHit, 10, ItemsLayerMask)) {
                     _interactedObject = raycastHit.transform.gameObject;
-                    UIinGameManager.Instance.HideAllUIsinGame();
-                    _interactedObject.GetComponent<UICanvasItemsStatic>().ShowUI();
+
+                    _interactedObject.GetComponent<ItemStatic>().Activate();
                 }
                 else {
                     if (_interactedObject != null) {
-                        UIinGameManager.Instance.HideAllUIsinGame();
+                        _interactedObject.GetComponent<ItemStatic>().Desactivate();
+                        
                         _interactedObject = null;
                     }
                 }
             }
         }
-
 
         public void Validate() {
             if (_interactedObject != null) {
@@ -36,20 +40,19 @@ namespace Items {
 
                 switch (itemStaticType) {
                     case ItemStaticType.DOOR:
-                        AudioManager.Instance.PlayEffect(EffectType.BUTTON_INTERACTION);
+                        AudioManager.Instance.PlayEffect(EffectType.OPEN_DOOR, 0);
                         
                         Transform spawnPoint = _interactedObject.GetComponent<Door>().spawnPoint;
                         ScenesSwitch.Instance.SwitchScene(_interactedObject.GetComponent<Door>().destinationMap.ToUpper(), spawnPoint.position, false);
                         _interactedObject = null;
                         break;
                     case ItemStaticType.REGIME:
-                        AudioManager.Instance.PlayEffect(EffectType.BUTTON_INTERACTION);
+                        AudioManager.Instance.PlayEffect(EffectType.GRAB_BANANAS, 0);
 
                         var bananaType = _interactedObject.GetComponent<Regime>().bananasDataScriptableObject.itemThrowableType;
-                        var quantity = _interactedObject.GetComponent<Regime>().bananasDataScriptableObject
-                            .regimeQuantity;
+                        var quantity = _interactedObject.GetComponent<Regime>().bananasDataScriptableObject.regimeQuantity;
 
-                        Inventory.Instance.AddQuantity(bananaType, ItemThrowableCategory.BANANA, quantity);
+                        Inventory.Instance.AddQuantity(bananaType, quantity);
                         UIQueuedMessages.Instance.AddMessage(
                             "+ "+
                             quantity+" "+
@@ -71,6 +74,7 @@ namespace Items {
                         Foundry.Instance.Give_Ingots_To_Player();
                         break;
                     case ItemStaticType.GRABBABLE:
+                        AudioManager.Instance.PlayEffect(EffectType.GRAB_BANANAS, 0);
                         _interactedObject.GetComponent<GrabbableItem>().GrabPrintedItem();
                         break;
                 }

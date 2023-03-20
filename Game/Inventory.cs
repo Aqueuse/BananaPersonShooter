@@ -32,11 +32,11 @@ namespace Game {
             };
         }
 
-        public void AddQuantity(ItemThrowableType itemThrowableType, ItemThrowableCategory itemThrowableCategory, int quantity) {
+        public void AddQuantity(ItemThrowableType itemThrowableType, int quantity) {
             bananaManInventory[itemThrowableType] += quantity;
             UISlotsManager.Instance.RefreshQuantityInQuickSlot(itemThrowableType);
         
-            UISlotsManager.Instance.TryToPutOnSlot(itemThrowableType, itemThrowableCategory);
+            UISlotsManager.Instance.TryToPutOnSlot(itemThrowableType);
         }
 
         public int GetQuantity(ItemThrowableType itemThrowableType) {

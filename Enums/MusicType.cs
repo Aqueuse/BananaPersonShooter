@@ -1,9 +1,9 @@
 namespace Enums {
     public enum MusicType {
-        HOME,
-        MAP01,
-        BOSS,
-        DEATH,
-        BOSS_VICTORY
+        HOME = 0,
+        MAP01 = 1,
+        BOSS = 2,
+        DEATH = 3,
+        BOSS_VICTORY = 4
     }
 }

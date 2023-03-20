@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using Enums;
+using Items;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace UI.InGame.Inventory {
     public class UInventory : MonoSingleton<UInventory> {
@@ -11,8 +10,8 @@ namespace UI.InGame.Inventory {
 
         [SerializeField] private GenericDictionary<ItemThrowableType, GameObject> inventorySlots;
         [SerializeField] private GameObject firstInventoryItem;
-        
-        private Dictionary<ItemThrowableType, int> itemsIndexByType;
+
+        private Dictionary<ItemThrowableType, int> _itemsIndexByType;
 
         public GameObject lastselectedInventoryItem;
 
@@ -32,42 +31,9 @@ namespace UI.InGame.Inventory {
                 else inventorySlots[inventoryItem.Key].SetActive(false);
             }
         }
-
-        public void ActivateAllInventory() {
-            foreach (var inventoryItem in inventorySlots) {
-                inventoryItem.Value.SetActive(true);
-            }
-        }
-
-        public int GetSlotIndex(ItemThrowableType itemThrowableType) {
-            foreach (UInventorySlot inventorySlot in transform.GetComponentsInChildren<UInventorySlot>()) {
-                if (inventorySlot.itemThrowableType == itemThrowableType) {
-                    return inventorySlot.GetComponent<RectTransform>().GetSiblingIndex();
-                }
-            }
-
-            return 0;
-        }
-
-        public ItemThrowableType GetItemThrowableTypeByIndex(int index) {
-            return transform.GetComponentsInChildren<UInventorySlot>().ToList()[index].itemThrowableType;
-        }
         
-        public ItemThrowableCategory GetItemThrowableCategoryByIndex(int index) {
-            return transform.GetComponentsInChildren<UInventorySlot>().ToList()[index].itemThrowableCategory;
-        }
-
         public Sprite GetItemSprite(ItemThrowableType itemThrowableType) {
-            ActivateAllInventory();
-            
-            foreach (UInventorySlot inventorySlot in transform.GetComponentsInChildren<UInventorySlot>()) {
-                if (inventorySlot.itemThrowableType == itemThrowableType) {
-                    RefreshUInventory();
-                    return inventorySlot.GetComponent<RectTransform>().GetChild(0).GetComponentInChildren<Image>().sprite;
-                }
-            }
-
-            return null;
+            return ItemsManager.Instance.itemsDataScriptableObject.itemSpriteByItemType[itemThrowableType];
         }
     }
 }

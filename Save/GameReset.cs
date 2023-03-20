@@ -8,14 +8,14 @@ using UnityEngine;
 
 namespace Save {
     public class GameReset : MonoSingleton<GameReset> {
-        private Vector3[] debrisPosition;
-        private Quaternion[] debrisRotation;
-        private int[] debrisPrefabIndex;
+        private Vector3[] _debrisPosition;
+        private Quaternion[] _debrisRotation;
+        private int[] _debrisPrefabIndex;
         
-        private GameObject debrisContainer;
+        private GameObject _debrisContainer;
         
-        private BananaManSavedData bananaManSavedData;
-        private MapSavedData mapSavedData;
+        private BananaManSavedData _bananaManSavedData;
+        private MapSavedData _mapSavedData;
 
         public void ResetGameData() {
             ResetInventory();
@@ -35,15 +35,15 @@ namespace Save {
         private void ResetInventory() {
             foreach (var bananaSlot in Inventory.Instance.bananaManInventory.ToList()) {
                 Inventory.Instance.bananaManInventory[bananaSlot.Key] = 0;
-                GameData.Instance.BananaManSavedData.inventory[bananaSlot.Key.ToString()] = 0;
+                GameData.Instance.bananaManSavedData.inventory[bananaSlot.Key.ToString()] = 0;
             }
         }
 
         private void ResetSlots() {
-            foreach (var slot in GameData.Instance.BananaManSavedData.slots.ToList()) {
-                GameData.Instance.BananaManSavedData.slots["inventorySlot" + slot.Key] = 0;
+            for (var i = 0; i < GameData.Instance.bananaManSavedData.slots.Count; i++) {
+                GameData.Instance.bananaManSavedData.slots[i] = ItemThrowableType.EMPTY.ToString();
             }
-
+            
             foreach (UISlot uiSlot in UISlotsManager.Instance.uiSlotsScripts) {
                 uiSlot.EmptySlot();
             }
@@ -53,25 +53,25 @@ namespace Save {
             BananaMan.Instance.health = 100;
             BananaMan.Instance.resistance = 100;
 
-            GameData.Instance.BananaManSavedData.health = 100;
-            GameData.Instance.BananaManSavedData.resistance = 100;
+            GameData.Instance.bananaManSavedData.health = 100;
+            GameData.Instance.bananaManSavedData.resistance = 100;
         }
 
         private void ResetPositionAndLastMap() {
             GameData.Instance.lastPositionOnMap = ScenesSwitch.Instance.teleportSpawnPointBySceneName["COMMANDROOM"].position;
-            GameData.Instance.BananaManSavedData.last_map = "COMMANDROOM";
+            GameData.Instance.bananaManSavedData.lastMap = "COMMANDROOM";
             BananaMan.Instance.transform.position = GameData.Instance.lastPositionOnMap;
         }
 
         private void ResetAdvancementType() {
-            GameData.Instance.BananaManSavedData.advancementState = AdvancementState.NEW_GAME;
+            GameData.Instance.bananaManSavedData.advancementState = AdvancementState.NEW_GAME;
         }
 
         private void ResetActiveItem() {
             BananaMan.Instance.activeItemThrowableType = ItemThrowableType.EMPTY;
             BananaMan.Instance.activeItemThrowableCategory = ItemThrowableCategory.EMPTY;
 
-            GameData.Instance.BananaManSavedData.active_item = 0;
+            GameData.Instance.bananaManSavedData.activeItem = 0;
         }
 
         private void ResetMonkeysSasiety() {

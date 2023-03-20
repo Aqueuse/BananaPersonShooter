@@ -12,7 +12,7 @@ namespace Input.UIActions {
             if (
                 UnityEngine.Input.GetKeyDown(KeyCode.Escape) || 
                 UnityEngine.Input.GetKeyDown(KeyCode.H) || 
-                UnityEngine.Input.GetKeyDown(KeyCode.JoystickButton2) ||
+                UnityEngine.Input.GetKeyDown(KeyCode.JoystickButton1) ||
                 UnityEngine.Input.GetKeyDown(KeyCode.JoystickButton6)) {
                 GameManager.Instance.PauseGame(false);
                 TutorialsManager.Instance.Hide_Help();

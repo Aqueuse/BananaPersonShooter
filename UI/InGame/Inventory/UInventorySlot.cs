@@ -11,7 +11,7 @@ namespace UI.InGame.Inventory {
         public ItemThrowableType itemThrowableType;
         public ItemThrowableCategory itemThrowableCategory;
 
-        [SerializeField] private GameObject quantityText;
+        [SerializeField] private TextMeshProUGUI quantityText;
         
         public void AssignToSlot() {
             SetDescription();
@@ -20,19 +20,16 @@ namespace UI.InGame.Inventory {
             BananaMan.Instance.activeItemThrowableType = itemThrowableType;
             
             UInventory.Instance.lastselectedInventoryItem = gameObject;
-            
+
+            UISlotsManager.Instance.AssignToSelectedSlot(itemThrowableType);
+
             if (itemThrowableCategory == ItemThrowableCategory.BANANA) {
                 BananaMan.Instance.activeItem = ScriptableObjectManager.Instance.GetBananaScriptableObject(itemThrowableType);
-                UISlotsManager.Instance.AssignToSelectedSlot(itemThrowableType, itemThrowableCategory);
-            }
-
-            else {
-                UISlotsManager.Instance.AssignToSelectedSlot(itemThrowableType, itemThrowableCategory);
             }
         }
         
         public void SetQuantity(int quantity) {
-            quantityText.GetComponent<TextMeshProUGUI>().text = quantity > 999 ? "999+" : quantity.ToString();
+            quantityText.text = quantity > 999 ? "999+" : quantity.ToString();
         }
 
         public void SetDescription() {

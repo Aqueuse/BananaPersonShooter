@@ -1,5 +1,5 @@
     using System;
-using E7.Introloop;
+
 using Enums;
     using Game;
     using UnityEngine;
@@ -12,7 +12,6 @@ namespace Audio {
         [SerializeField] private AudioSource audioMusicsSource;
         
         [SerializeField] private AudioSource audioFootstepsSource;
-        [SerializeField] private IntroloopPlayer audioIntroLoopMusicSource; // beautifully handle lopped music with intro
 
         [SerializeField] public GenericDictionary<EffectType, AudioDataScriptableObject> audioEffectsDictionnary;
         [SerializeField] private GenericDictionary<AmbianceType, AudioDataScriptableObject> audioAmbianceDictionnary;
@@ -64,7 +63,6 @@ namespace Audio {
                     break;
                 case AudioSourcesType.MUSIC:
                     audioMusicsSource.Stop();
-                    audioIntroLoopMusicSource.Stop();
                     break;
                 case AudioSourcesType.EFFECT:
                     audioEffectsSource.Stop();
@@ -81,13 +79,11 @@ namespace Audio {
             var audioData = audioMusicsDictionnary[type];
 
             if (hasIntro) {
-                audioIntroLoopMusicSource.DefaultIntroloopAudio = audioData.clipWithIntro;
-                audioIntroLoopMusicSource.DefaultIntroloopAudio.Volume = audioData.volume * musicLevel;
-                audioIntroLoopMusicSource.Play();
+
             }
 
             else {
-                audioIntroLoopMusicSource.Stop();
+
                 audioMusicsSource.clip = audioData.clip[0];
                 audioMusicsSource.volume = audioData.volume * musicLevel;
 
@@ -106,14 +102,14 @@ namespace Audio {
             audioAmbianceSource.Play();
         }
 
-        public void PlayEffect(EffectType effectType) {
+        public void PlayEffect(EffectType effectType, ulong delay) {
             var audioData = audioEffectsDictionnary[effectType]; 
     
             audioEffectsSource.volume = effectsLevel;
             audioEffectsSource.clip = audioData.clip[Random.Range(0, audioData.clip.Length)];
             audioEffectsSource.loop = audioData.IsLooping;
 
-            audioEffectsSource.Play();
+            audioEffectsSource.PlayDelayed(delay);
         }
         
         public void PlayFootStepOneShot() {
@@ -156,7 +152,7 @@ namespace Audio {
         }
 
         public void TestEffectLevel() {
-            PlayEffect(EffectType.BUTTON_INTERACTION);
+            PlayEffect(EffectType.BUTTON_INTERACTION, 0);
         }
     }
 }

@@ -1,3 +1,3 @@
 public enum AmbianceType {
-    MAP01
+    MAP01 = 0
 }

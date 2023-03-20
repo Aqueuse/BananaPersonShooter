@@ -1,6 +1,6 @@
 ﻿namespace Enums {
     public enum InputContext {
-        GAME,
-        UI
+        GAME = 0,
+        UI = 1
     }
 }

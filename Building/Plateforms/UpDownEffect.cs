@@ -3,44 +3,50 @@ using UnityEngine;
 
 namespace Building.Plateforms {
     enum VerticalState {
-        UP,
-        DOWN
+        UP = 0,
+        DOWN = 1
     }
     
     public class UpDownEffect : MonoBehaviour {
-        private VerticalState verticalState = VerticalState.UP;
+        private VerticalState _verticalState = VerticalState.UP;
 
-        private Vector3 upPosition;
+        private Vector3 _upPosition;
 
-        private float step;
-        private Vector3 initialPosition;
-        
-        private readonly float speed = 5f;
-        
+        private float _step;
+        private Vector3 _initialPosition;
+
+        private const float Speed = 5f;
+
         private void Start() {
-            initialPosition = transform.position;
-            upPosition = initialPosition + Vector3.up * 100;
+            _initialPosition = transform.position;
+            _upPosition = _initialPosition + Vector3.up * 100;
         }
         
         private void FixedUpdate() {
-            if (GameManager.Instance.isGamePlaying) {
-                step =  speed * Time.deltaTime; // calculate distance to move
-
-                if (Vector3.Distance(transform.position, initialPosition) <= 1f) {
-                    verticalState = VerticalState.UP;
-                }
-
-                if (Vector3.Distance(transform.position, upPosition) <= 1f) {
-                    verticalState = VerticalState.DOWN;
-                }
+            if (!GameManager.Instance.isGamePlaying) return;
             
-                if (verticalState == VerticalState.UP) {
-                    transform.position = Vector3.MoveTowards(transform.position, upPosition, step);
-                }
+            _step =  Speed * Time.deltaTime; // calculate distance to move
+
+            if (Vector3.Distance(transform.position, _initialPosition) <= 1f) {
+                _verticalState = VerticalState.UP;
+            }
+
+            if (Vector3.Distance(transform.position, _upPosition) <= 1f) {
+                _verticalState = VerticalState.DOWN;
+            }
             
-                if (verticalState == VerticalState.DOWN) {
-                    transform.position = Vector3.MoveTowards(transform.position, initialPosition, step);
-                }
+            if (_verticalState == VerticalState.UP) {
+                transform.position = Vector3.MoveTowards(transform.position, _upPosition, _step);
+            }
+            
+            if (_verticalState == VerticalState.DOWN) {
+                transform.position = Vector3.MoveTowards(transform.position, _initialPosition, _step);
+            }
+        }
+
+        private void OnTriggerEnter(Collider other) {
+            if (other.CompareTag("MoverUnvalid")) {
+                _verticalState = _verticalState == VerticalState.UP ? VerticalState.DOWN : VerticalState.UP;
             }
         }
     }

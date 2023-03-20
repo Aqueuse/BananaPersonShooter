@@ -1,7 +1,7 @@
 namespace Enums {
     public enum ItemThrowableCategory {
-        BANANA,
-        CRAFTABLE,
-        EMPTY
+        BANANA = 0,
+        CRAFTABLE = 1,
+        EMPTY = 2
     }
 }

@@ -10,36 +10,34 @@ using UnityEngine;
 namespace Building {
     public class BananaGunGet : MonoSingleton<BananaGunGet> {
         [SerializeField] private GameObject moverTarget;
-        private GameObject targetedGameObject;
+        private GameObject _targetedGameObject;
         
-        private ItemThrowableType targetType;
+        private ItemThrowableType _targetType;
         private const int Layermask = 1 << 9;
 
-        private bool isAspiring;
+        private bool _isAspiring;
         
         void Update() {
-            if (isAspiring && BananaMan.Instance.isGrabingBananaGun) {
+            if (_isAspiring && BananaMan.Instance.isGrabingBananaGun) {
                 BananaGun.Instance.bananaGun.transform.LookAt(moverTarget.transform, Vector3.up);
 
-                if (Physics.Raycast(GameManager.Instance.cameraMain.transform.position, GameManager.Instance.cameraMain.transform.forward, out RaycastHit raycastHit, 20, Layermask)) {
+                if (Physics.Raycast(GameManager.Instance.cameraMain.transform.position, GameManager.Instance.cameraMain.transform.forward, out RaycastHit raycastHit, 100, Layermask)) {
                     if (raycastHit.transform.GetComponent<ItemThrowable>() != null) {
                         ItemThrowable itemThrowable = raycastHit.transform.GetComponent<ItemThrowable>();
 
                         if (itemThrowable.ItemThrowableType == ItemThrowableType.PLATEFORM) {
-                            targetedGameObject = raycastHit.transform.gameObject;
+                            _targetedGameObject = raycastHit.transform.gameObject;
 
-                            var platformClass = targetedGameObject.GetComponent<Plateform>(); 
+                            var platformClass = _targetedGameObject.GetComponent<Plateform>(); 
 
                             platformClass.DissolveMe();
-                            AudioManager.Instance.PlayEffect(EffectType.DESINTEGRATION);
                         }
 
                         if (itemThrowable.ItemThrowableCategory == ItemThrowableCategory.CRAFTABLE && itemThrowable.ItemThrowableType == ItemThrowableType.DEBRIS) {
-                            targetedGameObject = raycastHit.transform.gameObject;
-                            var debrisClass = targetedGameObject.GetComponent<Debris>(); 
+                            _targetedGameObject = raycastHit.transform.gameObject;
+                            var debrisClass = _targetedGameObject.GetComponent<Debris>(); 
 
                             debrisClass.DissolveMe();
-                            AudioManager.Instance.PlayEffect(EffectType.DESINTEGRATION);
                         }
                     }
                 }
@@ -47,14 +45,15 @@ namespace Building {
         }
 
         public void StartToGet() {
-            isAspiring = true;
+            _isAspiring = true;
             BananaGun.Instance.GrabBananaGun();
             UICrosshair.Instance.SetCrosshair(ItemThrowableType.EMPTY);
             UICrosshair.Instance.ShowHideCrosshairs(true);
+            AudioManager.Instance.PlayEffect(EffectType.DESINTEGRATION, 1);
         }
 
         public void CancelGet() {
-            isAspiring = false;
+            _isAspiring = false;
             
             AudioManager.Instance.StopAudioSource(AudioSourcesType.EFFECT);
 
