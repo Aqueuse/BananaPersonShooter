@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 34852139ae771484289135c8cc860b89, type: 3}
+  m_Name: Corolle Music Data
+  m_EditorClassIdentifier: 
+  clip:
+  - {fileID: 8300000, guid: 9687de44d310f4342985d7af92463cc4, type: 3}
+  - {fileID: 8300000, guid: 3d1740bdf89490e4385928b701ec1a79, type: 3}
+  - {fileID: 8300000, guid: 1c68fb53f08aa36449bc12228677de8f, type: 3}
+  - {fileID: 8300000, guid: db7a52c61da8a91429d0f64bb2942034, type: 3}
+  - {fileID: 8300000, guid: 8c9bd7b3d36e78642ade12ae48f5199d, type: 3}
+  - {fileID: 8300000, guid: a59f72ce0bd6fc146970ec1f70280e98, type: 3}
+  - {fileID: 8300000, guid: 4d73af06a8d53254184da11eaffb76e8, type: 3}
+  - {fileID: 8300000, guid: 18052715a2459684bba7053516d65ea1, type: 3}
+  - {fileID: 8300000, guid: fd2f6bb8fac871f4eaa4c262fd79e93c, type: 3}
+  - {fileID: 8300000, guid: a24c2bf4dbc6ab146af5786256e24a79, type: 3}
+  - {fileID: 8300000, guid: e1435035d205f734a8057d84ed6a01b0, type: 3}
+  IsLooping: 1
+  isRandomlySilenced: 1
+  volume: 1

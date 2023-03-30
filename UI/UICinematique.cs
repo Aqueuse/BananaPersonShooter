@@ -20,8 +20,6 @@ namespace UI {
         }
 
         public void AddToSlider() {
-            Debug.Log("pouet");
-            
             slider.value += Time.deltaTime*1.5f;
         }
     }

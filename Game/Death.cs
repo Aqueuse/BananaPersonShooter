@@ -21,14 +21,13 @@ namespace Game {
                 BananaMan.Instance.GetComponent<BananaMan>().Die();
                 UIFace.Instance.Die(true);
                 AudioManager.Instance.PlayEffect(EffectType.BANANASPLASH, 0);
-                AudioManager.Instance.PlayMusic(MusicType.DEATH, false);
 
                 Cursor.visible = true;
                 Cursor.lockState = CursorLockMode.None;
                 InputManager.Instance.SwitchContext(InputContext.UI);
                 MainCamera.Instance.Set0Sensibility();
 
-                UIManager.Instance.Show_death_Panel();
+                UIManager.Instance.Set_active(UICanvasGroupType.DEATH, true);
 
                 deathPlaneMeshRenderer.enabled = true;
                 deathVideoPlayer.enabled = true;

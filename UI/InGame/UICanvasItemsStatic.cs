@@ -2,38 +2,46 @@ using Cameras;
 using Enums;
 using Game;
 using Input;
-using Player;
 using UnityEngine;
 
 namespace UI.InGame {
     public class UICanvasItemsStatic : MonoBehaviour {
         [SerializeField] private GameObject uIinGame;
         [SerializeField] private bool canRotate;
+
+        private Canvas _canvas;
+        private Transform _transform;
         
-        private bool _isPlayerInZone;
+        private Transform _cameraTransform;
+        private Vector3 _localScale;
+        private float _cameraDistance;
+
+        private CanvasGroup uiInGameCanvasGroup;
 
         private void Start() {
-            _isPlayerInZone = false;
+            _canvas = GetComponent<Canvas>();
+            _transform = GetComponent<Transform>();
+            _cameraTransform = MainCamera.Instance.transform;
+
+            uiInGameCanvasGroup = uIinGame.GetComponent<CanvasGroup>();
         }
 
         private void Update() {
-            if (!_isPlayerInZone || !canRotate) return;
+            if (!canRotate) return;
             
-            var mainCameraPosition = MainCamera.Instance.transform.position;
-            transform.LookAt(mainCameraPosition);
+            _transform.LookAt(_cameraTransform);
+            
+            _cameraDistance = Vector3.Distance(_transform.position, _cameraTransform.position);
+            
+            _canvas.enabled = !(_cameraDistance > 15f);
         }
 
         public void ShowUI() {
-            if (GameManager.Instance.gameContext != GameContext.IN_DIALOGUE &&
-                InputManager.Instance.uiSchemaContext != UISchemaSwitchType.GAME_MENU) {
-                uIinGame.SetActive(true);
-                _isPlayerInZone = true;
-            }
+            uiInGameCanvasGroup.alpha = 1;
         }
 
         public void HideUI() {
-            uIinGame.SetActive(false);
-            _isPlayerInZone = false;
+            uiInGameCanvasGroup.alpha = 0;
         }
     }
 }

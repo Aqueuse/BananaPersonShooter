@@ -14,61 +14,61 @@ namespace Game {
 
         [SerializeField] private GameObject skipCinematiqueGameObject;
         
-        private VideoPlayer cinematiqueVideoPlayer;
-        private MeshRenderer meshRenderer;
-        private CinemachineVirtualCamera cinematiqueCamera;
+        private VideoPlayer _cinematiqueVideoPlayer;
+        private MeshRenderer _meshRenderer;
+        private CinemachineVirtualCamera _cinematiqueCamera;
 
-        private CinematiqueType cinematiqueType;
+        private CinematiqueType _cinematiqueType;
         
         private void Start() {
-            cinematiqueVideoPlayer = GetComponentInChildren<VideoPlayer>();
-            meshRenderer = GetComponentInChildren<MeshRenderer>();
-            cinematiqueCamera = GetComponentInChildren<CinemachineVirtualCamera>();
+            _cinematiqueVideoPlayer = GetComponentInChildren<VideoPlayer>();
+            _meshRenderer = GetComponentInChildren<MeshRenderer>();
+            _cinematiqueCamera = GetComponentInChildren<CinemachineVirtualCamera>();
             
-            RenderTexture.active = cinematiqueVideoPlayer.targetTexture;
+            RenderTexture.active = _cinematiqueVideoPlayer.targetTexture;
             GL.Clear(true, true, Color.black);
             RenderTexture.active = null;
 
-            cinematiqueVideoPlayer.loopPointReached += EndReached;
+            _cinematiqueVideoPlayer.loopPointReached += EndReached;
         }
 
         public void Play(CinematiqueType playedCinematiqueType) {
-            cinematiqueVideoPlayer.enabled = true;
+            _cinematiqueVideoPlayer.enabled = true;
             skipCinematiqueGameObject.SetActive(true);
 
             UISchemaSwitcher.Instance.SwitchUISchema(UISchemaSwitchType.CINEMATIQUE);
             GameManager.Instance.gameContext = GameContext.IN_CINEMATIQUE;
 
-            cinematiqueType = playedCinematiqueType;
-            cinematiqueCamera.Priority = 100;
-            meshRenderer.material = playedCinematiqueType == CinematiqueType.DEATH ? transparentVideoMaterial : videoMaterial;
+            _cinematiqueType = playedCinematiqueType;
+            _cinematiqueCamera.Priority = 100;
+            _meshRenderer.material = playedCinematiqueType == CinematiqueType.DEATH ? transparentVideoMaterial : videoMaterial;
 
-            cinematiqueVideoPlayer.clip = cinematiquesVideoClipsByType[playedCinematiqueType];
-            cinematiqueVideoPlayer.frame = 0;
-            cinematiqueVideoPlayer.Play();
+            _cinematiqueVideoPlayer.clip = cinematiquesVideoClipsByType[playedCinematiqueType];
+            _cinematiqueVideoPlayer.frame = 0;
+            _cinematiqueVideoPlayer.Play();
             
             AudioManager.Instance.StopAudioSource(AudioSourcesType.MUSIC);
         }
 
         public void Pause() {
-			if (cinematiqueVideoPlayer.enabled)
-				cinematiqueVideoPlayer.Pause();
+			if (_cinematiqueVideoPlayer.enabled)
+				_cinematiqueVideoPlayer.Pause();
         }
 
         public void Unpause() {
-            if(cinematiqueVideoPlayer.enabled)
-                cinematiqueVideoPlayer.Play();
+            if(_cinematiqueVideoPlayer.enabled)
+                _cinematiqueVideoPlayer.Play();
             UISchemaSwitcher.Instance.SwitchUISchema(UISchemaSwitchType.CINEMATIQUE);
         }
 
         public void Skip() {
-            cinematiqueCamera.Priority = 3;
+            _cinematiqueCamera.Priority = 3;
             
             skipCinematiqueGameObject.SetActive(false);
 
-            cinematiqueVideoPlayer.enabled = false;
+            _cinematiqueVideoPlayer.enabled = false;
 
-            if (cinematiqueType == CinematiqueType.NEW_GAME) {
+            if (_cinematiqueType == CinematiqueType.NEW_GAME) {
                 GameManager.Instance.Start_New_Game();
             }
         }

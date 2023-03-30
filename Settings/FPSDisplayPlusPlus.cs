@@ -58,7 +58,7 @@ public class FPSDisplayPlusPlus : MonoBehaviour
         InvokeRepeating(nameof(GetMinMax), 1f, 1f);
         if (moreOptionInUI)
         {
-            startRect = new(10, 10, 145, 130);
+            startRect = new(10, 10, 145, 140);
             StartCoroutine(Stats());
         }
     }
@@ -260,7 +260,8 @@ public class FPSDisplayPlusPlus : MonoBehaviour
             $"Mem {memsize}\n" +
             $"GC Used {TotalGc}\n" +
             $"GC Res {ManagedMemory}\n" +
-            $"Sys Mem {Sysmemsize}"
+            $"Sys Mem {Sysmemsize}\n" +
+            "OS : "+Environment.OSVersion+"\n"
             , _style);
     }
 

@@ -26,9 +26,8 @@ namespace Input.UIActions {
 
         private void Update() {
             Activate();
-            Escape();
-            
             Hide_Interface();
+            
             SwitchToUpperSlot();
             SwitchToLowerSlot();
             Scroll_Slots();
@@ -39,15 +38,9 @@ namespace Input.UIActions {
                 ExecuteEvents.Execute(selectedTrigger.gameObject, pointer, ExecuteEvents.pointerDownHandler);
             }
         }
-
-        private void Escape() {
-            if (UnityEngine.Input.GetKeyDown(KeyCode.Escape) || UnityEngine.Input.GetKeyDown(KeyCode.JoystickButton1)) {
-                UIManager.Instance.Hide_menus();
-            }
-        }
         
         private void Hide_Interface() {
-            if (UnityEngine.Input.GetKeyDown(KeyCode.I) || UnityEngine.Input.GetAxis("DpadHorizontal") > 0) {
+            if (UnityEngine.Input.GetKeyDown(KeyCode.Escape) || UnityEngine.Input.GetKeyDown(KeyCode.I) || UnityEngine.Input.GetAxis("DpadHorizontal") > 0) {
                 UIManager.Instance.Show_Hide_interface();
             }
         }

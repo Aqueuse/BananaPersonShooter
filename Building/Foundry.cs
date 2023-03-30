@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.Localization.Settings;
 
 namespace Building {
-    public class Foundry : MonoSingleton<Foundry> {
+    public class Foundry : MonoBehaviour {
         [SerializeField] private GameObject debrisStack;
         [SerializeField] private GameObject lavaStack;
         [SerializeField] private GameObject ingots;

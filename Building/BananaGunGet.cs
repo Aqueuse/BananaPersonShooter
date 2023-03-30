@@ -18,27 +18,30 @@ namespace Building {
         private bool _isAspiring;
         
         void Update() {
-            if (_isAspiring && BananaMan.Instance.isGrabingBananaGun) {
-                BananaGun.Instance.bananaGun.transform.LookAt(moverTarget.transform, Vector3.up);
+            if (!_isAspiring || !BananaMan.Instance.isGrabingBananaGun) return;
+            
+            BananaGun.Instance.bananaGun.transform.LookAt(moverTarget.transform, Vector3.up);
 
-                if (Physics.Raycast(GameManager.Instance.cameraMain.transform.position, GameManager.Instance.cameraMain.transform.forward, out RaycastHit raycastHit, 100, Layermask)) {
-                    if (raycastHit.transform.GetComponent<ItemThrowable>() != null) {
-                        ItemThrowable itemThrowable = raycastHit.transform.GetComponent<ItemThrowable>();
+            if (Physics.Raycast(GameManager.Instance.cameraMain.transform.position, GameManager.Instance.cameraMain.transform.forward, out RaycastHit raycastHit, 100, Layermask)) {
+                if (raycastHit.transform.GetComponent<ItemThrowable>() != null) {
+                    ItemThrowable itemThrowable = raycastHit.transform.GetComponent<ItemThrowable>();
 
-                        if (itemThrowable.ItemThrowableType == ItemThrowableType.PLATEFORM) {
-                            _targetedGameObject = raycastHit.transform.gameObject;
+                    if (itemThrowable.ItemThrowableType == ItemThrowableType.PLATEFORM) {
+                        _targetedGameObject = raycastHit.transform.gameObject;
 
-                            var platformClass = _targetedGameObject.GetComponent<Plateform>(); 
+                        var platformClass = _targetedGameObject.GetComponent<Plateform>(); 
 
-                            platformClass.DissolveMe();
-                        }
+                        AudioManager.Instance.PlayEffect(EffectType.DESINTEGRATION, 0);
+                        platformClass.DissolveMe();
+                    }
 
-                        if (itemThrowable.ItemThrowableCategory == ItemThrowableCategory.CRAFTABLE && itemThrowable.ItemThrowableType == ItemThrowableType.DEBRIS) {
-                            _targetedGameObject = raycastHit.transform.gameObject;
-                            var debrisClass = _targetedGameObject.GetComponent<Debris>(); 
+                    if (itemThrowable.ItemThrowableCategory == ItemThrowableCategory.CRAFTABLE && itemThrowable.ItemThrowableType == ItemThrowableType.DEBRIS) {
+                        _targetedGameObject = raycastHit.transform.gameObject;
+                        var debrisClass = _targetedGameObject.GetComponent<Debris>(); 
+                        UICanvasItemsHiddableManager.Instance.RemoveCanva(_targetedGameObject.GetComponentInChildren<Canvas>());
 
-                            debrisClass.DissolveMe();
-                        }
+                        AudioManager.Instance.PlayEffect(EffectType.DESINTEGRATION, 0);
+                        debrisClass.DissolveMe();
                     }
                 }
             }
@@ -49,7 +52,6 @@ namespace Building {
             BananaGun.Instance.GrabBananaGun();
             UICrosshair.Instance.SetCrosshair(ItemThrowableType.EMPTY);
             UICrosshair.Instance.ShowHideCrosshairs(true);
-            AudioManager.Instance.PlayEffect(EffectType.DESINTEGRATION, 1);
         }
 
         public void CancelGet() {

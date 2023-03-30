@@ -2,7 +2,6 @@
 using Cameras;
 using Enums;
 using Game;
-using Items;
 using Player;
 using UI;
 using UI.InGame.QuickSlots;

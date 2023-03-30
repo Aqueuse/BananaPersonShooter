@@ -4,24 +4,16 @@ using Enums;
 using Game;
 using Player;
 using UI.InGame.QuickSlots;
-using UI.Save;
 
 namespace Save {
     public class GameSave : MonoSingleton<GameSave> {
-        public void NewSave(string saveUuid) {
-            if (saveUuid.Length == 0) saveUuid = DateTime.Now.ToString("yyyyMMddHHmmss");
-
-            SaveGameData(saveUuid);
-            UISave.Instance.CreateNewSave(saveUuid);
-        }
-
         public void SaveGameData(string saveUuid) {
             var date = DateTime.ParseExact(DateTime.Now.ToString("U"), "U", CultureInfo.CurrentCulture).ToString(CultureInfo.CurrentCulture);
             
             SaveInventory();
             SaveSlots();
             SaveBananaManVitals();
-            SavePosition();
+            SavePositionAndRotation();
             SaveActiveItem();
             SaveMonkeysSatiety();
             
@@ -56,11 +48,18 @@ namespace Save {
             GameData.Instance.bananaManSavedData.resistance = BananaMan.Instance.resistance; 
         }
 
-        private void SavePosition() {
-            GameData.Instance.lastPositionOnMap = BananaMan.Instance.transform.position;
+        private void SavePositionAndRotation() {
+            var bananaManTransform = BananaMan.Instance.transform;
+            GameData.Instance.lastPositionOnMap = bananaManTransform.position;
+            GameData.Instance.lastRotationOnMap = bananaManTransform.rotation.eulerAngles;
+            
             GameData.Instance.bananaManSavedData.xWorldPosition = GameData.Instance.lastPositionOnMap.x;
             GameData.Instance.bananaManSavedData.yWorldPosition = GameData.Instance.lastPositionOnMap.y;
             GameData.Instance.bananaManSavedData.zworldPosition = GameData.Instance.lastPositionOnMap.z;
+
+            GameData.Instance.bananaManSavedData.xWorldRotation = GameData.Instance.lastRotationOnMap.x;
+            GameData.Instance.bananaManSavedData.yWorldRotation = GameData.Instance.lastRotationOnMap.y;
+            GameData.Instance.bananaManSavedData.zWorldRotation = GameData.Instance.lastRotationOnMap.z;
         }
 
         private void SaveActiveItem() {

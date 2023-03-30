@@ -1,3 +1,4 @@
+using Data.Bananas;
 using Data.Craftables;
 using Enums;
 using UnityEngine;

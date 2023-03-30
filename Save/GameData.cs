@@ -12,6 +12,7 @@ namespace Save {
         public BananaManSavedData bananaManSavedData = new BananaManSavedData();
         
         public Vector3 lastPositionOnMap;
+        public Vector3 lastRotationOnMap;
         
         public GenericDictionary<string, MapSavedData> mapSavedDatasByMapName;
 

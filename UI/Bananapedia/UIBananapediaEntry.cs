@@ -1,3 +1,4 @@
+using Data.Bananas;
 using Settings;
 using TMPro;
 using UnityEngine;

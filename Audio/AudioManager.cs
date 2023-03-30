@@ -1,6 +1,7 @@
     using System;
-
-using Enums;
+    using System.Collections.Generic;
+    using System.Linq;
+    using Enums;
     using Game;
     using UnityEngine;
 using Random = UnityEngine.Random;
@@ -18,8 +19,9 @@ namespace Audio {
         [SerializeField] private GenericDictionary<MusicType, AudioDataScriptableObject> audioMusicsDictionnary;
         [SerializeField] private GenericDictionary<FootStepType, AudioDataScriptableObject> audioFootStepsDictionnary;
 
-        
-        
+        private MusicType actualMusicType;
+        private AudioClip lastClip;
+
         public float musicLevel = 0.1f;
         public float ambianceLevel = 0.1f;
         public float effectsLevel = 0.1f;
@@ -35,24 +37,24 @@ namespace Audio {
             switch (sceneName) {
                 case "HOME":
                     StopAudioSource(AudioSourcesType.AMBIANCE);
-                    PlayMusic(MusicType.HOME, false);
+                    PlayMusic(MusicType.HOME);
                     break;
                 
                 case "MAP01":
-                    PlayAmbiance(AmbianceType.MAP01);
-                    PlayMusic(MusicType.MAP01, false);
+                    PlayAmbiance(AmbianceType.DRONE_MAP01);
+                    PlayMusic(MusicType.JUNGLE_MAP01);
                     break;
                     
                 case "COROLLE":
-                    PlayAmbiance(AmbianceType.MAP01);
-                    PlayMusic(MusicType.MAP01, false);
+                    PlayAmbiance(AmbianceType.DRONE_COROLLE);
+                    PlayMusic(MusicType.COROLLE);
                     break;
                 
                 case "COMMANDROOM":
-                    StopAudioSource(AudioSourcesType.AMBIANCE);
-                    StopAudioSource(AudioSourcesType.MUSIC);
+                    PlayAmbiance(AmbianceType.DRONE_COMMANDROOM);
+                    PlayMusic(MusicType.COMMANDROOM);
                     break;
-            }  // 7 secondes 955  / 39 secondes 775
+            }
         }
 
         public void StopAudioSource(AudioSourcesType audioSourceType) {
@@ -75,27 +77,45 @@ namespace Audio {
             }
         }
 
-        public void PlayMusic(MusicType type, bool hasIntro) {
-            var audioData = audioMusicsDictionnary[type];
+        public void PlayMusic(MusicType musicType) {
+            actualMusicType = musicType;
+            var audioData = audioMusicsDictionnary[musicType];
 
-            if (hasIntro) {
+            audioMusicsSource.volume = audioData.volume * musicLevel;
 
+            audioMusicsSource.loop = audioData.IsLooping;
+
+            if (audioData.isRandomlySilenced) {
+                Invoke(nameof(PlayMusicDelayed), 0);
             }
 
             else {
-
                 audioMusicsSource.clip = audioData.clip[0];
-                audioMusicsSource.volume = audioData.volume * musicLevel;
-
-                audioMusicsSource.loop = audioData.IsLooping;
                 audioMusicsSource.Play();
             }
+        }
+
+        private void PlayMusicDelayed() {
+            var audioData = audioMusicsDictionnary[actualMusicType];
+            
+            HashSet<AudioClip> audioClips = new HashSet<AudioClip>(audioData.clip);
+            if (lastClip != null) audioClips.Remove(lastClip);
+
+            // prevent playing the same song
+            var randomClip = audioClips.ElementAt(Random.Range(0, audioClips.Count));
+            audioMusicsSource.clip = randomClip;
+            lastClip = randomClip;
+
+            audioMusicsSource.Play();
+            var clipDuration = audioMusicsSource.clip.length;
+            
+            Invoke(nameof(PlayMusicDelayed), Random.Range(clipDuration+30, clipDuration+60));
         }
 
         private void PlayAmbiance(AmbianceType ambianceType) {
             var audioData = audioAmbianceDictionnary[ambianceType];
 
-            audioAmbianceSource.volume = ambianceLevel;
+            audioAmbianceSource.volume = ambianceLevel * audioMusicsSource.volume;
             audioAmbianceSource.clip = audioData.clip[Random.Range(0, audioData.clip.Length)];
             audioAmbianceSource.loop = true;
             

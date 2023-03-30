@@ -4,7 +4,6 @@ using Audio;
 using Building;
 using Building.Plateforms;
 using Enums;
-using MiniChimps;
 using Monkeys;
 using Monkeys.Gorilla;
 using UI.InGame.Statistics;
@@ -34,14 +33,12 @@ namespace Game {
         
         public float monkeySasiety;
 
+        public bool hasBananaTree;
         public bool hasDebris;
         public bool isDiscovered;
 
         public string mapName;
-
-        public bool isShowingDebris;
-        public bool isShowingBananaTrees;
-
+        
         private void Start() {
             maxDebrisQuantity = 28;
         }
@@ -56,18 +53,15 @@ namespace Game {
 
             if (activeMonkey.happiness < 20 && activeMonkey.monkeyState != MonkeyState.ANGRY) {
                 activeMonkey.monkeyState = MonkeyState.ANGRY;
-                HautParleurs.Instance.PlayHappinessLevelClip(MonkeyState.ANGRY);
             }
 
             if (activeMonkey.happiness is >= 20 and < 60 && activeMonkey.monkeyState != MonkeyState.SAD) {
                 activeMonkey.monkeyState = MonkeyState.SAD;
                 activeMonkey.GetComponent<GorillaSounds>().PlaySadMonkeySounds();
-                HautParleurs.Instance.PlayHappinessLevelClip(MonkeyState.SAD);
             }
 
             if (activeMonkey.happiness >= 60 && activeMonkey.monkeyState != MonkeyState.HAPPY) {
                 activeMonkey.monkeyState = MonkeyState.HAPPY;
-                HautParleurs.Instance.PlayHappinessLevelClip(MonkeyState.HAPPY);
             }
         }
 
@@ -82,7 +76,7 @@ namespace Game {
             if (MapItems.Instance == null) return;
 
             if (MapsManager.Instance.currentMap.hasDebris) {
-                var debrisClass = MapItems.Instance.debrisContainer.gameObject.GetComponentsInChildren<Debris>();
+                var debrisClass = MapItems.Instance.debrisContainer.gameObject.GetComponentsInChildren<MeshRenderer>();
 
                 var mapDebrisPrefabIndex = new int[debrisClass.Length];
                 var mapDebrisPosition = new Vector3[debrisClass.Length];
@@ -115,9 +109,9 @@ namespace Game {
             plateformsPosition = new List<Vector3>();
             plateformsTypes = new List<PlateformType>();
             
-            for (var i = 0; i < plateformsClass.Count; i++) {
-                plateformsPosition.Add(plateformsClass[i].initialPosition);
-                plateformsTypes.Add(plateformsClass[i].plateformType);
+            foreach (var plateformClass in plateformsClass) {
+                plateformsPosition.Add(plateformClass.initialPosition);
+                plateformsTypes.Add(plateformClass.plateformType);
             }
         }
         
@@ -126,7 +120,7 @@ namespace Game {
         }
 
         public void StartBossFight(MonkeyType monkeyType) {
-            AudioManager.Instance.PlayMusic(MusicType.BOSS, true);
+            AudioManager.Instance.PlayMusic(MusicType.FIGHT);
 
             activeMonkeyType = monkeyType;
         }

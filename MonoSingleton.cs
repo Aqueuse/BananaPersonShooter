@@ -4,17 +4,7 @@ public abstract class MonoSingleton<T> : MonoBehaviour where T : MonoBehaviour
 {
     private static T _instance;
 
-    public static T Instance {
-        get {
-            // Instance requiered for the first time, we look for it
-            if (_instance == null) {
-                Debug.Log(typeof(T) + " is NULL");
-                _instance = FindObjectOfType(typeof(T)) as T;
-            }
-
-            return _instance;
-        }
-    }
+    public static T Instance { get { return _instance; } }
 
     private void Awake() {
         if (_instance != null && _instance != this) {

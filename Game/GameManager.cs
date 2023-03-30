@@ -15,33 +15,25 @@ using UnityEngine;
 namespace Game {
     public class GameManager : MonoSingleton<GameManager> {
         [SerializeField] public Camera cameraMain;
+        [SerializeField] private CinemachineFreeLook playerCamera;
 
         public GameObject loadingScreen;
-        private CinemachineFreeLook _playerCamera;
     
         public bool isGamePlaying;
         
         public GameContext gameContext;
         
         private void Start() {
-            if (cameraMain != null) {
-                _playerCamera = cameraMain.GetComponentInChildren<CinemachineFreeLook>();
-            }
-
+            isGamePlaying = false;
             gameContext = GameContext.IN_HOME;
 
             BananaMan.Instance.GetComponent<RagDoll>().SetRagDoll(false);
         
             GameSettings.Instance.LoadSettings(); 
-            AudioManager.Instance.PlayMusic(MusicType.HOME, false);
+            AudioManager.Instance.PlayMusic(MusicType.HOME);
 
             InputManager.Instance.uiSchemaContext = UISchemaSwitchType.HOME_MENU;
             InputManager.Instance.SwitchContext(InputContext.UI);
-
-            // isInGame = false;
-            // isGamePlaying = false;
-            // isOnDialogue = false;
-            // isFigthing = false;
         }
         
         public void New_Game() {
@@ -60,7 +52,7 @@ namespace Game {
             UISave.Instance.CreateNewSave(GameData.Instance.currentSaveUuid);
          
             BananaGun.Instance.bananaGunInBack.SetActive(false);
-            UIManager.Instance.Hide_HUD();
+            UIManager.Instance.Set_active(UICanvasGroupType.HUD, false);
             
             Play(GameData.Instance.currentSaveUuid, true);
         }
@@ -74,9 +66,21 @@ namespace Game {
             loadingScreen.SetActive(true);
             
             cameraMain.clearFlags = CameraClearFlags.Skybox;
-            _playerCamera.Priority = 10;
+            playerCamera.Priority = 10;
+            MainCamera.Instance.SwitchToFreeLookCamera();
             
-            ScenesSwitch.Instance.SwitchScene(GameData.Instance.bananaManSavedData.lastMap, GameData.Instance.lastPositionOnMap, newGame);
+            if (newGame) {
+                ScenesSwitch.Instance.SwitchScene(
+                    "COMMANDROOM", 
+                    SpawnPoint.COMMAND_ROOM_TELEPORTATION,
+                    true);
+            }
+            else {
+                ScenesSwitch.Instance.SwitchScene(
+                    GameData.Instance.bananaManSavedData.lastMap, 
+                    SpawnPoint.LAST_MAP,
+                    false);
+            }
         }
 
         public void PauseGame(bool pause) {

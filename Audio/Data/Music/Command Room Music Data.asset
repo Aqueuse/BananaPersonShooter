@@ -9,13 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b2cd7c3672a89964589361a843fb5884, type: 3}
-  m_Name: Boss Music Introloop Audio
+  m_Script: {fileID: 11500000, guid: 34852139ae771484289135c8cc860b89, type: 3}
+  m_Name: Command Room Music Data
   m_EditorClassIdentifier: 
+  clip:
+  - {fileID: 8300000, guid: 3d1740bdf89490e4385928b701ec1a79, type: 3}
+  IsLooping: 1
+  isRandomlySilenced: 0
   volume: 1
-  pitch: 1
-  audioClip: {fileID: 8300000, guid: 55dc0f5e330eb2343bbb331ba83c03ee, type: 3}
-  introBoundary: 8.097
-  loopingBoundary: 39.951
-  nonLooping: 0
-  loopWholeAudio: 0

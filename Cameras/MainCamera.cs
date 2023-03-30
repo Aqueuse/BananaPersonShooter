@@ -84,7 +84,6 @@ namespace Cameras {
         public void DezoomCamera() {
             if (_cinemachineCameraOffset.m_Offset.z < -1.9f) return;
             
-            // DEZOOM MAX = -1.39
             if (_cinemachineCameraOffset.m_Offset.z >= -1.9f) {
                 _cinemachineCameraOffset.m_Offset.z -= 0.1f;
             }

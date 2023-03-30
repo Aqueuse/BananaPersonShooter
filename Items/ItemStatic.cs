@@ -1,5 +1,4 @@
 ﻿using Enums;
-using Input;
 using UI.InGame;
 using UnityEngine;
 
@@ -8,27 +7,25 @@ namespace Items {
         public ItemStaticType itemStaticType;
 
         private UICanvasItemsStatic _canvasItemsStatic;
-        private bool _isActive;
+
+        public bool _isActive;
 
         private void Start() {
             _canvasItemsStatic = GetComponentInChildren<UICanvasItemsStatic>();
         }
-        
+
         public void Activate() {
             if (_isActive) return;
-            
-            UIinGameManager.Instance.HideAllUIsinGame();
-            _canvasItemsStatic.ShowUI();
-            if (itemStaticType == ItemStaticType.UIMAP) GetComponent<UIMapActions>().enabled = true;
 
+            ItemsManager.Instance.HideAllItemsStatics();
+            _canvasItemsStatic.ShowUI();
             _isActive = true;
         }
 
         public void Desactivate() {
-            UIinGameManager.Instance.HideAllUIsinGame();
-            if (itemStaticType == ItemStaticType.UIMAP) GetComponent<UIMapActions>().enabled = false;
-
             _isActive = false;
+            
+            _canvasItemsStatic.HideUI();
         }
     }
 }

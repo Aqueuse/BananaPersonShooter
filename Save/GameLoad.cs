@@ -10,7 +10,6 @@ using Game;
 using Items;
 using Player;
 using UI;
-using UI.InGame;
 using UI.InGame.QuickSlots;
 using UI.Save;
 using UnityEngine;
@@ -19,7 +18,7 @@ namespace Save {
     public class GameLoad : MonoSingleton<GameLoad> {
         public void LoadLastSave() {
             GameManager.Instance.loadingScreen.SetActive(true);
-            UIManager.Instance.Hide_death_Panel();
+            UIManager.Instance.Set_active(UICanvasGroupType.DEATH, false);
             Death.Instance.HideDeath();
             
             if (GameData.Instance.currentSaveUuid == null) ScenesSwitch.Instance.ReturnHome();
@@ -44,7 +43,7 @@ namespace Save {
             LoadInventory();
             LoadSlots();
             LoadBananaManVitals();
-            LoadPositionAndLastMap();
+            LoadPositionAndRotationOnLastMap();
             LoadActiveItem();
             LoadMonkeysSatiety();
 
@@ -76,11 +75,17 @@ namespace Save {
             BananaMan.Instance.resistance = GameData.Instance.bananaManSavedData.resistance;
         }
 
-        private void LoadPositionAndLastMap() {
+        private void LoadPositionAndRotationOnLastMap() {
              GameData.Instance.lastPositionOnMap = new Vector3(
                 GameData.Instance.bananaManSavedData.xWorldPosition,
                 GameData.Instance.bananaManSavedData.yWorldPosition,
                 GameData.Instance.bananaManSavedData.zworldPosition);
+
+             GameData.Instance.lastRotationOnMap = new Vector3(
+                 GameData.Instance.bananaManSavedData.xWorldRotation,
+                 GameData.Instance.bananaManSavedData.yWorldRotation,
+                 GameData.Instance.bananaManSavedData.zWorldRotation
+             );
         }
         
         private void LoadActiveItem() {
@@ -111,8 +116,6 @@ namespace Save {
                 GameData.Instance.mapSavedDatasByMapName[map.Key] = savedMapData;
                 
                 MapsManager.Instance.mapBySceneName[map.Key].isDiscovered = savedMapData.isDiscovered;
-                MapsManager.Instance.mapBySceneName[map.Key].isShowingDebris = savedMapData.isShowingDebris;
-                MapsManager.Instance.mapBySceneName[map.Key].isShowingBananaTrees = savedMapData.isShowingBananaTrees;
             }
         }
 
@@ -132,8 +135,6 @@ namespace Save {
                 debris.transform.position = mapData.debrisPosition[i];
                 debris.transform.rotation = mapData.debrisRotation[i];
             }
-            
-            UIinGameManager.Instance.SetHiddablesVisibility();
         }
 
         public void RespawnPlateformsOnMap() {

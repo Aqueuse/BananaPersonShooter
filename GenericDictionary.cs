@@ -12,11 +12,10 @@ public class GenericDictionary<TKey, TValue> : IDictionary<TKey, TValue>, ISeria
 {
 	// Internal
 	[SerializeField]
-	private List<KeyValuePair> list = new List<KeyValuePair>();
-	[SerializeField, HideInInspector]
-	private Dictionary<TKey, int> indexByKey = new Dictionary<TKey, int>();
-	[SerializeField, HideInInspector]
-	private Dictionary<TKey, TValue> dict = new Dictionary<TKey, TValue>();
+	private List<KeyValuePair> list = new();
+
+	private Dictionary<TKey, int> indexByKey = new();
+	private Dictionary<TKey, TValue> dict = new();
 
 #pragma warning disable 0414
 	[SerializeField, HideInInspector]
@@ -91,7 +90,7 @@ public class GenericDictionary<TKey, TValue> : IDictionary<TKey, TValue>, ISeria
 
 	public bool ContainsKey(TKey key) 
 	{
-		return dict.ContainsKey(key); 
+		return dict.ContainsKey(key);
 	}
 
 	public bool Remove(TKey key)

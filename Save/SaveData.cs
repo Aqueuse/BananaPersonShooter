@@ -73,9 +73,6 @@ namespace Save {
                 map.Value.isDiscovered = mapClass.isDiscovered;
                 map.Value.cleanliness = mapClass.cleanliness;
                 map.Value.monkey_sasiety = mapClass.monkeySasiety;
-            
-                map.Value.isShowingDebris = mapClass.isShowingDebris;
-                map.Value.isShowingBananaTrees = mapClass.isShowingBananaTrees;
                 
                 var jsonMapSavedData = JsonConvert.SerializeObject(GameData.Instance.mapSavedDatasByMapName[map.Key]);
                 var mapSavefilePath = Path.Combine(savefilePath, map.Key+".json");
@@ -125,15 +122,17 @@ namespace Save {
                 _debrisDatas[i] = debrisPosition[i] + "/" + debrisRotation[i] + "/" + debrisIndex[i];
             }
 
-            string savefilePath = Path.Combine(mapDataSavesPath, mapName+"_debris.data");
+            if (_debrisDatas.Length > 0) {
+                string savefilePath = Path.Combine(mapDataSavesPath, mapName+"_debris.data");
             
-            using StreamWriter streamWriter = new StreamWriter(savefilePath, append:false);
+                using StreamWriter streamWriter = new StreamWriter(savefilePath, append:false);
             
-            foreach (var debrisData in _debrisDatas) {
-                streamWriter.WriteLine(debrisData);
+                foreach (var debrisData in _debrisDatas) {
+                    streamWriter.WriteLine(debrisData);
+                }
+            
+                streamWriter.Flush();
             }
-            
-            streamWriter.Flush();
         }
         
         public void SaveMapPlateformsDataByUuid(List<Vector3> plateformsPosition, List<PlateformType> plateformTypes, string mapName, string saveUuid) {

@@ -3,22 +3,22 @@ using UnityEngine;
 
 namespace MiniChimps {
     public class MiniChimpSpeak : MonoBehaviour {
-        private AudioSource miniChimpAudioSource;
+        private AudioSource _miniChimpAudioSource;
 
         private void Start() {
-            miniChimpAudioSource = GetComponentInChildren<AudioSource>();
+            _miniChimpAudioSource = GetComponentInChildren<AudioSource>();
         }
 
         public void PlayMiniChimpVoice(AudioClip audioClip) {
-            miniChimpAudioSource.volume = AudioManager.Instance.voicesLevel;
-            miniChimpAudioSource.clip = audioClip;
-            miniChimpAudioSource.loop = false;
+            _miniChimpAudioSource.volume = AudioManager.Instance.voicesLevel;
+            _miniChimpAudioSource.clip = audioClip;
+            _miniChimpAudioSource.loop = false;
 
-            miniChimpAudioSource.Play();
+            _miniChimpAudioSource.Play();
         }
 
         public void StopMiniChimpVoice() {
-            miniChimpAudioSource.Stop();
+            _miniChimpAudioSource.Stop();
         }
 
     }

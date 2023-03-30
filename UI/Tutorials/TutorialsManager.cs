@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Enums;
 using Game;
 using UnityEngine;
 
@@ -7,12 +8,12 @@ namespace UI.Tutorials {
         [SerializeField] private List<UiTutorialButton> tutorialsButtons;
 
         public void Show_Help() {
-            UIManager.Instance.Set_active(GetComponent<CanvasGroup>(), true);
+            UIManager.Instance.Set_active(UICanvasGroupType.TUTORIALS, true);
         }
 
         public void Hide_Help() {
             GameManager.Instance.PauseGame(false);
-            UIManager.Instance.Set_active(GetComponent<CanvasGroup>(), false);
+            UIManager.Instance.Set_active(UICanvasGroupType.TUTORIALS, false);
         }
         
         public void HideAllTutorials() {

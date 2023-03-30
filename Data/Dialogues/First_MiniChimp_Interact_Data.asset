@@ -14,12 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DialogueDataScriptableObject
   dialogue:
     list:
-    - Key: 0
-      Value:
-      - 'Well, well! An intruder. And I imagine that the crashed ship in the gorilla''s
-        territory has something to do with it? '
-      - "Eh bien, eh bien ! Un intrus. Et j'imagine que le vaisseau \xE9cras\xE9
-        dans le territoire du gorille n'y est pas pour rien ? "
     - Key: 1
       Value:
       - Listen buddy, if you want us to help you repair your ship, it's quid pro
@@ -33,28 +27,4 @@ MonoBehaviour:
       Value:
       - Take this banana gun !
       - Prends ce pisto-banane !
-    - Key: 3
-      Value:
-      - 'With it, you can collect space debris in the different areas of the reserve.
-        Incidentally, we use it to feed the monkeys. '
-      - "Avec \xE7a, tu pourras r\xE9colter des d\xE9bris spatiaux dans les diff\xE9rentes
-        zones de la r\xE9serve. Accessoirement, on l'utilise pour nourrir les singes."
-    - Key: 4
-      Value:
-      - 'Locate and collect at least 10 debris in the gorilla''s territory, then
-        go see my colleague at the forge in the main hall. He''ll teach you how to
-        make platforms. '
-      - "Localise et r\xE9colte au moins 10 d\xE9bris dans le territoire du gorille,
-        puis va voir mon coll\xE8gue \xE0 la forge, dans la grande salle centrale.
-        Il t'apprendra \xE0 fabriquer des plateformes avec."
-    - Key: 5
-      Value:
-      - Without these platforms, I doubt you'll be able to reach the banana trees.
-      - "Sans ces plateformes, je doute que tu r\xE9ussisses \xE0 atteindre les bananiers."
-    - Key: 6
-      Value:
-      - Help us feed the monkeys. If they all become happy again, we'll arrange for
-        your ship. You could even be promoted!
-      - "Aide nous \xE0 nourrir les singes. S'ils sont tous redevenus heureux, on
-        s'arrangera pour ton vaisseau. Tu pourrais m\xEAme prendre du galon ! "
     keyCollision: 0

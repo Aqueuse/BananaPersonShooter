@@ -120,17 +120,6 @@ namespace Player {
             }
         }
 
-        public void FocusCamera() {
-            if (!isFocusCamera) {
-                _tpsPlayerAnimatorScript.FocusCamera(true);
-                isFocusCamera = true;
-                return;
-            }
-
-            _tpsPlayerAnimatorScript.FocusCamera(false);
-            isFocusCamera = false;
-        }
-
         public void PlayerJump() {
             if (!BananaMan.Instance.isInAir && !isRolling) {
                 if (!BananaMan.Instance.isRagdoll && !isFocusCamera) {

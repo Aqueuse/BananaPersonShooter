@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using Audio;
+using Data.Bananas;
 using Enums;
 using Game;
 using HoaxGames;
@@ -7,21 +8,8 @@ using UI.InGame;
 using UnityEngine;
 
 namespace Player {
-    class BananaMan : MonoBehaviour{
-
-		public static BananaMan Instance;
-		private void Awake()
-		{
-			if (Instance == null)
-			{
-				Instance = this;
-			}
-			else
-			{
-				Destroy(this.gameObject);
-			}
-		}
-		public TpsPlayerAnimator tpsPlayerAnimator;
+    public class BananaMan : MonoSingleton<BananaMan> {
+        public TpsPlayerAnimator tpsPlayerAnimator;
         private PlayerController _playerController;
         private Rigidbody _rigidbody;
         private FootIK _ik;

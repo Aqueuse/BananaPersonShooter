@@ -14,7 +14,7 @@ namespace Building {
         private float _dissolve;
 
         private bool _isDissolving;
-
+        
         private void Start() {
             _dissolve = 1.5f;
         }
@@ -40,17 +40,13 @@ namespace Building {
         }
 
         private void OnDestroy() {
-            if (MapsManager.Instance != null) return;
-
+            if (MapItems.Instance == null) return;
+            
             MapsManager.Instance.currentMap.RefreshDebrisDataMap();
         }
 
         public void DissolveMe() {
             _isDissolving = true;
-        }
-
-        public Transform GetTransform() {
-            return gameObject.transform;
         }
     }
 }

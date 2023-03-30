@@ -12,6 +12,7 @@ namespace Settings {
         [SerializeField] private Slider musicLevelSlider;
         [SerializeField] private Slider ambianceLevelSlider;
         [SerializeField] private Slider effectsLevelSlider;
+        [SerializeField] private Slider voicesLevelSlider;
 
         [SerializeField] private Toggle fullScreenToggle;
         [SerializeField] private Toggle vsyncToggle;
@@ -40,6 +41,9 @@ namespace Settings {
         private bool _isCameraVerticallyInverted;
         private bool _isCameraHorizontallyInverted;
 
+        public bool isShowingDebris;
+        public bool isShowingBananaTrees;
+        
         public JsonPlayerPrefs prefs;
         
         private void Start() {
@@ -54,10 +58,10 @@ namespace Settings {
         public void LoadSettings() {
             prefs = new JsonPlayerPrefs(SaveData.Instance.gamePath + "/preferences.json");
             
-            AudioManager.Instance.musicLevel = prefs.GetFloat("musicLevel", 0.1f);
-            AudioManager.Instance.voicesLevel = prefs.GetFloat("voicesLevel", 0.1f);
-            AudioManager.Instance.effectsLevel = prefs.GetFloat("effectsLevel", 0.1f);
-            AudioManager.Instance.ambianceLevel = prefs.GetFloat("ambianceLevel", 0.1f);
+            AudioManager.Instance.musicLevel = prefs.GetFloat("musicLevel", 0.5f);
+            AudioManager.Instance.voicesLevel = prefs.GetFloat("voicesLevel", 0.5f);
+            AudioManager.Instance.effectsLevel = prefs.GetFloat("effectsLevel", 0.5f);
+            AudioManager.Instance.ambianceLevel = prefs.GetFloat("ambianceLevel", 0.5f);
 
             _isFullscreen = prefs.GetString("isFullscreen", "False");
             _isVsync = prefs.GetString("isVSync", "True");
@@ -74,6 +78,7 @@ namespace Settings {
             SetMusicVolume(AudioManager.Instance.musicLevel);
             SetAmbianceVolume(AudioManager.Instance.ambianceLevel);
             SetEffectVolume(AudioManager.Instance.effectsLevel);
+            SetVoicesVolume(AudioManager.Instance.voicesLevel);
             
             InverseCameraVerticalAxis(_isCameraVerticallyInverted);
             InverseCameraHorizontalAxis(_isCameraHorizontallyInverted);
@@ -89,6 +94,7 @@ namespace Settings {
             musicLevelSlider.value = AudioManager.Instance.musicLevel;
             ambianceLevelSlider.value = AudioManager.Instance.ambianceLevel;
             effectsLevelSlider.value = AudioManager.Instance.effectsLevel;
+            voicesLevelSlider.value = AudioManager.Instance.voicesLevel;
 
             fullScreenToggle.isOn = _isFullscreen.Equals("True");
             vsyncToggle.isOn = _isVsync.Equals("True");
@@ -113,30 +119,35 @@ namespace Settings {
         void SetLanguage() {
             LocalizationSettings.SelectedLocale = LocalizationSettings.AvailableLocales.Locales[languageIndexSelected];
             prefs.SetInt("language", languageIndexSelected);
+            prefs.Save();
         }
 
         public void SetMusicVolume(float level) {
             AudioManager.Instance.SetVolume(AudioSourcesType.MUSIC, level);
 
             prefs.SetFloat("musicLevel", level);
+            prefs.Save();
         }
 
         public void SetVoicesVolume(float level) {
             AudioManager.Instance.SetVolume(AudioSourcesType.VOICE, level);
 
-            prefs.SetFloat("voiceLevel", level);
+            prefs.SetFloat("voicesLevel", level);
+            prefs.Save();
         }
 
         public void SetEffectVolume(float level) {
             AudioManager.Instance.SetVolume(AudioSourcesType.EFFECT, level);
         
             prefs.SetFloat("effectsLevel", level);
+            prefs.Save();
         }
 
         public void SetAmbianceVolume(float level) {
             AudioManager.Instance.SetVolume(AudioSourcesType.AMBIANCE, level);
             
             prefs.SetFloat("ambianceLevel", level);
+            prefs.Save();
         }
 
         public void ToggleFullscreen(bool isGameFullscreen) {

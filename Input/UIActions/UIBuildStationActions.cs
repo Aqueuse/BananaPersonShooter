@@ -1,10 +1,10 @@
 using Building;
-using Enums;
+using UI;
 using UnityEngine;
 
 namespace Input.UIActions {
-    public class UIBuildStationActions : MonoBehaviour {
-        private MiniChimpType miniChimpType;
+    public class UIBuildStationActions : MonoSingleton<UIBuildStationActions> {
+        public BuildStation activeBuildStation;
         
         void Update() {
             Print();
@@ -13,13 +13,13 @@ namespace Input.UIActions {
 
         private void Print() {
             if (UnityEngine.Input.GetKeyDown(KeyCode.E) || UnityEngine.Input.GetKeyDown(KeyCode.JoystickButton2)) {
-                BuildStation.Instance.Print();
+                activeBuildStation.Print();
             }
         }
 
         private void Close() {
             if (UnityEngine.Input.GetKeyDown(KeyCode.Escape) || UnityEngine.Input.GetKeyDown(KeyCode.JoystickButton1)) {
-                BuildStation.Instance.HideBuildStationInterface();
+                UIManager.Instance.uiBuildStation.HideBuildStationInterface();
             }
         }
 

@@ -13,7 +13,19 @@ MonoBehaviour:
   m_Name: Jungle Music Map01 Data
   m_EditorClassIdentifier: 
   clip:
-  - {fileID: 8300000, guid: 8ffa63b73d0529749982e645dc023db6, type: 3}
-  clipWithIntro: {fileID: 0}
+  - {fileID: 8300000, guid: 3e18d85d39ffa2840ae66040fdcf7c7f, type: 3}
+  - {fileID: 8300000, guid: 9306b0a94b4fa124ab3c2811d73fbfbc, type: 3}
+  - {fileID: 8300000, guid: 788debf01f779d74fb275c22bb620e77, type: 3}
+  - {fileID: 8300000, guid: f2718a8af69aebc428435babbeb6a404, type: 3}
+  - {fileID: 8300000, guid: 1cb35833a38f1754bb2f263aac531845, type: 3}
+  - {fileID: 8300000, guid: 228a0ec469c46294b9d649bb0e7c8e2c, type: 3}
+  - {fileID: 8300000, guid: 46784ed1e634585409fd0630b0b59947, type: 3}
+  - {fileID: 8300000, guid: d0119692c22dfd6419f5b0eb291e7911, type: 3}
+  - {fileID: 8300000, guid: 75103cdc35fd2fe4f92b0f557549303f, type: 3}
+  - {fileID: 8300000, guid: 0db23cd21e179394a9c3c5f5bebcea16, type: 3}
+  - {fileID: 8300000, guid: 8b714d4dd118684459239182d6c7d971, type: 3}
+  - {fileID: 8300000, guid: 5129c4ada45256944acd75ee6013be92, type: 3}
+  - {fileID: 8300000, guid: 2ebe19cf1a1fb834cb9edfdb538ab60e, type: 3}
   IsLooping: 1
+  isRandomlySilenced: 1
   volume: 1

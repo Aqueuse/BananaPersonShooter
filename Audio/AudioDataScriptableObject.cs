@@ -6,6 +6,7 @@ namespace Audio {
     public class AudioDataScriptableObject : ScriptableObject {
         public AudioClip[] clip;
         public bool IsLooping;
+        public bool isRandomlySilenced;
         
         [Range(0.0f, 1.0f)] public float volume;
     }

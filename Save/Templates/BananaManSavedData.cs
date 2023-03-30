@@ -11,6 +11,12 @@ namespace Save.Templates {
         public float xWorldPosition = -1022.773f;
         public float yWorldPosition = 0.809f;
         public float zworldPosition = -2651.568f;
+
+        // Quaternion(0,-0.495293289,0,0.868725777)
+        
+        public float xWorldRotation = 0;
+        public float yWorldRotation = -0.495293289f;
+        public float zWorldRotation = 0;
         
         public string lastMap = "COMMANDROOM";
         public ItemThrowableType activeItem = ItemThrowableType.EMPTY;

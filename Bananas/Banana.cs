@@ -1,4 +1,5 @@
-﻿using Enums;
+﻿using Data.Bananas;
+using Enums;
 using Game;
 using Monkeys;
 using Player;

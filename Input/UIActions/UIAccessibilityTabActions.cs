@@ -1,3 +1,4 @@
+using Enums;
 using UI;
 using UI.Menus;
 using UnityEngine;
@@ -11,7 +12,7 @@ namespace Input.UIActions {
 
         private void Scroll_Left_Options_Tab() {
             if (UnityEngine.Input.GetKeyDown(KeyCode.JoystickButton4)) {
-                if (UIManager.Instance.optionsMenuCanvasGroup.alpha > 0) {
+                if (UIManager.Instance.canvasGroupsByUICanvasType[UICanvasGroupType.OPTIONS].alpha > 0) {
                     UIOptionsMenu.Instance.Switch_to_Left_Tab();
                 }
             }
@@ -19,7 +20,7 @@ namespace Input.UIActions {
         
         private void Scroll_Right_Options_Tab() {
             if (UnityEngine.Input.GetKeyDown(KeyCode.JoystickButton5)) {
-                if (UIManager.Instance.optionsMenuCanvasGroup.alpha > 0) {
+                if (UIManager.Instance.canvasGroupsByUICanvasType[UICanvasGroupType.OPTIONS].alpha > 0) {
                     UIOptionsMenu.Instance.Switch_to_Right_Tab();
                 }
             }

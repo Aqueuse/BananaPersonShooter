@@ -58,7 +58,7 @@ namespace Save {
         }
 
         private void ResetPositionAndLastMap() {
-            GameData.Instance.lastPositionOnMap = ScenesSwitch.Instance.teleportSpawnPointBySceneName["COMMANDROOM"].position;
+            GameData.Instance.lastPositionOnMap = ScenesSwitch.Instance.spawnPointsBySpawnType[SpawnPoint.COMMAND_ROOM_TELEPORTATION].position;
             GameData.Instance.bananaManSavedData.lastMap = "COMMANDROOM";
             BananaMan.Instance.transform.position = GameData.Instance.lastPositionOnMap;
         }

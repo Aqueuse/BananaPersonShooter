@@ -1,4 +1,5 @@
 using Audio;
+using Data.Bananas;
 using Enums;
 using Game;
 using Input;

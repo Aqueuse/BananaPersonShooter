@@ -169,8 +169,8 @@ namespace Save {
                     MapsManager.Instance.mapBySceneName[map.Key].plateformsTypes = new List<PlateformType>();
 
                     if (plateformsData.Count > 0) {
-                        for (var i=0; i<plateformsData.Count; i++) {
-                            var dataSplit = plateformsData[i].Split("/");
+                        foreach (var plateformData in plateformsData) {
+                            var dataSplit = plateformData.Split("/");
                         
                             MapsManager.Instance.mapBySceneName[map.Key].plateformsPosition.Add(Vector3FromString(dataSplit[0]));
                             MapsManager.Instance.mapBySceneName[map.Key].plateformsTypes.Add((PlateformType)Enum.Parse(typeof(PlateformType), dataSplit[1]));

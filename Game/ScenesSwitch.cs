@@ -5,21 +5,32 @@ using Enums;
 using Input;
 using Player;
 using Save;
+using Settings;
 using UI;
+using UI.InGame;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using VFX;
 
 namespace Game {
     public class ScenesSwitch : MonoSingleton<ScenesSwitch> {
-        [SerializeField] private Transform homeSpawnTransform;
         [SerializeField] private GameObject teleportationGameObject;
         
-        public GenericDictionary<string, Transform> teleportSpawnPointBySceneName;
-        
-        private IEnumerator LoadScene(string sceneName, Vector3 spawnPoint, bool isTeleporting) {
+        public GenericDictionary<SpawnPoint, Transform> spawnPointsBySpawnType;
+        public GenericDictionary<SpawnPoint, string> sceneNameBySpawnPoint;
+
+        private Transform bananaManTransform;
+        private Vector3 bananaManRotation;
+
+        private void Start() {
+            bananaManTransform = BananaMan.Instance.transform;
+        }
+
+        private IEnumerator LoadScene(string sceneName, SpawnPoint spawnPoint, bool isTeleporting) {
             AsyncOperation load = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Single);
-        
+
+            bananaManRotation = bananaManTransform.rotation.eulerAngles;
+
             // Wait until the asynchronous scene fully loads
             while (!load.isDone) {
                 yield return null;
@@ -28,7 +39,32 @@ namespace Game {
             if (load.isDone) {
                 SceneManager.SetActiveScene(SceneManager.GetSceneByName(sceneName));
                 
-                BananaMan.Instance.transform.position = spawnPoint;
+                //// spawning banana man
+                if (isTeleporting) {
+                    Teleportation.Instance.TeleportDown();
+                    bananaManTransform.position = spawnPointsBySpawnType[spawnPoint].position;
+                    
+                    bananaManRotation = bananaManTransform.rotation.eulerAngles;
+                    bananaManRotation.y = spawnPointsBySpawnType[spawnPoint].rotation.y;
+
+                    bananaManTransform.rotation = Quaternion.Euler(bananaManRotation);
+                }
+
+                if (spawnPoint == SpawnPoint.LAST_MAP) {
+                    Teleportation.Instance.ShowBananaManMaterials();
+                    bananaManTransform.position = GameData.Instance.lastPositionOnMap;
+                    bananaManRotation = GameData.Instance.lastRotationOnMap;
+                    
+                    bananaManTransform.rotation = Quaternion.Euler(bananaManRotation);
+                }
+
+                else {
+                    Teleportation.Instance.ShowBananaManMaterials();
+                    bananaManTransform.position = spawnPointsBySpawnType[spawnPoint].position;
+                    bananaManRotation = spawnPointsBySpawnType[spawnPoint].rotation.eulerAngles;
+                    
+                    bananaManTransform.rotation = Quaternion.Euler(bananaManRotation);
+                }
                 
                 if (sceneName.ToUpper() == "HOME") {
                     GameManager.Instance.cameraMain.clearFlags = CameraClearFlags.SolidColor;
@@ -49,6 +85,11 @@ namespace Game {
                     BananaMan.Instance.GetComponent<CharacterController>().enabled = false;
                     BananaMan.Instance.GetComponent<PlayerController>().canMove = false;
                     BananaMan.Instance.GetComponent<BananaMan>().ResetToPlayable();
+
+                    GameData.Instance.currentSaveUuid = null;
+                    
+                    bananaManTransform.position = spawnPointsBySpawnType[spawnPoint].position;
+                    bananaManTransform.rotation = Quaternion.Euler(bananaManRotation);
                 }
 
                 else {
@@ -59,10 +100,18 @@ namespace Game {
                         MapsManager.Instance.currentMap.RecalculateHapiness();
                         MapsManager.Instance.currentMap.RefreshMonkeyDataMap();
                     }
-                    
-                    if (MapsManager.Instance.currentMap.hasDebris && MapsManager.Instance.currentMap.isDiscovered) GameLoad.Instance.RespawnDebrisOnMap();
-                    GameLoad.Instance.RespawnPlateformsOnMap();
 
+                    if (MapsManager.Instance.currentMap.hasDebris) {
+                        if (MapsManager.Instance.currentMap.isDiscovered) GameLoad.Instance.RespawnDebrisOnMap();
+                        Uihud.Instance.SetDebrisCanvasVisibility(GameSettings.Instance.isShowingDebris);
+                    }
+
+                    if (MapsManager.Instance.currentMap.hasBananaTree) {
+                        Uihud.Instance.SetBananaTreeCanvasVisibility(GameSettings.Instance.isShowingBananaTrees); 
+                    }
+                    
+                    GameLoad.Instance.RespawnPlateformsOnMap();
+                    
                     Cursor.visible = false;
                     Cursor.lockState = CursorLockMode.Locked;
                     
@@ -73,15 +122,8 @@ namespace Game {
                     UIManager.Instance.Hide_Game_Menu();
                     UIManager.Instance.Hide_home_menu();
 
-                    if (GameData.Instance.bananaManSavedData.advancementState == AdvancementState.NEW_GAME) {
-                        GameManager.Instance.isGamePlaying = false;
-
-                        InputManager.Instance.uiSchemaContext = UISchemaSwitchType.DIALOGUES;
-                        InputManager.Instance.SwitchContext(InputContext.UI);
-                        GameManager.Instance.gameContext = GameContext.IN_DIALOGUE;
-                    }
-                    else {
-                        UIManager.Instance.Show_HUD();
+                    if (GameData.Instance.bananaManSavedData.advancementState != AdvancementState.NEW_GAME) {
+                        UIManager.Instance.Set_active(UICanvasGroupType.HUD, true);
                     }
                     
                     MainCamera.Instance.Return_back_To_Player();
@@ -89,8 +131,6 @@ namespace Game {
                     
                     BananaMan.Instance.GetComponent<CharacterController>().enabled = true;
                     BananaMan.Instance.GetComponent<PlayerController>().canMove = true;
-
-                    if (isTeleporting) Teleportation.Instance.TeleportDown();
                 }
                 
                 GameManager.Instance.loadingScreen.SetActive(false);
@@ -99,12 +139,12 @@ namespace Game {
             }
         }
     
-        public void SwitchScene(string sceneName, Vector3 spawnPoint, bool isTeleporting) {
+        public void SwitchScene(string sceneName, SpawnPoint spawnPoint, bool isTeleporting) {
             GameManager.Instance.loadingScreen.SetActive(true);
 
             MapsManager.Instance.currentMap = MapsManager.Instance.mapBySceneName[sceneName];
 
-            UIManager.Instance.Hide_HUD();
+            UIManager.Instance.Set_active(UICanvasGroupType.HUD, false);
             UIManager.Instance.Hide_home_menu();
             
             // prevent banana man to fall while loading scene
@@ -118,17 +158,20 @@ namespace Game {
         public void ReturnHome() {
             if (GameData.Instance.currentSaveUuid != null) GameSave.Instance.SaveGameData(GameData.Instance.currentSaveUuid);
         
-            SwitchScene("HOME", homeSpawnTransform.position, false);
+            SwitchScene("HOME", SpawnPoint.HOME, false);
         }
 
-        public void Teleport(string sceneName) {
-            // show TP VFX on banana man
+        public void Teleport(SpawnPoint spawnPoint) {
             teleportationGameObject.SetActive(true);            
 
             Teleportation.Instance.TeleportUp();
-            UIManager.Instance.Show_Hide_interface();
+            UIManager.Instance.HideInterface();
             
-            SwitchScene(sceneName.ToUpper(), teleportSpawnPointBySceneName[sceneName].position, true);
+            SwitchScene(sceneNameBySpawnPoint[spawnPoint].ToUpper(), spawnPoint, true);
+        }
+
+        public void TeleportToCommandRoom() {
+            Teleport(SpawnPoint.COMMAND_ROOM_TELEPORTATION);
         }
     }
 }

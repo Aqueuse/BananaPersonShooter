@@ -1,5 +1,6 @@
 using Data.Craftables;
 using Game;
+using Input.UIActions;
 using TMPro;
 using UI.InGame;
 using UnityEngine;
@@ -35,7 +36,7 @@ namespace Building.Plateforms {
                 UIQueuedMessages.Instance.AddMessage(message);
             }
             
-            BuildStation.Instance.RemovePlatform();
+            UIBuildStationActions.Instance.activeBuildStation.RemovePlatform();
         }
     }
 }

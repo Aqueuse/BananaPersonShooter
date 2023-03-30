@@ -9,7 +9,7 @@ namespace Input.UIActions {
         }
         
         private void PlayAgain() {
-            if (UnityEngine.Input.GetKeyDown(KeyCode.E) || UnityEngine.Input.GetKeyDown(KeyCode.JoystickButton7)) {
+            if (UnityEngine.Input.GetKeyDown(KeyCode.E) || UnityEngine.Input.GetKeyDown(KeyCode.JoystickButton2)) {
                 if (GameData.Instance.currentSaveUuid == null) ScenesSwitch.Instance.ReturnHome();
                 else {
                     GameLoad.Instance.LoadLastSave();

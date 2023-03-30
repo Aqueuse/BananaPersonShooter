@@ -12,7 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 34852139ae771484289135c8cc860b89, type: 3}
   m_Name: Boss Battle Music Data
   m_EditorClassIdentifier: 
-  clip: []
-  clipWithIntro: {fileID: 11400000, guid: 6a464dfd22ee2a347b85988b9c99c743, type: 2}
-  IsLooping: 0
+  clip:
+  - {fileID: 8300000, guid: 3d547e29c8839a14f94b394725cb2631, type: 3}
+  - {fileID: 8300000, guid: 2a13a82ce8b36c046994076f457c4b20, type: 3}
+  - {fileID: 8300000, guid: 859d9e3520c5bc046824604e12822cd8, type: 3}
+  IsLooping: 1
   volume: 1

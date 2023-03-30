@@ -1,0 +1,88 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 29b173fb07297a5439ee997203e3d866, type: 3}
+  m_Name: FootStepsSoundsByMaterialData
+  m_EditorClassIdentifier: 
+  basicFootStepTypesByMaterial:
+    list:
+    - Key: {fileID: 2100000, guid: dbe54498e841680449c6145a68e463ab, type: 2}
+      Value: 2
+    - Key: {fileID: 2100000, guid: 4abfde9c7f58fa24eb95c2a567ddd4c1, type: 2}
+      Value: 2
+    - Key: {fileID: 2100000, guid: c82762edfd436914a8733833258a0d40, type: 2}
+      Value: 2
+    - Key: {fileID: 2100000, guid: 8e39f7172c6a46a4dbe571c86503403f, type: 2}
+      Value: 2
+    - Key: {fileID: 2100000, guid: 23516a6f0c577d9448fd09503ac667aa, type: 2}
+      Value: 2
+    - Key: {fileID: 0}
+      Value: 3
+    - Key: {fileID: 2100000, guid: 9b14b38c1e8f7ea488835c56e89adff4, type: 2}
+      Value: 3
+    - Key: {fileID: 2100000, guid: 0af82e019af4d224481a0e36dd4480d9, type: 2}
+      Value: 3
+    - Key: {fileID: 2100000, guid: c73701dd5f51cf248aa8f3660b1fe731, type: 2}
+      Value: 3
+    - Key: {fileID: 2100000, guid: ea774e22069ec244fbfcf411cf91fd4e, type: 2}
+      Value: 3
+    - Key: {fileID: 2100000, guid: 018426700f92dce48b20ab2b1b3c87c0, type: 2}
+      Value: 3
+    - Key: {fileID: 2100000, guid: c5b26a556a61a384ca0397ac69521235, type: 2}
+      Value: 3
+    - Key: {fileID: 2100000, guid: 6650358e77480e340bb869c5efea42bc, type: 2}
+      Value: 3
+    - Key: {fileID: 2100000, guid: 3682020576e745349bade7f5a43cb8c9, type: 2}
+      Value: 3
+    - Key: {fileID: 2100000, guid: 55e3bd1366b21474ea636a16a9c2def8, type: 2}
+      Value: 0
+    - Key: {fileID: 2100000, guid: 6083fcd5ef7af054b95d031bd21d4a09, type: 2}
+      Value: 5
+    - Key: {fileID: 0}
+      Value: 2
+    - Key: {fileID: 2100000, guid: bfc3182fa6960b24b8d3e98683d5ca75, type: 2}
+      Value: 3
+    - Key: {fileID: 2100000, guid: a01c7ddd26484fd40b52c75cf3202f9d, type: 2}
+      Value: 2
+    - Key: {fileID: -7321195248465570047, guid: 71443f4dd22b1014c952309ec3142863, type: 3}
+      Value: 3
+    - Key: {fileID: 2100000, guid: 496881ce4bf658c4fa2bd9da500c49b1, type: 2}
+      Value: 3
+    - Key: {fileID: 2100000, guid: 18a8cdf4bc40ecd4395fcdbb8747376d, type: 2}
+      Value: 3
+    - Key: {fileID: 2100000, guid: 481492c8683d1c9408cf4cbfb408b124, type: 2}
+      Value: 3
+    - Key: {fileID: 2100000, guid: 1eed11d1810e87c4ebf6459ecce2d3bc, type: 2}
+      Value: 3
+    - Key: {fileID: 2100000, guid: f50c8c35738ad044abc860ea66ef9b81, type: 2}
+      Value: 3
+    - Key: {fileID: 0}
+      Value: 3
+    - Key: {fileID: 0}
+      Value: 3
+    - Key: {fileID: 2100000, guid: 73186142afac6d0478fbea52a72bfc77, type: 2}
+      Value: 2
+    keyCollision: 1
+  terrainFootStepTypeByMaterial:
+    list:
+    - Key: {fileID: 2100000, guid: 8e39f7172c6a46a4dbe571c86503403f, type: 2}
+      Value: 0
+    - Key: {fileID: 2100000, guid: 6083fcd5ef7af054b95d031bd21d4a09, type: 2}
+      Value: 5
+    - Key: {fileID: 2100000, guid: 62708a0f95431824b8a409d1f2b6020d, type: 2}
+      Value: 6
+    - Key: {fileID: 2100000, guid: 7e34b69e4a179d842a67a44c08433557, type: 2}
+      Value: 6
+    - Key: {fileID: 2100000, guid: 705427f914222cc4d82b56eaf4190973, type: 2}
+      Value: 1
+    - Key: {fileID: 2100000, guid: 9b14b38c1e8f7ea488835c56e89adff4, type: 2}
+      Value: 3
+    keyCollision: 0
