@@ -1,4 +1,6 @@
-public enum BuildableType {
-    PLATEFORM,
-    PLATEFORM5
+namespace Enums {
+    public enum BuildableType {
+        PLATEFORM,
+        EMPTY
+    }
 }

@@ -7,7 +7,7 @@ using Save.Templates;
 using UnityEngine;
 
 namespace Save {
-    public class SaveData : MonoSingleton<SaveData> {
+    public class SaveData : MonoBehaviour {
         private string[] _debrisDatas;
         private string[] _plateformsDatas;
 
@@ -52,13 +52,13 @@ namespace Save {
             else {
                 _savedData = new SavedData {
                     uuid = saveUuid,
-                    saveName = LoadData.Instance.GetsaveNameByUuid(saveUuid),
+                    saveName = ObjectsReference.Instance.loadData.GetsaveNameByUuid(saveUuid),
                     lastSavedDate = saveDate
                 };
             }
             
             var jsonSavedData = JsonConvert.SerializeObject(_savedData);
-            var jsonbananaManSavedData = JsonConvert.SerializeObject(GameData.Instance.bananaManSavedData);
+            var jsonbananaManSavedData = JsonConvert.SerializeObject(ObjectsReference.Instance.gameData.bananaManSavedData);
             
             string savefilePath = Path.Combine(savePath, "data.json");
             
@@ -66,15 +66,15 @@ namespace Save {
             
             savefilePath = Path.Combine(savePath, "MAPS");
             
-            foreach (var map in GameData.Instance.mapSavedDatasByMapName) {
-                Map mapClass = MapsManager.Instance.mapBySceneName[map.Key];
+            foreach (var map in ObjectsReference.Instance.gameData.mapSavedDatasByMapName) {
+                Map mapClass = ObjectsReference.Instance.mapsManager.mapBySceneName[map.Key];
                 
                 // synchronize data beetween classes and templates
                 map.Value.isDiscovered = mapClass.isDiscovered;
                 map.Value.cleanliness = mapClass.cleanliness;
                 map.Value.monkey_sasiety = mapClass.monkeySasiety;
                 
-                var jsonMapSavedData = JsonConvert.SerializeObject(GameData.Instance.mapSavedDatasByMapName[map.Key]);
+                var jsonMapSavedData = JsonConvert.SerializeObject(ObjectsReference.Instance.gameData.mapSavedDatasByMapName[map.Key]);
                 var mapSavefilePath = Path.Combine(savefilePath, map.Key+".json");
                 File.WriteAllText(mapSavefilePath, jsonMapSavedData);
             }
@@ -89,7 +89,7 @@ namespace Save {
         public void SaveName(string saveUuid, string saveName) {
             var savePath = Path.Combine(_savesPath, saveUuid);
             
-            _savedData = LoadData.Instance.GetSavedDataByUuid(saveUuid);
+            _savedData = ObjectsReference.Instance.loadData.GetSavedDataByUuid(saveUuid);
             _savedData.saveName = saveName;
             var jsonSavedData = JsonConvert.SerializeObject(_savedData);
             
@@ -99,7 +99,7 @@ namespace Save {
         }
 
         void SaveCameraView(string path) {
-            var screenshotCamera = GameManager.Instance.cameraMain;
+            var screenshotCamera = ObjectsReference.Instance.gameManager.cameraMain;
             RenderTexture screenTexture = new RenderTexture(150, 150, 16);
             screenshotCamera.targetTexture = screenTexture;
             RenderTexture.active = screenTexture;
@@ -134,8 +134,8 @@ namespace Save {
                 streamWriter.Flush();
             }
         }
-        
-        public void SaveMapPlateformsDataByUuid(List<Vector3> plateformsPosition, List<PlateformType> plateformTypes, string mapName, string saveUuid) {
+
+        public void SaveMapPlateformsDataByUuid(List<Vector3> plateformsPosition, List<ItemType> plateformTypes, string mapName, string saveUuid) {
             var savePath = Path.Combine(_savesPath, saveUuid);
             var mapDataSavesPath = Path.Combine(savePath, "MAPDATA");
             

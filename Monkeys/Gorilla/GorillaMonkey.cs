@@ -1,7 +1,5 @@
 ﻿using System.Collections.Generic;
 using Enums;
-using Game;
-using Player;
 using UnityEngine;
 using UnityEngine.AI;
 using Random = UnityEngine.Random;
@@ -77,9 +75,9 @@ namespace Monkeys.Gorilla {
         }
 
         private void Update() {
-            if (GameManager.Instance.isGamePlaying) {
+            if (ObjectsReference.Instance.gameManager.isGamePlaying) {
                 if (_monkey.monkeyState == MonkeyState.ANGRY) {
-                    var bananaManPosition = BananaMan.Instance.transform.position;
+                    var bananaManPosition = ObjectsReference.Instance.bananaMan.transform.position;
                     Vector3 bananaManPositionXY = new Vector3(bananaManPosition.x, 0, bananaManPosition.z);
 
                     if (navMeshAgent.isOnNavMesh) {
@@ -182,7 +180,7 @@ namespace Monkeys.Gorilla {
 
 
         private void OnTriggerEnter(Collider other) {
-            GetComponent<Monkey>().Feed(BananaMan.Instance.activeItem.sasiety);
+            GetComponent<Monkey>().Feed(ObjectsReference.Instance.bananaMan.activeItem.sasiety);
         }
 
         private Vector3 RandomNavmeshLocation(float radius) {

@@ -1,11 +1,10 @@
-﻿using Game;
-using TMPro;
+﻿using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace UI.Menus {
-    public class UiGameMenu : MonoSingleton<UiGameMenu> {
+    public class UiGameMenu : MonoBehaviour {
         [SerializeField] private Color activatedColor;
         [SerializeField] private Color unactivatedColor;
         [SerializeField] private Color activatedTextColor;
@@ -21,7 +20,7 @@ namespace UI.Menus {
         }
         
         public void Quit() {
-            ScenesSwitch.Instance.ReturnHome();
+            ObjectsReference.Instance.scenesSwitch.ReturnHome();
         }
 
         public void SwitchToRightButton() {

@@ -1,6 +1,6 @@
-namespace Enums {
-    public enum PlateformType {
-        INACTIVE,
+﻿namespace Enums {
+    public enum ItemType {
+        EMPTY,
         BARANGAN,
         BLUE_JAVA,
         BURRO,
@@ -17,6 +17,12 @@ namespace Enums {
         PRAYING_HANDS,
         RED,
         RINO_HORN,
-        TINDOK
+        TINDOK,
+        DEBRIS,
+        METAL,
+        BATTERY,
+        ELECTRONIC,
+        TISSU,
+        BANANA_SKIN,
     }
 }

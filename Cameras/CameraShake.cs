@@ -2,7 +2,7 @@ using System.Collections;
 using UnityEngine;
 
 namespace Cameras {
-    public class CameraShake : MonoSingleton<CameraShake> {
+    public class CameraShake : MonoBehaviour {
         private Vector3 _originalPos;
         private float _timeAtCurrentFrame;
         private float _timeAtLastFrame;

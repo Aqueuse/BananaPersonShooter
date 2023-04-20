@@ -1,6 +1,5 @@
 namespace Enums {
     public enum AdvancementState {
-        NEW_GAME,
         GET_BANANAGUN,
         GRAB_DEBRIS_ON_MAP,
         FIRST_PLATFORM_BUILD,

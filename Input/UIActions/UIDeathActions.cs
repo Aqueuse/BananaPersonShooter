@@ -1,5 +1,3 @@
-using Game;
-using Save;
 using UnityEngine;
 
 namespace Input.UIActions {
@@ -9,11 +7,15 @@ namespace Input.UIActions {
         }
         
         private void PlayAgain() {
-            if (UnityEngine.Input.GetKeyDown(KeyCode.E) || UnityEngine.Input.GetKeyDown(KeyCode.JoystickButton2)) {
-                if (GameData.Instance.currentSaveUuid == null) ScenesSwitch.Instance.ReturnHome();
+            if (UnityEngine.Input.GetKeyDown(KeyCode.Return) || UnityEngine.Input.GetKeyDown(KeyCode.JoystickButton2)) {
+                if (ObjectsReference.Instance.gameData.currentSaveUuid == null) ObjectsReference.Instance.scenesSwitch.ReturnHome();
                 else {
-                    GameLoad.Instance.LoadLastSave();
+                    ObjectsReference.Instance.gameLoad.LoadLastSave();
                 }
+            }
+
+            if (UnityEngine.Input.GetKeyDown(KeyCode.Escape) || UnityEngine.Input.GetKeyDown(KeyCode.JoystickButton1)) {
+                ObjectsReference.Instance.scenesSwitch.ReturnHome();
             }
         }
     }

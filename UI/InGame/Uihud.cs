@@ -1,27 +1,24 @@
+using Building;
 using Enums;
-using Input;
-using Settings;
 using TMPro;
-using UI.InGame.Statistics;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace UI.InGame {
     public enum InterfaceContext {
         INVENTORY,
+        BLUEPRINTS,
         STATISTICS
     }
 
-    public class Uihud : MonoSingleton<Uihud> {
+    public class Uihud : MonoBehaviour {
         [SerializeField] private GameObject inventoryButton;
+        [SerializeField] private GameObject blueprintsButton;
         [SerializeField] private GameObject statisticsButton;
     
         [SerializeField] private Color activatedColor;
         [SerializeField] private Color unactivatedColor;
         
-        [SerializeField] private Image debrisNotVisibleImage;
-        [SerializeField] private Image bananaTreesNotVisibleImage;
-
         public InterfaceContext interfaceContext;
 
         private void Start() {
@@ -31,61 +28,64 @@ namespace UI.InGame {
         public void Switch_To_Inventory() {
             interfaceContext = InterfaceContext.INVENTORY;
             
-            UIManager.Instance.Set_active(UICanvasGroupType.STATISTICS, false);
-            UIManager.Instance.Set_active(UICanvasGroupType.INVENTORY, true);
+            ObjectsReference.Instance.uiManager.Set_active(UICanvasGroupType.STATISTICS, false);
+            ObjectsReference.Instance.uiManager.Set_active(UICanvasGroupType.BLUEPRINTS, false);
+            ObjectsReference.Instance.uiManager.Set_active(UICanvasGroupType.INVENTORY, true);
 
             inventoryButton.GetComponent<Image>().color = activatedColor;
             inventoryButton.GetComponentInChildren<TextMeshProUGUI>().color = Color.black;
-            
+
+            blueprintsButton.GetComponent<Image>().color = unactivatedColor;
+            blueprintsButton.GetComponentInChildren<TextMeshProUGUI>().color = activatedColor;
+
             statisticsButton.GetComponent<Image>().color = unactivatedColor;
             statisticsButton.GetComponentInChildren<TextMeshProUGUI>().color = activatedColor;
             
-            InputManager.Instance.uiSchemaContext = UISchemaSwitchType.INVENTAIRE;
-            InputManager.Instance.uiSchemaSwitcher.SwitchUISchema(UISchemaSwitchType.INVENTAIRE);
+            ObjectsReference.Instance.inputManager.uiSchemaContext = UISchemaSwitchType.INVENTAIRE;
+            ObjectsReference.Instance.inputManager.uiSchemaSwitcher.SwitchUISchema(UISchemaSwitchType.INVENTAIRE);
+        }
+
+        public void Switch_To_Blueprints() {
+            interfaceContext = InterfaceContext.BLUEPRINTS;
+            
+            ObjectsReference.Instance.uiManager.Set_active(UICanvasGroupType.INVENTORY, false);
+            ObjectsReference.Instance.uiManager.Set_active(UICanvasGroupType.STATISTICS, false);
+            ObjectsReference.Instance.uiManager.Set_active(UICanvasGroupType.BLUEPRINTS, true);
+            
+            inventoryButton.GetComponent<Image>().color = unactivatedColor;
+            inventoryButton.GetComponentInChildren<TextMeshProUGUI>().color = activatedColor;
+
+            blueprintsButton.GetComponent<Image>().color = activatedColor;
+            blueprintsButton.GetComponentInChildren<TextMeshProUGUI>().color = Color.black;
+
+            statisticsButton.GetComponent<Image>().color = unactivatedColor;
+            statisticsButton.GetComponentInChildren<TextMeshProUGUI>().color = activatedColor;
+
+            ObjectsReference.Instance.inputManager.uiSchemaContext = UISchemaSwitchType.BLUEPRINTS;
+            ObjectsReference.Instance.inputManager.uiSchemaSwitcher.SwitchUISchema(UISchemaSwitchType.BLUEPRINTS);
         }
 
         public void Switch_To_Statistics() {
             interfaceContext = InterfaceContext.STATISTICS;
 
-            UIStatistics.Instance.Refresh_Map_Statistics("MAP01");
+            ObjectsReference.Instance.mapsManager.currentMap.RecalculateHappiness();
+            ObjectsReference.Instance.uiStatistics.Refresh_Map_Statistics(ObjectsReference.Instance.mapsManager.currentMap.mapName);
             
-            UIManager.Instance.Set_active(UICanvasGroupType.INVENTORY, false);
-            UIManager.Instance.Set_active(UICanvasGroupType.STATISTICS, true);
+            ObjectsReference.Instance.uiManager.Set_active(UICanvasGroupType.INVENTORY, false);
+            ObjectsReference.Instance.uiManager.Set_active(UICanvasGroupType.BLUEPRINTS, false);
+            ObjectsReference.Instance.uiManager.Set_active(UICanvasGroupType.STATISTICS, true);
+
+            inventoryButton.GetComponent<Image>().color = unactivatedColor;
+            inventoryButton.GetComponentInChildren<TextMeshProUGUI>().color = activatedColor;
+            
+            blueprintsButton.GetComponent<Image>().color = unactivatedColor;
+            blueprintsButton.GetComponentInChildren<TextMeshProUGUI>().color = activatedColor;
 
             statisticsButton.GetComponent<Image>().color = activatedColor;
             statisticsButton.GetComponentInChildren<TextMeshProUGUI>().color = Color.black;
             
-            inventoryButton.GetComponent<Image>().color = unactivatedColor;
-            inventoryButton.GetComponentInChildren<TextMeshProUGUI>().color = activatedColor;
-
-            InputManager.Instance.uiSchemaContext = UISchemaSwitchType.STATISTIQUES;
-            InputManager.Instance.uiSchemaSwitcher.SwitchUISchema(UISchemaSwitchType.STATISTIQUES);
-
-            debrisNotVisibleImage.enabled = GameSettings.Instance.isShowingDebris;
-            bananaTreesNotVisibleImage.enabled = GameSettings.Instance.isShowingBananaTrees;
-        }
-        
-        public void SetDebrisCanvasVisibility(bool isVisible) {
-            UICanvasItemsHiddableManager.Instance.SetItemsCanvasVisibility(isVisible);
-
-            debrisNotVisibleImage.enabled = isVisible;
-        }
-        
-        public void SetBananaTreeCanvasVisibility(bool isVisible) {
-            UICanvasItemBananaTree.Instance.isItemVisible = isVisible;
-            UICanvasItemBananaTree.Instance.GetComponent<Canvas>().enabled = isVisible;
-
-            bananaTreesNotVisibleImage.enabled = isVisible;
-        }
-
-        public void OnclickDebrisButton() { 
-            GameSettings.Instance.isShowingDebris = !GameSettings.Instance.isShowingDebris;
-            SetDebrisCanvasVisibility(GameSettings.Instance.isShowingDebris);
-        }
-
-        public void OnclickBananaTreesButton() { 
-            GameSettings.Instance.isShowingBananaTrees = !GameSettings.Instance.isShowingBananaTrees;
-            SetBananaTreeCanvasVisibility(GameSettings.Instance.isShowingBananaTrees);
+            ObjectsReference.Instance.inputManager.uiSchemaContext = UISchemaSwitchType.STATISTIQUES;
+            ObjectsReference.Instance.inputManager.uiSchemaSwitcher.SwitchUISchema(UISchemaSwitchType.STATISTIQUES);
         }
     }
 }

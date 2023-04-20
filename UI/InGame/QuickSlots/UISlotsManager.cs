@@ -1,24 +1,24 @@
 ﻿using System.Collections.Generic;
-using Building;
 using Enums;
+using UnityEngine;
 
 namespace UI.InGame.QuickSlots {
-    public class UISlotsManager : MonoSingleton<UISlotsManager> {
+    public class UISlotsManager : MonoBehaviour {
         public List<UISlot> uiSlotsScripts;
     
         public int selectedSlotIndex = 2;
         
-        public void RefreshQuantityInQuickSlot(ItemThrowableType itemThrowableType) {
+        public void RefreshQuantityInQuickSlot(ItemCategory itemCategory, ItemType itemType = ItemType.EMPTY) {
             foreach (var uiSlotsScript in uiSlotsScripts) {
-                if (uiSlotsScript.itemThrowableType == itemThrowableType) {
-                    uiSlotsScript.SetAmmoQuantity(global::Game.Inventory.Instance.bananaManInventory[itemThrowableType]);
+                if (itemCategory != ItemCategory.BUILDABLE && uiSlotsScript.itemType == itemType) {
+                    uiSlotsScript.SetAmmoQuantity(ObjectsReference.Instance.inventory.bananaManInventory[itemType]);
                 }
 
-                if (uiSlotsScript.itemThrowableType == ItemThrowableType.EMPTY) {
+                if (uiSlotsScript.itemType == ItemType.EMPTY) {
                     uiSlotsScript.EmptySlot();
                 }
 
-                if (global::Game.Inventory.Instance.GetQuantity(uiSlotsScript.itemThrowableType) <= 0) {
+                if (ObjectsReference.Instance.inventory.GetQuantity(uiSlotsScript.itemType) <= 0) {
                     uiSlotsScript.EmptySlot();
                 }
             }
@@ -31,7 +31,7 @@ namespace UI.InGame.QuickSlots {
             }
 
             uiSlotsScripts[selectedSlotIndex].SetSelectedWeaponSlot();
-            SlotSwitch.Instance.SwitchSlot(Get_Selected_Slot());
+            ObjectsReference.Instance.slotSwitch.SwitchSlot(Get_Selected_Slot());
         }
 
         private void Switch_To_SelectedSlot() {
@@ -40,7 +40,7 @@ namespace UI.InGame.QuickSlots {
             }
 
             uiSlotsScripts[selectedSlotIndex].SetSelectedWeaponSlot();
-            SlotSwitch.Instance.SwitchSlot(Get_Selected_Slot());
+            ObjectsReference.Instance.slotSwitch.SwitchSlot(Get_Selected_Slot());
         }
 
         public void Select_Upper_Slot() {
@@ -65,35 +65,45 @@ namespace UI.InGame.QuickSlots {
             }
         }
         
-        public void AssignToSelectedSlot(ItemThrowableType itemThrowableType) {
+        public void AssignToSelectedSlot(ItemCategory itemCategory, ItemType itemType = ItemType.EMPTY, BuildableType buildableType = BuildableType.EMPTY) {
             // if the item is already present in the quickslots, empty the last slot where it was to prevent duplicates
             foreach (var uiSlot in uiSlotsScripts) {
-                if (uiSlot.itemThrowableType == itemThrowableType) {
+                if (itemCategory == ItemCategory.BUILDABLE && uiSlot.buildableType == buildableType) {
+                    uiSlot.EmptySlot();
+                }
+
+                if (itemCategory != ItemCategory.BUILDABLE && uiSlot.itemType == itemType) {
                     uiSlot.EmptySlot();
                 }
             }
             
-            Get_Selected_Slot().SetSlot(itemThrowableType);
+            Get_Selected_Slot().SetSlot(itemCategory, slotItemType:itemType, slotBuildableType:buildableType);
         }
 
-        public void TryToPutOnSlot(ItemThrowableType itemThrowableType) {
-            if (IsAlreadyInQuickSlot(itemThrowableType)) {
-                GetSlotWithItemType(itemThrowableType).SetSlot(itemThrowableType);
+        public void TryToPutOnSlot(ItemCategory itemCategory, ItemType itemType = ItemType.EMPTY, BuildableType buildableType = BuildableType.EMPTY) {
+            if (IsAlreadyInQuickSlot(itemCategory, itemType, buildableType)) {
+                var uislot = GetSlotWithItemCategoryAndType(itemCategory, itemType, buildableType);
+                
+                uislot.SetSlot(itemCategory, slotItemType:itemType, slotBuildableType:buildableType);
             }
 
             else {
                 foreach (var uiSlot in uiSlotsScripts) {
-                    if (uiSlot.itemThrowableType == ItemThrowableType.EMPTY) {
-                        uiSlot.SetSlot(itemThrowableType);
+                    if (uiSlot.itemType == ItemType.EMPTY) {
+                        uiSlot.SetSlot(itemCategory, slotItemType:itemType, slotBuildableType:buildableType);
                         return;
                     }
                 }
             }
         }
 
-        private bool IsAlreadyInQuickSlot(ItemThrowableType itemThrowableType) {
+        private bool IsAlreadyInQuickSlot(ItemCategory itemCategory, ItemType itemType = ItemType.EMPTY, BuildableType buildableType = BuildableType.EMPTY) {
             foreach (var uiSlot in uiSlotsScripts) {
-                if (uiSlot.itemThrowableType == itemThrowableType) {
+                if (itemCategory == ItemCategory.BUILDABLE && uiSlot.buildableType == buildableType) {
+                    return true;
+                }
+
+                if (itemCategory != ItemCategory.BUILDABLE && uiSlot.itemType == itemType) {
                     return true;
                 }
             }
@@ -104,27 +114,22 @@ namespace UI.InGame.QuickSlots {
             return uiSlotsScripts[selectedSlotIndex];
         }
 
-        private UISlot GetSlotWithItemType(ItemThrowableType itemThrowableType) {
+        private UISlot GetSlotWithItemCategoryAndType(ItemCategory itemCategory, ItemType itemType = ItemType.EMPTY, BuildableType buildableType = BuildableType.EMPTY) {
             foreach (var uiSlot in uiSlotsScripts) {
-                if (uiSlot.itemThrowableType == itemThrowableType) {
+                if (itemCategory == ItemCategory.BUILDABLE && uiSlot.buildableType == buildableType) {
+                    return uiSlot;
+                }
+
+                if (itemCategory != ItemCategory.BUILDABLE && uiSlot.itemType == itemType) {
                     return uiSlot;
                 }
             }
 
             return null;
         }
-
-        public int GetSlotIndexByItemType(ItemThrowableType itemThrowableType) {
-            for (int i = 0; i < uiSlotsScripts.Count; i++) {
-                if (uiSlotsScripts[i].itemThrowableType == itemThrowableType) {
-                    return i;
-                }
-            }
-            return 0;
-        }
-
-        public ItemThrowableType Get_Selected_Slot_Type() {
-            return uiSlotsScripts[selectedSlotIndex].itemThrowableType;
+        
+        public ItemType Get_Selected_Slot_Type() {
+            return uiSlotsScripts[selectedSlotIndex].itemType;
         }
     }
 }

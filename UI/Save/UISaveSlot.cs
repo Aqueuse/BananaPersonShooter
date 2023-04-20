@@ -1,8 +1,5 @@
 using System.IO;
-using Audio;
 using Enums;
-using Game;
-using Save;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -29,8 +26,8 @@ namespace UI.Save {
         public string saveUuid = "";
 
         public void Select() {
-            AudioManager.Instance.PlayEffect(EffectType.BUTTON_INTERACTION, 0);
-            UISave.Instance.UnselectAll();
+            //AudioManager.Instance.PlayEffect(EffectType.BUTTON_INTERACTION, 0);
+            ObjectsReference.Instance.uiSave.UnselectAll();
             activatedMask.SetActive(true);
         }
 
@@ -46,27 +43,26 @@ namespace UI.Save {
         }
 
         public void ShowSaveOptions() {
-            AudioManager.Instance.PlayEffect(EffectType.BUTTON_INTERACTION, 0);
+            //AudioManager.Instance.PlayEffect(EffectType.BUTTON_INTERACTION, 0);
             loadButtonGameObject.SetActive(true);
             renameButtonGameObject.SetActive(true);
             deleteButtonGameObject.SetActive(true);
             textPanel.SetActive(false);
 
-            if (GameManager.Instance.gameContext == GameContext.IN_GAME) {
+            if (ObjectsReference.Instance.gameManager.gameContext == GameContext.IN_GAME) {
                 saveButtonGameObject.SetActive(true);
             }
         }
         
         public void Load() {
-            AudioManager.Instance.PlayEffect(EffectType.BUTTON_INTERACTION, 0);
-            GameManager.Instance.Play(saveUuid, false);
+            ObjectsReference.Instance.audioManager.PlayEffect(EffectType.BUTTON_INTERACTION, 0);
+            ObjectsReference.Instance.gameManager.Play(saveUuid, false);
         }
 
         public void SetToExistingSave(string existingSaveUuid) {
             saveUuid = existingSaveUuid;
-            AudioManager.Instance.PlayEffect(EffectType.BUTTON_INTERACTION, 0);
 
-            var savedData = LoadData.Instance.GetSavedDataByUuid(existingSaveUuid);
+            var savedData = ObjectsReference.Instance.loadData.GetSavedDataByUuid(existingSaveUuid);
             
             saveName.text = savedData.saveName;
             saveDate.text = savedData.lastSavedDate;
@@ -75,21 +71,17 @@ namespace UI.Save {
         }
 
         public void UpdateToExistingSave() {
-            AudioManager.Instance.PlayEffect(EffectType.BUTTON_INTERACTION, 0);
-
-            var savedData = LoadData.Instance.GetSavedDataByUuid(saveUuid);
+            var savedData = ObjectsReference.Instance.loadData.GetSavedDataByUuid(saveUuid);
             
             saveName.text = savedData.saveName;
             saveDate.text = savedData.lastSavedDate;
             
-            GameSave.Instance.SaveGameData(saveUuid);
+            ObjectsReference.Instance.gameSave.SaveGameData(saveUuid);
 
             UpdateThumbail();
         }
 
         public void UpdateToNewSave(string newSaveUuid, string date) {
-            AudioManager.Instance.PlayEffect(EffectType.BUTTON_INTERACTION, 0);
-
             saveUuid = newSaveUuid;
             saveDate.text = date;
 
@@ -97,19 +89,17 @@ namespace UI.Save {
         }
 
         public void Rename() {
-            AudioManager.Instance.PlayEffect(EffectType.BUTTON_INTERACTION, 0);
             renameInputFieldGameObject.SetActive(true);
         }
 
         public void ValidateRename() {
             saveName.text = renameInputFieldGameObject.GetComponentInChildren<TMP_InputField>().text;
-            SaveData.Instance.SaveName(saveUuid, saveName.text);
+            ObjectsReference.Instance.saveData.SaveName(saveUuid, saveName.text);
             renameInputFieldGameObject.SetActive(false);
         }
-
-
+        
         private void UpdateThumbail() {
-            var savePath = LoadData.Instance.GetSavePathByUuid(saveUuid);
+            var savePath = ObjectsReference.Instance.loadData.GetSavePathByUuid(saveUuid);
             string screenshotFilePath = Path.Combine(savePath, "screenshot.png");
             
             var bytes = File.ReadAllBytes(screenshotFilePath);
@@ -133,9 +123,9 @@ namespace UI.Save {
         }
 
         public void Delete() {
-            AudioManager.Instance.PlayEffect(EffectType.BUTTON_INTERACTION, 0);
+            ObjectsReference.Instance.audioManager.PlayEffect(EffectType.BUTTON_INTERACTION, 0);
             Destroy(saveRootGameObject);
-            SaveData.Instance.DeleteSave(saveUuid);
+            ObjectsReference.Instance.saveData.DeleteSave(saveUuid);
         }
     }
 }

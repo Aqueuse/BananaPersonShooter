@@ -6,7 +6,7 @@ namespace UI.InGame.Statistics {
         [SerializeField] private Map map;
         
         public void OnClick() {
-            UIStatistics.Instance.Refresh_Map_Statistics(map.mapName);
+            ObjectsReference.Instance.uiStatistics.Refresh_Map_Statistics(map.mapName);
         }
     }
 }

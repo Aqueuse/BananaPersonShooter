@@ -1,6 +1,4 @@
-﻿using UI;
-using UI.Menus;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.EventSystems;
 
 namespace Input.UIActions {
@@ -27,13 +25,13 @@ namespace Input.UIActions {
 
         private void Activate() {
             if (UnityEngine.Input.GetKeyDown(KeyCode.Return) || UnityEngine.Input.GetKeyDown(KeyCode.JoystickButton0)) {
-                ExecuteEvents.Execute(UiGameMenu.Instance.selectedTrigger.gameObject, _pointer, ExecuteEvents.pointerDownHandler);
+                ExecuteEvents.Execute(ObjectsReference.Instance.uiGameMenu.selectedTrigger.gameObject, _pointer, ExecuteEvents.pointerDownHandler);
             }
         }
 
         private void Escape() {
             if (UnityEngine.Input.GetKeyDown(KeyCode.Escape) || UnityEngine.Input.GetKeyDown(KeyCode.JoystickButton1)) {
-                UIManager.Instance.Hide_menus();
+                ObjectsReference.Instance.uiManager.Hide_menus();
             }
         }
 
@@ -41,7 +39,7 @@ namespace Input.UIActions {
             if (UnityEngine.Input.GetAxis("Horizontal") < 0 && !_scrolledLeft) {
                 _scrolledLeft = true;
 
-                UiGameMenu.Instance.SwitchToLeftButton();
+                ObjectsReference.Instance.uiGameMenu.SwitchToLeftButton();
             }
 
             if (UnityEngine.Input.GetAxis("Horizontal") == 0) {
@@ -54,7 +52,7 @@ namespace Input.UIActions {
             if (UnityEngine.Input.GetAxis("Horizontal") > 0 && !_scrolledRight) {
                 _scrolledRight = true;
                 
-                UiGameMenu.Instance.SwitchToRightButton();
+                ObjectsReference.Instance.uiGameMenu.SwitchToRightButton();
             }
 
             if (UnityEngine.Input.GetAxis("Horizontal") == 0) {

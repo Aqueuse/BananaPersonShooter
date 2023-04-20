@@ -1,9 +1,8 @@
-using Game;
 using Save.Templates;
 using UnityEngine;
 
 namespace Save {
-    public class GameData : MonoSingleton<GameData> {
+    public class GameData : MonoBehaviour {
         [SerializeField] public GameObject[] debrisPrefab;
         [SerializeField] public GameObject plateformPrefab;
 
@@ -19,7 +18,7 @@ namespace Save {
         private void Start() {
             mapSavedDatasByMapName = new GenericDictionary<string, MapSavedData>();
             
-            foreach (var map in MapsManager.Instance.mapBySceneName) {
+            foreach (var map in ObjectsReference.Instance.mapsManager.mapBySceneName) {
                 mapSavedDatasByMapName.Add(map.Key, new MapSavedData());
             }
         }

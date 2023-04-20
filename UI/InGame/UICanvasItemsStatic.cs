@@ -1,12 +1,9 @@
-using Cameras;
-using Enums;
-using Game;
-using Input;
 using UnityEngine;
 
 namespace UI.InGame {
     public class UICanvasItemsStatic : MonoBehaviour {
         [SerializeField] private GameObject uIinGame;
+        [SerializeField] private GameObject icon;
         [SerializeField] private bool canRotate;
 
         private Canvas _canvas;
@@ -21,7 +18,7 @@ namespace UI.InGame {
         private void Start() {
             _canvas = GetComponent<Canvas>();
             _transform = GetComponent<Transform>();
-            _cameraTransform = MainCamera.Instance.transform;
+            _cameraTransform = ObjectsReference.Instance.mainCamera.transform;
 
             uiInGameCanvasGroup = uIinGame.GetComponent<CanvasGroup>();
         }
@@ -32,16 +29,24 @@ namespace UI.InGame {
             _transform.LookAt(_cameraTransform);
             
             _cameraDistance = Vector3.Distance(_transform.position, _cameraTransform.position);
-            
-            _canvas.enabled = !(_cameraDistance > 15f);
+
+            if (_cameraDistance < 15f) {
+                _canvas.enabled = true;
+            }
+
+            else {
+                _canvas.enabled = false;
+            }
         }
 
         public void ShowUI() {
             uiInGameCanvasGroup.alpha = 1;
+            icon.SetActive(false);
         }
 
         public void HideUI() {
             uiInGameCanvasGroup.alpha = 0;
+            icon.SetActive(true);
         }
     }
 }

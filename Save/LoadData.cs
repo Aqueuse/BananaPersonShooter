@@ -3,14 +3,12 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using Enums;
-using Game;
 using Newtonsoft.Json;
 using Save.Templates;
-using UI.Save;
 using UnityEngine;
 
 namespace Save {
-    public class LoadData : MonoSingleton<LoadData> {
+    public class LoadData : MonoBehaviour {
         private readonly NumberFormatInfo _americaNumberFormatInfo = new CultureInfo("en-US").NumberFormat;
         private string _sceneName;
 
@@ -40,7 +38,7 @@ namespace Save {
                     SavedData savedData = JsonConvert.DeserializeObject<SavedData>(File.ReadAllText(saveDataFile));
                     
                     if (savedData.uuid != null) {
-                        UISave.Instance.AppendSaveSlot(savedData.uuid);
+                        ObjectsReference.Instance.uiSave.AppendSaveSlot(savedData.uuid);
                     }
                 }
             }
@@ -80,7 +78,7 @@ namespace Save {
             
             else {
                 var date = DateTime.ParseExact(DateTime.Now.ToString("U"), "U", CultureInfo.CurrentCulture);
-                SaveData.Instance.Save(saveUuid, date.ToString(CultureInfo.CurrentCulture));
+                ObjectsReference.Instance.saveData.Save(saveUuid, date.ToString(CultureInfo.CurrentCulture));
                 
                 var savefilePath = Path.Combine(_savePath, "player.json");
             
@@ -104,7 +102,7 @@ namespace Save {
 
             else {
                 var date = DateTime.ParseExact(DateTime.Now.ToString("U"), "U", CultureInfo.CurrentCulture);
-                SaveData.Instance.Save(saveUuid, date.ToString(CultureInfo.CurrentCulture));
+                ObjectsReference.Instance.saveData.Save(saveUuid, date.ToString(CultureInfo.CurrentCulture));
                 
                 var savefilePath = Path.Combine(_savePath, mapName+".json");
 
@@ -119,7 +117,7 @@ namespace Save {
             
             var saveMapDatasPath = Path.Combine(_savePath, "MAPDATA");
             
-            foreach (var map in MapsManager.Instance.mapBySceneName) {
+            foreach (var map in ObjectsReference.Instance.mapsManager.mapBySceneName) {
                 if (map.Value.hasDebris) {
                     var loadfilePath = Path.Combine(saveMapDatasPath, map.Key.ToUpper()+"_debris.data");
                     
@@ -132,16 +130,16 @@ namespace Save {
                             debrisData.Add(streamReader.ReadLine());
                         }
 
-                        MapsManager.Instance.mapBySceneName[map.Key].debrisPosition = new Vector3[debrisData.Count];
-                        MapsManager.Instance.mapBySceneName[map.Key].debrisRotation = new Quaternion[debrisData.Count];
-                        MapsManager.Instance.mapBySceneName[map.Key].debrisIndex = new int[debrisData.Count];
+                        ObjectsReference.Instance.mapsManager.mapBySceneName[map.Key].debrisPosition = new Vector3[debrisData.Count];
+                        ObjectsReference.Instance.mapsManager.mapBySceneName[map.Key].debrisRotation = new Quaternion[debrisData.Count];
+                        ObjectsReference.Instance.mapsManager.mapBySceneName[map.Key].debrisIndex = new int[debrisData.Count];
 
                         for (var i=0; i<debrisData.Count; i++) {
                             var dataSplit = debrisData[i].Split("/");
                 
-                            MapsManager.Instance.mapBySceneName[map.Key].debrisPosition[i] = Vector3FromString(dataSplit[0]);
-                            MapsManager.Instance.mapBySceneName[map.Key].debrisRotation[i] = QuaternionFromString(dataSplit[1]);
-                            MapsManager.Instance.mapBySceneName[map.Key].debrisIndex[i] = int.Parse(dataSplit[2]);
+                            ObjectsReference.Instance.mapsManager.mapBySceneName[map.Key].debrisPosition[i] = Vector3FromString(dataSplit[0]);
+                            ObjectsReference.Instance.mapsManager.mapBySceneName[map.Key].debrisRotation[i] = QuaternionFromString(dataSplit[1]);
+                            ObjectsReference.Instance.mapsManager.mapBySceneName[map.Key].debrisIndex[i] = int.Parse(dataSplit[2]);
                         }
                     }
                 }
@@ -153,7 +151,7 @@ namespace Save {
             
             var saveMapDatasPath = Path.Combine(_savePath, "MAPDATA");
             
-            foreach (var map in MapsManager.Instance.mapBySceneName) {
+            foreach (var map in ObjectsReference.Instance.mapsManager.mapBySceneName) {
                 var loadfilePath = Path.Combine(saveMapDatasPath, map.Key.ToUpper()+"_plateforms.data");
                 
                 if (File.Exists(loadfilePath)) {
@@ -165,15 +163,15 @@ namespace Save {
                         plateformsData.Add(streamReader.ReadLine());
                     }
 
-                    MapsManager.Instance.mapBySceneName[map.Key].plateformsPosition = new List<Vector3>();
-                    MapsManager.Instance.mapBySceneName[map.Key].plateformsTypes = new List<PlateformType>();
+                    ObjectsReference.Instance.mapsManager.mapBySceneName[map.Key].plateformsPosition = new List<Vector3>();
+                    ObjectsReference.Instance.mapsManager.mapBySceneName[map.Key].plateformsTypes = new List<ItemType>();
 
                     if (plateformsData.Count > 0) {
                         foreach (var plateformData in plateformsData) {
                             var dataSplit = plateformData.Split("/");
                         
-                            MapsManager.Instance.mapBySceneName[map.Key].plateformsPosition.Add(Vector3FromString(dataSplit[0]));
-                            MapsManager.Instance.mapBySceneName[map.Key].plateformsTypes.Add((PlateformType)Enum.Parse(typeof(PlateformType), dataSplit[1]));
+                            ObjectsReference.Instance.mapsManager.mapBySceneName[map.Key].plateformsPosition.Add(Vector3FromString(dataSplit[0]));
+                            ObjectsReference.Instance.mapsManager.mapBySceneName[map.Key].plateformsTypes.Add((ItemType)Enum.Parse(typeof(ItemType), dataSplit[1]));
                         }
                     }
                 }

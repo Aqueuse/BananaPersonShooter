@@ -1,29 +1,24 @@
-using Game;
 using UnityEngine;
 
 namespace Player {
     public class DetectWater : MonoBehaviour {
-        private const int LayerMask = 1 << 4;
         private PlayerController _playerController;
+        private Rigidbody _playerRigidbody;
 
         private void Start() {
-            _playerController = BananaMan.Instance.GetComponent<PlayerController>();
+            _playerController = ObjectsReference.Instance.bananaMan.GetComponent<PlayerController>();
+            _playerRigidbody = _playerController.GetComponent<Rigidbody>();
         }
 
-        void Update() {
-            if (GameManager.Instance.isGamePlaying) {
-                if (Physics.CheckSphere(transform.position, 0.25f, LayerMask)) {
-                    BananaMan.Instance.isInWater = true;
-                    _playerController.baseMovementSpeed = 4f;
-                }
+        private void OnTriggerEnter(Collider other) {
+            _playerController.isInWater = true;
+            _playerController.speed = 6f;
+            _playerRigidbody.maxLinearVelocity = 10;
+        }
 
-                else {
-                    if (_playerController.baseMovementSpeed < 6f) {
-                        BananaMan.Instance.isInWater = false;
-                        _playerController.baseMovementSpeed = 6;
-                    }
-                }
-            }
+        private void OnTriggerExit(Collider other) {
+            _playerController.isInWater = false;
+            _playerRigidbody.maxLinearVelocity = 40;
         }
     }
 }

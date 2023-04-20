@@ -8,8 +8,7 @@ using System;
 /// Simply declare your key/value types and you're good to go - zero boilerplate.
 /// </summary>
 [Serializable]
-public class GenericDictionary<TKey, TValue> : IDictionary<TKey, TValue>, ISerializationCallbackReceiver
-{
+public class GenericDictionary<TKey, TValue> : IDictionary<TKey, TValue>, ISerializationCallbackReceiver {
 	// Internal
 	[SerializeField]
 	private List<KeyValuePair> list = new();

@@ -12,11 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9aa579ee7e77bb468bc13896355d2a8, type: 3}
   m_Name: RedBananaData
   m_EditorClassIdentifier: 
-  bananaName: Banane rouge
-  sprite: {fileID: 21300000, guid: 9e58179fb30f5d34ba412c11ca25c6aa, type: 3}
-  description:
+  itemType: 15
+  itemCategory: 0
+  buildableType: 0
+  itemName: Banane rouge
+  itemSprite: {fileID: 21300000, guid: 9e58179fb30f5d34ba412c11ca25c6aa, type: 3}
+  itemDescription:
   - Flaming banana
   - "Banane flamb\xE9e"
+  bananaName: Banane rouge
   effects:
   - creates a zone of fire for 15 seconds that repels monkeys
   - "cr\xE9e une zone de feu pendant 15 secondes qui repousse les singes"
@@ -25,5 +29,5 @@ MonoBehaviour:
   damageTime: 0
   healthBonus: 0.5
   resistanceBonus: 1
-  itemThrowableType: 15
   bananaEffect: 2
+  bananaMaterial: {fileID: 0}

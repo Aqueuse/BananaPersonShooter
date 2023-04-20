@@ -1,7 +1,4 @@
-using Audio;
 using Enums;
-using Game;
-using UI.InGame;
 using UnityEngine;
 using UnityEngine.Localization.Settings;
 
@@ -25,24 +22,18 @@ namespace Building {
                 GetComponent<MeshRenderer>().materials[0].SetFloat(DissolveProperty, _dissolve);
                 
                 if (_dissolve < dissolved) {
-                    Inventory.Instance.AddQuantity(ItemThrowableType.DEBRIS, 1);
-                    AudioManager.Instance.StopAudioSource(AudioSourcesType.EFFECT);
-                    MapsManager.Instance.currentMap.Clean();
-                    MapsManager.Instance.currentMap.isDiscovered = true;
-                    
-                    UIQueuedMessages.Instance.AddMessage(
-                        "+ 1 "+
-                        LocalizationSettings.Instance.GetStringDatabase().GetLocalizedString("debris"));
+                    ObjectsReference.Instance.inventory.AddQuantity(ItemCategory.RAW_MATERIAL, ItemType.METAL, 2);
+                    ObjectsReference.Instance.inventory.AddQuantity(ItemCategory.RAW_MATERIAL, ItemType.ELECTRONIC, 1);
+                    ObjectsReference.Instance.audioManager.StopAudioSource(AudioSourcesType.EFFECT);
+                    ObjectsReference.Instance.mapsManager.currentMap.RecalculateHappiness();
+                    ObjectsReference.Instance.mapsManager.currentMap.isDiscovered = true;
+
+                    ObjectsReference.Instance.uiQueuedMessages.AddMessage("+ 2 "+ LocalizationSettings.Instance.GetStringDatabase().GetLocalizedString("metal"));
+                    ObjectsReference.Instance.uiQueuedMessages.AddMessage("+ 1 "+ LocalizationSettings.Instance.GetStringDatabase().GetLocalizedString("electronic_components"));
                     
                     Destroy(gameObject);
                 }
             }
-        }
-
-        private void OnDestroy() {
-            if (MapItems.Instance == null) return;
-            
-            MapsManager.Instance.currentMap.RefreshDebrisDataMap();
         }
 
         public void DissolveMe() {

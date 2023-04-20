@@ -1,25 +1,17 @@
 using System.Collections.Generic;
 using System.Linq;
-using Audio;
 using Building;
 using Building.Plateforms;
 using Enums;
-using Monkeys;
 using Monkeys.Gorilla;
-using UI.InGame.Statistics;
 using UnityEngine;
-using UnityEngine.AI;
 
 namespace Game {
     public class Map : MonoBehaviour {
-        [SerializeField] private GameObject monkeyPrefab;
-        [SerializeField] private GameObject monkeySpawnPoint;
-
         public MonkeyType activeMonkeyType;
         public float cleanliness;
 
         private Vector3 _bananaManDirectionToCenter;
-        public Monkey activeMonkey;
 
         public int maxDebrisQuantity;
         private int _actualDebrisQuantity;
@@ -29,7 +21,7 @@ namespace Game {
         public int[] debrisIndex;
 
         public List<Vector3> plateformsPosition;
-        public List<PlateformType> plateformsTypes;
+        public List<ItemType> plateformsTypes;
         
         public float monkeySasiety;
 
@@ -43,39 +35,39 @@ namespace Game {
             maxDebrisQuantity = 28;
         }
 
-        public void RecalculateHapiness() {
+        public void RecalculateHappiness() {
             _actualDebrisQuantity = MapItems.Instance.debrisContainer.GetComponentsInChildren<Debris>().Length;
 
             cleanliness = 50-(_actualDebrisQuantity /(float)maxDebrisQuantity)*50;
-            activeMonkey.happiness = activeMonkey.sasiety + cleanliness;
 
-            UIStatistics.Instance.Refresh_Map_Statistics(MapsManager.Instance.currentMap.mapName);
+            foreach (var monkey in MapItems.Instance.monkeys) {
+                monkey.happiness = monkey.sasiety + cleanliness;
 
-            if (activeMonkey.happiness < 20 && activeMonkey.monkeyState != MonkeyState.ANGRY) {
-                activeMonkey.monkeyState = MonkeyState.ANGRY;
+                if (monkey.happiness < 20 && monkey.monkeyState != MonkeyState.ANGRY) {
+                    monkey.monkeyState = MonkeyState.ANGRY;
+                }
+
+                if (monkey.happiness is >= 20 and < 60 && monkey.monkeyState != MonkeyState.SAD) {
+                    monkey.monkeyState = MonkeyState.SAD;
+                    monkey.GetComponent<GorillaSounds>().PlaySadMonkeySounds();
+                }
+
+                if (monkey.happiness >= 60 && monkey.monkeyState != MonkeyState.HAPPY) {
+                    monkey.monkeyState = MonkeyState.HAPPY;
+                }
             }
 
-            if (activeMonkey.happiness is >= 20 and < 60 && activeMonkey.monkeyState != MonkeyState.SAD) {
-                activeMonkey.monkeyState = MonkeyState.SAD;
-                activeMonkey.GetComponent<GorillaSounds>().PlaySadMonkeySounds();
-            }
+            ObjectsReference.Instance.uiStatistics.Refresh_Map_Statistics(ObjectsReference.Instance.mapsManager.currentMap.mapName);
 
-            if (activeMonkey.happiness >= 60 && activeMonkey.monkeyState != MonkeyState.HAPPY) {
-                activeMonkey.monkeyState = MonkeyState.HAPPY;
+            foreach (var monkey in MapItems.Instance.monkeys) {
+                monkey.associatedUI.SetSliderValue(ObjectsReference.Instance.monkeysManager.colorByMonkeyState[monkey.monkeyState]);
             }
         }
-
-        public void Clean() {
-            if (cleanliness <= 50) {
-                RecalculateHapiness();
-                activeMonkey.associatedUI.SetSliderValue(activeMonkey.happiness, activeMonkey.monkeyState);
-            }
-        }
-
+        
         public void RefreshDebrisDataMap() {
             if (MapItems.Instance == null) return;
 
-            if (MapsManager.Instance.currentMap.hasDebris) {
+            if (ObjectsReference.Instance.mapsManager.currentMap.hasDebris) {
                 var debrisClass = MapItems.Instance.debrisContainer.gameObject.GetComponentsInChildren<MeshRenderer>();
 
                 var mapDebrisPrefabIndex = new int[debrisClass.Length];
@@ -93,54 +85,23 @@ namespace Game {
                 debrisRotation = mapDebrisRotation;
             }
         }
-
-        public void RefreshMonkeyDataMap() {
-            if (activeMonkeyType != MonkeyType.NONE) {
-                monkeySasiety = activeMonkey.sasiety;
-            }
-        }
-
+        
         public void RefreshPlateformsDataMap() {
-            if (MapItems.Instance == null) return;
-            
-            var plateformsClass =
-                MapItems.Instance.plateformsContainer.gameObject.GetComponentsInChildren<Plateform>().ToList();
+            var plateformsClass = MapItems.Instance.plateformsContainer.gameObject.GetComponentsInChildren<Plateform>().ToList();
 
             plateformsPosition = new List<Vector3>();
-            plateformsTypes = new List<PlateformType>();
+            plateformsTypes = new List<ItemType>();
             
             foreach (var plateformClass in plateformsClass) {
-                plateformsPosition.Add(plateformClass.initialPosition);
+                plateformsPosition.Add(plateformClass.transform.position);
                 plateformsTypes.Add(plateformClass.plateformType);
             }
         }
         
-        public GameObject GetActiveMonkey() {
-            return activeMonkey.gameObject;
-        }
-
         public void StartBossFight(MonkeyType monkeyType) {
-            AudioManager.Instance.PlayMusic(MusicType.FIGHT);
+            ObjectsReference.Instance.audioManager.PlayMusic(MusicType.FIGHT);
 
             activeMonkeyType = monkeyType;
-        }
-
-        public void SpawnMonkey() {
-            if (activeMonkeyType == MonkeyType.KELSAIK) {
-                NavMeshTriangulation navMeshTriangulation = NavMesh.CalculateTriangulation();
-                
-                int vertexIndex = Random.Range(0, navMeshTriangulation.vertices.Length);
-                
-                // instanciate monkey
-                var boss = Instantiate(monkeyPrefab, monkeySpawnPoint.transform.position, Quaternion.identity);
-                activeMonkey = boss.GetComponent<Monkey>();
-
-                if (NavMesh.SamplePosition(navMeshTriangulation.vertices[vertexIndex], out NavMeshHit navMeshHit, 2f, 0)) {
-                    boss.GetComponent<NavMeshAgent>().Warp(navMeshHit.position);
-                }
-
-                boss.transform.localScale = new Vector3(1, 1, 1);
-            }
         }
     }
 }

@@ -1,16 +1,20 @@
 using System;
 using System.Globalization;
 using Enums;
-using Game;
-using Player;
-using UI.InGame.QuickSlots;
+using UnityEngine;
 
 namespace Save {
-    public class GameSave : MonoSingleton<GameSave> {
+    public class GameSave : MonoBehaviour {
         public void SaveGameData(string saveUuid) {
             var date = DateTime.ParseExact(DateTime.Now.ToString("U"), "U", CultureInfo.CurrentCulture).ToString(CultureInfo.CurrentCulture);
-            
+
+            if (ObjectsReference.Instance.gameManager.gameContext == GameContext.IN_GAME) {
+                ObjectsReference.Instance.mapsManager.currentMap.RefreshPlateformsDataMap();
+                ObjectsReference.Instance.mapsManager.currentMap.RefreshDebrisDataMap();
+            }
+
             SaveInventory();
+            SaveBlueprints();
             SaveSlots();
             SaveBananaManVitals();
             SavePositionAndRotation();
@@ -20,65 +24,85 @@ namespace Save {
             SaveDebrisPositionAndRotationByUuid(saveUuid);
             SavePlateformsPositionAndTypeByUuid(saveUuid);
 
-            SaveData.Instance.Save(saveUuid, date);
+            ObjectsReference.Instance.saveData.Save(saveUuid, date);
         }
 
         private void SaveInventory() {
-            foreach (var inventorySlot in Inventory.Instance.bananaManInventory) {
-                GameData.Instance.bananaManSavedData.inventory[inventorySlot.Key.ToString()] = inventorySlot.Value;
+            foreach (var inventorySlot in ObjectsReference.Instance.inventory.bananaManInventory) {
+                ObjectsReference.Instance.gameData.bananaManSavedData.inventory[inventorySlot.Key.ToString()] = inventorySlot.Value;
+            }
+        }
+
+        private void SaveBlueprints() {
+            var activeBlueprintsSlots = ObjectsReference.Instance.uiBlueprints.GetActivatedBlueprints();
+            
+            foreach (var blueprintsSlot in activeBlueprintsSlots) {
+                ObjectsReference.Instance.gameData.bananaManSavedData.blueprints.Add(blueprintsSlot.buildableType.ToString());
             }
         }
 
         private void SaveSlots() {
-        GameData.Instance.bananaManSavedData.slots = new() {
-                ItemThrowableType.EMPTY.ToString(), 
-                ItemThrowableType.EMPTY.ToString(), 
-                ItemThrowableType.EMPTY.ToString(), 
-                ItemThrowableType.EMPTY.ToString() 
+            ObjectsReference.Instance.gameData.bananaManSavedData.slots = new() {
+                "EMPTY,EMPTY",
+                "EMPTY,EMPTY",
+                "EMPTY,EMPTY",
+                "EMPTY,EMPTY" 
             };
             
-            for (int i = 0; i < UISlotsManager.Instance.uiSlotsScripts.Count; i++) {
-                GameData.Instance.bananaManSavedData.slots[i] =
-                    UISlotsManager.Instance.uiSlotsScripts[i].itemThrowableType.ToString();
+            for (int i = 0; i < ObjectsReference.Instance.uiSlotsManager.uiSlotsScripts.Count; i++) {
+                var uiSlotScript = ObjectsReference.Instance.uiSlotsManager.uiSlotsScripts[i];
+                
+                var itemCategory = uiSlotScript.itemCategory;
+                var itemType = uiSlotScript.itemType;
+                var buildableType = uiSlotScript.buildableType;
+
+                if (itemCategory == ItemCategory.BUILDABLE) {
+                    ObjectsReference.Instance.gameData.bananaManSavedData.slots[i] = itemCategory+","+buildableType;
+                }
+                else {
+                    ObjectsReference.Instance.gameData.bananaManSavedData.slots[i] = itemCategory+","+itemType;
+                }
             }
         }
 
         private void SaveBananaManVitals() {
-            GameData.Instance.bananaManSavedData.health = BananaMan.Instance.health; 
-            GameData.Instance.bananaManSavedData.resistance = BananaMan.Instance.resistance; 
+            ObjectsReference.Instance.gameData.bananaManSavedData.health = ObjectsReference.Instance.bananaMan.health; 
+            ObjectsReference.Instance.gameData.bananaManSavedData.resistance = ObjectsReference.Instance.bananaMan.resistance; 
         }
 
         private void SavePositionAndRotation() {
-            var bananaManTransform = BananaMan.Instance.transform;
-            GameData.Instance.lastPositionOnMap = bananaManTransform.position;
-            GameData.Instance.lastRotationOnMap = bananaManTransform.rotation.eulerAngles;
+            var bananaManTransform = ObjectsReference.Instance.bananaMan.transform;
+            ObjectsReference.Instance.gameData.lastPositionOnMap = bananaManTransform.position;
+            ObjectsReference.Instance.gameData.lastRotationOnMap = bananaManTransform.rotation.eulerAngles;
             
-            GameData.Instance.bananaManSavedData.xWorldPosition = GameData.Instance.lastPositionOnMap.x;
-            GameData.Instance.bananaManSavedData.yWorldPosition = GameData.Instance.lastPositionOnMap.y;
-            GameData.Instance.bananaManSavedData.zworldPosition = GameData.Instance.lastPositionOnMap.z;
+            ObjectsReference.Instance.gameData.bananaManSavedData.xWorldPosition = ObjectsReference.Instance.gameData.lastPositionOnMap.x;
+            ObjectsReference.Instance.gameData.bananaManSavedData.yWorldPosition = ObjectsReference.Instance.gameData.lastPositionOnMap.y;
+            ObjectsReference.Instance.gameData.bananaManSavedData.zworldPosition = ObjectsReference.Instance.gameData.lastPositionOnMap.z;
 
-            GameData.Instance.bananaManSavedData.xWorldRotation = GameData.Instance.lastRotationOnMap.x;
-            GameData.Instance.bananaManSavedData.yWorldRotation = GameData.Instance.lastRotationOnMap.y;
-            GameData.Instance.bananaManSavedData.zWorldRotation = GameData.Instance.lastRotationOnMap.z;
+            ObjectsReference.Instance.gameData.bananaManSavedData.xWorldRotation = ObjectsReference.Instance.gameData.lastRotationOnMap.x;
+            ObjectsReference.Instance.gameData.bananaManSavedData.yWorldRotation = ObjectsReference.Instance.gameData.lastRotationOnMap.y;
+            ObjectsReference.Instance.gameData.bananaManSavedData.zWorldRotation = ObjectsReference.Instance.gameData.lastRotationOnMap.z;
         }
 
         private void SaveActiveItem() {
-            GameData.Instance.bananaManSavedData.activeItem = BananaMan.Instance.activeItemThrowableType;
+            ObjectsReference.Instance.gameData.bananaManSavedData.activeItem = ObjectsReference.Instance.bananaMan.activeItemType;
+            ObjectsReference.Instance.gameData.bananaManSavedData.activeItemCategory = ObjectsReference.Instance.bananaMan.activeItemCategory;
+            ObjectsReference.Instance.gameData.bananaManSavedData.activeBuildableType = ObjectsReference.Instance.bananaMan.activeBuildableType;
         }
 
         private void SaveMonkeysSatiety() {
-            foreach (var map in MapsManager.Instance.mapBySceneName) {
+            foreach (var map in ObjectsReference.Instance.mapsManager.mapBySceneName) {
                 // add other monkeys and other maps
-                GameData.Instance.mapSavedDatasByMapName[map.Key].monkey_sasiety = map.Value.monkeySasiety;
+                ObjectsReference.Instance.gameData.mapSavedDatasByMapName[map.Key].monkey_sasiety = map.Value.monkeySasiety;
             }
         }
 
         /////////////////// DEBRIS ///////////////////////
 
         private void SaveDebrisPositionAndRotationByUuid(string saveUuid) {
-            foreach (var map in MapsManager.Instance.mapBySceneName) {
+            foreach (var map in ObjectsReference.Instance.mapsManager.mapBySceneName) {
                 if (map.Value.hasDebris && map.Value.debrisIndex.Length != 0) {
-                    SaveData.Instance.SaveMapDebrisDataByUuid(
+                    ObjectsReference.Instance.saveData.SaveMapDebrisDataByUuid(
                         map.Value.debrisPosition,
                         map.Value.debrisRotation,
                         map.Value.debrisIndex,
@@ -92,8 +116,8 @@ namespace Save {
         /////////////////// PLATEFORMS ///////////////////////
 
         private void SavePlateformsPositionAndTypeByUuid(string saveUuid) {
-            foreach (var map in MapsManager.Instance.mapBySceneName) {
-                SaveData.Instance.SaveMapPlateformsDataByUuid(map.Value.plateformsPosition, map.Value.plateformsTypes, map.Key, saveUuid);
+            foreach (var map in ObjectsReference.Instance.mapsManager.mapBySceneName) {
+                ObjectsReference.Instance.saveData.SaveMapPlateformsDataByUuid(map.Value.plateformsPosition, map.Value.plateformsTypes, map.Key, saveUuid);
             }
         }
     }

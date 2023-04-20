@@ -1,5 +1,3 @@
-using Game;
-using UI.Tutorials;
 using UnityEngine;
 
 namespace Input.UIActions {
@@ -14,8 +12,8 @@ namespace Input.UIActions {
                 UnityEngine.Input.GetKeyDown(KeyCode.H) || 
                 UnityEngine.Input.GetKeyDown(KeyCode.JoystickButton1) ||
                 UnityEngine.Input.GetKeyDown(KeyCode.JoystickButton6)) {
-                GameManager.Instance.PauseGame(false);
-                TutorialsManager.Instance.Hide_Help();
+                ObjectsReference.Instance.gameManager.PauseGame(false);
+                ObjectsReference.Instance.tutorialsManager.Hide_Help();
             }
         }
     }

@@ -1,16 +1,9 @@
-﻿using Building;
-using Cameras;
-using Enums;
-using Game;
+﻿using Enums;
 using Player;
-using UI;
-using UI.InGame.QuickSlots;
-using UI.Tutorials;
 using UnityEngine;
-using ItemsManager = Items.ItemsManager;
 
 namespace Input {
-    public class GameActions : MonoSingleton<GameActions> {
+    public class GameActions : MonoBehaviour {
         public Vector2 move;
 
         public Vector2 scrollSlotsValue;
@@ -30,7 +23,7 @@ namespace Input {
 
             scrollSlotsValue = new Vector2();
 
-            _playerController = BananaMan.Instance.GetComponent<PlayerController>();
+            _playerController = ObjectsReference.Instance.bananaMan.GetComponent<PlayerController>();
 
             _leftTriggerActivated = false;
             rightTriggerActivated = false;
@@ -44,9 +37,14 @@ namespace Input {
             Eat();
             
             Interact();
-            Show_Inventory();
             PauseGame();
             ShowTutorial();
+
+            ZoomDezoomCamera();
+
+            if (!ObjectsReference.Instance.gameData.bananaManSavedData.playerAdvancements.Contains(AdvancementState.GET_BANANAGUN)) return;
+            
+            Show_Inventory();
 
             Scroll_Slots();
             SwitchToUpperSlot();
@@ -58,20 +56,11 @@ namespace Input {
             SwitchToSlotIndex3();
             
             Aspire();
-            Shoot();
-            
-            ZoomDezoomCamera();
         }
         
         private void Move() {
-            // if (!BananaMan.Instance.isRagdoll) {
-                move.x = UnityEngine.Input.GetAxis("Horizontal");
-                move.y = UnityEngine.Input.GetAxis("Vertical");
-            // }
-            // else {
-            //     move.x = 0;
-            //     move.y = 0;
-            // }
+            move.x = UnityEngine.Input.GetAxis("Horizontal");
+            move.y = UnityEngine.Input.GetAxis("Vertical");
         }
 
         private void Jump() {
@@ -101,42 +90,42 @@ namespace Input {
         }
 
         private void Eat() {
-            if (UnityEngine.Input.GetKeyDown(KeyCode.R) || UnityEngine.Input.GetKeyDown(KeyCode.JoystickButton3)) {
-                BananaMan.Instance.GainHealth();
+            if (ObjectsReference.Instance.bananaMan.activeItemCategory == ItemCategory.BANANA && UnityEngine.Input.GetKeyDown(KeyCode.R) || UnityEngine.Input.GetKeyDown(KeyCode.JoystickButton3)) {
+                ObjectsReference.Instance.bananaMan.GainHealth();
             }
         }
 
         private void Interact() {
             if (UnityEngine.Input.GetKeyDown(KeyCode.E) || UnityEngine.Input.GetKeyDown(KeyCode.JoystickButton2)) {
-                ItemsManager.Instance.Validate();
+                ObjectsReference.Instance.itemsManager.Validate();
             }
         }
 
         private void Show_Inventory() {
             if (UnityEngine.Input.GetKeyDown(KeyCode.I) || UnityEngine.Input. GetAxis("DpadHorizontal") < 0) {
-                UIManager.Instance.Show_Hide_interface();
+                ObjectsReference.Instance.uiManager.Show_Hide_interface();
             }
         }
 
         private void PauseGame() {
             if (UnityEngine.Input.GetKeyDown(KeyCode.Escape) || UnityEngine.Input.GetKeyDown(KeyCode.JoystickButton7)) {
-                InputManager.Instance.uiSchemaContext = UISchemaSwitchType.GAME_MENU;
-                GameManager.Instance.PauseGame(true);
-                UIManager.Instance.Show_game_menu();
+                ObjectsReference.Instance.inputManager.uiSchemaContext = UISchemaSwitchType.GAME_MENU;
+                ObjectsReference.Instance.gameManager.PauseGame(true);
+                ObjectsReference.Instance.uiManager.Show_game_menu();
             }
         }
 
         private void ShowTutorial() {
             if (UnityEngine.Input.GetKeyDown(KeyCode.H) || UnityEngine.Input.GetKeyDown(KeyCode.JoystickButton6)) {
-                InputManager.Instance.uiSchemaContext = UISchemaSwitchType.TUTORIAL;
-                GameManager.Instance.PauseGame(true);
-                TutorialsManager.Instance.Show_Help();
+                ObjectsReference.Instance.inputManager.uiSchemaContext = UISchemaSwitchType.TUTORIAL;
+                ObjectsReference.Instance.gameManager.PauseGame(true);
+                ObjectsReference.Instance.tutorialsManager.Show_Help();
             }
         }
 
         private void SwitchToUpperSlot() {
             if (UnityEngine.Input.GetAxis("DpadVertical") > 0 && !_scrolledUp) {
-                UISlotsManager.Instance.Select_Upper_Slot();
+                ObjectsReference.Instance.uiSlotsManager.Select_Upper_Slot();
                 _scrolledUp = true;
             }
 
@@ -148,7 +137,7 @@ namespace Input {
     
         private void SwitchToLowerSlot() {
             if (UnityEngine.Input.GetAxis("DpadVertical") < 0 && !_scrolledDown) {
-                UISlotsManager.Instance.Select_Lower_Slot();
+                ObjectsReference.Instance.uiSlotsManager.Select_Lower_Slot();
                 _scrolledDown = true;
             }
         }
@@ -157,90 +146,51 @@ namespace Input {
             scrollSlotsValue = UnityEngine.Input.mouseScrollDelta;
             
             float scrollValue = scrollSlotsValue.y;
-            if (scrollValue < 0) UISlotsManager.Instance.Select_Upper_Slot();
-            if (scrollValue > 0) UISlotsManager.Instance.Select_Lower_Slot();
+            if (scrollValue < 0) ObjectsReference.Instance.uiSlotsManager.Select_Upper_Slot();
+            if (scrollValue > 0) ObjectsReference.Instance.uiSlotsManager.Select_Lower_Slot();
         }
 
         private void Aspire() {
             if (UnityEngine.Input.GetKeyDown(KeyCode.Mouse1)) {
-                BananaGunGet.Instance.StartToGet();
+                ObjectsReference.Instance.bananaGunGet.StartToGet();
             }
 
             if (UnityEngine.Input.GetKeyUp(KeyCode.Mouse1)) {
-                BananaGunGet.Instance.CancelGet();
+                ObjectsReference.Instance.bananaGunGet.CancelGet();
             }
 
             if (UnityEngine.Input.GetAxis("LeftTrigger") <= -0.1 && !_leftTriggerActivated) {
                 _leftTriggerActivated = true;
-                BananaGunGet.Instance.StartToGet();
+                ObjectsReference.Instance.bananaGunGet.StartToGet();
             }
 
             if (UnityEngine.Input.GetAxis("LeftTrigger") >= 0 && _leftTriggerActivated)  {
                 _leftTriggerActivated = false;
-                BananaGunGet.Instance.CancelGet();
+                ObjectsReference.Instance.bananaGunGet.CancelGet();
             }
         }
 
         private void SwitchToSlotIndex0() {
             if (UnityEngine.Input.GetKeyDown(KeyCode.Alpha1)) {
-                UISlotsManager.Instance.Switch_to_Slot_Index(0);
+                ObjectsReference.Instance.uiSlotsManager.Switch_to_Slot_Index(0);
             }
         }
 
         private void SwitchToSlotIndex1() {
             if (UnityEngine.Input.GetKeyDown(KeyCode.Alpha2)) {
-                UISlotsManager.Instance.Switch_to_Slot_Index(1);
+                ObjectsReference.Instance.uiSlotsManager.Switch_to_Slot_Index(1);
             }
         }
         
         private void SwitchToSlotIndex2() {
             if (UnityEngine.Input.GetKeyDown(KeyCode.Alpha3)) {
-                UISlotsManager.Instance.Switch_to_Slot_Index(2);
+                ObjectsReference.Instance.uiSlotsManager.Switch_to_Slot_Index(2);
             }
         }
         
         private void SwitchToSlotIndex3() {
             if (UnityEngine.Input.GetKeyDown(KeyCode.Alpha4)) {
-                UISlotsManager.Instance.Switch_to_Slot_Index(3);
-            }
-        }
-        
-        private void Shoot() {
-            if (BananaMan.Instance.activeItemThrowableCategory == ItemThrowableCategory.BANANA) {
-                if (UnityEngine.Input.GetKeyDown(KeyCode.Mouse0)) {
-                    leftClickActivated = true;
-                    BananaGunPut.Instance.LoadingGun();
-                }
-
-                if (UnityEngine.Input.GetKeyUp(KeyCode.Mouse0)) {
-                    BananaGun.Instance.CancelMover();
-                }
-
-                if (UnityEngine.Input.GetAxis("RightTrigger") != 0 && !rightTriggerActivated) {
-                    rightTriggerActivated = true;
-                    BananaGunPut.Instance.LoadingGun();
-                }
-
-                if (UnityEngine.Input.GetAxis("RightTrigger") == 0 && rightTriggerActivated)  {
-                    BananaGun.Instance.CancelMover();
-                    rightTriggerActivated = false;
-                }
-            }
-
-            if (BananaMan.Instance.activeItemThrowableType == ItemThrowableType.PLATEFORM) {
-                if (UnityEngine.Input.GetKeyDown(KeyCode.Mouse0)) {
-                    leftClickActivated = true;
-                    SlotSwitch.Instance.ValidatePlateform();
-                }
-                
-                if (UnityEngine.Input.GetAxis("RightTrigger") != 0 && !rightTriggerActivated) {
-                    rightTriggerActivated = true;
-                    SlotSwitch.Instance.ValidatePlateform();
-                }
-
-                if (UnityEngine.Input.GetAxis("RightTrigger") == 0 && rightTriggerActivated) {
-                    rightTriggerActivated = false;
-                }
+                ObjectsReference.Instance.uiSlotsManager.Switch_to_Slot_Index(3);
             }
         }
         
@@ -250,24 +200,24 @@ namespace Input {
             float scrollValue = scrollSlotsValue.y;
 
             if (UnityEngine.Input.GetKey(KeyCode.LeftShift) && scrollValue > 0) {
-                MainCamera.Instance.ZoomCamera();
+                ObjectsReference.Instance.mainCamera.ZoomCamera();
             }
 
             if (UnityEngine.Input.GetKey(KeyCode.LeftShift) && scrollValue < 0) {
-                MainCamera.Instance.DezoomCamera();
+                ObjectsReference.Instance.mainCamera.DezoomCamera();
             }
 
             if (UnityEngine.Input.GetKey(KeyCode.JoystickButton8) && UnityEngine.Input.GetAxis("Right Stick Y") > 0) {
-                MainCamera.Instance.ZoomCamera();
+                ObjectsReference.Instance.mainCamera.ZoomCamera();
             }
 
             if (UnityEngine.Input.GetKey(KeyCode.JoystickButton8) && UnityEngine.Input.GetAxis("Right Stick Y") < 0) {
-                MainCamera.Instance.DezoomCamera();
+                ObjectsReference.Instance.mainCamera.DezoomCamera();
             }
         }
 
         private void OnDisable() {
-            BananaMan.Instance.GetComponent<PlayerController>().ResetPlayer();
+            ObjectsReference.Instance.bananaMan.GetComponent<PlayerController>().ResetPlayer();
         }
     }
 }

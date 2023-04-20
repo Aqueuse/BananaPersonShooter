@@ -1,14 +1,13 @@
-using Audio;
+using Building;
 using Cinemachine;
 using Enums;
-using Save;
 using UnityEngine;
 using UnityEngine.Localization.Settings;
 using UnityEngine.Rendering;
 using UnityEngine.UI;
 
 namespace Settings {
-    public class GameSettings : MonoSingleton<GameSettings> {
+    public class GameSettings : MonoBehaviour {
         [SerializeField] private Slider musicLevelSlider;
         [SerializeField] private Slider ambianceLevelSlider;
         [SerializeField] private Slider effectsLevelSlider;
@@ -26,6 +25,10 @@ namespace Settings {
 
         [SerializeField] private Toggle horizontalCameraInversionToggle;
         [SerializeField] private Toggle verticalCameraInversionToggle;
+
+        [SerializeField] private Toggle debrisVisibilityToggle;
+        [SerializeField] private Toggle bananaTreesVisibilityToggle;
+        [SerializeField] private Toggle monkeysVisibilityToggle;
         
         private FullScreenMode _fullScreenMode;
 
@@ -43,6 +46,7 @@ namespace Settings {
 
         public bool isShowingDebris;
         public bool isShowingBananaTrees;
+        public bool isShowingMonkeys;
         
         public JsonPlayerPrefs prefs;
         
@@ -56,12 +60,12 @@ namespace Settings {
         }
 
         public void LoadSettings() {
-            prefs = new JsonPlayerPrefs(SaveData.Instance.gamePath + "/preferences.json");
+            prefs = new JsonPlayerPrefs(ObjectsReference.Instance.saveData.gamePath + "/preferences.json");
             
-            AudioManager.Instance.musicLevel = prefs.GetFloat("musicLevel", 0.5f);
-            AudioManager.Instance.voicesLevel = prefs.GetFloat("voicesLevel", 0.5f);
-            AudioManager.Instance.effectsLevel = prefs.GetFloat("effectsLevel", 0.5f);
-            AudioManager.Instance.ambianceLevel = prefs.GetFloat("ambianceLevel", 0.5f);
+            ObjectsReference.Instance.audioManager.musicLevel = prefs.GetFloat("musicLevel", 0.5f);
+            ObjectsReference.Instance.audioManager.voicesLevel = prefs.GetFloat("voicesLevel", 0.5f);
+            ObjectsReference.Instance.audioManager.effectsLevel = prefs.GetFloat("effectsLevel", 0.5f);
+            ObjectsReference.Instance.audioManager.ambianceLevel = prefs.GetFloat("ambianceLevel", 0.5f);
 
             _isFullscreen = prefs.GetString("isFullscreen", "False");
             _isVsync = prefs.GetString("isVSync", "True");
@@ -75,10 +79,10 @@ namespace Settings {
             _isCameraVerticallyInverted = prefs.GetString("isCameraVerticalAxisInverted", "False").Equals("True");
             _isCameraHorizontallyInverted = prefs.GetString("isCameraHorizontalAxisInverted", "False").Equals("True"); 
             
-            SetMusicVolume(AudioManager.Instance.musicLevel);
-            SetAmbianceVolume(AudioManager.Instance.ambianceLevel);
-            SetEffectVolume(AudioManager.Instance.effectsLevel);
-            SetVoicesVolume(AudioManager.Instance.voicesLevel);
+            SetMusicVolume(ObjectsReference.Instance.audioManager.musicLevel);
+            SetAmbianceVolume(ObjectsReference.Instance.audioManager.ambianceLevel);
+            SetEffectVolume(ObjectsReference.Instance.audioManager.effectsLevel);
+            SetVoicesVolume(ObjectsReference.Instance.audioManager.voicesLevel);
             
             InverseCameraVerticalAxis(_isCameraVerticallyInverted);
             InverseCameraHorizontalAxis(_isCameraHorizontallyInverted);
@@ -90,11 +94,15 @@ namespace Settings {
             ToggleVSync(_isVsync.Equals("True"));
             SetResolution(_resolution);
 
+            isShowingDebris = prefs.GetString("areDebrisVisible", "True").Equals("True");
+            isShowingBananaTrees = prefs.GetString("areBananaTreesVisible", "True").Equals("True");
+            isShowingMonkeys = prefs.GetString("areMonkeysVisible", "True").Equals("True");
+
             // reflects values on UI 
-            musicLevelSlider.value = AudioManager.Instance.musicLevel;
-            ambianceLevelSlider.value = AudioManager.Instance.ambianceLevel;
-            effectsLevelSlider.value = AudioManager.Instance.effectsLevel;
-            voicesLevelSlider.value = AudioManager.Instance.voicesLevel;
+            musicLevelSlider.value = ObjectsReference.Instance.audioManager.musicLevel;
+            ambianceLevelSlider.value = ObjectsReference.Instance.audioManager.ambianceLevel;
+            effectsLevelSlider.value = ObjectsReference.Instance.audioManager.effectsLevel;
+            voicesLevelSlider.value = ObjectsReference.Instance.audioManager.voicesLevel;
 
             fullScreenToggle.isOn = _isFullscreen.Equals("True");
             vsyncToggle.isOn = _isVsync.Equals("True");
@@ -106,6 +114,10 @@ namespace Settings {
             verticalCameraInversionToggle.isOn = _isCameraVerticallyInverted;
     
             languageDropDown.value = languageIndexSelected;
+
+            debrisVisibilityToggle.isOn = isShowingDebris;
+            bananaTreesVisibilityToggle.isOn = isShowingBananaTrees;
+            monkeysVisibilityToggle.isOn = isShowingMonkeys;
             
             prefs.Save();
         }
@@ -123,28 +135,28 @@ namespace Settings {
         }
 
         public void SetMusicVolume(float level) {
-            AudioManager.Instance.SetVolume(AudioSourcesType.MUSIC, level);
+            ObjectsReference.Instance.audioManager.SetVolume(AudioSourcesType.MUSIC, level);
 
             prefs.SetFloat("musicLevel", level);
             prefs.Save();
         }
 
         public void SetVoicesVolume(float level) {
-            AudioManager.Instance.SetVolume(AudioSourcesType.VOICE, level);
+            ObjectsReference.Instance.audioManager.SetVolume(AudioSourcesType.VOICE, level);
 
             prefs.SetFloat("voicesLevel", level);
             prefs.Save();
         }
 
         public void SetEffectVolume(float level) {
-            AudioManager.Instance.SetVolume(AudioSourcesType.EFFECT, level);
+            ObjectsReference.Instance.audioManager.SetVolume(AudioSourcesType.EFFECT, level);
         
             prefs.SetFloat("effectsLevel", level);
             prefs.Save();
         }
 
         public void SetAmbianceVolume(float level) {
-            AudioManager.Instance.SetVolume(AudioSourcesType.AMBIANCE, level);
+            ObjectsReference.Instance.audioManager.SetVolume(AudioSourcesType.AMBIANCE, level);
             
             prefs.SetFloat("ambianceLevel", level);
             prefs.Save();
@@ -155,12 +167,15 @@ namespace Settings {
             _fullScreenMode = Screen.fullScreenMode;
 
             prefs.SetString("isFullscreen", isGameFullscreen ? "True" : "False");
+            prefs.Save();
         }
 
         public void ToggleVSync(bool isGameVsync) {
             QualitySettings.vSyncCount = isGameVsync ? 1 : 0;
 
             prefs.SetString("isVSync", isGameVsync ? "True" : "False");
+            
+            prefs.Save();
         }
 
         public void SetResolution(int gameResolution) {
@@ -176,6 +191,8 @@ namespace Settings {
                     break;
             }
             prefs.SetInt("resolution", gameResolution);
+            
+            prefs.Save();
         }
 
         public void SetLookSensibility(float sensibility) {
@@ -189,11 +206,15 @@ namespace Settings {
         public void InverseCameraVerticalAxis(bool isCameraInverted) {
             playerCamera.m_YAxis.m_InvertInput = !isCameraInverted; // Cinemachine is naturally inverted
             prefs.SetString("isCameraVerticalAxisInverted", isCameraInverted.ToString());
+
+            prefs.Save();
         }
 
         public void InverseCameraHorizontalAxis(bool isCameraInverted) {
             playerCamera.m_XAxis.m_InvertInput = isCameraInverted; // Cinemachine is naturally inverted
             prefs.SetString("isCameraHorizontalAxisInverted", isCameraInverted.ToString());
+            
+            prefs.Save();
         }
 
         // public void ResetAllBindings() {
@@ -206,5 +227,29 @@ namespace Settings {
         //     }
         //     
         // }
+        public void SaveDebrisCanvasVisibility(bool isVisible) {
+            ObjectsReference.Instance.gameSettings.isShowingDebris = isVisible;
+            prefs.SetString("areDebrisVisible", isVisible ? "True" : "False");
+            if (ObjectsReference.Instance.gameManager.gameContext == GameContext.IN_GAME) MapItems.Instance.uiCanvasItemsHiddableManager.SetDebrisCanvasVisibility(isVisible);
+            
+            prefs.Save();
+        }
+        
+        public void SaveBananaTreeCanvasVisibility(bool isVisible) {
+            ObjectsReference.Instance.gameSettings.isShowingBananaTrees = isVisible;
+            prefs.SetString("areBananaTreesVisible", isVisible ? "True" : "False");
+            if (ObjectsReference.Instance.gameManager.gameContext == GameContext.IN_GAME) MapItems.Instance.uiCanvasItemsHiddableManager.SetBananaTreeVisibility(isVisible); 
+            
+            prefs.Save();
+        }
+
+        public void SaveMonkeysVisibility(bool isVisible) {
+            ObjectsReference.Instance.gameSettings.isShowingMonkeys = isVisible;
+            
+            prefs.SetString("areMonkeysVisible", isVisible ? "True" : "False");
+            if (ObjectsReference.Instance.gameManager.gameContext == GameContext.IN_GAME) MapItems.Instance.uiCanvasItemsHiddableManager.SetMonkeysVisibility(isVisible);
+            
+            prefs.Save();
+        }
     }
 }

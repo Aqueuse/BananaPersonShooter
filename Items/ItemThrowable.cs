@@ -3,7 +3,8 @@ using UnityEngine;
 
 namespace Items {
     public class ItemThrowable : MonoBehaviour {
-        public ItemThrowableType ItemThrowableType;
-        public ItemThrowableCategory ItemThrowableCategory;
+        public ItemType itemType;
+        public ItemCategory itemCategory;
+        public BuildableType buildableType;
     }
 }

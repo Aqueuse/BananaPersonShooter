@@ -1,7 +1,7 @@
 using UnityEngine;
 
 namespace UI.InGame {
-    public class UIQueuedMessages : MonoSingleton<UIQueuedMessages> {
+    public class UIQueuedMessages : MonoBehaviour {
         [SerializeField] private GameObject queuedMessagePrefab;
     
         public void AddMessage(string message) {

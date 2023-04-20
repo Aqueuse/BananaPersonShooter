@@ -3,13 +3,9 @@ using UnityEngine;
 
 namespace Data.Bananas {
     [CreateAssetMenu (fileName = "Data", menuName = "ScriptableObjects/bananasDataScriptableObject", order = 1)]
-    public class BananasDataScriptableObject : ScriptableObject {
-        public string bananaName;
-        public Sprite sprite;
-        [Multiline] public string[] description;
+    public class BananasDataScriptableObject : ItemScriptableObject {
         [Multiline] public string[] effects;
 
-        // Game
         public int regimeQuantity;
 
         public float sasiety;
@@ -18,7 +14,6 @@ namespace Data.Bananas {
         public float healthBonus;
         public float resistanceBonus;
 
-        public ItemThrowableType itemThrowableType;
         public BananaEffect bananaEffect;
 
         public Material bananaMaterial;

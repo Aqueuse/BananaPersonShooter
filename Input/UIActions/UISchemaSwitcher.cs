@@ -6,7 +6,7 @@ namespace Input.UIActions {
         [SerializeField] private GenericDictionary<UISchemaSwitchType, UISchemaSwitch> uISchemaSwitches;
         
         public void SwitchUISchema(UISchemaSwitchType uiSchemaSwitchType) {
-            InputManager.Instance.uiSchemaContext = uiSchemaSwitchType;
+            ObjectsReference.Instance.inputManager.uiSchemaContext = uiSchemaSwitchType;
             
             DisableAllUISchemas();
             

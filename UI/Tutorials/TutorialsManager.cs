@@ -1,19 +1,18 @@
 using System.Collections.Generic;
 using Enums;
-using Game;
 using UnityEngine;
 
 namespace UI.Tutorials {
-    public class TutorialsManager : MonoSingleton<TutorialsManager> {
+    public class TutorialsManager : MonoBehaviour {
         [SerializeField] private List<UiTutorialButton> tutorialsButtons;
 
         public void Show_Help() {
-            UIManager.Instance.Set_active(UICanvasGroupType.TUTORIALS, true);
+            ObjectsReference.Instance.uiManager.Set_active(UICanvasGroupType.TUTORIALS, true);
         }
 
         public void Hide_Help() {
-            GameManager.Instance.PauseGame(false);
-            UIManager.Instance.Set_active(UICanvasGroupType.TUTORIALS, false);
+            ObjectsReference.Instance.gameManager.PauseGame(false);
+            ObjectsReference.Instance.uiManager.Set_active(UICanvasGroupType.TUTORIALS, false);
         }
         
         public void HideAllTutorials() {

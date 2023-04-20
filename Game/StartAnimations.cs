@@ -1,11 +1,10 @@
 using Tweaks;
-using UI;
 using UnityEngine;
 using UnityEngine.AI;
 using Random = UnityEngine.Random;
 
 namespace Game {
-    public class StartScreen : MonoSingleton<StartScreen> {
+    public class StartAnimations : MonoBehaviour {
         [SerializeField] private GameObject cinematiqueGorilla;
         [SerializeField] private Transform cinematiqueGorillaSpawnPoint;
         [SerializeField] private GameObject bananaPrefab;
@@ -27,14 +26,14 @@ namespace Game {
         }
 
         private void Update() {
-            if (UnityEngine.Input.GetMouseButtonDown(0) && !UIManager.Instance.isOnMenu) {
-                Ray ray = GameManager.Instance.cameraMain.ScreenPointToRay(UnityEngine.Input.mousePosition);
+            if (UnityEngine.Input.GetMouseButtonDown(0) && !ObjectsReference.Instance.uiManager.isOnMenu) {
+                Ray ray = ObjectsReference.Instance.gameManager.cameraMain.ScreenPointToRay(UnityEngine.Input.mousePosition);
                 Vector3 direction = ray.GetPoint(1) - ray.GetPoint(0);
                 GameObject spawnedBanana = Instantiate(bananaPrefab, ray.GetPoint(2), Quaternion.LookRotation(direction));
                 spawnedBanana.GetComponent<Rigidbody>().velocity = spawnedBanana.transform.forward * 10f;
             }
-            else if(UnityEngine.Input.GetMouseButtonDown(1)  && !UIManager.Instance.isOnMenu) {
-				Ray ray = GameManager.Instance.cameraMain.ScreenPointToRay(UnityEngine.Input.mousePosition);
+            else if(UnityEngine.Input.GetMouseButtonDown(1)  && !ObjectsReference.Instance.uiManager.isOnMenu) {
+				Ray ray = ObjectsReference.Instance.gameManager.cameraMain.ScreenPointToRay(UnityEngine.Input.mousePosition);
 				Vector3 direction = ray.GetPoint(1) - ray.GetPoint(0);
 				GameObject spawnedBanana = Instantiate(bananaPrefab, ray.GetPoint(2), Quaternion.LookRotation(direction));
 				spawnedBanana.AddComponent<TrailRendererRandom>();

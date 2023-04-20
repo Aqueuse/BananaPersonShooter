@@ -1,13 +1,12 @@
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using Enums;
-    using Game;
-    using UnityEngine;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using Enums;
+using UnityEngine;
 using Random = UnityEngine.Random;
 
 namespace Audio {
-    public class AudioManager : MonoSingleton<AudioManager> {
+    public class AudioManager : MonoBehaviour {
         [SerializeField] private AudioSource audioEffectsSource;
         [SerializeField] private AudioSource audioAmbianceSource;
         [SerializeField] private AudioSource audioMusicsSource;
@@ -102,14 +101,21 @@ namespace Audio {
             if (lastClip != null) audioClips.Remove(lastClip);
 
             // prevent playing the same song
-            var randomClip = audioClips.ElementAt(Random.Range(0, audioClips.Count));
-            audioMusicsSource.clip = randomClip;
-            lastClip = randomClip;
+            if (audioClips.Count > 1) {
+                var randomClip = audioClips.ElementAt(Random.Range(0, audioClips.Count));
+                audioMusicsSource.clip = randomClip;
+                lastClip = randomClip;
 
-            audioMusicsSource.Play();
-            var clipDuration = audioMusicsSource.clip.length;
+                audioMusicsSource.Play();
+                var clipDuration = audioMusicsSource.clip.length;
             
-            Invoke(nameof(PlayMusicDelayed), Random.Range(clipDuration+30, clipDuration+60));
+                Invoke(nameof(PlayMusicDelayed), Random.Range(clipDuration+30, clipDuration+60));
+            }
+            else {
+                audioMusicsSource.clip = audioClips.ElementAt(0);
+                var clipDuration = audioMusicsSource.clip.length;
+                Invoke(nameof(PlayMusicDelayed), clipDuration);
+            }
         }
 
         private void PlayAmbiance(AmbianceType ambianceType) {
@@ -133,7 +139,7 @@ namespace Audio {
         }
         
         public void PlayFootStepOneShot() {
-            if (GameManager.Instance.isGamePlaying) {
+            if (ObjectsReference.Instance.gameManager.isGamePlaying) {
                 var audioData = audioFootStepsDictionnary[footStepType];
                 if (!audioFootstepsSource.isPlaying) {
                     audioFootstepsSource.volume = effectsLevel-0.2f;
@@ -143,7 +149,7 @@ namespace Audio {
         }
 
         public void PlayFootstep() {
-            if (GameManager.Instance.isGamePlaying) {
+            if (ObjectsReference.Instance.gameManager.isGamePlaying) {
                 var audioData = audioFootStepsDictionnary[footStepType];
                 audioFootstepsSource.volume = effectsLevel-0.2f;
                 audioFootstepsSource.clip = audioData.clip[Random.Range(0, audioData.clip.Length)]; 

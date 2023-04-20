@@ -1,11 +1,9 @@
-using Cameras;
 using Enums;
 using Player;
-using UI.InGame;
 using UnityEngine;
 
 namespace Building {
-    public class BananaGun : MonoSingleton<BananaGun> {
+    public class BananaGun : MonoBehaviour {
         public GameObject bananaGun;
         public GameObject bananaGunInBack;
         
@@ -14,33 +12,33 @@ namespace Building {
         public bool wasFocus;
         
         private void Start() {
-            _playerController = BananaMan.Instance.GetComponent<PlayerController>();
-            BananaMan.Instance.isGrabingBananaGun = false;
+            _playerController = ObjectsReference.Instance.bananaMan.GetComponent<PlayerController>();
+            ObjectsReference.Instance.bananaMan.isGrabingBananaGun = false;
         }
         
         public void GrabBananaGun() {
             bananaGun.SetActive(true);
             bananaGunInBack.SetActive(false);
 
-            BananaMan.Instance.isGrabingBananaGun = true;
+            ObjectsReference.Instance.bananaMan.isGrabingBananaGun = true;
 
-            BananaMan.Instance.tpsPlayerAnimator.GrabBananaGun();
+            ObjectsReference.Instance.bananaMan.tpsPlayerAnimator.GrabBananaGun();
             wasFocus = _playerController.isFocusCamera;
-            MainCamera.Instance.Switch_To_Shoot_Target();
+            ObjectsReference.Instance.mainCamera.Switch_To_Shoot_Target();
             
-            UICrosshair.Instance.SetCrosshair(ItemThrowableType.CAVENDISH);
+            ObjectsReference.Instance.uiCrosshair.SetCrosshair(ItemType.CAVENDISH);
         }
 
         public void CancelMover() {
-            BananaGunPut.Instance.CancelThrow();
+            ObjectsReference.Instance.bananaGunPut.CancelThrow();
             
             bananaGun.SetActive(false);
             bananaGunInBack.SetActive(true);
 
-            BananaMan.Instance.isGrabingBananaGun = false;
+            ObjectsReference.Instance.bananaMan.isGrabingBananaGun = false;
 
-            BananaMan.Instance.tpsPlayerAnimator.FocusCamera(wasFocus);
-            MainCamera.Instance.Switch_To_TPS_Target();
+            ObjectsReference.Instance.bananaMan.tpsPlayerAnimator.FocusCamera(wasFocus);
+            ObjectsReference.Instance.mainCamera.Switch_To_TPS_Target();
         }
     }
 }

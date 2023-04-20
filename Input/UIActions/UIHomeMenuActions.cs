@@ -1,6 +1,4 @@
-﻿using UI;
-using UI.Menus;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.EventSystems;
 
 namespace Input.UIActions {
@@ -19,7 +17,7 @@ namespace Input.UIActions {
         
         private void Start() {
             pointer = new PointerEventData(EventSystem.current);
-            UIHomeMenu.Instance.selectedTrigger = homeMenu.GetComponentsInChildren<EventTrigger>()[0];
+            ObjectsReference.Instance.uiHomeMenu.selectedTrigger = homeMenu.GetComponentsInChildren<EventTrigger>()[0];
         }
         
         private void Update() {
@@ -32,13 +30,13 @@ namespace Input.UIActions {
 
         private void Activate() {
             if (UnityEngine.Input.GetKeyDown(KeyCode.Return) || UnityEngine.Input.GetKeyDown(KeyCode.JoystickButton0)) {
-                ExecuteEvents.Execute(UIHomeMenu.Instance.selectedTrigger.gameObject, pointer, ExecuteEvents.pointerDownHandler);
+                ExecuteEvents.Execute(ObjectsReference.Instance.uiHomeMenu.selectedTrigger.gameObject, pointer, ExecuteEvents.pointerDownHandler);
             }
         }
 
         private void Escape() {
             if (UnityEngine.Input.GetKeyDown(KeyCode.Escape) || UnityEngine.Input.GetKeyDown(KeyCode.JoystickButton1)) {
-                UIManager.Instance.Hide_menus();
+                ObjectsReference.Instance.uiManager.Hide_menus();
             }
         }
         
@@ -46,7 +44,7 @@ namespace Input.UIActions {
             if (UnityEngine.Input.GetAxis("Horizontal") < 0 && !_scrolledLeft) {
                 _scrolledLeft = true;
 
-                UIHomeMenu.Instance.SwitchToLeftHomeMenuButton();
+                ObjectsReference.Instance.uiHomeMenu.SwitchToLeftHomeMenuButton();
             }
 
             if (UnityEngine.Input.GetAxis("Horizontal") == 0) {
@@ -59,7 +57,7 @@ namespace Input.UIActions {
             if (UnityEngine.Input.GetAxis("Horizontal") > 0 && !_scrolledRight) {
                 _scrolledRight = true;
 
-                UIHomeMenu.Instance.SwitchToRightHomeMenuButton();
+                ObjectsReference.Instance.uiHomeMenu.SwitchToRightHomeMenuButton();
             }
             
             if (UnityEngine.Input.GetAxis("Horizontal") == 0) {

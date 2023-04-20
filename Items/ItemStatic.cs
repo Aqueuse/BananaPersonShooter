@@ -17,7 +17,7 @@ namespace Items {
         public void Activate() {
             if (_isActive) return;
 
-            ItemsManager.Instance.HideAllItemsStatics();
+            ObjectsReference.Instance.itemsManager.HideAllItemsStatics();
             _canvasItemsStatic.ShowUI();
             _isActive = true;
         }

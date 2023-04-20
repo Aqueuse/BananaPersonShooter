@@ -1,6 +1,4 @@
 ﻿using Enums;
-using Game;
-using Player;
 using UI.InGame;
 using UnityEngine;
 using UnityEngine.AI;
@@ -25,19 +23,28 @@ namespace Monkeys {
 
         private void Start() {
             sasiety = 20;
-            MapsManager.Instance.currentMap.RecalculateHapiness();
-            associatedUI.SetSliderValue(happiness, monkeyState);
+            ObjectsReference.Instance.mapsManager.currentMap.RecalculateHappiness();
+            associatedUI.SetSliderValue(ObjectsReference.Instance.monkeysManager.colorByMonkeyState[monkeyState]);
 
             _navMeshAgent = GetComponent<NavMeshAgent>();
             _animator = GetComponent<Animator>();
+            
+            NavMeshTriangulation navMeshTriangulation = NavMesh.CalculateTriangulation();
+                
+            int vertexIndex = Random.Range(0, navMeshTriangulation.vertices.Length);
+                
+            if (NavMesh.SamplePosition(navMeshTriangulation.vertices[vertexIndex], out NavMeshHit navMeshHit, 2f, 0)) {
+                _navMeshAgent.Warp(navMeshHit.position);
+            }
+
+            transform.localScale = new Vector3(1, 1, 1);
         }
 
         public void Feed(float addedBananaValue) {
             if (happiness <= 50) {
-                GetComponent<NavMeshAgent>().SetDestination(BananaMan.Instance.transform.position);
+                GetComponent<NavMeshAgent>().SetDestination(ObjectsReference.Instance.bananaMan.transform.position);
                 sasiety += addedBananaValue;
-                MapsManager.Instance.currentMap.RecalculateHapiness();
-                associatedUI.SetSliderValue(happiness, monkeyState);
+                ObjectsReference.Instance.mapsManager.currentMap.RecalculateHappiness();
             }
         }
         

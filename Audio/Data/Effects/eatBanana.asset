@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 34852139ae771484289135c8cc860b89, type: 3}
+  m_Name: eatBanana
+  m_EditorClassIdentifier: 
+  clip:
+  - {fileID: 8300000, guid: fb153c77ef82f2540a9bc3e65dcdeb90, type: 3}
+  IsLooping: 0
+  isRandomlySilenced: 0
+  volume: 0.027

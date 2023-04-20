@@ -1,17 +1,16 @@
 ﻿using System.Collections.Generic;
 using Enums;
-using Items;
 using TMPro;
 using UnityEngine;
 
 namespace UI.InGame.Inventory {
-    public class UInventory : MonoSingleton<UInventory> {
+    public class UInventory : MonoBehaviour {
         public TextMeshProUGUI itemDescription;
 
-        [SerializeField] private GenericDictionary<ItemThrowableType, GameObject> inventorySlots;
+        [SerializeField] private GenericDictionary<ItemType, GameObject> inventorySlots;
         [SerializeField] private GameObject firstInventoryItem;
 
-        private Dictionary<ItemThrowableType, int> _itemsIndexByType;
+        private Dictionary<ItemType, int> _itemsIndexByType;
 
         public GameObject lastselectedInventoryItem;
 
@@ -20,7 +19,7 @@ namespace UI.InGame.Inventory {
         }
 
         public void RefreshUInventory() {
-            var inventory = global::Game.Inventory.Instance.bananaManInventory;
+            var inventory = ObjectsReference.Instance.inventory.bananaManInventory;
 
             foreach (var inventoryItem in inventory) {
                 if (inventoryItem.Value > 0) {
@@ -30,10 +29,6 @@ namespace UI.InGame.Inventory {
 
                 else inventorySlots[inventoryItem.Key].SetActive(false);
             }
-        }
-        
-        public Sprite GetItemSprite(ItemThrowableType itemThrowableType) {
-            return ItemsManager.Instance.itemsDataScriptableObject.itemSpriteByItemType[itemThrowableType];
         }
     }
 }

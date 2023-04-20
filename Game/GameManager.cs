@@ -1,19 +1,11 @@
 ﻿using System;
-using Audio;
 using Building;
-using Cameras;
 using Cinemachine;
 using Enums;
-using Input;
-using Player;
-using Save;
-using Settings;
-using UI;
-using UI.Save;
 using UnityEngine;
 
 namespace Game {
-    public class GameManager : MonoSingleton<GameManager> {
+    public class GameManager : MonoBehaviour {
         [SerializeField] public Camera cameraMain;
         [SerializeField] private CinemachineFreeLook playerCamera;
 
@@ -26,58 +18,56 @@ namespace Game {
         private void Start() {
             isGamePlaying = false;
             gameContext = GameContext.IN_HOME;
+            
+            ObjectsReference.Instance.gameSettings.LoadSettings(); 
+            ObjectsReference.Instance.audioManager.PlayMusic(MusicType.HOME);
 
-            BananaMan.Instance.GetComponent<RagDoll>().SetRagDoll(false);
-        
-            GameSettings.Instance.LoadSettings(); 
-            AudioManager.Instance.PlayMusic(MusicType.HOME);
-
-            InputManager.Instance.uiSchemaContext = UISchemaSwitchType.HOME_MENU;
-            InputManager.Instance.SwitchContext(InputContext.UI);
+            ObjectsReference.Instance.inputManager.uiSchemaContext = UISchemaSwitchType.HOME_MENU;
+            ObjectsReference.Instance.inputManager.SwitchContext(InputContext.UI);
         }
         
         public void New_Game() {
-            UIManager.Instance.Hide_home_menu();
-            StartScreen.Instance.enabled = false;
+            ObjectsReference.Instance.uiManager.Hide_home_menu();
+            GameObject.FindWithTag("startAnimations").GetComponent<StartAnimations>().enabled = false;
             
-            Cinematiques.Instance.Play(CinematiqueType.NEW_GAME);
+            ObjectsReference.Instance.cinematiques.Play(CinematiqueType.NEW_GAME);
         }
 
         public void Start_New_Game() {
-            GameData.Instance.currentSaveUuid = DateTime.Now.ToString("yyyyMMddHHmmss");
+            ObjectsReference.Instance.gameData.currentSaveUuid = DateTime.Now.ToString("yyyyMMddHHmmss");
 
-            GameReset.Instance.ResetGameData();
+            ObjectsReference.Instance.gameReset.ResetGameData();
             
-            GameSave.Instance.SaveGameData(GameData.Instance.currentSaveUuid);
-            UISave.Instance.CreateNewSave(GameData.Instance.currentSaveUuid);
+            ObjectsReference.Instance.gameSave.SaveGameData(ObjectsReference.Instance.gameData.currentSaveUuid);
+            ObjectsReference.Instance.uiSave.CreateNewSave(ObjectsReference.Instance.gameData.currentSaveUuid);
          
-            BananaGun.Instance.bananaGunInBack.SetActive(false);
-            UIManager.Instance.Set_active(UICanvasGroupType.HUD, false);
+            ObjectsReference.Instance.bananaGun.bananaGunInBack.SetActive(false);
+            ObjectsReference.Instance.uiManager.Set_active(UICanvasGroupType.HUD, false);
             
-            Play(GameData.Instance.currentSaveUuid, true);
+            Play(ObjectsReference.Instance.gameData.currentSaveUuid, true);
         }
         
         public void Play(string saveUuid, bool newGame) {
-            GameLoad.Instance.LoadGameData(saveUuid);
+            ObjectsReference.Instance.gameLoad.LoadGameData(saveUuid);
         
-            UIManager.Instance.Hide_home_menu();
+            ObjectsReference.Instance.uiManager.Hide_home_menu();
             Cursor.visible = false;
             Cursor.lockState = CursorLockMode.Locked;
             loadingScreen.SetActive(true);
             
             cameraMain.clearFlags = CameraClearFlags.Skybox;
             playerCamera.Priority = 10;
-            MainCamera.Instance.SwitchToFreeLookCamera();
+            ObjectsReference.Instance.mainCamera.SwitchToFreeLookCamera();
             
             if (newGame) {
-                ScenesSwitch.Instance.SwitchScene(
+                ObjectsReference.Instance.scenesSwitch.SwitchScene(
                     "COMMANDROOM", 
                     SpawnPoint.COMMAND_ROOM_TELEPORTATION,
                     true);
             }
             else {
-                ScenesSwitch.Instance.SwitchScene(
-                    GameData.Instance.bananaManSavedData.lastMap, 
+                ObjectsReference.Instance.scenesSwitch.SwitchScene(
+                    ObjectsReference.Instance.gameData.bananaManSavedData.lastMap, 
                     SpawnPoint.LAST_MAP,
                     false);
             }
@@ -87,11 +77,15 @@ namespace Game {
             if (pause) {
                 Cursor.visible = true;
                 Cursor.lockState = CursorLockMode.None;
-                InputManager.Instance.SwitchContext(InputContext.UI);
+                ObjectsReference.Instance.inputManager.SwitchContext(InputContext.UI);
 
-                MainCamera.Instance.Set0Sensibility();
-                
-                if (MapsManager.Instance.currentMap.activeMonkeyType != MonkeyType.NONE) MapsManager.Instance.currentMap.activeMonkey.PauseMonkey();
+                ObjectsReference.Instance.mainCamera.Set0Sensibility();
+
+                if (ObjectsReference.Instance.mapsManager.currentMap.activeMonkeyType != MonkeyType.NONE) {
+                    foreach (var monkey in MapItems.Instance.monkeys) {
+                        monkey.PauseMonkey();
+                    }
+                }
                 
                 isGamePlaying = false;
             }
@@ -99,18 +93,22 @@ namespace Game {
             if (!pause) {
                 Cursor.visible = false;
                 Cursor.lockState = CursorLockMode.Locked;
-                InputManager.Instance.SwitchContext(InputContext.GAME);
+                ObjectsReference.Instance.inputManager.SwitchContext(InputContext.GAME);
                 
-                MainCamera.Instance.SetNormalSensibility();
-                
-                if (MapsManager.Instance.currentMap.activeMonkeyType != MonkeyType.NONE) MapsManager.Instance.currentMap.activeMonkey.UnpauseMonkey();
+                ObjectsReference.Instance.mainCamera.SetNormalSensibility();
+
+                if (ObjectsReference.Instance.mapsManager.currentMap.activeMonkeyType != MonkeyType.NONE) {
+                    foreach (var monkey in MapItems.Instance.monkeys) {
+                        monkey.UnpauseMonkey();
+                    }
+                }
 
                 isGamePlaying = true;
             }
         }
 
         public void Quit() {
-            GameSettings.Instance.prefs.Save();
+            ObjectsReference.Instance.gameSettings.prefs.Save();
             Application.Quit();
         }
     }

@@ -12,11 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9aa579ee7e77bb468bc13896355d2a8, type: 3}
   m_Name: PrayingHandsBananaData
   m_EditorClassIdentifier: 
-  bananaName: Praying hands
-  sprite: {fileID: 21300000, guid: b4965c27d2b128849b5af61c5fe69b1a, type: 3}
-  description:
+  itemType: 14
+  itemCategory: 0
+  buildableType: 1
+  itemName: Praying hands
+  itemSprite: {fileID: 21300000, guid: b4965c27d2b128849b5af61c5fe69b1a, type: 3}
+  itemDescription:
   - Fragmentation banana
   - "Banane \xE0 fragmentation"
+  bananaName: Praying hands
   effects:
   - explodes then splits into 10 bananas which in turn explode
   - "explose puis se divise en 10 bananes qui explosent \xE0 leur tour"
@@ -25,5 +29,5 @@ MonoBehaviour:
   damageTime: 0
   healthBonus: 1
   resistanceBonus: 1
-  itemThrowableType: 14
   bananaEffect: 5
+  bananaMaterial: {fileID: 0}

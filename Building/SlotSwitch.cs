@@ -1,72 +1,75 @@
-using Building.Plateforms;
-using Data;
 using Enums;
-using Game;
-using Items;
-using Player;
 using UI.InGame.QuickSlots;
 using UnityEngine;
 
 namespace Building {
-    public class SlotSwitch : MonoSingleton<SlotSwitch> {
+    public class SlotSwitch : MonoBehaviour {
         [SerializeField] private GameObject plateformPrefab;
-        [SerializeField] private GameObject plateformSpawnerPoint;
+        [SerializeField] private GameObject buildableSpawnerPoint;
 
-        private GameObject _activePlateform;
+        private GameObject _activeBuildable;
         
         void FixedUpdate() {
-            if (BananaMan.Instance.activeItemThrowableType == ItemThrowableType.PLATEFORM && _activePlateform != null) {
-                _activePlateform.transform.position = plateformSpawnerPoint.transform.position;
+            if (ObjectsReference.Instance.bananaMan.activeItemCategory == ItemCategory.BUILDABLE && _activeBuildable != null) {
+                _activeBuildable.transform.position = buildableSpawnerPoint.transform.position;
             }
         }
 
         public void SwitchSlot(UISlot slot) {
-            BananaMan.Instance.activeItemThrowableType = slot.itemThrowableType;
-            BananaMan.Instance.activeItemThrowableCategory = ItemsManager.Instance.itemsDataScriptableObject.itemsThrowableCategoriesByType[slot.itemThrowableType];
+            ObjectsReference.Instance.bananaMan.SetActiveItemTypeAndCategory(slot.itemType, slot.itemCategory, slot.buildableType);
             
             // remove plateform ghost if it exist
-            if (_activePlateform != null) Destroy(_activePlateform);
+            if (_activeBuildable != null) Destroy(_activeBuildable);
 
-            switch (BananaMan.Instance.activeItemThrowableCategory) {
-                case ItemThrowableCategory.BANANA:
-                    BananaMan.Instance.activeItem = ScriptableObjectManager.Instance.GetBananaScriptableObject(UISlotsManager.Instance.Get_Selected_Slot_Type());
+            switch (ObjectsReference.Instance.bananaMan.activeItemCategory) {
+                case ItemCategory.BANANA:
+                    ObjectsReference.Instance.bananaMan.activeItem = ObjectsReference.Instance.scriptableObjectManager.GetBananaScriptableObject(ObjectsReference.Instance.uiSlotsManager.Get_Selected_Slot_Type());
                     break;
-                
-                case ItemThrowableCategory.CRAFTABLE:
-                    if (BananaMan.Instance.activeItemThrowableType == ItemThrowableType.PLATEFORM) {
-                        if (global::Game.Inventory.Instance.bananaManInventory[BananaMan.Instance.activeItemThrowableType] > 0) {
-                            _activePlateform = Instantiate(
-                                original: plateformPrefab,
-                                position: plateformSpawnerPoint.transform.position,
-                                rotation: plateformSpawnerPoint.transform.localRotation);
-                        }
 
-                        _activePlateform.transform.parent = MapItems.Instance.plateformsContainer.transform;
-                        BananaGun.Instance.CancelMover();
+                case ItemCategory.BUILDABLE:
+                    _activeBuildable = Instantiate(
+                        original: plateformPrefab,
+                        position: buildableSpawnerPoint.transform.position,
+                        rotation: buildableSpawnerPoint.transform.localRotation);
+                    
+                    _activeBuildable.transform.parent = MapItems.Instance.plateformsContainer.transform;
+                    
+                    // set buildable color
+                    var craftingIngredients =
+                        ObjectsReference.Instance.scriptableObjectManager.GetBuildableCraftingIngredients(
+                            ObjectsReference.Instance.bananaMan.activeBuildableType);
+
+                    if (ObjectsReference.Instance.inventory.HasCraftingIngredients(craftingIngredients)) {
+                        _activeBuildable.GetComponent<Buildable>().SetValid();
                     }
+                    else {
+                        _activeBuildable.GetComponent<Buildable>().SetUnbuildable();
+                    }
+
+                    ObjectsReference.Instance.bananaGun.CancelMover();
                     break;
-                
-                case ItemThrowableCategory.EMPTY:
-                    BananaGun.Instance.CancelMover();
+
+                case ItemCategory.EMPTY:
+                    ObjectsReference.Instance.bananaGun.CancelMover();
                     break;
             }
         }
 
-        public void ValidatePlateform() {
-            var plateformQuantityInInventory = global::Game.Inventory.Instance.GetQuantity(BananaMan.Instance.activeItemThrowableType);
-            
-            if (BananaMan.Instance.activeItemThrowableType == ItemThrowableType.PLATEFORM && _activePlateform != null) {
-                if (_activePlateform.GetComponent<Plateform>().isValid && plateformQuantityInInventory > 0) {
-                    plateformQuantityInInventory--;
+        public void ValidateBuildable() {
+            if (ObjectsReference.Instance.bananaMan.activeItemCategory == ItemCategory.BUILDABLE && _activeBuildable != null) {
+                if (_activeBuildable.GetComponent<Buildable>().isValid) {
+                    var craftingIngredients =
+                        ObjectsReference.Instance.scriptableObjectManager.GetBuildableCraftingIngredients(
+                            ObjectsReference.Instance.bananaMan.activeBuildableType);
+
+                    foreach (var craftingIngredient in craftingIngredients) {
+                        ObjectsReference.Instance.inventory.RemoveQuantity(ItemCategory.BUILDABLE, craftingIngredient.Key, craftingIngredient.Value);
+                    }
                     
-                    global::Game.Inventory.Instance.RemoveQuantity(BananaMan.Instance.activeItemThrowableType, 1);
-                    UISlotsManager.Instance.Get_Selected_Slot().SetAmmoQuantity(plateformQuantityInInventory);
-            
-                    MapsManager.Instance.currentMap.RefreshPlateformsDataMap();
+                    if (ObjectsReference.Instance.bananaMan.activeBuildableType == BuildableType.PLATEFORM) ObjectsReference.Instance.mapsManager.currentMap.RefreshPlateformsDataMap();
 
-                    _activePlateform.GetComponent<Plateform>().SetNormal();
-                    _activePlateform = null;
-
+                    _activeBuildable.GetComponent<Buildable>().SetNormal(ObjectsReference.Instance.bananaMan.activeBuildableType);
+                    _activeBuildable = null;
                 }
             }
         }

@@ -1,30 +1,25 @@
-﻿using Data;
-using Enums;
-using Player;
-using Settings;
+﻿using Enums;
 using TMPro;
-using UI.InGame.QuickSlots;
 using UnityEngine;
 
 namespace UI.InGame.Inventory {
     public class UInventorySlot : MonoBehaviour {
-        public ItemThrowableType itemThrowableType;
-        public ItemThrowableCategory itemThrowableCategory;
+        public ItemType itemType;
+        public ItemCategory itemCategory;
 
         [SerializeField] private TextMeshProUGUI quantityText;
         
         public void AssignToSlot() {
             SetDescription();
             
-            BananaMan.Instance.activeItemThrowableCategory = itemThrowableCategory;
-            BananaMan.Instance.activeItemThrowableType = itemThrowableType;
+            ObjectsReference.Instance.bananaMan.SetActiveItemTypeAndCategory(itemType, itemCategory, BuildableType.EMPTY);
             
-            UInventory.Instance.lastselectedInventoryItem = gameObject;
+            ObjectsReference.Instance.uInventory.lastselectedInventoryItem = gameObject;
 
-            UISlotsManager.Instance.AssignToSelectedSlot(itemThrowableType);
+            ObjectsReference.Instance.uiSlotsManager.AssignToSelectedSlot(itemCategory, itemType);
 
-            if (itemThrowableCategory == ItemThrowableCategory.BANANA) {
-                BananaMan.Instance.activeItem = ScriptableObjectManager.Instance.GetBananaScriptableObject(itemThrowableType);
+            if (itemCategory == ItemCategory.BANANA) {
+                ObjectsReference.Instance.bananaMan.activeItem = ObjectsReference.Instance.scriptableObjectManager.GetBananaScriptableObject(itemType);
             }
         }
         
@@ -33,7 +28,7 @@ namespace UI.InGame.Inventory {
         }
 
         public void SetDescription() {
-            UInventory.Instance.itemDescription.text = ScriptableObjectManager.Instance.GetDescription(itemThrowableCategory, itemThrowableType, GameSettings.Instance.languageIndexSelected);
+            ObjectsReference.Instance.uInventory.itemDescription.text = ObjectsReference.Instance.scriptableObjectManager.GetDescription(itemCategory, ObjectsReference.Instance.gameSettings.languageIndexSelected, itemType);
         }
     }
 }

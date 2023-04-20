@@ -1,4 +1,3 @@
-using Game;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -13,7 +12,7 @@ namespace UI {
         private void Update() {
             if (slider.value >= 1f) {
                 slider.value = 0;
-                Cinematiques.Instance.Skip();
+                ObjectsReference.Instance.cinematiques.Skip();
             }
 
             slider.value -= Time.deltaTime;

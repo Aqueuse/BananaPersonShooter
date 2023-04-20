@@ -1,5 +1,4 @@
 using Enums;
-using Save;
 using UnityEngine;
 
 namespace Game.CommandRoomPanelControls {
@@ -12,8 +11,12 @@ namespace Game.CommandRoomPanelControls {
 
 
         private void Start() {
-            if (GameData.Instance.bananaManSavedData.advancementState == AdvancementState.NEW_GAME) {
+            if (!ObjectsReference.Instance.gameData.bananaManSavedData.playerAdvancements.Contains(AdvancementState.GET_BANANAGUN)) {
                 SetBananaGunVisibility(true);
+                ShowHidePanel(CommandRoomPanelType.GOALS);
+            }
+            else {
+                SetBananaGunVisibility(false);
             }
         }
 

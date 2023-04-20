@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 
 namespace UI.InGame {
-    public class UIFace : MonoSingleton<UIFace> {
+    public class UIFace : MonoBehaviour {
         [SerializeField] private GameObject facePlane;
         
         private Animator _faceAnimator;

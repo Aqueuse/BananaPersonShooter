@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 namespace UI.Menus {
-    public class UIOptionsMenu : MonoSingleton<UIOptionsMenu> {
+    public class UIOptionsMenu : MonoBehaviour {
         [SerializeField] private GameObject[] tabs;
         [SerializeField] private Image[] tabsButtons;
 

@@ -1,4 +1,3 @@
-using Audio;
 using UnityEngine;
 
 namespace MiniChimps {
@@ -10,7 +9,7 @@ namespace MiniChimps {
         }
 
         public void PlayMiniChimpVoice(AudioClip audioClip) {
-            _miniChimpAudioSource.volume = AudioManager.Instance.voicesLevel;
+            _miniChimpAudioSource.volume = ObjectsReference.Instance.audioManager.voicesLevel;
             _miniChimpAudioSource.clip = audioClip;
             _miniChimpAudioSource.loop = false;
 

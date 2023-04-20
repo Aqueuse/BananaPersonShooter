@@ -12,11 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9aa579ee7e77bb468bc13896355d2a8, type: 3}
   m_Name: PisangRajaBananaData
   m_EditorClassIdentifier: 
-  bananaName: Pisang Raja
-  sprite: {fileID: 21300000, guid: 6fdba3cd7fdc53c4d826500e4c7568ef, type: 3}
-  description:
+  itemType: 12
+  itemCategory: 0
+  buildableType: 1
+  itemName: Pisang Raja
+  itemSprite: {fileID: 21300000, guid: 6fdba3cd7fdc53c4d826500e4c7568ef, type: 3}
+  itemDescription:
   - Very brave little banana
   - "Petite banane tr\xE8s courageuse"
+  bananaName: Pisang Raja
   effects:
   - ordinary nourishing, double healing
   - "sati\xE9t\xE9 ordinaire, soins doubl\xE9s"
@@ -25,5 +29,5 @@ MonoBehaviour:
   damageTime: 0
   healthBonus: 2
   resistanceBonus: 1
-  itemThrowableType: 11
   bananaEffect: 0
+  bananaMaterial: {fileID: 0}

@@ -1,60 +1,103 @@
 using System.Collections.Generic;
 using System.Linq;
-using Cameras;
-using Settings;
+using Building;
 using UnityEngine;
 
 namespace UI.InGame {
-    public class UICanvasItemsHiddableManager : MonoSingleton<UICanvasItemsHiddableManager> {
+    public class UICanvasItemsHiddableManager : MonoBehaviour {
+        [SerializeField] private RectTransform canvasBananaTree;
+        [SerializeField] private RectTransform[] canvasMonkeys;
+        private List<Canvas> _debrisCanvasList;
+        
         private Transform _cameraTransform;
         private Vector3 _localScale;
         private float _cameraDistance;
-
-        private List<Canvas> _canvas;
-
-        public bool areItemsVisible;
+        
+        public bool isBananaTreeVisible;
+        public bool areDebrisVisible;
+        public bool areMonkeysVisible;
         
         private void Start() {
-            _canvas = GetComponentsInChildren<Canvas>().ToList();
-            _cameraTransform = MainCamera.Instance.transform;
+            _debrisCanvasList = MapItems.Instance.debrisContainer.GetComponentsInChildren<Canvas>().ToList();
+            _cameraTransform = ObjectsReference.Instance.mainCamera.transform;
 
-            areItemsVisible = GameSettings.Instance.isShowingDebris;
+            areDebrisVisible = ObjectsReference.Instance.gameSettings.isShowingDebris;
+            areMonkeysVisible = ObjectsReference.Instance.gameSettings.isShowingMonkeys;
+            isBananaTreeVisible = ObjectsReference.Instance.gameSettings.isShowingBananaTrees;
         }
 
         private void Update() {
-            if (!areItemsVisible) return;
-            
-            foreach (var canva in _canvas) {
-                var canvaTransform = canva.transform;
-
-                _cameraDistance = Vector3.Distance(canvaTransform.position, _cameraTransform.position);
-
-                _localScale.x = _cameraDistance / 6000f; // ugly optimisation, yeah
-                _localScale.y = _cameraDistance / 6000f; 
-
-                canvaTransform.LookAt(_cameraTransform);
-                canvaTransform.localScale = _localScale;
+            if (isBananaTreeVisible) {
+                _cameraDistance = Vector3.Distance(canvasBananaTree.transform.position, _cameraTransform.position);
                 
-                if (_cameraDistance <= 15f || _cameraDistance > 400f) {
-                    canva.enabled = false;
-                }
+                _localScale.x = _cameraDistance / 6000f; // ugly optimisation, yeah
+                _localScale.y = _cameraDistance / 6000f;
 
-                else {
-                    canva.enabled = true;
+                canvasBananaTree.LookAt(_cameraTransform);
+                canvasBananaTree.localScale = _localScale;
+            }
+
+            if (areMonkeysVisible) {
+                foreach (var canvasMonkey in canvasMonkeys) {
+                    _cameraDistance = Vector3.Distance(canvasMonkey.position, _cameraTransform.position);
+
+                    _localScale.x = _cameraDistance / 6000f; // ugly optimisation, yeah
+                    _localScale.y = _cameraDistance / 6000f;
+                    
+                    canvasMonkey.LookAt(_cameraTransform);
+                    canvasMonkey.localScale = _localScale;
+                }
+            }
+
+            if (areDebrisVisible) {
+                foreach (var canva in _debrisCanvasList) {
+                    if (canva != null) {
+                        var canvaTransform = canva.transform;
+
+                        _cameraDistance = Vector3.Distance(canvaTransform.position, _cameraTransform.position);
+
+                        _localScale.x = _cameraDistance / 6000f; // ugly optimisation, yeah
+                        _localScale.y = _cameraDistance / 6000f;
+
+                        canvaTransform.LookAt(_cameraTransform);
+                        canvaTransform.localScale = _localScale;
+
+                        if (_cameraDistance <= 15f || _cameraDistance > 400f) {
+                            canva.enabled = false;
+                        }
+
+                        else {
+                            canva.enabled = true;
+                        }
+                    }
                 }
             }
         }
 
         public void RemoveCanva(Canvas canvasToRemove) {
-            _canvas.Remove(canvasToRemove);
+            _debrisCanvasList.Remove(canvasToRemove);
         }
 
-        public void SetItemsCanvasVisibility(bool isVisible) {
-            areItemsVisible = isVisible;
+        public void SetDebrisCanvasVisibility(bool isVisible) {
+            _debrisCanvasList = MapItems.Instance.debrisContainer.GetComponentsInChildren<Canvas>().ToList();
+            areDebrisVisible = isVisible;
 
-            foreach (var canva in _canvas) {
+            foreach (var canva in _debrisCanvasList) {
                 canva.enabled = isVisible;
             }
+        }
+
+        public void SetMonkeysVisibility(bool isVisible) {
+            areMonkeysVisible = isVisible;
+
+            foreach (var canvas in canvasMonkeys) {
+                canvas.GetComponent<Canvas>().enabled = isVisible;
+            }
+        }
+        
+        public void SetBananaTreeVisibility(bool isVisible) {
+            isBananaTreeVisible = isVisible;
+            canvasBananaTree.GetComponent<Canvas>().enabled = isVisible;
         }
     }
 }

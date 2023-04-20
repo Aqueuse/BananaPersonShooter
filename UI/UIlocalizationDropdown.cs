@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using Settings;
 using UnityEngine;
 using UnityEngine.Localization.Settings;
 using TMP_Dropdown = TMPro.TMP_Dropdown;
@@ -31,7 +30,7 @@ namespace UI {
 
         static void LocaleSelected(int index) {
             LocalizationSettings.SelectedLocale = LocalizationSettings.AvailableLocales.Locales[index];
-            GameSettings.Instance.languageIndexSelected = index;
+            ObjectsReference.Instance.gameSettings.languageIndexSelected = index;
             PlayerPrefs.SetInt("language", index);
         }
     }

@@ -1,36 +1,34 @@
-using Audio;
 using Data;
 using Enums;
-using Game;
 using UnityEngine;
 
 namespace Player {
-	public class SurfaceDetector : MonoSingleton<SurfaceDetector> {
+	public class SurfaceDetector : MonoBehaviour {
 		[SerializeField] private FootstepSoundsByMaterialScriptableObject footstepSoundsByMaterialScriptableObject;
-		private RaycastHit ray;
-		private int _layerMask;
+		private RaycastHit raycastHit;
+		private int _terrainLayerMask;
 
 		private void Start() {
-			_layerMask = 1 << 9;
+			_terrainLayerMask = 1 << 9;
 		}
 
 		private void Update() {
-			if (!BananaMan.Instance.isInAir && GameManager.Instance.isGamePlaying) {
-				if (Physics.Raycast(transform.position, -transform.up, out ray, 5, layerMask: _layerMask)) {
-					var check = ray.transform.GetComponent<Renderer>();
+			if (ObjectsReference.Instance.gameManager.isGamePlaying) {
+				if (Physics.Raycast(transform.position, -transform.up, out raycastHit, 5, layerMask: _terrainLayerMask)) {
+					var check = raycastHit.transform.GetComponent<Renderer>();
 					if (check.sharedMaterials.Length <= 2) {
 						if (!footstepSoundsByMaterialScriptableObject.basicFootStepTypesByMaterial.ContainsKey(check.sharedMaterials[0])) {
-							AudioManager.Instance.footStepType = FootStepType.ROCK;
+							ObjectsReference.Instance.audioManager.footStepType = FootStepType.ROCK;
 						}
 
 						else {
-							AudioManager.Instance.footStepType = footstepSoundsByMaterialScriptableObject.basicFootStepTypesByMaterial[check.sharedMaterials[0]];
+							ObjectsReference.Instance.audioManager.footStepType = footstepSoundsByMaterialScriptableObject.basicFootStepTypesByMaterial[check.sharedMaterials[0]];
 						}
 					}
 
 					else {
-						AudioManager.Instance.footStepType = footstepSoundsByMaterialScriptableObject.terrainFootStepTypeByMaterial[
-							GetSurfaceTypeFromMaterial(ray.transform.gameObject, ray.triangleIndex)];
+						ObjectsReference.Instance.audioManager.footStepType = footstepSoundsByMaterialScriptableObject.terrainFootStepTypeByMaterial[
+							GetSurfaceTypeFromMaterial(raycastHit.transform.gameObject, raycastHit.triangleIndex)];
 					}
 				}
 			}
@@ -43,8 +41,7 @@ namespace Player {
 			else {
 				Renderer terrainRenderer = obj.GetComponent<Renderer>();
 
-				if (terrainRenderer.materials.Length > 2)
-				{
+				if (terrainRenderer.materials.Length > 2) {
 					Debug.Log("renderer.materials.Length > 2");
 					return null;
 				}

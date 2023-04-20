@@ -5,6 +5,7 @@ namespace Enums {
         DESINTEGRATION,
         THROW_BANANA,
         GRAB_BANANAS,
-        OPEN_DOOR
+        OPEN_DOOR,
+        EAT_BANANA
     }
 }

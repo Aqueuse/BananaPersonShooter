@@ -1,10 +1,7 @@
 using System;
 using System.Globalization;
 using System.IO;
-using Audio;
 using Enums;
-using Game;
-using Save;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -23,12 +20,12 @@ namespace UI.Save {
 
         private void Start() {
             saveUuid = "auto_save";
-            autoSavePath = LoadData.Instance.GetSavePathByUuid("auto_save");
+            autoSavePath = ObjectsReference.Instance.loadData.GetSavePathByUuid("auto_save");
         }
 
         public void Select() {
-            AudioManager.Instance.PlayEffect(EffectType.BUTTON_INTERACTION, 0);
-            UISave.Instance.UnselectAll();
+            ObjectsReference.Instance.audioManager.PlayEffect(EffectType.BUTTON_INTERACTION, 0);
+            ObjectsReference.Instance.uiSave.UnselectAll();
             activatedMask.SetActive(true);
         }
 
@@ -39,21 +36,21 @@ namespace UI.Save {
         }
 
         public void ShowSaveOptions() {
-            AudioManager.Instance.PlayEffect(EffectType.BUTTON_INTERACTION, 0);
+            ObjectsReference.Instance.audioManager.PlayEffect(EffectType.BUTTON_INTERACTION, 0);
             loadButtonGameObject.SetActive(true);
             textPanel.SetActive(false);
         }
 
         public void Load() {
             Unselect();
-            GameManager.Instance.Play("auto_save", false);
+            ObjectsReference.Instance.gameManager.Play("auto_save", false);
         }
 
         public void AutoSave() {
             var date = DateTime.ParseExact(DateTime.Now.ToString("U"), "U", CultureInfo.CurrentCulture).ToString(CultureInfo.CurrentCulture);
             SetLastTimeSinceSave();
 
-            SaveData.Instance.Save(saveUuid, date);
+            ObjectsReference.Instance.saveData.Save(saveUuid, date);
             UpdateThumbail();
         }
         
@@ -64,7 +61,7 @@ namespace UI.Save {
         }
 
         private void UpdateThumbail() {
-            autoSavePath = LoadData.Instance.GetSavePathByUuid("auto_save");
+            autoSavePath = ObjectsReference.Instance.loadData.GetSavePathByUuid("auto_save");
             
             string screenshotFilePath = Path.Combine(autoSavePath, "screenshot.png");
                 var bytes = File.ReadAllBytes(screenshotFilePath);

@@ -6,10 +6,10 @@ namespace Enums {
         OPTIONS,
         BANANAPEDIA,
         CREDITS,
-        BUILDSTATION,
         DEATH,
         HUD,
         INVENTORY,
+        BLUEPRINTS,
         STATISTICS,
         TUTORIALS
     }

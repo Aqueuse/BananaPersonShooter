@@ -1,6 +1,4 @@
-﻿using UI;
-using UI.InGame.QuickSlots;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.EventSystems;
 
 namespace Input.UIActions {
@@ -41,7 +39,7 @@ namespace Input.UIActions {
         
         private void Hide_Interface() {
             if (UnityEngine.Input.GetKeyDown(KeyCode.Escape) || UnityEngine.Input.GetKeyDown(KeyCode.I) || UnityEngine.Input.GetAxis("DpadHorizontal") > 0) {
-                UIManager.Instance.Show_Hide_interface();
+                ObjectsReference.Instance.uiManager.Show_Hide_interface();
             }
         }
         
@@ -50,7 +48,7 @@ namespace Input.UIActions {
                 counter+=Time.deltaTime;
                 if (counter > slowDownValue) {
                     counter = 0;
-                    UISlotsManager.Instance.Select_Upper_Slot();
+                    ObjectsReference.Instance.uiSlotsManager.Select_Upper_Slot();
                     _scrolledUp = true;
                 }
             }
@@ -66,7 +64,7 @@ namespace Input.UIActions {
                 counter+=Time.deltaTime;
                 if (counter > slowDownValue) {
                     counter = 0;
-                    UISlotsManager.Instance.Select_Lower_Slot();
+                    ObjectsReference.Instance.uiSlotsManager.Select_Lower_Slot();
                     _scrolledDown = true;
                 }
             }
@@ -76,8 +74,8 @@ namespace Input.UIActions {
             scrollSlotsValue = UnityEngine.Input.mouseScrollDelta;
             
             var scrollValue = scrollSlotsValue.y;
-            if (scrollValue < 0) UISlotsManager.Instance.Select_Upper_Slot();
-            if (scrollValue > 0) UISlotsManager.Instance.Select_Lower_Slot();
+            if (scrollValue < 0) ObjectsReference.Instance.uiSlotsManager.Select_Upper_Slot();
+            if (scrollValue > 0) ObjectsReference.Instance.uiSlotsManager.Select_Lower_Slot();
         }
     }
 }

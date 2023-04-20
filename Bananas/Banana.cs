@@ -1,39 +1,45 @@
-﻿using Data.Bananas;
+﻿using Building;
+using Data.Bananas;
 using Enums;
-using Game;
 using Monkeys;
-using Player;
 using UnityEngine;
 using UnityEngine.AI;
 
 namespace Bananas {
     public class Banana : MonoBehaviour {
+        [SerializeField] private GameObject bananaSkin;
         public BananasDataScriptableObject bananasDataScriptableObject;
 
-        private void OnTriggerEnter(Collider other) {
-            if (other.gameObject.CompareTag("Boss")) {
-                MapsManager.Instance.currentMap.GetActiveMonkey().GetComponent<Monkey>().Feed(BananaMan.Instance.activeItem.sasiety);
-                DestroyMe();
-            }
-        }
-
         private void OnCollisionEnter(Collision collision) {
-            if (collision.gameObject.layer == LayerMask.NameToLayer("Terrain")) {  
-                // trasnformation en peau de banane
-                transform.gameObject.GetComponent<MeshRenderer>().enabled = false;
-                transform.GetChild(0).GetComponent<MeshRenderer>().enabled = true;
-
-                if (MapsManager.Instance.currentMap.activeMonkeyType != MonkeyType.NONE) {
-                    MapsManager.Instance.currentMap.GetActiveMonkey().GetComponent<NavMeshAgent>().SetDestination(transform.position);
-                }
-                
-                Invoke(nameof(DestroyMe), 10);
+            if (collision.gameObject.CompareTag("Boss")) {
+                collision.gameObject.GetComponent<Monkey>().Feed(bananasDataScriptableObject.sasiety);
+                DestroyMe();
             }
 
             else {
-                if (!collision.gameObject.CompareTag("Player")) {
-                    BananaMan.Instance.resistance += 1;
-                    DestroyMe();
+                if (collision.gameObject.layer == LayerMask.NameToLayer("Terrain")) {  
+                    // trasnformation en peau de banane
+                    transform.gameObject.GetComponent<MeshRenderer>().enabled = false;
+                    bananaSkin.SetActive(true);
+
+                    if (ObjectsReference.Instance.mapsManager.currentMap.activeMonkeyType != MonkeyType.NONE) {
+                        foreach (var monkey in MapItems.Instance.monkeys) {
+                            monkey.GetComponent<NavMeshAgent>().SetDestination(transform.position);
+                        }
+                    }
+
+                    Invoke(nameof(DestroyMe), 10);
+                }
+
+                else {
+                    if (collision.gameObject.CompareTag("Player")) {
+                        ObjectsReference.Instance.inventory.AddQuantity(ItemCategory.RAW_MATERIAL, ItemType.BANANA_SKIN, 1);
+                        DestroyMe();
+                    }
+
+                    else {
+                        Invoke(nameof(DestroyMe), 10);
+                    }
                 }
             }
         }

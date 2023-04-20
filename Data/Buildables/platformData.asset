@@ -12,11 +12,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6e11e44741351774ca1f8261e4d989f1, type: 3}
   m_Name: platformData
   m_EditorClassIdentifier: 
-  itemThrowableType: 20
-  itemThrowableCategory: 1
-  sprite: {fileID: 21300000, guid: 73042722187975d4e8d0de6bcf3eb7db, type: 3}
-  description:
-  - A plateform that can be feed with bananas
-  - "Une plateforme qui peut \xEAtre aliment\xE9e en bananes"
-  rawMaterial: 19
-  cost: 2
+  itemType: 0
+  itemCategory: 1
+  buildableType: 0
+  itemName: plateform
+  itemSprite: {fileID: 21300000, guid: 3728d82037057e341bbbd20d9d44c435, type: 3}
+  itemDescription:
+  - a plateform than can be feeded with bananas
+  - "une plateforme qui peut \xEAtre aliment\xE9e en bananes"
+  rawMaterialsWithQuantity:
+    list:
+    - Key: 19
+      Value: 2
+    - Key: 21
+      Value: 1
+    keyCollision: 0

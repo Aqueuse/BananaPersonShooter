@@ -1,15 +1,13 @@
 using System;
 using System.Globalization;
-using Save;
 using UnityEngine;
 
 namespace UI.Save {
-    public class UISave : MonoSingleton<UISave> {
+    public class UISave : MonoBehaviour {
         [SerializeField] private GameObject savePrefab;
         [SerializeField] private GameObject autosavePrefab;
         public GameObject newSaveButton;
-        
-        
+
         public void UnselectAll() {
             foreach (var saveSlot in GetComponentsInChildren<UISaveSlot>()) {
                 saveSlot.Unselect();
@@ -20,7 +18,7 @@ namespace UI.Save {
             var date = DateTime.ParseExact(DateTime.Now.ToString("U"), "U", CultureInfo.CurrentCulture).ToString(CultureInfo.CurrentCulture);
             if (saveUuid.Length == 0) saveUuid = DateTime.Now.ToString("yyyyMMddHHmmss");
 
-            GameSave.Instance.SaveGameData(saveUuid);
+            ObjectsReference.Instance.gameSave.SaveGameData(saveUuid);
 
             var save = Instantiate(savePrefab, transform);
             save.GetComponent<UISaveSlot>().UpdateToNewSave(saveUuid, date);

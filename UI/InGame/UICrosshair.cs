@@ -3,8 +3,8 @@ using UnityEngine;
 using UnityEngine.UI;
 
 namespace UI.InGame {
-    public class UICrosshair : MonoSingleton<UICrosshair> {
-        [SerializeField] private GenericDictionary<ItemThrowableType, Image> crosshairsByItemType;
+    public class UICrosshair : MonoBehaviour {
+        [SerializeField] private GenericDictionary<ItemType, Image> crosshairsByItemType;
         
         private CanvasGroup _canvasGroup;
 
@@ -12,12 +12,12 @@ namespace UI.InGame {
             _canvasGroup = GetComponent<CanvasGroup>();
         }
     
-        public void SetCrosshair(ItemThrowableType itemThrowableType) {
+        public void SetCrosshair(ItemType itemType) {
             foreach (var crosshair in crosshairsByItemType) {
                 crosshair.Value.enabled = false;
             }
 
-            crosshairsByItemType[itemThrowableType].enabled = true;
+            crosshairsByItemType[itemType].enabled = true;
         }
 
         public void ShowHideCrosshairs(bool isVisible) {

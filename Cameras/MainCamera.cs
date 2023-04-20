@@ -1,5 +1,4 @@
 ﻿using Cinemachine;
-using Settings;
 using UnityEngine;
 
 namespace Cameras {
@@ -8,7 +7,7 @@ namespace Cameras {
         SHOOT = 1
     }
 
-    public class MainCamera : MonoSingleton<MainCamera> {
+    public class MainCamera : MonoBehaviour {
         [SerializeField] private CinemachineFreeLook cinemachineFreeLook;
         [SerializeField] private CinemachineVirtualCamera dialogueCamera;
        private CameraStyle _cameraStyle;
@@ -69,8 +68,8 @@ namespace Cameras {
         }
 
         public void SetNormalSensibility() {
-            cinemachineFreeLook.m_YAxis.m_MaxSpeed = GameSettings.Instance.lookSensibility;
-            cinemachineFreeLook.m_XAxis.m_MaxSpeed = GameSettings.Instance.lookSensibility * 400;
+            cinemachineFreeLook.m_YAxis.m_MaxSpeed = ObjectsReference.Instance.gameSettings.lookSensibility;
+            cinemachineFreeLook.m_XAxis.m_MaxSpeed = ObjectsReference.Instance.gameSettings.lookSensibility * 400;
         }
         
         public void ZoomCamera() {

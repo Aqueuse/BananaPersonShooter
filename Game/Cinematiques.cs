@@ -1,4 +1,3 @@
-using Audio;
 using Cinemachine;
 using Enums;
 using Input.UIActions;
@@ -6,7 +5,7 @@ using UnityEngine;
 using UnityEngine.Video;
 
 namespace Game {
-    public class Cinematiques : MonoSingleton<Cinematiques> {
+    public class Cinematiques : MonoBehaviour {
         [SerializeField] private GenericDictionary<CinematiqueType, VideoClip> cinematiquesVideoClipsByType;
 
         [SerializeField] private Material videoMaterial;
@@ -37,7 +36,7 @@ namespace Game {
             skipCinematiqueGameObject.SetActive(true);
 
             UISchemaSwitcher.Instance.SwitchUISchema(UISchemaSwitchType.CINEMATIQUE);
-            GameManager.Instance.gameContext = GameContext.IN_CINEMATIQUE;
+            ObjectsReference.Instance.gameManager.gameContext = GameContext.IN_CINEMATIQUE;
 
             _cinematiqueType = playedCinematiqueType;
             _cinematiqueCamera.Priority = 100;
@@ -47,7 +46,7 @@ namespace Game {
             _cinematiqueVideoPlayer.frame = 0;
             _cinematiqueVideoPlayer.Play();
             
-            AudioManager.Instance.StopAudioSource(AudioSourcesType.MUSIC);
+            ObjectsReference.Instance.audioManager.StopAudioSource(AudioSourcesType.MUSIC);
         }
 
         public void Pause() {
@@ -69,7 +68,7 @@ namespace Game {
             _cinematiqueVideoPlayer.enabled = false;
 
             if (_cinematiqueType == CinematiqueType.NEW_GAME) {
-                GameManager.Instance.Start_New_Game();
+                ObjectsReference.Instance.gameManager.Start_New_Game();
             }
         }
 

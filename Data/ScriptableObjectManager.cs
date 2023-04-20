@@ -1,31 +1,44 @@
+using System.Collections.Generic;
 using Data.Bananas;
-using Data.Craftables;
+using Data.Buildables;
+using Data.RawMaterial;
 using Enums;
 using UnityEngine;
 
 namespace Data {
-    public class ScriptableObjectManager : MonoSingleton<ScriptableObjectManager> {
-        [SerializeField] private GenericDictionary<ItemThrowableType, BananasDataScriptableObject> bananasDataScriptableObject;
-        [SerializeField] private GenericDictionary<ItemThrowableType, CraftableDataScriptableObject> craftablesDataScriptableObject;
+    public class ScriptableObjectManager : MonoBehaviour {
+        [SerializeField] private GenericDictionary<ItemType, BananasDataScriptableObject> bananasDataScriptableObject;
+        [SerializeField] private GenericDictionary<BuildableType, BuildableDataScriptableObject> buildablesDataScriptableObject;
+        [SerializeField] private GenericDictionary<ItemType, RawMaterialDataScriptableObject> rawMaterialDataScriptableObjects;
         
-        public string GetDescription(ItemThrowableCategory itemThrowableCategory, ItemThrowableType itemThrowableType, int langageIndex) {
-            if (itemThrowableCategory == ItemThrowableCategory.CRAFTABLE) {
-                return craftablesDataScriptableObject[itemThrowableType].description[langageIndex];
-            }
+        public string GetDescription(ItemCategory itemCategory, int langageIndex, ItemType itemType = ItemType.EMPTY, BuildableType buildableType = BuildableType.EMPTY) {
+            if (itemCategory == ItemCategory.BUILDABLE) return buildablesDataScriptableObject[buildableType].itemDescription[langageIndex];
+
+            if (itemCategory == ItemCategory.RAW_MATERIAL)
+                return rawMaterialDataScriptableObjects[itemType].itemDescription[langageIndex];
             
-            return bananasDataScriptableObject[itemThrowableType].description[langageIndex];
+            return bananasDataScriptableObject[itemType].itemDescription[langageIndex];
         }
 
-        public BananasDataScriptableObject GetBananaScriptableObject(ItemThrowableType itemThrowableType) {
-            return bananasDataScriptableObject[itemThrowableType];
-        }
-        
-        public int GetCraftCost(ItemThrowableType itemThrowableType, int quantity) {
-            return craftablesDataScriptableObject[itemThrowableType].cost*quantity;
+        public BananasDataScriptableObject GetBananaScriptableObject(ItemType itemType) {
+            return bananasDataScriptableObject[itemType];
         }
 
-        public ItemThrowableType GetCraftIngredient(ItemThrowableType itemThrowableType) {
-            return craftablesDataScriptableObject[itemThrowableType].rawMaterial;
+        public Sprite GetItemSprite(ItemCategory itemCategory, ItemType itemType = ItemType.EMPTY, BuildableType buildableType = BuildableType.EMPTY) {
+            switch (itemCategory) {
+                case ItemCategory.BUILDABLE:
+                    return buildablesDataScriptableObject[buildableType].itemSprite;
+                case ItemCategory.BANANA:
+                    return bananasDataScriptableObject[itemType].itemSprite;
+                case ItemCategory.RAW_MATERIAL:
+                    return rawMaterialDataScriptableObjects[itemType].itemSprite;
+            }
+
+            return null;
+        }
+
+        public GenericDictionary<ItemType, int> GetBuildableCraftingIngredients(BuildableType buildableType) {
+            return buildablesDataScriptableObject[buildableType].rawMaterialsWithQuantity;
         }
     }
 }

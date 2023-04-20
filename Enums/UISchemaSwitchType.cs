@@ -2,7 +2,6 @@ namespace Enums {
     public enum UISchemaSwitchType {
         HOME_MENU,
         GAME_MENU,
-        LOAD,
         CREDITS,
         BANANAPEDIA,
         AUDIOVIDEO_TAB,
@@ -10,10 +9,11 @@ namespace Enums {
         LANGUAGES_TAB,
         ACCESSIBILITY_TAB,
         INVENTAIRE,
+        BLUEPRINTS,
         STATISTIQUES,
-        BUILDSTATION,
         TUTORIAL,
         CINEMATIQUE,
-        DEATH
+        DEATH,
+        LOAD
     }
 }

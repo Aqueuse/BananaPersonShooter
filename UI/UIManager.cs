@@ -1,19 +1,12 @@
-﻿using Cameras;
-using Enums;
-using Game;
-using Input;
-using Settings;
+﻿using Enums;
 using UI.InGame;
-using UI.InGame.BuildStation;
-using UI.InGame.Inventory;
-using UI.Save;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
 namespace UI {
-    public class UIManager : MonoSingleton<UIManager> {
+    public class UIManager : MonoBehaviour {
         [SerializeField] private Animator interfaceAnimator;
-        public UIBuildStation uiBuildStation;
+        [SerializeField] private UIBananapedia uiBananapedia;
 
         public GenericDictionary<UICanvasGroupType, CanvasGroup> canvasGroupsByUICanvasType;
         public bool isOnMenu;
@@ -21,16 +14,16 @@ namespace UI {
         private static readonly int ShowInventoryID = Animator.StringToHash("SHOW INVENTORY");
         
         private void Start() {
-            InputManager.Instance.uiSchemaContext = UISchemaSwitchType.HOME_MENU;
+            ObjectsReference.Instance.inputManager.uiSchemaContext = UISchemaSwitchType.HOME_MENU;
             isOnMenu = false;
         }
-
+        
         public void Hide_menus() {
-            if (GameSettings.Instance.isKeyRebinding) return;
+            if (ObjectsReference.Instance.gameSettings.isKeyRebinding) return;
 
             isOnMenu = false;
 
-            switch (GameManager.Instance.gameContext) {
+            switch (ObjectsReference.Instance.gameManager.gameContext) {
                 case GameContext.IN_GAME:
                     Set_active(UICanvasGroupType.LOAD, false);
                     Set_active(UICanvasGroupType.OPTIONS, false);
@@ -42,11 +35,11 @@ namespace UI {
                         interfaceAnimator.SetBool(ShowInventoryID, false);
                     }
 
-                    GameManager.Instance.PauseGame(false);
+                    ObjectsReference.Instance.gameManager.PauseGame(false);
                     break;
                 
                 case GameContext.IN_CINEMATIQUE:
-                    Cinematiques.Instance.Unpause();
+                    ObjectsReference.Instance.cinematiques.Unpause();
                     Set_active(UICanvasGroupType.HOME_MENU, false);
                     break;
                 
@@ -86,7 +79,7 @@ namespace UI {
             Set_active(UICanvasGroupType.BANANAPEDIA, false);
             Set_active(UICanvasGroupType.CREDITS, false);
             
-            UISave.Instance.newSaveButton.SetActive(GameManager.Instance.gameContext == GameContext.IN_GAME);
+            ObjectsReference.Instance.uiSave.newSaveButton.SetActive(ObjectsReference.Instance.gameManager.gameContext == GameContext.IN_GAME);
             isOnMenu = true;
         }
 
@@ -99,7 +92,7 @@ namespace UI {
         }
 
         public void Switch_To_Bananapedia() {
-            UIBananapedia.Instance.SelectFirstBananapediaEntry();
+            uiBananapedia.SelectFirstBananapediaEntry();
 
             Set_active(UICanvasGroupType.LOAD, false);
             Set_active(UICanvasGroupType.OPTIONS, false);
@@ -120,7 +113,7 @@ namespace UI {
         }
         
         public void Show_game_menu() {
-            switch (GameManager.Instance.gameContext) {
+            switch (ObjectsReference.Instance.gameManager.gameContext) {
                 case GameContext.IN_DIALOGUE:
                     Set_active(UICanvasGroupType.GAME_MENU, true);
                     break;
@@ -139,30 +132,37 @@ namespace UI {
         /// IN GAME ///
         
         public void Show_Hide_interface() {
-            if (GameManager.Instance.gameContext == GameContext.IN_GAME && canvasGroupsByUICanvasType[UICanvasGroupType.GAME_MENU].alpha == 0f) {
+            if (ObjectsReference.Instance.gameManager.gameContext == GameContext.IN_GAME && canvasGroupsByUICanvasType[UICanvasGroupType.GAME_MENU].alpha == 0f) {
                 if (!Is_Interface_Visible()) {
                     interfaceAnimator.SetBool(ShowInventoryID, true);
                     
-                    InputManager.Instance.uiSchemaContext = UISchemaSwitchType.INVENTAIRE;
-                    InputManager.Instance.SwitchContext(InputContext.UI);
-                    
-                    UInventory.Instance.RefreshUInventory();
-                    GameManager.Instance.PauseGame(true);
+                    ObjectsReference.Instance.inputManager.uiSchemaContext = UISchemaSwitchType.INVENTAIRE;
+                    ObjectsReference.Instance.inputManager.SwitchContext(InputContext.UI);
+                        
+                    ObjectsReference.Instance.uInventory.RefreshUInventory();
+                    ObjectsReference.Instance.gameManager.PauseGame(true);
                     Focus_interface();
                     
-                    MainCamera.Instance.Switch_To_Shoot_Target();
-                    
-                    if (Uihud.Instance.interfaceContext == InterfaceContext.INVENTORY) Uihud.Instance.Switch_To_Inventory();
-                    else {
-                        Uihud.Instance.Switch_To_Statistics();
+                    ObjectsReference.Instance.mainCamera.Switch_To_Shoot_Target();
+
+                    switch (ObjectsReference.Instance.uihud.interfaceContext) {
+                        case InterfaceContext.INVENTORY:
+                            ObjectsReference.Instance.uihud.Switch_To_Inventory();
+                            break;
+                        case InterfaceContext.BLUEPRINTS:
+                            ObjectsReference.Instance.uihud.Switch_To_Blueprints();
+                            break;
+                        case InterfaceContext.STATISTICS:
+                            ObjectsReference.Instance.uihud.Switch_To_Statistics();
+                            break;
                     }
                 }
                 else {
-                    InputManager.Instance.SwitchContext(InputContext.GAME);
+                    ObjectsReference.Instance.inputManager.SwitchContext(InputContext.GAME);
                     interfaceAnimator.SetBool(ShowInventoryID, false);
-                    GameManager.Instance.PauseGame(false);
+                    ObjectsReference.Instance.gameManager.PauseGame(false);
                     
-                    MainCamera.Instance.Switch_To_TPS_Target();
+                    ObjectsReference.Instance.mainCamera.Switch_To_TPS_Target();
                 }
             }
         }
@@ -176,7 +176,7 @@ namespace UI {
         }
         
         void Focus_interface() {
-            EventSystem.current.SetSelectedGameObject(UInventory.Instance.lastselectedInventoryItem);
+            EventSystem.current.SetSelectedGameObject(ObjectsReference.Instance.uInventory.lastselectedInventoryItem);
         }
         
         public void Set_active(UICanvasGroupType uiCanvasGroupType, bool visible) {

@@ -1,6 +1,5 @@
 ﻿using Enums;
 using TMPro;
-using UI.InGame.Inventory;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -16,10 +15,12 @@ namespace UI.InGame.QuickSlots {
         private Color _transparent = Color.white;
         private Color _visible = Color.white;
         
-        public ItemThrowableType itemThrowableType;
+        public ItemCategory itemCategory;
+        public ItemType itemType;
+        public BuildableType buildableType;
 
         private void Start() {
-            itemThrowableType = ItemThrowableType.EMPTY;
+            itemType = ItemType.EMPTY;
 
             _transparent.a = 0f;
             _visible.a = 64f;
@@ -27,21 +28,32 @@ namespace UI.InGame.QuickSlots {
             EmptySlot();
         }
 
-        public void SetSlot(ItemThrowableType slotItemThrowableType) {
-            itemThrowableType = slotItemThrowableType;
+        public void SetSlot(ItemCategory slotItemCategory, ItemType slotItemType = ItemType.EMPTY, BuildableType slotBuildableType = BuildableType.EMPTY) {
+            itemCategory = slotItemCategory;
+            itemType = slotItemType;
+            buildableType = slotBuildableType;
 
-            if (itemThrowableType != ItemThrowableType.EMPTY) {
-                iconImage.sprite = UInventory.Instance.GetItemSprite(itemThrowableType);
-                iconImage.color = _visible;
-                SetAmmoQuantity(Game.Inventory.Instance.GetQuantity(itemThrowableType));
-            }
-            else {
-                EmptySlot();
+            switch (slotItemCategory) {
+                case ItemCategory.BUILDABLE:
+                    iconImage.sprite = ObjectsReference.Instance.scriptableObjectManager.GetItemSprite(itemCategory, buildableType:buildableType);
+                    iconImage.color = _visible;
+                    quantityText.text = "";
+                    break;
+                case ItemCategory.EMPTY:
+                    EmptySlot();
+                    break;
+                case ItemCategory.RAW_MATERIAL or ItemCategory.BANANA:
+                    iconImage.sprite = ObjectsReference.Instance.scriptableObjectManager.GetItemSprite(itemCategory, itemType: itemType);
+                    iconImage.color = _visible;
+                    SetAmmoQuantity(ObjectsReference.Instance.inventory.GetQuantity(itemType));
+                    break;
             }
         }
-
+        
         public void EmptySlot() {
-            itemThrowableType = ItemThrowableType.EMPTY;
+            itemType = ItemType.EMPTY;
+            buildableType = BuildableType.EMPTY;
+            itemCategory = ItemCategory.EMPTY;
             
             iconImage.color = _transparent;
             quantityText.text = "";
@@ -56,16 +68,12 @@ namespace UI.InGame.QuickSlots {
         }
 
         public void SetAmmoQuantity(int quantity) {
-            if (itemThrowableType != ItemThrowableType.EMPTY) {
+            if (itemType != ItemType.EMPTY) {
                 if (quantity == 0) EmptySlot();
                 else {
                     quantityText.text = quantity > 999 ? "999+" : quantity.ToString();
                 }
             }
-        }
-
-        public void SetSprite(Sprite sprite) {
-            iconImage.sprite = sprite;
         }
     }
 }

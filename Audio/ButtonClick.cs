@@ -8,15 +8,15 @@ namespace Audio {
         private AudioDataScriptableObject _audioDataScriptableObject;
 
         private void Start() {
-            _audioDataScriptableObject = AudioManager.Instance.audioEffectsDictionnary[EffectType.BUTTON_INTERACTION];
+            _audioDataScriptableObject = ObjectsReference.Instance.audioManager.audioEffectsDictionnary[EffectType.BUTTON_INTERACTION];
             _audioClip = _audioDataScriptableObject.clip[0];
         }
 
         public void Click() {
             audioSource.clip = _audioClip;
-            audioSource.volume = _audioDataScriptableObject.volume * AudioManager.Instance.effectsLevel;
+            audioSource.volume = _audioDataScriptableObject.volume * ObjectsReference.Instance.audioManager.effectsLevel;
         
-            audioSource.Play();
+            //audioSource.Play();
         }
     }
 }

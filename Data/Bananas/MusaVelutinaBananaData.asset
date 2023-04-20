@@ -12,11 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9aa579ee7e77bb468bc13896355d2a8, type: 3}
   m_Name: MusaVelutinaBananaData
   m_EditorClassIdentifier: 
-  bananaName: Musa Velutina
-  sprite: {fileID: 21300000, guid: ef84dcd962000f947b2a3b2370e0e63e, type: 3}
-  description:
+  itemType: 10
+  itemCategory: 0
+  buildableType: 1
+  itemName: Musa Velutina
+  itemSprite: {fileID: 21300000, guid: ef84dcd962000f947b2a3b2370e0e63e, type: 3}
+  itemDescription:
   - Free Hugs
   - "C\xE2lins gratuits"
+  bananaName: Musa Velutina
   effects:
   - Creates an area where the monkeys stop fighting for a few seconds
   - "\"Cr\xE9e une zone o\xF9 les singes arr\xEAtent de se battre pendant quelques\r\n   
@@ -26,5 +30,5 @@ MonoBehaviour:
   damageTime: 0
   healthBonus: 1
   resistanceBonus: 1
-  itemThrowableType: 9
-  bananaEffect: 11
+  bananaEffect: 1
+  bananaMaterial: {fileID: 0}

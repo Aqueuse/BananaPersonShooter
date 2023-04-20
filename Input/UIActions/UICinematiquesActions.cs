@@ -1,5 +1,4 @@
 using Enums;
-using Game;
 using UI;
 using UnityEngine;
 
@@ -20,10 +19,10 @@ namespace Input.UIActions {
         
         private void PauseGame() {
             if (UnityEngine.Input.GetKeyDown(KeyCode.Escape) || UnityEngine.Input.GetKeyDown(KeyCode.JoystickButton7)) {
-                InputManager.Instance.uiSchemaContext = UISchemaSwitchType.HOME_MENU;
-                GameManager.Instance.PauseGame(true);
-                Cinematiques.Instance.Pause();
-                UIManager.Instance.Show_home_menu();
+                ObjectsReference.Instance.inputManager.uiSchemaContext = UISchemaSwitchType.HOME_MENU;
+                ObjectsReference.Instance.gameManager.PauseGame(true);
+                ObjectsReference.Instance.cinematiques.Pause();
+                ObjectsReference.Instance.uiManager.Show_home_menu();
             }
         }
     }

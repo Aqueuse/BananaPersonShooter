@@ -1,11 +1,10 @@
-﻿using Game;
-using TMPro;
+﻿using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using Image = UnityEngine.UI.Image;
 
 namespace UI.Menus {
-    public class UIHomeMenu : MonoSingleton<UIHomeMenu> {
+    public class UIHomeMenu : MonoBehaviour {
         [SerializeField] private Color activatedColor;
         [SerializeField] private Color unactivatedColor;
         [SerializeField] private Color activatedTextColor;
@@ -21,11 +20,11 @@ namespace UI.Menus {
         }
 
         public void NewGame() {
-            GameManager.Instance.New_Game();
+            ObjectsReference.Instance.gameManager.New_Game();
         }
 
         public void Quit() {
-            GameManager.Instance.Quit();
+            ObjectsReference.Instance.gameManager.Quit();
         }
 
         public void SwitchToLeftHomeMenuButton() {
