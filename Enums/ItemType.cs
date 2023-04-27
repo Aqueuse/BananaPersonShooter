@@ -22,7 +22,7 @@
         METAL,
         BATTERY,
         ELECTRONIC,
-        TISSU,
-        BANANA_SKIN,
+        FABRIC,
+        BANANA_PEEL
     }
 }

@@ -4,12 +4,11 @@ using UnityEngine.AI;
 using Random = UnityEngine.Random;
 
 namespace Game {
-    public class StartAnimations : MonoBehaviour {
-        [SerializeField] private GameObject cinematiqueGorilla;
-        [SerializeField] private Transform cinematiqueGorillaSpawnPoint;
+    public class StartAnimations : MonoSingleton<StartAnimations> {
         [SerializeField] private GameObject bananaPrefab;
-        
-        // syncrhonize navmeshagent with animator
+        public NavMeshAgent gorillaNavMeshAgent;
+
+        // synchronize navmeshagent with animator
         private Transform _transform;
         private float _worldDeltaPositionX;
         private float _worldDeltaPositionY;
@@ -22,7 +21,14 @@ namespace Game {
         private Vector2 _smoothDeltaPosition;
         
         private void Start() {
-            SpawnCinematiqueMonkey();
+            NavMeshTriangulation navMeshTriangulation = NavMesh.CalculateTriangulation();
+            int vertexIndex = Random.Range(0, navMeshTriangulation.vertices.Length);
+            
+            if (NavMesh.SamplePosition(navMeshTriangulation.vertices[vertexIndex], out NavMeshHit navMeshHit, 2f, 0)) {
+                gorillaNavMeshAgent.Warp(navMeshHit.position);
+            }
+
+            gorillaNavMeshAgent.gameObject.transform.localScale = new Vector3(1, 1, 1);
         }
 
         private void Update() {
@@ -32,27 +38,13 @@ namespace Game {
                 GameObject spawnedBanana = Instantiate(bananaPrefab, ray.GetPoint(2), Quaternion.LookRotation(direction));
                 spawnedBanana.GetComponent<Rigidbody>().velocity = spawnedBanana.transform.forward * 10f;
             }
-            else if(UnityEngine.Input.GetMouseButtonDown(1)  && !ObjectsReference.Instance.uiManager.isOnMenu) {
+            else if(UnityEngine.Input.GetMouseButtonDown(1) && !ObjectsReference.Instance.uiManager.isOnMenu) {
 				Ray ray = ObjectsReference.Instance.gameManager.cameraMain.ScreenPointToRay(UnityEngine.Input.mousePosition);
 				Vector3 direction = ray.GetPoint(1) - ray.GetPoint(0);
 				GameObject spawnedBanana = Instantiate(bananaPrefab, ray.GetPoint(2), Quaternion.LookRotation(direction));
 				spawnedBanana.AddComponent<TrailRendererRandom>();
 				spawnedBanana.GetComponent<Rigidbody>().velocity = spawnedBanana.transform.forward * 10f;
 			}
-        }
-        
-        private void SpawnCinematiqueMonkey() {
-            NavMeshTriangulation navMeshTriangulation = NavMesh.CalculateTriangulation();
-                
-            int vertexIndex = Random.Range(0, navMeshTriangulation.vertices.Length);
-                
-            var monkey = Instantiate(cinematiqueGorilla, cinematiqueGorillaSpawnPoint.position, Quaternion.identity);
-
-            if (NavMesh.SamplePosition(navMeshTriangulation.vertices[vertexIndex], out NavMeshHit navMeshHit, 2f, 0)) {
-                monkey.GetComponent<NavMeshAgent>().Warp(navMeshHit.position);
-            }
-
-            monkey.transform.localScale = new Vector3(1, 1, 1);
         }
     }
 }

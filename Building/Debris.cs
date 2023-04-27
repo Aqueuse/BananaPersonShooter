@@ -28,9 +28,6 @@ namespace Building {
                     ObjectsReference.Instance.mapsManager.currentMap.RecalculateHappiness();
                     ObjectsReference.Instance.mapsManager.currentMap.isDiscovered = true;
 
-                    ObjectsReference.Instance.uiQueuedMessages.AddMessage("+ 2 "+ LocalizationSettings.Instance.GetStringDatabase().GetLocalizedString("metal"));
-                    ObjectsReference.Instance.uiQueuedMessages.AddMessage("+ 1 "+ LocalizationSettings.Instance.GetStringDatabase().GetLocalizedString("electronic_components"));
-                    
                     Destroy(gameObject);
                 }
             }

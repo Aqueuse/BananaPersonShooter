@@ -1,4 +1,5 @@
 using Enums;
+using Input.interactables;
 using Input.UIActions;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -12,6 +13,8 @@ namespace Input {
         private GameActions _gameActions;
         public ShootGameActions shootGameActions;
         public BuildGameActions buildGameActions;
+
+        public BananasDryerAction bananasDryerAction;
         
         void Start() {
             _gameActions = GetComponent<GameActions>();

@@ -25,8 +25,6 @@ namespace Building {
             ObjectsReference.Instance.bananaMan.tpsPlayerAnimator.GrabBananaGun();
             wasFocus = _playerController.isFocusCamera;
             ObjectsReference.Instance.mainCamera.Switch_To_Shoot_Target();
-            
-            ObjectsReference.Instance.uiCrosshair.SetCrosshair(ItemType.CAVENDISH);
         }
 
         public void CancelMover() {

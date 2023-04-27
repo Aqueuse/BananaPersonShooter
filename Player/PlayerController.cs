@@ -12,7 +12,6 @@ namespace Player {
         private RaycastHit slopeHit;
 
         public float jumpForce;
-        public LayerMask groundMask;
 
         public float speed;
         private const float BaseMovementSpeed = 6f;
@@ -81,8 +80,6 @@ namespace Player {
             else {
                 transform.rotation = _cameraRotation;
             }
-            
-            
             
             // If the input is null, stop the movement
             if (_rawInputMovement is { x: 0, z: 0 }) {

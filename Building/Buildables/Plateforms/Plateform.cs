@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Building.Plateforms {
     public class Plateform : MonoBehaviour {
-        [SerializeField] private Material normalPlateformMaterial;
+        private Material normalPlateformMaterial;
         
         [SerializeField] private Color emissionColor;
         [SerializeField] private Color unactiveColor;
@@ -30,6 +30,7 @@ namespace Building.Plateforms {
             plateformMaterials = new Material[1];
 
             plateformType = ItemType.EMPTY;
+            normalPlateformMaterial = _meshRenderer.materials[0];
         }
 
         private void OnCollisionEnter(Collision other) {
@@ -38,24 +39,28 @@ namespace Building.Plateforms {
         }
         
         private void SetActivatedMaterial(Color color) {
+            _meshRenderer = GetComponent<MeshRenderer>();
+            normalPlateformMaterial = _meshRenderer.materials[0];
+            
             normalPlateformMaterial.SetColor(AlimentationColor, color);
             normalPlateformMaterial.SetColor(EmissionColor, emissionColor);
 
             plateformMaterials = new Material[1];
             plateformMaterials[0] = normalPlateformMaterial;
 
-            _meshRenderer = GetComponent<MeshRenderer>();
             _meshRenderer.materials = plateformMaterials;
         }
 
         public void SetUnactiveMaterial() {
+            _meshRenderer = GetComponent<MeshRenderer>();
+            normalPlateformMaterial = _meshRenderer.materials[0];
+            
             normalPlateformMaterial.SetColor(AlimentationColor, unactiveColor);
             normalPlateformMaterial.SetColor(EmissionColor, unactiveColor);
 
             plateformMaterials = new Material[1];
             plateformMaterials[0] = normalPlateformMaterial;
 
-            _meshRenderer = GetComponent<MeshRenderer>();
             _meshRenderer.materials = plateformMaterials;
         }
 

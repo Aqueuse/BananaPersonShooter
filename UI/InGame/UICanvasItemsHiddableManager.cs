@@ -29,7 +29,7 @@ namespace UI.InGame {
         private void Update() {
             if (isBananaTreeVisible) {
                 _cameraDistance = Vector3.Distance(canvasBananaTree.transform.position, _cameraTransform.position);
-                
+
                 _localScale.x = _cameraDistance / 6000f; // ugly optimisation, yeah
                 _localScale.y = _cameraDistance / 6000f;
 
@@ -50,24 +50,25 @@ namespace UI.InGame {
             }
 
             if (areDebrisVisible) {
+                var cameraPosition = _cameraTransform.position;
+                
                 foreach (var canva in _debrisCanvasList) {
                     if (canva != null) {
                         var canvaTransform = canva.transform;
+                
+                        _cameraDistance = Vector3.Distance(canvaTransform.position, cameraPosition);
 
-                        _cameraDistance = Vector3.Distance(canvaTransform.position, _cameraTransform.position);
-
-                        _localScale.x = _cameraDistance / 6000f; // ugly optimisation, yeah
-                        _localScale.y = _cameraDistance / 6000f;
-
-                        canvaTransform.LookAt(_cameraTransform);
-                        canvaTransform.localScale = _localScale;
-
-                        if (_cameraDistance <= 15f || _cameraDistance > 400f) {
-                            canva.enabled = false;
-                        }
-
-                        else {
+                        if (_cameraDistance > 15f && _cameraDistance < 400f) {
                             canva.enabled = true;
+                            _localScale.x = _cameraDistance / 6000f; // ugly optimisation, yeah
+                            _localScale.y = _cameraDistance / 6000f;
+                
+                            canvaTransform.LookAt(_cameraTransform);
+                            canvaTransform.localScale = _localScale;
+                        }
+                        
+                        else {
+                            canva.enabled = false;
                         }
                     }
                 }

@@ -112,6 +112,12 @@ namespace Game {
                     
                     if (ObjectsReference.Instance.gameData.bananaManSavedData.playerAdvancements.Contains(AdvancementState.GET_BANANAGUN)) {
                         ObjectsReference.Instance.uiManager.Set_active(UICanvasGroupType.HUD, true);
+                        ObjectsReference.Instance.bananaGun.bananaGunInBack.SetActive(true);
+                    }
+
+                    else {
+                        ObjectsReference.Instance.uiManager.Set_active(UICanvasGroupType.HUD, false);
+                        ObjectsReference.Instance.bananaGun.bananaGunInBack.SetActive(false);
                     }
                     
                     ObjectsReference.Instance.mainCamera.Return_back_To_Player();

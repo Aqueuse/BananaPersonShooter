@@ -3,6 +3,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using Building;
+using Building.Buildables;
 using Enums;
 using UnityEngine;
 
@@ -15,7 +16,6 @@ namespace Save {
             
             if (ObjectsReference.Instance.gameData.currentSaveUuid == null) ObjectsReference.Instance.scenesSwitch.ReturnHome();
             else {
-                
                 ObjectsReference.Instance.gameManager.Play(ObjectsReference.Instance.gameData.currentSaveUuid, false);
             }
         }
@@ -38,10 +38,10 @@ namespace Save {
             LoadBananaManVitals();
             LoadPositionAndRotationOnLastMap();
             LoadActiveItem();
-            LoadMonkeysSatiety();
 
             LoadMapsData();
-            
+            LoadMonkeysSatiety();
+
             ObjectsReference.Instance.loadData.LoadMapDebrisDataByUuid(saveUuid);
             ObjectsReference.Instance.loadData.LoadMapPlateformsDataByUuid(saveUuid);
         }

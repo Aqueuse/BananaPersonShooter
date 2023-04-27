@@ -12,14 +12,16 @@ namespace UI.InGame.QuickSlots {
             foreach (var uiSlotsScript in uiSlotsScripts) {
                 if (itemCategory != ItemCategory.BUILDABLE && uiSlotsScript.itemType == itemType) {
                     uiSlotsScript.SetAmmoQuantity(ObjectsReference.Instance.inventory.bananaManInventory[itemType]);
+
+                    if (ObjectsReference.Instance.inventory.GetQuantity(uiSlotsScript.itemType) <= 0) {
+                        uiSlotsScript.EmptySlot();
+                    }
                 }
 
-                if (uiSlotsScript.itemType == ItemType.EMPTY) {
-                    uiSlotsScript.EmptySlot();
-                }
-
-                if (ObjectsReference.Instance.inventory.GetQuantity(uiSlotsScript.itemType) <= 0) {
-                    uiSlotsScript.EmptySlot();
+                else {
+                    if (uiSlotsScript.itemCategory == ItemCategory.EMPTY) {
+                        uiSlotsScript.EmptySlot();
+                    }
                 }
             }
         }

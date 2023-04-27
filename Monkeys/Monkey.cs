@@ -22,7 +22,7 @@ namespace Monkeys {
         private bool _isNearPlayer;
 
         private void Start() {
-            sasiety = 20;
+            sasiety = ObjectsReference.Instance.mapsManager.currentMap.monkeySasiety;
             ObjectsReference.Instance.mapsManager.currentMap.RecalculateHappiness();
             associatedUI.SetSliderValue(ObjectsReference.Instance.monkeysManager.colorByMonkeyState[monkeyState]);
 
@@ -41,9 +41,10 @@ namespace Monkeys {
         }
 
         public void Feed(float addedBananaValue) {
-            if (happiness <= 50) {
-                GetComponent<NavMeshAgent>().SetDestination(ObjectsReference.Instance.bananaMan.transform.position);
+            if (sasiety < 50) {
+                _navMeshAgent.SetDestination(ObjectsReference.Instance.bananaMan.transform.position);
                 sasiety += addedBananaValue;
+                ObjectsReference.Instance.mapsManager.currentMap.monkeySasiety = sasiety;
                 ObjectsReference.Instance.mapsManager.currentMap.RecalculateHappiness();
             }
         }

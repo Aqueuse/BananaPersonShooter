@@ -56,9 +56,7 @@ namespace Game {
                     monkey.monkeyState = MonkeyState.HAPPY;
                 }
             }
-
-            ObjectsReference.Instance.uiStatistics.Refresh_Map_Statistics(ObjectsReference.Instance.mapsManager.currentMap.mapName);
-
+            
             foreach (var monkey in MapItems.Instance.monkeys) {
                 monkey.associatedUI.SetSliderValue(ObjectsReference.Instance.monkeysManager.colorByMonkeyState[monkey.monkeyState]);
             }

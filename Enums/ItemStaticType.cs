@@ -4,6 +4,7 @@
         MINI_CHIMP,
         UIMAP,
         BANANAGUN,
-        COMMAND_ROOM_PANEL
+        COMMAND_ROOM_PANEL,
+        BANANA_DRYER
     }
 }

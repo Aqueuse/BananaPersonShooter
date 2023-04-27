@@ -5,16 +5,13 @@ using UnityEngine;
 namespace Player {
 	public class SurfaceDetector : MonoBehaviour {
 		[SerializeField] private FootstepSoundsByMaterialScriptableObject footstepSoundsByMaterialScriptableObject;
+		[SerializeField] private LayerMask surfaceLayerMask;
+		
 		private RaycastHit raycastHit;
-		private int _terrainLayerMask;
-
-		private void Start() {
-			_terrainLayerMask = 1 << 9;
-		}
-
+		
 		private void Update() {
 			if (ObjectsReference.Instance.gameManager.isGamePlaying) {
-				if (Physics.Raycast(transform.position, -transform.up, out raycastHit, 5, layerMask: _terrainLayerMask)) {
+				if (Physics.Raycast(transform.position, -transform.up, out raycastHit, 5, layerMask: surfaceLayerMask)) {
 					var check = raycastHit.transform.GetComponent<Renderer>();
 					if (check.sharedMaterials.Length <= 2) {
 						if (!footstepSoundsByMaterialScriptableObject.basicFootStepTypesByMaterial.ContainsKey(check.sharedMaterials[0])) {

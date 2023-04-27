@@ -42,9 +42,9 @@ namespace Save.Templates {
             {ItemType.TINDOK.ToString(), 0},
             {ItemType.METAL.ToString(), 0},
             {ItemType.BATTERY.ToString(), 0},
-            {ItemType.TISSU.ToString(), 0},
+            {ItemType.FABRIC.ToString(), 0},
             {ItemType.ELECTRONIC.ToString(), 0},
-            {ItemType.BANANA_SKIN.ToString(), 0}
+            {ItemType.BANANA_PEEL.ToString(), 0}
         };
 
         public List<string> blueprints = new List<string>();

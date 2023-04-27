@@ -10,9 +10,8 @@ namespace Items {
         public BananasDataScriptableObject bananasDataScriptableObject;
         public BananierState bananierState;
         
-
         public void GrabBananas() {
-            gameObject.layer = LayerMask.NameToLayer("Default");
+            gameObject.tag = "Untagged";
             
             foreach (var bananier in bananiersPrefabByState) {
                 bananier.Value.SetActive(bananier.Key == BananierState.BABY);
@@ -34,8 +33,7 @@ namespace Items {
         }
         
         private void Grown_mature_bananier() {
-            gameObject.layer = LayerMask.NameToLayer("Aspirables");
-            // TODO hide ui
+            gameObject.tag = "Aspirables";
             
             foreach (var bananier in bananiersPrefabByState) {
                 bananier.Value.SetActive(bananier.Key == BananierState.MATURE);

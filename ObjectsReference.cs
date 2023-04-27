@@ -36,7 +36,8 @@ public class ObjectsReference : MonoSingleton<ObjectsReference> {
     public Inventory inventory;
     public SlotSwitch slotSwitch;
     public ScriptableObjectManager scriptableObjectManager;
-
+    public GhostsReference ghostsReference;
+    
     public MainCamera mainCamera;
 
     public Cinematiques cinematiques;

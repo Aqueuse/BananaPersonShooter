@@ -30,6 +30,7 @@ namespace Player {
                 resistance += activeItem.resistanceBonus;
 
                 ObjectsReference.Instance.inventory.RemoveQuantity(activeItemCategory, activeItemType, 1);
+                ObjectsReference.Instance.inventory.AddQuantity(ItemCategory.RAW_MATERIAL, ItemType.BANANA_PEEL, 1);
                 SetBananaSkinHealth();
                 ObjectsReference.Instance.audioManager.PlayEffect(EffectType.EAT_BANANA, 0);
             }

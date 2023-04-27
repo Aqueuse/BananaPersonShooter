@@ -6,5 +6,6 @@ namespace Data.Buildables {
     public class BuildableDataScriptableObject : ItemScriptableObject {
         [Header("craft")] 
         public GenericDictionary<ItemType, int> rawMaterialsWithQuantity;
+        public GameObject buildablePrefab;
     }
 }

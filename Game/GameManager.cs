@@ -81,7 +81,7 @@ namespace Game {
 
                 ObjectsReference.Instance.mainCamera.Set0Sensibility();
 
-                if (ObjectsReference.Instance.mapsManager.currentMap.activeMonkeyType != MonkeyType.NONE) {
+                if (gameContext == GameContext.IN_GAME && ObjectsReference.Instance.mapsManager.currentMap.activeMonkeyType != MonkeyType.NONE) {
                     foreach (var monkey in MapItems.Instance.monkeys) {
                         monkey.PauseMonkey();
                     }

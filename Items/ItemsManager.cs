@@ -3,28 +3,26 @@ using Enums;
 using Game.CommandRoomPanelControls;
 using UI.InGame;
 using UnityEngine;
-using UnityEngine.Localization.Settings;
 
 namespace Items {
     public class ItemsManager : MonoBehaviour {
         private GameObject _interactedObject;
-        private const int ItemsLayerMask = 1 << 8;
+        [SerializeField] private LayerMask itemsLayerMask;
 
         private ItemStaticType _interactedItemStaticType;
-        
 
         private void Update() {
             if (!ObjectsReference.Instance.gameManager.isGamePlaying || ObjectsReference.Instance.gameManager.gameContext != GameContext.IN_GAME) return;
-            
-            if (Physics.Raycast(transform.position, transform.forward,  out RaycastHit raycastHit, 10, ItemsLayerMask)) {
+
+            if (Physics.Raycast(transform.position, transform.forward,  out RaycastHit raycastHit, 10, itemsLayerMask)) {
                 _interactedObject = raycastHit.transform.gameObject;
-                
+
                 _interactedObject.GetComponent<ItemStatic>().Activate();
             }
             else {
                 if (_interactedObject != null) {
                     _interactedObject.GetComponent<ItemStatic>().Desactivate();
-                        
+
                     _interactedObject = null;
                 }
             }
@@ -37,7 +35,7 @@ namespace Items {
                 switch (itemStaticType) {
                     case ItemStaticType.DOOR:
                         ObjectsReference.Instance.audioManager.PlayEffect(EffectType.OPEN_DOOR, 0);
-                        
+
                         ObjectsReference.Instance.scenesSwitch.SwitchScene(_interactedObject.GetComponent<Door>().destinationMap.ToUpper(), _interactedObject.GetComponent<Door>().spawnPoint, false);
                         _interactedObject = null;
                         break;
@@ -61,12 +59,6 @@ namespace Items {
                         CommandRoomControlPanelsManager.Instance.ShowHidePanel(_interactedObject.GetComponent<CommandRoomPanel>().commandRoomPanelType);
                         break;
                 }
-            }
-        }
-
-        public void HideAllItemsStatics() {
-            foreach (var itemStatic in GameObject.FindGameObjectsWithTag("ItemStatic")) {
-                itemStatic.GetComponentInParent<ItemStatic>().Desactivate();
             }
         }
     }

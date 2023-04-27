@@ -33,7 +33,7 @@ namespace Bananas {
 
                 else {
                     if (collision.gameObject.CompareTag("Player")) {
-                        ObjectsReference.Instance.inventory.AddQuantity(ItemCategory.RAW_MATERIAL, ItemType.BANANA_SKIN, 1);
+                        ObjectsReference.Instance.inventory.AddQuantity(ItemCategory.RAW_MATERIAL, ItemType.BANANA_PEEL, 1);
                         DestroyMe();
                     }
 

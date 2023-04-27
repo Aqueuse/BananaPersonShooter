@@ -20,8 +20,7 @@ namespace Building {
 
             if (lastSelectedThrowableCategory == ItemCategory.BANANA) {
                 ObjectsReference.Instance.bananaGun.GrabBananaGun();
-                ObjectsReference.Instance.uiCrosshair.SetCrosshair(ItemType.CAVENDISH);
-                ObjectsReference.Instance.uiCrosshair.ShowHideCrosshairs(true);
+                ObjectsReference.Instance.uiCrosshair.SetCrosshair(ItemCategory.BANANA, ItemType.CAVENDISH);
 
                 Invoke(nameof(ThrowBanana), 0.3f);
             }
@@ -30,12 +29,11 @@ namespace Building {
         public void CancelThrow() {
             ObjectsReference.Instance.audioManager.StopAudioSource(AudioSourcesType.EFFECT);
             CancelInvoke(nameof(ThrowBanana));
-            ObjectsReference.Instance.uiCrosshair.ShowHideCrosshairs(false);
         }
 
         public void ThrowBanana() {
             if (ObjectsReference.Instance.inventory.GetQuantity(ObjectsReference.Instance.bananaMan.activeItemType) > 0) {
-                if (ObjectsReference.Instance.gameActions.leftClickActivated || ObjectsReference.Instance.gameActions.rightTriggerActivated) {
+                if (ObjectsReference.Instance.gameActions.leftClickActivated || ObjectsReference.Instance.inputManager.shootGameActions.rightTriggerActivated) {
                     var banana = Instantiate(weaponsGameObjects[ObjectsReference.Instance.bananaMan.activeItem.itemType],
                         launchingBananaPoint.transform.position, Quaternion.identity, null);
 

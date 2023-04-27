@@ -1,5 +1,6 @@
 ﻿using Enums;
 using UnityEngine;
+using UnityEngine.Localization.Settings;
 
 namespace Game {
     public class Inventory : MonoBehaviour {
@@ -28,8 +29,8 @@ namespace Game {
                 {ItemType.METAL, 0},
                 {ItemType.BATTERY, 0},
                 {ItemType.ELECTRONIC, 0},
-                {ItemType.TISSU, 0},
-                {ItemType.BANANA_SKIN, 0}
+                {ItemType.FABRIC, 0},
+                {ItemType.BANANA_PEEL, 0}
             };
         }
 
@@ -38,6 +39,8 @@ namespace Game {
             ObjectsReference.Instance.uiSlotsManager.RefreshQuantityInQuickSlot(itemCategory, itemType);
         
             ObjectsReference.Instance.uiSlotsManager.TryToPutOnSlot(itemCategory, itemType);
+            
+            ObjectsReference.Instance.uiQueuedMessages.AddMessage("+ "+ quantity+" "+ LocalizationSettings.StringDatabase.GetTable("items").GetEntry(itemType.ToString().ToLower()).GetLocalizedString());
         }
 
         public int GetQuantity(ItemType itemType) {
@@ -48,9 +51,8 @@ namespace Game {
             if (bananaManInventory[itemType] > quantity) bananaManInventory[itemType] -= quantity;
             else {
                 bananaManInventory[itemType] = 0;
-                ObjectsReference.Instance.bananaMan.activeItemType = ItemType.EMPTY;
-                ObjectsReference.Instance.bananaMan.activeItemCategory = ItemCategory.EMPTY;
             }
+            
             ObjectsReference.Instance.uiSlotsManager.RefreshQuantityInQuickSlot(itemCategory, itemType);
         }
 

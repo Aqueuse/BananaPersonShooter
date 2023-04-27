@@ -1,23 +1,39 @@
+using System.Collections.Generic;
+using System.Linq;
 using Enums;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace UI.InGame {
     public class UICrosshair : MonoBehaviour {
-        [SerializeField] private GenericDictionary<ItemType, Image> crosshairsByItemType;
+        [SerializeField] private GenericDictionary<ItemType, Image> bananaCrosshairsByItemType;
+        [SerializeField] private GenericDictionary<ItemCategory, Image> crosshairsByItemCategory;
         
         private CanvasGroup _canvasGroup;
 
+        private List<Image> crosshairsImage;
+
         private void Start() {
             _canvasGroup = GetComponent<CanvasGroup>();
+            crosshairsImage = GetComponentsInChildren<Image>().ToList();
         }
     
-        public void SetCrosshair(ItemType itemType) {
-            foreach (var crosshair in crosshairsByItemType) {
-                crosshair.Value.enabled = false;
+        public void SetCrosshair(ItemCategory itemTypeCategory, ItemType itemType) {
+            HideCrosshairs();
+            
+            if (itemTypeCategory == ItemCategory.BANANA) {
+                bananaCrosshairsByItemType[itemType].enabled = true;
             }
 
-            crosshairsByItemType[itemType].enabled = true;
+            else {
+                crosshairsByItemCategory[itemTypeCategory].enabled = true;
+            }
+        }
+
+        private void HideCrosshairs() {
+            foreach (var image in crosshairsImage) {
+                image.enabled = false;
+            }
         }
 
         public void ShowHideCrosshairs(bool isVisible) {
