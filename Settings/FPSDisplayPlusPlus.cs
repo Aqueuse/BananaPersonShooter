@@ -21,35 +21,35 @@ public class FPSDisplayPlusPlus : MonoBehaviour
     [SerializeField] private bool moreOptionInUI = true;
     [SerializeField] private bool moreOptionInEditor = true;
     [SerializeField] private string memsize;
-    [SerializeField] private string TotalGc; // GCMemSize
-    [SerializeField] private string ManagedMemory; // GCReservedMemSize
-    [SerializeField] private string Sysmemsize;
+    [SerializeField] private string totalGc; // GCMemSize
+    [SerializeField] private string managedMemory; // GCReservedMemSize
+    [SerializeField] private string sysmemsize;
     [SerializeField] private string cpuusage;
-	[SerializeField] private string Gfx_Used_Memory;
-    [SerializeField] private string Gfx_Reserved_Memory;
-    [SerializeField] private string Audio_Used_Memory;
-    [SerializeField] private string Audio_Reserved_Memory;
-    [SerializeField] private string Video_Used_Memory;
-    [SerializeField] private string Video_Reserved_Memory;
-    [SerializeField] private string Profiler_Used_Memory;
-    [SerializeField] private string Profiler_Reserved_Memory;
+	[SerializeField] private string gfxUsedMemory;
+    [SerializeField] private string gfxReservedMemory;
+    [SerializeField] private string audioUsedMemory;
+    [SerializeField] private string audioReservedMemory;
+    [SerializeField] private string videoUsedMemory;
+    [SerializeField] private string videoReservedMemory;
+    [SerializeField] private string profilerUsedMemory;
+    [SerializeField] private string profilerReservedMemory;
 
     private float _accum;
     private Color _color = Color.white;
     private int _frames;
 	private GUIStyle _style;
-	private ProfilerRecorder _GCReservedMemory;
-    private ProfilerRecorder _GCUsedMemory;  
-    private ProfilerRecorder _SystemUsedMemory;
+	private ProfilerRecorder _gcReservedMemory;
+    private ProfilerRecorder _gcUsedMemory;  
+    private ProfilerRecorder _systemUsedMemory;
     private ProfilerRecorder _totalUsedMemory;
-	private ProfilerRecorder _GfxUsedMemory;
-	private ProfilerRecorder _GfxReservedMemory;
-	private ProfilerRecorder _AudioUsedMemory;
-	private ProfilerRecorder _AudioReservedMemory;
-	private ProfilerRecorder _VideoUsedMemory;
-	private ProfilerRecorder _VideoReservedMemory;
-	private ProfilerRecorder _ProfilerUsedMemory;
-	private ProfilerRecorder _ProfilerReservedMemory;
+	private ProfilerRecorder _gfxUsedMemory;
+	private ProfilerRecorder _gfxReservedMemory;
+	private ProfilerRecorder _audioUsedMemory;
+	private ProfilerRecorder _audioReservedMemory;
+	private ProfilerRecorder _videoUsedMemory;
+	private ProfilerRecorder _videoReservedMemory;
+	private ProfilerRecorder _profilerUsedMemory;
+	private ProfilerRecorder _profilerReservedMemory;
 
 	private ProfilerRecorder _totalReservedMemoryRecorder;
 	private void Start()
@@ -73,17 +73,17 @@ public class FPSDisplayPlusPlus : MonoBehaviour
 	{ //  that the metric is available on Release builds
 		_totalReservedMemoryRecorder = ProfilerRecorder.StartNew(ProfilerCategory.Memory, "Total Reserved Memory");
 		_totalUsedMemory = ProfilerRecorder.StartNew(ProfilerCategory.Memory, "Total Used Memory");
-        _GCUsedMemory = ProfilerRecorder.StartNew(ProfilerCategory.Memory, "GC Used Memory");
-        _GCReservedMemory = ProfilerRecorder.StartNew(ProfilerCategory.Memory, "GC Reserved Memory");
-		_GfxUsedMemory = ProfilerRecorder.StartNew(ProfilerCategory.Memory, "Gfx Used Memory");
-		_GfxReservedMemory = ProfilerRecorder.StartNew(ProfilerCategory.Memory, "Gfx Reserved Memory");
-		_AudioUsedMemory = ProfilerRecorder.StartNew(ProfilerCategory.Memory, "Audio Used Memory");
-		_AudioReservedMemory = ProfilerRecorder.StartNew(ProfilerCategory.Memory, "Audio Reserved Memory");
-		_VideoUsedMemory = ProfilerRecorder.StartNew(ProfilerCategory.Memory, "Video Used Memory");
-		_VideoReservedMemory = ProfilerRecorder.StartNew(ProfilerCategory.Memory, "Video Reserved Memory");
-		_ProfilerUsedMemory = ProfilerRecorder.StartNew(ProfilerCategory.Memory, "Profiler Used Memory");
-		_ProfilerReservedMemory = ProfilerRecorder.StartNew(ProfilerCategory.Memory, "Profiler Reserved Memory");
-        _SystemUsedMemory = ProfilerRecorder.StartNew(ProfilerCategory.Memory, "System Used Memory");
+        _gcUsedMemory = ProfilerRecorder.StartNew(ProfilerCategory.Memory, "GC Used Memory");
+        _gcReservedMemory = ProfilerRecorder.StartNew(ProfilerCategory.Memory, "GC Reserved Memory");
+		_gfxUsedMemory = ProfilerRecorder.StartNew(ProfilerCategory.Memory, "Gfx Used Memory");
+		_gfxReservedMemory = ProfilerRecorder.StartNew(ProfilerCategory.Memory, "Gfx Reserved Memory");
+		_audioUsedMemory = ProfilerRecorder.StartNew(ProfilerCategory.Memory, "Audio Used Memory");
+		_audioReservedMemory = ProfilerRecorder.StartNew(ProfilerCategory.Memory, "Audio Reserved Memory");
+		_videoUsedMemory = ProfilerRecorder.StartNew(ProfilerCategory.Memory, "Video Used Memory");
+		_videoReservedMemory = ProfilerRecorder.StartNew(ProfilerCategory.Memory, "Video Reserved Memory");
+		_profilerUsedMemory = ProfilerRecorder.StartNew(ProfilerCategory.Memory, "Profiler Used Memory");
+		_profilerReservedMemory = ProfilerRecorder.StartNew(ProfilerCategory.Memory, "Profiler Reserved Memory");
+        _systemUsedMemory = ProfilerRecorder.StartNew(ProfilerCategory.Memory, "System Used Memory");
 
 #if UNITY_EDITOR
         if (moreOptionInEditor)
@@ -91,13 +91,13 @@ public class FPSDisplayPlusPlus : MonoBehaviour
 			_texturcount = ProfilerRecorder.StartNew(ProfilerCategory.Memory, "Texture Count");
 			_texturememory = ProfilerRecorder.StartNew(ProfilerCategory.Memory, "Texture Memory");
 			_meshMemoryRecorder = ProfilerRecorder.StartNew(ProfilerCategory.Memory, "Mesh Count");
-			_MeshMemory = ProfilerRecorder.StartNew(ProfilerCategory.Memory, "Mesh Memory");
+			_meshMemory = ProfilerRecorder.StartNew(ProfilerCategory.Memory, "Mesh Memory");
 			_materialcount = ProfilerRecorder.StartNew(ProfilerCategory.Memory, "Material Count");
             _materialmemory = ProfilerRecorder.StartNew(ProfilerCategory.Memory, "Material Memory");
-			_AnimationClipCount = ProfilerRecorder.StartNew(ProfilerCategory.Memory, "AnimationClip Count");
-			_AnimationClipMemory = ProfilerRecorder.StartNew(ProfilerCategory.Memory, "AnimationClip Memory");
+			_animationClipCount = ProfilerRecorder.StartNew(ProfilerCategory.Memory, "AnimationClip Count");
+			_animationClipMemory = ProfilerRecorder.StartNew(ProfilerCategory.Memory, "AnimationClip Memory");
             _assetcount = ProfilerRecorder.StartNew(ProfilerCategory.Memory, "Asset Count");
-            _GOinscene = ProfilerRecorder.StartNew(ProfilerCategory.Memory, "GameObjects in Scenes");
+            _gOinscene = ProfilerRecorder.StartNew(ProfilerCategory.Memory, "GameObjects in Scenes");
             _totalGOinscene = ProfilerRecorder.StartNew(ProfilerCategory.Memory, "Total Objects in Scenes");
             _totalUnityOjectcount = ProfilerRecorder.StartNew(ProfilerCategory.Memory, "Total Unity Object Count");
             _gcalloframecnt = ProfilerRecorder.StartNew(ProfilerCategory.Memory, "GC Allocation In Frame Count");
@@ -109,30 +109,30 @@ public class FPSDisplayPlusPlus : MonoBehaviour
     {
 		_totalReservedMemoryRecorder.Dispose();
 		_totalUsedMemory.Dispose();
-        _GCUsedMemory.Dispose();
-        _GCReservedMemory.Dispose();
-        _SystemUsedMemory.Dispose();
-        _GfxUsedMemory.Dispose();
-		_GfxReservedMemory.Dispose();
-		_AudioUsedMemory.Dispose();
-		_AudioReservedMemory.Dispose();
-		_VideoUsedMemory.Dispose();
-		_VideoReservedMemory.Dispose();
-		_ProfilerUsedMemory.Dispose();
-		_ProfilerReservedMemory.Dispose();
+        _gcUsedMemory.Dispose();
+        _gcReservedMemory.Dispose();
+        _systemUsedMemory.Dispose();
+        _gfxUsedMemory.Dispose();
+		_gfxReservedMemory.Dispose();
+		_audioUsedMemory.Dispose();
+		_audioReservedMemory.Dispose();
+		_videoUsedMemory.Dispose();
+		_videoReservedMemory.Dispose();
+		_profilerUsedMemory.Dispose();
+		_profilerReservedMemory.Dispose();
 
 #if UNITY_EDITOR
 		
 		_meshMemoryRecorder.Dispose();
-        _MeshMemory.Dispose();
+        _meshMemory.Dispose();
 		_texturcount.Dispose();
         _texturememory.Dispose();
         _materialcount.Dispose();
         _materialmemory.Dispose();
-		_AnimationClipCount.Dispose();
-        _AnimationClipMemory.Dispose();
+		_animationClipCount.Dispose();
+        _animationClipMemory.Dispose();
 		_assetcount.Dispose();
-        _GOinscene.Dispose();
+        _gOinscene.Dispose();
         _totalGOinscene.Dispose();
         _totalUnityOjectcount.Dispose();
         _gcalloframecnt.Dispose();
@@ -192,38 +192,38 @@ public class FPSDisplayPlusPlus : MonoBehaviour
             var usage = new UsageRamProc();
             cpuusage = usage.GetCpuPercentage();
             memsize = FormatSize(_totalUsedMemory.LastValue);
-			TotalGc = FormatSize(_GCUsedMemory.LastValue);
-			ManagedMemory = FormatSize(_GCReservedMemory.LastValue);
-            Sysmemsize = FormatSize(_SystemUsedMemory.LastValue);
+			totalGc = FormatSize(_gcUsedMemory.LastValue);
+			managedMemory = FormatSize(_gcReservedMemory.LastValue);
+            sysmemsize = FormatSize(_systemUsedMemory.LastValue);
 
-			Gfx_Used_Memory = FormatSize(_GfxUsedMemory.LastValue);
-			Gfx_Reserved_Memory = FormatSize(_GfxReservedMemory.LastValue);
-			Audio_Used_Memory = FormatSize(_AudioUsedMemory.LastValue);
-			Audio_Reserved_Memory = FormatSize(_AudioReservedMemory.LastValue);
-			Video_Used_Memory = FormatSize(_VideoUsedMemory.LastValue);
-			Video_Reserved_Memory = FormatSize(_VideoReservedMemory.LastValue);
-			Profiler_Used_Memory = FormatSize(_ProfilerUsedMemory.LastValue);
-			Profiler_Reserved_Memory = FormatSize(_ProfilerReservedMemory.LastValue);
+			gfxUsedMemory = FormatSize(_gfxUsedMemory.LastValue);
+			gfxReservedMemory = FormatSize(_gfxReservedMemory.LastValue);
+			audioUsedMemory = FormatSize(_audioUsedMemory.LastValue);
+			audioReservedMemory = FormatSize(_audioReservedMemory.LastValue);
+			videoUsedMemory = FormatSize(_videoUsedMemory.LastValue);
+			videoReservedMemory = FormatSize(_videoReservedMemory.LastValue);
+			profilerUsedMemory = FormatSize(_profilerUsedMemory.LastValue);
+			profilerReservedMemory = FormatSize(_profilerReservedMemory.LastValue);
 
 #if UNITY_EDITOR
 			if (moreOptionInEditor)
             {
-                textur_count = _texturcount.LastValue.ToString();
-                texture_memory = FormatSize(_texturememory.LastValue);
-                material_count = _materialcount.LastValue.ToString();
-                material_memory = FormatSize(_materialmemory.LastValue);
-                asset_count = _assetcount.LastValue.ToString();
-                GameObject_In_Scene = _GOinscene.LastValue.ToString();
-                total_GameObject_in_scene = _totalGOinscene.LastValue.ToString();
-                total_Unity_Oject_count = _totalUnityOjectcount.LastValue.ToString();
-                gc_alloc_framecount = _gcalloframecnt.LastValue.ToString();
-                gc_alloc_in_frame = FormatSize(_gcallofrrame.LastValue);
+                texturCount = _texturcount.LastValue.ToString();
+                textureMemory = FormatSize(_texturememory.LastValue);
+                materialCount = _materialcount.LastValue.ToString();
+                materialMemory = FormatSize(_materialmemory.LastValue);
+                assetCount = _assetcount.LastValue.ToString();
+                gameObjectInScene = _gOinscene.LastValue.ToString();
+                totalGameObjectInScene = _totalGOinscene.LastValue.ToString();
+                totalUnityOjectCount = _totalUnityOjectcount.LastValue.ToString();
+                gcAllocFramecount = _gcalloframecnt.LastValue.ToString();
+                gcAllocInFrame = FormatSize(_gcallofrrame.LastValue);
 
 				
-				Animation_Clip_Count = _AnimationClipCount.LastValue.ToString();
-                Animation_Clip_Memory = FormatSize(_AnimationClipMemory.LastValue);
-                mesh_Memory_Recorder = _meshMemoryRecorder.LastValue.ToString();
-				Mesh_Memory = FormatSize(_MeshMemory.LastValue);
+				animationClipCount = _animationClipCount.LastValue.ToString();
+                animationClipMemory = FormatSize(_animationClipMemory.LastValue);
+                meshMemoryRecorder = _meshMemoryRecorder.LastValue.ToString();
+				meshMemory = FormatSize(_meshMemory.LastValue);
 			}
 #endif
 
@@ -234,7 +234,7 @@ public class FPSDisplayPlusPlus : MonoBehaviour
 
     private string FormatSize(double value, int decimalPlaces = 1)
     {
-        string[] SizeSuffixes = { "b", "KB", "MB", "GB" };
+        string[] sizeSuffixes = { "b", "KB", "MB", "GB" };
         if (decimalPlaces < 0) { throw new ArgumentOutOfRangeException("decimalPlaces"); }
         if (value < 0) { return "-" + FormatSize(-value, decimalPlaces); }
         if (value == 0) { return string.Format("{0:n" + decimalPlaces + "} bytes", 0); }
@@ -245,7 +245,7 @@ public class FPSDisplayPlusPlus : MonoBehaviour
             mag += 1;
             adjustedSize /= 1024;
         }
-        return string.Format("{0:n" + decimalPlaces + "} {1}", adjustedSize, SizeSuffixes[mag]);
+        return string.Format("{0:n" + decimalPlaces + "} {1}", adjustedSize, sizeSuffixes[mag]);
     }
 
     private void FPSWindow(int windowID)
@@ -258,9 +258,9 @@ public class FPSDisplayPlusPlus : MonoBehaviour
             $"FPS\n[{minFPS}Min {maxFPS}Max]\n" +
             $"Cpu {cpuusage}% \n" +
             $"Mem {memsize}\n" +
-            $"GC Used {TotalGc}\n" +
-            $"GC Res {ManagedMemory}\n" +
-            $"Sys Mem {Sysmemsize}\n" +
+            $"GC Used {totalGc}\n" +
+            $"GC Res {managedMemory}\n" +
+            $"Sys Mem {sysmemsize}\n" +
             "OS : "+Environment.OSVersion+"\n"
             , _style);
     }
@@ -277,58 +277,58 @@ public class FPSDisplayPlusPlus : MonoBehaviour
     private ProfilerRecorder _materialcount;
     private ProfilerRecorder _materialmemory;
     private ProfilerRecorder _assetcount;
-    private ProfilerRecorder _GOinscene;
+    private ProfilerRecorder _gOinscene;
     private ProfilerRecorder _totalGOinscene;
     private ProfilerRecorder _totalUnityOjectcount;
     private ProfilerRecorder _gcalloframecnt;
     private ProfilerRecorder _gcallofrrame;
 
 	private ProfilerRecorder _meshMemoryRecorder;
-    private ProfilerRecorder _AnimationClipCount;
-    private ProfilerRecorder _AnimationClipMemory;
-    private ProfilerRecorder _MeshMemory;
+    private ProfilerRecorder _animationClipCount;
+    private ProfilerRecorder _animationClipMemory;
+    private ProfilerRecorder _meshMemory;
 
-	[SerializeField] private string textur_count;
-    [SerializeField] private string texture_memory;
-    [SerializeField] private string material_count;
-    [SerializeField] private string material_memory;
-    [SerializeField] private string asset_count;
-    [SerializeField] private string GameObject_In_Scene;
-    [SerializeField] private string total_GameObject_in_scene;
-    [SerializeField] private string total_Unity_Oject_count;
-    [SerializeField] private string gc_alloc_framecount;
-    [SerializeField] private string gc_alloc_in_frame;
+	[SerializeField] private string texturCount;
+    [SerializeField] private string textureMemory;
+    [SerializeField] private string materialCount;
+    [SerializeField] private string materialMemory;
+    [SerializeField] private string assetCount;
+    [SerializeField] private string gameObjectInScene;
+    [SerializeField] private string totalGameObjectInScene;
+    [SerializeField] private string totalUnityOjectCount;
+    [SerializeField] private string gcAllocFramecount;
+    [SerializeField] private string gcAllocInFrame;
 
-	[SerializeField] private string mesh_Memory_Recorder;
-	[SerializeField] private string Animation_Clip_Count;
-	[SerializeField] private string Animation_Clip_Memory;
-	[SerializeField] private string Mesh_Memory;
+	[SerializeField] private string meshMemoryRecorder;
+	[SerializeField] private string animationClipCount;
+	[SerializeField] private string animationClipMemory;
+	[SerializeField] private string meshMemory;
 #endif
 }
 
 internal class UsageRamProc
 {
-    private static DateTime lastTime;
-    private static TimeSpan lastTotalProcessorTime;
-    private static DateTime curTime;
-    private static TimeSpan curTotalProcessorTime;
-    private readonly Process pp = Process.GetCurrentProcess();
+    private static DateTime _lastTime;
+    private static TimeSpan _lastTotalProcessorTime;
+    private static DateTime _curTime;
+    private static TimeSpan _curTotalProcessorTime;
+    private readonly Process _pp = Process.GetCurrentProcess();
 
     public string GetCpuPercentage()
     {
-        if (lastTime == null || lastTime == new DateTime())
+        if (_lastTime == null || _lastTime == new DateTime())
         {
-            lastTime = DateTime.Now;
-            lastTotalProcessorTime = pp.TotalProcessorTime;
+            _lastTime = DateTime.Now;
+            _lastTotalProcessorTime = _pp.TotalProcessorTime;
             return "";
         }
-        curTime = DateTime.Now;
-        curTotalProcessorTime = pp.TotalProcessorTime;
+        _curTime = DateTime.Now;
+        _curTotalProcessorTime = _pp.TotalProcessorTime;
 
-        double CPUUsage = (curTotalProcessorTime.TotalMilliseconds - lastTotalProcessorTime.TotalMilliseconds) / curTime.Subtract(lastTime).TotalMilliseconds / Convert.ToDouble(Environment.ProcessorCount);
+        double cpuUsage = (_curTotalProcessorTime.TotalMilliseconds - _lastTotalProcessorTime.TotalMilliseconds) / _curTime.Subtract(_lastTime).TotalMilliseconds / Convert.ToDouble(Environment.ProcessorCount);
 
-        lastTime = curTime;
-        lastTotalProcessorTime = curTotalProcessorTime;
-        return $"{CPUUsage * 100:0.0}";
+        _lastTime = _curTime;
+        _lastTotalProcessorTime = _curTotalProcessorTime;
+        return $"{cpuUsage * 100:0.0}";
     }
 }

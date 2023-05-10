@@ -15,11 +15,11 @@ namespace Monkeys.Gorilla {
         [SerializeField] private GameObject shockWavePrefab;
         public Transform gorillaHandRight;
         public Transform gorillaHandLeft;
-        private NavMeshAgent navMeshAgent;
+        private NavMeshAgent _navMeshAgent;
         private Monkey _monkey;
 
-        private Vector3 gorillaHandLeftPosition;
-        private Vector3 gorillaHandRightPosition;
+        private Vector3 _gorillaHandLeftPosition;
+        private Vector3 _gorillaHandRightPosition;
 
         private Animator _animator;
 
@@ -60,7 +60,7 @@ namespace Monkeys.Gorilla {
         private List<int> _farPlayerAttack;
 
         private void Start() {
-            navMeshAgent = GetComponent<NavMeshAgent>();
+            _navMeshAgent = GetComponent<NavMeshAgent>();
             _animator = GetComponent<Animator>();
             _monkey = GetComponent<Monkey>();
 
@@ -68,10 +68,10 @@ namespace Monkeys.Gorilla {
             _mediumPlayerAttack = new List<int> { Punch, PunchRight, Swip, SwipRight };
             _farPlayerAttack = new List<int> { Roar, Flex, Shockwave, Shockwave, Shockwave };
 
-            navMeshAgent.updatePosition = false;
-            navMeshAgent.updateRotation = true;
+            _navMeshAgent.updatePosition = false;
+            _navMeshAgent.updateRotation = true;
 
-            navMeshAgent.velocity = new Vector3(4, 4, 4);
+            _navMeshAgent.velocity = new Vector3(4, 4, 4);
         }
 
         private void Update() {
@@ -80,13 +80,13 @@ namespace Monkeys.Gorilla {
                     var bananaManPosition = ObjectsReference.Instance.bananaMan.transform.position;
                     Vector3 bananaManPositionXY = new Vector3(bananaManPosition.x, 0, bananaManPosition.z);
 
-                    if (navMeshAgent.isOnNavMesh) {
-                        navMeshAgent.SetDestination(bananaManPositionXY);
+                    if (_navMeshAgent.isOnNavMesh) {
+                        _navMeshAgent.SetDestination(bananaManPositionXY);
 
-                        if (navMeshAgent.remainingDistance <= 7) _gorillaAttackType = GorillaAttackType.TOURBISMASH;
-                        if (navMeshAgent.remainingDistance is > 7 and <= 10)
+                        if (_navMeshAgent.remainingDistance <= 7) _gorillaAttackType = GorillaAttackType.TOURBISMASH;
+                        if (_navMeshAgent.remainingDistance is > 7 and <= 10)
                             _gorillaAttackType = GorillaAttackType.CATCHPLAYER;
-                        if (navMeshAgent.remainingDistance >= 13) _gorillaAttackType = GorillaAttackType.SHOCKWAVE;
+                        if (_navMeshAgent.remainingDistance >= 13) _gorillaAttackType = GorillaAttackType.SHOCKWAVE;
                     }
 
                     if (!isAttackingPlayer) {
@@ -112,22 +112,22 @@ namespace Monkeys.Gorilla {
 
                 if (_monkey.monkeyState == MonkeyState.SAD) {
                     SynchronizeAnimatorAndAgent();
-                    if (navMeshAgent.remainingDistance < 10) {
-                        navMeshAgent.SetDestination(RandomNavmeshLocation(1000));
+                    if (_navMeshAgent.remainingDistance < 10) {
+                        _navMeshAgent.SetDestination(RandomNavmeshLocation(1000));
                     }
                 }
             }
         }
 
         private void OnAnimatorMove() {
-            if (navMeshAgent != null) {
-                transform.position = navMeshAgent.nextPosition;
+            if (_navMeshAgent != null) {
+                transform.position = _navMeshAgent.nextPosition;
             }
         }
 
         private void SynchronizeAnimatorAndAgent() {
             _transform = transform;
-            _worldDeltaPosition = navMeshAgent.nextPosition - _transform.position;
+            _worldDeltaPosition = _navMeshAgent.nextPosition - _transform.position;
 
             // Map 'worldDeltaPosition' to local space
             _worldDeltaPositionX = Vector3.Dot(_transform.right, _worldDeltaPosition);
@@ -141,7 +141,7 @@ namespace Monkeys.Gorilla {
             // Update velocity if time advances
             if (Time.deltaTime > 1e-5f) _velocity = _smoothDeltaPosition / Time.deltaTime;
 
-            _shouldMove = _velocity.magnitude > 0.5f && navMeshAgent.remainingDistance > navMeshAgent.radius;
+            _shouldMove = _velocity.magnitude > 0.5f && _navMeshAgent.remainingDistance > _navMeshAgent.radius;
 
             // Update animation parameters
             _animator.SetBool(CanMove, _shouldMove);
@@ -165,10 +165,10 @@ namespace Monkeys.Gorilla {
         }
 
         public void CreateShockWave() {
-            gorillaHandLeftPosition = gorillaHandLeft.position;
-            gorillaHandRightPosition = gorillaHandRight.position;
+            _gorillaHandLeftPosition = gorillaHandLeft.position;
+            _gorillaHandRightPosition = gorillaHandRight.position;
 
-            var leftSpawnPosition = new Vector3(gorillaHandLeftPosition.x, 0.5f, gorillaHandLeftPosition.z);
+            var leftSpawnPosition = new Vector3(_gorillaHandLeftPosition.x, 0.5f, _gorillaHandLeftPosition.z);
 
             Instantiate(shockWavePrefab, leftSpawnPosition, Quaternion.identity);
         }

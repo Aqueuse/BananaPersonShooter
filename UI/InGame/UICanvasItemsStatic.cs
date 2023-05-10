@@ -13,14 +13,14 @@ namespace UI.InGame {
         private Vector3 _localScale;
         private float _cameraDistance;
 
-        private CanvasGroup uiInGameCanvasGroup;
+        private CanvasGroup _uiInGameCanvasGroup;
 
         private void Start() {
             _canvas = GetComponent<Canvas>();
             _transform = GetComponent<Transform>();
             _cameraTransform = ObjectsReference.Instance.mainCamera.transform;
 
-            uiInGameCanvasGroup = uIinGame.GetComponent<CanvasGroup>();
+            _uiInGameCanvasGroup = uIinGame.GetComponent<CanvasGroup>();
         }
 
         private void Update() {
@@ -40,12 +40,12 @@ namespace UI.InGame {
         }
 
         public void ShowUI() {
-            uiInGameCanvasGroup.alpha = 1;
+            _uiInGameCanvasGroup.alpha = 1;
             icon.SetActive(false);
         }
 
         public void HideUI() {
-            uiInGameCanvasGroup.alpha = 0;
+            _uiInGameCanvasGroup.alpha = 0;
             icon.SetActive(true);
         }
     }

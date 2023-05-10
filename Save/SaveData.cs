@@ -72,7 +72,7 @@ namespace Save {
                 // synchronize data beetween classes and templates
                 map.Value.isDiscovered = mapClass.isDiscovered;
                 map.Value.cleanliness = mapClass.cleanliness;
-                map.Value.monkey_sasiety = mapClass.monkeySasiety;
+                map.Value.monkeySasiety = mapClass.monkeySasiety;
                 
                 var jsonMapSavedData = JsonConvert.SerializeObject(ObjectsReference.Instance.gameData.mapSavedDatasByMapName[map.Key]);
                 var mapSavefilePath = Path.Combine(savefilePath, map.Key+".json");

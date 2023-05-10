@@ -18,8 +18,8 @@ namespace Audio {
         [SerializeField] private GenericDictionary<MusicType, AudioDataScriptableObject> audioMusicsDictionnary;
         [SerializeField] private GenericDictionary<FootStepType, AudioDataScriptableObject> audioFootStepsDictionnary;
 
-        private MusicType actualMusicType;
-        private AudioClip lastClip;
+        private MusicType _actualMusicType;
+        private AudioClip _lastClip;
 
         public float musicLevel = 0.1f;
         public float ambianceLevel = 0.1f;
@@ -77,12 +77,12 @@ namespace Audio {
         }
 
         public void PlayMusic(MusicType musicType) {
-            actualMusicType = musicType;
+            _actualMusicType = musicType;
             var audioData = audioMusicsDictionnary[musicType];
 
             audioMusicsSource.volume = audioData.volume * musicLevel;
 
-            audioMusicsSource.loop = audioData.IsLooping;
+            audioMusicsSource.loop = audioData.isLooping;
 
             if (audioData.isRandomlySilenced) {
                 Invoke(nameof(PlayMusicDelayed), 0);
@@ -95,16 +95,16 @@ namespace Audio {
         }
 
         private void PlayMusicDelayed() {
-            var audioData = audioMusicsDictionnary[actualMusicType];
+            var audioData = audioMusicsDictionnary[_actualMusicType];
             
             HashSet<AudioClip> audioClips = new HashSet<AudioClip>(audioData.clip);
-            if (lastClip != null) audioClips.Remove(lastClip);
+            if (_lastClip != null) audioClips.Remove(_lastClip);
 
             // prevent playing the same song
             if (audioClips.Count > 1) {
                 var randomClip = audioClips.ElementAt(Random.Range(0, audioClips.Count));
                 audioMusicsSource.clip = randomClip;
-                lastClip = randomClip;
+                _lastClip = randomClip;
 
                 audioMusicsSource.Play();
                 var clipDuration = audioMusicsSource.clip.length;
@@ -133,7 +133,7 @@ namespace Audio {
     
             audioEffectsSource.volume = effectsLevel;
             audioEffectsSource.clip = audioData.clip[Random.Range(0, audioData.clip.Length)];
-            audioEffectsSource.loop = audioData.IsLooping;
+            audioEffectsSource.loop = audioData.isLooping;
 
             audioEffectsSource.PlayDelayed(delay);
         }

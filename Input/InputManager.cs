@@ -33,12 +33,16 @@ namespace Input {
                 uiSchemaSwitcher.SwitchUISchema(uiSchemaContext);
                 
                 eventSystem.enabled = true;
+                Cursor.visible = true;
+                Cursor.lockState = CursorLockMode.None;
             }
             else {
                 _gameActions.enabled = true;
                 uiSchemaSwitcher.DisableAllUISchemas();
                 
                 eventSystem.enabled = false;
+                Cursor.visible = false;
+                Cursor.lockState = CursorLockMode.Confined;
                 
                 if (ObjectsReference.Instance.bananaMan.activeItemCategory == ItemCategory.BANANA) {
                     buildGameActions.enabled = false;

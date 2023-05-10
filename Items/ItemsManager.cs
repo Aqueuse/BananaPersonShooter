@@ -1,5 +1,7 @@
 ﻿using Dialogues;
 using Enums;
+using Game;
+using Game.BananaCannonMiniGame;
 using Game.CommandRoomPanelControls;
 using UI.InGame;
 using UnityEngine;
@@ -57,6 +59,10 @@ namespace Items {
                         break;
                     case ItemStaticType.COMMAND_ROOM_PANEL:
                         CommandRoomControlPanelsManager.Instance.ShowHidePanel(_interactedObject.GetComponent<CommandRoomPanel>().commandRoomPanelType);
+                        break;
+                    case ItemStaticType.BANANA_CANNON_MINI_GAME:
+                        if (_interactedObject.GetComponent<CanvasGroup>().alpha == 0) break;
+                        BananaCannonMiniGameManager.Instance.SwitchToMiniGame();
                         break;
                 }
             }

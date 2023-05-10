@@ -14,10 +14,10 @@ namespace Building {
 
         private bool _isAspiring;
 
-        private Dictionary<AdvancementState, BuildableType> buildableUnlockedByAdvancementState;
+        private Dictionary<AdvancementState, BuildableType> _buildableUnlockedByAdvancementState;
 
         private void Start() {
-            buildableUnlockedByAdvancementState = new Dictionary<AdvancementState, BuildableType> {
+            _buildableUnlockedByAdvancementState = new Dictionary<AdvancementState, BuildableType> {
                 { AdvancementState.GRAB_DEBRIS_ON_MAP, BuildableType.PLATEFORM },
                 { AdvancementState.GRAB_BANANAS, BuildableType.BANANA_DRYER }
             };
@@ -85,7 +85,7 @@ namespace Building {
         private void TryAddBlueprintByAdvancementState(AdvancementState advancementState) {
             if (!ObjectsReference.Instance.gameData.bananaManSavedData.playerAdvancements.Contains(advancementState)) {
                 ObjectsReference.Instance.gameData.bananaManSavedData.playerAdvancements.Add(advancementState);
-                ObjectsReference.Instance.uiBlueprints.SetVisible(buildableUnlockedByAdvancementState[advancementState]);
+                ObjectsReference.Instance.uiBlueprints.SetVisible(_buildableUnlockedByAdvancementState[advancementState]);
             }
         }
     }

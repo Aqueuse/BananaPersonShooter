@@ -11,12 +11,12 @@ namespace Input.UIActions {
         private bool _scrolledLeft;
         private bool _scrolledRight;
         
-        PointerEventData pointer;
+        PointerEventData _pointer;
 
-        private float counter;
+        private float _counter;
         
         private void Start() {
-            pointer = new PointerEventData(EventSystem.current);
+            _pointer = new PointerEventData(EventSystem.current);
             ObjectsReference.Instance.uiHomeMenu.selectedTrigger = homeMenu.GetComponentsInChildren<EventTrigger>()[0];
         }
         
@@ -30,7 +30,7 @@ namespace Input.UIActions {
 
         private void Activate() {
             if (UnityEngine.Input.GetKeyDown(KeyCode.Return) || UnityEngine.Input.GetKeyDown(KeyCode.JoystickButton0)) {
-                ExecuteEvents.Execute(ObjectsReference.Instance.uiHomeMenu.selectedTrigger.gameObject, pointer, ExecuteEvents.pointerDownHandler);
+                ExecuteEvents.Execute(ObjectsReference.Instance.uiHomeMenu.selectedTrigger.gameObject, _pointer, ExecuteEvents.pointerDownHandler);
             }
         }
 

@@ -11,6 +11,7 @@ namespace Enums {
         INVENTAIRE,
         BLUEPRINTS,
         STATISTIQUES,
+        BANANA_CANNON_MINI_GAME,
         TUTORIAL,
         CINEMATIQUE,
         DEATH,

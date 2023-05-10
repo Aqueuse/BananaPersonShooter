@@ -9,23 +9,23 @@ namespace Player {
 
         private Animator _animator;
 
-        private float footExtended;
+        private float _footExtended;
         
         public bool isLeftFootGrounded;
         public bool isRightFootGrounded;
 
-        private float leftFootDistanceToPlayerRoot;
-        private float rightFootDistanceToPlayerRoot;
+        private float _leftFootDistanceToPlayerRoot;
+        private float _rightFootDistanceToPlayerRoot;
         
-        private Vector3 footPosition;
-        private Vector3 terrainOrientation;
+        private Vector3 _footPosition;
+        private Vector3 _terrainOrientation;
         
         private void Start() {
             _animator = GetComponent<Animator>();
             isLeftFootGrounded = false;
             isRightFootGrounded = false;
 
-            footExtended = 0.1818f;
+            _footExtended = 0.1818f;
         }
 
         private void Update() {
@@ -40,24 +40,24 @@ namespace Player {
         }
 
         private void OnAnimatorIK(int layerIndex) {
-            leftFootDistanceToPlayerRoot = Vector3.Distance(_animator.GetIKPosition(AvatarIKGoal.LeftFoot), _animator.rootPosition);
-            rightFootDistanceToPlayerRoot = Vector3.Distance(_animator.GetIKPosition(AvatarIKGoal.RightFoot), _animator.rootPosition);
+            _leftFootDistanceToPlayerRoot = Vector3.Distance(_animator.GetIKPosition(AvatarIKGoal.LeftFoot), _animator.rootPosition);
+            _rightFootDistanceToPlayerRoot = Vector3.Distance(_animator.GetIKPosition(AvatarIKGoal.RightFoot), _animator.rootPosition);
             
-            if (leftFootDistanceToPlayerRoot < footExtended && !isLeftFootGrounded) {
+            if (_leftFootDistanceToPlayerRoot < _footExtended && !isLeftFootGrounded) {
                 ObjectsReference.Instance.audioManager.PlayFootstep();
                 isLeftFootGrounded = true;
             }
 
-            if (leftFootDistanceToPlayerRoot >= footExtended) {
+            if (_leftFootDistanceToPlayerRoot >= _footExtended) {
                 isLeftFootGrounded = false;
             }
 
-            if (rightFootDistanceToPlayerRoot < footExtended && !isRightFootGrounded) {
+            if (_rightFootDistanceToPlayerRoot < _footExtended && !isRightFootGrounded) {
                 ObjectsReference.Instance.audioManager.PlayFootstep();
                 isRightFootGrounded = true;
             }
 
-            if (rightFootDistanceToPlayerRoot >= footExtended) {
+            if (_rightFootDistanceToPlayerRoot >= _footExtended) {
                 isRightFootGrounded = false;
             }
             

@@ -93,7 +93,7 @@ namespace Save {
         private void SaveMonkeysSatiety() {
             foreach (var map in ObjectsReference.Instance.mapsManager.mapBySceneName) {
                 // add other monkeys and other maps
-                ObjectsReference.Instance.gameData.mapSavedDatasByMapName[map.Key].monkey_sasiety = map.Value.monkeySasiety;
+                ObjectsReference.Instance.gameData.mapSavedDatasByMapName[map.Key].monkeySasiety = map.Value.monkeySasiety;
             }
         }
 

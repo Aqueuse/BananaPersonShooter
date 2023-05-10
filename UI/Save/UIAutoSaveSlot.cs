@@ -16,11 +16,11 @@ namespace UI.Save {
         [SerializeField] private Image thumbail;
 
         public string saveUuid;
-        string autoSavePath;
+        string _autoSavePath;
 
         private void Start() {
             saveUuid = "auto_save";
-            autoSavePath = ObjectsReference.Instance.loadData.GetSavePathByUuid("auto_save");
+            _autoSavePath = ObjectsReference.Instance.loadData.GetSavePathByUuid("auto_save");
         }
 
         public void Select() {
@@ -61,9 +61,9 @@ namespace UI.Save {
         }
 
         private void UpdateThumbail() {
-            autoSavePath = ObjectsReference.Instance.loadData.GetSavePathByUuid("auto_save");
+            _autoSavePath = ObjectsReference.Instance.loadData.GetSavePathByUuid("auto_save");
             
-            string screenshotFilePath = Path.Combine(autoSavePath, "screenshot.png");
+            string screenshotFilePath = Path.Combine(_autoSavePath, "screenshot.png");
                 var bytes = File.ReadAllBytes(screenshotFilePath);
                 Texture2D texture2D = new Texture2D(2, 2);
                 texture2D.LoadImage(bytes);

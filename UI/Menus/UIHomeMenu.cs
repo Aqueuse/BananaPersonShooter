@@ -9,14 +9,14 @@ namespace UI.Menus {
         [SerializeField] private Color unactivatedColor;
         [SerializeField] private Color activatedTextColor;
 
-        private Image[] homeMenuButtons;
+        private Image[] _homeMenuButtons;
         private int _selectedButton;
 
         public EventTrigger selectedTrigger;
         
         private void Start() {
             _selectedButton = 0;
-             homeMenuButtons = GetComponentsInChildren<Image>();
+             _homeMenuButtons = GetComponentsInChildren<Image>();
         }
 
         public void NewGame() {
@@ -32,19 +32,19 @@ namespace UI.Menus {
                 _selectedButton--;
             }
             
-            SetActivatedButton(homeMenuButtons[_selectedButton]);
+            SetActivatedButton(_homeMenuButtons[_selectedButton]);
         }
 
         public void SwitchToRightHomeMenuButton() {
-            if (_selectedButton < homeMenuButtons.Length-1) {
+            if (_selectedButton < _homeMenuButtons.Length-1) {
                 _selectedButton++;
             }
             
-            SetActivatedButton(homeMenuButtons[_selectedButton]);
+            SetActivatedButton(_homeMenuButtons[_selectedButton]);
         }
         
         public void SetActivatedButton(Image buttonImage) {
-            foreach (var image in homeMenuButtons) {
+            foreach (var image in _homeMenuButtons) {
                 image.color = unactivatedColor;
                 image.GetComponentInChildren<TextMeshProUGUI>().color = activatedColor;
             }

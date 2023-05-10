@@ -6,31 +6,31 @@ namespace Building {
         public BuildableDataScriptableObject buildableDataScriptableObject;
 
         private MeshRenderer _meshRenderer;
-        private Material ghostMaterial;
+        private Material _ghostMaterial;
 
         
-        private Material[] buildableMaterials;
-        private GhostState ghostState;
+        private Material[] _buildableMaterials;
+        private GhostState _ghostState;
         
         private void Start() {
             _meshRenderer = GetComponent<MeshRenderer>();
 
-            buildableMaterials = new []{ghostMaterial};
-            ghostMaterial = _meshRenderer.materials[0];
+            _buildableMaterials = new []{_ghostMaterial};
+            _ghostMaterial = _meshRenderer.materials[0];
 
-            ghostState = GhostState.VALID;
+            _ghostState = GhostState.VALID;
         }
 
         public void SetGhostState(GhostState newGhostState) {
-            ghostState = newGhostState;
-            ghostMaterial.color = ObjectsReference.Instance.ghostsReference.GetColorByGhostState(newGhostState);
+            _ghostState = newGhostState;
+            _ghostMaterial.color = ObjectsReference.Instance.ghostsReference.GetColorByGhostState(newGhostState);
             
-            buildableMaterials = new []{ghostMaterial};
-            _meshRenderer.materials = buildableMaterials;
+            _buildableMaterials = new []{_ghostMaterial};
+            _meshRenderer.materials = _buildableMaterials;
         }
 
         public GhostState GetPlateformState() {
-            return ghostState;
+            return _ghostState;
         }
     }
 }

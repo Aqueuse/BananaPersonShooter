@@ -12,14 +12,14 @@ namespace Input.UIActions {
         public Vector2 scrollSlotsValue;
 
         public EventTrigger selectedTrigger;
-        PointerEventData pointer;
+        PointerEventData _pointer;
 
-        private float counter;
-        private float slowDownValue;
+        private float _counter;
+        private float _slowDownValue;
         
         private void Start() {
-            pointer = new PointerEventData(EventSystem.current);
-            slowDownValue = 0.15f;
+            _pointer = new PointerEventData(EventSystem.current);
+            _slowDownValue = 0.15f;
         }
 
         private void Update() {
@@ -33,7 +33,7 @@ namespace Input.UIActions {
 
         private void Activate() {
             if (UnityEngine.Input.GetKeyDown(KeyCode.Return) || UnityEngine.Input.GetKeyDown(KeyCode.JoystickButton0)) {
-                ExecuteEvents.Execute(selectedTrigger.gameObject, pointer, ExecuteEvents.pointerDownHandler);
+                ExecuteEvents.Execute(selectedTrigger.gameObject, _pointer, ExecuteEvents.pointerDownHandler);
             }
         }
         
@@ -45,9 +45,9 @@ namespace Input.UIActions {
         
         private void SwitchToUpperSlot() {
             if (UnityEngine.Input.GetAxis("DpadVertical") > 0 && !_scrolledUp) {
-                counter+=Time.deltaTime;
-                if (counter > slowDownValue) {
-                    counter = 0;
+                _counter+=Time.deltaTime;
+                if (_counter > _slowDownValue) {
+                    _counter = 0;
                     ObjectsReference.Instance.uiSlotsManager.Select_Upper_Slot();
                     _scrolledUp = true;
                 }
@@ -61,9 +61,9 @@ namespace Input.UIActions {
     
         private void SwitchToLowerSlot() {
             if (UnityEngine.Input.GetAxis("DpadVertical") < 0 && !_scrolledDown) {
-                counter+=Time.deltaTime;
-                if (counter > slowDownValue) {
-                    counter = 0;
+                _counter+=Time.deltaTime;
+                if (_counter > _slowDownValue) {
+                    _counter = 0;
                     ObjectsReference.Instance.uiSlotsManager.Select_Lower_Slot();
                     _scrolledDown = true;
                 }

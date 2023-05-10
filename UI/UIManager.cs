@@ -178,7 +178,7 @@ namespace UI {
         void Focus_interface() {
             EventSystem.current.SetSelectedGameObject(ObjectsReference.Instance.uInventory.lastselectedInventoryItem);
         }
-        
+
         public void Set_active(UICanvasGroupType uiCanvasGroupType, bool visible) {
             var canvasGroup = canvasGroupsByUICanvasType[uiCanvasGroupType];
             

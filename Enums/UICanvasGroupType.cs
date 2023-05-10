@@ -11,6 +11,7 @@ namespace Enums {
         INVENTORY,
         BLUEPRINTS,
         STATISTICS,
-        TUTORIALS
+        TUTORIALS,
+        MINIGAME
     }
 }

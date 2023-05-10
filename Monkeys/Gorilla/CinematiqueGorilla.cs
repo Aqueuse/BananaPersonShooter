@@ -4,7 +4,7 @@ using Random = UnityEngine.Random;
 
 namespace Monkeys.Gorilla {
     public class CinematiqueGorilla : MonoBehaviour {
-        private NavMeshAgent navMeshAgent;
+        private NavMeshAgent _navMeshAgent;
         private Animator _animator;
 
         private Vector2 _velocity;
@@ -26,13 +26,13 @@ namespace Monkeys.Gorilla {
         private float _smooth;
         
         private void Start() {
-            navMeshAgent = GetComponent<NavMeshAgent>();
+            _navMeshAgent = GetComponent<NavMeshAgent>();
             _animator = GetComponent<Animator>();
 
-            navMeshAgent.updatePosition = false;
-            navMeshAgent.updateRotation = true;
+            _navMeshAgent.updatePosition = false;
+            _navMeshAgent.updateRotation = true;
 
-            navMeshAgent.velocity = new Vector3(4, 4, 4);
+            _navMeshAgent.velocity = new Vector3(4, 4, 4);
         }
 
         private void Update() {
@@ -42,14 +42,14 @@ namespace Monkeys.Gorilla {
         }
 
         private void OnAnimatorMove() {
-            if (navMeshAgent != null) {
-                transform.position = navMeshAgent.nextPosition;
+            if (_navMeshAgent != null) {
+                transform.position = _navMeshAgent.nextPosition;
             }
         }
 
         private void SynchronizeAnimatorAndAgent() {
             _transform = transform;
-            _worldDeltaPosition = navMeshAgent.nextPosition - _transform.position;
+            _worldDeltaPosition = _navMeshAgent.nextPosition - _transform.position;
 
             // Map 'worldDeltaPosition' to local space
             _worldDeltaPositionX = Vector3.Dot(_transform.right, _worldDeltaPosition);
@@ -63,7 +63,7 @@ namespace Monkeys.Gorilla {
             // Update velocity if time advances
             if (Time.deltaTime > 1e-5f) _velocity = _smoothDeltaPosition / Time.deltaTime;
 
-            _shouldMove = _velocity.magnitude > 0.5f && navMeshAgent.remainingDistance > navMeshAgent.radius;
+            _shouldMove = _velocity.magnitude > 0.5f && _navMeshAgent.remainingDistance > _navMeshAgent.radius;
 
             // Update animation parameters
             _animator.SetBool(CanMove, _shouldMove);

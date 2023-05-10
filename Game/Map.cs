@@ -36,7 +36,7 @@ namespace Game {
         }
 
         public void RecalculateHappiness() {
-            _actualDebrisQuantity = MapItems.Instance.debrisContainer.GetComponentsInChildren<Debris>().Length;
+            _actualDebrisQuantity = MapItems.Instance.debrisContainer.GetComponentsInChildren<Building.Debris>().Length;
 
             cleanliness = 50-(_actualDebrisQuantity /(float)maxDebrisQuantity)*50;
 
@@ -73,7 +73,7 @@ namespace Game {
                 var mapDebrisRotation = new Quaternion[debrisClass.Length];
 
                 for (var i = 0; i < debrisClass.Length; i++) {
-                    mapDebrisPrefabIndex[i] = debrisClass[i].GetComponent<Debris>().prefabIndex;
+                    mapDebrisPrefabIndex[i] = debrisClass[i].GetComponent<Building.Debris>().prefabIndex;
                     mapDebrisPosition[i] = debrisClass[i].gameObject.transform.position;
                     mapDebrisRotation[i] = debrisClass[i].gameObject.transform.rotation;
                 }

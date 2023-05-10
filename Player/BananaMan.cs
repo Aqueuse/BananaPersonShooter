@@ -15,7 +15,7 @@ namespace Player {
         public bool isInWater;
         public bool isGrabingBananaGun;
 
-        private float maxHealth = 100;
+        private float _maxHealth = 100;
         public float health;
         public float resistance;
         private static readonly int CutoffHeight = Shader.PropertyToID("Cutoff_Height");
@@ -25,7 +25,7 @@ namespace Player {
         }
         
         public void GainHealth() {
-            if (ObjectsReference.Instance.inventory.bananaManInventory[activeItemType] > 0 && health < maxHealth) {
+            if (ObjectsReference.Instance.inventory.bananaManInventory[activeItemType] > 0 && health < _maxHealth) {
                 health += activeItem.healthBonus;
                 resistance += activeItem.resistanceBonus;
 
@@ -44,7 +44,7 @@ namespace Player {
         }
 
         public void SetBananaSkinHealth() {
-            bodyMaterial.SetFloat(CutoffHeight, (maxHealth-health)/100);
+            bodyMaterial.SetFloat(CutoffHeight, (_maxHealth-health)/100);
         }
 
         public void SetActiveItemTypeAndCategory(ItemType itemType, ItemCategory itemCategory, BuildableType itemBuildableType) {

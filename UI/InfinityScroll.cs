@@ -10,7 +10,7 @@ using UnityEditor;
 namespace InfinityScroll {
     [ExecuteInEditMode]
     public class InfinityScroll : MonoBehaviour {
-        [HideInInspector] int delayEditorUpdate;
+        [HideInInspector] int _delayEditorUpdate;
 
         public Canvas canvas;
         public AnimationCurve y;
@@ -31,7 +31,7 @@ namespace InfinityScroll {
         [Tooltip("Constant speed to move the scroll.")]
         public float scrollSpeed = 40;
 
-        public List<IS_Item> items;
+        public List<IsItem> items;
 
         void Start() {
             if (!Application.isPlaying) {
@@ -54,11 +54,11 @@ namespace InfinityScroll {
 
         public void UpdateManual() {
             if (!Application.isPlaying) {
-                if (delayEditorUpdate < 20) {
-                    delayEditorUpdate++;
+                if (_delayEditorUpdate < 20) {
+                    _delayEditorUpdate++;
                 }
                 else {
-                    delayEditorUpdate = 0;
+                    _delayEditorUpdate = 0;
                     ReloadItems();
                     Setting();
                     UpdateState(value);
@@ -67,8 +67,8 @@ namespace InfinityScroll {
         }
 
         public void Setting() {
-            var wrap_mode = WrapMode.Loop;
-            y.preWrapMode = y.postWrapMode = wrap_mode;
+            var wrapMode = WrapMode.Loop;
+            y.preWrapMode = y.postWrapMode = wrapMode;
         }
 
 
@@ -97,8 +97,8 @@ namespace InfinityScroll {
         }
 
         public float ScrollY() {
-            var h_canvas = (canvas.transform as RectTransform).rect.height;
-            var scroll = h_canvas;
+            var hCanvas = (canvas.transform as RectTransform).rect.height;
+            var scroll = hCanvas;
 
             return scroll / (Height());
         }
@@ -121,7 +121,7 @@ namespace InfinityScroll {
             scrollHeight = 0;
 
             for (int i = 0; i < transform.childCount; i++) {
-                var item = transform.GetChild(i).GetComponent<IS_Item>();
+                var item = transform.GetChild(i).GetComponent<IsItem>();
 
                 if (item && item.gameObject.activeSelf) {
                     items.Add(item);

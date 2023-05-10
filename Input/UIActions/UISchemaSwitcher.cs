@@ -18,9 +18,5 @@ namespace Input.UIActions {
                 uISchemaSwitch.Value.DisableSchema();
             }
         }
-
-        public UISchemaSwitch GetUISchema(UISchemaSwitchType uiSchemaSwitchType) {
-            return uISchemaSwitches[uiSchemaSwitchType];
-        }
     }
 }

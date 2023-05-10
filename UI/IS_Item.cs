@@ -4,7 +4,7 @@
 namespace InfinityScroll
 {
     [RequireComponent(typeof(RectTransform))]
-    public class IS_Item : MonoBehaviour
+    public class IsItem : MonoBehaviour
     {
 
         public RectTransform RT() { return transform as RectTransform; }

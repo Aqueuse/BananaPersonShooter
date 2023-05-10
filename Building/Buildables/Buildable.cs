@@ -7,11 +7,11 @@ namespace Building.Buildables {
     public class Buildable : MonoBehaviour {
         [SerializeField] private float dissolved;
         [SerializeField] private BuildableType buildableType;
-        private Material[] buildableMaterials;
+        private Material[] _buildableMaterials;
         
         private BoxCollider _boxCollider;
         private MeshRenderer _meshRenderer;
-        private Material buildableInstanciatedMaterial;
+        private Material _buildableInstanciatedMaterial;
 
         private static readonly int DissolveProperty = Shader.PropertyToID("Cutoff_Height");
 
@@ -23,8 +23,8 @@ namespace Building.Buildables {
             _boxCollider = GetComponent<BoxCollider>();
             _meshRenderer = GetComponent<MeshRenderer>();
 
-            buildableInstanciatedMaterial = _meshRenderer.materials[0];
-            buildableMaterials = new []{buildableInstanciatedMaterial};
+            _buildableInstanciatedMaterial = _meshRenderer.materials[0];
+            _buildableMaterials = new []{_buildableInstanciatedMaterial};
 
             _dissolve = 1.5f;
         }
@@ -34,9 +34,9 @@ namespace Building.Buildables {
 
             _dissolve -= Time.deltaTime;
             
-            buildableInstanciatedMaterial.SetFloat(DissolveProperty, _dissolve);
-            buildableMaterials[0] = buildableInstanciatedMaterial;
-            _meshRenderer.materials = buildableMaterials;
+            _buildableInstanciatedMaterial.SetFloat(DissolveProperty, _dissolve);
+            _buildableMaterials[0] = _buildableInstanciatedMaterial;
+            _meshRenderer.materials = _buildableMaterials;
 
             if (_dissolve < dissolved) {
                 var craftingMaterials = ObjectsReference.Instance.scriptableObjectManager.GetBuildableCraftingIngredients(buildableType);
@@ -64,7 +64,7 @@ namespace Building.Buildables {
 
             _boxCollider.isTrigger = false;
 
-            buildableMaterials = new Material[1];
+            _buildableMaterials = new Material[1];
 
             if (buildableType == BuildableType.PLATEFORM) {
                 GetComponent<Plateform>().plateformType = respawnedItemType;

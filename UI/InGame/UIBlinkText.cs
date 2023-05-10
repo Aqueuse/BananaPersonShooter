@@ -4,7 +4,7 @@ using UnityEngine;
 namespace UI {
     public class UIBlinkText : MonoBehaviour {
         private TextMeshProUGUI _textMeshProUGUI;
-        private bool isVisible = true;
+        private bool _isVisible = true;
         private void Start() {
             _textMeshProUGUI = GetComponent<TextMeshProUGUI>();
         }
@@ -14,14 +14,14 @@ namespace UI {
         }
 
         void Blink() {
-            if (isVisible) {
+            if (_isVisible) {
                 _textMeshProUGUI.alpha = 0;
-                isVisible = false;
+                _isVisible = false;
                 return;
             }
         
             _textMeshProUGUI.alpha = 1;
-            isVisible = true;
+            _isVisible = true;
         }
     }
 }

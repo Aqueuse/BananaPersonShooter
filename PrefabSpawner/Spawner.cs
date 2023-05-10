@@ -36,8 +36,8 @@ namespace PrefabSpawner {
                         var spawnedPrefab = Instantiate(prefabs[prefabIndex], raycastHit.point, Quaternion.identity, deplacables.transform);
                         spawnedPrefab.transform.rotation = new Quaternion(0, Random.Range(-1, 1), 0, 1f);
 
-                        if (spawnedPrefab.GetComponent<Debris>() != null) {
-                            spawnedPrefab.GetComponent<Debris>().prefabIndex = prefabIndex;
+                        if (spawnedPrefab.GetComponent<Building.Debris>() != null) {
+                            spawnedPrefab.GetComponent<Building.Debris>().prefabIndex = prefabIndex;
                         }
 
                         _treesCounter++;

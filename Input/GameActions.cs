@@ -89,25 +89,25 @@ namespace Input {
             }
         }
 
-        private void Eat() {
+        private static void Eat() {
             if (ObjectsReference.Instance.bananaMan.activeItemCategory == ItemCategory.BANANA && UnityEngine.Input.GetKeyDown(KeyCode.R) || UnityEngine.Input.GetKeyDown(KeyCode.JoystickButton3)) {
                 ObjectsReference.Instance.bananaMan.GainHealth();
             }
         }
 
-        private void Interact() {
+        private static void Interact() {
             if (UnityEngine.Input.GetKeyDown(KeyCode.E) || UnityEngine.Input.GetKeyDown(KeyCode.JoystickButton2)) {
                 ObjectsReference.Instance.itemsManager.Validate();
             }
         }
 
-        private void Show_Inventory() {
+        private static void Show_Inventory() {
             if (UnityEngine.Input.GetKeyDown(KeyCode.I) || UnityEngine.Input. GetAxis("DpadHorizontal") < 0) {
                 ObjectsReference.Instance.uiManager.Show_Hide_interface();
             }
         }
 
-        private void PauseGame() {
+        private static void PauseGame() {
             if (UnityEngine.Input.GetKeyDown(KeyCode.Escape) || UnityEngine.Input.GetKeyDown(KeyCode.JoystickButton7)) {
                 ObjectsReference.Instance.inputManager.uiSchemaContext = UISchemaSwitchType.GAME_MENU;
                 ObjectsReference.Instance.gameManager.PauseGame(true);

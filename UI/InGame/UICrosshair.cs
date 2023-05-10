@@ -11,11 +11,11 @@ namespace UI.InGame {
         
         private CanvasGroup _canvasGroup;
 
-        private List<Image> crosshairsImage;
+        private List<Image> _crosshairsImage;
 
         private void Start() {
             _canvasGroup = GetComponent<CanvasGroup>();
-            crosshairsImage = GetComponentsInChildren<Image>().ToList();
+            _crosshairsImage = GetComponentsInChildren<Image>().ToList();
         }
     
         public void SetCrosshair(ItemCategory itemTypeCategory, ItemType itemType) {
@@ -31,7 +31,7 @@ namespace UI.InGame {
         }
 
         private void HideCrosshairs() {
-            foreach (var image in crosshairsImage) {
+            foreach (var image in _crosshairsImage) {
                 image.enabled = false;
             }
         }

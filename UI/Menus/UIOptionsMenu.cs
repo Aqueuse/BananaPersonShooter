@@ -10,10 +10,10 @@ namespace UI.Menus {
         [SerializeField] Color activatedColor;
         [SerializeField] Color unactivatedColor;
 
-        private int selectedTab;
+        private int _selectedTab;
 
         private void Start() {
-            selectedTab = 0;
+            _selectedTab = 0;
         }
 
         public void Switch_to_Tab(int index) {
@@ -27,30 +27,30 @@ namespace UI.Menus {
             tabsButtons[index].color = activatedColor;
             tabsButtons[index].GetComponentInChildren<TextMeshProUGUI>().color = Color.black;
 
-            selectedTab = index;
+            _selectedTab = index;
         }
 
         public void Switch_to_Left_Tab() {
-            if (selectedTab == 0) {
-                selectedTab = 4;
+            if (_selectedTab == 0) {
+                _selectedTab = 4;
                 Switch_to_Tab(4);
             }
 
             else {
-                selectedTab--;
-                Switch_to_Tab(selectedTab);
+                _selectedTab--;
+                Switch_to_Tab(_selectedTab);
             }
         }
         
         public void Switch_to_Right_Tab() {
-            if (selectedTab == 4) {
-                selectedTab = 0;
+            if (_selectedTab == 4) {
+                _selectedTab = 0;
                 Switch_to_Tab(0);
             }
 
             else {
-                selectedTab++;
-                Switch_to_Tab(selectedTab);
+                _selectedTab++;
+                Switch_to_Tab(_selectedTab);
             }
         }
     }

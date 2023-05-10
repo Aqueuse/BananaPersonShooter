@@ -75,8 +75,6 @@ namespace Game {
 
         public void PauseGame(bool pause) {
             if (pause) {
-                Cursor.visible = true;
-                Cursor.lockState = CursorLockMode.None;
                 ObjectsReference.Instance.inputManager.SwitchContext(InputContext.UI);
 
                 ObjectsReference.Instance.mainCamera.Set0Sensibility();
@@ -91,8 +89,6 @@ namespace Game {
             }
 
             if (!pause) {
-                Cursor.visible = false;
-                Cursor.lockState = CursorLockMode.Locked;
                 ObjectsReference.Instance.inputManager.SwitchContext(InputContext.GAME);
                 
                 ObjectsReference.Instance.mainCamera.SetNormalSensibility();

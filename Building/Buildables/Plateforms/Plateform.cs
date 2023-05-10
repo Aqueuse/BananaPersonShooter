@@ -4,33 +4,33 @@ using UnityEngine;
 
 namespace Building.Plateforms {
     public class Plateform : MonoBehaviour {
-        private Material normalPlateformMaterial;
+        private Material _normalPlateformMaterial;
         
         [SerializeField] private Color emissionColor;
         [SerializeField] private Color unactiveColor;
 
-        private UpDownEffect upDownEffect;
+        private UpDownEffect _upDownEffect;
         private MeshRenderer _meshRenderer;
-        private AudioSource audioSource;
+        private AudioSource _audioSource;
 
-        private Material[] plateformMaterials;
+        private Material[] _plateformMaterials;
         
         public ItemType plateformType;
 
-        private bool isPlayerOn;
+        private bool _isPlayerOn;
         
         private static readonly int AlimentationColor = Shader.PropertyToID("Alimentation_Color");
         private static readonly int EmissionColor = Shader.PropertyToID("Emission_Color");
 
         private void Start() {
             _meshRenderer = GetComponent<MeshRenderer>();
-            audioSource = GetComponent<AudioSource>();
-            upDownEffect = GetComponent<UpDownEffect>();
+            _audioSource = GetComponent<AudioSource>();
+            _upDownEffect = GetComponent<UpDownEffect>();
 
-            plateformMaterials = new Material[1];
+            _plateformMaterials = new Material[1];
 
             plateformType = ItemType.EMPTY;
-            normalPlateformMaterial = _meshRenderer.materials[0];
+            _normalPlateformMaterial = _meshRenderer.materials[0];
         }
 
         private void OnCollisionEnter(Collision other) {
@@ -40,40 +40,40 @@ namespace Building.Plateforms {
         
         private void SetActivatedMaterial(Color color) {
             _meshRenderer = GetComponent<MeshRenderer>();
-            normalPlateformMaterial = _meshRenderer.materials[0];
+            _normalPlateformMaterial = _meshRenderer.materials[0];
             
-            normalPlateformMaterial.SetColor(AlimentationColor, color);
-            normalPlateformMaterial.SetColor(EmissionColor, emissionColor);
+            _normalPlateformMaterial.SetColor(AlimentationColor, color);
+            _normalPlateformMaterial.SetColor(EmissionColor, emissionColor);
 
-            plateformMaterials = new Material[1];
-            plateformMaterials[0] = normalPlateformMaterial;
+            _plateformMaterials = new Material[1];
+            _plateformMaterials[0] = _normalPlateformMaterial;
 
-            _meshRenderer.materials = plateformMaterials;
+            _meshRenderer.materials = _plateformMaterials;
         }
 
         public void SetUnactiveMaterial() {
             _meshRenderer = GetComponent<MeshRenderer>();
-            normalPlateformMaterial = _meshRenderer.materials[0];
+            _normalPlateformMaterial = _meshRenderer.materials[0];
             
-            normalPlateformMaterial.SetColor(AlimentationColor, unactiveColor);
-            normalPlateformMaterial.SetColor(EmissionColor, unactiveColor);
+            _normalPlateformMaterial.SetColor(AlimentationColor, unactiveColor);
+            _normalPlateformMaterial.SetColor(EmissionColor, unactiveColor);
 
-            plateformMaterials = new Material[1];
-            plateformMaterials[0] = normalPlateformMaterial;
+            _plateformMaterials = new Material[1];
+            _plateformMaterials[0] = _normalPlateformMaterial;
 
-            _meshRenderer.materials = plateformMaterials;
+            _meshRenderer.materials = _plateformMaterials;
         }
 
         public void ActivePlateform(ItemType itemType) {
             _meshRenderer = GetComponent<MeshRenderer>();
-            audioSource = GetComponent<AudioSource>();
-            upDownEffect = GetComponent<UpDownEffect>();
+            _audioSource = GetComponent<AudioSource>();
+            _upDownEffect = GetComponent<UpDownEffect>();
 
             switch (itemType) {
                 case ItemType.CAVENDISH:
                     SetActivatedMaterial(ObjectsReference.Instance.scriptableObjectManager.GetBananaScriptableObject(ItemType.CAVENDISH).bananaMaterial.color);
-                    audioSource.enabled = true;
-                    upDownEffect.isActive = true;
+                    _audioSource.enabled = true;
+                    _upDownEffect.isActive = true;
 
                     plateformType = ItemType.CAVENDISH;
                     ObjectsReference.Instance.mapsManager.currentMap.RefreshPlateformsDataMap();

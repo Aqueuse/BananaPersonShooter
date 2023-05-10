@@ -9,29 +9,29 @@ namespace Building {
 
         private GameObject _activeGhost;
         private Ghost _activeGhostClass;
-        private GameObject buildable;
-        private GenericDictionary<ItemType, int> craftingIngredients;
+        private GameObject _buildable;
+        private GenericDictionary<ItemType, int> _craftingIngredients;
 
-        private Transform mainCameraTransform;
-        private Quaternion normalRotation;
-        private Vector3 buildableSpawnerPoint;
+        private Transform _mainCameraTransform;
+        private Quaternion _normalRotation;
+        private Vector3 _buildableSpawnerPoint;
 
         private void Start() {
-            mainCameraTransform = ObjectsReference.Instance.mainCamera.transform;
+            _mainCameraTransform = ObjectsReference.Instance.mainCamera.transform;
         }
 
         void FixedUpdate() {
             if (ObjectsReference.Instance.bananaMan.activeItemCategory == ItemCategory.BUILDABLE && _activeGhost != null) {
-                if (Physics.Raycast(origin: mainCameraTransform.position, direction:mainCameraTransform.forward, maxDistance:60f, 
+                if (Physics.Raycast(origin: _mainCameraTransform.position, direction:_mainCameraTransform.forward, maxDistance:60f, 
                         hitInfo: out RaycastHit raycastHit, layerMask:layerMask)) {
                     _activeGhost.transform.position = raycastHit.point;
                     
-                    buildableSpawnerPoint = raycastHit.point;
+                    _buildableSpawnerPoint = raycastHit.point;
                 }
 
-                craftingIngredients = _activeGhostClass.buildableDataScriptableObject.rawMaterialsWithQuantity;
+                _craftingIngredients = _activeGhostClass.buildableDataScriptableObject.rawMaterialsWithQuantity;
 
-                if (ObjectsReference.Instance.inventory.HasCraftingIngredients(craftingIngredients)) {
+                if (ObjectsReference.Instance.inventory.HasCraftingIngredients(_craftingIngredients)) {
                     _activeGhostClass.SetGhostState(GhostState.VALID);
                 }
                 else {
@@ -73,12 +73,12 @@ namespace Building {
             if (ObjectsReference.Instance.bananaMan.activeItemCategory == ItemCategory.BUILDABLE) {
                 
                 if (_activeGhostClass.GetPlateformState() == GhostState.VALID) {
-                    buildable = Instantiate(original:_activeGhostClass.buildableDataScriptableObject.buildablePrefab,
-                        position: buildableSpawnerPoint, rotation: _activeGhost.transform.rotation);
+                    _buildable = Instantiate(original:_activeGhostClass.buildableDataScriptableObject.buildablePrefab,
+                        position: _buildableSpawnerPoint, rotation: _activeGhost.transform.rotation);
 
-                    buildable.transform.parent = MapItems.Instance.plateformsContainer.transform;
+                    _buildable.transform.parent = MapItems.Instance.plateformsContainer.transform;
                     
-                    foreach (var craftingIngredient in craftingIngredients) {
+                    foreach (var craftingIngredient in _craftingIngredients) {
                         ObjectsReference.Instance.inventory.RemoveQuantity(ItemCategory.RAW_MATERIAL, craftingIngredient.Key, craftingIngredient.Value);
                         ObjectsReference.Instance.uiSlotsManager.RefreshQuantityInQuickSlot(ItemCategory.RAW_MATERIAL, craftingIngredient.Key);
                     }

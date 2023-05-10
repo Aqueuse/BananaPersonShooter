@@ -4,6 +4,7 @@ namespace Enums {
         IN_DIALOGUE,
         IN_CINEMATIQUE,
         IN_HOME,
+        IN_MINI_GAME,
         DEAD
     }
 }

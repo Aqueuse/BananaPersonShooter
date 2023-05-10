@@ -12,17 +12,17 @@ namespace Game {
         public GenericDictionary<SpawnPoint, Transform> spawnPointsBySpawnType;
         public GenericDictionary<SpawnPoint, string> sceneNameBySpawnPoint;
 
-        private Transform bananaManTransform;
-        private Vector3 bananaManRotation;
+        private Transform _bananaManTransform;
+        private Vector3 _bananaManRotation;
 
         private void Start() {
-            bananaManTransform = ObjectsReference.Instance.bananaMan.transform;
+            _bananaManTransform = ObjectsReference.Instance.bananaMan.transform;
         }
 
         private IEnumerator LoadScene(string sceneName, SpawnPoint spawnPoint, bool isTeleporting) {
             AsyncOperation load = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Single);
 
-            bananaManRotation = bananaManTransform.rotation.eulerAngles;
+            _bananaManRotation = _bananaManTransform.rotation.eulerAngles;
 
             // Wait until the asynchronous scene fully loads
             while (!load.isDone) {
@@ -35,26 +35,26 @@ namespace Game {
                 //// spawning banana man
                 if (isTeleporting) {
                     ObjectsReference.Instance.teleportation.TeleportDown();
-                    bananaManTransform.position = spawnPointsBySpawnType[spawnPoint].position;
+                    _bananaManTransform.position = spawnPointsBySpawnType[spawnPoint].position;
                     
-                    bananaManRotation = bananaManTransform.rotation.eulerAngles;
-                    bananaManRotation.y = spawnPointsBySpawnType[spawnPoint].rotation.y;
+                    _bananaManRotation = _bananaManTransform.rotation.eulerAngles;
+                    _bananaManRotation.y = spawnPointsBySpawnType[spawnPoint].rotation.y;
 
-                    bananaManTransform.rotation = Quaternion.Euler(bananaManRotation);
+                    _bananaManTransform.rotation = Quaternion.Euler(_bananaManRotation);
                 }
 
                 if (spawnPoint == SpawnPoint.LAST_MAP) {
-                    bananaManTransform.position = ObjectsReference.Instance.gameData.lastPositionOnMap;
-                    bananaManRotation = ObjectsReference.Instance.gameData.lastRotationOnMap;
+                    _bananaManTransform.position = ObjectsReference.Instance.gameData.lastPositionOnMap;
+                    _bananaManRotation = ObjectsReference.Instance.gameData.lastRotationOnMap;
                     
-                    bananaManTransform.rotation = Quaternion.Euler(bananaManRotation);
+                    _bananaManTransform.rotation = Quaternion.Euler(_bananaManRotation);
                 }
 
                 else {
-                    bananaManTransform.position = spawnPointsBySpawnType[spawnPoint].position;
-                    bananaManRotation = spawnPointsBySpawnType[spawnPoint].rotation.eulerAngles;
+                    _bananaManTransform.position = spawnPointsBySpawnType[spawnPoint].position;
+                    _bananaManRotation = spawnPointsBySpawnType[spawnPoint].rotation.eulerAngles;
                     
-                    bananaManTransform.rotation = Quaternion.Euler(bananaManRotation);
+                    _bananaManTransform.rotation = Quaternion.Euler(_bananaManRotation);
                 }
                 
                 if (sceneName.ToUpper() == "HOME") {
@@ -77,8 +77,8 @@ namespace Game {
 
                     ObjectsReference.Instance.gameData.currentSaveUuid = null;
                     
-                    bananaManTransform.position = spawnPointsBySpawnType[spawnPoint].position;
-                    bananaManTransform.rotation = Quaternion.Euler(bananaManRotation);
+                    _bananaManTransform.position = spawnPointsBySpawnType[spawnPoint].position;
+                    _bananaManTransform.rotation = Quaternion.Euler(_bananaManRotation);
                 }
 
                 else {

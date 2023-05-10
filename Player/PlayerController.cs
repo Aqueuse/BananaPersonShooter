@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace Player {
     public class PlayerController : MonoBehaviour {
@@ -9,7 +10,7 @@ namespace Player {
         private Animator _animator;
         private CapsuleCollider _capsuleCollider;
 
-        private RaycastHit slopeHit;
+        private RaycastHit _slopeHit;
 
         public float jumpForce;
 
@@ -22,7 +23,7 @@ namespace Player {
         public bool isRolling;
         public bool canMove = true;
         private bool _isGrounded;
-        private bool isHit;
+        private bool _isHit;
 
         private float _damageCount;
 
@@ -30,13 +31,13 @@ namespace Player {
         private static readonly int IsJumping = Animator.StringToHash("IsJumping");
         private Vector3 _rawInputMovement;
         public Transform mainCameraTransform;
-        private Vector3 cameraForward;
+        private Vector3 _cameraForward;
         private float _inputAngle;
 
-        private readonly float maxDistanceToCollide = 0.1f;
+        private readonly float _maxDistanceToCollide = 0.3f;
         private Vector3 _movement;
-        private Vector3 newPosition;
-        private float slopeAngle;
+        private Vector3 _newPosition;
+        private float _slopeAngle;
         private readonly float _maxSlopeAngle = 60f;
         private Quaternion _cameraRotation;
         private static readonly int IsFalling = Animator.StringToHash("IsFalling");
@@ -55,7 +56,7 @@ namespace Player {
 
             _rigidbody.maxLinearVelocity = 40;
         }
-
+        
         private void FixedUpdate() {
             if (!ObjectsReference.Instance.gameManager.isGamePlaying || !canMove) return;
             
@@ -87,24 +88,24 @@ namespace Player {
                 PlayerStopSprint();
             }
             else {
-                cameraForward = Vector3.Scale(mainCameraTransform.forward, new Vector3(1, 0, 1)).normalized;
-                _movement = (_rawInputMovement.z * cameraForward + _rawInputMovement.x * mainCameraTransform.right).normalized * (speed * Time.fixedDeltaTime);
+                _cameraForward = Vector3.Scale(mainCameraTransform.forward, new Vector3(1, 0, 1)).normalized;
+                _movement = (_rawInputMovement.z * _cameraForward + _rawInputMovement.x * mainCameraTransform.right).normalized * (speed * Time.fixedDeltaTime);
             }
             
             if (IsOnSlope()) _movement = GetSlopeMoveDirection(_movement);
             
             // collision prevention
-            isHit = _rigidbody.SweepTest(_movement.normalized, out RaycastHit hit, maxDistanceToCollide);
+            _isHit = _rigidbody.SweepTest(_movement.normalized, out RaycastHit hit, _maxDistanceToCollide);
             
-            if (isHit) {
+            if (_isHit) {
                 // Vérifie si la normale de la collision est orientée vers le haut (collide contre le sol ne veux rien dire)
-                newPosition = hit.normal.y > 0.1f ? _rigidbody.position + _movement : _rigidbody.position;
+                _newPosition = hit.normal.y > 0.5f ? _rigidbody.position + _movement : _rigidbody.position;
             }
             else {
-                newPosition = _rigidbody.position + _movement;
+                _newPosition = _rigidbody.position + _movement;
             }
             
-            _rigidbody.MovePosition(newPosition);
+            _rigidbody.MovePosition(_newPosition);
             
             if (_rigidbody.velocity.y < -20) {
                 _damageCount += 1;
@@ -164,16 +165,16 @@ namespace Player {
         }
 
         private bool IsOnSlope() {
-            if (Physics.Raycast(transform.position, Vector3.down, out slopeHit, 0.8f)) {
-                slopeAngle = Vector3.Angle(Vector3.up, slopeHit.normal);
-                return slopeAngle < _maxSlopeAngle && slopeAngle != 0;
+            if (Physics.Raycast(transform.position, Vector3.down, out _slopeHit, 0.8f)) {
+                _slopeAngle = Vector3.Angle(Vector3.up, _slopeHit.normal);
+                return _slopeAngle < _maxSlopeAngle && _slopeAngle != 0;
             }
 
             return false;
         }
 
         private Vector3 GetSlopeMoveDirection(Vector3 movementDirection) {
-            return Vector3.ProjectOnPlane(movementDirection, slopeHit.normal);
+            return Vector3.ProjectOnPlane(movementDirection, _slopeHit.normal);
         }
     }
 }

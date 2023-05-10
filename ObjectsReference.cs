@@ -71,4 +71,5 @@ public class ObjectsReference : MonoSingleton<ObjectsReference> {
     public UIOptionsMenu uiOptionsMenu;
     public UISave uiSave;
     public TutorialsManager tutorialsManager;
+    public UIbananaCannonMiniGame uIbananaCannonMiniGame;
 }

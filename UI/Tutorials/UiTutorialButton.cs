@@ -9,26 +9,26 @@ namespace UI.Tutorials {
         [SerializeField] private Color yellow;
         [SerializeField] private Color black;
 
-        private Image buttonBackgroundImage;
-        private TextMeshProUGUI buttonText;
+        private Image _buttonBackgroundImage;
+        private TextMeshProUGUI _buttonText;
         
         private void Start() {
-            buttonBackgroundImage = GetComponent<Image>();
-            buttonText = GetComponentInChildren<TextMeshProUGUI>();
+            _buttonBackgroundImage = GetComponent<Image>();
+            _buttonText = GetComponentInChildren<TextMeshProUGUI>();
         }
 
         public void ShowTutorial() {
             associatedTutorial.SetActive(true);
 
-            buttonBackgroundImage.color = yellow;
-            buttonText.color = black;
+            _buttonBackgroundImage.color = yellow;
+            _buttonText.color = black;
         }
 
         public void HideTutorial() {
             associatedTutorial.SetActive(false);
 
-            buttonBackgroundImage.color = black;
-            buttonText.color = yellow;
+            _buttonBackgroundImage.color = black;
+            _buttonText.color = yellow;
         }
     }
 }
