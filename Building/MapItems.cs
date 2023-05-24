@@ -1,3 +1,4 @@
+using Game.BananaCannonMiniGame;
 using Monkeys;
 using UI.InGame;
 using UnityEngine;
@@ -8,6 +9,7 @@ namespace Building {
         public GameObject plateformsContainer;
 
         public UICanvasItemsHiddableManager uiCanvasItemsHiddableManager;
+        public DebrisSpawner debrisSpawner;
 
         public Monkey[] monkeys;
     }

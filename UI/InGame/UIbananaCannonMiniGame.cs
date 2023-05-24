@@ -50,6 +50,11 @@ namespace UI.InGame {
             BananaCannonMiniGameManager.Instance.PlayMiniGame();
         }
 
+        public void Teleport() {
+            BananaCannonMiniGameManager.Instance.Teleport();
+            HideGameUI();
+        }
+
         public void QuitMiniGame() {
             pauseButton.SetActive(false);
             

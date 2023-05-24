@@ -1,24 +1,30 @@
 using UnityEngine;
 
 namespace Player {
-    public class DetectWater : MonoBehaviour {
+    public class DetectColliders : MonoBehaviour {
         private PlayerController _playerController;
         private Rigidbody _playerRigidbody;
 
+        private int _waterLayer;
+        
         private void Start() {
             _playerController = ObjectsReference.Instance.bananaMan.GetComponent<PlayerController>();
             _playerRigidbody = _playerController.GetComponent<Rigidbody>();
+
+            _waterLayer = LayerMask.NameToLayer("Water");
         }
 
         private void OnTriggerEnter(Collider other) {
-            _playerController.isInWater = true;
-            _playerController.speed = 6f;
-            _playerRigidbody.maxLinearVelocity = 10;
+            if (other.gameObject.layer == _waterLayer) {
+                _playerController.isInWater = true;
+                _playerController.speed = 6f;
+            }
         }
 
         private void OnTriggerExit(Collider other) {
-            _playerController.isInWater = false;
-            _playerRigidbody.maxLinearVelocity = 40;
+            if (other.gameObject.layer == _waterLayer) {
+                _playerController.isInWater = false;
+            }
         }
     }
 }

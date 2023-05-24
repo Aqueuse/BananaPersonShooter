@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Building;
-using Building.Plateforms;
+using Building.Buildables.Plateforms;
 using Enums;
 using Monkeys.Gorilla;
 using UnityEngine;
@@ -30,13 +30,16 @@ namespace Game {
         public bool isDiscovered;
 
         public string mapName;
+
+        public int debrisToSpawn;
         
         private void Start() {
-            maxDebrisQuantity = 28;
+            maxDebrisQuantity = 99;
+            debrisToSpawn = 0;
         }
 
         public void RecalculateHappiness() {
-            _actualDebrisQuantity = MapItems.Instance.debrisContainer.GetComponentsInChildren<Building.Debris>().Length;
+            _actualDebrisQuantity = MapItems.Instance.debrisContainer.GetComponentsInChildren<MeshFilter>().Length;
 
             cleanliness = 50-(_actualDebrisQuantity /(float)maxDebrisQuantity)*50;
 
@@ -73,7 +76,7 @@ namespace Game {
                 var mapDebrisRotation = new Quaternion[debrisClass.Length];
 
                 for (var i = 0; i < debrisClass.Length; i++) {
-                    mapDebrisPrefabIndex[i] = debrisClass[i].GetComponent<Building.Debris>().prefabIndex;
+                    mapDebrisPrefabIndex[i] = ObjectsReference.Instance.scriptableObjectManager._meshReferenceScriptableObject.debrisPrefabIndexByMesh[debrisClass[i].GetComponent<MeshFilter>().sharedMesh];
                     mapDebrisPosition[i] = debrisClass[i].gameObject.transform.position;
                     mapDebrisRotation[i] = debrisClass[i].gameObject.transform.rotation;
                 }

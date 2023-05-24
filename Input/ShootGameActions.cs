@@ -10,12 +10,13 @@ namespace Input {
         }
 
         private void Update() {
+            if (!ObjectsReference.Instance.gameData.bananaManSavedData.playerAdvancements.Contains(AdvancementState.GET_BANANAGUN)) return;
+            if (ObjectsReference.Instance.uiManager.Is_Interface_Visible()) return;
+
             Shoot();
         }
         
         private void Shoot() {
-            if (!ObjectsReference.Instance.gameData.bananaManSavedData.playerAdvancements.Contains(AdvancementState.GET_BANANAGUN)) return;
-            
             if (ObjectsReference.Instance.bananaMan.activeItemCategory == ItemCategory.BANANA) {
                 if (UnityEngine.Input.GetKeyDown(KeyCode.Mouse0)) {
                     ObjectsReference.Instance.bananaGunPut.LoadingGun();

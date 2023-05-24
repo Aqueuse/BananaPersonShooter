@@ -1,5 +1,6 @@
 using Game.BananaCannonMiniGame;
 using UnityEngine;
+using VFX;
 
 namespace Input.UIActions {
     public class BananaCannonMiniGameActions : MonoBehaviour {
@@ -11,6 +12,7 @@ namespace Input.UIActions {
 
         private void Update() {
             StartGame();
+            Teleport();
             UnpauseGame();
             QuitGame();
 
@@ -23,12 +25,20 @@ namespace Input.UIActions {
 
         private void StartGame() {
             if (ObjectsReference.Instance.uIbananaCannonMiniGame.startMenuCanvasGroup.alpha > 0) {
-                if (UnityEngine.Input.GetKeyDown(KeyCode.JoystickButton2) ) {
+                if (UnityEngine.Input.GetKeyDown(KeyCode.JoystickButton0) ) {
                     BananaCannonMiniGameManager.Instance.PlayMiniGame();
                 }
             }
         }
-        
+
+        private void Teleport() {
+            if (ObjectsReference.Instance.uIbananaCannonMiniGame.startMenuCanvasGroup.alpha > 0) {
+                if (UnityEngine.Input.GetKeyDown(KeyCode.JoystickButton2) ) {
+                    BananaCannonMiniGameManager.Instance.Teleport();
+                }
+            }
+        }
+
         private void UnpauseGame() {
             if (ObjectsReference.Instance.uIbananaCannonMiniGame.pauseMenuCanvasGroup.alpha > 0) {
                 if (UnityEngine.Input.GetKeyDown(KeyCode.JoystickButton1) ) {
@@ -52,7 +62,7 @@ namespace Input.UIActions {
         }
         
         ////////////////////////////
-        
+
         private void PauseGame() {
             if (UnityEngine.Input.GetKeyDown(KeyCode.JoystickButton7) ) {
                 BananaCannonMiniGameManager.Instance.PauseMiniGame();
@@ -76,7 +86,6 @@ namespace Input.UIActions {
             if (UnityEngine.Input.GetAxis("LeftTrigger") == 0 && leftTriggerActivated)  {
                 leftTriggerActivated = false;
             }
-            
         }
     }
 }

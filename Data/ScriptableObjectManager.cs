@@ -1,44 +1,56 @@
-using System.Collections.Generic;
 using Data.Bananas;
-using Data.Buildables;
-using Data.RawMaterial;
 using Enums;
 using UnityEngine;
 
 namespace Data {
     public class ScriptableObjectManager : MonoBehaviour {
-        [SerializeField] private GenericDictionary<ItemType, BananasDataScriptableObject> bananasDataScriptableObject;
-        [SerializeField] private GenericDictionary<BuildableType, BuildableDataScriptableObject> buildablesDataScriptableObject;
-        [SerializeField] private GenericDictionary<ItemType, RawMaterialDataScriptableObject> rawMaterialDataScriptableObjects;
+        public MeshReferenceScriptableObject _meshReferenceScriptableObject;
         
         public string GetDescription(ItemCategory itemCategory, int langageIndex, ItemType itemType = ItemType.EMPTY, BuildableType buildableType = BuildableType.EMPTY) {
-            if (itemCategory == ItemCategory.BUILDABLE) return buildablesDataScriptableObject[buildableType].itemDescription[langageIndex];
+            if (itemCategory == ItemCategory.BUILDABLE) return _meshReferenceScriptableObject.buildablesDataScriptableObject[buildableType].itemDescription[langageIndex];
 
             if (itemCategory == ItemCategory.RAW_MATERIAL)
-                return rawMaterialDataScriptableObjects[itemType].itemDescription[langageIndex];
+                return _meshReferenceScriptableObject.rawMaterialDataScriptableObjects[itemType].itemDescription[langageIndex];
             
-            return bananasDataScriptableObject[itemType].itemDescription[langageIndex];
+            return _meshReferenceScriptableObject.bananasDataScriptableObject[itemType].itemDescription[langageIndex];
         }
 
         public BananasDataScriptableObject GetBananaScriptableObject(ItemType itemType) {
-            return bananasDataScriptableObject[itemType];
+            return _meshReferenceScriptableObject.bananasDataScriptableObject[itemType];
         }
 
         public Sprite GetItemSprite(ItemCategory itemCategory, ItemType itemType = ItemType.EMPTY, BuildableType buildableType = BuildableType.EMPTY) {
             switch (itemCategory) {
                 case ItemCategory.BUILDABLE:
-                    return buildablesDataScriptableObject[buildableType].itemSprite;
+                    return _meshReferenceScriptableObject.buildablesDataScriptableObject[buildableType].itemSprite;
                 case ItemCategory.BANANA:
-                    return bananasDataScriptableObject[itemType].itemSprite;
+                    return _meshReferenceScriptableObject.bananasDataScriptableObject[itemType].itemSprite;
                 case ItemCategory.RAW_MATERIAL:
-                    return rawMaterialDataScriptableObjects[itemType].itemSprite;
+                    return _meshReferenceScriptableObject.rawMaterialDataScriptableObjects[itemType].itemSprite;
             }
 
             return null;
         }
 
         public GenericDictionary<ItemType, int> GetBuildableCraftingIngredients(BuildableType buildableType) {
-            return buildablesDataScriptableObject[buildableType].rawMaterialsWithQuantity;
+            return _meshReferenceScriptableObject.buildablesDataScriptableObject[buildableType].rawMaterialsWithQuantity;
+        }
+
+        public BuildableGridSize GetBuildableGridSizeByMesh(Mesh sharedMesh) {
+            var buildableType = _meshReferenceScriptableObject.buildableTypeByMesh[sharedMesh];
+            return _meshReferenceScriptableObject.buildablesDataScriptableObject[buildableType].buildableGridSize;
+        }
+
+        public bool IsBuildable(Mesh sharedMesh) {
+            return _meshReferenceScriptableObject.buildableTypeByMesh.ContainsKey(sharedMesh);
+        }
+
+        public bool IsDebris(Mesh sharedMesh) {
+            return _meshReferenceScriptableObject.debrisPrefabIndexByMesh.ContainsKey(sharedMesh);
+        }
+
+        public BuildableType GetBuildableTypeByMesh(Mesh sharedMesh) {
+            return _meshReferenceScriptableObject.buildableTypeByMesh[sharedMesh];
         }
     }
 }

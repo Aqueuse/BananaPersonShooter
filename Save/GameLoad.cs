@@ -4,6 +4,8 @@ using System.IO;
 using System.Linq;
 using Building;
 using Building.Buildables;
+using Building.Buildables.Plateforms;
+using Building.Plateforms;
 using Enums;
 using UnityEngine;
 
@@ -147,6 +149,8 @@ namespace Save {
                 debris.transform.position = mapData.debrisPosition[i];
                 debris.transform.rotation = mapData.debrisRotation[i];
             }
+            
+            if (mapData.debrisToSpawn > 0) MapItems.Instance.debrisSpawner.SpawnNewDebrisOnMap(MapItems.Instance.debrisContainer.transform);
         }
 
         public void RespawnPlateformsOnMap() {
@@ -156,10 +160,17 @@ namespace Save {
                 var plateforme = Instantiate(ObjectsReference.Instance.gameData.plateformPrefab, MapItems.Instance.plateformsContainer.transform, true);
                 plateforme.transform.position = mapData.plateformsPosition[i];
 
-                var plateformClass = plateforme.GetComponent<Buildable>();
                 var plateformType = mapData.plateformsTypes[i];
                 
-                plateformClass.RespawnBuildable(plateformType);
+                var _boxCollider = GetComponent<BoxCollider>();
+                _boxCollider.isTrigger = false;
+            
+                plateforme.GetComponent<Plateform>().plateformType = plateformType;
+
+                if (plateformType == ItemType.EMPTY) GetComponent<Plateform>().SetUnactiveMaterial();
+                else {
+                    plateforme.GetComponent<Plateform>().ActivePlateform(plateformType);
+                }
             }
         }
     }

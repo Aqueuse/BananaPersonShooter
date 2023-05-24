@@ -1,45 +1,38 @@
 ﻿using Data.Bananas;
-using Enums;
-using UI.InGame;
 using UnityEngine;
 
 namespace Items {
     public class Regime : MonoBehaviour {
-        [SerializeField] private GenericDictionary<BananierState, GameObject> bananiersPrefabByState;
-
+        [SerializeField] private GameObject babyBananier;
+        [SerializeField] private GameObject youngBananier;
+        [SerializeField] private GameObject matureBananier;
+        
         public BananasDataScriptableObject bananasDataScriptableObject;
-        public BananierState bananierState;
         
         public void GrabBananas() {
             gameObject.tag = "Untagged";
+        
+            babyBananier.SetActive(true);
+            youngBananier.SetActive(false);
+            matureBananier.SetActive(false);
             
-            foreach (var bananier in bananiersPrefabByState) {
-                bananier.Value.SetActive(bananier.Key == BananierState.BABY);
-            }
-
-            bananierState = BananierState.BABY;
-
             Invoke(nameof(Grown_young_bananier), 60);
         }
 
         private void Grown_young_bananier() {
-            foreach (var bananier in bananiersPrefabByState) {
-                bananier.Value.SetActive(bananier.Key == BananierState.YOUNG);
-            }
-
-            bananierState = BananierState.YOUNG;
-
+            babyBananier.SetActive(false);
+            youngBananier.SetActive(true);
+            matureBananier.SetActive(false);
+            
             Invoke(nameof(Grown_mature_bananier), 60);
         }
         
         private void Grown_mature_bananier() {
             gameObject.tag = "Aspirables";
             
-            foreach (var bananier in bananiersPrefabByState) {
-                bananier.Value.SetActive(bananier.Key == BananierState.MATURE);
-            }
-            
-            bananierState = BananierState.MATURE;
+            babyBananier.SetActive(false);
+            youngBananier.SetActive(false);
+            matureBananier.SetActive(true);
         }
     }
 }

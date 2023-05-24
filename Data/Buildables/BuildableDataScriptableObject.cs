@@ -7,5 +7,8 @@ namespace Data.Buildables {
         [Header("craft")] 
         public GenericDictionary<ItemType, int> rawMaterialsWithQuantity;
         public GameObject buildablePrefab;
+
+        public bool mustSnap;
+        public BuildableGridSize buildableGridSize;
     }
 }

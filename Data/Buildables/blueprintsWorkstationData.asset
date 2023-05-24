@@ -10,23 +10,23 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6e11e44741351774ca1f8261e4d989f1, type: 3}
-  m_Name: platformData
+  m_Name: blueprintsWorkstationData
   m_EditorClassIdentifier: 
   itemType: 0
   itemCategory: 1
-  buildableType: 0
-  itemName: plateform
-  itemSprite: {fileID: 21300000, guid: 3728d82037057e341bbbd20d9d44c435, type: 3}
+  buildableType: 5
+  itemName: blueprints_workstation
+  itemSprite: {fileID: 21300000, guid: ab491f16b98a8064fabe9758c563a6e8, type: 3}
   itemDescription:
-  - a plateform than can be feeded with bananas
-  - "une plateforme qui peut \xEAtre aliment\xE9e en bananes"
+  - "un bureau pour concevoir des murs personnalis\xE9s"
+  - a desk to design custom walls
   rawMaterialsWithQuantity:
     list:
     - key: 19
-      value: 2
+      value: 3
     - key: 21
       value: 2
+    - key: 20
+      value: 1
     keyCollision: 0
-  buildablePrefab: {fileID: 3045356508486292204, guid: 0630715419ab7f249ba73f9625dea7fb, type: 3}
-  mustSnap: 0
-  buildableGridSize: 3
+  buildablePrefab: {fileID: 5006133390569365907, guid: 6473fc63d7b38244cacef9e82e267f96, type: 3}

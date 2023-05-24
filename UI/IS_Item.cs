@@ -1,10 +1,9 @@
 ﻿using UnityEngine;
 
-
-namespace InfinityScroll
+namespace UI
 {
     [RequireComponent(typeof(RectTransform))]
-    public class IsItem : MonoBehaviour
+    public class IS_Item : MonoBehaviour
     {
 
         public RectTransform RT() { return transform as RectTransform; }

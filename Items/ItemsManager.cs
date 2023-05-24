@@ -1,9 +1,9 @@
-﻿using Dialogues;
+﻿using Building.Buildables.DoorLeft;
+using Building.Buildables.DoorRight;
+using Dialogues;
 using Enums;
-using Game;
 using Game.BananaCannonMiniGame;
 using Game.CommandRoomPanelControls;
-using UI.InGame;
 using UnityEngine;
 
 namespace Items {
@@ -35,7 +35,7 @@ namespace Items {
                 ItemStaticType itemStaticType = _interactedObject.GetComponent<ItemStatic>().itemStaticType;
 
                 switch (itemStaticType) {
-                    case ItemStaticType.DOOR:
+                    case ItemStaticType.DOOR_BEETWEEN_LEVELS:
                         ObjectsReference.Instance.audioManager.PlayEffect(EffectType.OPEN_DOOR, 0);
 
                         ObjectsReference.Instance.scenesSwitch.SwitchScene(_interactedObject.GetComponent<Door>().destinationMap.ToUpper(), _interactedObject.GetComponent<Door>().spawnPoint, false);
@@ -43,10 +43,6 @@ namespace Items {
                         break;
                     case ItemStaticType.MINI_CHIMP:
                         _interactedObject.GetComponent<SpeechToVoice>().Play();
-                        break;
-                    case ItemStaticType.UIMAP:
-                        var uImap = _interactedObject.GetComponent<UIMap>();
-                        ObjectsReference.Instance.scenesSwitch.Teleport(uImap.spawnPoint);
                         break;
                     case ItemStaticType.BANANAGUN:
                         ObjectsReference.Instance.audioManager.PlayEffect(EffectType.GRAB_BANANAS, 0);
@@ -63,6 +59,12 @@ namespace Items {
                     case ItemStaticType.BANANA_CANNON_MINI_GAME:
                         if (_interactedObject.GetComponent<CanvasGroup>().alpha == 0) break;
                         BananaCannonMiniGameManager.Instance.SwitchToMiniGame();
+                        break;
+                    case ItemStaticType.DOOR_LEFT:
+                        _interactedObject.GetComponent<RotationDoorLeft>().Action();
+                        break;
+                    case ItemStaticType.DOOR_RIGHT:
+                        _interactedObject.GetComponent<RotationDoorRight>().Action();
                         break;
                 }
             }

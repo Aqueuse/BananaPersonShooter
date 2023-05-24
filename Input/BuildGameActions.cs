@@ -13,6 +13,9 @@ namespace Input {
         }
 
         private void Update() {
+            if (!ObjectsReference.Instance.gameData.bananaManSavedData.playerAdvancements.Contains(AdvancementState.GET_BANANAGUN)) return;
+            if (ObjectsReference.Instance.uiManager.Is_Interface_Visible()) return;
+
             Build();
         }
         

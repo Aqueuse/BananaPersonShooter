@@ -1,25 +1,33 @@
 using System.Collections.Generic;
 using Building.Buildables;
+using Data;
 using Enums;
 using Items;
 using UnityEngine;
-using UnityEngine.Localization.Settings;
 
 namespace Building {
     public class BananaGunGet : MonoBehaviour {
         [SerializeField] private GameObject moverTarget;
+        [SerializeField] private LayerMask aspirableLayerMask;
+
         private GameObject _targetedGameObject;
         
         private ItemType _targetType;
 
         private bool _isAspiring;
 
-        private Dictionary<AdvancementState, BuildableType> _buildableUnlockedByAdvancementState;
+        private DissolveMe dissolveClass;
+
+        private Dictionary<AdvancementState, BuildableType[]> _buildableUnlockedByAdvancementState;
+
+        private ScriptableObjectManager _scriptableObjectManager;
 
         private void Start() {
-            _buildableUnlockedByAdvancementState = new Dictionary<AdvancementState, BuildableType> {
-                { AdvancementState.GRAB_DEBRIS_ON_MAP, BuildableType.PLATEFORM },
-                { AdvancementState.GRAB_BANANAS, BuildableType.BANANA_DRYER }
+            _scriptableObjectManager = ObjectsReference.Instance.scriptableObjectManager;
+
+            _buildableUnlockedByAdvancementState = new Dictionary<AdvancementState, BuildableType[]> {
+                { AdvancementState.GRAB_DEBRIS_ON_MAP, new [] { BuildableType.PLATEFORM , BuildableType.FIRST_DOOR_LEFT, BuildableType.FIRST_DOOR_RIGHT, BuildableType.FIRST_CLOISON } },
+                { AdvancementState.GRAB_BANANAS, new [] { BuildableType.BANANA_DRYER } }
             };
         }
 
@@ -28,41 +36,52 @@ namespace Building {
             
             ObjectsReference.Instance.bananaGun.transform.LookAt(moverTarget.transform, Vector3.up);
 
-            if (Physics.Raycast(ObjectsReference.Instance.gameManager.cameraMain.transform.position, ObjectsReference.Instance.gameManager.cameraMain.transform.forward, out RaycastHit raycastHit, 100)) {
-                if (!raycastHit.transform.gameObject.CompareTag("Aspirables")) return;
+            if (Physics.Raycast(ObjectsReference.Instance.gameManager.cameraMain.transform.position, ObjectsReference.Instance.gameManager.cameraMain.transform.forward, out RaycastHit raycastHit, 100, layerMask:aspirableLayerMask)) {
+                _targetedGameObject = raycastHit.transform.gameObject;
 
-                if (raycastHit.transform.GetComponent<ItemThrowable>() != null) {
-                    ItemThrowable itemThrowable = raycastHit.transform.GetComponent<ItemThrowable>();
-                    _targetedGameObject = raycastHit.transform.gameObject;
+                var targetedGameObjectMesh = _targetedGameObject.GetComponent<MeshFilter>().sharedMesh; 
 
-                    if (itemThrowable.itemCategory == ItemCategory.BUILDABLE) {
-                        ObjectsReference.Instance.audioManager.PlayEffect(EffectType.DESINTEGRATION, 0);
-                        _targetedGameObject.GetComponent<Buildable>().DissolveMe();
-                    }
+                // Regime
+                if (targetedGameObjectMesh == _scriptableObjectManager._meshReferenceScriptableObject.matureBananaTree) {
+                    ObjectsReference.Instance.audioManager.PlayEffect(EffectType.GRAB_BANANAS, 0);
 
-                    if (itemThrowable.itemCategory == ItemCategory.REGIME) {
-                        ObjectsReference.Instance.audioManager.PlayEffect(EffectType.GRAB_BANANAS, 0);
+                    var regimeClass = _targetedGameObject.GetComponent<Regime>(); 
 
-                        var bananaType = _targetedGameObject.GetComponent<Regime>().bananasDataScriptableObject.itemType;
-                        var quantity = _targetedGameObject.GetComponent<Regime>().bananasDataScriptableObject.regimeQuantity;
+                    var bananaType = regimeClass.bananasDataScriptableObject.itemType;
+                    var quantity = regimeClass.bananasDataScriptableObject.regimeQuantity;
 
-                        ObjectsReference.Instance.inventory.AddQuantity(ItemCategory.BANANA, bananaType, quantity);
-                        
-                        _targetedGameObject.GetComponent<Regime>().GrabBananas();
-                        
-                        TryAddBlueprintByAdvancementState(AdvancementState.GRAB_BANANAS);
-                    }
+                    ObjectsReference.Instance.inventory.AddQuantity(ItemCategory.BANANA, bananaType, quantity);
+                    
+                    regimeClass.GrabBananas();
+                    
+                    TryAddBlueprintByAdvancementState(AdvancementState.GRAB_BANANAS);
+                }
 
-                    if (itemThrowable.itemType == ItemType.DEBRIS) {
-                        _targetedGameObject = raycastHit.transform.gameObject;
-                        var debrisClass = _targetedGameObject.GetComponent<Debris>(); 
-                        MapItems.Instance.uiCanvasItemsHiddableManager.RemoveCanva(_targetedGameObject.GetComponentInChildren<Canvas>());
+                else {
+                    if (_targetedGameObject.GetComponent<DissolveMe>() == null) {
+                        // Buildable
+                        if (_scriptableObjectManager.IsBuildable(targetedGameObjectMesh)) {
+                            dissolveClass = _targetedGameObject.AddComponent<DissolveMe>();
+                            ObjectsReference.Instance.audioManager.PlayEffect(EffectType.DESINTEGRATION, 0);
+                            dissolveClass.Dissolve(ItemCategory.BUILDABLE,
+                                _scriptableObjectManager.GetBuildableTypeByMesh(targetedGameObjectMesh), ItemType.EMPTY);
+                        }
 
-                        ObjectsReference.Instance.audioManager.PlayEffect(EffectType.DESINTEGRATION, 0);
-                        
-                        debrisClass.DissolveMe();
+                        else {
+                            // Debris
+                            
+                            if (_scriptableObjectManager.IsDebris(targetedGameObjectMesh)) {
+                                _targetedGameObject = raycastHit.transform.gameObject;
+                                MapItems.Instance.uiCanvasItemsHiddableManager.RemoveCanva(_targetedGameObject
+                                    .GetComponentInChildren<Canvas>());
 
-                        TryAddBlueprintByAdvancementState(AdvancementState.GRAB_DEBRIS_ON_MAP);
+                                TryAddBlueprintByAdvancementState(AdvancementState.GRAB_DEBRIS_ON_MAP);
+
+                                dissolveClass = _targetedGameObject.AddComponent<DissolveMe>();
+                                ObjectsReference.Instance.audioManager.PlayEffect(EffectType.DESINTEGRATION, 0);
+                                dissolveClass.Dissolve(ItemCategory.RAW_MATERIAL, BuildableType.EMPTY, ItemType.DEBRIS);
+                            }
+                        }
                     }
                 }
             }
@@ -76,16 +95,15 @@ namespace Building {
 
         public void CancelGet() {
             _isAspiring = false;
-            
             ObjectsReference.Instance.audioManager.StopAudioSource(AudioSourcesType.EFFECT);
-
-            ObjectsReference.Instance.bananaGun.CancelMover();
         }
 
         private void TryAddBlueprintByAdvancementState(AdvancementState advancementState) {
             if (!ObjectsReference.Instance.gameData.bananaManSavedData.playerAdvancements.Contains(advancementState)) {
                 ObjectsReference.Instance.gameData.bananaManSavedData.playerAdvancements.Add(advancementState);
-                ObjectsReference.Instance.uiBlueprints.SetVisible(_buildableUnlockedByAdvancementState[advancementState]);
+                foreach (var buildableType in _buildableUnlockedByAdvancementState[advancementState]) {
+                    ObjectsReference.Instance.uiBlueprints.SetVisible(buildableType);
+                }
             }
         }
     }

@@ -15,7 +15,7 @@ namespace Game.BananaCannonMiniGame {
         }
         
         private void SpawnDebrisOnMap() {
-            BananaCannonMiniGameManager.Instance.SpawnDebrisOnMap(transform.position);
+            BananaCannonMiniGameManager.Instance.RefreshDebrisQuantity(transform.position);
             Destroy(gameObject);
         }
     }

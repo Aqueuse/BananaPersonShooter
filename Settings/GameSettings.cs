@@ -181,13 +181,13 @@ namespace Settings {
         public void SetResolution(int gameResolution) {
             switch (gameResolution) {
                 case 0:
-                    Screen.SetResolution(1024, 768, _fullScreenMode, Screen.currentResolution.refreshRateRatio);
+                    Screen.SetResolution(1024, 768, _fullScreenMode, Screen.currentResolution.refreshRate);
                     break;
                 case 1:
-                    Screen.SetResolution(1280, 720, _fullScreenMode, Screen.currentResolution.refreshRateRatio);
+                    Screen.SetResolution(1280, 720, _fullScreenMode, Screen.currentResolution.refreshRate);
                     break;
                 case 2:
-                    Screen.SetResolution(1920, 1080, _fullScreenMode, Screen.currentResolution.refreshRateRatio);
+                    Screen.SetResolution(1920, 1080, _fullScreenMode, Screen.currentResolution.refreshRate);
                     break;
             }
             prefs.SetInt("resolution", gameResolution);

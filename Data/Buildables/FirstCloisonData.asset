@@ -10,23 +10,20 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6e11e44741351774ca1f8261e4d989f1, type: 3}
-  m_Name: platformData
+  m_Name: FirstCloisonData
   m_EditorClassIdentifier: 
   itemType: 0
   itemCategory: 1
-  buildableType: 0
-  itemName: plateform
-  itemSprite: {fileID: 21300000, guid: 3728d82037057e341bbbd20d9d44c435, type: 3}
+  buildableType: 4
+  itemName: cloison_simple
+  itemSprite: {fileID: 21300000, guid: 7ab4e301d4aca9645b2586e1baa9ed6f, type: 3}
   itemDescription:
-  - a plateform than can be feeded with bananas
-  - "une plateforme qui peut \xEAtre aliment\xE9e en bananes"
+  - a simple wall
+  - un mur tout simple
   rawMaterialsWithQuantity:
     list:
     - key: 19
-      value: 2
-    - key: 21
-      value: 2
+      value: 5
     keyCollision: 0
-  buildablePrefab: {fileID: 3045356508486292204, guid: 0630715419ab7f249ba73f9625dea7fb, type: 3}
-  mustSnap: 0
-  buildableGridSize: 3
+  buildablePrefab: {fileID: 7031273002014940532, guid: fdd9a9276ba792a449fe7f0af57b8d22, type: 3}
+  mustSnap: 1

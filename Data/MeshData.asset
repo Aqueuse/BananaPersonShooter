@@ -1,0 +1,120 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 38537577b946d264eb08b0e0655684c8, type: 3}
+  m_Name: MeshData
+  m_EditorClassIdentifier: 
+  buildableTypeByMesh:
+    list:
+    - key: {fileID: 4406489637720207892, guid: e41a84e117fe0e84aa1777ae5325ec5b, type: 3}
+      value: 0
+    - key: {fileID: 1253886969902792521, guid: e190571eff76f3a4b8798951c997608c, type: 3}
+      value: 1
+    - key: {fileID: 2576167635766237099, guid: 16759d6534ad69143a1c562db3d85f0b, type: 3}
+      value: 2
+    - key: {fileID: -6109902856652777379, guid: 19c0116b99684d548974b6451d8c7a9b, type: 3}
+      value: 3
+    - key: {fileID: 6569083057910171247, guid: 58139aac25324be4b9228a8c7f6b6866, type: 3}
+      value: 4
+    - key: {fileID: 7027302762433730867, guid: c4a054841e876ee41a065b0791d0f645, type: 3}
+      value: 5
+    keyCollision: 0
+  debrisPrefabIndexByMesh:
+    list:
+    - key: {fileID: 6706821472280100530, guid: 887f23c78ac950046af92281f5a1b08b, type: 3}
+      value: 0
+    - key: {fileID: -65395533742008503, guid: 887f23c78ac950046af92281f5a1b08b, type: 3}
+      value: 1
+    - key: {fileID: 2132077362016667005, guid: 887f23c78ac950046af92281f5a1b08b, type: 3}
+      value: 2
+    - key: {fileID: 5743414289550474031, guid: 887f23c78ac950046af92281f5a1b08b, type: 3}
+      value: 3
+    - key: {fileID: 1430512683316738043, guid: 887f23c78ac950046af92281f5a1b08b, type: 3}
+      value: 4
+    - key: {fileID: -2326956799095521501, guid: 887f23c78ac950046af92281f5a1b08b, type: 3}
+      value: 5
+    - key: {fileID: 6861924820468139030, guid: 887f23c78ac950046af92281f5a1b08b, type: 3}
+      value: 6
+    - key: {fileID: -3330749993263271370, guid: 887f23c78ac950046af92281f5a1b08b, type: 3}
+      value: 7
+    - key: {fileID: -4453356896587114868, guid: 887f23c78ac950046af92281f5a1b08b, type: 3}
+      value: 8
+    - key: {fileID: -5756948355450429092, guid: 887f23c78ac950046af92281f5a1b08b, type: 3}
+      value: 9
+    - key: {fileID: -1492440335404072977, guid: 887f23c78ac950046af92281f5a1b08b, type: 3}
+      value: 10
+    keyCollision: 0
+  bananasDataScriptableObject:
+    list:
+    - key: 1
+      value: {fileID: 11400000, guid: 6ee2d98cd3dcd9647a2668efe34a40cf, type: 2}
+    - key: 2
+      value: {fileID: 11400000, guid: ac5c2f5ae520200469b2d8f932079c3e, type: 2}
+    - key: 3
+      value: {fileID: 11400000, guid: 49e145d6f8c54314d8612c2cfe3fc9b7, type: 2}
+    - key: 4
+      value: {fileID: 11400000, guid: fbdea4ee522232544a53d6cc909f2728, type: 2}
+    - key: 5
+      value: {fileID: 11400000, guid: c82cfb53027c0f14a8698eccc8560c4c, type: 2}
+    - key: 6
+      value: {fileID: 11400000, guid: 25b56569eee1b66479c10b6b2155f044, type: 2}
+    - key: 7
+      value: {fileID: 11400000, guid: 9d1a9fe6092029044a493dcfd19a12fd, type: 2}
+    - key: 8
+      value: {fileID: 11400000, guid: a746fed08b260144d80cbac70280c528, type: 2}
+    - key: 9
+      value: {fileID: 11400000, guid: 3742e79ecbcffcc458e49727ed209b6c, type: 2}
+    - key: 10
+      value: {fileID: 11400000, guid: 0001133bfe35d4c419feeb22ce85c867, type: 2}
+    - key: 11
+      value: {fileID: 11400000, guid: 6bc4f85598314934f80b29c7c356e034, type: 2}
+    - key: 12
+      value: {fileID: 11400000, guid: 7dd7de2bc2727c245b17ed4085684d05, type: 2}
+    - key: 13
+      value: {fileID: 11400000, guid: 4df3d2cdc88e4884db72d2daf62e742b, type: 2}
+    - key: 14
+      value: {fileID: 11400000, guid: 94278f7f133511749a9bfa2fcdb7c23e, type: 2}
+    - key: 15
+      value: {fileID: 11400000, guid: 26e9a392cdfc13d43b429e0fb9437d48, type: 2}
+    - key: 16
+      value: {fileID: 11400000, guid: c19717ece404cce4cba4f06399764d78, type: 2}
+    - key: 17
+      value: {fileID: 11400000, guid: 61e0d2a93b2f9a241a901e776267942d, type: 2}
+    keyCollision: 0
+  buildablesDataScriptableObject:
+    list:
+    - key: 0
+      value: {fileID: 11400000, guid: 3e10ce84627d20f45abaec480164343f, type: 2}
+    - key: 1
+      value: {fileID: 11400000, guid: dd912d8aa9ba03a448f781baa2ec0739, type: 2}
+    - key: 2
+      value: {fileID: 11400000, guid: a3372a8690741184099399f3d7d7edd0, type: 2}
+    - key: 3
+      value: {fileID: 11400000, guid: bc1c6d7b6af61e24f864693a79a0819a, type: 2}
+    - key: 4
+      value: {fileID: 11400000, guid: 91a9a57e9332db240916188b5ee89b4c, type: 2}
+    - key: 5
+      value: {fileID: 11400000, guid: 951c8da1d85b9634a9d57dc6e85b43f7, type: 2}
+    keyCollision: 0
+  rawMaterialDataScriptableObjects:
+    list:
+    - key: 19
+      value: {fileID: 11400000, guid: d14e403b3094f5c429b243314cf49b91, type: 2}
+    - key: 20
+      value: {fileID: 11400000, guid: c952d96f9612ca7468daa21b69880c7c, type: 2}
+    - key: 21
+      value: {fileID: 11400000, guid: 5736b26edab4ca44d953de06357d6dfa, type: 2}
+    - key: 22
+      value: {fileID: 11400000, guid: 74668e5c315d9d94ab8aaf0693fed5b8, type: 2}
+    - key: 23
+      value: {fileID: 11400000, guid: 9d6fb37980769de4aa2562c46fe6478c, type: 2}
+    keyCollision: 0
+  matureBananaTree: {fileID: -6874972058184434478, guid: f22c08fb5dcce1545bfad73baf26b373, type: 3}

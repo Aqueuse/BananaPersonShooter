@@ -4,10 +4,9 @@ using UnityEngine;
 namespace Building {
     public class Ghost : MonoBehaviour {
         public BuildableDataScriptableObject buildableDataScriptableObject;
-
+        
         private MeshRenderer _meshRenderer;
         private Material _ghostMaterial;
-
         
         private Material[] _buildableMaterials;
         private GhostState _ghostState;
@@ -20,7 +19,7 @@ namespace Building {
 
             _ghostState = GhostState.VALID;
         }
-
+        
         public void SetGhostState(GhostState newGhostState) {
             _ghostState = newGhostState;
             _ghostMaterial.color = ObjectsReference.Instance.ghostsReference.GetColorByGhostState(newGhostState);

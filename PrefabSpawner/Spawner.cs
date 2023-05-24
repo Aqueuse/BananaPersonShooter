@@ -1,4 +1,3 @@
-using Building;
 using Random = UnityEngine.Random;
 using UnityEngine;
 
@@ -35,18 +34,14 @@ namespace PrefabSpawner {
                         
                         var spawnedPrefab = Instantiate(prefabs[prefabIndex], raycastHit.point, Quaternion.identity, deplacables.transform);
                         spawnedPrefab.transform.rotation = new Quaternion(0, Random.Range(-1, 1), 0, 1f);
-
-                        if (spawnedPrefab.GetComponent<Building.Debris>() != null) {
-                            spawnedPrefab.GetComponent<Building.Debris>().prefabIndex = prefabIndex;
-                        }
-
+                        
                         _treesCounter++;
                     }
                 }
             }
             Debug.Log("spawned "+_treesCounter);
         }
-        
+
         private Vector3 RandomVector3(Vector3 min, Vector3 max) {
             return new Vector3(Random.Range(min.x, max.x), Random.Range(min.y, max.y), Random.Range(min.z, max.z));
         }

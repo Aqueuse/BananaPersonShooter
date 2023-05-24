@@ -2,6 +2,7 @@ using System.Collections;
 using Building;
 using Enums;
 using Player;
+using Settings;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -15,8 +16,11 @@ namespace Game {
         private Transform _bananaManTransform;
         private Vector3 _bananaManRotation;
 
+        private GameSettings _gameSettings;
+
         private void Start() {
             _bananaManTransform = ObjectsReference.Instance.bananaMan.transform;
+            _gameSettings = ObjectsReference.Instance.gameSettings;
         }
 
         private IEnumerator LoadScene(string sceneName, SpawnPoint spawnPoint, bool isTeleporting) {
@@ -83,19 +87,20 @@ namespace Game {
 
                 else {
                     ObjectsReference.Instance.gameData.bananaManSavedData.lastMap = sceneName;
+                    var currentMap = ObjectsReference.Instance.mapsManager.currentMap; 
 
-                    if (ObjectsReference.Instance.mapsManager.currentMap.activeMonkeyType != MonkeyType.NONE) {
-                        ObjectsReference.Instance.mapsManager.currentMap.RecalculateHappiness();
-                        MapItems.Instance.uiCanvasItemsHiddableManager.SetMonkeysVisibility(ObjectsReference.Instance.gameSettings.isShowingMonkeys);
+                    if (currentMap.activeMonkeyType != MonkeyType.NONE) {
+                        currentMap.RecalculateHappiness();
+                        MapItems.Instance.uiCanvasItemsHiddableManager.SetMonkeysVisibility(_gameSettings.isShowingMonkeys);
                     }
 
-                    if (ObjectsReference.Instance.mapsManager.currentMap.hasDebris) {
-                        if (ObjectsReference.Instance.mapsManager.currentMap.isDiscovered) ObjectsReference.Instance.gameLoad.RespawnDebrisOnMap();
-                        MapItems.Instance.uiCanvasItemsHiddableManager.SetDebrisCanvasVisibility(ObjectsReference.Instance.gameSettings.isShowingDebris);
+                    if (currentMap.hasDebris) {
+                        if (currentMap.isDiscovered) ObjectsReference.Instance.gameLoad.RespawnDebrisOnMap();
+                        MapItems.Instance.uiCanvasItemsHiddableManager.SetDebrisCanvasVisibility(_gameSettings.isShowingDebris);
                     }
 
-                    if (ObjectsReference.Instance.mapsManager.currentMap.hasBananaTree) {
-                        MapItems.Instance.uiCanvasItemsHiddableManager.SetBananaTreeVisibility(ObjectsReference.Instance.gameSettings.isShowingBananaTrees); 
+                    if (currentMap.hasBananaTree) {
+                        MapItems.Instance.uiCanvasItemsHiddableManager.SetBananaTreeVisibility(_gameSettings.isShowingBananaTrees); 
                     }
                     
                     ObjectsReference.Instance.gameLoad.RespawnPlateformsOnMap();

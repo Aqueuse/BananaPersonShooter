@@ -4,7 +4,6 @@ using UnityEngine;
 namespace Building {
     public enum GhostState {
         UNBUILDABLE,
-        UNVALID,
         VALID
     }
 

@@ -102,8 +102,8 @@ namespace UI {
         }
         
         public void Show_Credits() {
-            canvasGroupsByUICanvasType[UICanvasGroupType.CREDITS].GetComponent<InfinityScroll.InfinityScroll>().enabled = true;
-            canvasGroupsByUICanvasType[UICanvasGroupType.CREDITS].GetComponent<InfinityScroll.InfinityScroll>().value = 0.13f;
+            canvasGroupsByUICanvasType[UICanvasGroupType.CREDITS].GetComponent<InfinityScroll>().enabled = true;
+            canvasGroupsByUICanvasType[UICanvasGroupType.CREDITS].GetComponent<InfinityScroll>().value = 0.13f;
             
             Set_active(UICanvasGroupType.LOAD, false);
             Set_active(UICanvasGroupType.OPTIONS, false);
@@ -171,7 +171,7 @@ namespace UI {
             interfaceAnimator.SetBool(ShowInventoryID, false);
         }
 
-        private bool Is_Interface_Visible() {
+        public bool Is_Interface_Visible() {
             return interfaceAnimator.GetBool(ShowInventoryID);
         }
         

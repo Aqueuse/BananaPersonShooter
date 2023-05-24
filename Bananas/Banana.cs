@@ -17,7 +17,7 @@ namespace Bananas {
             }
 
             else {
-                if (collision.gameObject.layer == LayerMask.NameToLayer("Terrain")) {  
+                if (collision.gameObject.layer == LayerMask.NameToLayer("Default")) {  
                     // trasnformation en peau de banane
                     transform.gameObject.GetComponent<MeshRenderer>().enabled = false;
                     bananaSkin.SetActive(true);

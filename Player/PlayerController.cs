@@ -1,5 +1,4 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Player {
     public class PlayerController : MonoBehaviour {
@@ -11,7 +10,8 @@ namespace Player {
         private CapsuleCollider _capsuleCollider;
 
         private RaycastHit _slopeHit;
-
+        private RaycastHit hitTest;
+        
         public float jumpForce;
 
         public float speed;
@@ -34,7 +34,7 @@ namespace Player {
         private Vector3 _cameraForward;
         private float _inputAngle;
 
-        private readonly float _maxDistanceToCollide = 0.3f;
+        private readonly float _maxDistanceToCollide = 0.2f;
         private Vector3 _movement;
         private Vector3 _newPosition;
         private float _slopeAngle;
@@ -54,7 +54,7 @@ namespace Player {
 
             _damageCount = 0;
 
-            _rigidbody.maxLinearVelocity = 40;
+            // TODO : _rigidbody.maxLinearVelocity = 40;
         }
         
         private void FixedUpdate() {
@@ -95,11 +95,11 @@ namespace Player {
             if (IsOnSlope()) _movement = GetSlopeMoveDirection(_movement);
             
             // collision prevention
-            _isHit = _rigidbody.SweepTest(_movement.normalized, out RaycastHit hit, _maxDistanceToCollide);
+            _isHit = _rigidbody.SweepTest(_movement.normalized, out hitTest, _maxDistanceToCollide);
             
-            if (_isHit) {
+            if (_isHit && !hitTest.collider.isTrigger) {
                 // Vérifie si la normale de la collision est orientée vers le haut (collide contre le sol ne veux rien dire)
-                _newPosition = hit.normal.y > 0.5f ? _rigidbody.position + _movement : _rigidbody.position;
+                _newPosition = hitTest.normal.y > 0.5f ? _rigidbody.position + _movement : _rigidbody.position;
             }
             else {
                 _newPosition = _rigidbody.position + _movement;

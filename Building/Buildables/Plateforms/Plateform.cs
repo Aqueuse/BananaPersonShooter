@@ -1,8 +1,9 @@
 using Bananas;
+using Building.Plateforms;
 using Enums;
 using UnityEngine;
 
-namespace Building.Plateforms {
+namespace Building.Buildables.Plateforms {
     public class Plateform : MonoBehaviour {
         private Material _normalPlateformMaterial;
         
