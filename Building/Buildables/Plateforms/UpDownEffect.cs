@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Building.Plateforms {
+namespace Building.Buildables.Plateforms {
     public class UpDownEffect : MonoBehaviour {
         public float force;
         public bool isActive;

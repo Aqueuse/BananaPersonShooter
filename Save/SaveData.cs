@@ -1,14 +1,15 @@
 using System.Collections.Generic;
 using System.IO;
-using Enums;
 using Game;
+using JetBrains.Annotations;
 using Newtonsoft.Json;
+using PeterO.Cbor;
 using Save.Templates;
 using UnityEngine;
 
 namespace Save {
     public class SaveData : MonoBehaviour {
-        private string[] _debrisDatas;
+        private string[] _buildablesDatas;
         private string[] _plateformsDatas;
 
         private string _appPath;
@@ -111,51 +112,39 @@ namespace Save {
             File.WriteAllBytes(path, byteArray);
             screenshotCamera.targetTexture = null;
         }
-        
-        public void SaveMapDebrisDataByUuid(Vector3[] debrisPosition, Quaternion[] debrisRotation, int[] debrisIndex, string mapName, string saveUuid) {
+
+        public void SaveDataCBOR(
+            string mapName,  
+            List<Vector3> aspirablesPositions, 
+            List<Quaternion> aspirablesRotations,
+            string saveUuid,
+            
+            List<ItemCategory> aspirablesCategories,
+            [NotNull] List<int> debrisPrefabsIndex,
+            [NotNull] List<BuildableType> buildableTypes,
+            [NotNull] List<ItemType> itemTypes
+        ) {
+
             var savePath = Path.Combine(_savesPath, saveUuid);
             var mapDataSavesPath = Path.Combine(savePath, "MAPDATA");
-            
-            _debrisDatas = new string[debrisPosition.Length];
 
-            for (var i = 0; i < debrisPosition.Length; i++) {
-                _debrisDatas[i] = debrisPosition[i] + "/" + debrisRotation[i] + "/" + debrisIndex[i];
+            _buildablesDatas = new string[aspirablesCategories.Count];
+            
+            for (var i = 0; i < _buildablesDatas.Length; i++) {
+                _buildablesDatas[i] = aspirablesPositions[i] + "/" +
+                                      aspirablesRotations[i] + "/" +
+                                      aspirablesCategories[i] + "/" +
+                                      debrisPrefabsIndex[i] + "/" +
+                                      buildableTypes[i] + "/" +
+                                      itemTypes[i];
             }
 
-            if (_debrisDatas.Length > 0) {
-                string savefilePath = Path.Combine(mapDataSavesPath, mapName+"_debris.data");
+            var cbor = CBORObject.NewArray();
             
-                using StreamWriter streamWriter = new StreamWriter(savefilePath, append:false);
-            
-                foreach (var debrisData in _debrisDatas) {
-                    streamWriter.WriteLine(debrisData);
-                }
-            
-                streamWriter.Flush();
-            }
-        }
+            cbor.Add(mapName, _buildablesDatas);
 
-        public void SaveMapPlateformsDataByUuid(List<Vector3> plateformsPosition, List<ItemType> plateformTypes, string mapName, string saveUuid) {
-            var savePath = Path.Combine(_savesPath, saveUuid);
-            var mapDataSavesPath = Path.Combine(savePath, "MAPDATA");
-            
-            _plateformsDatas = new string[plateformsPosition.Count];
-            
-            for (var i = 0; i < plateformsPosition.Count; i++) {
-                _plateformsDatas[i] = plateformsPosition[i] + "/" + plateformTypes[i];
-            }
-
-            if (_plateformsDatas.Length > 0) {
-                string savefilePath = Path.Combine(mapDataSavesPath, mapName+"_plateforms.data");
-
-                using StreamWriter streamWriter = new StreamWriter(savefilePath, append:false);
-
-                foreach (var plateformsData in _plateformsDatas) {
-                    streamWriter.WriteLine(plateformsData);
-                }
-
-                streamWriter.Flush();
-            }
+            using var stream = new FileStream(mapDataSavesPath, FileMode.Create);
+            cbor.WriteTo(stream);
         }
     }
 }

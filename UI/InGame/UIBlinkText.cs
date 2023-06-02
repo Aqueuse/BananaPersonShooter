@@ -1,7 +1,7 @@
 using TMPro;
 using UnityEngine;
 
-namespace UI {
+namespace UI.InGame {
     public class UIBlinkText : MonoBehaviour {
         private TextMeshProUGUI _textMeshProUGUI;
         private bool _isVisible = true;

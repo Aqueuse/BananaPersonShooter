@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 
 namespace Player {
-	public class PlayerAnimationsBehavior : StateMachineBehaviour {
+	public class PlayerAnimationsBehaviour : StateMachineBehaviour {
 		public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
 			if (stateInfo.IsTag("roll")) {
 				ObjectsReference.Instance.bananaMan.GetComponent<PlayerController>().isRolling = false;

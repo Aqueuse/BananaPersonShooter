@@ -1,5 +1,4 @@
 using Data.Bananas;
-using Enums;
 using Game.BananaCannonMiniGame.projectilesBehaviours;
 using UnityEngine;
 

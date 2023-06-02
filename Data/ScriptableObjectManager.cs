@@ -1,5 +1,4 @@
 using Data.Bananas;
-using Enums;
 using UnityEngine;
 
 namespace Data {
@@ -47,6 +46,10 @@ namespace Data {
 
         public bool IsDebris(Mesh sharedMesh) {
             return _meshReferenceScriptableObject.debrisPrefabIndexByMesh.ContainsKey(sharedMesh);
+        }
+
+        public bool isPlateforme(int prefabIndex) {
+            return _meshReferenceScriptableObject.plateformeTypeByPrefabIndex.ContainsKey(prefabIndex);
         }
 
         public BuildableType GetBuildableTypeByMesh(Mesh sharedMesh) {

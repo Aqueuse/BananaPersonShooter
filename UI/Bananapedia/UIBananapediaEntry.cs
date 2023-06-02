@@ -3,7 +3,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace UI {
+namespace UI.Bananapedia {
     public class UIBananapediaEntry : MonoBehaviour {
         [SerializeField] private BananasDataScriptableObject bananasDataScriptableObject;
         [SerializeField] private Image image;

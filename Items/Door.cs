@@ -1,5 +1,4 @@
-﻿using Enums;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Items {
     public class Door : MonoBehaviour {

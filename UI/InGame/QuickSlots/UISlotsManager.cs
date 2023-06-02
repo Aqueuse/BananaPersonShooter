@@ -1,12 +1,10 @@
 ﻿using System.Collections.Generic;
-using Enums;
 using UnityEngine;
 
 namespace UI.InGame.QuickSlots {
     public class UISlotsManager : MonoBehaviour {
         public List<UISlot> uiSlotsScripts;
-    
-        public int selectedSlotIndex = 2;
+        public int selectedSlotIndex;
         
         public void RefreshQuantityInQuickSlot(ItemCategory itemCategory, ItemType itemType = ItemType.EMPTY) {
             foreach (var uiSlotsScript in uiSlotsScripts) {
@@ -70,11 +68,7 @@ namespace UI.InGame.QuickSlots {
         public void AssignToSelectedSlot(ItemCategory itemCategory, ItemType itemType = ItemType.EMPTY, BuildableType buildableType = BuildableType.EMPTY) {
             // if the item is already present in the quickslots, empty the last slot where it was to prevent duplicates
             foreach (var uiSlot in uiSlotsScripts) {
-                if (itemCategory == ItemCategory.BUILDABLE && uiSlot.buildableType == buildableType) {
-                    uiSlot.EmptySlot();
-                }
-
-                if (itemCategory != ItemCategory.BUILDABLE && uiSlot.itemType == itemType) {
+                if (uiSlot.itemType == itemType) {
                     uiSlot.EmptySlot();
                 }
             }

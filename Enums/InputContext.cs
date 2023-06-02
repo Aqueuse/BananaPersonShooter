@@ -1,6 +1,4 @@
-﻿namespace Enums {
-    public enum InputContext {
-        GAME,
-        UI
-    }
+﻿public enum InputContext {
+    GAME,
+    UI
 }

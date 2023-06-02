@@ -58,8 +58,8 @@ namespace Player {
         }
         
         private void FixedUpdate() {
-            if (!ObjectsReference.Instance.gameManager.isGamePlaying || !canMove) return;
-            
+            if (!ObjectsReference.Instance.gameManager.isGamePlaying) return;
+
             // ugly but opti
             _cameraRotation.x = 0;
             _cameraRotation.y = mainCameraTransform.transform.rotation.y;
@@ -73,6 +73,7 @@ namespace Player {
                 
             _rawInputMovement = Vector3.ClampMagnitude(_rawInputMovement, 1); // clamp the speed in diagonal
             
+            /////// ROTATION ///////
             _inputAngle = Vector2.SignedAngle(Vector2.up, new Vector2(-_rawInputMovement.x, _rawInputMovement.z));
 
             if (!ObjectsReference.Instance.bananaMan.isGrabingBananaGun) {
@@ -82,6 +83,9 @@ namespace Player {
                 transform.rotation = _cameraRotation;
             }
             
+            if (!canMove) return;
+            
+            ////// MOVEMENT ///////
             // If the input is null, stop the movement
             if (_rawInputMovement is { x: 0, z: 0 }) {
                 _movement = Vector3.zero;
@@ -141,12 +145,11 @@ namespace Player {
         }
 
         public void PlayerRoll() {
-            if (_isGrounded && !ObjectsReference.Instance.bananaMan.isGrabingBananaGun) {
+            if (_isGrounded && !ObjectsReference.Instance.bananaMan.isGrabingBananaGun && isRolling == false) {
                 if (_rawInputMovement.z != 0 || _rawInputMovement.x != 0) {
-                    _tpsPlayerAnimatorScript.Roll();
+                     _tpsPlayerAnimatorScript.Roll();
                     _capsuleCollider.height = 0.90f;
                     _capsuleCollider.center = new Vector3(-0.01361084f, 0.44f, 1.027142e-11f);
-                    isRolling = true;
                 }
             }
         }
@@ -158,7 +161,13 @@ namespace Player {
         public void PlayerStopSprint() {
             speed = BaseMovementSpeed;
         }
-        
+
+        public void StopPlayer() {
+            canMove = false;
+            speed = 0;
+            _tpsPlayerAnimatorScript.UpdateMovementAnimation(0, 0);
+        }
+
         public void ResetPlayer() {
             speed = BaseMovementSpeed;
             _tpsPlayerAnimatorScript.UpdateMovementAnimation(0, 0);

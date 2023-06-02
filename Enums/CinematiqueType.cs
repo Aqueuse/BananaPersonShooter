@@ -1,6 +1,4 @@
-namespace Enums {
-    public enum CinematiqueType {
-        NEW_GAME,
-        DEATH
-    }
+public enum CinematiqueType {
+    NEW_GAME,
+    DEATH
 }

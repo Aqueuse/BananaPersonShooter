@@ -1,5 +1,4 @@
 using Data.Bananas;
-using Enums;
 using UnityEngine;
 
 namespace Building {
@@ -35,7 +34,7 @@ namespace Building {
         public void ThrowBanana() {
             if (ObjectsReference.Instance.inventory.GetQuantity(ObjectsReference.Instance.bananaMan.activeItemType) <= 0) return;
             
-            if (ObjectsReference.Instance.gameActions.leftClickActivated || ObjectsReference.Instance.inputManager.shootGameActions.rightTriggerActivated) {
+            if (ObjectsReference.Instance.gameActions.leftClickActivated || ObjectsReference.Instance.gameActions.rightTriggerActivated) {
                 banana = Instantiate(weaponsGameObjects[ObjectsReference.Instance.bananaMan.activeItem.itemType],
                     launchingBananaPoint.transform.position, Quaternion.identity, null);
 
@@ -43,7 +42,7 @@ namespace Building {
                 banana.transform.SetParent(null);
 
                 // throw it with good speed forward the player
-                banana.GetComponent<Rigidbody>().AddForce(ObjectsReference.Instance.gameManager.cameraMain.transform.forward * 200, ForceMode.Impulse);
+                banana.GetComponent<Rigidbody>().AddForce(launchingBananaPoint.transform.forward * 200, ForceMode.Impulse);
                 ObjectsReference.Instance.audioManager.PlayEffect(EffectType.THROW_BANANA, 0);
 
                 // ammo reduce

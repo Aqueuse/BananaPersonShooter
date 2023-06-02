@@ -1,24 +1,28 @@
 ﻿using Building.Buildables.DoorLeft;
 using Building.Buildables.DoorRight;
 using Dialogues;
-using Enums;
 using Game.BananaCannonMiniGame;
 using Game.CommandRoomPanelControls;
 using UnityEngine;
 
 namespace Items {
     public class ItemsManager : MonoBehaviour {
-        private GameObject _interactedObject;
         [SerializeField] private LayerMask itemsLayerMask;
-
+        [SerializeField] private Transform grabbableTarget;
+        
+        public bool isGrabbing;
+        private Vector3 grabbablePosition;
+        private Rigidbody grabbableRigidbody;
+        
+        private GameObject _interactedObject;
         private ItemStaticType _interactedItemStaticType;
-
+        
         private void Update() {
-            if (!ObjectsReference.Instance.gameManager.isGamePlaying || ObjectsReference.Instance.gameManager.gameContext != GameContext.IN_GAME) return;
+            if (!ObjectsReference.Instance.gameManager.isGamePlaying || ObjectsReference.Instance.gameManager.gameContext != GameContext.IN_GAME || isGrabbing) return;
 
             if (Physics.Raycast(transform.position, transform.forward,  out RaycastHit raycastHit, 10, itemsLayerMask)) {
+                if (_interactedObject != null) _interactedObject.GetComponent<ItemStatic>().Desactivate(); // magic ( ͡• ͜ʖ ͡• )
                 _interactedObject = raycastHit.transform.gameObject;
-
                 _interactedObject.GetComponent<ItemStatic>().Activate();
             }
             else {
@@ -30,11 +34,17 @@ namespace Items {
             }
         }
 
-        public void Validate() {
-            if (_interactedObject != null) {
-                ItemStaticType itemStaticType = _interactedObject.GetComponent<ItemStatic>().itemStaticType;
+        private void FixedUpdate() {
+            if (isGrabbing) {
+                grabbableRigidbody.velocity = (grabbableTarget.position - _interactedObject.transform.position) * 10;
+            }
+        }
 
-                switch (itemStaticType) {
+        public void Validate() {
+            if (_interactedObject != null && !isGrabbing) {
+                _interactedItemStaticType = _interactedObject.GetComponent<ItemStatic>().itemStaticType;
+
+                switch (_interactedItemStaticType) {
                     case ItemStaticType.DOOR_BEETWEEN_LEVELS:
                         ObjectsReference.Instance.audioManager.PlayEffect(EffectType.OPEN_DOOR, 0);
 
@@ -50,7 +60,7 @@ namespace Items {
                         ObjectsReference.Instance.bananaGun.bananaGunInBack.SetActive(true);
                         // TODO : animation take banana gun
                         ObjectsReference.Instance.gameData.bananaManSavedData.playerAdvancements.Add(AdvancementState.GET_BANANAGUN);
-                        CommandRoomControlPanelsManager.Instance.SetBananaGunVisibility(false);
+                        _interactedObject.SetActive(false);
                         ObjectsReference.Instance.audioManager.PlayEffect(EffectType.GRAB_BANANAS, 0);
                         break;
                     case ItemStaticType.COMMAND_ROOM_PANEL:
@@ -69,5 +79,35 @@ namespace Items {
                 }
             }
         }
-    }
+
+        public void Grab() {
+            if (_interactedObject != null) {
+                if (_interactedObject.GetComponent<ItemStatic>().itemStaticType == ItemStaticType.GRABBABLE_PIECE) {
+                    grabbableRigidbody = _interactedObject.GetComponent<Rigidbody>();
+                    grabbableRigidbody.useGravity = false;
+                    
+                    _interactedObject.GetComponent<ItemStatic>().Desactivate();
+
+                    isGrabbing = true;
+                }
+
+                // move the object in front of camera
+            }
+        }
+
+        public void Release() {
+            // let the object fall
+            if (_interactedObject != null) {
+                if (_interactedObject.GetComponent<ItemStatic>().itemStaticType == ItemStaticType.GRABBABLE_PIECE) {
+                    grabbableRigidbody = _interactedObject.GetComponent<Rigidbody>();
+                    grabbableRigidbody.useGravity = true;
+                    grabbableRigidbody.velocity = Vector3.zero;
+
+                    _interactedObject.GetComponent<ItemStatic>().Desactivate();
+                    _interactedObject = null;
+                    isGrabbing = false;
+                }
+            }
+        }
+    } 
 }

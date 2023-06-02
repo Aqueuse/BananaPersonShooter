@@ -1,6 +1,4 @@
-﻿namespace Enums {
-    public enum MonkeyType {
-        NONE,
-        KELSAIK
-    }
+﻿public enum MonkeyType {
+    NONE,
+    KELSAIK
 }

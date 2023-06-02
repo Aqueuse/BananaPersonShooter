@@ -4,13 +4,13 @@ using UnityEngine;
 namespace Building {
     public class Ghost : MonoBehaviour {
         public BuildableDataScriptableObject buildableDataScriptableObject;
-        
+
         private MeshRenderer _meshRenderer;
         private Material _ghostMaterial;
         
         private Material[] _buildableMaterials;
         private GhostState _ghostState;
-        
+
         private void Start() {
             _meshRenderer = GetComponent<MeshRenderer>();
 

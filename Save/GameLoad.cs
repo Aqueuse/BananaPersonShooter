@@ -3,14 +3,12 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using Building;
-using Building.Buildables;
-using Building.Buildables.Plateforms;
-using Building.Plateforms;
-using Enums;
 using UnityEngine;
 
 namespace Save {
     public class GameLoad : MonoBehaviour {
+        private GameObject aspirable;
+        
         public void LoadLastSave() {
             ObjectsReference.Instance.gameManager.loadingScreen.SetActive(true);
             ObjectsReference.Instance.uiManager.Set_active(UICanvasGroupType.DEATH, false);
@@ -44,8 +42,7 @@ namespace Save {
             LoadMapsData();
             LoadMonkeysSatiety();
 
-            ObjectsReference.Instance.loadData.LoadMapDebrisDataByUuid(saveUuid);
-            ObjectsReference.Instance.loadData.LoadMapPlateformsDataByUuid(saveUuid);
+            ObjectsReference.Instance.loadData.LoadMapAspirablesDataByUuid(saveUuid);
         }
 
         private void LoadInventory() {
@@ -78,6 +75,8 @@ namespace Save {
                     ObjectsReference.Instance.uiSlotsManager.uiSlotsScripts[i].SetSlot(itemCategory, slotItemType:itemType);
                 }
             }
+            
+            ObjectsReference.Instance.uiSlotsManager.Switch_to_Slot_Index(0);
         }
 
         private void LoadBananaManVitals() {
@@ -133,45 +132,61 @@ namespace Save {
             }
         }
 
-        public void RespawnDebrisOnMap() {
+        public void RespawnAspirablesOnMap() {
             var mapData = ObjectsReference.Instance.mapsManager.currentMap;
 
-            Destroy(MapItems.Instance.debrisContainer);
-
-            MapItems.Instance.debrisContainer = new GameObject("debris") {
+            Destroy(MapItems.Instance.aspirablesContainer);
+            
+            MapItems.Instance.aspirablesContainer = new GameObject("aspirables") {
                 transform = {
                     parent = MapItems.Instance.transform
                 }
             };
 
-            for (var i=0; i<mapData.debrisIndex.Length; i++) {
-                var debris = Instantiate(ObjectsReference.Instance.gameData.debrisPrefab[mapData.debrisIndex[i]], MapItems.Instance.debrisContainer.transform, true);
-                debris.transform.position = mapData.debrisPosition[i];
-                debris.transform.rotation = mapData.debrisRotation[i];
-            }
-            
-            if (mapData.debrisToSpawn > 0) MapItems.Instance.debrisSpawner.SpawnNewDebrisOnMap(MapItems.Instance.debrisContainer.transform);
-        }
+            for (int i = 0; i < mapData.aspirablesCategories.Count; i++) {
+                if (mapData.aspirablesCategories[i] == ItemCategory.DEBRIS) {
+                    aspirable = Instantiate(
+                        ObjectsReference.Instance.gameData.debrisPrefab[mapData.aspirablesPrefabsIndex[i]], 
+                        MapItems.Instance.aspirablesContainer.transform, 
+                        true
+                    );
+                    
+                    aspirable.transform.position = mapData.aspirablesPositions[i];
+                    aspirable.transform.rotation = mapData.aspirablesRotations[i];
+                }
 
-        public void RespawnPlateformsOnMap() {
-            var mapData = ObjectsReference.Instance.mapsManager.currentMap;
-            
-            for (var i = 0; i < mapData.plateformsPosition.Count; i++) {
-                var plateforme = Instantiate(ObjectsReference.Instance.gameData.plateformPrefab, MapItems.Instance.plateformsContainer.transform, true);
-                plateforme.transform.position = mapData.plateformsPosition[i];
+                if (mapData.aspirablesCategories[i] == ItemCategory.BUILDABLE) {
+                    var prefab = ObjectsReference.Instance.scriptableObjectManager._meshReferenceScriptableObject
+                        .buildablePrefabByPrefabIndex[mapData.aspirablesPrefabsIndex[i]];
 
-                var plateformType = mapData.plateformsTypes[i];
-                
-                var _boxCollider = GetComponent<BoxCollider>();
-                _boxCollider.isTrigger = false;
-            
-                plateforme.GetComponent<Plateform>().plateformType = plateformType;
-
-                if (plateformType == ItemType.EMPTY) GetComponent<Plateform>().SetUnactiveMaterial();
-                else {
-                    plateforme.GetComponent<Plateform>().ActivePlateform(plateformType);
+                    aspirable = Instantiate(prefab, MapItems.Instance.aspirablesContainer.transform, true);
+                    
+                    aspirable.transform.position = mapData.aspirablesPositions[i];
+                    aspirable.transform.rotation = mapData.aspirablesRotations[i];
                 }
             }
+            
+            if (mapData.debrisToSpawn > 0) MapItems.Instance.debrisSpawner.SpawnNewDebrisOnMap(MapItems.Instance.aspirablesContainer.transform);
+            
+            
+            
+            //     for (var i = 0; i < mapData.plateformsPosition.Count; i++) {
+            //         var plateforme = Instantiate(ObjectsReference.Instance.gameData.plateformPrefab, MapItems.Instance.plateformsContainer.transform, true);
+            //         plateforme.transform.position = mapData.plateformsPosition[i];
+            //
+            //         var plateformType = mapData.plateformsTypes[i];
+            //         
+            //         var _boxCollider = GetComponent<BoxCollider>();
+            //         _boxCollider.isTrigger = false;
+            //     
+            //         plateforme.GetComponent<Plateform>().plateformType = plateformType;
+            //
+            //         if (plateformType == ItemType.EMPTY) GetComponent<Plateform>().SetUnactiveMaterial();
+            //         else {
+            //             plateforme.GetComponent<Plateform>().ActivePlateform(plateformType);
+            //         }
+            //     }
+            
         }
     }
 }

@@ -1,7 +1,5 @@
-namespace Enums {
-    public enum CommandRoomPanelType {
-        GOALS,
-        JOURNAL,
-        BANANA_CANNON
-    }
+public enum CommandRoomPanelType {
+    GOALS,
+    JOURNAL,
+    BANANA_CANNON
 }

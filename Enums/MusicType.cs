@@ -1,9 +1,7 @@
-namespace Enums {
-    public enum MusicType {
-        HOME,
-        COROLLE,
-        COMMANDROOM,
-        JUNGLE_MAP01,
-        FIGHT
-    }
+public enum MusicType {
+    HOME,
+    COROLLE,
+    COMMANDROOM,
+    JUNGLE_MAP01,
+    FIGHT
 }

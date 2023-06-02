@@ -18,7 +18,7 @@ namespace UI.InGame {
         public bool areMonkeysVisible;
         
         private void Start() {
-            _debrisCanvasList = MapItems.Instance.debrisContainer.GetComponentsInChildren<Canvas>().ToList();
+            _debrisCanvasList = MapItems.Instance.aspirablesContainer.GetComponentsInChildren<Canvas>().ToList();
             _cameraTransform = ObjectsReference.Instance.mainCamera.transform;
 
             areDebrisVisible = ObjectsReference.Instance.gameSettings.isShowingDebris;
@@ -80,7 +80,7 @@ namespace UI.InGame {
         }
 
         public void SetDebrisCanvasVisibility(bool isVisible) {
-            _debrisCanvasList = MapItems.Instance.debrisContainer.GetComponentsInChildren<Canvas>().ToList();
+            _debrisCanvasList = MapItems.Instance.aspirablesContainer.GetComponentsInChildren<Canvas>().ToList();
             areDebrisVisible = isVisible;
 
             foreach (var canva in _debrisCanvasList) {

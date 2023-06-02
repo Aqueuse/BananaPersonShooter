@@ -1,4 +1,3 @@
-using Enums;
 using UnityEngine;
 using UnityEngine.Localization.Settings;
 
@@ -37,34 +36,6 @@ namespace Building.Buildables {
             }
 
             if (_dissolve < dissolved) {
-                if (_itemCategory == ItemCategory.BUILDABLE) {
-                    var craftingMaterials =
-                        ObjectsReference.Instance.scriptableObjectManager.GetBuildableCraftingIngredients(_buildableType);
-
-                    foreach (var craftingMaterial in craftingMaterials) {
-                        ObjectsReference.Instance.inventory.AddQuantity(ItemCategory.RAW_MATERIAL, craftingMaterial.Key,
-                            craftingMaterial.Value);
-                    }
-
-                    ObjectsReference.Instance.audioManager.StopAudioSource(AudioSourcesType.EFFECT);
-                    ObjectsReference.Instance.uiQueuedMessages.AddMessage("+ 1 " + LocalizationSettings.Instance
-                        .GetStringDatabase().GetLocalizedString(_buildableType.ToString().ToLower()));
-
-                    if (_buildableType == BuildableType.BANANA_DRYER) GetComponent<BananasDryer>().RetrieveRawMaterials();
-                }
-                
-                else {
-                    Debug.Log(_itemCategory);
-                    if (_itemCategory == ItemCategory.RAW_MATERIAL && _itemType == ItemType.DEBRIS) {
-                        ObjectsReference.Instance.inventory.AddQuantity(ItemCategory.RAW_MATERIAL, ItemType.METAL, 2);
-                        ObjectsReference.Instance.inventory.AddQuantity(ItemCategory.RAW_MATERIAL, ItemType.ELECTRONIC, 1);
-                        ObjectsReference.Instance.audioManager.StopAudioSource(AudioSourcesType.EFFECT);
-                        ObjectsReference.Instance.mapsManager.currentMap.RecalculateHappiness();
-                        ObjectsReference.Instance.mapsManager.currentMap.isDiscovered = true;
-                    }
-                }
-
-                Destroy(gameObject);
             }
         }
 

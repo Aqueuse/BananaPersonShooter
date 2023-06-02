@@ -1,5 +1,4 @@
 using Cinemachine;
-using Enums;
 using TMPro;
 using UnityEngine;
 
@@ -36,7 +35,7 @@ namespace Game.BananaCannonMiniGame {
             _bananaType = ItemType.CAVENDISH;
             bananasQuantityText.text = ObjectsReference.Instance.inventory.GetQuantity(ItemType.CAVENDISH).ToString();
             
-            _debrisQuantity = ObjectsReference.Instance.mapsManager.mapBySceneName[_mapName].debrisIndex.Length;
+            _debrisQuantity = ObjectsReference.Instance.mapsManager.mapBySceneName[_mapName].GetDebrisQuantity();
             debrisQuantityText.text = _debrisQuantity.ToString();
             
             _spaceshipsQuantity = 6;

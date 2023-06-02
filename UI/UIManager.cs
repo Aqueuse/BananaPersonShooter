@@ -1,4 +1,4 @@
-﻿using Enums;
+﻿using UI.Bananapedia;
 using UI.InGame;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -143,8 +143,6 @@ namespace UI {
                     ObjectsReference.Instance.gameManager.PauseGame(true);
                     Focus_interface();
                     
-                    ObjectsReference.Instance.mainCamera.Switch_To_Shoot_Target();
-
                     switch (ObjectsReference.Instance.uihud.interfaceContext) {
                         case InterfaceContext.INVENTORY:
                             ObjectsReference.Instance.uihud.Switch_To_Inventory();
@@ -161,8 +159,6 @@ namespace UI {
                     ObjectsReference.Instance.inputManager.SwitchContext(InputContext.GAME);
                     interfaceAnimator.SetBool(ShowInventoryID, false);
                     ObjectsReference.Instance.gameManager.PauseGame(false);
-                    
-                    ObjectsReference.Instance.mainCamera.Switch_To_TPS_Target();
                 }
             }
         }

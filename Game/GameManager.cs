@@ -1,7 +1,6 @@
 ﻿using System;
 using Building;
 using Cinemachine;
-using Enums;
 using UnityEngine;
 
 namespace Game {
@@ -57,7 +56,6 @@ namespace Game {
             
             cameraMain.clearFlags = CameraClearFlags.Skybox;
             playerCamera.Priority = 10;
-            ObjectsReference.Instance.mainCamera.SwitchToFreeLookCamera();
             
             if (newGame) {
                 ObjectsReference.Instance.scenesSwitch.SwitchScene(

@@ -1,6 +1,5 @@
 using System.Collections;
 using Building;
-using Enums;
 using Player;
 using Settings;
 using UnityEngine;
@@ -95,7 +94,6 @@ namespace Game {
                     }
 
                     if (currentMap.hasDebris) {
-                        if (currentMap.isDiscovered) ObjectsReference.Instance.gameLoad.RespawnDebrisOnMap();
                         MapItems.Instance.uiCanvasItemsHiddableManager.SetDebrisCanvasVisibility(_gameSettings.isShowingDebris);
                     }
 
@@ -103,7 +101,7 @@ namespace Game {
                         MapItems.Instance.uiCanvasItemsHiddableManager.SetBananaTreeVisibility(_gameSettings.isShowingBananaTrees); 
                     }
                     
-                    ObjectsReference.Instance.gameLoad.RespawnPlateformsOnMap();
+                    ObjectsReference.Instance.gameLoad.RespawnAspirablesOnMap();
                     
                     Cursor.visible = false;
                     Cursor.lockState = CursorLockMode.Locked;
@@ -117,18 +115,26 @@ namespace Game {
                     
                     if (ObjectsReference.Instance.gameData.bananaManSavedData.playerAdvancements.Contains(AdvancementState.GET_BANANAGUN)) {
                         ObjectsReference.Instance.uiManager.Set_active(UICanvasGroupType.HUD, true);
-                        ObjectsReference.Instance.bananaGun.bananaGunInBack.SetActive(true);
+                        if (ObjectsReference.Instance.bananaMan.activeItemCategory == ItemCategory.BANANA ||
+                            ObjectsReference.Instance.bananaMan.activeItemCategory == ItemCategory.BUILDABLE) {
+                            ObjectsReference.Instance.bananaGun.bananaGunInBack.SetActive(false);
+                        }
+                        else {
+                            ObjectsReference.Instance.bananaGun.bananaGunInBack.SetActive(true);
+                        }
                     }
 
                     else {
                         ObjectsReference.Instance.uiManager.Set_active(UICanvasGroupType.HUD, false);
                         ObjectsReference.Instance.bananaGun.bananaGunInBack.SetActive(false);
+                        ObjectsReference.Instance.uiCrosshair.SetCrosshair(ItemCategory.EMPTY, ItemType.EMPTY);
                     }
                     
                     ObjectsReference.Instance.mainCamera.Return_back_To_Player();
                     ObjectsReference.Instance.mainCamera.SetNormalSensibility();
                     
                     ObjectsReference.Instance.bananaMan.GetComponent<PlayerController>().canMove = true;
+                    ObjectsReference.Instance.bananaMan.GetComponent<Rigidbody>().isKinematic = false;
                 }
                 
                 ObjectsReference.Instance.gameManager.loadingScreen.SetActive(false);
@@ -141,8 +147,7 @@ namespace Game {
             ObjectsReference.Instance.gameManager.loadingScreen.SetActive(true);
 
             if (ObjectsReference.Instance.gameManager.gameContext == GameContext.IN_GAME) {
-                ObjectsReference.Instance.mapsManager.currentMap.RefreshPlateformsDataMap();
-                ObjectsReference.Instance.mapsManager.currentMap.RefreshDebrisDataMap();
+                ObjectsReference.Instance.mapsManager.currentMap.RefreshAspirablesDataMap();
             }
             
             ObjectsReference.Instance.inputManager.uiSchemaContext = UISchemaSwitchType.LOAD;

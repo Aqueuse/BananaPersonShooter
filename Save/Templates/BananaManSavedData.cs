@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Enums;
 
 namespace Save.Templates {
     public class BananaManSavedData {

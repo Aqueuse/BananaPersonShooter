@@ -1,6 +1,4 @@
 using Bananas;
-using Building.Plateforms;
-using Enums;
 using UnityEngine;
 
 namespace Building.Buildables.Plateforms {
@@ -65,7 +63,7 @@ namespace Building.Buildables.Plateforms {
             _meshRenderer.materials = _plateformMaterials;
         }
 
-        public void ActivePlateform(ItemType itemType) {
+        private void ActivePlateform(ItemType itemType) {
             _meshRenderer = GetComponent<MeshRenderer>();
             _audioSource = GetComponent<AudioSource>();
             _upDownEffect = GetComponent<UpDownEffect>();
@@ -77,7 +75,7 @@ namespace Building.Buildables.Plateforms {
                     _upDownEffect.isActive = true;
 
                     plateformType = ItemType.CAVENDISH;
-                    ObjectsReference.Instance.mapsManager.currentMap.RefreshPlateformsDataMap();
+                    ObjectsReference.Instance.mapsManager.currentMap.RefreshAspirablesDataMap();
                     break;
             }
         }

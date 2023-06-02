@@ -1,5 +1,4 @@
 ﻿using Data.Bananas;
-using Enums;
 using UnityEngine;
 
 namespace Player {
@@ -15,7 +14,7 @@ namespace Player {
         public bool isInWater;
         public bool isGrabingBananaGun;
 
-        private float _maxHealth = 100;
+        private const float _maxHealth = 100;
         public float health;
         public float resistance;
         private static readonly int CutoffHeight = Shader.PropertyToID("Cutoff_Height");
@@ -51,26 +50,6 @@ namespace Player {
             activeItemType = itemType;
             activeItemCategory = itemCategory;
             activeBuildableType = itemBuildableType;
-            
-            if (itemCategory == ItemCategory.BANANA) {
-                ObjectsReference.Instance.inputManager.buildGameActions.enabled = false;
-                ObjectsReference.Instance.inputManager.shootGameActions.enabled = true;
-            }
-
-            if (activeItemCategory == ItemCategory.BUILDABLE) {
-                ObjectsReference.Instance.inputManager.shootGameActions.enabled = false;
-                ObjectsReference.Instance.inputManager.buildGameActions.enabled = true;
-            }
-
-            if (activeItemCategory == ItemCategory.EMPTY) {
-                ObjectsReference.Instance.inputManager.shootGameActions.enabled = false;
-                ObjectsReference.Instance.inputManager.buildGameActions.enabled = false;
-            }
-            
-            if (activeItemCategory == ItemCategory.RAW_MATERIAL) {
-                ObjectsReference.Instance.inputManager.shootGameActions.enabled = false;
-                ObjectsReference.Instance.inputManager.buildGameActions.enabled = false;
-            }
         }
     }
 }

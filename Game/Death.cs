@@ -1,4 +1,3 @@
-using Enums;
 using Input.UIActions;
 using UnityEngine;
 using UnityEngine.Video;
@@ -13,6 +12,7 @@ namespace Game {
                 ObjectsReference.Instance.gameManager.isGamePlaying = false;
                 
                 ObjectsReference.Instance.uiFace.Die(true);
+                ObjectsReference.Instance.bananaMan.GetComponent<Rigidbody>().isKinematic = true;
                 ObjectsReference.Instance.audioManager.PlayEffect(EffectType.BANANASPLASH, 0);
 
                 Cursor.visible = true;

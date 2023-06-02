@@ -1,8 +1,8 @@
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Building;
-using Building.Buildables.Plateforms;
-using Enums;
 using Monkeys.Gorilla;
 using UnityEngine;
 
@@ -16,13 +16,14 @@ namespace Game {
         public int maxDebrisQuantity;
         private int _actualDebrisQuantity;
 
-        public Vector3[] debrisPosition;
-        public Quaternion[] debrisRotation;
-        public int[] debrisIndex;
-
-        public List<Vector3> plateformsPosition;
-        public List<ItemType> plateformsTypes;
+        public List<Vector3> aspirablesPositions;
+        public List<Quaternion> aspirablesRotations;
         
+        public List<ItemCategory> aspirablesCategories;
+        public List<int> aspirablesPrefabsIndex;
+        public List<BuildableType> aspirablesBuildableTypes;
+        public List<ItemType> aspirablesItemTypes;
+
         public float monkeySasiety;
 
         public bool hasBananaTree;
@@ -39,7 +40,7 @@ namespace Game {
         }
 
         public void RecalculateHappiness() {
-            _actualDebrisQuantity = MapItems.Instance.debrisContainer.GetComponentsInChildren<MeshFilter>().Length;
+            _actualDebrisQuantity = MapItems.Instance.aspirablesContainer.GetComponentsInChildren<MeshFilter>().Length;
 
             cleanliness = 50-(_actualDebrisQuantity /(float)maxDebrisQuantity)*50;
 
@@ -64,41 +65,43 @@ namespace Game {
                 monkey.associatedUI.SetSliderValue(ObjectsReference.Instance.monkeysManager.colorByMonkeyState[monkey.monkeyState]);
             }
         }
-        
-        public void RefreshDebrisDataMap() {
+
+        public void RefreshAspirablesDataMap() {
             if (MapItems.Instance == null) return;
 
-            if (ObjectsReference.Instance.mapsManager.currentMap.hasDebris) {
-                var debrisClass = MapItems.Instance.debrisContainer.gameObject.GetComponentsInChildren<MeshRenderer>();
+            var aspirables = MapItems.Instance.aspirablesContainer.gameObject.GetComponentsInChildren<MeshRenderer>();
 
-                var mapDebrisPrefabIndex = new int[debrisClass.Length];
-                var mapDebrisPosition = new Vector3[debrisClass.Length];
-                var mapDebrisRotation = new Quaternion[debrisClass.Length];
+            var mapAspirablesCategories = new ItemCategory[aspirables.Length];
+            var mapAspirablePosition = new Vector3[aspirables.Length];
+            var mapAspirableRotation = new Quaternion[aspirables.Length];
+            var mapAspirablePrefabIndex = new string[aspirables.Length];
 
-                for (var i = 0; i < debrisClass.Length; i++) {
-                    mapDebrisPrefabIndex[i] = ObjectsReference.Instance.scriptableObjectManager._meshReferenceScriptableObject.debrisPrefabIndexByMesh[debrisClass[i].GetComponent<MeshFilter>().sharedMesh];
-                    mapDebrisPosition[i] = debrisClass[i].gameObject.transform.position;
-                    mapDebrisRotation[i] = debrisClass[i].gameObject.transform.rotation;
+            for (int i = 0; i < aspirables.Length; i++) {
+                if (aspirables[i].gameObject.layer == 7) {
+                    // check if is debris or buildable
+                    var aspirableMesh = aspirables[i].GetComponent<MeshFilter>().sharedMesh;
+
+                    if (ObjectsReference.Instance.scriptableObjectManager.IsBuildable(aspirableMesh)) {
+                        mapAspirablesCategories[i] = ItemCategory.DEBRIS;
+                        mapAspirablePrefabIndex[i] = ObjectsReference.Instance.scriptableObjectManager._meshReferenceScriptableObject.debrisPrefabIndexByMesh[aspirableMesh].ToString();
+                    }
+
+                    else {
+                        mapAspirablesCategories[i] = ItemCategory.BUILDABLE;
+                        mapAspirablePrefabIndex[i] = ObjectsReference.Instance.scriptableObjectManager
+                            ._meshReferenceScriptableObject.buildableTypeByMesh[aspirableMesh].ToString();
+                    }
+
+                    mapAspirablePosition[i] = aspirables[i].transform.position;
+                    mapAspirableRotation[i] = aspirables[i].transform.rotation;
                 }
-
-                debrisIndex = mapDebrisPrefabIndex;
-                debrisPosition = mapDebrisPosition;
-                debrisRotation = mapDebrisRotation;
             }
         }
-        
-        public void RefreshPlateformsDataMap() {
-            var plateformsClass = MapItems.Instance.plateformsContainer.gameObject.GetComponentsInChildren<Plateform>().ToList();
 
-            plateformsPosition = new List<Vector3>();
-            plateformsTypes = new List<ItemType>();
-            
-            foreach (var plateformClass in plateformsClass) {
-                plateformsPosition.Add(plateformClass.transform.position);
-                plateformsTypes.Add(plateformClass.plateformType);
-            }
+        public int GetDebrisQuantity() {
+            return Enum.GetValues(typeof(ItemCategory)).OfType<ItemCategory>().Count(itemCategory => itemCategory == ItemCategory.DEBRIS);
         }
-        
+
         public void StartBossFight(MonkeyType monkeyType) {
             ObjectsReference.Instance.audioManager.PlayMusic(MusicType.FIGHT);
 

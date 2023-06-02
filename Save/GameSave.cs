@@ -1,16 +1,20 @@
 using System;
 using System.Globalization;
-using Enums;
 using UnityEngine;
 
 namespace Save {
     public class GameSave : MonoBehaviour {
+        private SaveData _saveData;
+
+        private void Start() {
+            _saveData = ObjectsReference.Instance.saveData;
+        }
+
         public void SaveGameData(string saveUuid) {
             var date = DateTime.ParseExact(DateTime.Now.ToString("U"), "U", CultureInfo.CurrentCulture).ToString(CultureInfo.CurrentCulture);
 
             if (ObjectsReference.Instance.gameManager.gameContext == GameContext.IN_GAME) {
-                ObjectsReference.Instance.mapsManager.currentMap.RefreshPlateformsDataMap();
-                ObjectsReference.Instance.mapsManager.currentMap.RefreshDebrisDataMap();
+                ObjectsReference.Instance.mapsManager.currentMap.RefreshAspirablesDataMap();
             }
 
             SaveInventory();
@@ -20,10 +24,9 @@ namespace Save {
             SavePositionAndRotation();
             SaveActiveItem();
             SaveMonkeysSatiety();
-            
-            SaveDebrisPositionAndRotationByUuid(saveUuid);
-            SavePlateformsPositionAndTypeByUuid(saveUuid);
 
+            SaveAspirablesPositionRotationPrefabIndexByUuid(saveUuid);
+            
             ObjectsReference.Instance.saveData.Save(saveUuid, date);
         }
 
@@ -35,9 +38,12 @@ namespace Save {
 
         private void SaveBlueprints() {
             var activeBlueprintsSlots = ObjectsReference.Instance.uiBlueprints.GetActivatedBlueprints();
-            
+
             foreach (var blueprintsSlot in activeBlueprintsSlots) {
-                ObjectsReference.Instance.gameData.bananaManSavedData.blueprints.Add(blueprintsSlot.buildableType.ToString());
+                if (!ObjectsReference.Instance.gameData.bananaManSavedData.blueprints.Contains(blueprintsSlot.buildableType
+                        .ToString())) {
+                    ObjectsReference.Instance.gameData.bananaManSavedData.blueprints.Add(blueprintsSlot.buildableType.ToString());
+                }
             }
         }
 
@@ -48,7 +54,7 @@ namespace Save {
                 "EMPTY,EMPTY",
                 "EMPTY,EMPTY" 
             };
-            
+
             for (int i = 0; i < ObjectsReference.Instance.uiSlotsManager.uiSlotsScripts.Count; i++) {
                 var uiSlotScript = ObjectsReference.Instance.uiSlotsManager.uiSlotsScripts[i];
                 
@@ -97,27 +103,22 @@ namespace Save {
             }
         }
 
-        /////////////////// DEBRIS ///////////////////////
-
-        private void SaveDebrisPositionAndRotationByUuid(string saveUuid) {
+        private void SaveAspirablesPositionRotationPrefabIndexByUuid(string saveUuid) {
             foreach (var map in ObjectsReference.Instance.mapsManager.mapBySceneName) {
-                if (map.Value.hasDebris && map.Value.debrisIndex.Length != 0) {
-                    ObjectsReference.Instance.saveData.SaveMapDebrisDataByUuid(
-                        map.Value.debrisPosition,
-                        map.Value.debrisRotation,
-                        map.Value.debrisIndex,
-                        map.Key,
-                        saveUuid
-                    );
+                if (map.Value.aspirablesCategories.Count != 0) {
+                    var mapToSave = map.Value;
+
+                    _saveData.SaveDataCBOR(
+                        mapName: mapToSave.mapName,
+                        aspirablesPositions: mapToSave.aspirablesPositions,
+                        aspirablesRotations:mapToSave.aspirablesRotations,
+                        saveUuid: saveUuid,
+                        debrisPrefabsIndex: mapToSave.aspirablesPrefabsIndex,
+                        aspirablesCategories:mapToSave.aspirablesCategories,
+                        buildableTypes: mapToSave.aspirablesBuildableTypes,
+                        itemTypes:mapToSave.aspirablesItemTypes
+                        );
                 }
-            }
-        }
-        
-        /////////////////// PLATEFORMS ///////////////////////
-
-        private void SavePlateformsPositionAndTypeByUuid(string saveUuid) {
-            foreach (var map in ObjectsReference.Instance.mapsManager.mapBySceneName) {
-                ObjectsReference.Instance.saveData.SaveMapPlateformsDataByUuid(map.Value.plateformsPosition, map.Value.plateformsTypes, map.Key, saveUuid);
             }
         }
     }

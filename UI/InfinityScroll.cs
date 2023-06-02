@@ -32,17 +32,14 @@ namespace UI {
 
             Setting();
         }
-#if UNITY_EDITOR
+        
         private void OnEnable() {
             EditorApplication.update += UpdateManual;
         }
-#endif
 
-#if UNITY_EDITOR
         private void OnDisable() {
             EditorApplication.update -= UpdateManual;
         }
-#endif
 
         private void UpdateManual() {
             if (!Application.isPlaying) {
@@ -64,7 +61,7 @@ namespace UI {
         }
 
 
-        void Update() {
+        private void Update() {
             if (!Application.isPlaying) {
                 return;
             }
