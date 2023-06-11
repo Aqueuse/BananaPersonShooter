@@ -20,7 +20,7 @@ namespace UI.Menus {
         }
 
         public void NewGame() {
-            ObjectsReference.Instance.gameManager.New_Game();
+            ObjectsReference.Instance.gameManager.Prepare_New_Game();
         }
 
         public void Quit() {

@@ -15,12 +15,13 @@ MonoBehaviour:
   itemType: 14
   itemCategory: 0
   buildableType: 1
-  itemName: Praying hands
+  itemName:
+  - praying hands
+  - praying hands
   itemSprite: {fileID: 21300000, guid: b4965c27d2b128849b5af61c5fe69b1a, type: 3}
   itemDescription:
   - Fragmentation banana
   - "Banane \xE0 fragmentation"
-  bananaName: Praying hands
   effects:
   - explodes then splits into 10 bananas which in turn explode
   - "explose puis se divise en 10 bananes qui explosent \xE0 leur tour"

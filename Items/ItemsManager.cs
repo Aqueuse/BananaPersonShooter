@@ -1,6 +1,7 @@
 ﻿using Building.Buildables.DoorLeft;
 using Building.Buildables.DoorRight;
 using Dialogues;
+using Enums;
 using Game.BananaCannonMiniGame;
 using Game.CommandRoomPanelControls;
 using UnityEngine;
@@ -48,7 +49,7 @@ namespace Items {
                     case ItemStaticType.DOOR_BEETWEEN_LEVELS:
                         ObjectsReference.Instance.audioManager.PlayEffect(EffectType.OPEN_DOOR, 0);
 
-                        ObjectsReference.Instance.scenesSwitch.SwitchScene(_interactedObject.GetComponent<Door>().destinationMap.ToUpper(), _interactedObject.GetComponent<Door>().spawnPoint, false);
+                        ObjectsReference.Instance.scenesSwitch.SwitchScene(_interactedObject.GetComponent<Door>().destinationMap.ToUpper(), _interactedObject.GetComponent<Door>().spawnPoint, false, false);
                         _interactedObject = null;
                         break;
                     case ItemStaticType.MINI_CHIMP:

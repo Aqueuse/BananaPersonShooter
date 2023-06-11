@@ -12,10 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 145b73ac3666c3f44bd8b125c331f2eb, type: 3}
   m_Name: TissuData
   m_EditorClassIdentifier: 
-  itemType: 22
+  itemType: 21
   itemCategory: 2
-  buildableType: 1
-  itemName: tissu
+  buildableType: 6
+  itemName:
+  - fabric
+  - tissu
   itemSprite: {fileID: 21300000, guid: e2bef5a6fa24bfd46bcdcd8ce877f2b0, type: 3}
   itemDescription:
   - 'a piece of fabric made from banana peel fibers '

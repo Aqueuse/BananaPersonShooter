@@ -146,10 +146,10 @@ namespace Save {
 
                         foreach (var aspirable in aspirablesData) {
                             var dataSplit = aspirable.Split("/");
-                        
+                    
                             mapToLoad.aspirablesPositions.Add(Vector3FromString(dataSplit[0]));
                             mapToLoad.aspirablesRotations.Add(QuaternionFromString(dataSplit[1]));
-                            
+                        
                             mapToLoad.aspirablesCategories.Add((ItemCategory)Enum.Parse(typeof(ItemCategory), dataSplit[2]));
                             mapToLoad.aspirablesPrefabsIndex.Add(Convert.ToInt32(dataSplit[3]));
                             mapToLoad.aspirablesBuildableTypes.Add((BuildableType)Enum.Parse(typeof(BuildableType), dataSplit[4]));
@@ -162,6 +162,10 @@ namespace Save {
         
         public string GetSavePathByUuid(string saveUuid) {
             return Path.Combine(_savesPath, saveUuid);
+        }
+
+        public bool SaveExists(string saveuuid) {
+            return Directory.Exists(Path.Combine(_savesPath, saveuuid));
         }
 
         private Vector3 Vector3FromString(string vector3String) {

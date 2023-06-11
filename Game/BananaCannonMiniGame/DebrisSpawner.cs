@@ -16,7 +16,7 @@ namespace Game.BananaCannonMiniGame {
         private Vector3 _raycastOrigin;
 
         private void Start() {
-            _debrisPrefab = ObjectsReference.Instance.gameData.debrisPrefab;
+            _debrisPrefab = ObjectsReference.Instance.scriptableObjectManager._meshReferenceScriptableObject.debrisPrefab;
             _randomPositionInCircle = new Vector2();
             _randomPositionInCircleVector3 = new Vector3();
             _raycastOrigin = new Vector3();

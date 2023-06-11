@@ -15,12 +15,13 @@ MonoBehaviour:
   itemType: 1
   itemCategory: 0
   buildableType: 1
-  itemName: Barangan
+  itemName:
+  - barangan
+  - barangan
   itemSprite: {fileID: 21300000, guid: 25083ab756e238a4b92f2ff93e10b504, type: 3}
   itemDescription:
   - Sexy banana
   - Banane sexy
-  bananaName: Barangan
   effects:
   - aphrodisiac grenade, attracts monkeys during a few seconds
   - Grenade aphrodisiaque, attire les singes pendant quelques secondes

@@ -15,12 +15,13 @@ MonoBehaviour:
   itemType: 13
   itemCategory: 0
   buildableType: 1
-  itemName: Plantain
+  itemName:
+  - plantain
+  - plantain
   itemSprite: {fileID: 21300000, guid: 51fc44a1d27d82247a0e9c3000b13926, type: 3}
   itemDescription:
   - Split in two ammo
   - "Se s\xE9pare en deux munitions"
-  bananaName: Plantain
   effects:
   - Throw two bananas in a horizontal line
   - Lance deux bananes sur une ligne horizontale

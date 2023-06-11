@@ -4,28 +4,23 @@ using UnityEngine;
 
 namespace Save {
     public class GameSave : MonoBehaviour {
-        private SaveData _saveData;
-
-        private void Start() {
-            _saveData = ObjectsReference.Instance.saveData;
-        }
-
-        public void SaveGameData(string saveUuid) {
+        public void SaveGame(string saveUuid) {
             var date = DateTime.ParseExact(DateTime.Now.ToString("U"), "U", CultureInfo.CurrentCulture).ToString(CultureInfo.CurrentCulture);
-
-            if (ObjectsReference.Instance.gameManager.gameContext == GameContext.IN_GAME) {
+            
+            if (ObjectsReference.Instance.gameManager.gameContext == GameContext.IN_GAME && ObjectsReference.Instance.mapsManager.currentMap.isDiscovered) {
                 ObjectsReference.Instance.mapsManager.currentMap.RefreshAspirablesDataMap();
+                SaveInventory();
             }
 
-            SaveInventory();
             SaveBlueprints();
             SaveSlots();
+            SaveActiveItem();
+                
+            SaveMonkeysSatiety();
+            SaveAspirablesPositionRotationPrefabIndexByUuid();
+
             SaveBananaManVitals();
             SavePositionAndRotation();
-            SaveActiveItem();
-            SaveMonkeysSatiety();
-
-            SaveAspirablesPositionRotationPrefabIndexByUuid(saveUuid);
             
             ObjectsReference.Instance.saveData.Save(saveUuid, date);
         }
@@ -103,23 +98,7 @@ namespace Save {
             }
         }
 
-        private void SaveAspirablesPositionRotationPrefabIndexByUuid(string saveUuid) {
-            foreach (var map in ObjectsReference.Instance.mapsManager.mapBySceneName) {
-                if (map.Value.aspirablesCategories.Count != 0) {
-                    var mapToSave = map.Value;
-
-                    _saveData.SaveDataCBOR(
-                        mapName: mapToSave.mapName,
-                        aspirablesPositions: mapToSave.aspirablesPositions,
-                        aspirablesRotations:mapToSave.aspirablesRotations,
-                        saveUuid: saveUuid,
-                        debrisPrefabsIndex: mapToSave.aspirablesPrefabsIndex,
-                        aspirablesCategories:mapToSave.aspirablesCategories,
-                        buildableTypes: mapToSave.aspirablesBuildableTypes,
-                        itemTypes:mapToSave.aspirablesItemTypes
-                        );
-                }
-            }
+        private void SaveAspirablesPositionRotationPrefabIndexByUuid() {
         }
     }
 }

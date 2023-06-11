@@ -1,3 +1,4 @@
+using Enums;
 using UI.InGame.QuickSlots;
 using UnityEngine;
 
@@ -44,7 +45,7 @@ namespace Building {
         private Vector3 raycastHitPoint;
         
         private RaycastHit raycastHit;
-        
+
         private void Start() {
             _mainCameraTransform = ObjectsReference.Instance.mainCamera.transform;
             
@@ -69,8 +70,10 @@ namespace Building {
 
                 raycastHitPoint = raycastHit.point;
                 var targetGameObject = raycastHit.transform.gameObject; 
-
+                
                 if (targetGameObject.layer == 7 && _activeGhostClass.buildableDataScriptableObject.mustSnap) {
+                    
+                    // TODO : not opti at all in fixed update
                     targetMesh = targetGameObject.GetComponent<MeshFilter>().sharedMesh;
                     var gridSize = ObjectsReference.Instance.scriptableObjectManager.GetBuildableGridSizeByMesh(targetMesh);
 
@@ -237,7 +240,7 @@ namespace Building {
                 _buildable = Instantiate(original: _activeGhostClass.buildableDataScriptableObject.buildablePrefab,
                     position: _activeGhost.transform.position, rotation: _activeGhost.transform.rotation);
 
-                _buildable.transform.parent = MapItems.Instance.plateformsContainer.transform;
+                _buildable.transform.parent = MapItems.Instance.aspirablesContainer.transform;
 
                 foreach (var craftingIngredient in _craftingIngredients) {
                     ObjectsReference.Instance.inventory.RemoveQuantity(ItemCategory.RAW_MATERIAL, craftingIngredient.Key,
@@ -245,8 +248,9 @@ namespace Building {
                     ObjectsReference.Instance.uiSlotsManager.RefreshQuantityInQuickSlot(ItemCategory.RAW_MATERIAL,
                         craftingIngredient.Key);
                 }
-
-                ObjectsReference.Instance.mapsManager.currentMap.RefreshAspirablesDataMap();
+                
+                ObjectsReference.Instance.mapsManager.currentMap.isDiscovered = true;
+                //ObjectsReference.Instance.mapsManager.currentMap.RefreshAspirablesDataMap();
             }
         }
     }

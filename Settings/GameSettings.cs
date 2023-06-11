@@ -1,5 +1,6 @@
 using Building;
 using Cinemachine;
+using Enums;
 using UnityEngine;
 using UnityEngine.Localization.Settings;
 using UnityEngine.Rendering;
@@ -229,7 +230,7 @@ namespace Settings {
         public void SaveDebrisCanvasVisibility(bool isVisible) {
             ObjectsReference.Instance.gameSettings.isShowingDebris = isVisible;
             prefs.SetString("areDebrisVisible", isVisible ? "True" : "False");
-            if (ObjectsReference.Instance.gameManager.gameContext == GameContext.IN_GAME  && ObjectsReference.Instance.mapsManager.currentMap.hasDebris) MapItems.Instance.uiCanvasItemsHiddableManager.SetDebrisCanvasVisibility(isVisible);
+            if (ObjectsReference.Instance.gameManager.gameContext == GameContext.IN_GAME) MapItems.Instance.uiCanvasItemsHiddableManager.SetDebrisCanvasVisibility(isVisible);
             
             prefs.Save();
         }
@@ -237,7 +238,7 @@ namespace Settings {
         public void SaveBananaTreeCanvasVisibility(bool isVisible) {
             ObjectsReference.Instance.gameSettings.isShowingBananaTrees = isVisible;
             prefs.SetString("areBananaTreesVisible", isVisible ? "True" : "False");
-            if (ObjectsReference.Instance.gameManager.gameContext == GameContext.IN_GAME && ObjectsReference.Instance.mapsManager.currentMap.hasBananaTree) MapItems.Instance.uiCanvasItemsHiddableManager.SetBananaTreeVisibility(isVisible); 
+            if (ObjectsReference.Instance.gameManager.gameContext == GameContext.IN_GAME) MapItems.Instance.uiCanvasItemsHiddableManager.SetBananaTreeVisibility(isVisible); 
             
             prefs.Save();
         }

@@ -21,7 +21,7 @@ namespace Settings {
 		[SerializeField] private bool allowDrag = true;
 		[SerializeField] private float frequency = 0.5F;
 		[SerializeField] private bool moreOptionInUI = true;
-		[SerializeField] private bool moreOptionInEditor = true;
+		//[SerializeField] private bool moreOptionInEditor = true;
 		[SerializeField] private string memsize;
 		[SerializeField] private string totalGc; // GCMemSize
 		[SerializeField] private string managedMemory; // GCReservedMemSize
@@ -88,23 +88,23 @@ namespace Settings {
 			_systemUsedMemory = ProfilerRecorder.StartNew(ProfilerCategory.Memory, "System Used Memory");
 
 #if UNITY_EDITOR
-			if (moreOptionInEditor)
-			{ // only on development builds or editor
-				_texturcount = ProfilerRecorder.StartNew(ProfilerCategory.Memory, "Texture Count");
-				_texturememory = ProfilerRecorder.StartNew(ProfilerCategory.Memory, "Texture Memory");
-				_meshMemoryRecorder = ProfilerRecorder.StartNew(ProfilerCategory.Memory, "Mesh Count");
-				_meshMemory = ProfilerRecorder.StartNew(ProfilerCategory.Memory, "Mesh Memory");
-				_materialcount = ProfilerRecorder.StartNew(ProfilerCategory.Memory, "Material Count");
-				_materialmemory = ProfilerRecorder.StartNew(ProfilerCategory.Memory, "Material Memory");
-				_animationClipCount = ProfilerRecorder.StartNew(ProfilerCategory.Memory, "AnimationClip Count");
-				_animationClipMemory = ProfilerRecorder.StartNew(ProfilerCategory.Memory, "AnimationClip Memory");
-				_assetcount = ProfilerRecorder.StartNew(ProfilerCategory.Memory, "Asset Count");
-				_gOinscene = ProfilerRecorder.StartNew(ProfilerCategory.Memory, "GameObjects in Scenes");
-				_totalGOinscene = ProfilerRecorder.StartNew(ProfilerCategory.Memory, "Total Objects in Scenes");
-				_totalUnityOjectcount = ProfilerRecorder.StartNew(ProfilerCategory.Memory, "Total Unity Object Count");
-				_gcalloframecnt = ProfilerRecorder.StartNew(ProfilerCategory.Memory, "GC Allocation In Frame Count");
-				_gcallofrrame = ProfilerRecorder.StartNew(ProfilerCategory.Memory, "GC Allocated In Frame");
-			}
+			// if (moreOptionInEditor)
+			// { // only on development builds or editor
+			// 	_texturcount = ProfilerRecorder.StartNew(ProfilerCategory.Memory, "Texture Count");
+			// 	_texturememory = ProfilerRecorder.StartNew(ProfilerCategory.Memory, "Texture Memory");
+			// 	_meshMemoryRecorder = ProfilerRecorder.StartNew(ProfilerCategory.Memory, "Mesh Count");
+			// 	_meshMemory = ProfilerRecorder.StartNew(ProfilerCategory.Memory, "Mesh Memory");
+			// 	_materialcount = ProfilerRecorder.StartNew(ProfilerCategory.Memory, "Material Count");
+			// 	_materialmemory = ProfilerRecorder.StartNew(ProfilerCategory.Memory, "Material Memory");
+			// 	_animationClipCount = ProfilerRecorder.StartNew(ProfilerCategory.Memory, "AnimationClip Count");
+			// 	_animationClipMemory = ProfilerRecorder.StartNew(ProfilerCategory.Memory, "AnimationClip Memory");
+			// 	_assetcount = ProfilerRecorder.StartNew(ProfilerCategory.Memory, "Asset Count");
+			// 	_gOinscene = ProfilerRecorder.StartNew(ProfilerCategory.Memory, "GameObjects in Scenes");
+			// 	_totalGOinscene = ProfilerRecorder.StartNew(ProfilerCategory.Memory, "Total Objects in Scenes");
+			// 	_totalUnityOjectcount = ProfilerRecorder.StartNew(ProfilerCategory.Memory, "Total Unity Object Count");
+			// 	_gcalloframecnt = ProfilerRecorder.StartNew(ProfilerCategory.Memory, "GC Allocation In Frame Count");
+			// 	_gcallofrrame = ProfilerRecorder.StartNew(ProfilerCategory.Memory, "GC Allocated In Frame");
+			// }
 #endif
 		}
 		private void OnDisable()
@@ -208,25 +208,25 @@ namespace Settings {
 				profilerReservedMemory = FormatSize(_profilerReservedMemory.LastValue);
 
 #if UNITY_EDITOR
-				if (moreOptionInEditor)
-				{
-					texturCount = _texturcount.LastValue.ToString();
-					textureMemory = FormatSize(_texturememory.LastValue);
-					materialCount = _materialcount.LastValue.ToString();
-					materialMemory = FormatSize(_materialmemory.LastValue);
-					assetCount = _assetcount.LastValue.ToString();
-					gameObjectInScene = _gOinscene.LastValue.ToString();
-					totalGameObjectInScene = _totalGOinscene.LastValue.ToString();
-					totalUnityOjectCount = _totalUnityOjectcount.LastValue.ToString();
-					gcAllocFramecount = _gcalloframecnt.LastValue.ToString();
-					gcAllocInFrame = FormatSize(_gcallofrrame.LastValue);
-
-				
-					animationClipCount = _animationClipCount.LastValue.ToString();
-					animationClipMemory = FormatSize(_animationClipMemory.LastValue);
-					meshMemoryRecorder = _meshMemoryRecorder.LastValue.ToString();
-					meshMemory = FormatSize(_meshMemory.LastValue);
-				}
+				// if (moreOptionInEditor)
+				// {
+				// 	texturCount = _texturcount.LastValue.ToString();
+				// 	textureMemory = FormatSize(_texturememory.LastValue);
+				// 	materialCount = _materialcount.LastValue.ToString();
+				// 	materialMemory = FormatSize(_materialmemory.LastValue);
+				// 	assetCount = _assetcount.LastValue.ToString();
+				// 	gameObjectInScene = _gOinscene.LastValue.ToString();
+				// 	totalGameObjectInScene = _totalGOinscene.LastValue.ToString();
+				// 	totalUnityOjectCount = _totalUnityOjectcount.LastValue.ToString();
+				// 	gcAllocFramecount = _gcalloframecnt.LastValue.ToString();
+				// 	gcAllocInFrame = FormatSize(_gcallofrrame.LastValue);
+				//
+				//
+				// 	animationClipCount = _animationClipCount.LastValue.ToString();
+				// 	animationClipMemory = FormatSize(_animationClipMemory.LastValue);
+				// 	meshMemoryRecorder = _meshMemoryRecorder.LastValue.ToString();
+				// 	meshMemory = FormatSize(_meshMemory.LastValue);
+				// }
 #endif
 
 

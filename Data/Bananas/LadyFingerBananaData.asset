@@ -15,12 +15,13 @@ MonoBehaviour:
   itemType: 7
   itemCategory: 0
   buildableType: 1
-  itemName: Lady Finger
+  itemName:
+  - lady finger
+  - lady finger
   itemSprite: {fileID: 21300000, guid: 2b806cf4313761348a254d668b606357, type: 3}
   itemDescription:
   - Split in five bananas
   - Se divise en cinq bananes
-  bananaName: Lady Finger
   effects:
   - circle satiety
   - "sati\xE9t\xE9 circulaire"

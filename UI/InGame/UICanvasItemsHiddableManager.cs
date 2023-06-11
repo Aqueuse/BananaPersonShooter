@@ -7,7 +7,7 @@ namespace UI.InGame {
     public class UICanvasItemsHiddableManager : MonoBehaviour {
         [SerializeField] private RectTransform canvasBananaTree;
         [SerializeField] private RectTransform[] canvasMonkeys;
-        private List<Canvas> _debrisCanvasList;
+        public List<Canvas> _debrisCanvasList;
         
         private Transform _cameraTransform;
         private Vector3 _localScale;
@@ -80,11 +80,14 @@ namespace UI.InGame {
         }
 
         public void SetDebrisCanvasVisibility(bool isVisible) {
-            _debrisCanvasList = MapItems.Instance.aspirablesContainer.GetComponentsInChildren<Canvas>().ToList();
-            areDebrisVisible = isVisible;
+            if (ObjectsReference.Instance.mapsManager.currentMap.GetDebrisQuantity() > 0) {
+                _debrisCanvasList = MapItems.Instance.aspirablesContainer.GetComponentsInChildren<Canvas>().ToList();
+                
+                foreach (var canva in _debrisCanvasList) {
+                    canva.enabled = isVisible;
+                }
 
-            foreach (var canva in _debrisCanvasList) {
-                canva.enabled = isVisible;
+                areDebrisVisible = isVisible;
             }
         }
 
@@ -98,7 +101,7 @@ namespace UI.InGame {
         
         public void SetBananaTreeVisibility(bool isVisible) {
             isBananaTreeVisible = isVisible;
-            canvasBananaTree.GetComponent<Canvas>().enabled = isVisible;
+            if (canvasBananaTree != null) canvasBananaTree.GetComponent<Canvas>().enabled = isVisible;
         }
     }
 }

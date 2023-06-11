@@ -1,57 +1,99 @@
-﻿using TMPro;
+﻿using Enums;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace UI.Menus {
     public class UIOptionsMenu : MonoBehaviour {
-        [SerializeField] private GameObject[] tabs;
-        [SerializeField] private Image[] tabsButtons;
+        [SerializeField] private GenericDictionary<UISchemaSwitchType, UIOptionsTab> tabs;
 
-        [SerializeField] Color activatedColor;
-        [SerializeField] Color unactivatedColor;
+        public Color tabButtonActivatedColor;
+        public Color tabButtonUnactivatedColor;
 
-        private int _selectedTab;
+        public Color buttonActivatedColor;
+        public Color buttonUnactivatedColor;
+        
+        private UISchemaSwitchType _selectedTab;
 
         private void Start() {
-            _selectedTab = 0;
+            _selectedTab = UISchemaSwitchType.AUDIOVIDEO_TAB;
         }
 
-        public void Switch_to_Tab(int index) {
-            for (var i=0; i<tabs.Length; i++) {
-                tabs[i].SetActive(false);
-                tabsButtons[i].color = unactivatedColor;
-                tabsButtons[i].GetComponentInChildren<TextMeshProUGUI>().color = activatedColor;
+        public void Switch_to_Tab(UISchemaSwitchType uiSchemaSwitchType) {
+            ObjectsReference.Instance.inputManager.uiSchemaSwitcher.SwitchUISchema(uiSchemaSwitchType);
+            
+            foreach (var tab in tabs) {
+                tabs[tab.Key].Disable();
             }
-        
-            tabs[index].SetActive(true);
-            tabsButtons[index].color = activatedColor;
-            tabsButtons[index].GetComponentInChildren<TextMeshProUGUI>().color = Color.black;
 
-            _selectedTab = index;
+            tabs[uiSchemaSwitchType].Enable();
+            _selectedTab = uiSchemaSwitchType;
         }
 
         public void Switch_to_Left_Tab() {
-            if (_selectedTab == 0) {
-                _selectedTab = 4;
-                Switch_to_Tab(4);
-            }
+            switch (_selectedTab) {
+                case UISchemaSwitchType.AUDIOVIDEO_TAB:
+                    Switch_to_Tab(UISchemaSwitchType.LANGUAGES_TAB);
+                    break;
 
-            else {
-                _selectedTab--;
-                Switch_to_Tab(_selectedTab);
+                case UISchemaSwitchType.KEYBOARD_TAB:
+                    Switch_to_Tab(UISchemaSwitchType.AUDIOVIDEO_TAB);
+                    break;
+
+                case UISchemaSwitchType.GAMEPAD_TAB:
+                    Switch_to_Tab(UISchemaSwitchType.KEYBOARD_TAB);
+                    break;
+
+                case UISchemaSwitchType.ACCESSIBILITY_TAB:
+                    Switch_to_Tab(UISchemaSwitchType.GAMEPAD_TAB);
+                    break;
+
+                case UISchemaSwitchType.LANGUAGES_TAB:
+                    Switch_to_Tab(UISchemaSwitchType.ACCESSIBILITY_TAB);
+                    break;
             }
         }
         
         public void Switch_to_Right_Tab() {
-            if (_selectedTab == 4) {
-                _selectedTab = 0;
-                Switch_to_Tab(0);
-            }
+            switch (_selectedTab) {
+                case UISchemaSwitchType.AUDIOVIDEO_TAB:
+                    Switch_to_Tab(UISchemaSwitchType.KEYBOARD_TAB);
+                    break;
+                
+                case UISchemaSwitchType.KEYBOARD_TAB:
+                    Switch_to_Tab(UISchemaSwitchType.GAMEPAD_TAB);
+                    break;
 
-            else {
-                _selectedTab++;
-                Switch_to_Tab(_selectedTab);
+                case UISchemaSwitchType.GAMEPAD_TAB:
+                    Switch_to_Tab(UISchemaSwitchType.ACCESSIBILITY_TAB);
+                    break;
+                
+                case UISchemaSwitchType.ACCESSIBILITY_TAB:
+                    Switch_to_Tab(UISchemaSwitchType.LANGUAGES_TAB);
+                    break;
+                
+                case UISchemaSwitchType.LANGUAGES_TAB:
+                    Switch_to_Tab(UISchemaSwitchType.AUDIOVIDEO_TAB);
+                    break;
             }
+        }
+
+        public void Switch_To_Audio_Video_Tab() {
+            Switch_to_Tab(UISchemaSwitchType.AUDIOVIDEO_TAB);
+        }
+        
+        public void Switch_To_Keyboard_Tab() {
+            Switch_to_Tab(UISchemaSwitchType.KEYBOARD_TAB);
+        }
+
+        public void Switch_To_Gamepad_Tab() {
+            Switch_to_Tab(UISchemaSwitchType.GAMEPAD_TAB);
+        }
+
+        public void Switch_To_Accessibility_Tab() {
+            Switch_to_Tab(UISchemaSwitchType.ACCESSIBILITY_TAB);
+        }
+
+        public void Switch_To_languages_Tab() {
+            Switch_to_Tab(UISchemaSwitchType.LANGUAGES_TAB);
         }
     }
 }

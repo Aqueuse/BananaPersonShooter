@@ -15,12 +15,13 @@ MonoBehaviour:
   itemType: 2
   itemCategory: 0
   buildableType: 1
-  itemName: Blue java
+  itemName:
+  - blue java
+  - blue java
   itemSprite: {fileID: 21300000, guid: 45711768726f01d4390c97b88d867934, type: 3}
   itemDescription:
   - Frosted banana
   - "Banane givr\xE9e"
-  bananaName: Blue java
   effects:
   - Creates an area of ice that slows down monkeys for 10 seconds
   - "Cr\xE9e une zone de glace qui ralenti les singes pendant 10 secondes"

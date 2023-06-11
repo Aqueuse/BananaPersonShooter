@@ -1,3 +1,4 @@
+using Enums;
 using Input.interactables;
 using Input.UIActions;
 using UnityEngine;
@@ -13,7 +14,7 @@ namespace Input {
 
         public BananasDryerAction bananasDryerAction;
         
-        void Start() {
+        private void Start() {
             _gameActions = GetComponent<GameActions>();
             
             uiSchemaSwitcher = GetComponent<UISchemaSwitcher>();
@@ -28,6 +29,8 @@ namespace Input {
                 eventSystem.enabled = true;
                 Cursor.visible = true;
                 Cursor.lockState = CursorLockMode.None;
+
+                ObjectsReference.Instance.playerController.canMove = false;
             }
             else {
                 _gameActions.enabled = true;
@@ -36,6 +39,8 @@ namespace Input {
                 eventSystem.enabled = false;
                 Cursor.visible = false;
                 Cursor.lockState = CursorLockMode.Confined;
+                
+                ObjectsReference.Instance.playerController.canMove = true;
             }
         }
     }

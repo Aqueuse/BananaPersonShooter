@@ -15,16 +15,18 @@ MonoBehaviour:
   itemType: 0
   itemCategory: 1
   buildableType: 0
-  itemName: plateform
+  itemName:
+  - plateform
+  - plateforme
   itemSprite: {fileID: 21300000, guid: 3728d82037057e341bbbd20d9d44c435, type: 3}
   itemDescription:
   - a plateform than can be feeded with bananas
   - "une plateforme qui peut \xEAtre aliment\xE9e en bananes"
   rawMaterialsWithQuantity:
     list:
-    - key: 19
+    - key: 18
       value: 2
-    - key: 21
+    - key: 20
       value: 2
     keyCollision: 0
   buildablePrefab: {fileID: 3045356508486292204, guid: 0630715419ab7f249ba73f9625dea7fb, type: 3}

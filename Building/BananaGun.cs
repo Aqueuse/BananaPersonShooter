@@ -5,22 +5,18 @@ namespace Building {
     public class BananaGun : MonoBehaviour {
         public GameObject moverTarget;
         [SerializeField] private LayerMask aspirableLayerMask;
+        private PlayerController _playerController;
         
-        [SerializeField] private Color selectionColor;
-        [SerializeField] private Color baseColor = Color.white;
-        
-        private Material[] aspirableMaterials;
-
         public GameObject bananaGun;
         public GameObject bananaGunInBack;
-        
-        private PlayerController _playerController;
-        public GameObject _targetedGameObject;
-
+        public GameObject targetedGameObject;
         public bool wasFocus;
         
+        private Material[] aspirableMaterials;
+        private static readonly int Emission = Shader.PropertyToID("_emission");
+
         private void Start() {
-            _playerController = ObjectsReference.Instance.bananaMan.GetComponent<PlayerController>();
+            _playerController = ObjectsReference.Instance.playerController;
         }
         
         private void Update() {
@@ -30,12 +26,12 @@ namespace Building {
             if (ObjectsReference.Instance.gameActions.isBuildModeActivated) {
                 if (Physics.Raycast(ObjectsReference.Instance.gameManager.cameraMain.transform.position, ObjectsReference.Instance.gameManager.cameraMain.transform.forward, out RaycastHit raycastHit, 100, layerMask:aspirableLayerMask)) {
                     UnhighlightSelectedObject();
-                    _targetedGameObject = raycastHit.transform.gameObject;
+                    targetedGameObject = raycastHit.transform.gameObject;
                     HighlightSelectedObject();
                 }
                 else {
                     UnhighlightSelectedObject();
-                    _targetedGameObject = null;
+                    targetedGameObject = null;
                 }
             }
         }
@@ -50,30 +46,29 @@ namespace Building {
             wasFocus = _playerController.isFocusCamera;
         }
 
-        public void CancelMover() {
+        public void UngrabBananaGun() {
             ObjectsReference.Instance.bananaGunPut.CancelThrow();
             
             bananaGun.SetActive(false);
             bananaGunInBack.SetActive(true);
 
             ObjectsReference.Instance.bananaMan.isGrabingBananaGun = false;
-
             ObjectsReference.Instance.bananaMan.tpsPlayerAnimator.FocusCamera(wasFocus);
         }
         
         private void HighlightSelectedObject() {
-            if (_targetedGameObject != null && _targetedGameObject.layer == 7) {
-                aspirableMaterials = _targetedGameObject.GetComponent<MeshRenderer>().materials;
-                aspirableMaterials[0].color = selectionColor;
-                _targetedGameObject.GetComponent<MeshRenderer>().materials = aspirableMaterials;
+            if (targetedGameObject != null && targetedGameObject.layer == 7) {
+                aspirableMaterials = targetedGameObject.GetComponent<Renderer>().materials;
+                aspirableMaterials[0].SetFloat(Emission, 0.2f);
+                targetedGameObject.GetComponent<Renderer>().materials = aspirableMaterials;
             }
         }
 
         public void UnhighlightSelectedObject() {
-            if (_targetedGameObject != null && _targetedGameObject.layer == 7) {
-                aspirableMaterials = _targetedGameObject.GetComponent<MeshRenderer>().materials;
-                aspirableMaterials[0].color = baseColor;
-                _targetedGameObject.GetComponent<MeshRenderer>().materials = aspirableMaterials;
+            if (targetedGameObject != null && targetedGameObject.layer == 7) {
+                aspirableMaterials = targetedGameObject.GetComponent<Renderer>().materials;
+                aspirableMaterials[0].SetFloat(Emission, 0f);
+                targetedGameObject.GetComponent<Renderer>().materials = aspirableMaterials;
             }
         }
     }

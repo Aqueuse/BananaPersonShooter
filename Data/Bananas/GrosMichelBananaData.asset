@@ -15,12 +15,13 @@ MonoBehaviour:
   itemType: 6
   itemCategory: 0
   buildableType: 1
-  itemName: Gros Michel
+  itemName:
+  - gros michel
+  - gros michel
   itemSprite: {fileID: 21300000, guid: 31439fbe8779c6140ba78790fcf12553, type: 3}
   itemDescription:
   - Big Heavy Banana
   - "Grosse banane blind\xE9e"
-  bananaName: Gros Michel
   effects:
   - Much much more nourishing, much more resistance
   - "Beaucoup beaucoup plus nourrissante, beaucoup plus de r\xE9sistance"

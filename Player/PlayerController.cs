@@ -22,7 +22,7 @@ namespace Player {
         public bool isFocusCamera;
         public bool isRolling;
         public bool canMove = true;
-        private bool _isGrounded;
+        public bool isGrounded;
         private bool _isHit;
 
         private float _damageCount;
@@ -83,8 +83,6 @@ namespace Player {
                 transform.rotation = _cameraRotation;
             }
             
-            if (!canMove) return;
-            
             ////// MOVEMENT ///////
             // If the input is null, stop the movement
             if (_rawInputMovement is { x: 0, z: 0 }) {
@@ -109,43 +107,50 @@ namespace Player {
                 _newPosition = _rigidbody.position + _movement;
             }
             
-            _rigidbody.MovePosition(_newPosition);
+            if (canMove) {
+                _rigidbody.MovePosition(_newPosition);
+            }
+            else {
+                speed = 0;
+            }
             
+            // damage
             if (_rigidbody.velocity.y < -20) {
                 _damageCount += 1;
             }
 
-            if (_isGrounded && _damageCount > 0) {
+            if (isGrounded && _damageCount > 0) {
                 ObjectsReference.Instance.bananaMan.TakeDamage(_damageCount);
                 _damageCount = 0;
             }
 
             // end jump
             if (Physics.Raycast(groundCheck.position, Vector3.down, 0.3f)) {
-                _isGrounded = true;
+                isGrounded = true;
                 _animator.SetBool(IsJumping, false);
                 _animator.SetBool(IsFalling, false);
             }
             
             else {
-                _isGrounded = false;
+                isGrounded = false;
                 _animator.SetBool(IsFalling, true);
             }
             
+            _tpsPlayerAnimatorScript.SetGrounded(isGrounded);
             _tpsPlayerAnimatorScript.UpdateMovementAnimation(_rawInputMovement.z*speed, _rawInputMovement.x*speed);
-            _tpsPlayerAnimatorScript.SetGrounded(_isGrounded);
             ObjectsReference.Instance.uiFace.MoveFaceAnimation(_rawInputMovement.magnitude);
+
         }
 
         public void PlayerJump() {
-            if (_isGrounded && !isRolling) {
+            if (isGrounded && !isRolling) {
                _rigidbody.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
                _tpsPlayerAnimatorScript.Jump();
             }
         }
 
         public void PlayerRoll() {
-            if (_isGrounded && !ObjectsReference.Instance.bananaMan.isGrabingBananaGun && isRolling == false) {
+            if (isGrounded && !ObjectsReference.Instance.bananaMan.isGrabingBananaGun && isRolling == false) {
                 if (_rawInputMovement.z != 0 || _rawInputMovement.x != 0) {
                      _tpsPlayerAnimatorScript.Roll();
                     _capsuleCollider.height = 0.90f;
@@ -155,7 +160,7 @@ namespace Player {
         }
 
         public void PlayerSprint() {
-            if (_isGrounded && !isRolling && !isInWater) speed = SprintMovementSpeed;
+            if (isGrounded && !isRolling && !isInWater) speed = SprintMovementSpeed;
         }
 
         public void PlayerStopSprint() {

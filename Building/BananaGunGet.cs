@@ -1,105 +1,100 @@
-using System.Collections.Generic;
 using Building.Buildables;
 using Data;
+using Enums;
 using Items;
+using UI.InGame.Chimployee;
 using UnityEngine;
-using UnityEngine.Localization.Settings;
 
 namespace Building {
     public class BananaGunGet : MonoBehaviour {
-        private Mesh _targetedGameObjectMesh;
-        
-        private ItemType _targetType;
-        
         private ScriptableObjectManager _scriptableObjectManager;
-        
-        private Dictionary<AdvancementState, BuildableType[]> _buildableUnlockedByAdvancementState;
-
         private BananaGun bananaGun;
 
+        private Mesh _targetedGameObjectMesh;
+        private ItemType _targetType;
+        
         private void Start() {
             _scriptableObjectManager = ObjectsReference.Instance.scriptableObjectManager;
             bananaGun = ObjectsReference.Instance.bananaGun;
-            
-            _buildableUnlockedByAdvancementState = new Dictionary<AdvancementState, BuildableType[]> {
-                { AdvancementState.GRAB_DEBRIS_ON_MAP, new [] { BuildableType.PLATEFORM , BuildableType.FIRST_DOOR_LEFT, BuildableType.FIRST_DOOR_RIGHT, BuildableType.FIRST_CLOISON } },
-                { AdvancementState.GRAB_BANANAS, new [] { BuildableType.BANANA_DRYER } }
-            };
         }
         
         public void Harvest() {
-            if (bananaGun._targetedGameObject == null) return;
+            if (bananaGun.targetedGameObject == null || bananaGun.targetedGameObject.layer != 7) return;
             
-            _targetedGameObjectMesh = bananaGun._targetedGameObject.GetComponent<MeshFilter>().sharedMesh;
-
-            // Regime
-            if (_targetedGameObjectMesh == _scriptableObjectManager._meshReferenceScriptableObject.matureBananaTree) {
-                ObjectsReference.Instance.audioManager.PlayEffect(EffectType.GRAB_BANANAS, 0);
-            
-                var regimeClass = bananaGun._targetedGameObject.GetComponent<Regime>();
-            
-                var bananaType = regimeClass.bananasDataScriptableObject.itemType;
-                var quantity = regimeClass.bananasDataScriptableObject.regimeQuantity;
-            
-                ObjectsReference.Instance.inventory.AddQuantity(ItemCategory.BANANA, bananaType, quantity);
-            
-                regimeClass.GrabBananas();
-            
-                TryAddBlueprintByAdvancementState(AdvancementState.GRAB_BANANAS);
-            }
-            
-            else {
-                // buildable
-            if (_scriptableObjectManager.IsBuildable(_targetedGameObjectMesh)) {
-                var buildableType = _scriptableObjectManager.GetBuildableTypeByMesh(_targetedGameObjectMesh);
-                
-                var craftingMaterials =
-                    ObjectsReference.Instance.scriptableObjectManager.GetBuildableCraftingIngredients(buildableType);
-            
-                foreach (var craftingMaterial in craftingMaterials) {
-                    ObjectsReference.Instance.inventory.AddQuantity(ItemCategory.RAW_MATERIAL, craftingMaterial.Key,
-                        craftingMaterial.Value);
-                }
-            
-                ObjectsReference.Instance.audioManager.StopAudioSource(AudioSourcesType.EFFECT);
-                ObjectsReference.Instance.uiQueuedMessages.AddMessage("+ 1 " + LocalizationSettings.Instance
-                    .GetStringDatabase().GetLocalizedString(buildableType.ToString().ToLower()));
-            
-                if (buildableType == BuildableType.BANANA_DRYER) GetComponent<BananasDryer>().RetrieveRawMaterials();
-                
-                Destroy(bananaGun._targetedGameObject);
-                bananaGun._targetedGameObject = null;
-            }
+            switch (bananaGun.targetedGameObject.tag) {
+                case "Regime":
+                    ObjectsReference.Instance.audioManager.PlayEffect(EffectType.GRAB_BANANAS, 0);
                     
-                else {
-                    // debris
-                    if (_scriptableObjectManager.IsDebris(_targetedGameObjectMesh)) {
-                        MapItems.Instance.uiCanvasItemsHiddableManager.RemoveCanva(bananaGun._targetedGameObject.GetComponentInChildren<Canvas>());
+                    var regimeClass = bananaGun.targetedGameObject.GetComponent<Regime>();
+                    var bananaType = regimeClass.bananasDataScriptableObject.itemType;
+                    var quantity = regimeClass.bananasDataScriptableObject.regimeQuantity;
             
-                        TryAddBlueprintByAdvancementState(AdvancementState.GRAB_DEBRIS_ON_MAP);
+                    ObjectsReference.Instance.inventory.AddQuantity(ItemCategory.BANANA, bananaType, quantity);
             
-                        ObjectsReference.Instance.audioManager.PlayEffect(EffectType.DESINTEGRATION, 0);
-                        
-                        ObjectsReference.Instance.inventory.AddQuantity(ItemCategory.RAW_MATERIAL, ItemType.METAL, 2);
-                        ObjectsReference.Instance.inventory.AddQuantity(ItemCategory.RAW_MATERIAL, ItemType.ELECTRONIC, 1);
-                        ObjectsReference.Instance.audioManager.StopAudioSource(AudioSourcesType.EFFECT);
-                        ObjectsReference.Instance.mapsManager.currentMap.RecalculateHappiness();
-                        ObjectsReference.Instance.mapsManager.currentMap.isDiscovered = true;
-                        
-                        Destroy(bananaGun._targetedGameObject);
-                        bananaGun._targetedGameObject = null;
-                    }
-                }
-            }
-        }
-        
-        private void TryAddBlueprintByAdvancementState(AdvancementState advancementState) {
-            if (!ObjectsReference.Instance.gameData.bananaManSavedData.playerAdvancements.Contains(advancementState)) {
-                ObjectsReference.Instance.gameData.bananaManSavedData.playerAdvancements.Add(advancementState);
+                    regimeClass.GrabBananas();
+                    break;
                 
-                foreach (var buildableType in _buildableUnlockedByAdvancementState[advancementState]) {
-                    ObjectsReference.Instance.uiBlueprints.SetVisible(buildableType);
-                }
+                case "Buildable":
+                    _targetedGameObjectMesh = bananaGun.targetedGameObject.GetComponent<MeshFilter>().sharedMesh;
+
+                    ObjectsReference.Instance.audioManager.PlayEffect(EffectType.GRAB_BANANAS, 0);
+                    var buildableType = _scriptableObjectManager.GetBuildableTypeByMesh(_targetedGameObjectMesh);
+                
+                    var craftingMaterials =
+                        ObjectsReference.Instance.scriptableObjectManager.GetBuildableCraftingIngredients(buildableType);
+            
+                    foreach (var craftingMaterial in craftingMaterials) {
+                        ObjectsReference.Instance.inventory.AddQuantity(ItemCategory.RAW_MATERIAL, craftingMaterial.Key,
+                            craftingMaterial.Value);
+                    }
+                    
+                    if (buildableType == BuildableType.BANANA_DRYER) GetComponent<BananasDryer>().RetrieveRawMaterials();
+
+                    ObjectsReference.Instance.mapsManager.currentMap.isDiscovered = true;
+
+                    Destroy(bananaGun.targetedGameObject);
+                    bananaGun.targetedGameObject = null;
+                    break;
+                
+                case "Debris":
+                    ObjectsReference.Instance.audioManager.PlayEffect(EffectType.GRAB_BANANAS, 0);
+                    MapItems.Instance.uiCanvasItemsHiddableManager.RemoveCanva(bananaGun.targetedGameObject.GetComponentInChildren<Canvas>());
+                    
+                    ObjectsReference.Instance.inventory.AddQuantity(ItemCategory.RAW_MATERIAL, ItemType.METAL, 2);
+                    ObjectsReference.Instance.inventory.AddQuantity(ItemCategory.RAW_MATERIAL, ItemType.ELECTRONIC, 1);
+                    ObjectsReference.Instance.mapsManager.currentMap.RecalculateHappiness();
+                    ObjectsReference.Instance.mapsManager.currentMap.isDiscovered = true;
+                    
+                    Destroy(bananaGun.targetedGameObject);
+                    bananaGun.targetedGameObject = null;
+                    break;
+                case "Ruine":
+                    ObjectsReference.Instance.audioManager.PlayEffect(EffectType.GRAB_BANANAS, 0);
+                    ObjectsReference.Instance.inventory.AddQuantity(ItemCategory.RAW_MATERIAL, ItemType.METAL, 2);
+                    
+                    Destroy(bananaGun.targetedGameObject);
+                    bananaGun.targetedGameObject = null;
+                    break;
+                case "Monkeyman" :
+                    ObjectsReference.Instance.mapsManager.currentMap.isDiscovered = true;
+                    ObjectsReference.Instance.gameData.bananaManSavedData.playerAdvancements.Add(AdvancementState.GET_MONKEYMAN_IA);
+                    
+                    ObjectsReference.Instance.inventory.AddQuantity(ItemCategory.RAW_MATERIAL, ItemType.METAL, 1);
+                    ObjectsReference.Instance.inventory.AddQuantity(ItemCategory.RAW_MATERIAL, ItemType.ELECTRONIC, 2);
+
+                    Destroy(bananaGun.targetedGameObject.transform.parent.gameObject);
+                    bananaGun.targetedGameObject = null;
+
+                    ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.BUILD_HELPER].alpha = 0f;
+                    
+                    ObjectsReference.Instance.uihud.Activate_Chimployee_Tab();
+                    
+                    ObjectsReference.Instance.uiManager.Show_Hide_interface();
+                    ObjectsReference.Instance.uihud.Switch_To_Chimployee();
+                    
+                    ObjectsReference.Instance.uiChimployee.InitDialogue(ChimployeeDialogue.chimployee_first_interaction);
+                    ObjectsReference.Instance.bananaGun.UngrabBananaGun();
+                    break;
             }
         }
     }

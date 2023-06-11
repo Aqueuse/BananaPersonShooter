@@ -15,14 +15,16 @@ MonoBehaviour:
   itemType: 0
   itemCategory: 1
   buildableType: 2
-  itemName: door_left
+  itemName:
+  - simple door (left)
+  - porte simple (gauche)
   itemSprite: {fileID: 21300000, guid: 436a81f3cca1f7c4dacd0e01466a66e6, type: 3}
   itemDescription:
   - a combinable door (left)
   - une porte combinable (gauche)
   rawMaterialsWithQuantity:
     list:
-    - key: 19
+    - key: 18
       value: 5
     keyCollision: 0
   buildablePrefab: {fileID: 1603251378263894779, guid: 89acf479cb887f84f981b4082e09062d, type: 3}

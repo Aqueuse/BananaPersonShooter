@@ -15,12 +15,13 @@ MonoBehaviour:
   itemType: 5
   itemCategory: 0
   buildableType: 1
-  itemName: Gold Finger
+  itemName:
+  - gold finger
+  - gold finger
   itemSprite: {fileID: 21300000, guid: 4091a8e1d607d5242a0ceade0a52ca37, type: 3}
   itemDescription:
   - Homing banana
   - "Banane \xE0 t\xEAte chercheuse"
-  bananaName: Gold Finger
   effects:
   - "Technologically\r                           advanced banana homing"
   - "Banane technologiquement avanc\xE9e, \xE0 t\xEAte chercheuse"

@@ -1,5 +1,7 @@
-﻿using UI.Bananapedia;
+﻿using Enums;
+using UI.Bananapedia;
 using UI.InGame;
+using UI.Save;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -10,7 +12,7 @@ namespace UI {
 
         public GenericDictionary<UICanvasGroupType, CanvasGroup> canvasGroupsByUICanvasType;
         public bool isOnMenu;
-
+        
         private static readonly int ShowInventoryID = Animator.StringToHash("SHOW INVENTORY");
         
         private void Start() {
@@ -48,6 +50,9 @@ namespace UI {
                     Set_active(UICanvasGroupType.OPTIONS, false);
                     Set_active(UICanvasGroupType.BANANAPEDIA, false);
                     Set_active(UICanvasGroupType.CREDITS, false);
+                    Set_active(UICanvasGroupType.HOME_MENU, true);
+
+                    ObjectsReference.Instance.inputManager.uiSchemaSwitcher.SwitchUISchema(UISchemaSwitchType.HOME_MENU);
                     break;
             }
         }
@@ -61,6 +66,7 @@ namespace UI {
             Set_active(UICanvasGroupType.GAME_MENU, false);
             
             isOnMenu = false;
+            ObjectsReference.Instance.inputManager.uiSchemaSwitcher.SwitchUISchema(UISchemaSwitchType.HOME_MENU);
         }
 
         public void Hide_home_menu() {
@@ -73,43 +79,73 @@ namespace UI {
             isOnMenu = false;
         }
 
-        public void Switch_To_Load_menu() {
+        public void Show_Load_Menu() {
             Set_active(UICanvasGroupType.LOAD, true);
             Set_active(UICanvasGroupType.OPTIONS, false);
             Set_active(UICanvasGroupType.BANANAPEDIA, false);
             Set_active(UICanvasGroupType.CREDITS, false);
-            
-            ObjectsReference.Instance.uiSave.newSaveButton.SetActive(ObjectsReference.Instance.gameManager.gameContext == GameContext.IN_GAME);
+            Set_active(UICanvasGroupType.HOME_MENU, false);
+
             isOnMenu = true;
+            Hide_Game_Menu();
+
+            if (ObjectsReference.Instance.gameManager.gameContext == GameContext.IN_GAME) {
+                ObjectsReference.Instance.uiSave.newSaveButton.SetActive(true);
+                EventSystem.current.SetSelectedGameObject(ObjectsReference.Instance.uiSave.newSaveButton);
+            }
+
+            else {
+                ObjectsReference.Instance.uiSave.newSaveButton.SetActive(false);
+                if (ObjectsReference.Instance.uiSave.GetComponentInChildren<UISaveSlot>() != null)
+                    EventSystem.current.SetSelectedGameObject(ObjectsReference.Instance.uiSave.GetComponentsInChildren<UISaveSlot>()[0].gameObject);
+            }
+            
+            ObjectsReference.Instance.inputManager.uiSchemaSwitcher.SwitchUISchema(UISchemaSwitchType.LOAD);
         }
 
-        public void Switch_To_options_menu() {
+        public void Show_Options() {
             Set_active(UICanvasGroupType.LOAD, false);
             Set_active(UICanvasGroupType.OPTIONS, true);
             Set_active(UICanvasGroupType.BANANAPEDIA, false);
             Set_active(UICanvasGroupType.CREDITS, false);
+            Set_active(UICanvasGroupType.HOME_MENU, false);
+            
             isOnMenu = true;
+            Hide_Game_Menu();
+            
+            ObjectsReference.Instance.inputManager.uiSchemaSwitcher.SwitchUISchema(UISchemaSwitchType.AUDIOVIDEO_TAB);
+            ObjectsReference.Instance.uiOptionsMenu.Switch_To_Audio_Video_Tab();
+            
         }
 
-        public void Switch_To_Bananapedia() {
+        public void Show_Bananapedia() {
             uiBananapedia.SelectFirstBananapediaEntry();
 
             Set_active(UICanvasGroupType.LOAD, false);
             Set_active(UICanvasGroupType.OPTIONS, false);
             Set_active(UICanvasGroupType.BANANAPEDIA, true);
             Set_active(UICanvasGroupType.CREDITS, false);
+            Set_active(UICanvasGroupType.HOME_MENU, false);
+
             isOnMenu = true;
+            Hide_Game_Menu();
+            
+            ObjectsReference.Instance.inputManager.uiSchemaSwitcher.SwitchUISchema(UISchemaSwitchType.BANANAPEDIA);
         }
         
         public void Show_Credits() {
-            canvasGroupsByUICanvasType[UICanvasGroupType.CREDITS].GetComponent<InfinityScroll>().enabled = true;
-            canvasGroupsByUICanvasType[UICanvasGroupType.CREDITS].GetComponent<InfinityScroll>().value = 0.13f;
-            
             Set_active(UICanvasGroupType.LOAD, false);
             Set_active(UICanvasGroupType.OPTIONS, false);
             Set_active(UICanvasGroupType.BANANAPEDIA, false);
             Set_active(UICanvasGroupType.CREDITS, true);
+            Set_active(UICanvasGroupType.HOME_MENU, false);
+            
+            EventSystem.current.SetSelectedGameObject(ObjectsReference.Instance.uiCredits.scrollbar.gameObject);
+            
             isOnMenu = true;
+            Hide_Game_Menu();
+            
+            ObjectsReference.Instance.inputManager.uiSchemaSwitcher.SwitchUISchema(UISchemaSwitchType.CREDITS);
         }
         
         public void Show_game_menu() {
@@ -150,8 +186,8 @@ namespace UI {
                         case InterfaceContext.BLUEPRINTS:
                             ObjectsReference.Instance.uihud.Switch_To_Blueprints();
                             break;
-                        case InterfaceContext.STATISTICS:
-                            ObjectsReference.Instance.uihud.Switch_To_Statistics();
+                        case InterfaceContext.CHIMPLOYEE:
+                            ObjectsReference.Instance.uihud.Switch_To_Chimployee();
                             break;
                     }
                 }

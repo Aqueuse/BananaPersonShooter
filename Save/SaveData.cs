@@ -3,7 +3,6 @@ using System.IO;
 using Game;
 using JetBrains.Annotations;
 using Newtonsoft.Json;
-using PeterO.Cbor;
 using Save.Templates;
 using UnityEngine;
 
@@ -17,7 +16,8 @@ namespace Save {
         private string _savesPath;
 
         private SavedData _savedData;
-
+        private string savePath;
+        
         private void Start() {
             _appPath = Path.GetDirectoryName(Application.persistentDataPath);
             if (_appPath != null) {
@@ -36,7 +36,7 @@ namespace Save {
         }
 
         public void Save(string saveUuid, string saveDate) {
-            var savePath = Path.Combine(_savesPath, saveUuid);
+            savePath = Path.Combine(_savesPath, saveUuid);
 
             if (!Directory.Exists(savePath)) {
                 Directory.CreateDirectory(savePath);
@@ -85,10 +85,26 @@ namespace Save {
             
             string screenshotFilePath = Path.Combine(savePath, "screenshot.png");
             SaveCameraView(screenshotFilePath);
+            
+            foreach (var map in ObjectsReference.Instance.mapsManager.mapBySceneName) {
+                if (map.Value.aspirablesCategories.Count != 0) {
+                    var mapToSave = map.Value;
+
+                    SaveMapData(
+                        mapName: mapToSave.mapName,
+                        aspirablesPositions: mapToSave.aspirablesPositions,
+                        aspirablesRotations:mapToSave.aspirablesRotations,
+                        debrisPrefabsIndex: mapToSave.aspirablesPrefabsIndex,
+                        aspirablesCategories:mapToSave.aspirablesCategories,
+                        buildableTypes: mapToSave.aspirablesBuildableTypes,
+                        itemTypes:mapToSave.aspirablesItemTypes
+                    );
+                }
+            }
         }
 
         public void SaveName(string saveUuid, string saveName) {
-            var savePath = Path.Combine(_savesPath, saveUuid);
+            savePath = Path.Combine(_savesPath, saveUuid);
             
             _savedData = ObjectsReference.Instance.loadData.GetSavedDataByUuid(saveUuid);
             _savedData.saveName = saveName;
@@ -113,11 +129,10 @@ namespace Save {
             screenshotCamera.targetTexture = null;
         }
 
-        public void SaveDataCBOR(
+        private void SaveMapData(
             string mapName,  
             List<Vector3> aspirablesPositions, 
             List<Quaternion> aspirablesRotations,
-            string saveUuid,
             
             List<ItemCategory> aspirablesCategories,
             [NotNull] List<int> debrisPrefabsIndex,
@@ -125,26 +140,30 @@ namespace Save {
             [NotNull] List<ItemType> itemTypes
         ) {
 
-            var savePath = Path.Combine(_savesPath, saveUuid);
             var mapDataSavesPath = Path.Combine(savePath, "MAPDATA");
-
-            _buildablesDatas = new string[aspirablesCategories.Count];
             
-            for (var i = 0; i < _buildablesDatas.Length; i++) {
-                _buildablesDatas[i] = aspirablesPositions[i] + "/" +
-                                      aspirablesRotations[i] + "/" +
-                                      aspirablesCategories[i] + "/" +
-                                      debrisPrefabsIndex[i] + "/" +
-                                      buildableTypes[i] + "/" +
-                                      itemTypes[i];
+            if (aspirablesCategories.Count > 0) {
+                _buildablesDatas = new string[aspirablesCategories.Count];
+            
+                for (var i = 0; i < _buildablesDatas.Length; i++) {
+                    _buildablesDatas[i] = aspirablesPositions[i] + "/" +
+                                          aspirablesRotations[i] + "/" +
+                                          aspirablesCategories[i] + "/" +
+                                          debrisPrefabsIndex[i] + "/" +
+                                          buildableTypes[i] + "/" +
+                                          itemTypes[i];
+                }
+                
+                string savefilePath = Path.Combine(mapDataSavesPath, mapName+"_aspirables.data");
+                
+                using StreamWriter streamWriter = new StreamWriter(savefilePath, append:false);
+            
+                foreach (var data in _buildablesDatas) {
+                    streamWriter.WriteLine(data);
+                }
+            
+                streamWriter.Flush();
             }
-
-            var cbor = CBORObject.NewArray();
-            
-            cbor.Add(mapName, _buildablesDatas);
-
-            using var stream = new FileStream(mapDataSavesPath, FileMode.Create);
-            cbor.WriteTo(stream);
         }
     }
 }

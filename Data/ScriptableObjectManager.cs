@@ -13,6 +13,16 @@ namespace Data {
             
             return _meshReferenceScriptableObject.bananasDataScriptableObject[itemType].itemDescription[langageIndex];
         }
+        
+        public string GetName(ItemCategory itemCategory, int langageIndex, ItemType itemType = ItemType.EMPTY, BuildableType buildableType = BuildableType.EMPTY) {
+            if (itemCategory == ItemCategory.BUILDABLE) return _meshReferenceScriptableObject.buildablesDataScriptableObject[buildableType].itemName[langageIndex];
+
+            if (itemCategory == ItemCategory.RAW_MATERIAL)
+                return _meshReferenceScriptableObject.rawMaterialDataScriptableObjects[itemType].itemName[langageIndex];
+            
+            return _meshReferenceScriptableObject.bananasDataScriptableObject[itemType].itemName[langageIndex];
+        }
+        
 
         public BananasDataScriptableObject GetBananaScriptableObject(ItemType itemType) {
             return _meshReferenceScriptableObject.bananasDataScriptableObject[itemType];
@@ -39,21 +49,13 @@ namespace Data {
             var buildableType = _meshReferenceScriptableObject.buildableTypeByMesh[sharedMesh];
             return _meshReferenceScriptableObject.buildablesDataScriptableObject[buildableType].buildableGridSize;
         }
-
-        public bool IsBuildable(Mesh sharedMesh) {
-            return _meshReferenceScriptableObject.buildableTypeByMesh.ContainsKey(sharedMesh);
-        }
-
-        public bool IsDebris(Mesh sharedMesh) {
-            return _meshReferenceScriptableObject.debrisPrefabIndexByMesh.ContainsKey(sharedMesh);
-        }
-
-        public bool isPlateforme(int prefabIndex) {
-            return _meshReferenceScriptableObject.plateformeTypeByPrefabIndex.ContainsKey(prefabIndex);
-        }
-
+        
         public BuildableType GetBuildableTypeByMesh(Mesh sharedMesh) {
             return _meshReferenceScriptableObject.buildableTypeByMesh[sharedMesh];
+        }
+
+        public GameObject BuildablePrefabByBuildableType(BuildableType buildableType) {
+            return _meshReferenceScriptableObject.buildablePrefabByBuildableType[buildableType];
         }
     }
 }

@@ -12,10 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 145b73ac3666c3f44bd8b125c331f2eb, type: 3}
   m_Name: MetalData
   m_EditorClassIdentifier: 
-  itemType: 19
+  itemType: 18
   itemCategory: 2
-  buildableType: 1
-  itemName: metal
+  buildableType: 6
+  itemName:
+  - metal
+  - "m\xE9tal"
   itemSprite: {fileID: 21300000, guid: 6746b3046e1ee344082ce05dff218769, type: 3}
   itemDescription:
   - metal from outer space

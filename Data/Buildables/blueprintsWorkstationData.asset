@@ -15,18 +15,22 @@ MonoBehaviour:
   itemType: 0
   itemCategory: 1
   buildableType: 5
-  itemName: blueprints_workstation
+  itemName:
+  - blueprint workstation
+  - "station \xE0 blueprints"
   itemSprite: {fileID: 21300000, guid: ab491f16b98a8064fabe9758c563a6e8, type: 3}
   itemDescription:
-  - "un bureau pour concevoir des murs personnalis\xE9s"
   - a desk to design custom walls
+  - "un bureau pour concevoir des cloisons personnalis\xE9es"
   rawMaterialsWithQuantity:
     list:
-    - key: 19
+    - key: 18
       value: 3
-    - key: 21
+    - key: 20
       value: 2
     - key: 20
       value: 1
-    keyCollision: 0
+    keyCollision: 1
   buildablePrefab: {fileID: 5006133390569365907, guid: 6473fc63d7b38244cacef9e82e267f96, type: 3}
+  mustSnap: 0
+  buildableGridSize: 0

@@ -15,7 +15,9 @@ MonoBehaviour:
   itemType: 4
   itemCategory: 0
   buildableType: 6
-  itemName: Cavendish
+  itemName:
+  - cavendish
+  - cavendish
   itemSprite: {fileID: 21300000, guid: 78d734baad5807a468cd9ec3100c26b8, type: 3}
   itemDescription:
   - The basic banana

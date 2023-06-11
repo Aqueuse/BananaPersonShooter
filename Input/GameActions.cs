@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Enums;
 using Player;
 using UnityEngine;
 
@@ -33,7 +34,7 @@ namespace Input {
 
             scrollSlotsValue = new Vector2();
 
-            _playerController = ObjectsReference.Instance.bananaMan.GetComponent<PlayerController>();
+            _playerController = ObjectsReference.Instance.playerController;
             
             _leftTriggerActivated = false;
 
@@ -78,7 +79,7 @@ namespace Input {
                     Reload();
                     Eat();
 
-                    CheckBuildMode();
+                    if (_playerController.isGrounded) CheckBuildMode();
                 }
             
                 if (isBuildModeActivated) {
@@ -255,7 +256,7 @@ namespace Input {
             }
             
             if (UnityEngine.Input.GetKeyUp(KeyCode.Mouse0)) {
-                ObjectsReference.Instance.bananaGun.CancelMover();
+                ObjectsReference.Instance.bananaGun.UngrabBananaGun();
                 leftClickActivated = false;
             }
             
@@ -265,7 +266,7 @@ namespace Input {
             }
             
             if (UnityEngine.Input.GetAxis("RightTrigger") == 0 && rightTriggerActivated)  {
-                ObjectsReference.Instance.bananaGun.CancelMover();
+                ObjectsReference.Instance.bananaGun.UngrabBananaGun();
                 rightTriggerActivated = false;
             }
         }
@@ -290,7 +291,7 @@ namespace Input {
             }
 
             if (UnityEngine.Input.GetKeyUp(KeyCode.Mouse1)) {
-                ObjectsReference.Instance.bananaGun.CancelMover();
+                ObjectsReference.Instance.bananaGun.UngrabBananaGun();
                 _playerController.canMove = true;
                 
                 ObjectsReference.Instance.bananaGun.UnhighlightSelectedObject();
@@ -321,7 +322,7 @@ namespace Input {
                 ObjectsReference.Instance.gameActions._leftTriggerActivated) {
                 _leftTriggerActivated = false;
                 
-                ObjectsReference.Instance.bananaGun.CancelMover();
+                ObjectsReference.Instance.bananaGun.UngrabBananaGun();
                 _playerController.canMove = true;
                 
                 ObjectsReference.Instance.uiCrosshair.SetCrosshair(ItemCategory.EMPTY, ItemType.EMPTY);
@@ -381,7 +382,7 @@ namespace Input {
         }
 
         private void OnDisable() {
-            ObjectsReference.Instance.bananaMan.GetComponent<PlayerController>().ResetPlayer();
+            ObjectsReference.Instance.playerController.ResetPlayer();
         }
     }
 }

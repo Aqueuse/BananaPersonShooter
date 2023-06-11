@@ -1,12 +1,11 @@
 using System;
-using System.Globalization;
 using UnityEngine;
 
 namespace UI.Save {
     public class UISave : MonoBehaviour {
         [SerializeField] private GameObject savePrefab;
-        [SerializeField] private GameObject autosavePrefab;
         public GameObject newSaveButton;
+        public UISaveSlot selectedSaveSlot;
 
         public void UnselectAll() {
             foreach (var saveSlot in GetComponentsInChildren<UISaveSlot>()) {
@@ -14,26 +13,25 @@ namespace UI.Save {
             }
         }
         
-        public void CreateNewSave(string saveUuid) {
-            var date = DateTime.ParseExact(DateTime.Now.ToString("U"), "U", CultureInfo.CurrentCulture).ToString(CultureInfo.CurrentCulture);
-            if (saveUuid.Length == 0) saveUuid = DateTime.Now.ToString("yyyyMMddHHmmss");
-
-            ObjectsReference.Instance.gameSave.SaveGameData(saveUuid);
+        public void CreateNewSave() {
+            var saveUuid = DateTime.Now.ToString("yyyyMMddHHmmss");
+            ObjectsReference.Instance.gameData.currentSaveUuid = saveUuid;
 
             var save = Instantiate(savePrefab, transform);
-            save.GetComponent<UISaveSlot>().UpdateToNewSave(saveUuid, date);
+            save.GetComponent<UISaveSlot>().saveUuid = saveUuid;
+            
+            save.GetComponent<UISaveSlot>().Save();
         }
         
         public void AppendSaveSlot(string saveUuid) {
-            if (saveUuid == "auto_save") {
-                var save = Instantiate(autosavePrefab, transform);
-                save.GetComponent<UIAutoSaveSlot>().saveUuid = saveUuid;
-            }
+            var save = Instantiate(savePrefab, transform);
+            var savedData = ObjectsReference.Instance.loadData.GetSavedDataByUuid(saveUuid);
 
-            else {
-                var save = Instantiate(savePrefab, transform);
-                save.GetComponent<UISaveSlot>().SetToExistingSave(saveUuid);
-            }
+            save.GetComponent<UISaveSlot>().saveUuid = saveUuid;
+            save.GetComponent<UISaveSlot>().saveDate.text = savedData.lastSavedDate;
+            save.GetComponent<UISaveSlot>().saveName.text = savedData.saveName;
+            
+            save.GetComponent<UISaveSlot>().UpdateThumbail();
         }
     }
 }

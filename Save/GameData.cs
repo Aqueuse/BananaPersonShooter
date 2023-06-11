@@ -3,12 +3,9 @@ using UnityEngine;
 
 namespace Save {
     public class GameData : MonoBehaviour {
-        [SerializeField] public GameObject[] debrisPrefab;
-        [SerializeField] public GameObject plateformPrefab;
-
         public string currentSaveUuid;
         
-        public BananaManSavedData bananaManSavedData = new BananaManSavedData();
+        public BananaManSavedData bananaManSavedData = new();
         
         public Vector3 lastPositionOnMap;
         public Vector3 lastRotationOnMap;

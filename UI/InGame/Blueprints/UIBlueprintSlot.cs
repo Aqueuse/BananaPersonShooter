@@ -6,15 +6,16 @@ namespace UI.InGame.Blueprints {
         public BuildableType buildableType;
         
         public void AssignToSlot() {
-            SetDescription();
+            SetDescriptionAndName();
             
             ObjectsReference.Instance.uInventory.lastselectedInventoryItem = gameObject;
 
             ObjectsReference.Instance.uiSlotsManager.AssignToSelectedSlot(ItemCategory.BUILDABLE, buildableType:buildableType);
         }
         
-        private void SetDescription() {
-            ObjectsReference.Instance.uInventory.itemDescription.text = ObjectsReference.Instance.scriptableObjectManager.GetDescription(itemCategory, ObjectsReference.Instance.gameSettings.languageIndexSelected, buildableType:buildableType);
+        private void SetDescriptionAndName() {
+            ObjectsReference.Instance.uiBlueprints.itemName.text = ObjectsReference.Instance.scriptableObjectManager.GetName(itemCategory, ObjectsReference.Instance.gameSettings.languageIndexSelected, buildableType:buildableType);
+            ObjectsReference.Instance.uiBlueprints.itemDescription.text = ObjectsReference.Instance.scriptableObjectManager.GetDescription(itemCategory, ObjectsReference.Instance.gameSettings.languageIndexSelected, buildableType:buildableType);
         }
     }
 }

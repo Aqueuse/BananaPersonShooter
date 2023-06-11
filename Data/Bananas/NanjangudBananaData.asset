@@ -15,12 +15,13 @@ MonoBehaviour:
   itemType: 11
   itemCategory: 0
   buildableType: 1
-  itemName: Nanjangud
+  itemName:
+  - nanjangud
+  - nanjangud
   itemSprite: {fileID: 21300000, guid: 490b98b84e100f14cabc1a03c619aad7, type: 3}
   itemDescription:
   - special taste, slow down time
   - "Go\xFBt sp\xE9cial, ralenti le temps"
-  bananaName: Nanjangud
   effects:
   - slow down time for 5 seconds
   - ralenti le temps pendant 5 secondes

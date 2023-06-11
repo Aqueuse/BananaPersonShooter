@@ -1,3 +1,5 @@
+using System;
+using System.Globalization;
 using System.IO;
 using TMPro;
 using UnityEngine;
@@ -18,16 +20,17 @@ namespace UI.Save {
         [SerializeField] private GameObject saveRootGameObject;
 
         [SerializeField] private GameObject textPanel;
-        [SerializeField] private TextMeshProUGUI saveName;
-        [SerializeField] private TextMeshProUGUI saveDate;
+        public TextMeshProUGUI saveName;
+        public TextMeshProUGUI saveDate;
         [SerializeField] private Image thumbail;
 
         public string saveUuid = "";
-
+        
         public void Select() {
-            //AudioManager.Instance.PlayEffect(EffectType.BUTTON_INTERACTION, 0);
+            ObjectsReference.Instance.uiSave.selectedSaveSlot = this;
             ObjectsReference.Instance.uiSave.UnselectAll();
             activatedMask.SetActive(true);
+            
         }
 
         public void Unselect() {
@@ -42,7 +45,6 @@ namespace UI.Save {
         }
 
         public void ShowSaveOptions() {
-            //AudioManager.Instance.PlayEffect(EffectType.BUTTON_INTERACTION, 0);
             loadButtonGameObject.SetActive(true);
             renameButtonGameObject.SetActive(true);
             deleteButtonGameObject.SetActive(true);
@@ -58,35 +60,25 @@ namespace UI.Save {
             ObjectsReference.Instance.gameManager.Play(saveUuid, false);
         }
 
-        public void SetToExistingSave(string existingSaveUuid) {
-            saveUuid = existingSaveUuid;
+        public void Save () {
+            var date = DateTime.ParseExact(DateTime.Now.ToString("U"), "U", CultureInfo.CurrentCulture).ToString(CultureInfo.CurrentCulture);
+            
+            if (ObjectsReference.Instance.loadData.SaveExists(saveUuid)) {
+                var savedData = ObjectsReference.Instance.loadData.GetSavedDataByUuid(saveUuid);
+            
+                saveName.text = savedData.saveName;
+                saveDate.text = date;
+            }
 
-            var savedData = ObjectsReference.Instance.loadData.GetSavedDataByUuid(existingSaveUuid);
+            else {
+                saveDate.text = date;
+            }
             
-            saveName.text = savedData.saveName;
-            saveDate.text = savedData.lastSavedDate;
-            
-            UpdateThumbail();
-        }
-
-        public void UpdateToExistingSave() {
-            var savedData = ObjectsReference.Instance.loadData.GetSavedDataByUuid(saveUuid);
-            
-            saveName.text = savedData.saveName;
-            saveDate.text = savedData.lastSavedDate;
-            
-            ObjectsReference.Instance.gameSave.SaveGameData(saveUuid);
+            ObjectsReference.Instance.gameSave.SaveGame(saveUuid);
 
             UpdateThumbail();
         }
-
-        public void UpdateToNewSave(string newSaveUuid, string date) {
-            saveUuid = newSaveUuid;
-            saveDate.text = date;
-
-            UpdateThumbail();
-        }
-
+        
         public void Rename() {
             renameInputFieldGameObject.SetActive(true);
         }
@@ -97,7 +89,7 @@ namespace UI.Save {
             renameInputFieldGameObject.SetActive(false);
         }
         
-        private void UpdateThumbail() {
+        public void UpdateThumbail() {
             var savePath = ObjectsReference.Instance.loadData.GetSavePathByUuid(saveUuid);
             string screenshotFilePath = Path.Combine(savePath, "screenshot.png");
             

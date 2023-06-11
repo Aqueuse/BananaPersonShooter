@@ -2,17 +2,17 @@ using TMPro;
 using UnityEngine;
 
 namespace UI.InGame {
-    public enum RepairStationMode {
+    public enum AssemblerMode {
         IDLE,
         BANANA_GUN
     }
 
-    public class UIrepairStation : MonoBehaviour {
+    public class UIassembler : MonoBehaviour {
         [SerializeField] private CanvasGroup basicTextCanvasGroup;
         [SerializeField] private CanvasGroup bananaGunReparationCanvasGroup;
         [SerializeField] private TextMeshProUGUI bananaGunPiecesQuantityText;
 
-        public RepairStationMode repairStationMode = RepairStationMode.IDLE;
+        public AssemblerMode assemblerMode = AssemblerMode.IDLE;
         
         public void SwitchToBananaGunReparationMode() {
             basicTextCanvasGroup.alpha = 0;

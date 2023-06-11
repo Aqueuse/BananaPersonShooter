@@ -12,10 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 145b73ac3666c3f44bd8b125c331f2eb, type: 3}
   m_Name: BananaSkinData
   m_EditorClassIdentifier: 
-  itemType: 23
+  itemType: 22
   itemCategory: 2
-  buildableType: 1
-  itemName: banana skin
+  buildableType: 6
+  itemName:
+  - banana peel
+  - peau de banane
   itemSprite: {fileID: 21300000, guid: 4f859998ebfdfb448bb9e15e9003ae91, type: 3}
   itemDescription:
   - can be dried into fabric

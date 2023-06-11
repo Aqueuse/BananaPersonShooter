@@ -1,8 +1,8 @@
 using System;
-using System.Globalization;
-using System.IO;
 using System.Linq;
 using Building;
+using Enums;
+using Game.CommandRoomPanelControls;
 using UnityEngine;
 
 namespace Save {
@@ -23,13 +23,6 @@ namespace Save {
         public void LoadGameData(string saveUuid) {
             ObjectsReference.Instance.gameData.currentSaveUuid = saveUuid;
             
-            var date = DateTime.ParseExact(DateTime.Now.ToString("U"), "U", CultureInfo.CurrentCulture).ToString(CultureInfo.CurrentCulture);
-
-            if (saveUuid == "auto_save" && !Directory.Exists(ObjectsReference.Instance.loadData.GetSavePathByUuid("auto_save"))) {
-                ObjectsReference.Instance.saveData.Save(saveUuid, date);
-                ObjectsReference.Instance.uiSave.AppendSaveSlot(saveUuid);
-            }
-
             ObjectsReference.Instance.gameData.bananaManSavedData = ObjectsReference.Instance.loadData.GetPlayerDataByUuid(saveUuid);
             
             LoadInventory();
@@ -120,6 +113,34 @@ namespace Save {
             }
         }
 
+        public void LoadAdvancements() {
+            if (ObjectsReference.Instance.gameData.bananaManSavedData.playerAdvancements.Contains(AdvancementState.GET_MONKEYMAN_IA)) {
+                ObjectsReference.Instance.uihud.Activate_Chimployee_Tab();
+            }
+
+            if (ObjectsReference.Instance.gameData.bananaManSavedData.playerAdvancements.Contains(AdvancementState.GET_BANANAGUN)) {
+                ObjectsReference.Instance.uiManager.Set_active(UICanvasGroupType.HUD, true);
+                
+                if (ObjectsReference.Instance.bananaMan.activeItemCategory == ItemCategory.BANANA ||
+                    ObjectsReference.Instance.bananaMan.activeItemCategory == ItemCategory.BUILDABLE) {
+                    ObjectsReference.Instance.bananaGun.bananaGunInBack.SetActive(false);
+                }
+                else {
+                    ObjectsReference.Instance.bananaGun.bananaGunInBack.SetActive(true);
+                }
+            }
+
+            else {
+                ObjectsReference.Instance.uiManager.Set_active(UICanvasGroupType.HUD, false);
+                ObjectsReference.Instance.bananaGun.bananaGunInBack.SetActive(false);
+                ObjectsReference.Instance.uiCrosshair.SetCrosshair(ItemCategory.EMPTY, ItemType.EMPTY);
+            }
+            
+            if (ObjectsReference.Instance.gameData.bananaManSavedData.playerAdvancements.Contains(AdvancementState.FEED_MONKEY)) {
+                CommandRoomControlPanelsManager.Instance.AuthorizeBananaCannonMiniGameAccess();
+            }
+        }
+
         /////////////////// MAPS ///////////////////////
 
         private void LoadMapsData() {
@@ -135,58 +156,52 @@ namespace Save {
         public void RespawnAspirablesOnMap() {
             var mapData = ObjectsReference.Instance.mapsManager.currentMap;
 
-            Destroy(MapItems.Instance.aspirablesContainer);
+            if (mapData.isDiscovered) {
+                Destroy(MapItems.Instance.aspirablesContainer);
+                
+                MapItems.Instance.aspirablesContainer = new GameObject("aspirables") {
+                    transform = {
+                        parent = MapItems.Instance.transform
+                    }
+                };
             
-            MapItems.Instance.aspirablesContainer = new GameObject("aspirables") {
-                transform = {
-                    parent = MapItems.Instance.transform
-                }
-            };
+                for (int i = 0; i < mapData.aspirablesCategories.Count; i++) {
+                    if (mapData.aspirablesCategories[i] == ItemCategory.DEBRIS) {
+                        aspirable = Instantiate(
+                            ObjectsReference.Instance.scriptableObjectManager._meshReferenceScriptableObject.debrisPrefab[mapData.aspirablesPrefabsIndex[i]], 
+                            MapItems.Instance.aspirablesContainer.transform, 
+                            true
+                        );
+                    
+                        aspirable.transform.position = mapData.aspirablesPositions[i];
+                        aspirable.transform.rotation = mapData.aspirablesRotations[i];
+                    }
+                    
+                    if (mapData.aspirablesCategories[i] == ItemCategory.BUILDABLE) {
+                        var prefab = ObjectsReference.Instance.scriptableObjectManager.BuildablePrefabByBuildableType(mapData.aspirablesBuildableTypes[i]);
 
-            for (int i = 0; i < mapData.aspirablesCategories.Count; i++) {
-                if (mapData.aspirablesCategories[i] == ItemCategory.DEBRIS) {
+                        aspirable = Instantiate(prefab, MapItems.Instance.aspirablesContainer.transform, true);
+                    
+                        aspirable.transform.position = mapData.aspirablesPositions[i];
+                        aspirable.transform.rotation = mapData.aspirablesRotations[i];
+                    }
+                }
+            }
+            
+            else {
+                if (mapData.initialAspirablesOnMap != null) {
                     aspirable = Instantiate(
-                        ObjectsReference.Instance.gameData.debrisPrefab[mapData.aspirablesPrefabsIndex[i]], 
-                        MapItems.Instance.aspirablesContainer.transform, 
+                        mapData.initialAspirablesOnMap, 
+                        MapItems.Instance.aspirablesContainer.transform,
                         true
                     );
-                    
-                    aspirable.transform.position = mapData.aspirablesPositions[i];
-                    aspirable.transform.rotation = mapData.aspirablesRotations[i];
-                }
 
-                if (mapData.aspirablesCategories[i] == ItemCategory.BUILDABLE) {
-                    var prefab = ObjectsReference.Instance.scriptableObjectManager._meshReferenceScriptableObject
-                        .buildablePrefabByPrefabIndex[mapData.aspirablesPrefabsIndex[i]];
-
-                    aspirable = Instantiate(prefab, MapItems.Instance.aspirablesContainer.transform, true);
-                    
-                    aspirable.transform.position = mapData.aspirablesPositions[i];
-                    aspirable.transform.rotation = mapData.aspirablesRotations[i];
+                    aspirable.transform.position = MapItems.Instance.aspirablesContainer.transform.position;
+                    aspirable.transform.rotation = MapItems.Instance.aspirablesContainer.transform.rotation;
                 }
             }
             
             if (mapData.debrisToSpawn > 0) MapItems.Instance.debrisSpawner.SpawnNewDebrisOnMap(MapItems.Instance.aspirablesContainer.transform);
-            
-            
-            
-            //     for (var i = 0; i < mapData.plateformsPosition.Count; i++) {
-            //         var plateforme = Instantiate(ObjectsReference.Instance.gameData.plateformPrefab, MapItems.Instance.plateformsContainer.transform, true);
-            //         plateforme.transform.position = mapData.plateformsPosition[i];
-            //
-            //         var plateformType = mapData.plateformsTypes[i];
-            //         
-            //         var _boxCollider = GetComponent<BoxCollider>();
-            //         _boxCollider.isTrigger = false;
-            //     
-            //         plateforme.GetComponent<Plateform>().plateformType = plateformType;
-            //
-            //         if (plateformType == ItemType.EMPTY) GetComponent<Plateform>().SetUnactiveMaterial();
-            //         else {
-            //             plateforme.GetComponent<Plateform>().ActivePlateform(plateformType);
-            //         }
-            //     }
-            
         }
     }
 }

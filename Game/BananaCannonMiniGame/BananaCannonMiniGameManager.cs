@@ -1,4 +1,5 @@
 using Cinemachine;
+using Enums;
 using TMPro;
 using UnityEngine;
 
@@ -6,6 +7,7 @@ namespace Game.BananaCannonMiniGame {
     public class BananaCannonMiniGameManager : MonoSingleton<BananaCannonMiniGameManager> {
         [SerializeField] private CinemachineVirtualCamera bananaCannonVirtualCamera;
         [SerializeField] private ProjectilesManager projectilesManager;
+        
         public SpaceshipsSpawner spaceshipsSpawner;
         
         public CanvasGroup interactionCanvasGroup;
@@ -41,7 +43,7 @@ namespace Game.BananaCannonMiniGame {
             _spaceshipsQuantity = 6;
             spaceshipQuantityText.text = _spaceshipsQuantity.ToString();
         }
-
+        
         public void SwitchToMiniGame() {
             ObjectsReference.Instance.inputManager.uiSchemaContext = UISchemaSwitchType.BANANA_CANNON_MINI_GAME;
             ObjectsReference.Instance.inputManager.SwitchContext(InputContext.UI);
@@ -123,11 +125,9 @@ namespace Game.BananaCannonMiniGame {
             }
         }
 
-        public void RefreshDebrisQuantity(Vector3 position) {
+        public void RefreshDebrisQuantity() {
             _debrisToSpawn += 1;
             debrisQuantityText.text = (_debrisQuantity+_debrisToSpawn).ToString();
-
-            Debug.Log("spawn debris on the true map");
         }
 
         public void DecrementeSpaceshipQuantity() {
@@ -135,7 +135,7 @@ namespace Game.BananaCannonMiniGame {
             spaceshipQuantityText.text = _spaceshipsQuantity.ToString();
 
             if (_spaceshipsQuantity == 0) {
-                Debug.Log("you win !");
+                QuitMiniGame();
             }
         }
     }

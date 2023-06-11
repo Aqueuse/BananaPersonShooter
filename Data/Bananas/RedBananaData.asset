@@ -15,12 +15,13 @@ MonoBehaviour:
   itemType: 15
   itemCategory: 0
   buildableType: 0
-  itemName: Banane rouge
+  itemName:
+  - red banana
+  - banane rouge
   itemSprite: {fileID: 21300000, guid: 9e58179fb30f5d34ba412c11ca25c6aa, type: 3}
   itemDescription:
   - Flaming banana
   - "Banane flamb\xE9e"
-  bananaName: Banane rouge
   effects:
   - creates a zone of fire for 15 seconds that repels monkeys
   - "cr\xE9e une zone de feu pendant 15 secondes qui repousse les singes"

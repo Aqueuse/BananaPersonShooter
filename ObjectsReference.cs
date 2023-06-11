@@ -12,9 +12,9 @@ using Settings;
 using UI;
 using UI.InGame;
 using UI.InGame.Blueprints;
+using UI.InGame.Chimployee;
 using UI.InGame.Inventory;
 using UI.InGame.QuickSlots;
-using UI.InGame.Statistics;
 using UI.Menus;
 using UI.Save;
 using UI.Tutorials;
@@ -29,6 +29,7 @@ public class ObjectsReference : MonoSingleton<ObjectsReference> {
     public MonkeysManager monkeysManager;
 
     public BananaMan bananaMan;
+    public PlayerController playerController;
     public BananaGun bananaGun;
     public BananaGunGet bananaGunGet;
     public BananaGunPut bananaGunPut;
@@ -61,7 +62,7 @@ public class ObjectsReference : MonoSingleton<ObjectsReference> {
     public UInventory uInventory;
     public UIBlueprints uiBlueprints;
     public UISlotsManager uiSlotsManager;
-    public UIStatistics uiStatistics;
+    public UIChimployee uiChimployee;
     public UICrosshair uiCrosshair;
     public UIFace uiFace;
     public Uihud uihud;
@@ -69,6 +70,7 @@ public class ObjectsReference : MonoSingleton<ObjectsReference> {
     public UIHomeMenu uiHomeMenu;
     public UiGameMenu uiGameMenu;
     public UIOptionsMenu uiOptionsMenu;
+    public UICredits uiCredits;
     public UISave uiSave;
     public TutorialsManager tutorialsManager;
     public UIbananaCannonMiniGame uIbananaCannonMiniGame;

@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using UnityEngine.EventSystems;
 
 namespace Input.UIActions {
     public class UIBlueprintsActions : MonoBehaviour {
@@ -11,35 +10,39 @@ namespace Input.UIActions {
 
         public Vector2 scrollSlotsValue;
 
-        public EventTrigger selectedTrigger;
-        PointerEventData _pointer;
-
         private float _counter;
         private float _slowDownValue;
         
         private void Start() {
-            _pointer = new PointerEventData(EventSystem.current);
             _slowDownValue = 0.15f;
         }
 
         private void Update() {
-            Activate();
             Hide_Interface();
+            
+            Switch_To_Left();
+            Switch_To_Right();
             
             SwitchToUpperSlot();
             SwitchToLowerSlot();
             Scroll_Slots();
         }
-
-        private void Activate() {
-            if (UnityEngine.Input.GetKeyDown(KeyCode.Return) || UnityEngine.Input.GetKeyDown(KeyCode.JoystickButton0)) {
-                ExecuteEvents.Execute(selectedTrigger.gameObject, _pointer, ExecuteEvents.pointerDownHandler);
-            }
-        }
         
         private void Hide_Interface() {
             if (UnityEngine.Input.GetKeyDown(KeyCode.Escape) || UnityEngine.Input.GetKeyDown(KeyCode.I) || UnityEngine.Input.GetAxis("DpadHorizontal") > 0) {
                 ObjectsReference.Instance.uiManager.Show_Hide_interface();
+            }
+        }
+        
+        private void Switch_To_Left() {
+            if (UnityEngine.Input.GetKeyDown(KeyCode.JoystickButton4)) {
+                ObjectsReference.Instance.uihud.Switch_To_Left_Tab();
+            }
+        }
+
+        private void Switch_To_Right() {
+            if (UnityEngine.Input.GetKeyDown(KeyCode.JoystickButton5)) {
+                ObjectsReference.Instance.uihud.Switch_To_Right_Tab();
             }
         }
         

@@ -12,7 +12,7 @@ namespace Game.CommandRoomPanelControls {
         public bool isVisible;
         
         private static readonly int KeyboardColorPropertie = Shader.PropertyToID("_Color");
-
+        
         public void Activate() {
             keyboardMeshRenderer.material.SetColor(KeyboardColorPropertie, CommandRoomControlPanelsManager.Instance.activatedKeybard);
             panelCanvasGroup.alpha = 1;

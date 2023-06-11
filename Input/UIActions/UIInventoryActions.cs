@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using UnityEngine.EventSystems;
 
 namespace Input.UIActions {
     public class UIInventoryActions : MonoBehaviour {
@@ -10,31 +9,23 @@ namespace Input.UIActions {
         private bool _scrolledRight;
 
         public Vector2 scrollSlotsValue;
-
-        public EventTrigger selectedTrigger;
-        PointerEventData _pointer;
-
+        
         private float _counter;
         private float _slowDownValue;
         
         private void Start() {
-            _pointer = new PointerEventData(EventSystem.current);
             _slowDownValue = 0.15f;
         }
 
         private void Update() {
-            Activate();
             Hide_Interface();
             
-            SwitchToUpperSlot();
-            SwitchToLowerSlot();
+            Switch_To_Right();
+            Switch_To_Left();
+            
+            Switch_To_Upper_Slot();
+            Switch_To_Lower_Slot();
             Scroll_Slots();
-        }
-
-        private void Activate() {
-            if (UnityEngine.Input.GetKeyDown(KeyCode.Return) || UnityEngine.Input.GetKeyDown(KeyCode.JoystickButton0)) {
-                ExecuteEvents.Execute(selectedTrigger.gameObject, _pointer, ExecuteEvents.pointerDownHandler);
-            }
         }
         
         private void Hide_Interface() {
@@ -42,8 +33,20 @@ namespace Input.UIActions {
                 ObjectsReference.Instance.uiManager.Show_Hide_interface();
             }
         }
+
+        private void Switch_To_Left() {
+            if (UnityEngine.Input.GetKeyDown(KeyCode.JoystickButton4)) {
+                ObjectsReference.Instance.uihud.Switch_To_Left_Tab();
+            }
+        }
+
+        private void Switch_To_Right() {
+            if (UnityEngine.Input.GetKeyDown(KeyCode.JoystickButton5)) {
+                ObjectsReference.Instance.uihud.Switch_To_Right_Tab();
+            }
+        }
         
-        private void SwitchToUpperSlot() {
+        private void Switch_To_Upper_Slot() {
             if (UnityEngine.Input.GetAxis("DpadVertical") > 0 && !_scrolledUp) {
                 _counter+=Time.deltaTime;
                 if (_counter > _slowDownValue) {
@@ -59,7 +62,7 @@ namespace Input.UIActions {
             }
         }
     
-        private void SwitchToLowerSlot() {
+        private void Switch_To_Lower_Slot() {
             if (UnityEngine.Input.GetAxis("DpadVertical") < 0 && !_scrolledDown) {
                 _counter+=Time.deltaTime;
                 if (_counter > _slowDownValue) {

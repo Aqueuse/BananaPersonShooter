@@ -9,7 +9,7 @@ namespace UI.InGame.Inventory {
         [SerializeField] private TextMeshProUGUI quantityText;
         
         public void AssignToSlot() {
-            SetDescription();
+            SetDescriptionAndName();
             
             ObjectsReference.Instance.bananaMan.SetActiveItemTypeAndCategory(itemType, itemCategory, BuildableType.EMPTY);
             
@@ -26,7 +26,8 @@ namespace UI.InGame.Inventory {
             quantityText.text = quantity > 999 ? "999+" : quantity.ToString();
         }
 
-        public void SetDescription() {
+        public void SetDescriptionAndName() {
+            ObjectsReference.Instance.uInventory.itemName.text = ObjectsReference.Instance.scriptableObjectManager.GetName(itemCategory, ObjectsReference.Instance.gameSettings.languageIndexSelected, itemType);
             ObjectsReference.Instance.uInventory.itemDescription.text = ObjectsReference.Instance.scriptableObjectManager.GetDescription(itemCategory, ObjectsReference.Instance.gameSettings.languageIndexSelected, itemType);
         }
     }

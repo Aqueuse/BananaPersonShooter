@@ -22,7 +22,6 @@ namespace Input.UIActions {
         
         private void Update() {
             Activate();
-            Escape();
 
             Scroll_Left_Home_Menu_Button();
             Scroll_Right_Home_Menu_Button();
@@ -31,12 +30,6 @@ namespace Input.UIActions {
         private void Activate() {
             if (UnityEngine.Input.GetKeyDown(KeyCode.Return) || UnityEngine.Input.GetKeyDown(KeyCode.JoystickButton0)) {
                 ExecuteEvents.Execute(ObjectsReference.Instance.uiHomeMenu.selectedTrigger.gameObject, _pointer, ExecuteEvents.pointerDownHandler);
-            }
-        }
-
-        private void Escape() {
-            if (UnityEngine.Input.GetKeyDown(KeyCode.Escape) || UnityEngine.Input.GetKeyDown(KeyCode.JoystickButton1)) {
-                ObjectsReference.Instance.uiManager.Hide_menus();
             }
         }
         

@@ -1,31 +1,25 @@
+using System;
 using System.Collections;
-using Building;
-using Player;
-using Settings;
+using Enums;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 namespace Game {
     public class ScenesSwitch : MonoBehaviour {
         [SerializeField] private GameObject teleportationGameObject;
-        
+
         public GenericDictionary<SpawnPoint, Transform> spawnPointsBySpawnType;
         public GenericDictionary<SpawnPoint, string> sceneNameBySpawnPoint;
-
-        private Transform _bananaManTransform;
         private Vector3 _bananaManRotation;
 
-        private GameSettings _gameSettings;
-
+        private Transform _bananaManTransform;
+        
         private void Start() {
             _bananaManTransform = ObjectsReference.Instance.bananaMan.transform;
-            _gameSettings = ObjectsReference.Instance.gameSettings;
         }
 
-        private IEnumerator LoadScene(string sceneName, SpawnPoint spawnPoint, bool isTeleporting) {
+        private IEnumerator LoadScene(string sceneName, SpawnPoint spawnPoint, bool isTeleporting, bool isNewGame) {
             AsyncOperation load = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Single);
-
-            _bananaManRotation = _bananaManTransform.rotation.eulerAngles;
 
             // Wait until the asynchronous scene fully loads
             while (!load.isDone) {
@@ -33,38 +27,19 @@ namespace Game {
             }
 
             if (load.isDone) {
+                if (isNewGame) {
+                    ObjectsReference.Instance.gameReset.ResetGameData();
+                    ObjectsReference.Instance.uiSave.CreateNewSave();
+                }
+
+                
                 SceneManager.SetActiveScene(SceneManager.GetSceneByName(sceneName));
                 
-                //// spawning banana man
-                if (isTeleporting) {
-                    ObjectsReference.Instance.teleportation.TeleportDown();
-                    _bananaManTransform.position = spawnPointsBySpawnType[spawnPoint].position;
-                    
-                    _bananaManRotation = _bananaManTransform.rotation.eulerAngles;
-                    _bananaManRotation.y = spawnPointsBySpawnType[spawnPoint].rotation.y;
-
-                    _bananaManTransform.rotation = Quaternion.Euler(_bananaManRotation);
-                }
-
-                if (spawnPoint == SpawnPoint.LAST_MAP) {
-                    _bananaManTransform.position = ObjectsReference.Instance.gameData.lastPositionOnMap;
-                    _bananaManRotation = ObjectsReference.Instance.gameData.lastRotationOnMap;
-                    
-                    _bananaManTransform.rotation = Quaternion.Euler(_bananaManRotation);
-                }
-
-                else {
-                    _bananaManTransform.position = spawnPointsBySpawnType[spawnPoint].position;
-                    _bananaManRotation = spawnPointsBySpawnType[spawnPoint].rotation.eulerAngles;
-                    
-                    _bananaManTransform.rotation = Quaternion.Euler(_bananaManRotation);
-                }
-                
-                if (sceneName.ToUpper() == "HOME") {
+                if (spawnPoint == SpawnPoint.HOME) {
                     ObjectsReference.Instance.gameManager.cameraMain.clearFlags = CameraClearFlags.SolidColor;
                     Cursor.visible = true;
                     Cursor.lockState = CursorLockMode.None;
-                    
+
                     ObjectsReference.Instance.inputManager.uiSchemaContext = UISchemaSwitchType.HOME_MENU;
                     ObjectsReference.Instance.inputManager.SwitchContext(InputContext.UI);
 
@@ -76,32 +51,35 @@ namespace Game {
 
                     ObjectsReference.Instance.mainCamera.Set0Sensibility();
 
-                    ObjectsReference.Instance.bananaMan.GetComponent<PlayerController>().canMove = false;
+                    ObjectsReference.Instance.playerController.canMove = false;
 
                     ObjectsReference.Instance.gameData.currentSaveUuid = null;
-                    
-                    _bananaManTransform.position = spawnPointsBySpawnType[spawnPoint].position;
-                    _bananaManTransform.rotation = Quaternion.Euler(_bananaManRotation);
+
+                    ObjectsReference.Instance.bananaMan.transform.position = ObjectsReference.Instance.scenesSwitch.spawnPointsBySpawnType[SpawnPoint.HOME].position;
                 }
 
                 else {
+                    //// spawning banana man
+                    if (isTeleporting) ObjectsReference.Instance.teleportation.TeleportDown();
+
+                    if (spawnPoint == SpawnPoint.LAST_MAP) {
+                        _bananaManTransform.position = ObjectsReference.Instance.gameData.lastPositionOnMap;
+                        _bananaManRotation = ObjectsReference.Instance.gameData.lastRotationOnMap;
+                        
+                        _bananaManTransform.rotation = Quaternion.Euler(_bananaManRotation);
+                    }
+
+                    if (spawnPoint != SpawnPoint.LAST_MAP) {
+                        _bananaManTransform.position = spawnPointsBySpawnType[spawnPoint].position;
+                        _bananaManRotation = spawnPointsBySpawnType[spawnPoint].rotation.eulerAngles;
+
+                        _bananaManTransform.rotation = Quaternion.Euler(_bananaManRotation);
+                    }
+
                     ObjectsReference.Instance.gameData.bananaManSavedData.lastMap = sceneName;
-                    var currentMap = ObjectsReference.Instance.mapsManager.currentMap; 
-
-                    if (currentMap.activeMonkeyType != MonkeyType.NONE) {
-                        currentMap.RecalculateHappiness();
-                        MapItems.Instance.uiCanvasItemsHiddableManager.SetMonkeysVisibility(_gameSettings.isShowingMonkeys);
-                    }
-
-                    if (currentMap.hasDebris) {
-                        MapItems.Instance.uiCanvasItemsHiddableManager.SetDebrisCanvasVisibility(_gameSettings.isShowingDebris);
-                    }
-
-                    if (currentMap.hasBananaTree) {
-                        MapItems.Instance.uiCanvasItemsHiddableManager.SetBananaTreeVisibility(_gameSettings.isShowingBananaTrees); 
-                    }
                     
                     ObjectsReference.Instance.gameLoad.RespawnAspirablesOnMap();
+                    ObjectsReference.Instance.mapsManager.currentMap.Init();
                     
                     Cursor.visible = false;
                     Cursor.lockState = CursorLockMode.Locked;
@@ -113,73 +91,57 @@ namespace Game {
                     ObjectsReference.Instance.uiManager.Hide_Game_Menu();
                     ObjectsReference.Instance.uiManager.Hide_home_menu();
                     
-                    if (ObjectsReference.Instance.gameData.bananaManSavedData.playerAdvancements.Contains(AdvancementState.GET_BANANAGUN)) {
-                        ObjectsReference.Instance.uiManager.Set_active(UICanvasGroupType.HUD, true);
-                        if (ObjectsReference.Instance.bananaMan.activeItemCategory == ItemCategory.BANANA ||
-                            ObjectsReference.Instance.bananaMan.activeItemCategory == ItemCategory.BUILDABLE) {
-                            ObjectsReference.Instance.bananaGun.bananaGunInBack.SetActive(false);
-                        }
-                        else {
-                            ObjectsReference.Instance.bananaGun.bananaGunInBack.SetActive(true);
-                        }
-                    }
-
-                    else {
-                        ObjectsReference.Instance.uiManager.Set_active(UICanvasGroupType.HUD, false);
-                        ObjectsReference.Instance.bananaGun.bananaGunInBack.SetActive(false);
-                        ObjectsReference.Instance.uiCrosshair.SetCrosshair(ItemCategory.EMPTY, ItemType.EMPTY);
-                    }
-                    
                     ObjectsReference.Instance.mainCamera.Return_back_To_Player();
                     ObjectsReference.Instance.mainCamera.SetNormalSensibility();
                     
-                    ObjectsReference.Instance.bananaMan.GetComponent<PlayerController>().canMove = true;
+                    ObjectsReference.Instance.playerController.canMove = true;
                     ObjectsReference.Instance.bananaMan.GetComponent<Rigidbody>().isKinematic = false;
                 }
                 
                 ObjectsReference.Instance.gameManager.loadingScreen.SetActive(false);
 
                 ObjectsReference.Instance.audioManager.SetMusiqueBySceneName(sceneName);
+                
+                ObjectsReference.Instance.gameLoad.LoadAdvancements();
             }
         }
-    
-        public void SwitchScene(string sceneName, SpawnPoint spawnPoint, bool isTeleporting) {
-            ObjectsReference.Instance.gameManager.loadingScreen.SetActive(true);
 
-            if (ObjectsReference.Instance.gameManager.gameContext == GameContext.IN_GAME) {
-                ObjectsReference.Instance.mapsManager.currentMap.RefreshAspirablesDataMap();
-            }
-            
+        public void SwitchScene(string sceneName, SpawnPoint spawnPoint, bool isTeleporting, bool isNewGame) {
             ObjectsReference.Instance.inputManager.uiSchemaContext = UISchemaSwitchType.LOAD;
             ObjectsReference.Instance.inputManager.SwitchContext(InputContext.UI);
 
-            ObjectsReference.Instance.mapsManager.currentMap = ObjectsReference.Instance.mapsManager.mapBySceneName[sceneName];
-
+            ObjectsReference.Instance.gameManager.loadingScreen.SetActive(true);
             ObjectsReference.Instance.uiManager.Set_active(UICanvasGroupType.HUD, false);
             ObjectsReference.Instance.uiManager.Hide_home_menu();
             
             // prevent banana man to fall while loading scene
-            ObjectsReference.Instance.bananaMan.GetComponent<PlayerController>().canMove = false;
-        
-            StartCoroutine(LoadScene(sceneName, spawnPoint, isTeleporting));
+            ObjectsReference.Instance.playerController.canMove = false;
+
+            if (!isNewGame && ObjectsReference.Instance.gameManager.gameContext == GameContext.IN_GAME && ObjectsReference.Instance.mapsManager.currentMap.isDiscovered) {
+                ObjectsReference.Instance.mapsManager.currentMap.RefreshAspirablesDataMap();
+            }
+            
+            ObjectsReference.Instance.mapsManager.currentMap = ObjectsReference.Instance.mapsManager.mapBySceneName[sceneName];
+            
+            StartCoroutine(LoadScene(sceneName, spawnPoint, isTeleporting, isNewGame));
         }
 
         public void ReturnHome() {
-            if (ObjectsReference.Instance.gameData.currentSaveUuid != null) ObjectsReference.Instance.gameSave.SaveGameData(ObjectsReference.Instance.gameData.currentSaveUuid);
+            if (ObjectsReference.Instance.gameData.currentSaveUuid != null) ObjectsReference.Instance.gameSave.SaveGame(ObjectsReference.Instance.gameData.currentSaveUuid);
         
-            SwitchScene("HOME", SpawnPoint.HOME, false);
+            SwitchScene("HOME", SpawnPoint.HOME, false, false);
         }
 
         public void Teleport(SpawnPoint spawnPoint) {
             teleportationGameObject.SetActive(true);
 
             ObjectsReference.Instance.teleportation.TeleportUp();
-            ObjectsReference.Instance.uiManager.HideInterface();
 
-            SwitchScene(sceneNameBySpawnPoint[spawnPoint].ToUpper(), spawnPoint, true);
+            SwitchScene(sceneNameBySpawnPoint[spawnPoint].ToUpper(), spawnPoint, true, false);
         }
 
         public void TeleportToCommandRoom() {
+            ObjectsReference.Instance.uiManager.HideInterface();
             Teleport(SpawnPoint.COMMAND_ROOM_TELEPORTATION);
         }
     }

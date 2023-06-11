@@ -15,12 +15,13 @@ MonoBehaviour:
   itemType: 12
   itemCategory: 0
   buildableType: 1
-  itemName: Pisang Raja
+  itemName:
+  - pisang raja
+  - pisang raja
   itemSprite: {fileID: 21300000, guid: 6fdba3cd7fdc53c4d826500e4c7568ef, type: 3}
   itemDescription:
   - Very brave little banana
   - "Petite banane tr\xE8s courageuse"
-  bananaName: Pisang Raja
   effects:
   - ordinary nourishing, double healing
   - "sati\xE9t\xE9 ordinaire, soins doubl\xE9s"

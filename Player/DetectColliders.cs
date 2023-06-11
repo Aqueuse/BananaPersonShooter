@@ -8,7 +8,7 @@ namespace Player {
         private int _waterLayer;
         
         private void Start() {
-            _playerController = ObjectsReference.Instance.bananaMan.GetComponent<PlayerController>();
+            _playerController = ObjectsReference.Instance.playerController;
             _playerRigidbody = _playerController.GetComponent<Rigidbody>();
 
             _waterLayer = LayerMask.NameToLayer("Water");

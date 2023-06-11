@@ -15,12 +15,13 @@ MonoBehaviour:
   itemType: 17
   itemCategory: 0
   buildableType: 1
-  itemName: Tindok
+  itemName:
+  - tindok
+  - tindok
   itemSprite: {fileID: 21300000, guid: 491ec185540e92a48947a487a6373969, type: 3}
   itemDescription:
   - Banana grapple
   - Banane grappin
-  bananaName: Tindok
   effects:
   - No nutritional value but will cling to walls, platforms and tree trunks
   - Aucune valeur nutritive mais permet de s'accrocher aux murs, aux plateformes

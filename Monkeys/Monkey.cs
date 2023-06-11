@@ -46,6 +46,11 @@ namespace Monkeys {
                 ObjectsReference.Instance.mapsManager.currentMap.monkeySasiety = sasiety;
                 ObjectsReference.Instance.mapsManager.currentMap.RecalculateHappiness();
             }
+
+            if (sasiety >= 50 && !ObjectsReference.Instance.gameData.bananaManSavedData.playerAdvancements.Contains(AdvancementState.FEED_MONKEY)) {
+                ObjectsReference.Instance.gameData.bananaManSavedData.playerAdvancements.Add(AdvancementState.FEED_MONKEY);
+                Debug.Log("congratulation, you gained access to the banana cannon \\o/");
+            }
         }
         
         public void PauseMonkey() {

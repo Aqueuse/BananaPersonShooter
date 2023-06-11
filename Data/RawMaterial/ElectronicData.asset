@@ -12,10 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 145b73ac3666c3f44bd8b125c331f2eb, type: 3}
   m_Name: ElectronicData
   m_EditorClassIdentifier: 
-  itemType: 21
+  itemType: 20
   itemCategory: 2
-  buildableType: 1
-  itemName: electronic components
+  buildableType: 6
+  itemName:
+  - electronic component
+  - "composant \xE9lectronique"
   itemSprite: {fileID: 21300000, guid: deab70e55ae84734faee3873ccc8f0c1, type: 3}
   itemDescription:
   - some useful components to create machines

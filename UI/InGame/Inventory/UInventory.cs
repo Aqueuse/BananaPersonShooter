@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace UI.InGame.Inventory {
     public class UInventory : MonoBehaviour {
+        public TextMeshProUGUI itemName;
         public TextMeshProUGUI itemDescription;
 
         [SerializeField] private GenericDictionary<ItemType, GameObject> inventorySlots;

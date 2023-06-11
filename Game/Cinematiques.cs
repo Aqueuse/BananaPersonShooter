@@ -1,4 +1,5 @@
 using Cinemachine;
+using Enums;
 using Input.UIActions;
 using UnityEngine;
 using UnityEngine.Video;
@@ -38,7 +39,7 @@ namespace Game {
             ObjectsReference.Instance.gameManager.gameContext = GameContext.IN_CINEMATIQUE;
 
             _cinematiqueType = playedCinematiqueType;
-            _cinematiqueCamera.Priority = 100;
+            _cinematiqueCamera.Priority = 200;
             _meshRenderer.material = playedCinematiqueType == CinematiqueType.DEATH ? transparentVideoMaterial : videoMaterial;
 
             _cinematiqueVideoPlayer.clip = cinematiquesVideoClipsByType[playedCinematiqueType];
@@ -67,7 +68,7 @@ namespace Game {
             _cinematiqueVideoPlayer.enabled = false;
 
             if (_cinematiqueType == CinematiqueType.NEW_GAME) {
-                ObjectsReference.Instance.gameManager.Start_New_Game();
+                ObjectsReference.Instance.gameManager.Play(null, true);
             }
         }
 

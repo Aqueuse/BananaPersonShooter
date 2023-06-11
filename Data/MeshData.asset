@@ -27,6 +27,35 @@ MonoBehaviour:
     - key: {fileID: 7027302762433730867, guid: c4a054841e876ee41a065b0791d0f645, type: 3}
       value: 5
     keyCollision: 0
+  buildablePrefabByBuildableType:
+    list:
+    - key: 0
+      value: {fileID: 3045356508486292204, guid: 0630715419ab7f249ba73f9625dea7fb, type: 3}
+    - key: 1
+      value: {fileID: 637136286764793117, guid: fe03facf4bdab3f4e8e3d03d49cef23d, type: 3}
+    - key: 2
+      value: {fileID: 1603251378263894779, guid: 89acf479cb887f84f981b4082e09062d, type: 3}
+    - key: 3
+      value: {fileID: 1794275120481673325, guid: eb7491dc1f384814a97345923888f029, type: 3}
+    - key: 4
+      value: {fileID: 7031273002014940532, guid: fdd9a9276ba792a449fe7f0af57b8d22, type: 3}
+    - key: 5
+      value: {fileID: 5006133390569365907, guid: 6473fc63d7b38244cacef9e82e267f96, type: 3}
+    - key: 6
+      value: {fileID: 0}
+    keyCollision: 0
+  debrisPrefab:
+  - {fileID: 3034936155825932874, guid: 64253b8d4c4fad64baba3dc6eacff163, type: 3}
+  - {fileID: 1790695722175367410, guid: 7dd2128083576254baecd37b94770b04, type: 3}
+  - {fileID: 5921204638695566634, guid: 28c77417ad2dd024f899298c17f35b69, type: 3}
+  - {fileID: 110324304273304089, guid: 2ae9da1f2207b8a45a7825af577bd329, type: 3}
+  - {fileID: 4261545650218510393, guid: 3dec76e025bfed749b9d07ce6d2b7ff8, type: 3}
+  - {fileID: 2536140802975679023, guid: 5cab7397d9929554db189917c0deada0, type: 3}
+  - {fileID: 1873221254321708770, guid: 0938477bd99c2724ebc5d57c947f6de0, type: 3}
+  - {fileID: 2009239392203965442, guid: 6ae31360bac7bc0488f2483c33f129f1, type: 3}
+  - {fileID: 41601335132078673, guid: 405f6c33ce2f300458fbd7a5d3fe2e3a, type: 3}
+  - {fileID: 8411729713571211728, guid: fd1cca67ab5c7dc4e9d101bf39c2058f, type: 3}
+  - {fileID: 184702945649002739, guid: 9927dcf9f135e3c438504656baa9f9a8, type: 3}
   debrisPrefabIndexByMesh:
     list:
     - key: {fileID: 6706821472280100530, guid: 887f23c78ac950046af92281f5a1b08b, type: 3}
@@ -106,15 +135,15 @@ MonoBehaviour:
     keyCollision: 0
   rawMaterialDataScriptableObjects:
     list:
-    - key: 19
+    - key: 18
       value: {fileID: 11400000, guid: d14e403b3094f5c429b243314cf49b91, type: 2}
-    - key: 20
+    - key: 19
       value: {fileID: 11400000, guid: c952d96f9612ca7468daa21b69880c7c, type: 2}
-    - key: 21
+    - key: 20
       value: {fileID: 11400000, guid: 5736b26edab4ca44d953de06357d6dfa, type: 2}
-    - key: 22
+    - key: 21
       value: {fileID: 11400000, guid: 74668e5c315d9d94ab8aaf0693fed5b8, type: 2}
-    - key: 23
+    - key: 22
       value: {fileID: 11400000, guid: 9d6fb37980769de4aa2562c46fe6478c, type: 2}
     keyCollision: 0
   matureBananaTree: {fileID: -6874972058184434478, guid: f22c08fb5dcce1545bfad73baf26b373, type: 3}

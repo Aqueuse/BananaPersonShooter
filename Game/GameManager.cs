@@ -1,6 +1,6 @@
-﻿using System;
-using Building;
+﻿using Building;
 using Cinemachine;
+using Enums;
 using UnityEngine;
 
 namespace Game {
@@ -25,30 +25,13 @@ namespace Game {
             ObjectsReference.Instance.inputManager.SwitchContext(InputContext.UI);
         }
         
-        public void New_Game() {
+        public void Prepare_New_Game() {
             ObjectsReference.Instance.uiManager.Hide_home_menu();
             GameObject.FindWithTag("startAnimations").GetComponent<StartAnimations>().enabled = false;
-            
             ObjectsReference.Instance.cinematiques.Play(CinematiqueType.NEW_GAME);
         }
 
-        public void Start_New_Game() {
-            ObjectsReference.Instance.gameData.currentSaveUuid = DateTime.Now.ToString("yyyyMMddHHmmss");
-
-            ObjectsReference.Instance.gameReset.ResetGameData();
-            
-            ObjectsReference.Instance.gameSave.SaveGameData(ObjectsReference.Instance.gameData.currentSaveUuid);
-            ObjectsReference.Instance.uiSave.CreateNewSave(ObjectsReference.Instance.gameData.currentSaveUuid);
-         
-            ObjectsReference.Instance.bananaGun.bananaGunInBack.SetActive(false);
-            ObjectsReference.Instance.uiManager.Set_active(UICanvasGroupType.HUD, false);
-            
-            Play(ObjectsReference.Instance.gameData.currentSaveUuid, true);
-        }
-        
-        public void Play(string saveUuid, bool newGame) {
-            ObjectsReference.Instance.gameLoad.LoadGameData(saveUuid);
-        
+        public void Play(string saveUuid, bool isNewGame) {
             ObjectsReference.Instance.uiManager.Hide_home_menu();
             Cursor.visible = false;
             Cursor.lockState = CursorLockMode.Locked;
@@ -57,17 +40,19 @@ namespace Game {
             cameraMain.clearFlags = CameraClearFlags.Skybox;
             playerCamera.Priority = 10;
             
-            if (newGame) {
+            if (isNewGame) {
                 ObjectsReference.Instance.scenesSwitch.SwitchScene(
                     "COMMANDROOM", 
                     SpawnPoint.COMMAND_ROOM_TELEPORTATION,
-                    true);
+                    true, true);
             }
             else {
+                ObjectsReference.Instance.gameLoad.LoadGameData(saveUuid);
+
                 ObjectsReference.Instance.scenesSwitch.SwitchScene(
                     ObjectsReference.Instance.gameData.bananaManSavedData.lastMap, 
                     SpawnPoint.LAST_MAP,
-                    false);
+                    false, false);
             }
         }
 
