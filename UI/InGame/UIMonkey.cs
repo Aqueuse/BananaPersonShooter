@@ -3,10 +3,15 @@ using UnityEngine.UI;
 
 namespace UI.InGame {
     public class UIMonkey : MonoBehaviour {
-        [SerializeField] private Image fillImage;
+        [SerializeField] private Slider sasietySlider;
+        [SerializeField] private Slider cleanlinessSlider;
         
-        public void SetSliderValue(Color colorFill) {
-            fillImage.color = colorFill;
+        public void SetSasietySliderValue(float sasiety) {
+            sasietySlider.value = sasiety;
+        }
+
+        public void SetCleanlinessSliderValue(float cleanliness) {
+            cleanlinessSlider.value = cleanliness;
         }
     }
 }

@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Building;
+using Game;
 using UnityEngine;
 
 namespace UI.InGame {
@@ -80,7 +81,7 @@ namespace UI.InGame {
         }
 
         public void SetDebrisCanvasVisibility(bool isVisible) {
-            if (ObjectsReference.Instance.mapsManager.currentMap.GetDebrisQuantity() > 0) {
+            if (Map.GetDebrisQuantity() > 0) {
                 _debrisCanvasList = MapItems.Instance.aspirablesContainer.GetComponentsInChildren<Canvas>().ToList();
                 
                 foreach (var canva in _debrisCanvasList) {

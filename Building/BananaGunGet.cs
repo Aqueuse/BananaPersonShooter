@@ -23,7 +23,7 @@ namespace Building {
             
             switch (bananaGun.targetedGameObject.tag) {
                 case "Regime":
-                    ObjectsReference.Instance.audioManager.PlayEffect(EffectType.GRAB_BANANAS, 0);
+                    ObjectsReference.Instance.audioManager.PlayEffect(EffectType.TAKE_SOMETHING, 0);
                     
                     var regimeClass = bananaGun.targetedGameObject.GetComponent<Regime>();
                     var bananaType = regimeClass.bananasDataScriptableObject.itemType;
@@ -37,7 +37,7 @@ namespace Building {
                 case "Buildable":
                     _targetedGameObjectMesh = bananaGun.targetedGameObject.GetComponent<MeshFilter>().sharedMesh;
 
-                    ObjectsReference.Instance.audioManager.PlayEffect(EffectType.GRAB_BANANAS, 0);
+                    ObjectsReference.Instance.audioManager.PlayEffect(EffectType.TAKE_SOMETHING, 0);
                     var buildableType = _scriptableObjectManager.GetBuildableTypeByMesh(_targetedGameObjectMesh);
                 
                     var craftingMaterials =
@@ -57,7 +57,7 @@ namespace Building {
                     break;
                 
                 case "Debris":
-                    ObjectsReference.Instance.audioManager.PlayEffect(EffectType.GRAB_BANANAS, 0);
+                    ObjectsReference.Instance.audioManager.PlayEffect(EffectType.TAKE_SOMETHING, 0);
                     MapItems.Instance.uiCanvasItemsHiddableManager.RemoveCanva(bananaGun.targetedGameObject.GetComponentInChildren<Canvas>());
                     
                     ObjectsReference.Instance.inventory.AddQuantity(ItemCategory.RAW_MATERIAL, ItemType.METAL, 2);
@@ -69,8 +69,8 @@ namespace Building {
                     bananaGun.targetedGameObject = null;
                     break;
                 case "Ruine":
-                    ObjectsReference.Instance.audioManager.PlayEffect(EffectType.GRAB_BANANAS, 0);
-                    ObjectsReference.Instance.inventory.AddQuantity(ItemCategory.RAW_MATERIAL, ItemType.METAL, 2);
+                    ObjectsReference.Instance.audioManager.PlayEffect(EffectType.TAKE_SOMETHING, 0);
+                    ObjectsReference.Instance.inventory.AddQuantity(ItemCategory.RAW_MATERIAL, ItemType.METAL, 10);
                     
                     Destroy(bananaGun.targetedGameObject);
                     bananaGun.targetedGameObject = null;
@@ -79,19 +79,15 @@ namespace Building {
                     ObjectsReference.Instance.mapsManager.currentMap.isDiscovered = true;
                     ObjectsReference.Instance.gameData.bananaManSavedData.playerAdvancements.Add(AdvancementState.GET_MONKEYMAN_IA);
                     
-                    ObjectsReference.Instance.inventory.AddQuantity(ItemCategory.RAW_MATERIAL, ItemType.METAL, 1);
+                    ObjectsReference.Instance.inventory.AddQuantity(ItemCategory.RAW_MATERIAL, ItemType.METAL, 4);
                     ObjectsReference.Instance.inventory.AddQuantity(ItemCategory.RAW_MATERIAL, ItemType.ELECTRONIC, 2);
 
                     Destroy(bananaGun.targetedGameObject.transform.parent.gameObject);
                     bananaGun.targetedGameObject = null;
 
                     ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.BUILD_HELPER].alpha = 0f;
-                    
                     ObjectsReference.Instance.uihud.Activate_Chimployee_Tab();
-                    
-                    ObjectsReference.Instance.uiManager.Show_Hide_interface();
-                    ObjectsReference.Instance.uihud.Switch_To_Chimployee();
-                    
+
                     ObjectsReference.Instance.uiChimployee.InitDialogue(ChimployeeDialogue.chimployee_first_interaction);
                     ObjectsReference.Instance.bananaGun.UngrabBananaGun();
                     break;

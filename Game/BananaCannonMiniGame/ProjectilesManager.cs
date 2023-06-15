@@ -25,7 +25,7 @@ namespace Game.BananaCannonMiniGame {
             _projectileColor = bananasDataScriptableObjectsByBananaType[bananaType].bananaMaterial.color;
         }
 
-        private void SetBehaviour(Projectile projectile, ItemType bananaType) {
+        private static void SetBehaviour(Projectile projectile, ItemType bananaType) {
             switch (bananaType) {
                 case ItemType.CAVENDISH:
                     if (projectile.gameObject.GetComponent<CavendishBehaviour>() != null) {

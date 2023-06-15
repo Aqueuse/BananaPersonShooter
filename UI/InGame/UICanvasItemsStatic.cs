@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace UI.InGame {
     public class UICanvasItemsStatic : MonoBehaviour {
-        [SerializeField] private GameObject uIinGame;
+        [SerializeField] private CanvasGroup _uiInGameCanvasGroup;
         [SerializeField] private GameObject icon;
         [SerializeField] private bool canRotate;
 
@@ -12,15 +12,11 @@ namespace UI.InGame {
         private Transform _cameraTransform;
         private Vector3 _localScale;
         private float _cameraDistance;
-
-        private CanvasGroup _uiInGameCanvasGroup;
-
+        
         private void Start() {
             _canvas = GetComponent<Canvas>();
             _transform = GetComponent<Transform>();
             _cameraTransform = ObjectsReference.Instance.mainCamera.transform;
-
-            _uiInGameCanvasGroup = uIinGame.GetComponent<CanvasGroup>();
         }
 
         private void Update() {

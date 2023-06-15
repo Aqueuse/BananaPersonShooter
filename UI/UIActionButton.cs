@@ -26,6 +26,7 @@ namespace UI {
         public void Select() {
             backgroundImage.color = activatedColor;
             
+            if (UnityEngine.Input.GetMouseButton(0)) return;
             if (_uIautoscrollList != null) _uIautoscrollList.SynchronizeScrollbarAndSelectedButton(rectTransform);
         }
 

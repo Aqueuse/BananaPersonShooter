@@ -6,7 +6,7 @@ namespace UI.Tutorials {
     public class TutorialsManager : MonoBehaviour {
         [SerializeField] private List<UiTutorialButton> tutorialsButtons;
 
-        public void Show_Help() {
+        public static void Show_Help() {
             ObjectsReference.Instance.uiManager.Set_active(UICanvasGroupType.TUTORIALS, true);
         }
 

@@ -2,11 +2,11 @@ using UnityEngine;
 
 namespace Input.UIActions {
     public class UITutorialsActions : MonoBehaviour {
-        void Update() {
+        private void Update() {
             Close();
         }
         
-        private void Close() {
+        private static void Close() {
             if (
                 UnityEngine.Input.GetKeyDown(KeyCode.Escape) || 
                 UnityEngine.Input.GetKeyDown(KeyCode.H) || 

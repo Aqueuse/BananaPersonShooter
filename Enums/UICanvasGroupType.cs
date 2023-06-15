@@ -13,6 +13,7 @@ namespace Enums {
         CHIMPLOYEE,
         TUTORIALS,
         MINIGAME,
+        BANANAGUN_HELPER,
         BUILD_HELPER,
         BUILD_HELPER_Y_AXIS,
         BUILD_HELPER_Z_AXIS,

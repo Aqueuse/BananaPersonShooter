@@ -1,20 +1,23 @@
 using System.Collections.Generic;
+using Enums;
 using Game.CommandRoomPanelControls;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Localization.Components;
 using UnityEngine.UI;
 
 namespace UI.InGame.Chimployee {
     public enum ChimployeeDialogue {
-        chimployee_first_interaction
+        chimployee_first_interaction,  // integre le chimployee au banana gun
+        chimployee_second_interaction, // nourri un singe
+        chimployee_third_interaction // clean a map
     }
 
     public class UIChimployee : MonoBehaviour {
         [SerializeField] private GenericDictionary<ChimployeeDialogue, List<GameObject>>  questDialogues;
         [SerializeField] private GameObject chimployeeTabDialogueContent;
         [SerializeField] private Scrollbar scrollbar;
-
-        [SerializeField] private GameObject NextButton;
+        
         [SerializeField] private GameObject SkipButton;
         public GameObject TpButton;
 
@@ -25,6 +28,14 @@ namespace UI.InGame.Chimployee {
         public bool dialogueShown;
 
         public void InitDialogue(ChimployeeDialogue chimployeeDialogue) {
+            ObjectsReference.Instance.uiManager.Show_Hide_interface();
+            ObjectsReference.Instance.uihud.Switch_To_Chimployee();
+            
+            ObjectsReference.Instance.audioManager.PlayMusic(MusicType.CHIMPLOYEE);
+            
+            ObjectsReference.Instance.bananaGun.UngrabBananaGun();
+            ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.BANANAGUN_HELPER].alpha = 0;
+
             // flush last dialogues
             var lastDialogues = chimployeeTabDialogueContent.GetComponentsInChildren<TextMeshProUGUI>();
             
@@ -36,7 +47,6 @@ namespace UI.InGame.Chimployee {
             dialogueIndex = 0;
             dialogueShown = false;
 
-            NextButton.SetActive(true);
             SkipButton.SetActive(true);
             
             Next();
@@ -45,35 +55,43 @@ namespace UI.InGame.Chimployee {
         public void Next() {
             if (!dialogueShown && dialogueIndex < questDialogues[_chimployeeDialogue].Count) {
                 Instantiate(questDialogues[_chimployeeDialogue][dialogueIndex], chimployeeTabDialogueContent.transform);
+                
+                var dialogueTime = questDialogues[_chimployeeDialogue][dialogueIndex].GetComponent<LocalizeStringEvent>().StringReference
+                    .GetLocalizedString().Length/20;
+
                 dialogueIndex += 1;
                 
                 LayoutRebuilder.ForceRebuildLayoutImmediate(chimployeeTabDialogueContent.GetComponent<RectTransform>());
                 scrollbar.value = 0;
+                
+                ObjectsReference.Instance.audioManager.PlayEffect(EffectType.BUTTON_INTERACTION, 0);
+
+                Invoke(nameof(Next), dialogueTime);
             }
 
             else {
+                CancelInvoke();
                 FinishDialogue();
             }
         }
-
+        
         public void FinishDialogue() {
             if (!dialogueShown) {
                 dialogueShown = true;
 
-                for (int i = dialogueIndex; i < questDialogues[_chimployeeDialogue].Count; i++) {
+                for (var i = dialogueIndex; i < questDialogues[_chimployeeDialogue].Count; i++) {
                     Instantiate(questDialogues[_chimployeeDialogue][dialogueIndex], chimployeeTabDialogueContent.transform);
                     dialogueIndex += 1;
                 }
             }
             
             // hide next and skip buttons
-            NextButton.SetActive(false);
             SkipButton.SetActive(false);
         }
 
-        public void AuthorizeDoorsAccess() {
+        public static void AuthorizeDoorsAccess() {
             CommandRoomControlPanelsManager.Instance.AuthorizeDoorsAccess();
-            TpButton.SetActive(true);
+            Uihud.AuthorizeTp();
         }
     }
 }

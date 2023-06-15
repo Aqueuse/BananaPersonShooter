@@ -25,7 +25,7 @@ MonoBehaviour:
   rawMaterialsWithQuantity:
     list:
     - key: 18
-      value: 5
+      value: 4
     keyCollision: 0
   buildablePrefab: {fileID: 1603251378263894779, guid: 89acf479cb887f84f981b4082e09062d, type: 3}
   mustSnap: 1

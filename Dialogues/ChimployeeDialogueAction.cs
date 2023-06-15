@@ -8,7 +8,7 @@ namespace Dialogues {
         void Start() {
             switch (_chimployeeDialogue) {
                 case ChimployeeDialogue.chimployee_first_interaction:
-                    ObjectsReference.Instance.uiChimployee.AuthorizeDoorsAccess();
+                    UIChimployee.AuthorizeDoorsAccess();
                     break;
             }
         }

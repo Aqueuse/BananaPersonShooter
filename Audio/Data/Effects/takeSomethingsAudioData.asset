@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 34852139ae771484289135c8cc860b89, type: 3}
-  m_Name: grabBananasAudioData
+  m_Name: takeSomethingsAudioData
   m_EditorClassIdentifier: 
   clip:
   - {fileID: 8300000, guid: 303d44c8d6ec943a38df8ec10b19d9c7, type: 3}
-  clipWithIntro: {fileID: 0}
-  IsLooping: 0
-  volume: 0
+  isLooping: 0
+  isRandomlySilenced: 0
+  volume: 0.02

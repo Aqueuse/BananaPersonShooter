@@ -42,7 +42,7 @@ public class GenericDictionary<TKey, TValue> : IDictionary<TKey, TValue>, ISeria
 		_dict.Clear();
 		_indexByKey.Clear();
 		keyCollision = false;
-		for (int i = 0; i < list.Count; i++)
+		for (var i = 0; i < list.Count; i++)
 		{
 			var key = list[i].key;
 			if (key != null && !ContainsKey(key))
@@ -110,7 +110,7 @@ public class GenericDictionary<TKey, TValue> : IDictionary<TKey, TValue>, ISeria
 
 	private void UpdateIndexLookup(int removedIndex)
 	{
-		for (int i = removedIndex; i < list.Count; i++)
+		for (var i = removedIndex; i < list.Count; i++)
 		{
 			var key = list[i].key;
 			_indexByKey[key]--;
@@ -169,7 +169,7 @@ public class GenericDictionary<TKey, TValue> : IDictionary<TKey, TValue>, ISeria
 		TValue value;
 		if (_dict.TryGetValue(pair.Key, out value))
 		{
-			bool valueMatch = EqualityComparer<TValue>.Default.Equals(value, pair.Value);
+			var valueMatch = EqualityComparer<TValue>.Default.Equals(value, pair.Value);
 			if (valueMatch)
 			{
 				return Remove(pair.Key);

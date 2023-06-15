@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Building;
 using Building.Buildables.Plateforms;
 using Monkeys.Gorilla;
+using UI.InGame.Chimployee;
 using UnityEngine;
 
 namespace Game {
@@ -46,7 +47,13 @@ namespace Game {
         public void RecalculateHappiness() {
             _actualDebrisQuantity = MapItems.Instance.aspirablesContainer.GetComponentsInChildren<MeshFilter>().Length;
 
-            cleanliness = 50-(_actualDebrisQuantity /(float)maxDebrisQuantity)*50;
+            cleanliness = 50-_actualDebrisQuantity /(float)maxDebrisQuantity*50;
+
+            if (cleanliness >= 50 &&
+                ObjectsReference.Instance.gameData.bananaManSavedData.playerAdvancements.Contains(AdvancementState.CLEANED_MAP)) {
+                ObjectsReference.Instance.gameData.bananaManSavedData.playerAdvancements.Add(AdvancementState.CLEANED_MAP);
+                ObjectsReference.Instance.uiChimployee.InitDialogue(ChimployeeDialogue.chimployee_third_interaction);
+            }
 
             foreach (var monkey in MapItems.Instance.monkeys) {
                 monkey.happiness = monkey.sasiety + cleanliness;
@@ -66,7 +73,8 @@ namespace Game {
             }
             
             foreach (var monkey in MapItems.Instance.monkeys) {
-                monkey.associatedUI.SetSliderValue(ObjectsReference.Instance.monkeysManager.colorByMonkeyState[monkey.monkeyState]);
+                monkey.associatedUI.SetSasietySliderValue(monkey.sasiety);
+                monkey.associatedUI.SetCleanlinessSliderValue(cleanliness);
             }
         }
 
@@ -106,7 +114,7 @@ namespace Game {
             }
         }
 
-        public int GetDebrisQuantity() {
+        public static int GetDebrisQuantity() {
             return GameObject.FindGameObjectsWithTag("Debris").Length;
         }
 

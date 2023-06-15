@@ -25,7 +25,7 @@ MonoBehaviour:
   rawMaterialsWithQuantity:
     list:
     - key: 18
-      value: 2
+      value: 8
     - key: 20
       value: 2
     keyCollision: 0

@@ -1,4 +1,5 @@
-﻿using TMPro;
+﻿using Game;
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using Image = UnityEngine.UI.Image;
@@ -20,7 +21,7 @@ namespace UI.Menus {
         }
 
         public void NewGame() {
-            ObjectsReference.Instance.gameManager.Prepare_New_Game();
+            GameManager.Prepare_New_Game();
         }
 
         public void Quit() {

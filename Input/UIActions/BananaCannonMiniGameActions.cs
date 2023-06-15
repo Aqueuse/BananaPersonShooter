@@ -1,6 +1,5 @@
 using Game.BananaCannonMiniGame;
 using UnityEngine;
-using VFX;
 
 namespace Input.UIActions {
     public class BananaCannonMiniGameActions : MonoBehaviour {
@@ -23,7 +22,7 @@ namespace Input.UIActions {
             Shoot();
         }
 
-        private void StartGame() {
+        private static void StartGame() {
             if (ObjectsReference.Instance.uIbananaCannonMiniGame.startMenuCanvasGroup.alpha > 0) {
                 if (UnityEngine.Input.GetKeyDown(KeyCode.JoystickButton0) ) {
                     BananaCannonMiniGameManager.Instance.PlayMiniGame();
@@ -31,7 +30,7 @@ namespace Input.UIActions {
             }
         }
 
-        private void Teleport() {
+        private static void Teleport() {
             if (ObjectsReference.Instance.uIbananaCannonMiniGame.startMenuCanvasGroup.alpha > 0) {
                 if (UnityEngine.Input.GetKeyDown(KeyCode.JoystickButton2) ) {
                     BananaCannonMiniGameManager.Instance.Teleport();
@@ -39,15 +38,15 @@ namespace Input.UIActions {
             }
         }
 
-        private void UnpauseGame() {
+        private static void UnpauseGame() {
             if (ObjectsReference.Instance.uIbananaCannonMiniGame.pauseMenuCanvasGroup.alpha > 0) {
                 if (UnityEngine.Input.GetKeyDown(KeyCode.JoystickButton1) ) {
-                    BananaCannonMiniGameManager.Instance.UnpauseMiniGame();
+                    BananaCannonMiniGameManager.UnpauseMiniGame();
                 }
             }
         }
 
-        private void QuitGame() {
+        private static void QuitGame() {
             if (ObjectsReference.Instance.uIbananaCannonMiniGame.startMenuCanvasGroup.alpha > 0) {
                 if (UnityEngine.Input.GetKeyDown(KeyCode.JoystickButton1) ) {
                     BananaCannonMiniGameManager.Instance.QuitMiniGame();
@@ -63,13 +62,13 @@ namespace Input.UIActions {
         
         ////////////////////////////
 
-        private void PauseGame() {
+        private static void PauseGame() {
             if (UnityEngine.Input.GetKeyDown(KeyCode.JoystickButton7) ) {
-                BananaCannonMiniGameManager.Instance.PauseMiniGame();
+                BananaCannonMiniGameManager.PauseMiniGame();
             }
         }
 
-        private void RotateCannon() {
+        private static void RotateCannon() {
             BananaCannonMiniGameManager.Instance.MoveTarget(UnityEngine.Input.GetAxis("Horizontal"), UnityEngine.Input.GetAxis("Vertical"));
             BananaCannonMiniGameManager.Instance.MoveTarget(UnityEngine.Input.GetAxis("Mouse X"), UnityEngine.Input.GetAxis("Mouse Y"));
         }

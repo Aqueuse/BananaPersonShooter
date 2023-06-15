@@ -30,14 +30,14 @@ namespace Save {
         }
 
         private void LoadSaves() {
-            string[] saveFolders = Directory.GetDirectories(_savesPath);
+            var saveFolders = Directory.GetDirectories(_savesPath);
 
             foreach (var folder in saveFolders) {
-                string saveDataFile = Path.Combine(folder, "data.json");
-                string playerDataFile = Path.Combine(folder, "player.json");
+                var saveDataFile = Path.Combine(folder, "data.json");
+                var playerDataFile = Path.Combine(folder, "player.json");
                 
                 if (File.Exists(saveDataFile) && File.Exists(playerDataFile)) {
-                    SavedData savedData = JsonConvert.DeserializeObject<SavedData>(File.ReadAllText(saveDataFile));
+                    var savedData = JsonConvert.DeserializeObject<SavedData>(File.ReadAllText(saveDataFile));
                     
                     if (savedData.uuid != null) {
                         ObjectsReference.Instance.uiSave.AppendSaveSlot(savedData.uuid);
@@ -50,7 +50,7 @@ namespace Save {
             _savePath = Path.Combine(_savesPath, saveUuid);
             
             var savefilePath = Path.Combine(_savePath, "data.json");
-            string savedDataString = File.ReadAllText(savefilePath);
+            var savedDataString = File.ReadAllText(savefilePath);
 
             return JsonConvert.DeserializeObject<SavedData>(savedDataString);
         }
@@ -61,7 +61,7 @@ namespace Save {
             var savefilePath = Path.Combine(_savePath, "data.json");
 
             if (File.Exists(savefilePath)) {
-                string savedDataString = File.ReadAllText(savefilePath);
+                var savedDataString = File.ReadAllText(savefilePath);
                 return JsonConvert.DeserializeObject<SavedData>(savedDataString).saveName;
             }
             return "new save";
@@ -73,7 +73,7 @@ namespace Save {
             if (Directory.Exists(_savePath)) {
                     var savefilePath = Path.Combine(_savePath, "player.json");
             
-                    string playerDataString = File.ReadAllText(savefilePath);
+                    var playerDataString = File.ReadAllText(savefilePath);
                     
                     return JsonConvert.DeserializeObject<BananaManSavedData>(playerDataString);
             }
@@ -84,7 +84,7 @@ namespace Save {
                 
                 var savefilePath = Path.Combine(_savePath, "player.json");
             
-                string playerDataString = File.ReadAllText(savefilePath);
+                var playerDataString = File.ReadAllText(savefilePath);
             
                 return JsonConvert.DeserializeObject<BananaManSavedData>(playerDataString);
             }
@@ -97,7 +97,7 @@ namespace Save {
             if (Directory.Exists(_savePath)) {
                 var savefilePath = Path.Combine(mapSavePath, mapName+".json");
 
-                string mapDataString = File.ReadAllText(savefilePath);
+                var mapDataString = File.ReadAllText(savefilePath);
 
                 return JsonConvert.DeserializeObject<MapSavedData>(mapDataString);
             }
@@ -108,7 +108,7 @@ namespace Save {
                 
                 var savefilePath = Path.Combine(_savePath, mapName+".json");
 
-                string map01DataString = File.ReadAllText(savefilePath);
+                var map01DataString = File.ReadAllText(savefilePath);
 
                 return JsonConvert.DeserializeObject<MapSavedData>(map01DataString);
             }
@@ -123,7 +123,7 @@ namespace Save {
                 var loadfilePath = Path.Combine(saveMapDatasPath, map.Key.ToUpper()+"_aspirables.data");
                 
                 if (File.Exists(loadfilePath)) {
-                    using StreamReader streamReader = new StreamReader(loadfilePath);
+                    using var streamReader = new StreamReader(loadfilePath);
 
                     var aspirablesData = new List<string>();
 
@@ -169,7 +169,7 @@ namespace Save {
         }
 
         private Vector3 Vector3FromString(string vector3String) {
-            string[] temp = vector3String.Substring(1,vector3String.Length-2).Split(',');
+            var temp = vector3String.Substring(1,vector3String.Length-2).Split(',');
             
             return new Vector3(
                 float.Parse(temp[0], _americaNumberFormatInfo), 
@@ -179,7 +179,7 @@ namespace Save {
         }
 
         private Quaternion QuaternionFromString(string quaternionString){
-            string[] temp = quaternionString.Substring(1,quaternionString.Length-2).Split(',');
+            var temp = quaternionString.Substring(1,quaternionString.Length-2).Split(',');
             return new Quaternion(
                 float.Parse(temp[0], _americaNumberFormatInfo), 
                 float.Parse(temp[1], _americaNumberFormatInfo),

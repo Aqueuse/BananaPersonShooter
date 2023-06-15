@@ -97,11 +97,11 @@ namespace Settings {
             isShowingDebris = prefs.GetString("areDebrisVisible", "True").Equals("True");
             isShowingBananaTrees = prefs.GetString("areBananaTreesVisible", "True").Equals("True");
             isShowingMonkeys = prefs.GetString("areMonkeysVisible", "True").Equals("True");
-
+            
             // reflects values on UI 
             musicLevelSlider.value = ObjectsReference.Instance.audioManager.musicLevel;
             ambianceLevelSlider.value = ObjectsReference.Instance.audioManager.ambianceLevel;
-            effectsLevelSlider.value = ObjectsReference.Instance.audioManager.effectsLevel;
+            effectsLevelSlider.value = ObjectsReference.Instance.audioManager.effectsLevel*10;
             voicesLevelSlider.value = ObjectsReference.Instance.audioManager.voicesLevel;
 
             fullScreenToggle.isOn = _isFullscreen.Equals("True");
@@ -118,12 +118,11 @@ namespace Settings {
             debrisVisibilityToggle.isOn = isShowingDebris;
             bananaTreesVisibilityToggle.isOn = isShowingBananaTrees;
             monkeysVisibilityToggle.isOn = isShowingMonkeys;
-            
-            prefs.Save();
         }
 
         public void ResetOptions() {
-            prefs.DeleteAll(); // temporaly reset the player prefs on launch while in the building of the beta
+            prefs.DeleteAll();
+            prefs.Save();
             
             LoadSettings();
         }
@@ -148,7 +147,11 @@ namespace Settings {
             prefs.Save();
         }
 
-        public void SetEffectVolume(float level) {
+        public void SetEffectLevelFromUISlider(float level) {
+            SetEffectVolume(level/10);
+        }
+
+        private void SetEffectVolume(float level) {
             ObjectsReference.Instance.audioManager.SetVolume(AudioSourcesType.EFFECT, level);
         
             prefs.SetFloat("effectsLevel", level);

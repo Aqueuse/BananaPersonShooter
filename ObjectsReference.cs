@@ -3,9 +3,9 @@ using Building;
 using Cameras;
 using Data;
 using Game;
+using Game.Steam;
 using Input;
 using Items;
-using Monkeys;
 using Player;
 using Save;
 using Settings;
@@ -26,7 +26,6 @@ public class ObjectsReference : MonoSingleton<ObjectsReference> {
     public MapsManager mapsManager;
     public AudioManager audioManager;
     public ItemsManager itemsManager;
-    public MonkeysManager monkeysManager;
 
     public BananaMan bananaMan;
     public PlayerController playerController;
@@ -55,7 +54,8 @@ public class ObjectsReference : MonoSingleton<ObjectsReference> {
     public SaveData saveData;
 
     public GameSettings gameSettings;
-
+    public SteamIntegration steamIntegration;
+    
     public Teleportation teleportation;
 
     public UIManager uiManager;

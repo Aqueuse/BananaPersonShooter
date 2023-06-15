@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 34852139ae771484289135c8cc860b89, type: 3}
-  m_Name: Command Room Music Data
+  m_Name: grabSomethingAudioData
   m_EditorClassIdentifier: 
   clip:
-  - {fileID: 8300000, guid: db7a52c61da8a91429d0f64bb2942034, type: 3}
-  isLooping: 1
+  - {fileID: 8300000, guid: 6c70945a67ff0844eae169d33eb65488, type: 3}
+  isLooping: 0
   isRandomlySilenced: 0
-  volume: 1
+  volume: 0

@@ -8,8 +8,9 @@ namespace UI.InGame.Blueprints {
         public void AssignToSlot() {
             SetDescriptionAndName();
             
+            ObjectsReference.Instance.bananaMan.SetActiveItemTypeAndCategory(ItemType.EMPTY, itemCategory, buildableType);
             ObjectsReference.Instance.uInventory.lastselectedInventoryItem = gameObject;
-
+            
             ObjectsReference.Instance.uiSlotsManager.AssignToSelectedSlot(ItemCategory.BUILDABLE, buildableType:buildableType);
         }
         

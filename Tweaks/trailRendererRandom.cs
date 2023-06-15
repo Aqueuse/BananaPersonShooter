@@ -34,7 +34,7 @@ namespace Tweaks {
                 _keyUpdate = 1f / keyNb;
                 _trailRenderer.colorGradient = NewGrad(keyNb);
 
-                for (int i = 0; i < _trailRenderer.colorGradient.colorKeys.Length; i++) {
+                for (var i = 0; i < _trailRenderer.colorGradient.colorKeys.Length; i++) {
                     colorList.Add(_trailRenderer.colorGradient.colorKeys[i].color);
                 }
             }
@@ -70,7 +70,7 @@ namespace Tweaks {
                     _keyUpdate = 1f / keyNb;
                     _trailRenderer.colorGradient = NewGrad(keyNb);
 
-                    for (int i = 0; i < _trailRenderer.colorGradient.colorKeys.Length; i++) {
+                    for (var i = 0; i < _trailRenderer.colorGradient.colorKeys.Length; i++) {
                         colorList.Add(_trailRenderer.colorGradient.colorKeys[i].color);
                     }
                 }
@@ -85,7 +85,7 @@ namespace Tweaks {
             _colorKey = new GradientColorKey[range];
             _alphaKey = new GradientAlphaKey[range];
 
-            for (int i = 0; i < range; i++) {
+            for (var i = 0; i < range; i++) {
                 _colorKey[i].color = GetColor();
                 _colorKey[i].time = _time;
                 _alphaKey[i].alpha = _alpha;

@@ -19,7 +19,7 @@ namespace Player {
         }
 
         private void FixedUpdate() {
-            if (Physics.Raycast(transform.position, -transform.up, out RaycastHit raycastHit, 100, walkableSurfaces)) {
+            if (Physics.Raycast(transform.position, -transform.up, out var raycastHit, 100, walkableSurfaces)) {
                 surfaceY = raycastHit.point.y;
             }
             

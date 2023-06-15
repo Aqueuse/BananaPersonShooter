@@ -1,4 +1,5 @@
 ﻿using UI.InGame;
+using UI.InGame.Chimployee;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -23,16 +24,15 @@ namespace Monkeys {
         private void Start() {
             sasiety = ObjectsReference.Instance.mapsManager.currentMap.monkeySasiety;
             ObjectsReference.Instance.mapsManager.currentMap.RecalculateHappiness();
-            associatedUI.SetSliderValue(ObjectsReference.Instance.monkeysManager.colorByMonkeyState[monkeyState]);
-
+            
             _navMeshAgent = GetComponent<NavMeshAgent>();
             _animator = GetComponent<Animator>();
             
-            NavMeshTriangulation navMeshTriangulation = NavMesh.CalculateTriangulation();
+            var navMeshTriangulation = NavMesh.CalculateTriangulation();
                 
-            int vertexIndex = Random.Range(0, navMeshTriangulation.vertices.Length);
+            var vertexIndex = Random.Range(0, navMeshTriangulation.vertices.Length);
                 
-            if (NavMesh.SamplePosition(navMeshTriangulation.vertices[vertexIndex], out NavMeshHit navMeshHit, 2f, 0)) {
+            if (NavMesh.SamplePosition(navMeshTriangulation.vertices[vertexIndex], out var navMeshHit, 2f, 0)) {
                 _navMeshAgent.Warp(navMeshHit.position);
             }
 
@@ -47,9 +47,9 @@ namespace Monkeys {
                 ObjectsReference.Instance.mapsManager.currentMap.RecalculateHappiness();
             }
 
-            if (sasiety >= 50 && !ObjectsReference.Instance.gameData.bananaManSavedData.playerAdvancements.Contains(AdvancementState.FEED_MONKEY)) {
+            if (sasiety >=30 && !ObjectsReference.Instance.gameData.bananaManSavedData.playerAdvancements.Contains(AdvancementState.FEED_MONKEY)) {
                 ObjectsReference.Instance.gameData.bananaManSavedData.playerAdvancements.Add(AdvancementState.FEED_MONKEY);
-                Debug.Log("congratulation, you gained access to the banana cannon \\o/");
+                ObjectsReference.Instance.uiChimployee.InitDialogue(ChimployeeDialogue.chimployee_second_interaction);
             }
         }
         

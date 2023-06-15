@@ -7,19 +7,27 @@ namespace Game.CommandRoomPanelControls {
         [SerializeField] private GenericDictionary<GameObject, Transform> bananaGunPiecesRepairedPosition;
         [SerializeField] private GameObject bananaGunRepaired;
         [SerializeField] private GameObject bananaGunPieces;
-        
+
+        [SerializeField] private AudioClip[] bananaGunAssemblySounds;
+
         [SerializeField] private MeshRenderer assemblerZoneMeshRenderer;
         [SerializeField] private Color activatedColor;
         [SerializeField] private Color baseColor;
 
         [SerializeField] private UIassembler uIassembler;
 
+        private AudioSource assemblerAudioSource;
         private static readonly int colorPropertie = Shader.PropertyToID("_Color");
 
         private int bananaGunPiecesRepaired;
         private bool _bananaGunRepaired;
 
         private void Start() {
+            assemblerAudioSource = GetComponent<AudioSource>();
+            assemblerAudioSource.volume = ObjectsReference.Instance.audioManager.effectsLevel;
+            
+            ShuffleBananaGunAssemblySounds();
+            
             if (ObjectsReference.Instance.gameData.bananaManSavedData.playerAdvancements.Contains(AdvancementState.GET_BANANAGUN)) {
                 _bananaGunRepaired = true;
                 bananaGunPieces.SetActive(false);
@@ -34,8 +42,11 @@ namespace Game.CommandRoomPanelControls {
                     if (itemStaticClass.itemStaticType == ItemStaticType.GRABBABLE_PIECE &&
                         itemStaticClass.GetComponent<Grabbable>().grabbablePieceType == GrabbablePieceType.BANANA_GUN) {
                         
-                        // s'il est dans la liste, on le met à sa place définitive
                         if (bananaGunPiecesRepairedPosition.ContainsKey(other.gameObject)) {
+                            assemblerAudioSource.pitch += 0.02f;
+                            CommandRoomControlPanelsManager.Instance.SetAssemblerVolume(ObjectsReference.Instance.audioManager.effectsLevel);
+                            if (!assemblerAudioSource.isPlaying) assemblerAudioSource.Play();
+
                             assemblerZoneMeshRenderer.material.SetColor(colorPropertie, activatedColor);
 
                             var bananaGunPiece = other.gameObject;
@@ -49,6 +60,7 @@ namespace Game.CommandRoomPanelControls {
                             bananaGunPiece.transform.position = bananaGunPiecesRepairedPosition[bananaGunPiece].position;
                             bananaGunPiece.transform.rotation = bananaGunPiecesRepairedPosition[bananaGunPiece].rotation;
 
+                            
                             bananaGunPiecesRepaired += 1;
                             if (uIassembler.assemblerMode != AssemblerMode.BANANA_GUN) uIassembler.SwitchToBananaGunReparationMode();
                             uIassembler.SetBananaGunPiecesQuantity(bananaGunPiecesRepaired);
@@ -60,7 +72,9 @@ namespace Game.CommandRoomPanelControls {
                                 DesactivateBananaGunPieces();
                                 bananaGunRepaired.SetActive(true);
                                 _bananaGunRepaired = true;
-                        
+                                
+                                assemblerAudioSource.Stop();
+                                
                                 uIassembler.SwitchToIdleMode();
                         
                                 ObjectsReference.Instance.gameData.bananaManSavedData.playerAdvancements.Add(AdvancementState.GET_BANANAGUN);
@@ -73,6 +87,17 @@ namespace Game.CommandRoomPanelControls {
 
         private void DesactivateBananaGunPieces() {
             bananaGunPieces.SetActive(false);
+        }
+
+        public void SetAssemblerAudioVolume(float level) {
+            assemblerAudioSource.volume = level;
+        }
+        
+        private void ShuffleBananaGunAssemblySounds() {
+            for (var i = 0; i < bananaGunAssemblySounds.Length; i++) {
+                var randomNumber = Random.Range(i, bananaGunAssemblySounds.Length);
+                (bananaGunAssemblySounds[randomNumber], bananaGunAssemblySounds[i]) = (bananaGunAssemblySounds[i], bananaGunAssemblySounds[randomNumber]);
+            }
         }
     }
 }

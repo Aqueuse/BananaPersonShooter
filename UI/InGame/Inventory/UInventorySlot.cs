@@ -12,7 +12,6 @@ namespace UI.InGame.Inventory {
             SetDescriptionAndName();
             
             ObjectsReference.Instance.bananaMan.SetActiveItemTypeAndCategory(itemType, itemCategory, BuildableType.EMPTY);
-            
             ObjectsReference.Instance.uInventory.lastselectedInventoryItem = gameObject;
 
             ObjectsReference.Instance.uiSlotsManager.AssignToSelectedSlot(itemCategory, itemType);

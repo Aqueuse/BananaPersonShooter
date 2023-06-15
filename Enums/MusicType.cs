@@ -3,5 +3,6 @@ public enum MusicType {
     COROLLE,
     COMMANDROOM,
     JUNGLE_MAP01,
-    FIGHT
+    FIGHT,
+    CHIMPLOYEE
 }

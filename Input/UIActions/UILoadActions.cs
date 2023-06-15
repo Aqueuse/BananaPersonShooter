@@ -11,7 +11,7 @@ namespace Input.UIActions {
             Save();
             Load();
             Rename();
-            
+
             Delete();
 
             if (isDeleting) {
@@ -20,13 +20,13 @@ namespace Input.UIActions {
             }
         }
 
-        private void Save() {
+        private static void Save() {
             if (UnityEngine.Input.GetKeyDown(KeyCode.JoystickButton0)) { // (A)
                 ObjectsReference.Instance.uiSave.selectedSaveSlot.Save();
             }
         }
 
-        private void Load() {
+        private static void Load() {
             if (UnityEngine.Input.GetKeyDown(KeyCode.JoystickButton2)) { // (X)
                 ObjectsReference.Instance.uiSave.selectedSaveSlot.Load();
             }
@@ -39,7 +39,7 @@ namespace Input.UIActions {
             }
         }
 
-        private void Rename() {
+        private static void Rename() {
             if (UnityEngine.Input.GetKeyDown(KeyCode.JoystickButton6)) { // (select)
                 ObjectsReference.Instance.uiSave.selectedSaveSlot.Rename();
             }
@@ -61,7 +61,7 @@ namespace Input.UIActions {
             }
         }
 
-        private void Escape() {
+        private static void Escape() {
             if (UnityEngine.Input.GetKeyDown(KeyCode.Escape) || UnityEngine.Input.GetKeyDown(KeyCode.JoystickButton1)) {
                 ObjectsReference.Instance.uiManager.Hide_menus();
             }

@@ -28,7 +28,7 @@ namespace Items {
         }
         
         private void Grown_mature_bananier() {
-            gameObject.tag = "Aspirables";
+            gameObject.tag = "Regime";
             
             babyBananier.SetActive(false);
             youngBananier.SetActive(false);

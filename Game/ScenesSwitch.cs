@@ -1,6 +1,6 @@
-using System;
 using System.Collections;
 using Enums;
+using Save;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -19,7 +19,7 @@ namespace Game {
         }
 
         private IEnumerator LoadScene(string sceneName, SpawnPoint spawnPoint, bool isTeleporting, bool isNewGame) {
-            AsyncOperation load = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Single);
+            var load = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Single);
 
             // Wait until the asynchronous scene fully loads
             while (!load.isDone) {
@@ -100,9 +100,9 @@ namespace Game {
                 
                 ObjectsReference.Instance.gameManager.loadingScreen.SetActive(false);
 
-                ObjectsReference.Instance.audioManager.SetMusiqueBySceneName(sceneName);
+                ObjectsReference.Instance.audioManager.SetMusiqueAndAmbianceBySceneName(sceneName);
                 
-                ObjectsReference.Instance.gameLoad.LoadAdvancements();
+                GameLoad.LoadAdvancements();
             }
         }
 

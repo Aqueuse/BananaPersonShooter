@@ -4,7 +4,7 @@ using UnityEngine.AI;
 using Random = UnityEngine.Random;
 
 namespace Monkeys.Gorilla {
-    enum GorillaAttackType {
+    internal enum GorillaAttackType {
         SHOCKWAVE = 0,
         CATCHPLAYER = 1,
         TOURBISMASH = 2
@@ -18,7 +18,6 @@ namespace Monkeys.Gorilla {
         private Monkey _monkey;
 
         private Vector3 _gorillaHandLeftPosition;
-        private Vector3 _gorillaHandRightPosition;
 
         private Animator _animator;
 
@@ -29,7 +28,7 @@ namespace Monkeys.Gorilla {
         public bool isAttackingPlayer;
 
         private int _randomAttack;
-        float _combatPhaseFactor;
+        private float _combatPhaseFactor;
         private GorillaAttackType _gorillaAttackType;
 
         // animations
@@ -77,7 +76,7 @@ namespace Monkeys.Gorilla {
             if (ObjectsReference.Instance.gameManager.isGamePlaying) {
                 if (_monkey.monkeyState == MonkeyState.ANGRY) {
                     var bananaManPosition = ObjectsReference.Instance.bananaMan.transform.position;
-                    Vector3 bananaManPositionXY = new Vector3(bananaManPosition.x, 0, bananaManPosition.z);
+                    var bananaManPositionXY = new Vector3(bananaManPosition.x, 0, bananaManPosition.z);
 
                     if (_navMeshAgent.isOnNavMesh) {
                         _navMeshAgent.SetDestination(bananaManPositionXY);
@@ -148,7 +147,7 @@ namespace Monkeys.Gorilla {
             _animator.SetFloat(VelocityZ, _velocity.y);
         }
 
-        void TourbiSmash() {
+        private void TourbiSmash() {
             _randomAttack = Random.Range(0, _nearPlayerAttack.Count);
             _animator.SetTrigger(_nearPlayerAttack[_randomAttack]);
         }
@@ -158,14 +157,13 @@ namespace Monkeys.Gorilla {
             _animator.SetTrigger(_mediumPlayerAttack[_randomAttack]);
         }
 
-        void ShockWavePlayer() {
+        private void ShockWavePlayer() {
             _randomAttack = Random.Range(0, _farPlayerAttack.Count);
             _animator.SetTrigger(_farPlayerAttack[_randomAttack]);
         }
 
         public void CreateShockWave() {
             _gorillaHandLeftPosition = gorillaHandLeft.position;
-            _gorillaHandRightPosition = gorillaHandRight.position;
 
             var leftSpawnPosition = new Vector3(_gorillaHandLeftPosition.x, 0.5f, _gorillaHandLeftPosition.z);
 
@@ -183,10 +181,10 @@ namespace Monkeys.Gorilla {
         }
 
         private Vector3 RandomNavmeshLocation(float radius) {
-            Vector3 randomDirection = Random.insideUnitSphere * radius;
+            var randomDirection = Random.insideUnitSphere * radius;
             randomDirection += transform.position;
-            Vector3 finalPosition = Vector3.zero;
-            if (NavMesh.SamplePosition(randomDirection, out NavMeshHit navMeshHit, radius, 1)) {
+            var finalPosition = Vector3.zero;
+            if (NavMesh.SamplePosition(randomDirection, out var navMeshHit, radius, 1)) {
                 finalPosition = navMeshHit.position;
             }
 

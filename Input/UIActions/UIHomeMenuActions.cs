@@ -10,8 +10,8 @@ namespace Input.UIActions {
 
         private bool _scrolledLeft;
         private bool _scrolledRight;
-        
-        PointerEventData _pointer;
+
+        private PointerEventData _pointer;
 
         private float _counter;
         

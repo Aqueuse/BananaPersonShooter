@@ -34,7 +34,7 @@ namespace Player {
         private Vector3 _cameraForward;
         private float _inputAngle;
 
-        private readonly float _maxDistanceToCollide = 0.2f;
+        private readonly float _maxDistanceToCollide = 0.3f;
         private Vector3 _movement;
         private Vector3 _newPosition;
         private float _slopeAngle;
@@ -53,8 +53,6 @@ namespace Player {
             speed = BaseMovementSpeed;
 
             _damageCount = 0;
-
-            // TODO : _rigidbody.maxLinearVelocity = 40;
         }
         
         private void FixedUpdate() {
@@ -118,10 +116,15 @@ namespace Player {
             if (_rigidbody.velocity.y < -20) {
                 _damageCount += 1;
             }
-
+            
             if (isGrounded && _damageCount > 0) {
                 ObjectsReference.Instance.bananaMan.TakeDamage(_damageCount);
                 _damageCount = 0;
+            }
+
+            // cap max velocity
+            if (_rigidbody.velocity.magnitude > 21) {
+                _rigidbody.velocity = Vector3.ClampMagnitude(_rigidbody.velocity, 21);
             }
 
             // end jump

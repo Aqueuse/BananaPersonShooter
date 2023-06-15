@@ -32,7 +32,7 @@ namespace Audio {
             audioFootstepsSource.loop = false;
         }
 
-        public void SetMusiqueBySceneName(string sceneName) {
+        public void SetMusiqueAndAmbianceBySceneName(string sceneName) {
             switch (sceneName) {
                 case "HOME":
                     StopAudioSource(AudioSourcesType.AMBIANCE);
@@ -51,7 +51,9 @@ namespace Audio {
                 
                 case "COMMANDROOM":
                     PlayAmbiance(AmbianceType.DRONE_COMMANDROOM);
-                    PlayMusic(MusicType.COMMANDROOM);
+                    if (ObjectsReference.Instance.gameData.bananaManSavedData.playerAdvancements.Contains(AdvancementState.GET_BANANAGUN)) {
+                        PlayMusic(MusicType.COMMANDROOM);
+                    }
                     break;
             }
         }
@@ -90,6 +92,7 @@ namespace Audio {
 
             else {
                 audioMusicsSource.clip = audioData.clip[0];
+                audioMusicsSource.time = 0;
                 audioMusicsSource.Play();
             }
         }
@@ -97,7 +100,7 @@ namespace Audio {
         private void PlayMusicDelayed() {
             var audioData = audioMusicsDictionnary[_actualMusicType];
             
-            HashSet<AudioClip> audioClips = new HashSet<AudioClip>(audioData.clip);
+            var audioClips = new HashSet<AudioClip>(audioData.clip);
             if (_lastClip != null) audioClips.Remove(_lastClip);
 
             // prevent playing the same song
@@ -136,16 +139,6 @@ namespace Audio {
             audioEffectsSource.loop = audioData.isLooping;
 
             audioEffectsSource.PlayDelayed(delay);
-        }
-        
-        public void PlayFootStepOneShot() {
-            if (ObjectsReference.Instance.gameManager.isGamePlaying) {
-                var audioData = audioFootStepsDictionnary[footStepType];
-                if (!audioFootstepsSource.isPlaying) {
-                    audioFootstepsSource.volume = effectsLevel-0.2f;
-                    audioFootstepsSource.PlayOneShot(audioData.clip[Random.Range(0, audioData.clip.Length)]);
-                }
-            }
         }
 
         public void PlayFootstep() {

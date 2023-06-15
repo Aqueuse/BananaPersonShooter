@@ -24,7 +24,7 @@ namespace Building {
             ObjectsReference.Instance.bananaGun.transform.LookAt(moverTarget.transform, Vector3.up);
 
             if (ObjectsReference.Instance.gameActions.isBuildModeActivated) {
-                if (Physics.Raycast(ObjectsReference.Instance.gameManager.cameraMain.transform.position, ObjectsReference.Instance.gameManager.cameraMain.transform.forward, out RaycastHit raycastHit, 100, layerMask:aspirableLayerMask)) {
+                if (Physics.Raycast(ObjectsReference.Instance.gameManager.cameraMain.transform.position, ObjectsReference.Instance.gameManager.cameraMain.transform.forward, out var raycastHit, 100, layerMask:aspirableLayerMask)) {
                     UnhighlightSelectedObject();
                     targetedGameObject = raycastHit.transform.gameObject;
                     HighlightSelectedObject();
@@ -41,7 +41,6 @@ namespace Building {
             bananaGunInBack.SetActive(false);
 
             ObjectsReference.Instance.bananaMan.isGrabingBananaGun = true;
-
             ObjectsReference.Instance.bananaMan.tpsPlayerAnimator.GrabBananaGun();
             wasFocus = _playerController.isFocusCamera;
         }

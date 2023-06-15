@@ -62,11 +62,11 @@ namespace UI.InGame {
         }
 
         public void PauseMiniGame() {
-            BananaCannonMiniGameManager.Instance.PauseMiniGame();
+            BananaCannonMiniGameManager.PauseMiniGame();
         }
         
         public void UnpauseMiniGame() {
-            BananaCannonMiniGameManager.Instance.UnpauseMiniGame();
+            BananaCannonMiniGameManager.UnpauseMiniGame();
         }
     }
 }

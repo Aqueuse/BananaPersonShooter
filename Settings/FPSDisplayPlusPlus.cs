@@ -240,8 +240,8 @@ namespace Settings {
 			if (decimalPlaces < 0) { throw new ArgumentOutOfRangeException("decimalPlaces"); }
 			if (value < 0) { return "-" + FormatSize(-value, decimalPlaces); }
 			if (value == 0) { return string.Format("{0:n" + decimalPlaces + "} bytes", 0); }
-			int mag = (int)Math.Log(value, 1024);
-			decimal adjustedSize = (decimal)value / (1L << mag * 10);
+			var mag = (int)Math.Log(value, 1024);
+			var adjustedSize = (decimal)value / (1L << mag * 10);
 			if (Math.Round(adjustedSize, decimalPlaces) >= 1000)
 			{
 				mag += 1;
@@ -327,7 +327,7 @@ namespace Settings {
 			_curTime = DateTime.Now;
 			_curTotalProcessorTime = _pp.TotalProcessorTime;
 
-			double cpuUsage = (_curTotalProcessorTime.TotalMilliseconds - _lastTotalProcessorTime.TotalMilliseconds) / _curTime.Subtract(_lastTime).TotalMilliseconds / Convert.ToDouble(Environment.ProcessorCount);
+			var cpuUsage = (_curTotalProcessorTime.TotalMilliseconds - _lastTotalProcessorTime.TotalMilliseconds) / _curTime.Subtract(_lastTime).TotalMilliseconds / Convert.ToDouble(Environment.ProcessorCount);
 
 			_lastTime = _curTime;
 			_lastTotalProcessorTime = _curTotalProcessorTime;

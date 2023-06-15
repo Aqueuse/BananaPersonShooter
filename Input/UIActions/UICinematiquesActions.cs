@@ -5,8 +5,8 @@ using UnityEngine;
 namespace Input.UIActions {
     public class UICinematiquesActions : MonoBehaviour {
         [SerializeField] private UICinematique uiCinematique;
-        
-        void Update() {
+
+        private void Update() {
             Skip();
             PauseGame();
         }
@@ -17,7 +17,7 @@ namespace Input.UIActions {
             }
         }
         
-        private void PauseGame() {
+        private static void PauseGame() {
             if (UnityEngine.Input.GetKeyDown(KeyCode.Escape) || UnityEngine.Input.GetKeyDown(KeyCode.JoystickButton7)) {
                 ObjectsReference.Instance.inputManager.uiSchemaContext = UISchemaSwitchType.HOME_MENU;
                 ObjectsReference.Instance.gameManager.PauseGame(true);

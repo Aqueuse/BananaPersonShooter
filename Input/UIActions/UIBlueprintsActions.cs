@@ -28,19 +28,19 @@ namespace Input.UIActions {
             Scroll_Slots();
         }
         
-        private void Hide_Interface() {
+        private static void Hide_Interface() {
             if (UnityEngine.Input.GetKeyDown(KeyCode.Escape) || UnityEngine.Input.GetKeyDown(KeyCode.I) || UnityEngine.Input.GetAxis("DpadHorizontal") > 0) {
                 ObjectsReference.Instance.uiManager.Show_Hide_interface();
             }
         }
         
-        private void Switch_To_Left() {
+        private static void Switch_To_Left() {
             if (UnityEngine.Input.GetKeyDown(KeyCode.JoystickButton4)) {
                 ObjectsReference.Instance.uihud.Switch_To_Left_Tab();
             }
         }
 
-        private void Switch_To_Right() {
+        private static void Switch_To_Right() {
             if (UnityEngine.Input.GetKeyDown(KeyCode.JoystickButton5)) {
                 ObjectsReference.Instance.uihud.Switch_To_Right_Tab();
             }

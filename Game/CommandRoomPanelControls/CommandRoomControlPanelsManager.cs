@@ -14,21 +14,30 @@ namespace Game.CommandRoomPanelControls {
         [SerializeField] private BoxCollider miniGameCanonBananaInteractionCollider;
         [SerializeField] private CanvasGroup miniGameCannonBananaInteractionCanvas;
 
+        [SerializeField] private Assembler assembler;
+        
         private void Start() {
             ShowHidePanel(CommandRoomPanelType.JOURNAL);
+            
+            if (ObjectsReference.Instance.gameData.bananaManSavedData.playerAdvancements.Contains(AdvancementState.FEED_MONKEY)) {
+                AuthorizeBananaCannonMiniGameAccess();
+            }
         }
 
         public void ShowHidePanel(CommandRoomPanelType commandRoomPanelType) {
             foreach (var commandRoomPanel in panels) {
-                commandRoomPanel.Value.Desactivate();
+                if (commandRoomPanel.Value.commandRoomPanelType == commandRoomPanelType) {
+                    if (commandRoomPanel.Value.isVisible()) commandRoomPanel.Value.Desactivate();
+                    else {
+                        commandRoomPanel.Value.Activate();
+                    }
+                }
+                else {
+                    commandRoomPanel.Value.Desactivate();
+                }
             }
 
-            if (panels[commandRoomPanelType].isVisible) {
-                panels[commandRoomPanelType].Desactivate();
-            }
-            else {
-                panels[commandRoomPanelType].Activate();
-            }
+            ObjectsReference.Instance.audioManager.PlayEffect(EffectType.BUTTON_INTERACTION, 0);
         }
 
         public void AuthorizeDoorsAccess() {
@@ -40,6 +49,10 @@ namespace Game.CommandRoomPanelControls {
             bananaCannonMiniGameAccessDenied.SetActive(false);
             miniGameCanonBananaInteractionCollider.enabled = true;
             miniGameCannonBananaInteractionCanvas.alpha = 1;
+        }
+
+        public void SetAssemblerVolume(float level) {
+            assembler.SetAssemblerAudioVolume(level);
         }
 
     }

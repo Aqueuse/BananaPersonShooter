@@ -37,7 +37,7 @@ namespace Game.BananaCannonMiniGame {
             _bananaType = ItemType.CAVENDISH;
             bananasQuantityText.text = ObjectsReference.Instance.inventory.GetQuantity(ItemType.CAVENDISH).ToString();
             
-            _debrisQuantity = ObjectsReference.Instance.mapsManager.mapBySceneName[_mapName].GetDebrisQuantity();
+            _debrisQuantity = Map.GetDebrisQuantity();
             debrisQuantityText.text = _debrisQuantity.ToString();
             
             _spaceshipsQuantity = 6;
@@ -70,13 +70,13 @@ namespace Game.BananaCannonMiniGame {
             ObjectsReference.Instance.scenesSwitch.Teleport(spawnPoint);
         }
 
-        public void PauseMiniGame() {
+        public static void PauseMiniGame() {
             Time.timeScale = 0;
 
             ObjectsReference.Instance.uIbananaCannonMiniGame.ShowPauseMenu();
         }
 
-        public void UnpauseMiniGame() {
+        public static void UnpauseMiniGame() {
             Time.timeScale = 1;
 
             ObjectsReference.Instance.uIbananaCannonMiniGame.HidePauseMenu();
@@ -98,9 +98,6 @@ namespace Game.BananaCannonMiniGame {
             ObjectsReference.Instance.mapsManager.mapBySceneName[_mapName].debrisToSpawn = _debrisToSpawn;
 
             ObjectsReference.Instance.gameManager.gameContext = GameContext.IN_GAME;
-            
-            // DEBUG TRICHE
-            ObjectsReference.Instance.mapsManager.mapBySceneName[_mapName].debrisToSpawn = 5;
         }
 
         public void MoveTarget(float xQuantity, float yQuantity) {

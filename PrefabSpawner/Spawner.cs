@@ -28,7 +28,7 @@ namespace PrefabSpawner {
 
                 var randomPosition = terrain.transform.TransformPoint(random2);
                     
-                if (Physics.Raycast(randomPosition, Vector3.down, out RaycastHit raycastHit)) {
+                if (Physics.Raycast(randomPosition, Vector3.down, out var raycastHit)) {
                     if (raycastHit.transform.tag.Equals("vegetationMask")) {
                         var prefabIndex = Random.Range(0, prefabs.Length);
                         
@@ -42,7 +42,7 @@ namespace PrefabSpawner {
             Debug.Log("spawned "+_treesCounter);
         }
 
-        private Vector3 RandomVector3(Vector3 min, Vector3 max) {
+        private static Vector3 RandomVector3(Vector3 min, Vector3 max) {
             return new Vector3(Random.Range(min.x, max.x), Random.Range(min.y, max.y), Random.Range(min.z, max.z));
         }
 

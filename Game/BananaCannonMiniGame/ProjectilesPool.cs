@@ -6,7 +6,7 @@ namespace Game.BananaCannonMiniGame {
         public Projectile projectilePrefab;
         private ObjectPool<Projectile> _projectilesPool;
 
-        void Start() {
+        private void Start() {
             _projectilesPool = new ObjectPool<Projectile>(
                 InstantiateObject,
                 actionOnGet: OnObject,
@@ -19,22 +19,22 @@ namespace Game.BananaCannonMiniGame {
         }
 
         private Projectile InstantiateObject() {
-            Projectile projectile = Instantiate(projectilePrefab, transform);
+            var projectile = Instantiate(projectilePrefab, transform);
             projectile.SetPool(_projectilesPool);
             return projectile;
         }
 
-        void OnObject(Projectile projectile) {
+        private static void OnObject(Projectile projectile) {
             projectile.gameObject.SetActive(true);
         }
 
-        void OnReleased(Projectile projectile) {
+        private static void OnReleased(Projectile projectile) {
             projectile.gameObject.SetActive(false);
         }
 
         // If the pool capacity is reached then any items returned will be destroyed.
         // We can control what the destroy behavior does, here we destroy the GameObject.
-        void OnDestroyPoolObject(Projectile projectile) {
+        private static void OnDestroyPoolObject(Projectile projectile) {
             Destroy(projectile.gameObject);
         }
 

@@ -6,7 +6,7 @@ namespace Input.UIActions {
             Escape();
         }
 
-        private void Escape() {
+        private static void Escape() {
             if (UnityEngine.Input.GetKeyDown(KeyCode.Escape) || UnityEngine.Input.GetKeyDown(KeyCode.JoystickButton1)) {
                 ObjectsReference.Instance.uiManager.Hide_menus();
             }

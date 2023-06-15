@@ -30,7 +30,6 @@ namespace UI.Save {
             ObjectsReference.Instance.uiSave.selectedSaveSlot = this;
             ObjectsReference.Instance.uiSave.UnselectAll();
             activatedMask.SetActive(true);
-            
         }
 
         public void Unselect() {
@@ -58,6 +57,7 @@ namespace UI.Save {
         public void Load() {
             ObjectsReference.Instance.audioManager.PlayEffect(EffectType.BUTTON_INTERACTION, 0);
             ObjectsReference.Instance.gameManager.Play(saveUuid, false);
+            ObjectsReference.Instance.uiSave.UnselectAll();
         }
 
         public void Save () {
@@ -91,10 +91,10 @@ namespace UI.Save {
         
         public void UpdateThumbail() {
             var savePath = ObjectsReference.Instance.loadData.GetSavePathByUuid(saveUuid);
-            string screenshotFilePath = Path.Combine(savePath, "screenshot.png");
+            var screenshotFilePath = Path.Combine(savePath, "screenshot.png");
             
             var bytes = File.ReadAllBytes(screenshotFilePath);
-            Texture2D texture2D = new Texture2D(2, 2);
+            var texture2D = new Texture2D(2, 2);
             texture2D.LoadImage(bytes);
             
             var thumbailSprite = Sprite.Create(texture2D, new Rect(0, 0, texture2D.width, texture2D.height), new Vector2(0.5f, 0.5f));

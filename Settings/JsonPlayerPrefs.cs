@@ -38,9 +38,9 @@ namespace Settings {
             _savePath = savePath;
             // try to load existing data
             if (File.Exists(savePath)) {
-                using StreamReader reader = new StreamReader(savePath);
-                string json = reader.ReadToEnd();
-                JsonPlayerPrefs data = JsonUtility.FromJson<JsonPlayerPrefs>(json);
+                using var reader = new StreamReader(savePath);
+                var json = reader.ReadToEnd();
+                var data = JsonUtility.FromJson<JsonPlayerPrefs>(json);
                 playerPrefs = data.playerPrefs;
             }
         }
@@ -58,7 +58,7 @@ namespace Settings {
         /// Removes key and its corresponding value from the preferences.
         /// </summary>
         public void DeleteKey(string key) {
-            for (int i = playerPrefs.Count - 1; i >= 0; i--) // in reverse since we're removing
+            for (var i = playerPrefs.Count - 1; i >= 0; i--) // in reverse since we're removing
             {
                 if (playerPrefs[i].key == key) {
                     playerPrefs.RemoveAt(i);
@@ -127,8 +127,8 @@ namespace Settings {
         /// </summary>
         public void Save() {
             // serialize and save file
-            string json = JsonUtility.ToJson(this);
-            using StreamWriter writer = new StreamWriter(_savePath);
+            var json = JsonUtility.ToJson(this);
+            using var writer = new StreamWriter(_savePath);
             writer.WriteLine(json);
         }
 

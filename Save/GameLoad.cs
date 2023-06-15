@@ -3,6 +3,7 @@ using System.Linq;
 using Building;
 using Enums;
 using Game.CommandRoomPanelControls;
+using UI.InGame;
 using UnityEngine;
 
 namespace Save {
@@ -38,20 +39,20 @@ namespace Save {
             ObjectsReference.Instance.loadData.LoadMapAspirablesDataByUuid(saveUuid);
         }
 
-        private void LoadInventory() {
+        private static void LoadInventory() {
             foreach (var bananaSlot in ObjectsReference.Instance.inventory.bananaManInventory.ToList()) {
                 ObjectsReference.Instance.inventory.bananaManInventory[bananaSlot.Key] =
                     ObjectsReference.Instance.gameData.bananaManSavedData.inventory[bananaSlot.Key.ToString()];
             }
         }
         
-        private void LoadBlueprints() {
+        private static void LoadBlueprints() {
             foreach (var blueprint in ObjectsReference.Instance.gameData.bananaManSavedData.blueprints) {
                 ObjectsReference.Instance.uiBlueprints.SetVisible(Enum.Parse<BuildableType>(blueprint));
             }
         }
 
-        private void LoadSlots() {
+        private static void LoadSlots() {
             for (var i = 0; i < ObjectsReference.Instance.uiSlotsManager.uiSlotsScripts.Count; i++) {
                 var itemCategoryAndType = ObjectsReference.Instance.gameData.bananaManSavedData.slots[i].Split(",");
                 var itemCategoryString = itemCategoryAndType[0];
@@ -72,14 +73,14 @@ namespace Save {
             ObjectsReference.Instance.uiSlotsManager.Switch_to_Slot_Index(0);
         }
 
-        private void LoadBananaManVitals() {
+        private static void LoadBananaManVitals() {
             ObjectsReference.Instance.bananaMan.health = ObjectsReference.Instance.gameData.bananaManSavedData.health;
             ObjectsReference.Instance.bananaMan.resistance = ObjectsReference.Instance.gameData.bananaManSavedData.resistance;
             
             ObjectsReference.Instance.bananaMan.SetBananaSkinHealth();
         }
 
-        private void LoadPositionAndRotationOnLastMap() {
+        private static void LoadPositionAndRotationOnLastMap() {
             ObjectsReference.Instance.gameData.lastPositionOnMap = new Vector3(
                 ObjectsReference.Instance.gameData.bananaManSavedData.xWorldPosition,
                 ObjectsReference.Instance.gameData.bananaManSavedData.yWorldPosition,
@@ -92,7 +93,7 @@ namespace Save {
              );
         }
         
-        private void LoadActiveItem() {
+        private static void LoadActiveItem() {
             var activeItemType = ObjectsReference.Instance.gameData.bananaManSavedData.activeItem;
             var activeItemCategory = ObjectsReference.Instance.gameData.bananaManSavedData.activeItemCategory;
             var activeBuildableType = ObjectsReference.Instance.gameData.bananaManSavedData.activeBuildableType;
@@ -106,21 +107,21 @@ namespace Save {
             ObjectsReference.Instance.bananaMan.activeBuildableType = activeBuildableType;
         }
 
-        private void LoadMonkeysSatiety() {
+        private static void LoadMonkeysSatiety() {
             foreach (var mapData in ObjectsReference.Instance.mapsManager.mapBySceneName) {
-                // add other monkeys and other maps
                 mapData.Value.monkeySasiety = ObjectsReference.Instance.gameData.mapSavedDatasByMapName[mapData.Key].monkeySasiety;
             }
         }
 
-        public void LoadAdvancements() {
+        public static void LoadAdvancements() {
             if (ObjectsReference.Instance.gameData.bananaManSavedData.playerAdvancements.Contains(AdvancementState.GET_MONKEYMAN_IA)) {
                 ObjectsReference.Instance.uihud.Activate_Chimployee_Tab();
+                Uihud.AuthorizeTp();
             }
 
             if (ObjectsReference.Instance.gameData.bananaManSavedData.playerAdvancements.Contains(AdvancementState.GET_BANANAGUN)) {
                 ObjectsReference.Instance.uiManager.Set_active(UICanvasGroupType.HUD, true);
-                
+
                 if (ObjectsReference.Instance.bananaMan.activeItemCategory == ItemCategory.BANANA ||
                     ObjectsReference.Instance.bananaMan.activeItemCategory == ItemCategory.BUILDABLE) {
                     ObjectsReference.Instance.bananaGun.bananaGunInBack.SetActive(false);
@@ -143,7 +144,7 @@ namespace Save {
 
         /////////////////// MAPS ///////////////////////
 
-        private void LoadMapsData() {
+        private static void LoadMapsData() {
             foreach (var map in ObjectsReference.Instance.mapsManager.mapBySceneName) {
                 var savedMapData = ObjectsReference.Instance.loadData.GetMapDataByUuid(ObjectsReference.Instance.gameData.currentSaveUuid, map.Key);
                 
@@ -165,7 +166,7 @@ namespace Save {
                     }
                 };
             
-                for (int i = 0; i < mapData.aspirablesCategories.Count; i++) {
+                for (var i = 0; i < mapData.aspirablesCategories.Count; i++) {
                     if (mapData.aspirablesCategories[i] == ItemCategory.DEBRIS) {
                         aspirable = Instantiate(
                             ObjectsReference.Instance.scriptableObjectManager._meshReferenceScriptableObject.debrisPrefab[mapData.aspirablesPrefabsIndex[i]], 

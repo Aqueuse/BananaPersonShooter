@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Enums;
 using Player;
+using UI.Tutorials;
 using UnityEngine;
 
 namespace Input {
@@ -135,7 +136,7 @@ namespace Input {
         }
 
         private static void Grab() {
-            if (UnityEngine.Input.GetKeyDown(KeyCode.E) || UnityEngine.Input.GetKeyDown(KeyCode.JoystickButton2)) {
+            if (UnityEngine.Input.GetKeyDown(KeyCode.F) || UnityEngine.Input.GetKeyDown(KeyCode.JoystickButton2)) {
                 if (!ObjectsReference.Instance.itemsManager.isGrabbing) {
                     ObjectsReference.Instance.itemsManager.Grab();
                 }
@@ -143,7 +144,7 @@ namespace Input {
         }
 
         private static void Release() {
-            if (UnityEngine.Input.GetKeyUp(KeyCode.E) || UnityEngine.Input.GetKeyUp(KeyCode.JoystickButton2)) {
+            if (UnityEngine.Input.GetKeyUp(KeyCode.F) || UnityEngine.Input.GetKeyUp(KeyCode.JoystickButton2)) {
                 ObjectsReference.Instance.itemsManager.Release();
             }
         }
@@ -168,11 +169,11 @@ namespace Input {
             }
         }
 
-        private void ShowTutorial() {
+        private static void ShowTutorial() {
             if (UnityEngine.Input.GetKeyDown(KeyCode.H) || UnityEngine.Input.GetKeyDown(KeyCode.JoystickButton6)) {
                 ObjectsReference.Instance.inputManager.uiSchemaContext = UISchemaSwitchType.TUTORIAL;
                 ObjectsReference.Instance.gameManager.PauseGame(true);
-                ObjectsReference.Instance.tutorialsManager.Show_Help();
+                TutorialsManager.Show_Help();
             }
         }
 
@@ -198,30 +199,30 @@ namespace Input {
         private void Scroll_Slots() {
             scrollSlotsValue = UnityEngine.Input.mouseScrollDelta;
             
-           float scrollValue = scrollSlotsValue.y;
+           var scrollValue = scrollSlotsValue.y;
             if (scrollValue < 0) ObjectsReference.Instance.uiSlotsManager.Select_Upper_Slot();
             if (scrollValue > 0) ObjectsReference.Instance.uiSlotsManager.Select_Lower_Slot();
         }
         
-        private void SwitchToSlotIndex0() {
+        private static void SwitchToSlotIndex0() {
             if (UnityEngine.Input.GetKeyDown(KeyCode.Alpha1)) {
                 ObjectsReference.Instance.uiSlotsManager.Switch_to_Slot_Index(0);
             }
         }
 
-        private void SwitchToSlotIndex1() {
+        private static void SwitchToSlotIndex1() {
             if (UnityEngine.Input.GetKeyDown(KeyCode.Alpha2)) {
                 ObjectsReference.Instance.uiSlotsManager.Switch_to_Slot_Index(1);
             }
         }
         
-        private void SwitchToSlotIndex2() {
+        private static void SwitchToSlotIndex2() {
             if (UnityEngine.Input.GetKeyDown(KeyCode.Alpha3)) {
                 ObjectsReference.Instance.uiSlotsManager.Switch_to_Slot_Index(2);
             }
         }
         
-        private void SwitchToSlotIndex3() {
+        private static void SwitchToSlotIndex3() {
             if (UnityEngine.Input.GetKeyDown(KeyCode.Alpha4)) {
                 ObjectsReference.Instance.uiSlotsManager.Switch_to_Slot_Index(3);
             }
@@ -230,7 +231,7 @@ namespace Input {
         private void ZoomDezoomCamera() {
             scrollSlotsValue = UnityEngine.Input.mouseScrollDelta;
 
-            float scrollValue = scrollSlotsValue.y;
+            var scrollValue = scrollSlotsValue.y;
 
             if (UnityEngine.Input.GetKey(KeyCode.LeftShift) && scrollValue > 0) {
                 ObjectsReference.Instance.mainCamera.ZoomCamera();
@@ -283,8 +284,12 @@ namespace Input {
                 _playerController.StopPlayer();
                 
                 ObjectsReference.Instance.uiCrosshair.SetCrosshair(ItemCategory.BUILDABLE, ItemType.EMPTY);
-                ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.BUILD_HELPER].alpha = 1f;
-
+                
+                ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.BANANAGUN_HELPER].alpha = 1f;
+                if (ObjectsReference.Instance.bananaMan.activeItemCategory == ItemCategory.BUILDABLE) {
+                    ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.BUILD_HELPER].alpha = 1f;
+                }
+                
                 if (ObjectsReference.Instance.bananaMan.activeItemCategory == ItemCategory.BUILDABLE) ObjectsReference.Instance.slotSwitch.ActivateGhost();
                 
                 isBuildModeActivated = true;
@@ -296,6 +301,8 @@ namespace Input {
                 
                 ObjectsReference.Instance.bananaGun.UnhighlightSelectedObject();
                 ObjectsReference.Instance.uiCrosshair.SetCrosshair(ItemCategory.EMPTY, ItemType.EMPTY);
+                
+                ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.BANANAGUN_HELPER].alpha = 0f;
                 ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.BUILD_HELPER].alpha = 0f;
 
                 ObjectsReference.Instance.slotSwitch.CancelGhost();
@@ -347,14 +354,14 @@ namespace Input {
             }
         }
 
-        private void SwitchRotationAxis() {
+        private void SwitchRotationAxis() {  // remembering that we are virtyally in a QWERTY keyboard all the time because Unity
             if (UnityEngine.Input.GetKeyDown(KeyCode.Q) || UnityEngine.Input.GetKeyDown(KeyCode.JoystickButton3)) {
                 rotationAxis = RotationAxis.Y;
                 ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.BUILD_HELPER_Y_AXIS].alpha = 1f;
                 ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.BUILD_HELPER_Z_AXIS].alpha = 0f;
             }
             
-            if (UnityEngine.Input.GetKeyDown(KeyCode.E) || UnityEngine.Input.GetKeyDown(KeyCode.JoystickButton1)) {
+            if (UnityEngine.Input.GetKeyDown(KeyCode.W) || UnityEngine.Input.GetKeyDown(KeyCode.JoystickButton1)) {
                 rotationAxis = RotationAxis.Z;
                 ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.BUILD_HELPER_Y_AXIS].alpha = 0f;
                 ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.BUILD_HELPER_Z_AXIS].alpha = 1f;

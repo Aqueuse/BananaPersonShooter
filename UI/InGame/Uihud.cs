@@ -132,6 +132,9 @@ namespace UI.InGame {
             chimployeeCanvasGroup.alpha = 1;
             chimployeeCanvasGroup.interactable = true;
             chimployeeCanvasGroup.blocksRaycasts = true;
+        }
+
+        public static void AuthorizeTp() {
             ObjectsReference.Instance.uiChimployee.TpButton.SetActive(true);
         }
     }

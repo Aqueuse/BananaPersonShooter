@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.IO;
-using Game;
 using JetBrains.Annotations;
 using Newtonsoft.Json;
 using Save.Templates;
@@ -61,14 +60,14 @@ namespace Save {
             var jsonSavedData = JsonConvert.SerializeObject(_savedData);
             var jsonbananaManSavedData = JsonConvert.SerializeObject(ObjectsReference.Instance.gameData.bananaManSavedData);
             
-            string savefilePath = Path.Combine(savePath, "data.json");
+            var savefilePath = Path.Combine(savePath, "data.json");
             
             File.WriteAllText(savefilePath, jsonSavedData);
             
             savefilePath = Path.Combine(savePath, "MAPS");
             
             foreach (var map in ObjectsReference.Instance.gameData.mapSavedDatasByMapName) {
-                Map mapClass = ObjectsReference.Instance.mapsManager.mapBySceneName[map.Key];
+                var mapClass = ObjectsReference.Instance.mapsManager.mapBySceneName[map.Key];
                 
                 // synchronize data beetween classes and templates
                 map.Value.isDiscovered = mapClass.isDiscovered;
@@ -83,7 +82,7 @@ namespace Save {
             savefilePath = Path.Combine(savePath, "player.json");
             File.WriteAllText(savefilePath, jsonbananaManSavedData);
             
-            string screenshotFilePath = Path.Combine(savePath, "screenshot.png");
+            var screenshotFilePath = Path.Combine(savePath, "screenshot.png");
             SaveCameraView(screenshotFilePath);
             
             foreach (var map in ObjectsReference.Instance.mapsManager.mapBySceneName) {
@@ -110,21 +109,21 @@ namespace Save {
             _savedData.saveName = saveName;
             var jsonSavedData = JsonConvert.SerializeObject(_savedData);
             
-            string savefilePath = Path.Combine(savePath, "data.json");
+            var savefilePath = Path.Combine(savePath, "data.json");
 
             File.WriteAllText(savefilePath, jsonSavedData);
         }
 
-        void SaveCameraView(string path) {
+        private static void SaveCameraView(string path) {
             var screenshotCamera = ObjectsReference.Instance.gameManager.cameraMain;
-            RenderTexture screenTexture = new RenderTexture(150, 150, 16);
+            var screenTexture = new RenderTexture(150, 150, 16);
             screenshotCamera.targetTexture = screenTexture;
             RenderTexture.active = screenTexture;
             screenshotCamera.Render();
-            Texture2D renderedTexture = new Texture2D(150, 150);
+            var renderedTexture = new Texture2D(150, 150);
             renderedTexture.ReadPixels(new Rect(0, 0, 150, 150), 0, 0);
             RenderTexture.active = null;
-            byte[] byteArray = renderedTexture.EncodeToPNG();
+            var byteArray = renderedTexture.EncodeToPNG();
             File.WriteAllBytes(path, byteArray);
             screenshotCamera.targetTexture = null;
         }
@@ -154,9 +153,9 @@ namespace Save {
                                           itemTypes[i];
                 }
                 
-                string savefilePath = Path.Combine(mapDataSavesPath, mapName+"_aspirables.data");
+                var savefilePath = Path.Combine(mapDataSavesPath, mapName+"_aspirables.data");
                 
-                using StreamWriter streamWriter = new StreamWriter(savefilePath, append:false);
+                using var streamWriter = new StreamWriter(savefilePath, append:false);
             
                 foreach (var data in _buildablesDatas) {
                     streamWriter.WriteLine(data);

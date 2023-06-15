@@ -21,10 +21,10 @@ namespace Game {
         private Vector2 _smoothDeltaPosition;
         
         private void Start() {
-            NavMeshTriangulation navMeshTriangulation = NavMesh.CalculateTriangulation();
-            int vertexIndex = Random.Range(0, navMeshTriangulation.vertices.Length);
+            var navMeshTriangulation = NavMesh.CalculateTriangulation();
+            var vertexIndex = Random.Range(0, navMeshTriangulation.vertices.Length);
             
-            if (NavMesh.SamplePosition(navMeshTriangulation.vertices[vertexIndex], out NavMeshHit navMeshHit, 2f, 0)) {
+            if (NavMesh.SamplePosition(navMeshTriangulation.vertices[vertexIndex], out var navMeshHit, 2f, 0)) {
                 gorillaNavMeshAgent.Warp(navMeshHit.position);
             }
 
@@ -33,15 +33,15 @@ namespace Game {
 
         private void Update() {
             if (UnityEngine.Input.GetMouseButtonDown(0) && !ObjectsReference.Instance.uiManager.isOnMenu) {
-                Ray ray = ObjectsReference.Instance.gameManager.cameraMain.ScreenPointToRay(UnityEngine.Input.mousePosition);
-                Vector3 direction = ray.GetPoint(1) - ray.GetPoint(0);
-                GameObject spawnedBanana = Instantiate(bananaPrefab, ray.GetPoint(2), Quaternion.LookRotation(direction));
+                var ray = ObjectsReference.Instance.gameManager.cameraMain.ScreenPointToRay(UnityEngine.Input.mousePosition);
+                var direction = ray.GetPoint(1) - ray.GetPoint(0);
+                var spawnedBanana = Instantiate(bananaPrefab, ray.GetPoint(2), Quaternion.LookRotation(direction));
                 spawnedBanana.GetComponent<Rigidbody>().velocity = spawnedBanana.transform.forward * 10f;
             }
             else if(UnityEngine.Input.GetMouseButtonDown(1) && !ObjectsReference.Instance.uiManager.isOnMenu) {
-				Ray ray = ObjectsReference.Instance.gameManager.cameraMain.ScreenPointToRay(UnityEngine.Input.mousePosition);
-				Vector3 direction = ray.GetPoint(1) - ray.GetPoint(0);
-				GameObject spawnedBanana = Instantiate(bananaPrefab, ray.GetPoint(2), Quaternion.LookRotation(direction));
+				var ray = ObjectsReference.Instance.gameManager.cameraMain.ScreenPointToRay(UnityEngine.Input.mousePosition);
+				var direction = ray.GetPoint(1) - ray.GetPoint(0);
+				var spawnedBanana = Instantiate(bananaPrefab, ray.GetPoint(2), Quaternion.LookRotation(direction));
 				spawnedBanana.AddComponent<TrailRendererRandom>();
 				spawnedBanana.GetComponent<Rigidbody>().velocity = spawnedBanana.transform.forward * 10f;
 			}

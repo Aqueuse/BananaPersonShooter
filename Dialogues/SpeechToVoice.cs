@@ -21,7 +21,7 @@ namespace Dialogues {
         public void Play() {
             charactersArray = minichimpText.text.ToLower().ToCharArray();
 
-            for (int i = 0; i < charactersArray.Length/4; i++) {
+            for (var i = 0; i < charactersArray.Length/4; i++) {
                 _clipsQueue.Enqueue(gibberishAudioDataScriptableObject.characterToClip.ContainsKey(charactersArray[i]) 
                     ? gibberishAudioDataScriptableObject.characterToClip[charactersArray[i]]
                     : gibberishAudioDataScriptableObject.characterToClip['f']);

@@ -22,6 +22,7 @@ namespace UI {
         
         public void Hide_menus() {
             if (ObjectsReference.Instance.gameSettings.isKeyRebinding) return;
+            ObjectsReference.Instance.uiSave.UnselectAll();
 
             isOnMenu = false;
 
@@ -206,8 +207,8 @@ namespace UI {
         public bool Is_Interface_Visible() {
             return interfaceAnimator.GetBool(ShowInventoryID);
         }
-        
-        void Focus_interface() {
+
+        private static void Focus_interface() {
             EventSystem.current.SetSelectedGameObject(ObjectsReference.Instance.uInventory.lastselectedInventoryItem);
         }
 

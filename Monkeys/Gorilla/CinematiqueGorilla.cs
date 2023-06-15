@@ -72,10 +72,10 @@ namespace Monkeys.Gorilla {
         }
         
         private Vector3 RandomNavmeshLocation(float radius) {
-            Vector3 randomDirection = Random.insideUnitSphere * radius;
+            var randomDirection = Random.insideUnitSphere * radius;
             randomDirection += transform.position;
-            Vector3 finalPosition = Vector3.zero;
-            if (NavMesh.SamplePosition(randomDirection, out NavMeshHit navMeshHit, radius, 1)) {
+            var finalPosition = Vector3.zero;
+            if (NavMesh.SamplePosition(randomDirection, out var navMeshHit, radius, 1)) {
                 finalPosition = navMeshHit.position;
             }
 

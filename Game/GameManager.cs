@@ -25,7 +25,7 @@ namespace Game {
             ObjectsReference.Instance.inputManager.SwitchContext(InputContext.UI);
         }
         
-        public void Prepare_New_Game() {
+        public static void Prepare_New_Game() {
             ObjectsReference.Instance.uiManager.Hide_home_menu();
             GameObject.FindWithTag("startAnimations").GetComponent<StartAnimations>().enabled = false;
             ObjectsReference.Instance.cinematiques.Play(CinematiqueType.NEW_GAME);

@@ -9,7 +9,7 @@ namespace Input.UIActions {
         private bool _scrolledLeft;
         private bool _scrolledRight;
 
-        PointerEventData _pointer;
+        private PointerEventData _pointer;
 
         private void Start() {
             _pointer = new PointerEventData(EventSystem.current);
@@ -29,7 +29,7 @@ namespace Input.UIActions {
             }
         }
 
-        private void Escape() {
+        private static void Escape() {
             if (UnityEngine.Input.GetKeyDown(KeyCode.Escape) || UnityEngine.Input.GetKeyDown(KeyCode.JoystickButton1)) {
                 ObjectsReference.Instance.uiManager.Hide_menus();
             }

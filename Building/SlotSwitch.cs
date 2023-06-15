@@ -70,17 +70,15 @@ namespace Building {
 
                 raycastHitPoint = raycastHit.point;
                 var targetGameObject = raycastHit.transform.gameObject; 
-                
-                if (targetGameObject.layer == 7 && _activeGhostClass.buildableDataScriptableObject.mustSnap) {
-                    
-                    // TODO : not opti at all in fixed update
+
+                if (targetGameObject.CompareTag("Buildable") && targetGameObject.layer == 7 && _activeGhostClass.buildableDataScriptableObject.mustSnap) {
                     targetMesh = targetGameObject.GetComponent<MeshFilter>().sharedMesh;
                     var gridSize = ObjectsReference.Instance.scriptableObjectManager.GetBuildableGridSizeByMesh(targetMesh);
 
                     pivotTransform = targetGameObject.transform;
                     pivotTransformPosition = pivotTransform.position;
                     pivotTransformRotation = pivotTransform.rotation;
-                    
+
                     pivotLocalePosition = pivotTransform.InverseTransformPoint(pivotTransformPosition);
                     pivotLocaleRotation = Quaternion.Inverse(pivotTransformRotation) * pivotTransformRotation;
 
@@ -100,6 +98,9 @@ namespace Building {
                             break;
                         case BuildableGridSize.BUILDING_BLOCK_2X2:
   //                          RefreshGhostPositionForBuildingBlock2x2();
+                            break;
+                        default:
+                            RefreshGhostPositionForBuildingBlock1x1();
                             break;
                     }
                     _ghostPosition = pivotTransform.TransformPoint(offsettedPosition);
@@ -198,10 +199,12 @@ namespace Building {
                 case ItemCategory.BUILDABLE:
                     ObjectsReference.Instance.uiCrosshair.SetCrosshair(slot.itemCategory, ItemType.EMPTY);
                     if (ObjectsReference.Instance.gameActions.isBuildModeActivated) ActivateGhost();
+                    ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.BUILD_HELPER].alpha = 1f;
                     break;
 
                 case ItemCategory.EMPTY or ItemCategory.RAW_MATERIAL:
                     ObjectsReference.Instance.uiCrosshair.SetCrosshair(ItemCategory.EMPTY, ItemType.EMPTY);
+                    ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.BUILD_HELPER].alpha = 0f;
                     break;
             }
         }
@@ -228,8 +231,6 @@ namespace Building {
             ghostRotationEuler.z %= 360;
             
             ghostRotation = Quaternion.Euler(ghostRotationEuler);
-            
-            _activeGhost.transform.rotation = Quaternion.identity;
             _activeGhost.transform.rotation = ghostRotation;
         }
 
@@ -250,7 +251,6 @@ namespace Building {
                 }
                 
                 ObjectsReference.Instance.mapsManager.currentMap.isDiscovered = true;
-                //ObjectsReference.Instance.mapsManager.currentMap.RefreshAspirablesDataMap();
             }
         }
     }

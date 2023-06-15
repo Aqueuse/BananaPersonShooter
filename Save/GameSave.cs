@@ -25,13 +25,13 @@ namespace Save {
             ObjectsReference.Instance.saveData.Save(saveUuid, date);
         }
 
-        private void SaveInventory() {
+        private static void SaveInventory() {
             foreach (var inventorySlot in ObjectsReference.Instance.inventory.bananaManInventory) {
                 ObjectsReference.Instance.gameData.bananaManSavedData.inventory[inventorySlot.Key.ToString()] = inventorySlot.Value;
             }
         }
 
-        private void SaveBlueprints() {
+        private static void SaveBlueprints() {
             var activeBlueprintsSlots = ObjectsReference.Instance.uiBlueprints.GetActivatedBlueprints();
 
             foreach (var blueprintsSlot in activeBlueprintsSlots) {
@@ -42,7 +42,7 @@ namespace Save {
             }
         }
 
-        private void SaveSlots() {
+        private static void SaveSlots() {
             ObjectsReference.Instance.gameData.bananaManSavedData.slots = new() {
                 "EMPTY,EMPTY",
                 "EMPTY,EMPTY",
@@ -50,7 +50,7 @@ namespace Save {
                 "EMPTY,EMPTY" 
             };
 
-            for (int i = 0; i < ObjectsReference.Instance.uiSlotsManager.uiSlotsScripts.Count; i++) {
+            for (var i = 0; i < ObjectsReference.Instance.uiSlotsManager.uiSlotsScripts.Count; i++) {
                 var uiSlotScript = ObjectsReference.Instance.uiSlotsManager.uiSlotsScripts[i];
                 
                 var itemCategory = uiSlotScript.itemCategory;
@@ -66,12 +66,12 @@ namespace Save {
             }
         }
 
-        private void SaveBananaManVitals() {
+        private static void SaveBananaManVitals() {
             ObjectsReference.Instance.gameData.bananaManSavedData.health = ObjectsReference.Instance.bananaMan.health; 
             ObjectsReference.Instance.gameData.bananaManSavedData.resistance = ObjectsReference.Instance.bananaMan.resistance; 
         }
 
-        private void SavePositionAndRotation() {
+        private static void SavePositionAndRotation() {
             var bananaManTransform = ObjectsReference.Instance.bananaMan.transform;
             ObjectsReference.Instance.gameData.lastPositionOnMap = bananaManTransform.position;
             ObjectsReference.Instance.gameData.lastRotationOnMap = bananaManTransform.rotation.eulerAngles;
@@ -85,20 +85,20 @@ namespace Save {
             ObjectsReference.Instance.gameData.bananaManSavedData.zWorldRotation = ObjectsReference.Instance.gameData.lastRotationOnMap.z;
         }
 
-        private void SaveActiveItem() {
+        private static void SaveActiveItem() {
             ObjectsReference.Instance.gameData.bananaManSavedData.activeItem = ObjectsReference.Instance.bananaMan.activeItemType;
             ObjectsReference.Instance.gameData.bananaManSavedData.activeItemCategory = ObjectsReference.Instance.bananaMan.activeItemCategory;
             ObjectsReference.Instance.gameData.bananaManSavedData.activeBuildableType = ObjectsReference.Instance.bananaMan.activeBuildableType;
         }
 
-        private void SaveMonkeysSatiety() {
+        private static void SaveMonkeysSatiety() {
             foreach (var map in ObjectsReference.Instance.mapsManager.mapBySceneName) {
                 // add other monkeys and other maps
                 ObjectsReference.Instance.gameData.mapSavedDatasByMapName[map.Key].monkeySasiety = map.Value.monkeySasiety;
             }
         }
 
-        private void SaveAspirablesPositionRotationPrefabIndexByUuid() {
+        private static void SaveAspirablesPositionRotationPrefabIndexByUuid() {
         }
     }
 }
