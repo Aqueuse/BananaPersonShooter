@@ -1,10 +1,10 @@
 ﻿using Building.Buildables.DoorLeft;
 using Building.Buildables.DoorRight;
-using Dialogues;
 using Enums;
 using Game.BananaCannonMiniGame;
 using Game.CommandRoomPanelControls;
 using Game.Steam;
+using Monkeys.MiniChimps;
 using UnityEngine;
 
 namespace Items {
@@ -30,7 +30,6 @@ namespace Items {
             else {
                 if (_interactedObject != null) {
                     _interactedObject.GetComponent<ItemStatic>().Desactivate();
-
                     _interactedObject = null;
                 }
             }
@@ -53,26 +52,27 @@ namespace Items {
                         ObjectsReference.Instance.scenesSwitch.SwitchScene(_interactedObject.GetComponent<Door>().destinationMap.ToUpper(), _interactedObject.GetComponent<Door>().spawnPoint, false, false);
                         _interactedObject = null;
                         break;
-                    case ItemStaticType.MINI_CHIMP:
-                        _interactedObject.GetComponent<SpeechToVoice>().Play();
+                    case ItemStaticType.MINI_CHIMP_COMMAND_ROOM:
+                        _interactedObject.GetComponent<MiniChimpDialogue>().Play();
                         break;
                     case ItemStaticType.BANANAGUN:
                         ObjectsReference.Instance.uiManager.Set_active(UICanvasGroupType.HUD, true);
                         ObjectsReference.Instance.bananaGun.bananaGunInBack.SetActive(true);
                         // TODO : animation take banana gun
-                        
-                        ObjectsReference.Instance.audioManager.PlayEffect(EffectType.GUITAR_RYTHM_01, 0);
+
                         ObjectsReference.Instance.gameData.bananaManSavedData.playerAdvancements.Add(AdvancementState.GET_BANANAGUN);
                         ObjectsReference.Instance.steamIntegration.UnlockAchievement(SteamAchievement.STEAM_ACHIEVEMENT_BANAGUN_RECONSTRUCTED);
                         
+                        CommandRoomControlPanelsManager.Instance.SetMiniChimpDialogue(AdvancementState.GET_BANANAGUN);
+                        CommandRoomControlPanelsManager.Instance.miniChimpCommandRoomMiniChimpDialogue.Play();
+
                         _interactedObject.SetActive(false);
                         break;
                     case ItemStaticType.COMMAND_ROOM_PANEL:
                         CommandRoomControlPanelsManager.Instance.ShowHidePanel(_interactedObject.GetComponent<CommandRoomPanel>().commandRoomPanelType);
                         break;
                     case ItemStaticType.BANANA_CANNON_MINI_GAME:
-                        if (_interactedObject.GetComponent<CanvasGroup>().alpha == 0) break;
-                        BananaCannonMiniGameManager.Instance.SwitchToMiniGame();
+                        if (ObjectsReference.Instance.gameData.bananaManSavedData.playerAdvancements.Contains(AdvancementState.USE_BANANA_CANNON)) BananaCannonMiniGameManager.Instance.SwitchToMiniGame();
                         break;
                     case ItemStaticType.DOOR_LEFT:
                         _interactedObject.GetComponent<RotationDoorLeft>().Action();

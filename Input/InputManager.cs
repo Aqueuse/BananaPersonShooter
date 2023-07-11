@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using Enums;
 using Input.interactables;
 using Input.UIActions;
@@ -14,10 +16,54 @@ namespace Input {
 
         public BananasDryerAction bananasDryerAction;
         
+        [SerializeField] private GenericDictionary<string, bool> previousControllers = new();
+        private string[] currentControllers;
+        private Dictionary<string, bool> tempCurrentControllers;
+        private string controllerId;
+        private bool wasConnected;
+        private bool isConnected;
+
         private void Start() {
             _gameActions = GetComponent<GameActions>();
-            
             uiSchemaSwitcher = GetComponent<UISchemaSwitcher>();
+            
+            InvokeRepeating(nameof(CheckControllerConnection), 0, 1f);
+        }
+        
+        private void CheckControllerConnection() {
+            currentControllers = UnityEngine.Input.GetJoystickNames();
+
+            tempCurrentControllers = new Dictionary<string, bool>(previousControllers);
+            
+            foreach (var controller in tempCurrentControllers) {
+                controllerId = controller.Key;
+                wasConnected = controller.Value;
+                
+                isConnected = Array.IndexOf(currentControllers, controllerId) != -1;
+                
+                if (wasConnected && !isConnected) {
+                    if (ObjectsReference.Instance.gameManager.gameContext == GameContext.IN_GAME) {
+                        ObjectsReference.Instance.inputManager.uiSchemaContext = UISchemaSwitchType.GAME_MENU;
+                        ObjectsReference.Instance.gameManager.PauseGame(true);
+                        ObjectsReference.Instance.uiManager.Show_game_menu();
+                        ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.GAMEPAD_DISCONNECTED].alpha = 1;
+                    }
+                }
+                else if (!wasConnected && isConnected) {
+                    if (ObjectsReference.Instance.gameManager.gameContext == GameContext.IN_GAME) {
+                        ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.GAMEPAD_DISCONNECTED].alpha = 0;
+                        ObjectsReference.Instance.uiManager.Hide_menus();                        
+                    }
+                }
+
+                previousControllers[controllerId] = isConnected;
+            }
+ 
+            // Parcours des nouveaux contrôleurs
+            foreach (string currentControllerId in currentControllers) {
+                // Ajouter le contrôleur à la liste des contrôleurs précédents
+                if (currentControllerId.Length > 0) previousControllers.TryAdd(currentControllerId, true);
+            }
         }
 
         public void SwitchContext(InputContext newInputContext) {

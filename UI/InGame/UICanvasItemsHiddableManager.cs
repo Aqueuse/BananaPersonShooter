@@ -3,6 +3,7 @@ using System.Linq;
 using Building;
 using Game;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace UI.InGame {
     public class UICanvasItemsHiddableManager : MonoBehaviour {
@@ -58,18 +59,10 @@ namespace UI.InGame {
                         var canvaTransform = canva.transform;
                 
                         _cameraDistance = Vector3.Distance(canvaTransform.position, cameraPosition);
-
-                        if (_cameraDistance > 15f && _cameraDistance < 400f) {
-                            canva.enabled = true;
-                            _localScale.x = _cameraDistance / 6000f; // ugly optimisation, yeah
-                            _localScale.y = _cameraDistance / 6000f;
-                
-                            canvaTransform.LookAt(_cameraTransform);
-                            canvaTransform.localScale = _localScale;
-                        }
+                        canvaTransform.LookAt(_cameraTransform);
                         
-                        else {
-                            canva.enabled = false;
+                        if (_cameraDistance < 30f) {
+                            canva.GetComponentInChildren<Image>().GetComponent<RectTransform>().sizeDelta = new Vector2(_cameraDistance/5, _cameraDistance/5);
                         }
                     }
                 }
@@ -86,6 +79,7 @@ namespace UI.InGame {
                 
                 foreach (var canva in _debrisCanvasList) {
                     canva.enabled = isVisible;
+                    canva.GetComponent<CanvasGroup>().alpha = 1;
                 }
 
                 areDebrisVisible = isVisible;

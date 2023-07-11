@@ -18,7 +18,9 @@ MonoBehaviour:
   itemName:
   - fabric
   - tissu
+  - tela
   itemSprite: {fileID: 21300000, guid: e2bef5a6fa24bfd46bcdcd8ce877f2b0, type: 3}
   itemDescription:
   - 'a piece of fabric made from banana peel fibers '
-  - "un morceau de tissu compos\xE9 de fibres de peau de banane"
+  - un morceau de tissu en fibres de peau de banane
+  - "Un trozo de tela hecho de fibras de piel de pl\xE1tano"

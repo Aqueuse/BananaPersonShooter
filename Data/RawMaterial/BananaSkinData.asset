@@ -18,7 +18,9 @@ MonoBehaviour:
   itemName:
   - banana peel
   - peau de banane
+  - "c\xE1scara de pl\xE1tano"
   itemSprite: {fileID: 21300000, guid: 4f859998ebfdfb448bb9e15e9003ae91, type: 3}
   itemDescription:
   - can be dried into fabric
   - "peut \xEAtre s\xE9ch\xE9e pour en faire du tissu"
+  - Puede ser secada para hacer tela

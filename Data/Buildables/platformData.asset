@@ -18,10 +18,12 @@ MonoBehaviour:
   itemName:
   - plateform
   - plateforme
+  - plataforma
   itemSprite: {fileID: 21300000, guid: 3728d82037057e341bbbd20d9d44c435, type: 3}
   itemDescription:
   - a plateform than can be feeded with bananas
   - "une plateforme qui peut \xEAtre aliment\xE9e en bananes"
+  - "Una plataforma que puede ser alimentada con pl\xE1tanos"
   rawMaterialsWithQuantity:
     list:
     - key: 18

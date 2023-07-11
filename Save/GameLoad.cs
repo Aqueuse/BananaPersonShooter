@@ -2,41 +2,46 @@ using System;
 using System.Linq;
 using Building;
 using Enums;
-using Game.CommandRoomPanelControls;
+using Monkeys.Chimployee;
 using UI.InGame;
 using UnityEngine;
 
 namespace Save {
     public class GameLoad : MonoBehaviour {
         private GameObject aspirable;
+        private GameObject prefab;
         
         public void LoadLastSave() {
             ObjectsReference.Instance.gameManager.loadingScreen.SetActive(true);
             ObjectsReference.Instance.uiManager.Set_active(UICanvasGroupType.DEATH, false);
             ObjectsReference.Instance.death.HideDeath();
-            
+
             if (ObjectsReference.Instance.gameData.currentSaveUuid == null) ObjectsReference.Instance.scenesSwitch.ReturnHome();
             else {
                 ObjectsReference.Instance.gameManager.Play(ObjectsReference.Instance.gameData.currentSaveUuid, false);
             }
         }
-        
+
         public void LoadGameData(string saveUuid) {
             ObjectsReference.Instance.gameData.currentSaveUuid = saveUuid;
-            
+
             ObjectsReference.Instance.gameData.bananaManSavedData = ObjectsReference.Instance.loadData.GetPlayerDataByUuid(saveUuid);
-            
+
+            LoadPositionAndRotationOnLastMap();
+            LoadBananaManVitals();
+            LoadActiveItem();
             LoadInventory();
             LoadBlueprints();
             LoadSlots();
-            LoadBananaManVitals();
-            LoadPositionAndRotationOnLastMap();
-            LoadActiveItem();
 
             LoadMapsData();
             LoadMonkeysSatiety();
 
             ObjectsReference.Instance.loadData.LoadMapAspirablesDataByUuid(saveUuid);
+
+            LoadAdvancements();
+
+            ObjectsReference.Instance.gameSave.StartAutoSave();
         }
 
         private static void LoadInventory() {
@@ -45,7 +50,7 @@ namespace Save {
                     ObjectsReference.Instance.gameData.bananaManSavedData.inventory[bananaSlot.Key.ToString()];
             }
         }
-        
+
         private static void LoadBlueprints() {
             foreach (var blueprint in ObjectsReference.Instance.gameData.bananaManSavedData.blueprints) {
                 ObjectsReference.Instance.uiBlueprints.SetVisible(Enum.Parse<BuildableType>(blueprint));
@@ -70,7 +75,7 @@ namespace Save {
                 }
             }
             
-            ObjectsReference.Instance.uiSlotsManager.Switch_to_Slot_Index(0);
+            ObjectsReference.Instance.uiSlotsManager.SetActiveSlot();
         }
 
         private static void LoadBananaManVitals() {
@@ -113,32 +118,38 @@ namespace Save {
             }
         }
 
-        public static void LoadAdvancements() {
-            if (ObjectsReference.Instance.gameData.bananaManSavedData.playerAdvancements.Contains(AdvancementState.GET_MONKEYMAN_IA)) {
-                ObjectsReference.Instance.uihud.Activate_Chimployee_Tab();
-                Uihud.AuthorizeTp();
-            }
-
-            if (ObjectsReference.Instance.gameData.bananaManSavedData.playerAdvancements.Contains(AdvancementState.GET_BANANAGUN)) {
+        private static void LoadAdvancements() {
+            var playerAdvancements = ObjectsReference.Instance.gameData.bananaManSavedData.playerAdvancements;
+            ObjectsReference.Instance.uIadvancements.SetAdvancementBanana(ObjectsReference.Instance.advancements.GetBestAdvancement());
+            
+            //////////////////// GET BANANA GUN ////////////////////////////
+            if (playerAdvancements.Contains(AdvancementState.GET_BANANAGUN)) {
+                ObjectsReference.Instance.bananaGun.bananaGunInBack.SetActive(true);
                 ObjectsReference.Instance.uiManager.Set_active(UICanvasGroupType.HUD, true);
-
-                if (ObjectsReference.Instance.bananaMan.activeItemCategory == ItemCategory.BANANA ||
-                    ObjectsReference.Instance.bananaMan.activeItemCategory == ItemCategory.BUILDABLE) {
-                    ObjectsReference.Instance.bananaGun.bananaGunInBack.SetActive(false);
-                }
-                else {
-                    ObjectsReference.Instance.bananaGun.bananaGunInBack.SetActive(true);
-                }
             }
 
             else {
                 ObjectsReference.Instance.uiManager.Set_active(UICanvasGroupType.HUD, false);
                 ObjectsReference.Instance.bananaGun.bananaGunInBack.SetActive(false);
-                ObjectsReference.Instance.uiCrosshair.SetCrosshair(ItemCategory.EMPTY, ItemType.EMPTY);
+                ObjectsReference.Instance.uiCrosshairs.SetCrosshair(ItemCategory.EMPTY, ItemType.EMPTY);
+            }
+
+            //////////////////// ASPIRE SOMETHING ////////////////////////////
+            if (playerAdvancements.Contains(AdvancementState.ASPIRE_SOMETHING)) {
+                ObjectsReference.Instance.uihud.Activate_Chimployee_Tab();
+                Uihud.AuthorizeTp();
             }
             
-            if (ObjectsReference.Instance.gameData.bananaManSavedData.playerAdvancements.Contains(AdvancementState.FEED_MONKEY)) {
-                CommandRoomControlPanelsManager.Instance.AuthorizeBananaCannonMiniGameAccess();
+            //////////////////// CLEANED MAP ////////////////////////////
+            //////////////////// FEED MONKEY ////////////////////////////
+            if (playerAdvancements.Contains(AdvancementState.CLEANED_MAP)) {
+                ObjectsReference.Instance.chimployee.ShowAllDialogue(ChimployeeDialogue.chimployee_please_clean_map);
+            }
+            
+            else {
+                if (playerAdvancements.Contains(AdvancementState.FEED_MONKEY)) {
+                    ObjectsReference.Instance.chimployee.ShowAllDialogue(ChimployeeDialogue.chimployee_please_feed_monkey);
+                }
             }
         }
 
@@ -158,14 +169,14 @@ namespace Save {
             var mapData = ObjectsReference.Instance.mapsManager.currentMap;
 
             if (mapData.isDiscovered) {
-                Destroy(MapItems.Instance.aspirablesContainer);
-                
+                DestroyImmediate(MapItems.Instance.aspirablesContainer);
+
                 MapItems.Instance.aspirablesContainer = new GameObject("aspirables") {
                     transform = {
                         parent = MapItems.Instance.transform
                     }
                 };
-            
+
                 for (var i = 0; i < mapData.aspirablesCategories.Count; i++) {
                     if (mapData.aspirablesCategories[i] == ItemCategory.DEBRIS) {
                         aspirable = Instantiate(
@@ -173,16 +184,34 @@ namespace Save {
                             MapItems.Instance.aspirablesContainer.transform, 
                             true
                         );
-                    
+
                         aspirable.transform.position = mapData.aspirablesPositions[i];
                         aspirable.transform.rotation = mapData.aspirablesRotations[i];
                     }
                     
                     if (mapData.aspirablesCategories[i] == ItemCategory.BUILDABLE) {
-                        var prefab = ObjectsReference.Instance.scriptableObjectManager.BuildablePrefabByBuildableType(mapData.aspirablesBuildableTypes[i]);
+                        prefab = ObjectsReference.Instance.scriptableObjectManager.BuildablePrefabByBuildableType(mapData.aspirablesBuildableTypes[i]);
 
                         aspirable = Instantiate(prefab, MapItems.Instance.aspirablesContainer.transform, true);
                     
+                        aspirable.transform.position = mapData.aspirablesPositions[i];
+                        aspirable.transform.rotation = mapData.aspirablesRotations[i];
+                    }
+
+                    if (mapData.aspirablesCategories[i] == ItemCategory.RUINE) {
+                        prefab = ObjectsReference.Instance.scriptableObjectManager._meshReferenceScriptableObject.ruinesPrefab[mapData.aspirablesPrefabsIndex[i]];
+
+                        aspirable = Instantiate(prefab, MapItems.Instance.aspirablesContainer.transform, true);
+                    
+                        aspirable.transform.position = mapData.aspirablesPositions[i];
+                        aspirable.transform.rotation = mapData.aspirablesRotations[i];
+                    }
+
+                    if (mapData.aspirablesCategories[i] == ItemCategory.CHIMPLOYEE) {
+                        prefab = ObjectsReference.Instance.scriptableObjectManager._meshReferenceScriptableObject.chimployeePrefab;
+
+                        aspirable = Instantiate(prefab, MapItems.Instance.aspirablesContainer.transform, true);
+
                         aspirable.transform.position = mapData.aspirablesPositions[i];
                         aspirable.transform.rotation = mapData.aspirablesRotations[i];
                     }

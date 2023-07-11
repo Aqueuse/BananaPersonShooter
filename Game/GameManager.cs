@@ -19,16 +19,14 @@ namespace Game {
             gameContext = GameContext.IN_HOME;
             
             ObjectsReference.Instance.gameSettings.LoadSettings(); 
-            ObjectsReference.Instance.audioManager.PlayMusic(MusicType.HOME);
+            ObjectsReference.Instance.audioManager.PlayMusic(MusicType.HOME, 0);
 
             ObjectsReference.Instance.inputManager.uiSchemaContext = UISchemaSwitchType.HOME_MENU;
             ObjectsReference.Instance.inputManager.SwitchContext(InputContext.UI);
         }
         
         public static void Prepare_New_Game() {
-            ObjectsReference.Instance.uiManager.Hide_home_menu();
-            GameObject.FindWithTag("startAnimations").GetComponent<StartAnimations>().enabled = false;
-            ObjectsReference.Instance.cinematiques.Play(CinematiqueType.NEW_GAME);
+            ObjectsReference.Instance.gameManager.Play(null, true);
         }
 
         public void Play(string saveUuid, bool isNewGame) {

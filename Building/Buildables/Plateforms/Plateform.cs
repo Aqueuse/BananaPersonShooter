@@ -18,7 +18,7 @@ namespace Building.Buildables.Plateforms {
 
         private bool _isPlayerOn;
         
-        private static readonly int AlimentationColor = Shader.PropertyToID("Alimentation_Color");
+        private static readonly int AlimentationColor = Shader.PropertyToID("_Color");
         private static readonly int EmissionColor = Shader.PropertyToID("Emission_Color");
 
         private void Start() {
@@ -67,15 +67,15 @@ namespace Building.Buildables.Plateforms {
             _meshRenderer = GetComponent<MeshRenderer>();
             _audioSource = GetComponent<AudioSource>();
             _upDownEffect = GetComponent<UpDownEffect>();
-
+            
             switch (itemType) {
                 case ItemType.CAVENDISH:
-                    SetActivatedMaterial(ObjectsReference.Instance.scriptableObjectManager.GetBananaScriptableObject(ItemType.CAVENDISH).bananaMaterial.color);
+                    SetActivatedMaterial(ObjectsReference.Instance.scriptableObjectManager.GetBananaScriptableObject(ItemType.CAVENDISH).bananaColor);
                     _audioSource.enabled = true;
                     _upDownEffect.isActive = true;
 
                     plateformType = ItemType.CAVENDISH;
-                    ObjectsReference.Instance.mapsManager.currentMap.RefreshAspirablesDataMap();
+                    ObjectsReference.Instance.mapsManager.currentMap.RefreshAspirablesItemsDataMap();
                     break;
             }
         }

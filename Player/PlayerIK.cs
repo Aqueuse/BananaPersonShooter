@@ -26,10 +26,11 @@ namespace Player {
             isRightFootGrounded = false;
 
             _footExtended = 0.1818f;
+            SetAimConstraint(false);
         }
-
-        private void Update() {
-            if (ObjectsReference.Instance.bananaMan.isGrabingBananaGun) {
+        
+        public void SetAimConstraint(bool active) {
+            if (active) {
                 headAimConstraint.weight = 1;
                 backAimConstraint.weight = 1;
             }

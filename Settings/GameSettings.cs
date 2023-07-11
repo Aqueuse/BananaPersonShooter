@@ -1,6 +1,7 @@
 using Building;
 using Cinemachine;
 using Enums;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Localization.Settings;
 using UnityEngine.Rendering;
@@ -16,9 +17,9 @@ namespace Settings {
         [SerializeField] private Toggle fullScreenToggle;
         [SerializeField] private Toggle vsyncToggle;
 
-        [SerializeField] private TMPro.TMP_Dropdown resolutionDropDown;
+        [SerializeField] private TMP_Dropdown resolutionDropDown;
         [SerializeField] private KeymapRebinding[] keymapRebindings;
-        [SerializeField] private TMPro.TMP_Dropdown languageDropDown;
+        [SerializeField] private TMP_Dropdown languageDropDown;
 
         [SerializeField] private CinemachineFreeLook playerCamera;
         [SerializeField] private Slider lookSensibilitySlider;
@@ -29,7 +30,10 @@ namespace Settings {
         [SerializeField] private Toggle debrisVisibilityToggle;
         [SerializeField] private Toggle bananaTreesVisibilityToggle;
         [SerializeField] private Toggle monkeysVisibilityToggle;
-        
+
+        [SerializeField] private Slider saveDelaySlider;
+        [SerializeField] private TextMeshProUGUI saveDelayText;
+
         private FullScreenMode _fullScreenMode;
 
         private string _isFullscreen;
@@ -47,6 +51,8 @@ namespace Settings {
         public bool isShowingDebris;
         public bool isShowingBananaTrees;
         public bool isShowingMonkeys;
+
+        public int saveDelay;
         
         public JsonPlayerPrefs prefs;
         
@@ -77,19 +83,19 @@ namespace Settings {
             lookSensibility = prefs.GetFloat("LookSensibility", 0.6f);
 
             _isCameraVerticallyInverted = prefs.GetString("isCameraVerticalAxisInverted", "False").Equals("True");
-            _isCameraHorizontallyInverted = prefs.GetString("isCameraHorizontalAxisInverted", "False").Equals("True"); 
-            
+            _isCameraHorizontallyInverted = prefs.GetString("isCameraHorizontalAxisInverted", "False").Equals("True");
+
+            saveDelay = prefs.GetInt("saveDelay", 300);
+
             SetMusicVolume(ObjectsReference.Instance.audioManager.musicLevel);
             SetAmbianceVolume(ObjectsReference.Instance.audioManager.ambianceLevel);
             SetEffectVolume(ObjectsReference.Instance.audioManager.effectsLevel);
             SetVoicesVolume(ObjectsReference.Instance.audioManager.voicesLevel);
-            
+
             InverseCameraVerticalAxis(_isCameraVerticallyInverted);
             InverseCameraHorizontalAxis(_isCameraHorizontallyInverted);
             SetLookSensibility(lookSensibility);
-            
-            Invoke(nameof(SetLanguage), 0.2f);
-        
+
             ToggleFullscreen(_isFullscreen.Equals("True"));
             ToggleVSync(_isVsync.Equals("True"));
             SetResolution(_resolution);
@@ -97,7 +103,7 @@ namespace Settings {
             isShowingDebris = prefs.GetString("areDebrisVisible", "True").Equals("True");
             isShowingBananaTrees = prefs.GetString("areBananaTreesVisible", "True").Equals("True");
             isShowingMonkeys = prefs.GetString("areMonkeysVisible", "True").Equals("True");
-            
+
             // reflects values on UI 
             musicLevelSlider.value = ObjectsReference.Instance.audioManager.musicLevel;
             ambianceLevelSlider.value = ObjectsReference.Instance.audioManager.ambianceLevel;
@@ -118,6 +124,8 @@ namespace Settings {
             debrisVisibilityToggle.isOn = isShowingDebris;
             bananaTreesVisibilityToggle.isOn = isShowingBananaTrees;
             monkeysVisibilityToggle.isOn = isShowingMonkeys;
+
+            saveDelaySlider.value = Mathf.Abs(saveDelay/60);
         }
 
         public void ResetOptions() {
@@ -127,15 +135,10 @@ namespace Settings {
             LoadSettings();
         }
 
-        void SetLanguage() {
-            LocalizationSettings.SelectedLocale = LocalizationSettings.AvailableLocales.Locales[languageIndexSelected];
-            prefs.SetInt("language", languageIndexSelected);
-            prefs.Save();
-        }
-
         public void SetMusicVolume(float level) {
             ObjectsReference.Instance.audioManager.SetVolume(AudioSourcesType.MUSIC, level);
-
+            ObjectsReference.Instance.cinematiques.SetCinematiqueVolume();
+            
             prefs.SetFloat("musicLevel", level);
             prefs.Save();
         }
@@ -216,7 +219,7 @@ namespace Settings {
         public void InverseCameraHorizontalAxis(bool isCameraInverted) {
             playerCamera.m_XAxis.m_InvertInput = isCameraInverted; // Cinemachine is naturally inverted
             prefs.SetString("isCameraHorizontalAxisInverted", isCameraInverted.ToString());
-            
+
             prefs.Save();
         }
 
@@ -230,6 +233,7 @@ namespace Settings {
         //     }
         //     
         // }
+
         public void SaveDebrisCanvasVisibility(bool isVisible) {
             ObjectsReference.Instance.gameSettings.isShowingDebris = isVisible;
             prefs.SetString("areDebrisVisible", isVisible ? "True" : "False");
@@ -242,16 +246,27 @@ namespace Settings {
             ObjectsReference.Instance.gameSettings.isShowingBananaTrees = isVisible;
             prefs.SetString("areBananaTreesVisible", isVisible ? "True" : "False");
             if (ObjectsReference.Instance.gameManager.gameContext == GameContext.IN_GAME) MapItems.Instance.uiCanvasItemsHiddableManager.SetBananaTreeVisibility(isVisible); 
-            
+
             prefs.Save();
         }
 
         public void SaveMonkeysVisibility(bool isVisible) {
             ObjectsReference.Instance.gameSettings.isShowingMonkeys = isVisible;
-            
+
             prefs.SetString("areMonkeysVisible", isVisible ? "True" : "False");
             if (ObjectsReference.Instance.gameManager.gameContext == GameContext.IN_GAME && ObjectsReference.Instance.mapsManager.currentMap.activeMonkeyType != MonkeyType.NONE) MapItems.Instance.uiCanvasItemsHiddableManager.SetMonkeysVisibility(isVisible);
-            
+
+            prefs.Save();
+        }
+
+        public void SetSaveDelay(float delay) {
+            saveDelay = (int)delay*60;
+            prefs.SetInt("saveDelay", (int)delay*60);
+            if (delay == 0) saveDelayText.text = LocalizationSettings.StringDatabase.GetLocalizedString("UI", "never");
+            else {
+                saveDelayText.text = delay + "m";
+            }
+
             prefs.Save();
         }
     }

@@ -1,4 +1,5 @@
 using System.Linq;
+using Player;
 using Save.Templates;
 using UnityEngine;
 
@@ -51,6 +52,8 @@ namespace Save {
 
             ObjectsReference.Instance.gameData.bananaManSavedData.health = 100;
             ObjectsReference.Instance.gameData.bananaManSavedData.resistance = 100;
+            
+            ObjectsReference.Instance.bananaMan.SetBananaSkinHealth();
         }
 
         private static void ResetPositionAndLastMap() {
@@ -72,7 +75,7 @@ namespace Save {
 
         private static void ResetMonkeysSasiety() {
             foreach (var mapData in ObjectsReference.Instance.mapsManager.mapBySceneName) {
-                mapData.Value.monkeySasiety = 50;
+                mapData.Value.monkeySasiety = 0;
             }
         }
     }

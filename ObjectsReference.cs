@@ -3,16 +3,18 @@ using Building;
 using Cameras;
 using Data;
 using Game;
+using Game.Advancement;
 using Game.Steam;
 using Input;
 using Items;
+using Monkeys.Chimployee;
 using Player;
 using Save;
 using Settings;
 using UI;
 using UI.InGame;
+using UI.InGame.Advancements;
 using UI.InGame.Blueprints;
-using UI.InGame.Chimployee;
 using UI.InGame.Inventory;
 using UI.InGame.QuickSlots;
 using UI.Menus;
@@ -39,12 +41,14 @@ public class ObjectsReference : MonoSingleton<ObjectsReference> {
     public GhostsReference ghostsReference;
 
     public MainCamera mainCamera;
+    public SurfaceDetector surfaceDetector;
 
     public Cinematiques cinematiques;
     public Death death;
     public ScenesSwitch scenesSwitch;
 
     public GameActions gameActions;
+    public Advancements advancements;
 
     public GameData gameData;
     public GameSave gameSave;
@@ -62,8 +66,10 @@ public class ObjectsReference : MonoSingleton<ObjectsReference> {
     public UInventory uInventory;
     public UIBlueprints uiBlueprints;
     public UISlotsManager uiSlotsManager;
-    public UIChimployee uiChimployee;
-    public UICrosshair uiCrosshair;
+    public Chimployee chimployee;
+    public UICrosshairs uiCrosshairs;
+    public UIadvancements uIadvancements;
+    public UIHelper uiHelper;
     public UIFace uiFace;
     public Uihud uihud;
     public UIQueuedMessages uiQueuedMessages;
@@ -72,6 +78,5 @@ public class ObjectsReference : MonoSingleton<ObjectsReference> {
     public UIOptionsMenu uiOptionsMenu;
     public UICredits uiCredits;
     public UISave uiSave;
-    public TutorialsManager tutorialsManager;
     public UIbananaCannonMiniGame uIbananaCannonMiniGame;
 }

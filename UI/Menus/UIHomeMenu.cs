@@ -10,14 +10,14 @@ namespace UI.Menus {
         [SerializeField] private Color unactivatedColor;
         [SerializeField] private Color activatedTextColor;
 
-        private Image[] _homeMenuButtons;
+        [SerializeField] private Image[] _homeMenuButtons;
+        
         private int _selectedButton;
 
         public EventTrigger selectedTrigger;
         
         private void Start() {
             _selectedButton = 0;
-             _homeMenuButtons = GetComponentsInChildren<Image>();
         }
 
         public void NewGame() {
@@ -54,6 +54,10 @@ namespace UI.Menus {
             buttonImage.GetComponentInChildren<TextMeshProUGUI>().color = activatedTextColor;
 
             selectedTrigger = buttonImage.GetComponent<EventTrigger>();
+        }
+
+        public void GoToDiscord() {
+            Application.OpenURL("https://discord.gg/2SUscY39dw");
         }
     }
 }

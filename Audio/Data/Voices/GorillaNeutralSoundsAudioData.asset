@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 34852139ae771484289135c8cc860b89, type: 3}
+  m_Name: GorillaNeutralSoundsAudioData
+  m_EditorClassIdentifier: 
+  clip:
+  - {fileID: 8300000, guid: 79de693dea9557947bccad473692a733, type: 3}
+  - {fileID: 8300000, guid: bfa75e2000b94dd4d81b1f66f5577267, type: 3}
+  - {fileID: 8300000, guid: 44315bf301f219349ab13bc8b5101365, type: 3}
+  - {fileID: 8300000, guid: 7ec9f4dec14c2b844bf775167c8080a4, type: 3}
+  - {fileID: 8300000, guid: 0218f6b047d7ab849a104b26983385f4, type: 3}
+  - {fileID: 8300000, guid: c7702956a63965b439cf4e8d63a8853a, type: 3}
+  - {fileID: 8300000, guid: 552e44f1c262f7f43b2b0429efb27d0a, type: 3}
+  isLooping: 0
+  isRandomlySilenced: 0
+  volume: 0.056

@@ -21,7 +21,7 @@ namespace Game.Steam {
             try {
                 Steamworks.SteamClient.Init(2236270);
             }
-            catch (Exception e) {
+            catch (Exception) {
                 isGameOnSteam = false;
             }
 

@@ -18,7 +18,9 @@ MonoBehaviour:
   itemName:
   - battery
   - batterie
+  - "bater\xEDa"
   itemSprite: {fileID: 21300000, guid: d6cdcfa1c604c7948aa34dee667cc20d, type: 3}
   itemDescription:
   - a source of energy to power machines
   - "une source d'\xE9nergie pour alimenter les machines"
+  - "Una fuente de energ\xEDa para suministrar energ\xEDa a las m\xE1quinas"

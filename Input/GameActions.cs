@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using Enums;
 using Player;
-using UI.Tutorials;
 using UnityEngine;
 
 namespace Input {
@@ -58,7 +57,6 @@ namespace Input {
             Release();
 
             PauseGame();
-            ShowTutorial();
 
             ZoomDezoomCamera();
             
@@ -136,7 +134,7 @@ namespace Input {
         }
 
         private static void Grab() {
-            if (UnityEngine.Input.GetKeyDown(KeyCode.F) || UnityEngine.Input.GetKeyDown(KeyCode.JoystickButton2)) {
+            if (UnityEngine.Input.GetKeyDown(KeyCode.F) || UnityEngine.Input.GetKeyDown(KeyCode.JoystickButton5)) {
                 if (!ObjectsReference.Instance.itemsManager.isGrabbing) {
                     ObjectsReference.Instance.itemsManager.Grab();
                 }
@@ -162,18 +160,10 @@ namespace Input {
         }
 
         private static void PauseGame() {
-            if (UnityEngine.Input.GetKeyDown(KeyCode.Escape) || UnityEngine.Input.GetKeyDown(KeyCode.JoystickButton7)) {
+            if (UnityEngine.Input.GetKeyDown(KeyCode.Escape) || UnityEngine.Input.GetKeyDown(KeyCode.JoystickButton7) || UnityEngine.Input.GetKeyDown(KeyCode.JoystickButton15)) {
                 ObjectsReference.Instance.inputManager.uiSchemaContext = UISchemaSwitchType.GAME_MENU;
                 ObjectsReference.Instance.gameManager.PauseGame(true);
                 ObjectsReference.Instance.uiManager.Show_game_menu();
-            }
-        }
-
-        private static void ShowTutorial() {
-            if (UnityEngine.Input.GetKeyDown(KeyCode.H) || UnityEngine.Input.GetKeyDown(KeyCode.JoystickButton6)) {
-                ObjectsReference.Instance.inputManager.uiSchemaContext = UISchemaSwitchType.TUTORIAL;
-                ObjectsReference.Instance.gameManager.PauseGame(true);
-                TutorialsManager.Show_Help();
             }
         }
 
@@ -283,12 +273,8 @@ namespace Input {
                 ObjectsReference.Instance.bananaGun.GrabBananaGun();
                 _playerController.StopPlayer();
                 
-                ObjectsReference.Instance.uiCrosshair.SetCrosshair(ItemCategory.BUILDABLE, ItemType.EMPTY);
-                
-                ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.BANANAGUN_HELPER].alpha = 1f;
-                if (ObjectsReference.Instance.bananaMan.activeItemCategory == ItemCategory.BUILDABLE) {
-                    ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.BUILD_HELPER].alpha = 1f;
-                }
+                ObjectsReference.Instance.uiCrosshairs.SetCrosshair(ItemCategory.BUILDABLE, ItemType.EMPTY);
+                ObjectsReference.Instance.uiHelper.show_build_helper(); 
                 
                 if (ObjectsReference.Instance.bananaMan.activeItemCategory == ItemCategory.BUILDABLE) ObjectsReference.Instance.slotSwitch.ActivateGhost();
                 
@@ -300,11 +286,13 @@ namespace Input {
                 _playerController.canMove = true;
                 
                 ObjectsReference.Instance.bananaGun.UnhighlightSelectedObject();
-                ObjectsReference.Instance.uiCrosshair.SetCrosshair(ItemCategory.EMPTY, ItemType.EMPTY);
-                
-                ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.BANANAGUN_HELPER].alpha = 0f;
-                ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.BUILD_HELPER].alpha = 0f;
+                ObjectsReference.Instance.uiCrosshairs.SetCrosshair(ItemCategory.EMPTY, ItemType.EMPTY);
 
+                if (ObjectsReference.Instance.bananaMan.activeItemCategory == ItemCategory.BANANA) ObjectsReference.Instance.uiHelper.show_banana_helper();
+                else {
+                    ObjectsReference.Instance.uiHelper.show_default_helper();
+                }
+               
                 ObjectsReference.Instance.slotSwitch.CancelGhost();
                 
                 isBuildModeActivated = false;
@@ -317,9 +305,9 @@ namespace Input {
                 ObjectsReference.Instance.bananaGun.GrabBananaGun();
                 _playerController.StopPlayer();
                 
-                ObjectsReference.Instance.uiCrosshair.SetCrosshair(ItemCategory.BUILDABLE, ItemType.EMPTY);
-                ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.BUILD_HELPER].alpha = 1f;
-
+                ObjectsReference.Instance.uiCrosshairs.SetCrosshair(ItemCategory.BUILDABLE, ItemType.EMPTY);
+                ObjectsReference.Instance.uiHelper.show_build_helper(); 
+                
                 if (ObjectsReference.Instance.bananaMan.activeItemCategory == ItemCategory.BUILDABLE) ObjectsReference.Instance.slotSwitch.ActivateGhost();
 
                 isBuildModeActivated = true;
@@ -332,9 +320,13 @@ namespace Input {
                 ObjectsReference.Instance.bananaGun.UngrabBananaGun();
                 _playerController.canMove = true;
                 
-                ObjectsReference.Instance.uiCrosshair.SetCrosshair(ItemCategory.EMPTY, ItemType.EMPTY);
+                ObjectsReference.Instance.uiCrosshairs.SetCrosshair(ItemCategory.EMPTY, ItemType.EMPTY);
                 ObjectsReference.Instance.bananaGun.UnhighlightSelectedObject();
-                ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.BUILD_HELPER].alpha = 0f;
+                
+                if (ObjectsReference.Instance.bananaMan.activeItemCategory == ItemCategory.BANANA) ObjectsReference.Instance.uiHelper.show_banana_helper();
+                else {
+                    ObjectsReference.Instance.uiHelper.show_default_helper();
+                }
 
                 ObjectsReference.Instance.slotSwitch.CancelGhost();
 
@@ -357,14 +349,12 @@ namespace Input {
         private void SwitchRotationAxis() {  // remembering that we are virtyally in a QWERTY keyboard all the time because Unity
             if (UnityEngine.Input.GetKeyDown(KeyCode.Q) || UnityEngine.Input.GetKeyDown(KeyCode.JoystickButton3)) {
                 rotationAxis = RotationAxis.Y;
-                ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.BUILD_HELPER_Y_AXIS].alpha = 1f;
-                ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.BUILD_HELPER_Z_AXIS].alpha = 0f;
+                ObjectsReference.Instance.uiHelper.Show_Y_Axis();
             }
             
             if (UnityEngine.Input.GetKeyDown(KeyCode.W) || UnityEngine.Input.GetKeyDown(KeyCode.JoystickButton1)) {
                 rotationAxis = RotationAxis.Z;
-                ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.BUILD_HELPER_Y_AXIS].alpha = 0f;
-                ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.BUILD_HELPER_Z_AXIS].alpha = 1f;
+                ObjectsReference.Instance.uiHelper.Show_Z_Axis();
             }
         }
 

@@ -8,7 +8,7 @@ namespace Enums {
         KEYBOARD_TAB,
         GAMEPAD_TAB,
         LANGUAGES_TAB,
-        ACCESSIBILITY_TAB,
+        GAMEPLAY_TAB,
         INVENTAIRE,
         BLUEPRINTS,
         CHIMPLOYEE,

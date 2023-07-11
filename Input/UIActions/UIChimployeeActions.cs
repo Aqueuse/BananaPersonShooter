@@ -12,16 +12,18 @@ namespace Input.UIActions {
             Switch_To_Left();
             Switch_To_Right();
             
+            Switch_To_Inventory();
+            Switch_To_Blueprints();
+            
             Teleport();
 
-            if (!ObjectsReference.Instance.uiChimployee.dialogueShown) {
-                NextDialogue();
+            if (!ObjectsReference.Instance.chimployee.dialogueShown) {
                 SkipDialogue();
             }
         }
 
         private static void Hide_Interface() {
-            if (ObjectsReference.Instance.uiChimployee.dialogueShown) {
+            if (ObjectsReference.Instance.chimployee.dialogueShown) {
                 if (UnityEngine.Input.GetKeyDown(KeyCode.Escape) || UnityEngine.Input.GetKeyDown(KeyCode.I) || UnityEngine.Input.GetAxis("DpadHorizontal") > 0) {
                     ObjectsReference.Instance.uiManager.Show_Hide_interface();
                 }
@@ -40,23 +42,29 @@ namespace Input.UIActions {
             }
         }
         
+        private void Switch_To_Inventory() {
+            if (UnityEngine.Input.GetKeyDown(KeyCode.Alpha1)) {
+                ObjectsReference.Instance.uihud.Switch_To_Inventory();
+            }
+        }
+
+        private void Switch_To_Blueprints() {
+            if (UnityEngine.Input.GetKeyDown(KeyCode.Alpha2)) {
+                ObjectsReference.Instance.uihud.Switch_To_Blueprints();
+            }
+        }
+        
         private static void Teleport() {
-            if (ObjectsReference.Instance.uiChimployee.TpButton.activeInHierarchy) {
-                if (UnityEngine.Input.GetKeyDown(KeyCode.T) || UnityEngine.Input.GetKeyDown(KeyCode.JoystickButton3)) {
+            if (ObjectsReference.Instance.chimployee.TpButton.activeInHierarchy) {
+                if (UnityEngine.Input.GetKeyDown(KeyCode.JoystickButton3)) {
                     ObjectsReference.Instance.scenesSwitch.TeleportToCommandRoom();
                 }
             }
         }
 
-        private static void NextDialogue() {
-            if (UnityEngine.Input.GetKeyDown(KeyCode.E) || UnityEngine.Input.GetKeyDown(KeyCode.JoystickButton2)) {
-                ObjectsReference.Instance.uiChimployee.Next();
-            }
-        }
-
         private static void SkipDialogue() {
-            if (UnityEngine.Input.GetKeyDown(KeyCode.S) || UnityEngine.Input.GetKeyDown(KeyCode.JoystickButton1)) {
-                ObjectsReference.Instance.uiChimployee.FinishDialogue();
+            if (UnityEngine.Input.GetKeyDown(KeyCode.JoystickButton1)) {
+                ObjectsReference.Instance.chimployee.FinishDialogue();
             }
         }
     }

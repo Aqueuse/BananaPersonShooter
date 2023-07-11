@@ -1,3 +1,4 @@
+using Enums;
 using Items;
 using UI.InGame;
 using UnityEngine;
@@ -7,9 +8,7 @@ namespace Game.CommandRoomPanelControls {
         [SerializeField] private GenericDictionary<GameObject, Transform> bananaGunPiecesRepairedPosition;
         [SerializeField] private GameObject bananaGunRepaired;
         [SerializeField] private GameObject bananaGunPieces;
-
-        [SerializeField] private AudioClip[] bananaGunAssemblySounds;
-
+        
         [SerializeField] private MeshRenderer assemblerZoneMeshRenderer;
         [SerializeField] private Color activatedColor;
         [SerializeField] private Color baseColor;
@@ -25,8 +24,6 @@ namespace Game.CommandRoomPanelControls {
         private void Start() {
             assemblerAudioSource = GetComponent<AudioSource>();
             assemblerAudioSource.volume = ObjectsReference.Instance.audioManager.effectsLevel;
-            
-            ShuffleBananaGunAssemblySounds();
             
             if (ObjectsReference.Instance.gameData.bananaManSavedData.playerAdvancements.Contains(AdvancementState.GET_BANANAGUN)) {
                 _bananaGunRepaired = true;
@@ -76,8 +73,6 @@ namespace Game.CommandRoomPanelControls {
                                 assemblerAudioSource.Stop();
                                 
                                 uIassembler.SwitchToIdleMode();
-                        
-                                ObjectsReference.Instance.gameData.bananaManSavedData.playerAdvancements.Add(AdvancementState.GET_BANANAGUN);
                             }
                         }
                     }
@@ -91,13 +86,6 @@ namespace Game.CommandRoomPanelControls {
 
         public void SetAssemblerAudioVolume(float level) {
             assemblerAudioSource.volume = level;
-        }
-        
-        private void ShuffleBananaGunAssemblySounds() {
-            for (var i = 0; i < bananaGunAssemblySounds.Length; i++) {
-                var randomNumber = Random.Range(i, bananaGunAssemblySounds.Length);
-                (bananaGunAssemblySounds[randomNumber], bananaGunAssemblySounds[i]) = (bananaGunAssemblySounds[i], bananaGunAssemblySounds[randomNumber]);
-            }
         }
     }
 }

@@ -6,14 +6,14 @@ using UnityEngine;
 using UnityEngine.Localization.Components;
 using UnityEngine.UI;
 
-namespace UI.InGame.Chimployee {
+namespace Monkeys.Chimployee {
     public enum ChimployeeDialogue {
         chimployee_first_interaction,  // integre le chimployee au banana gun
-        chimployee_second_interaction, // nourri un singe
-        chimployee_third_interaction // clean a map
+        chimployee_please_feed_monkey, // nourri un singe
+        chimployee_please_clean_map // clean a map
     }
 
-    public class UIChimployee : MonoBehaviour {
+    public class Chimployee : MonoBehaviour {
         [SerializeField] private GenericDictionary<ChimployeeDialogue, List<GameObject>>  questDialogues;
         [SerializeField] private GameObject chimployeeTabDialogueContent;
         [SerializeField] private Scrollbar scrollbar;
@@ -26,15 +26,13 @@ namespace UI.InGame.Chimployee {
         private int dialogueIndex;
 
         public bool dialogueShown;
-
+        
         public void InitDialogue(ChimployeeDialogue chimployeeDialogue) {
             ObjectsReference.Instance.uiManager.Show_Hide_interface();
             ObjectsReference.Instance.uihud.Switch_To_Chimployee();
             
-            ObjectsReference.Instance.audioManager.PlayMusic(MusicType.CHIMPLOYEE);
-            
             ObjectsReference.Instance.bananaGun.UngrabBananaGun();
-            ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.BANANAGUN_HELPER].alpha = 0;
+            ObjectsReference.Instance.uiHelper.Hide_retrieve_confirmation();
 
             // flush last dialogues
             var lastDialogues = chimployeeTabDialogueContent.GetComponentsInChildren<TextMeshProUGUI>();
@@ -52,12 +50,31 @@ namespace UI.InGame.Chimployee {
             Next();
         }
 
+        public void ShowAllDialogue(ChimployeeDialogue chimployeeDialogue) {
+            // flush last dialogues
+            var lastDialogues = chimployeeTabDialogueContent.GetComponentsInChildren<TextMeshProUGUI>();
+            
+            foreach (var dialogue in lastDialogues) {
+                Destroy(dialogue.gameObject);
+            }
+
+            for (int i = 0; i < questDialogues[chimployeeDialogue].Count; i++) {
+                Instantiate(questDialogues[chimployeeDialogue][i], chimployeeTabDialogueContent.transform);
+                
+                LayoutRebuilder.ForceRebuildLayoutImmediate(chimployeeTabDialogueContent.GetComponent<RectTransform>());
+                scrollbar.value = 0;
+            }
+            
+            SkipButton.SetActive(false);
+            dialogueShown = true;
+        }
+
         public void Next() {
             if (!dialogueShown && dialogueIndex < questDialogues[_chimployeeDialogue].Count) {
                 Instantiate(questDialogues[_chimployeeDialogue][dialogueIndex], chimployeeTabDialogueContent.transform);
                 
                 var dialogueTime = questDialogues[_chimployeeDialogue][dialogueIndex].GetComponent<LocalizeStringEvent>().StringReference
-                    .GetLocalizedString().Length/20;
+                    .GetLocalizedString().Length/8;
 
                 dialogueIndex += 1;
                 
@@ -91,7 +108,6 @@ namespace UI.InGame.Chimployee {
 
         public static void AuthorizeDoorsAccess() {
             CommandRoomControlPanelsManager.Instance.AuthorizeDoorsAccess();
-            Uihud.AuthorizeTp();
         }
     }
 }

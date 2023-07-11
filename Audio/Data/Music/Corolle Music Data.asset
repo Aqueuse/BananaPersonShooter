@@ -24,6 +24,6 @@ MonoBehaviour:
   - {fileID: 8300000, guid: fd2f6bb8fac871f4eaa4c262fd79e93c, type: 3}
   - {fileID: 8300000, guid: a24c2bf4dbc6ab146af5786256e24a79, type: 3}
   - {fileID: 8300000, guid: e1435035d205f734a8057d84ed6a01b0, type: 3}
-  IsLooping: 1
+  isLooping: 1
   isRandomlySilenced: 1
   volume: 1

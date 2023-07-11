@@ -14,21 +14,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemType: 1
   itemCategory: 0
-  buildableType: 1
+  buildableType: 6
   itemName:
+  - barangan
   - barangan
   - barangan
   itemSprite: {fileID: 21300000, guid: 25083ab756e238a4b92f2ff93e10b504, type: 3}
   itemDescription:
   - Sexy banana
   - Banane sexy
+  - "pl\xE1tano sexy"
   effects:
   - aphrodisiac grenade, attracts monkeys during a few seconds
   - Grenade aphrodisiaque, attire les singes pendant quelques secondes
+  - "Granada afrodis\xEDaca, atrae a los monos durante unos segundos"
   regimeQuantity: 30
   sasiety: 5
   damageTime: 0
   healthBonus: 0.5
   resistanceBonus: 1
   bananaEffect: 1
-  bananaMaterial: {fileID: 0}
+  bananaColor: {r: 1, g: 0.72156864, b: 0.03137255, a: 1}

@@ -15,6 +15,7 @@ namespace Player {
         private static readonly int Getup = Animator.StringToHash("GETUP");
         private static readonly int IsGroundedID = Animator.StringToHash("IsGrounded");
         private static readonly int IsJumpingID = Animator.StringToHash("IsJumping");
+        private static readonly int IsFallingFrontwardID = Animator.StringToHash("IsDyingFrontward");
 
         private void Start() {
             _playerAnimator = GetComponent<Animator>();
@@ -44,8 +45,12 @@ namespace Player {
             _playerAnimator.SetTrigger(RollID);
         }
 
+        public void FallFrontward() {
+            _playerAnimator.SetBool(IsFallingFrontwardID, true);
+        }
+
         public void GetUp() {
-            _playerAnimator.SetTrigger(Getup);
+            _playerAnimator.SetBool(IsFallingFrontwardID, false);
         }
 
         public void FocusCamera(bool isFocusCam) {

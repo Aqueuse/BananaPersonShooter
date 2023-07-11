@@ -6,6 +6,7 @@ namespace Building {
     public class SlotSwitch : MonoBehaviour {
         [SerializeField] private GhostsReference ghostsReference;
         [SerializeField] private LayerMask buildingLayerMask;
+        [SerializeField] private Transform plateformPlacementTransform;
 
         private GameObject _activeGhost;
         public Ghost _activeGhostClass;
@@ -30,7 +31,7 @@ namespace Building {
         private float deltaZ;
         private float deltaY;
 
-        private const float _buildableUnit = 1.3f;
+        private const float _buildableUnit = 1.29f;
 
         private Vector3 decalageLeft;
         private Vector3 decalageRight;
@@ -64,10 +65,13 @@ namespace Building {
             if (ObjectsReference.Instance.bananaMan.activeItemCategory != ItemCategory.BUILDABLE || _activeGhost == null) return;
             if (ObjectsReference.Instance.uiManager.Is_Interface_Visible()) return;
             if (!ObjectsReference.Instance.gameActions.isBuildModeActivated) return;
+            
+            if (_activeGhostClass.buildableDataScriptableObject.buildableType == BuildableType.PLATEFORM) {
+                _activeGhost.transform.position = plateformPlacementTransform.position;
+            }
 
             if (Physics.Raycast(origin: _mainCameraTransform.position, direction: _mainCameraTransform.forward,
-                    maxDistance: 60f, hitInfo: out raycastHit, layerMask:buildingLayerMask)) {
-
+                    maxDistance: 15f, hitInfo: out raycastHit, layerMask:buildingLayerMask)) {
                 raycastHitPoint = raycastHit.point;
                 var targetGameObject = raycastHit.transform.gameObject; 
 
@@ -105,9 +109,9 @@ namespace Building {
                     }
                     _ghostPosition = pivotTransform.TransformPoint(offsettedPosition);
                     
-                    _activeGhost.transform.position = _ghostPosition;
+                    if (_activeGhostClass.buildableDataScriptableObject.buildableType != BuildableType.PLATEFORM) _activeGhost.transform.position = _ghostPosition;
                 }
-
+                
                 else {
                     _activeGhost.transform.position = raycastHitPoint;
                 }
@@ -183,7 +187,7 @@ namespace Building {
 
         public void SwitchSlot(UISlot slot) {
             ObjectsReference.Instance.bananaMan.SetActiveItemTypeAndCategory(slot.itemType, slot.itemCategory, slot.buildableType);
-
+            
             CancelGhost();
 
             switch (ObjectsReference.Instance.bananaMan.activeItemCategory) {
@@ -192,19 +196,23 @@ namespace Building {
                         ObjectsReference.Instance.scriptableObjectManager.GetBananaScriptableObject(ObjectsReference.Instance
                             .uiSlotsManager.Get_Selected_Slot_Type());
 
-                    ObjectsReference.Instance.uiCrosshair.SetCrosshair(slot.itemCategory, slot.itemType);
-                    ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.BUILD_HELPER].alpha = 0f;
+                    ObjectsReference.Instance.uiCrosshairs.SetCrosshair(slot.itemCategory, slot.itemType);
+                    ObjectsReference.Instance.uiHelper.show_banana_helper();
+
                     break;
 
                 case ItemCategory.BUILDABLE:
-                    ObjectsReference.Instance.uiCrosshair.SetCrosshair(slot.itemCategory, ItemType.EMPTY);
                     if (ObjectsReference.Instance.gameActions.isBuildModeActivated) ActivateGhost();
-                    ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.BUILD_HELPER].alpha = 1f;
+
+                    ObjectsReference.Instance.uiCrosshairs.SetCrosshair(slot.itemCategory, ItemType.EMPTY);
+                    ObjectsReference.Instance.uiHelper.show_default_helper();
                     break;
 
                 case ItemCategory.EMPTY or ItemCategory.RAW_MATERIAL:
-                    ObjectsReference.Instance.uiCrosshair.SetCrosshair(ItemCategory.EMPTY, ItemType.EMPTY);
-                    ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.BUILD_HELPER].alpha = 0f;
+                    ObjectsReference.Instance.bananaGun.UngrabBananaGun();
+                    
+                    ObjectsReference.Instance.uiCrosshairs.SetCrosshair(ItemCategory.EMPTY, ItemType.EMPTY);
+                    ObjectsReference.Instance.uiHelper.show_default_helper();
                     break;
             }
         }
@@ -238,6 +246,8 @@ namespace Building {
             if (ObjectsReference.Instance.bananaMan.activeItemCategory != ItemCategory.BUILDABLE) return;
 
             if (_activeGhostClass.GetPlateformState() == GhostState.VALID) {
+                ObjectsReference.Instance.mapsManager.currentMap.isDiscovered = true;
+
                 _buildable = Instantiate(original: _activeGhostClass.buildableDataScriptableObject.buildablePrefab,
                     position: _activeGhost.transform.position, rotation: _activeGhost.transform.rotation);
 
@@ -249,8 +259,13 @@ namespace Building {
                     ObjectsReference.Instance.uiSlotsManager.RefreshQuantityInQuickSlot(ItemCategory.RAW_MATERIAL,
                         craftingIngredient.Key);
                 }
-                
-                ObjectsReference.Instance.mapsManager.currentMap.isDiscovered = true;
+
+                if (!ObjectsReference.Instance.gameData.bananaManSavedData.playerAdvancements.Contains(AdvancementState.PUT_PLATFORM)) {
+                    ObjectsReference.Instance.gameData.bananaManSavedData.playerAdvancements.Add(AdvancementState.PUT_PLATFORM);
+                    ObjectsReference.Instance.uIadvancements.SetAdvancementBanana(AdvancementState.PUT_PLATFORM);
+                }
+
+                ObjectsReference.Instance.mapsManager.currentMap.RefreshAspirablesItemsDataMap();
             }
         }
     }

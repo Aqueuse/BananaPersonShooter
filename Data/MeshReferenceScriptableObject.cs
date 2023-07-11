@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Data.Bananas;
 using Data.Buildables;
 using Data.RawMaterial;
@@ -10,9 +11,13 @@ namespace Data {
         public GenericDictionary<BuildableType, GameObject> buildablePrefabByBuildableType;
 
         public GameObject[] debrisPrefab;
-
-        public GenericDictionary<Mesh, int> debrisPrefabIndexByMesh;
-
+        public GameObject[] ruinesPrefab;
+        
+        public List<Mesh> debrisMeshes;
+        public List<Mesh> ruinesMeshes;
+        
+        public GameObject chimployeePrefab;
+        
         public GenericDictionary<ItemType, BananasDataScriptableObject> bananasDataScriptableObject;
         public GenericDictionary<BuildableType, BuildableDataScriptableObject> buildablesDataScriptableObject;
         public GenericDictionary<ItemType, RawMaterialDataScriptableObject> rawMaterialDataScriptableObjects;

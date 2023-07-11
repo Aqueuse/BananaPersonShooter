@@ -1,11 +1,13 @@
-public enum AdvancementState {
-    GET_BANANAGUN,
-    GET_MONKEYMAN_IA,
-    GRAB_METAL_ON_MAP,  // give plateform, cloison and door (left and right) blueprint
-    CLEANED_MAP,
-    EQUIP_PLATFORM,
-    PUT_PLATFORM,
-    PUT_BANANA_ON_PLATFORM,
-    GRAB_BANANAS, // give sechoir blueprint
-    FEED_MONKEY
+namespace Enums {
+    public enum AdvancementState {
+        NEW_GAME,
+        GET_BANANAGUN,
+        ASPIRE_SOMETHING,
+        PUT_PLATFORM,
+        GRAB_BANANAS,
+        FEED_MONKEY,
+        USE_BANANA_CANNON,
+        CLEANED_MAP,
+        FREE_TIME
+    }
 }

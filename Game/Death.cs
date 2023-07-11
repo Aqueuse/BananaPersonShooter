@@ -13,6 +13,8 @@ namespace Game {
                 ObjectsReference.Instance.gameManager.isGamePlaying = false;
                 
                 ObjectsReference.Instance.uiFace.Die(true);
+                ObjectsReference.Instance.bananaMan.tpsPlayerAnimator.FallFrontward();
+                
                 ObjectsReference.Instance.bananaMan.GetComponent<Rigidbody>().isKinematic = true;
                 ObjectsReference.Instance.audioManager.PlayEffect(EffectType.BANANASPLASH, 0);
 
@@ -36,6 +38,7 @@ namespace Game {
 
         public void HideDeath() {
             deathPlaneMeshRenderer.enabled = false;
+            ObjectsReference.Instance.bananaMan.tpsPlayerAnimator.GetUp();
         }
     }
 }

@@ -86,7 +86,15 @@ namespace Save {
             SaveCameraView(screenshotFilePath);
             
             foreach (var map in ObjectsReference.Instance.mapsManager.mapBySceneName) {
-                if (map.Value.aspirablesCategories.Count != 0) {
+                if (map.Value.aspirablesCategories.Count == 0) {
+                    // delete file
+                    var mapDataSavesPath = Path.Combine(savePath, "MAPDATA");
+                    var filePath = Path.Combine(mapDataSavesPath, map.Value.mapName+"_aspirables.data");
+
+                    File.Delete(filePath);
+                }
+
+                else {
                     var mapToSave = map.Value;
 
                     SaveMapData(

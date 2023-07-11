@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Enums;
+using UnityEngine;
 
 namespace Items {
     public class Door : MonoBehaviour {
@@ -6,7 +7,7 @@ namespace Items {
         public SpawnPoint spawnPoint;
 
         private void Start() {
-            if (ObjectsReference.Instance.gameData.bananaManSavedData.playerAdvancements.Contains(AdvancementState.GET_MONKEYMAN_IA)) {
+            if (ObjectsReference.Instance.gameData.bananaManSavedData.playerAdvancements.Contains(AdvancementState.ASPIRE_SOMETHING)) {
                 GetComponent<BoxCollider>().enabled = true;
             }
             else {

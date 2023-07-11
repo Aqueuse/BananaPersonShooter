@@ -7,12 +7,12 @@ namespace UI.Tutorials {
         [SerializeField] private List<UiTutorialButton> tutorialsButtons;
 
         public static void Show_Help() {
-            ObjectsReference.Instance.uiManager.Set_active(UICanvasGroupType.TUTORIALS, true);
+            ObjectsReference.Instance.uiManager.Set_active(UICanvasGroupType.ADVANCEMENTS, true);
         }
 
         public void Hide_Help() {
             ObjectsReference.Instance.gameManager.PauseGame(false);
-            ObjectsReference.Instance.uiManager.Set_active(UICanvasGroupType.TUTORIALS, false);
+            ObjectsReference.Instance.uiManager.Set_active(UICanvasGroupType.ADVANCEMENTS, false);
         }
         
         public void HideAllTutorials() {

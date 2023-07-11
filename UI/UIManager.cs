@@ -19,7 +19,7 @@ namespace UI {
             ObjectsReference.Instance.inputManager.uiSchemaContext = UISchemaSwitchType.HOME_MENU;
             isOnMenu = false;
         }
-        
+
         public void Hide_menus() {
             if (ObjectsReference.Instance.gameSettings.isKeyRebinding) return;
             ObjectsReference.Instance.uiSave.UnselectAll();
@@ -39,6 +39,9 @@ namespace UI {
                     }
 
                     ObjectsReference.Instance.gameManager.PauseGame(false);
+                    // to save performance
+                    // we effectively change the save delay when the player come back to the game
+                    ObjectsReference.Instance.gameSave.ResetAutoSave();
                     break;
                 
                 case GameContext.IN_CINEMATIQUE:

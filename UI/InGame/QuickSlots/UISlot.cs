@@ -58,11 +58,11 @@ namespace UI.InGame.QuickSlots {
             quantityText.text = "";
         }
 
-        public void SetSelectedWeaponSlot() {
+        public void SetSelectedSlot() {
             colorImage.color = active;
         }
 
-        public void SetUnselectedWeaponSlot() {
+        public void SetUnselectedSlot() {
             colorImage.color = unactive;
         }
 

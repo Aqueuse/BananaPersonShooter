@@ -27,7 +27,10 @@ namespace Building {
                 if (Physics.Raycast(ObjectsReference.Instance.gameManager.cameraMain.transform.position, ObjectsReference.Instance.gameManager.cameraMain.transform.forward, out var raycastHit, 100, layerMask:aspirableLayerMask)) {
                     UnhighlightSelectedObject();
                     targetedGameObject = raycastHit.transform.gameObject;
-                    HighlightSelectedObject();
+                    if (targetedGameObject.layer == 7) {
+                        HighlightSelectedObject();
+                        ObjectsReference.Instance.uiHelper.Show_retrieve_confirmation();
+                    }
                 }
                 else {
                     UnhighlightSelectedObject();
@@ -42,6 +45,7 @@ namespace Building {
 
             ObjectsReference.Instance.bananaMan.isGrabingBananaGun = true;
             ObjectsReference.Instance.bananaMan.tpsPlayerAnimator.GrabBananaGun();
+            ObjectsReference.Instance.bananaMan.GetComponent<PlayerIK>().SetAimConstraint(true);
             wasFocus = _playerController.isFocusCamera;
         }
 
@@ -52,15 +56,16 @@ namespace Building {
             bananaGunInBack.SetActive(true);
 
             ObjectsReference.Instance.bananaMan.isGrabingBananaGun = false;
+            ObjectsReference.Instance.gameActions.isBuildModeActivated = false;
             ObjectsReference.Instance.bananaMan.tpsPlayerAnimator.FocusCamera(wasFocus);
+            ObjectsReference.Instance.bananaMan.GetComponent<PlayerIK>().SetAimConstraint(false);
         }
         
         private void HighlightSelectedObject() {
-            if (targetedGameObject != null && targetedGameObject.layer == 7) {
-                aspirableMaterials = targetedGameObject.GetComponent<Renderer>().materials;
-                aspirableMaterials[0].SetFloat(Emission, 0.2f);
-                targetedGameObject.GetComponent<Renderer>().materials = aspirableMaterials;
-            }
+            aspirableMaterials = targetedGameObject.GetComponent<Renderer>().materials;
+            aspirableMaterials[0].SetFloat(Emission, 0.2f);
+            targetedGameObject.GetComponent<Renderer>().materials = aspirableMaterials;
+            ObjectsReference.Instance.uiHelper.Show_retrieve_confirmation();
         }
 
         public void UnhighlightSelectedObject() {
@@ -68,6 +73,7 @@ namespace Building {
                 aspirableMaterials = targetedGameObject.GetComponent<Renderer>().materials;
                 aspirableMaterials[0].SetFloat(Emission, 0f);
                 targetedGameObject.GetComponent<Renderer>().materials = aspirableMaterials;
+                ObjectsReference.Instance.uiHelper.Hide_retrieve_confirmation();
             }
         }
     }

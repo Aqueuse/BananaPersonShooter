@@ -11,16 +11,14 @@ namespace Enums {
         INVENTORY,
         BLUEPRINTS,
         CHIMPLOYEE,
-        TUTORIALS,
+        ADVANCEMENTS,
         MINIGAME,
-        BANANAGUN_HELPER,
-        BUILD_HELPER,
-        BUILD_HELPER_Y_AXIS,
-        BUILD_HELPER_Z_AXIS,
         AUDIO_VIDEO_TAB,
         KEYBOARD_TAB,
         GAMEPAD_TAB,
-        ACCESSIBILITY_TAB,
-        LANGUAGE_TAB
+        GAMEPLAY_TAB,
+        LANGUAGE_TAB,
+        CROSSHAIRS,
+        GAMEPAD_DISCONNECTED
     }
 }

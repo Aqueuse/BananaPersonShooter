@@ -1,6 +1,5 @@
 using System.Collections;
 using Enums;
-using Save;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -27,12 +26,6 @@ namespace Game {
             }
 
             if (load.isDone) {
-                if (isNewGame) {
-                    ObjectsReference.Instance.gameReset.ResetGameData();
-                    ObjectsReference.Instance.uiSave.CreateNewSave();
-                }
-
-                
                 SceneManager.SetActiveScene(SceneManager.GetSceneByName(sceneName));
                 
                 if (spawnPoint == SpawnPoint.HOME) {
@@ -49,6 +42,11 @@ namespace Game {
                     ObjectsReference.Instance.uiManager.Hide_Game_Menu();
                     ObjectsReference.Instance.uiManager.Show_home_menu();
 
+                    ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.HUD].alpha = 0f;
+                    ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.CROSSHAIRS].alpha = 0f;
+                    ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.ADVANCEMENTS].alpha = 0f;
+                    ObjectsReference.Instance.uIadvancements.FlushAdvancements();
+                    
                     ObjectsReference.Instance.mainCamera.Set0Sensibility();
 
                     ObjectsReference.Instance.playerController.canMove = false;
@@ -56,6 +54,8 @@ namespace Game {
                     ObjectsReference.Instance.gameData.currentSaveUuid = null;
 
                     ObjectsReference.Instance.bananaMan.transform.position = ObjectsReference.Instance.scenesSwitch.spawnPointsBySpawnType[SpawnPoint.HOME].position;
+                    
+                    ObjectsReference.Instance.gameSave.CancelAutoSave();
                 }
 
                 else {
@@ -83,13 +83,18 @@ namespace Game {
                     
                     Cursor.visible = false;
                     Cursor.lockState = CursorLockMode.Locked;
-                    
+                    ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.CROSSHAIRS].alpha = 1f;
+                    ObjectsReference.Instance.uiCrosshairs.SetCrosshair(ObjectsReference.Instance.bananaMan.activeItemCategory, ObjectsReference.Instance.bananaMan.activeItemType);
+                    ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.ADVANCEMENTS].alpha = 1f;
+
                     ObjectsReference.Instance.inputManager.SwitchContext(InputContext.GAME);
                     ObjectsReference.Instance.gameManager.gameContext = GameContext.IN_GAME;
                     ObjectsReference.Instance.gameManager.isGamePlaying = true;
                     
                     ObjectsReference.Instance.uiManager.Hide_Game_Menu();
                     ObjectsReference.Instance.uiManager.Hide_home_menu();
+                    
+                    ObjectsReference.Instance.chimployee.TpButton.SetActive(sceneName != "COMMANDROOM");
                     
                     ObjectsReference.Instance.mainCamera.Return_back_To_Player();
                     ObjectsReference.Instance.mainCamera.SetNormalSensibility();
@@ -100,9 +105,27 @@ namespace Game {
                 
                 ObjectsReference.Instance.gameManager.loadingScreen.SetActive(false);
 
-                ObjectsReference.Instance.audioManager.SetMusiqueAndAmbianceBySceneName(sceneName);
+                if (!isNewGame) ObjectsReference.Instance.audioManager.SetMusiqueAndAmbianceBySceneName(sceneName);
                 
-                GameLoad.LoadAdvancements();
+                if (isNewGame) {
+                    ObjectsReference.Instance.gameReset.ResetGameData();
+                    ObjectsReference.Instance.uiSave.CreateNewSave();
+                    
+                    ObjectsReference.Instance.gameManager.cameraMain.clearFlags = CameraClearFlags.SolidColor;
+                    
+                    Cursor.visible = true;
+                    Cursor.lockState = CursorLockMode.None;
+
+                    ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.CROSSHAIRS].alpha = 1f;
+                    ObjectsReference.Instance.uiCrosshairs.SetCrosshair(ItemCategory.EMPTY, ItemType.EMPTY);
+
+                    ObjectsReference.Instance.inputManager.uiSchemaContext = UISchemaSwitchType.CINEMATIQUE;
+                    ObjectsReference.Instance.inputManager.SwitchContext(InputContext.UI);
+                    
+                    ObjectsReference.Instance.uihud.Unactivate_Chimployee_Tab();
+
+                    ObjectsReference.Instance.cinematiques.Play(CinematiqueType.NEW_GAME);
+                }
             }
         }
 
@@ -111,14 +134,13 @@ namespace Game {
             ObjectsReference.Instance.inputManager.SwitchContext(InputContext.UI);
 
             ObjectsReference.Instance.gameManager.loadingScreen.SetActive(true);
-            ObjectsReference.Instance.uiManager.Set_active(UICanvasGroupType.HUD, false);
             ObjectsReference.Instance.uiManager.Hide_home_menu();
             
             // prevent banana man to fall while loading scene
             ObjectsReference.Instance.playerController.canMove = false;
 
             if (!isNewGame && ObjectsReference.Instance.gameManager.gameContext == GameContext.IN_GAME && ObjectsReference.Instance.mapsManager.currentMap.isDiscovered) {
-                ObjectsReference.Instance.mapsManager.currentMap.RefreshAspirablesDataMap();
+                ObjectsReference.Instance.mapsManager.currentMap.RefreshAspirablesItemsDataMap();
             }
             
             ObjectsReference.Instance.mapsManager.currentMap = ObjectsReference.Instance.mapsManager.mapBySceneName[sceneName];

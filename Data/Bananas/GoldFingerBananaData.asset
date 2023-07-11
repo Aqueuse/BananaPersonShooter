@@ -14,21 +14,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemType: 5
   itemCategory: 0
-  buildableType: 1
+  buildableType: 6
   itemName:
+  - gold finger
   - gold finger
   - gold finger
   itemSprite: {fileID: 21300000, guid: 4091a8e1d607d5242a0ceade0a52ca37, type: 3}
   itemDescription:
   - Homing banana
   - "Banane \xE0 t\xEAte chercheuse"
+  - Banana buscadora
   effects:
   - "Technologically\r                           advanced banana homing"
   - "Banane technologiquement avanc\xE9e, \xE0 t\xEAte chercheuse"
+  - "Pl\xE1tano tecnol\xF3gicamente avanzado, con buscador incorporado"
   regimeQuantity: 60
   sasiety: 5
   damageTime: 0
   healthBonus: 1
   resistanceBonus: 1
   bananaEffect: 6
-  bananaMaterial: {fileID: 0}
+  bananaColor: {r: 1, g: 0.72156864, b: 0.03137255, a: 1}

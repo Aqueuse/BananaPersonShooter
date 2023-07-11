@@ -22,7 +22,7 @@ namespace Game.BananaCannonMiniGame {
 
         private void SwitchBanana(ItemType bananaType) {
             _projectileType = bananaType;
-            _projectileColor = bananasDataScriptableObjectsByBananaType[bananaType].bananaMaterial.color;
+            _projectileColor = bananasDataScriptableObjectsByBananaType[bananaType].bananaColor;
         }
 
         private static void SetBehaviour(Projectile projectile, ItemType bananaType) {

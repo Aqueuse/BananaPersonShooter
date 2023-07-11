@@ -8,7 +8,7 @@ namespace Input.UIActions {
 
         private void Update() {
             Skip();
-            PauseGame();
+            PauseCinematique();
         }
 
         private void Skip() {
@@ -17,12 +17,13 @@ namespace Input.UIActions {
             }
         }
         
-        private static void PauseGame() {
+        private static void PauseCinematique() {
             if (UnityEngine.Input.GetKeyDown(KeyCode.Escape) || UnityEngine.Input.GetKeyDown(KeyCode.JoystickButton7)) {
-                ObjectsReference.Instance.inputManager.uiSchemaContext = UISchemaSwitchType.HOME_MENU;
+                ObjectsReference.Instance.inputManager.uiSchemaContext = UISchemaSwitchType.GAME_MENU;
+                
                 ObjectsReference.Instance.gameManager.PauseGame(true);
                 ObjectsReference.Instance.cinematiques.Pause();
-                ObjectsReference.Instance.uiManager.Show_home_menu();
+                ObjectsReference.Instance.uiManager.Show_game_menu();
             }
         }
     }

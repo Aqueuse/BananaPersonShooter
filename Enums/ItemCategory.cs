@@ -4,5 +4,7 @@ public enum ItemCategory {
     RAW_MATERIAL,
     REGIME,
     DEBRIS,
-    EMPTY
+    EMPTY,
+    RUINE,
+    CHIMPLOYEE
 }

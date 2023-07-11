@@ -16,8 +16,9 @@ namespace Building.Buildables.Plateforms {
 
         private void OnCollisionStay(Collision other) {
             if (!isActive) return;
-
+            
             if (other.gameObject.CompareTag("Player")) {
+
                 if (!isPlayerOn) {
                     isPlayerOn = true;
                     Activate();
@@ -26,7 +27,7 @@ namespace Building.Buildables.Plateforms {
         }
 
         private void Activate() {
-            ObjectsReference.Instance.bananaMan.GetComponent<Rigidbody>().AddForce(Vector3.up * force, ForceMode.Acceleration);
+            ObjectsReference.Instance.bananaMan.GetComponent<Rigidbody>().AddForce(transform.up * force, ForceMode.Acceleration);
         }
     }
 }

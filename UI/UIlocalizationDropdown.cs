@@ -26,12 +26,16 @@ namespace UI {
 
             dropdown.value = selected;
             dropdown.onValueChanged.AddListener(LocaleSelected);
+            
+            LocalizationSettings.SelectedLocale = LocalizationSettings.AvailableLocales.Locales[ObjectsReference.Instance.gameSettings.languageIndexSelected];
+            dropdown.value = ObjectsReference.Instance.gameSettings.languageIndexSelected;
         }
 
         static void LocaleSelected(int index) {
             LocalizationSettings.SelectedLocale = LocalizationSettings.AvailableLocales.Locales[index];
             ObjectsReference.Instance.gameSettings.languageIndexSelected = index;
-            PlayerPrefs.SetInt("language", index);
+            ObjectsReference.Instance.gameSettings.prefs.SetInt("language", index);
+            ObjectsReference.Instance.gameSettings.prefs.Save();
         }
     }
 }

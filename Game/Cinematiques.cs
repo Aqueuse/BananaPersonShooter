@@ -16,8 +16,6 @@ namespace Game {
         private VideoPlayer _cinematiqueVideoPlayer;
         private MeshRenderer _meshRenderer;
         private CinemachineVirtualCamera _cinematiqueCamera;
-
-        private CinematiqueType _cinematiqueType;
         
         private void Start() {
             _cinematiqueVideoPlayer = GetComponentInChildren<VideoPlayer>();
@@ -29,24 +27,25 @@ namespace Game {
             RenderTexture.active = null;
 
             _cinematiqueVideoPlayer.loopPointReached += EndReached;
+            _cinematiqueVideoPlayer.SetDirectAudioVolume(0, ObjectsReference.Instance.audioManager.musicLevel);
         }
 
         public void Play(CinematiqueType playedCinematiqueType) {
+            ObjectsReference.Instance.audioManager.StopAudioSource(AudioSourcesType.MUSIC);
+
             _cinematiqueVideoPlayer.enabled = true;
             skipCinematiqueGameObject.SetActive(true);
 
             UISchemaSwitcher.Instance.SwitchUISchema(UISchemaSwitchType.CINEMATIQUE);
             ObjectsReference.Instance.gameManager.gameContext = GameContext.IN_CINEMATIQUE;
 
-            _cinematiqueType = playedCinematiqueType;
             _cinematiqueCamera.Priority = 200;
             _meshRenderer.material = playedCinematiqueType == CinematiqueType.DEATH ? transparentVideoMaterial : videoMaterial;
 
             _cinematiqueVideoPlayer.clip = cinematiquesVideoClipsByType[playedCinematiqueType];
             _cinematiqueVideoPlayer.frame = 0;
+            _cinematiqueVideoPlayer.SetDirectAudioVolume(0, ObjectsReference.Instance.audioManager.musicLevel);
             _cinematiqueVideoPlayer.Play();
-            
-            ObjectsReference.Instance.audioManager.StopAudioSource(AudioSourcesType.MUSIC);
         }
 
         public void Pause() {
@@ -66,14 +65,31 @@ namespace Game {
             skipCinematiqueGameObject.SetActive(false);
 
             _cinematiqueVideoPlayer.enabled = false;
-
-            if (_cinematiqueType == CinematiqueType.NEW_GAME) {
-                ObjectsReference.Instance.gameManager.Play(null, true);
-            }
+            
+            Cursor.visible = false;
+            Cursor.lockState = CursorLockMode.Locked;
+            ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.CROSSHAIRS].alpha = 1f;
+            ObjectsReference.Instance.uiCrosshairs.SetCrosshair(ObjectsReference.Instance.bananaMan.activeItemCategory, ObjectsReference.Instance.bananaMan.activeItemType);
+            
+            ObjectsReference.Instance.inputManager.SwitchContext(InputContext.GAME);
+            ObjectsReference.Instance.gameManager.gameContext = GameContext.IN_GAME;
+            ObjectsReference.Instance.gameManager.isGamePlaying = true;
+            
+            ObjectsReference.Instance.mainCamera.Return_back_To_Player();
+            ObjectsReference.Instance.mainCamera.SetNormalSensibility();
+                    
+            ObjectsReference.Instance.playerController.canMove = true;
+            ObjectsReference.Instance.bananaMan.GetComponent<Rigidbody>().isKinematic = false;
+            
+            ObjectsReference.Instance.audioManager.SetMusiqueAndAmbianceBySceneName(ObjectsReference.Instance.mapsManager.currentMap.mapName);
         }
 
         void EndReached(VideoPlayer videoPlayer) {
             Skip();
+        }
+
+        public void SetCinematiqueVolume() {
+            _cinematiqueVideoPlayer.SetDirectAudioVolume(0, ObjectsReference.Instance.audioManager.musicLevel);
         }
     }
 }

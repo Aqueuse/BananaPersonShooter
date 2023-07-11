@@ -14,21 +14,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemType: 12
   itemCategory: 0
-  buildableType: 1
+  buildableType: 6
   itemName:
+  - pisang raja
   - pisang raja
   - pisang raja
   itemSprite: {fileID: 21300000, guid: 6fdba3cd7fdc53c4d826500e4c7568ef, type: 3}
   itemDescription:
   - Very brave little banana
   - "Petite banane tr\xE8s courageuse"
+  - "Peque\xF1a banana muy valiente"
   effects:
   - ordinary nourishing, double healing
   - "sati\xE9t\xE9 ordinaire, soins doubl\xE9s"
+  - "saciedad normal, curaci\xF3n duplicada"
   regimeQuantity: 60
   sasiety: 5
   damageTime: 0
   healthBonus: 2
   resistanceBonus: 1
   bananaEffect: 0
-  bananaMaterial: {fileID: 0}
+  bananaColor: {r: 1, g: 0.72156864, b: 0.03137255, a: 1}

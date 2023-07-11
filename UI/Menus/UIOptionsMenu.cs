@@ -17,7 +17,7 @@ namespace UI.Menus {
             _selectedTab = UISchemaSwitchType.AUDIOVIDEO_TAB;
         }
 
-        public void Switch_to_Tab(UISchemaSwitchType uiSchemaSwitchType) {
+        private void Switch_to_Tab(UISchemaSwitchType uiSchemaSwitchType) {
             ObjectsReference.Instance.inputManager.uiSchemaSwitcher.SwitchUISchema(uiSchemaSwitchType);
             
             foreach (var tab in tabs) {
@@ -42,12 +42,12 @@ namespace UI.Menus {
                     Switch_to_Tab(UISchemaSwitchType.KEYBOARD_TAB);
                     break;
 
-                case UISchemaSwitchType.ACCESSIBILITY_TAB:
+                case UISchemaSwitchType.GAMEPLAY_TAB:
                     Switch_to_Tab(UISchemaSwitchType.GAMEPAD_TAB);
                     break;
 
                 case UISchemaSwitchType.LANGUAGES_TAB:
-                    Switch_to_Tab(UISchemaSwitchType.ACCESSIBILITY_TAB);
+                    Switch_to_Tab(UISchemaSwitchType.GAMEPLAY_TAB);
                     break;
             }
         }
@@ -63,10 +63,10 @@ namespace UI.Menus {
                     break;
 
                 case UISchemaSwitchType.GAMEPAD_TAB:
-                    Switch_to_Tab(UISchemaSwitchType.ACCESSIBILITY_TAB);
+                    Switch_to_Tab(UISchemaSwitchType.GAMEPLAY_TAB);
                     break;
                 
-                case UISchemaSwitchType.ACCESSIBILITY_TAB:
+                case UISchemaSwitchType.GAMEPLAY_TAB:
                     Switch_to_Tab(UISchemaSwitchType.LANGUAGES_TAB);
                     break;
                 
@@ -88,8 +88,8 @@ namespace UI.Menus {
             Switch_to_Tab(UISchemaSwitchType.GAMEPAD_TAB);
         }
 
-        public void Switch_To_Accessibility_Tab() {
-            Switch_to_Tab(UISchemaSwitchType.ACCESSIBILITY_TAB);
+        public void Switch_To_Gameplay_Tab() {
+            Switch_to_Tab(UISchemaSwitchType.GAMEPLAY_TAB);
         }
 
         public void Switch_To_languages_Tab() {

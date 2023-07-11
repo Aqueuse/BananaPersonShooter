@@ -26,8 +26,8 @@ namespace UI.InGame.Inventory {
         }
 
         public void SetDescriptionAndName() {
-            ObjectsReference.Instance.uInventory.itemName.text = ObjectsReference.Instance.scriptableObjectManager.GetName(itemCategory, ObjectsReference.Instance.gameSettings.languageIndexSelected, itemType);
-            ObjectsReference.Instance.uInventory.itemDescription.text = ObjectsReference.Instance.scriptableObjectManager.GetDescription(itemCategory, ObjectsReference.Instance.gameSettings.languageIndexSelected, itemType);
+            ObjectsReference.Instance.uInventory.itemName.text = ObjectsReference.Instance.scriptableObjectManager.GetName(itemCategory, itemType);
+            ObjectsReference.Instance.uInventory.itemDescription.text = ObjectsReference.Instance.scriptableObjectManager.GetDescription(itemCategory, itemType);
         }
     }
 }

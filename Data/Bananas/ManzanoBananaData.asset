@@ -14,22 +14,26 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemType: 8
   itemCategory: 0
-  buildableType: 1
+  buildableType: 6
   itemName:
+  - manzano
   - manzano
   - manzano
   itemSprite: {fileID: 21300000, guid: 3a5430ed90fc95043baf76a87f11f5fb, type: 3}
   itemDescription:
   - small grenade
   - Petite grenade
+  - "Peque\xF1a granada"
   effects:
   - small grenade, explode at the impact, which destabilizes monkeys for a few seconds
   - "petite grenade, explose \xE0 l'impact, ce qui d\xE9stabilise les singes quelques
     secondes"
+  - "peque\xF1a granada, explota al impacto, lo que desestabiliza a los monos durante
+    unos segundos"
   regimeQuantity: 60
   sasiety: 5
   damageTime: 0
   healthBonus: 1
   resistanceBonus: 1
   bananaEffect: 4
-  bananaMaterial: {fileID: 0}
+  bananaColor: {r: 1, g: 0.72156864, b: 0.03137255, a: 1}

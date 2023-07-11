@@ -27,19 +27,19 @@ namespace UI.InGame.QuickSlots {
         public void Switch_to_Slot_Index(int index) {
             selectedSlotIndex = index;
             foreach (var uiSlotsScript in uiSlotsScripts) {
-                uiSlotsScript.SetUnselectedWeaponSlot();
+                uiSlotsScript.SetUnselectedSlot();
             }
 
-            uiSlotsScripts[selectedSlotIndex].SetSelectedWeaponSlot();
+            uiSlotsScripts[selectedSlotIndex].SetSelectedSlot();
             ObjectsReference.Instance.slotSwitch.SwitchSlot(Get_Selected_Slot());
         }
 
         private void Switch_To_SelectedSlot() {
             foreach (var uiSlotsScript in uiSlotsScripts) {
-                uiSlotsScript.SetUnselectedWeaponSlot();
+                uiSlotsScript.SetUnselectedSlot();
             }
 
-            uiSlotsScripts[selectedSlotIndex].SetSelectedWeaponSlot();
+            uiSlotsScripts[selectedSlotIndex].SetSelectedSlot();
             ObjectsReference.Instance.slotSwitch.SwitchSlot(Get_Selected_Slot());
         }
 
@@ -87,12 +87,22 @@ namespace UI.InGame.QuickSlots {
 
             else {
                 foreach (var uiSlot in uiSlotsScripts) {
-                    if (uiSlot.itemType == ItemType.EMPTY) {
+                    if (uiSlot.itemCategory == ItemCategory.EMPTY && uiSlot.itemType == ItemType.EMPTY) {
                         uiSlot.SetSlot(itemCategory, slotItemType:itemType, slotBuildableType:buildableType);
                         return;
                     }
                 }
             }
+        }
+
+        public void SetActiveSlot() {
+            var activeItemCategory = ObjectsReference.Instance.bananaMan.activeItemCategory;
+            var activeItemType = ObjectsReference.Instance.bananaMan.activeItemType;
+            var activeBuilableType = ObjectsReference.Instance.bananaMan.activeBuildableType;
+            
+            var uiSlot = GetSlotWithItemCategoryAndType(activeItemCategory, activeItemType, activeBuilableType);
+            selectedSlotIndex = uiSlot != null ? uiSlotsScripts.IndexOf(uiSlot) : 0;
+            Switch_to_Slot_Index(selectedSlotIndex);
         }
 
         private bool IsAlreadyInQuickSlot(ItemCategory itemCategory, ItemType itemType = ItemType.EMPTY, BuildableType buildableType = BuildableType.EMPTY) {

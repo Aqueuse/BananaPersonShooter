@@ -1,6 +1,6 @@
 ﻿public enum ItemStaticType {
     DOOR_BEETWEEN_LEVELS,
-    MINI_CHIMP,
+    MINI_CHIMP_COMMAND_ROOM,
     BANANAGUN,
     COMMAND_ROOM_PANEL,
     BANANA_DRYER,

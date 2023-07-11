@@ -24,7 +24,7 @@ namespace Input.UIActions {
 
         private static void StartGame() {
             if (ObjectsReference.Instance.uIbananaCannonMiniGame.startMenuCanvasGroup.alpha > 0) {
-                if (UnityEngine.Input.GetKeyDown(KeyCode.JoystickButton0) ) {
+                if (UnityEngine.Input.GetKeyDown(KeyCode.E) || UnityEngine.Input.GetKeyDown(KeyCode.JoystickButton0) ) {
                     BananaCannonMiniGameManager.Instance.PlayMiniGame();
                 }
             }
@@ -52,18 +52,12 @@ namespace Input.UIActions {
                     BananaCannonMiniGameManager.Instance.QuitMiniGame();
                 }
             }
-            
-            if (ObjectsReference.Instance.uIbananaCannonMiniGame.pauseMenuCanvasGroup.alpha > 0) {
-                if (UnityEngine.Input.GetKeyDown(KeyCode.JoystickButton2) ) {
-                    BananaCannonMiniGameManager.Instance.QuitMiniGame();
-                }
-            }
         }
         
         ////////////////////////////
 
         private static void PauseGame() {
-            if (UnityEngine.Input.GetKeyDown(KeyCode.JoystickButton7) ) {
+            if (UnityEngine.Input.GetKeyDown(KeyCode.Escape) || UnityEngine.Input.GetKeyDown(KeyCode.JoystickButton7) ) {
                 BananaCannonMiniGameManager.PauseMiniGame();
             }
         }

@@ -5,7 +5,9 @@ namespace Data {
     public class ScriptableObjectManager : MonoBehaviour {
         public MeshReferenceScriptableObject _meshReferenceScriptableObject;
         
-        public string GetDescription(ItemCategory itemCategory, int langageIndex, ItemType itemType = ItemType.EMPTY, BuildableType buildableType = BuildableType.EMPTY) {
+        public string GetDescription(ItemCategory itemCategory, ItemType itemType = ItemType.EMPTY, BuildableType buildableType = BuildableType.EMPTY) {
+            int langageIndex = ObjectsReference.Instance.gameSettings.languageIndexSelected;
+
             if (itemCategory == ItemCategory.BUILDABLE) return _meshReferenceScriptableObject.buildablesDataScriptableObject[buildableType].itemDescription[langageIndex];
 
             if (itemCategory == ItemCategory.RAW_MATERIAL)
@@ -14,7 +16,9 @@ namespace Data {
             return _meshReferenceScriptableObject.bananasDataScriptableObject[itemType].itemDescription[langageIndex];
         }
         
-        public string GetName(ItemCategory itemCategory, int langageIndex, ItemType itemType = ItemType.EMPTY, BuildableType buildableType = BuildableType.EMPTY) {
+        public string GetName(ItemCategory itemCategory, ItemType itemType = ItemType.EMPTY, BuildableType buildableType = BuildableType.EMPTY) {
+            int langageIndex = ObjectsReference.Instance.gameSettings.languageIndexSelected;
+            
             if (itemCategory == ItemCategory.BUILDABLE) return _meshReferenceScriptableObject.buildablesDataScriptableObject[buildableType].itemName[langageIndex];
 
             if (itemCategory == ItemCategory.RAW_MATERIAL)

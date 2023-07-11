@@ -4,20 +4,19 @@ using UnityEngine;
 
 namespace Save {
     public class GameSave : MonoBehaviour {
+        [SerializeField] private GameObject autoSaveBanana;
+        
         public void SaveGame(string saveUuid) {
             var date = DateTime.ParseExact(DateTime.Now.ToString("U"), "U", CultureInfo.CurrentCulture).ToString(CultureInfo.CurrentCulture);
             
-            if (ObjectsReference.Instance.gameManager.gameContext == GameContext.IN_GAME && ObjectsReference.Instance.mapsManager.currentMap.isDiscovered) {
-                ObjectsReference.Instance.mapsManager.currentMap.RefreshAspirablesDataMap();
-                SaveInventory();
-            }
+            ObjectsReference.Instance.mapsManager.currentMap.RefreshAspirablesItemsDataMap();
+            SaveInventory();
 
             SaveBlueprints();
             SaveSlots();
             SaveActiveItem();
-                
+
             SaveMonkeysSatiety();
-            SaveAspirablesPositionRotationPrefabIndexByUuid();
 
             SaveBananaManVitals();
             SavePositionAndRotation();
@@ -98,7 +97,27 @@ namespace Save {
             }
         }
 
-        private static void SaveAspirablesPositionRotationPrefabIndexByUuid() {
+        public void StartAutoSave() {
+            if (ObjectsReference.Instance.gameSettings.saveDelay > 0) InvokeRepeating(nameof(AutoSave), ObjectsReference.Instance.gameSettings.saveDelay, ObjectsReference.Instance.gameSettings.saveDelay);
+        }
+        
+        public void ResetAutoSave() {
+            CancelInvoke();
+            if (ObjectsReference.Instance.gameSettings.saveDelay > 0) InvokeRepeating(nameof(AutoSave), ObjectsReference.Instance.gameSettings.saveDelay, ObjectsReference.Instance.gameSettings.saveDelay);
+        }
+
+        public void CancelAutoSave() {
+            CancelInvoke();
+        }
+        
+        public void AutoSave() {
+            autoSaveBanana.SetActive(true);
+            SaveGame(ObjectsReference.Instance.gameData.currentSaveUuid);
+            Invoke(nameof(HideAutoSaveBanana), 5);
+        }
+
+        private void HideAutoSaveBanana() {
+            autoSaveBanana.SetActive(false);
         }
     }
 }

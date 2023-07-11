@@ -1,13 +1,10 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.Localization.Settings;
 
 namespace Game {
     public class Inventory : MonoBehaviour {
         public GenericDictionary<ItemType, int> bananaManInventory;
 
-        private Dictionary<AdvancementState, BuildableType[]> _buildableUnlockedByAdvancementState;
-        
         private void Start() {
             bananaManInventory = new GenericDictionary<ItemType, int> {
                 {ItemType.EMPTY, 0},
@@ -34,17 +31,9 @@ namespace Game {
                 {ItemType.FABRIC, 0},
                 {ItemType.BANANA_PEEL, 0}
             };
-            
-            _buildableUnlockedByAdvancementState = new Dictionary<AdvancementState, BuildableType[]> {
-                { AdvancementState.GRAB_METAL_ON_MAP, new [] { BuildableType.PLATEFORM , BuildableType.FIRST_DOOR_LEFT, BuildableType.FIRST_DOOR_RIGHT, BuildableType.FIRST_CLOISON } },
-                { AdvancementState.GRAB_BANANAS, new [] { BuildableType.BANANA_DRYER } }
-            };
         }
 
         public void AddQuantity(ItemCategory itemCategory, ItemType itemType, int quantity) {
-            if (itemType == ItemType.METAL) TryAddBlueprintByAdvancementState(AdvancementState.GRAB_METAL_ON_MAP);
-            if (itemCategory == ItemCategory.BANANA) TryAddBlueprintByAdvancementState(AdvancementState.GRAB_BANANAS);
-
             bananaManInventory[itemType] += quantity;
             ObjectsReference.Instance.uiSlotsManager.RefreshQuantityInQuickSlot(itemCategory, itemType);
         
@@ -72,16 +61,6 @@ namespace Game {
             }
 
             return true;
-        }
-        
-        private void TryAddBlueprintByAdvancementState(AdvancementState advancementState) {
-            if (!ObjectsReference.Instance.gameData.bananaManSavedData.playerAdvancements.Contains(advancementState)) {
-                ObjectsReference.Instance.gameData.bananaManSavedData.playerAdvancements.Add(advancementState);
-                
-                foreach (var buildableType in _buildableUnlockedByAdvancementState[advancementState]) {
-                    ObjectsReference.Instance.uiBlueprints.SetVisible(buildableType);
-                }
-            }
         }
     }
 }

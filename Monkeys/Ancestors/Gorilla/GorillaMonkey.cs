@@ -57,6 +57,9 @@ namespace Monkeys.Gorilla {
         private List<int> _mediumPlayerAttack;
         private List<int> _farPlayerAttack;
 
+        private Vector3 randomDirection;
+        private Vector3 finalPosition;
+        
         private void Start() {
             _navMeshAgent = GetComponent<NavMeshAgent>();
             _animator = GetComponent<Animator>();
@@ -74,6 +77,8 @@ namespace Monkeys.Gorilla {
 
         private void Update() {
             if (ObjectsReference.Instance.gameManager.isGamePlaying) {
+                SynchronizeAnimatorAndAgent();
+
                 if (_monkey.monkeyState == MonkeyState.ANGRY) {
                     var bananaManPosition = ObjectsReference.Instance.bananaMan.transform.position;
                     var bananaManPositionXY = new Vector3(bananaManPosition.x, 0, bananaManPosition.z);
@@ -104,12 +109,9 @@ namespace Monkeys.Gorilla {
                                 break;
                         }
                     }
-
-                    SynchronizeAnimatorAndAgent();
                 }
 
-                if (_monkey.monkeyState == MonkeyState.SAD) {
-                    SynchronizeAnimatorAndAgent();
+                if (_monkey.monkeyState == MonkeyState.SAD || _monkey.monkeyState == MonkeyState.HAPPY) {
                     if (_navMeshAgent.remainingDistance < 10) {
                         _navMeshAgent.SetDestination(RandomNavmeshLocation(1000));
                     }
@@ -181,9 +183,10 @@ namespace Monkeys.Gorilla {
         }
 
         private Vector3 RandomNavmeshLocation(float radius) {
-            var randomDirection = Random.insideUnitSphere * radius;
+            randomDirection = Random.insideUnitSphere * radius;
             randomDirection += transform.position;
-            var finalPosition = Vector3.zero;
+            finalPosition = Vector3.zero;
+            
             if (NavMesh.SamplePosition(randomDirection, out var navMeshHit, radius, 1)) {
                 finalPosition = navMeshHit.position;
             }

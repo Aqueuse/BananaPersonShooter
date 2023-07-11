@@ -15,6 +15,6 @@ namespace Data.Bananas {
 
         public BananaEffect bananaEffect;
 
-        public Material bananaMaterial;
+        public Color bananaColor;
     }
 }

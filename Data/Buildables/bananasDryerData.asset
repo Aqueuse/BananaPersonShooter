@@ -18,10 +18,12 @@ MonoBehaviour:
   itemName:
   - banana dryer
   - "s\xE9choir \xE0 bananes"
+  - "secador de pl\xE1tanos"
   itemSprite: {fileID: 21300000, guid: e7ba5001cb9b2f343a142e5809e8d14e, type: 3}
   itemDescription:
   - With that, you can dry bananas peels to make fabric
   - "Avec \xE7a, vous pourrez s\xE9cher vos peaux de bananes pour en faire du tissu"
+  - "Con eso, puedes secar las c\xE1scaras de pl\xE1tano para hacer tela con ellas"
   rawMaterialsWithQuantity:
     list:
     - key: 18

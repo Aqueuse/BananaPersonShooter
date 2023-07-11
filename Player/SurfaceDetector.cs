@@ -3,21 +3,21 @@ using UnityEngine;
 
 namespace Player {
 	public class SurfaceDetector : MonoBehaviour {
+		[SerializeField] private LayerMask surfacesLayerMask;
+		public FootStepType footStepType;
+
 		private RaycastHit _raycastHit;
 
 		private void Update() {
 			if (!ObjectsReference.Instance.gameManager.isGamePlaying) return;
-			if (!Physics.Raycast(transform.position, -transform.up, out _raycastHit, 5)) return;
-
-			if (
-				_raycastHit.transform.gameObject.GetComponent<MeshCollider>() != null &&
-			    _raycastHit.transform.gameObject.GetComponent<TerrainType>() != null) {
-				ObjectsReference.Instance.audioManager.footStepType = _raycastHit.transform.gameObject.GetComponent<TerrainType>().footStepType;
+			if (!Physics.Raycast(transform.position, -transform.up, out _raycastHit, 5, layerMask:surfacesLayerMask)) return;
+			
+			if (_raycastHit.transform.gameObject.GetComponent<TerrainType>() != null) {
+				footStepType = _raycastHit.transform.gameObject.GetComponent<TerrainType>().footStepType;
+				return;
 			}
-
-			else {
-					ObjectsReference.Instance.audioManager.footStepType = FootStepType.ROCK;
-			}
+			
+			footStepType = FootStepType.ROCK;
 		}
 	}
 }

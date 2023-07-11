@@ -1,11 +1,13 @@
-﻿using UI.InGame;
-using UI.InGame.Chimployee;
+﻿using Enums;
+using Monkeys.Chimployee;
+using UI.InGame;
 using UnityEngine;
 using UnityEngine.AI;
 
 namespace Monkeys {
     public class Monkey : MonoBehaviour {
         public UIMonkey associatedUI;
+        public MonkeySounds monkeySounds;
         private NavMeshAgent _navMeshAgent;
         private Animator _animator;
 
@@ -27,6 +29,7 @@ namespace Monkeys {
             
             _navMeshAgent = GetComponent<NavMeshAgent>();
             _animator = GetComponent<Animator>();
+            monkeySounds = GetComponentInChildren<MonkeySounds>();
             
             var navMeshTriangulation = NavMesh.CalculateTriangulation();
                 
@@ -47,9 +50,9 @@ namespace Monkeys {
                 ObjectsReference.Instance.mapsManager.currentMap.RecalculateHappiness();
             }
 
-            if (sasiety >=30 && !ObjectsReference.Instance.gameData.bananaManSavedData.playerAdvancements.Contains(AdvancementState.FEED_MONKEY)) {
+            if (sasiety >= 50 && !ObjectsReference.Instance.gameData.bananaManSavedData.playerAdvancements.Contains(AdvancementState.FEED_MONKEY)) {
                 ObjectsReference.Instance.gameData.bananaManSavedData.playerAdvancements.Add(AdvancementState.FEED_MONKEY);
-                ObjectsReference.Instance.uiChimployee.InitDialogue(ChimployeeDialogue.chimployee_second_interaction);
+                ObjectsReference.Instance.chimployee.InitDialogue(ChimployeeDialogue.chimployee_please_feed_monkey);
             }
         }
         

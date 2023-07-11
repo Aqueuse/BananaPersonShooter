@@ -21,7 +21,7 @@ namespace Building {
         public void LoadingGun() {
             if (ObjectsReference.Instance.bananaMan.activeItemCategory == ItemCategory.BANANA) {
                 ObjectsReference.Instance.bananaGun.GrabBananaGun();
-                ObjectsReference.Instance.uiCrosshair.SetCrosshair(ItemCategory.BANANA, ItemType.CAVENDISH);
+                ObjectsReference.Instance.uiCrosshairs.SetCrosshair(ItemCategory.BANANA, ItemType.CAVENDISH);
 
                 Invoke(nameof(ThrowBanana), 0.3f);
             }

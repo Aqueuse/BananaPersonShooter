@@ -14,21 +14,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemType: 9
   itemCategory: 0
-  buildableType: 1
+  buildableType: 6
   itemName:
+  - matoke
   - matoke
   - matoke
   itemSprite: {fileID: 21300000, guid: 065f15a06f4229441b1ccd72fe27b948, type: 3}
   itemDescription:
   - support banana
   - Banane de soutien
+  - "Pl\xE1tano de reserva"
   effects:
   - banana platform, add a platform on some surfaces (inorganic)
   - banane plateforme, ajoute une plateforme sur certaines surfaces (non organiques)
+  - "banana plataforma, a\xF1ade una plataforma en ciertas superficies (no org\xE1nicas)"
   regimeQuantity: 60
   sasiety: 5
   damageTime: 0
   healthBonus: 0.5
   resistanceBonus: 1
   bananaEffect: 12
-  bananaMaterial: {fileID: 0}
+  bananaColor: {r: 1, g: 0.72156864, b: 0.03137255, a: 1}

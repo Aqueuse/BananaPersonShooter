@@ -1,22 +1,21 @@
-
 using System.Collections.Generic;
 using Building;
 using Building.Buildables.Plateforms;
-using Monkeys.Gorilla;
-using UI.InGame.Chimployee;
+using Enums;
+using Monkeys.Chimployee;
 using UnityEngine;
 
 namespace Game {
     public class Map : MonoBehaviour {
         public string mapName;
         public bool isDiscovered;
-        
+
         public int debrisToSpawn;
 
         public MonkeyType activeMonkeyType;
         public float monkeySasiety;
         public float cleanliness;
-        
+
         public int maxDebrisQuantity;
         private int _actualDebrisQuantity;
 
@@ -24,12 +23,12 @@ namespace Game {
 
         public List<Vector3> aspirablesPositions;
         public List<Quaternion> aspirablesRotations;
-        
+
         public List<ItemCategory> aspirablesCategories;
         public List<int> aspirablesPrefabsIndex;
         public List<BuildableType> aspirablesBuildableTypes;
         public List<ItemType> aspirablesItemTypes;
-        
+
         private void Start() {
             maxDebrisQuantity = 99;
             debrisToSpawn = 0;
@@ -49,10 +48,11 @@ namespace Game {
 
             cleanliness = 50-_actualDebrisQuantity /(float)maxDebrisQuantity*50;
 
-            if (cleanliness >= 50 &&
-                ObjectsReference.Instance.gameData.bananaManSavedData.playerAdvancements.Contains(AdvancementState.CLEANED_MAP)) {
+            if (cleanliness >= 49 &&
+                ObjectsReference.Instance.gameData.bananaManSavedData.playerAdvancements.Contains(AdvancementState.FEED_MONKEY) &&
+                !ObjectsReference.Instance.gameData.bananaManSavedData.playerAdvancements.Contains(AdvancementState.CLEANED_MAP)) {
                 ObjectsReference.Instance.gameData.bananaManSavedData.playerAdvancements.Add(AdvancementState.CLEANED_MAP);
-                ObjectsReference.Instance.uiChimployee.InitDialogue(ChimployeeDialogue.chimployee_third_interaction);
+                ObjectsReference.Instance.chimployee.InitDialogue(ChimployeeDialogue.chimployee_please_clean_map);
             }
 
             foreach (var monkey in MapItems.Instance.monkeys) {
@@ -60,15 +60,17 @@ namespace Game {
 
                 if (monkey.happiness < 20 && monkey.monkeyState != MonkeyState.ANGRY) {
                     monkey.monkeyState = MonkeyState.ANGRY;
+                    monkey.monkeySounds.PlayRoarsSounds();
                 }
 
                 if (monkey.happiness is >= 20 and < 60 && monkey.monkeyState != MonkeyState.SAD) {
                     monkey.monkeyState = MonkeyState.SAD;
-                    monkey.GetComponent<GorillaSounds>().PlaySadMonkeySounds();
+                    monkey.monkeySounds.PlayQuickMonkeySounds();
                 }
 
                 if (monkey.happiness >= 60 && monkey.monkeyState != MonkeyState.HAPPY) {
                     monkey.monkeyState = MonkeyState.HAPPY;
+                    monkey.monkeySounds.PlayQuickMonkeySounds();
                 }
             }
             
@@ -78,7 +80,7 @@ namespace Game {
             }
         }
 
-        public void RefreshAspirablesDataMap() {
+        public void RefreshAspirablesItemsDataMap() {
             if (MapItems.Instance == null) return;
 
             aspirablesCategories = new List<ItemCategory>();
@@ -95,7 +97,7 @@ namespace Game {
                 aspirablesCategories.Add(ItemCategory.DEBRIS);
                 aspirablesPositions.Add(debris.transform.position);
                 aspirablesRotations.Add(debris.transform.rotation);
-                aspirablesPrefabsIndex.Add(ObjectsReference.Instance.scriptableObjectManager._meshReferenceScriptableObject.debrisPrefabIndexByMesh[debris.GetComponent<MeshFilter>().sharedMesh]);
+                aspirablesPrefabsIndex.Add(ObjectsReference.Instance.scriptableObjectManager._meshReferenceScriptableObject.debrisMeshes.IndexOf(debris.GetComponent<MeshFilter>().sharedMesh));
                 aspirablesBuildableTypes.Add(BuildableType.EMPTY);
                 aspirablesItemTypes.Add(ItemType.EMPTY);
             }
@@ -112,6 +114,29 @@ namespace Game {
                 aspirablesBuildableTypes.Add(aspirableBuildableType);
                 aspirablesItemTypes.Add(aspirableBuildableType == BuildableType.PLATEFORM ? buildable.GetComponent<Plateform>().plateformType : ItemType.EMPTY);
             }
+            
+            var chimployee = GameObject.FindGameObjectWithTag("Monkeyman");
+
+            if (chimployee != null) {
+                aspirablesCategories.Add(ItemCategory.CHIMPLOYEE);
+                aspirablesPositions.Add(chimployee.transform.position);
+                aspirablesRotations.Add(chimployee.transform.rotation);
+                aspirablesPrefabsIndex.Add(0);
+                aspirablesBuildableTypes.Add(BuildableType.EMPTY);
+                aspirablesItemTypes.Add(ItemType.EMPTY);
+            }
+            
+            var ruinesList = GameObject.FindGameObjectsWithTag("Ruine");
+                
+            foreach (var ruine in ruinesList) {
+                aspirablesCategories.Add(ItemCategory.RUINE);
+                aspirablesPositions.Add(ruine.transform.position);
+                aspirablesRotations.Add(ruine.transform.rotation);
+                
+                aspirablesPrefabsIndex.Add(ObjectsReference.Instance.scriptableObjectManager._meshReferenceScriptableObject.ruinesMeshes.IndexOf(ruine.GetComponent<MeshFilter>().sharedMesh));
+                aspirablesBuildableTypes.Add(BuildableType.EMPTY);
+                aspirablesItemTypes.Add(ItemType.EMPTY);
+            }
         }
 
         public static int GetDebrisQuantity() {
@@ -119,7 +144,7 @@ namespace Game {
         }
 
         public void StartBossFight(MonkeyType monkeyType) {
-            ObjectsReference.Instance.audioManager.PlayMusic(MusicType.FIGHT);
+            ObjectsReference.Instance.audioManager.PlayMusic(MusicType.FIGHT, 0);
 
             activeMonkeyType = monkeyType;
         }

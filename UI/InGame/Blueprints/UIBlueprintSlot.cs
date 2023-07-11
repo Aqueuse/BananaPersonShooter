@@ -12,11 +12,12 @@ namespace UI.InGame.Blueprints {
             ObjectsReference.Instance.uInventory.lastselectedInventoryItem = gameObject;
             
             ObjectsReference.Instance.uiSlotsManager.AssignToSelectedSlot(ItemCategory.BUILDABLE, buildableType:buildableType);
+            ObjectsReference.Instance.bananaGun.UngrabBananaGun();
         }
         
         private void SetDescriptionAndName() {
-            ObjectsReference.Instance.uiBlueprints.itemName.text = ObjectsReference.Instance.scriptableObjectManager.GetName(itemCategory, ObjectsReference.Instance.gameSettings.languageIndexSelected, buildableType:buildableType);
-            ObjectsReference.Instance.uiBlueprints.itemDescription.text = ObjectsReference.Instance.scriptableObjectManager.GetDescription(itemCategory, ObjectsReference.Instance.gameSettings.languageIndexSelected, buildableType:buildableType);
+            ObjectsReference.Instance.uiBlueprints.itemName.text = ObjectsReference.Instance.scriptableObjectManager.GetName(itemCategory, buildableType:buildableType);
+            ObjectsReference.Instance.uiBlueprints.itemDescription.text = ObjectsReference.Instance.scriptableObjectManager.GetDescription(itemCategory, buildableType:buildableType);
         }
     }
 }

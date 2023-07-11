@@ -18,17 +18,20 @@ MonoBehaviour:
   itemName:
   - cavendish
   - cavendish
+  - cavendish
   itemSprite: {fileID: 21300000, guid: 78d734baad5807a468cd9ec3100c26b8, type: 3}
   itemDescription:
   - The basic banana
   - La banane de base
+  - "La banana b\xE1sica"
   effects:
   - No particular effect, just tasty
   - Aucun effet particulier, juste savoureuse
+  - "No tiene ning\xFAn efecto especial, simplemente deliciosa"
   regimeQuantity: 60
   sasiety: 5
   damageTime: 0
   healthBonus: 10
   resistanceBonus: 10
   bananaEffect: 0
-  bananaMaterial: {fileID: 2100000, guid: 73186142afac6d0478fbea52a72bfc77, type: 2}
+  bananaColor: {r: 1, g: 0.72156864, b: 0.03137255, a: 1}

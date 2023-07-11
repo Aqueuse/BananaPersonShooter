@@ -16,7 +16,7 @@ namespace Audio {
         [SerializeField] public GenericDictionary<EffectType, AudioDataScriptableObject> audioEffectsDictionnary;
         [SerializeField] private GenericDictionary<AmbianceType, AudioDataScriptableObject> audioAmbianceDictionnary;
         [SerializeField] private GenericDictionary<MusicType, AudioDataScriptableObject> audioMusicsDictionnary;
-        [SerializeField] private GenericDictionary<FootStepType, AudioDataScriptableObject> audioFootStepsDictionnary;
+        public GenericDictionary<FootStepType, AudioDataScriptableObject> audioFootStepsDictionnary;
 
         private MusicType _actualMusicType;
         private AudioClip _lastClip;
@@ -25,9 +25,7 @@ namespace Audio {
         public float ambianceLevel = 0.1f;
         public float effectsLevel = 0.1f;
         public float voicesLevel = 0.1f;
-
-        public FootStepType footStepType;
-
+        
         private void Start() {
             audioFootstepsSource.loop = false;
         }
@@ -36,24 +34,22 @@ namespace Audio {
             switch (sceneName) {
                 case "HOME":
                     StopAudioSource(AudioSourcesType.AMBIANCE);
-                    PlayMusic(MusicType.HOME);
+                    PlayMusic(MusicType.HOME, 0);
                     break;
                 
                 case "MAP01":
                     PlayAmbiance(AmbianceType.DRONE_MAP01);
-                    PlayMusic(MusicType.JUNGLE_MAP01);
+                    PlayMusic(MusicType.JUNGLE_MAP01, 1);
                     break;
                     
                 case "COROLLE":
                     PlayAmbiance(AmbianceType.DRONE_COROLLE);
-                    PlayMusic(MusicType.COROLLE);
+                    PlayMusic(MusicType.COROLLE, 1);
                     break;
                 
                 case "COMMANDROOM":
                     PlayAmbiance(AmbianceType.DRONE_COMMANDROOM);
-                    if (ObjectsReference.Instance.gameData.bananaManSavedData.playerAdvancements.Contains(AdvancementState.GET_BANANAGUN)) {
-                        PlayMusic(MusicType.COMMANDROOM);
-                    }
+                    PlayMusic(MusicType.COMMANDROOM, 1);
                     break;
             }
         }
@@ -78,7 +74,7 @@ namespace Audio {
             }
         }
 
-        public void PlayMusic(MusicType musicType) {
+        public void PlayMusic(MusicType musicType, float delay) {
             _actualMusicType = musicType;
             var audioData = audioMusicsDictionnary[musicType];
 
@@ -93,7 +89,7 @@ namespace Audio {
             else {
                 audioMusicsSource.clip = audioData.clip[0];
                 audioMusicsSource.time = 0;
-                audioMusicsSource.Play();
+                audioMusicsSource.PlayDelayed(delay);
             }
         }
 
@@ -143,7 +139,7 @@ namespace Audio {
 
         public void PlayFootstep() {
             if (ObjectsReference.Instance.gameManager.isGamePlaying) {
-                var audioData = audioFootStepsDictionnary[footStepType];
+                var audioData = audioFootStepsDictionnary[ObjectsReference.Instance.surfaceDetector.footStepType];
                 audioFootstepsSource.volume = effectsLevel-0.2f;
                 audioFootstepsSource.clip = audioData.clip[Random.Range(0, audioData.clip.Length)]; 
                 audioFootstepsSource.Play();
