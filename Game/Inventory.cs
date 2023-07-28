@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using UnityEngine.Localization.Settings;
 
 namespace Game {
     public class Inventory : MonoBehaviour {
@@ -34,12 +33,14 @@ namespace Game {
         }
 
         public void AddQuantity(ItemCategory itemCategory, ItemType itemType, int quantity) {
+            if (bananaManInventory[itemType] > 10000) return;
+            
             bananaManInventory[itemType] += quantity;
             ObjectsReference.Instance.uiSlotsManager.RefreshQuantityInQuickSlot(itemCategory, itemType);
         
             ObjectsReference.Instance.uiSlotsManager.TryToPutOnSlot(itemCategory, itemType);
-            
-            ObjectsReference.Instance.uiQueuedMessages.AddMessage("+ "+ quantity+" "+ LocalizationSettings.StringDatabase.GetTable("items").GetEntry(itemType.ToString().ToLower()).GetLocalizedString());
+
+            ObjectsReference.Instance.uiQueuedMessages.AddToInventory(itemType, quantity);
         }
 
         public int GetQuantity(ItemType itemType) {

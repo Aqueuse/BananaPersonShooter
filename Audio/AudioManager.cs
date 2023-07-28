@@ -111,9 +111,11 @@ namespace Audio {
                 Invoke(nameof(PlayMusicDelayed), Random.Range(clipDuration+30, clipDuration+60));
             }
             else {
-                audioMusicsSource.clip = audioClips.ElementAt(0);
-                var clipDuration = audioMusicsSource.clip.length;
-                Invoke(nameof(PlayMusicDelayed), clipDuration);
+                if (audioClips.Count > 0) {
+                    audioMusicsSource.clip = audioClips.ElementAt(0);
+                    var clipDuration = audioMusicsSource.clip.length;
+                    Invoke(nameof(PlayMusicDelayed), clipDuration);
+                }
             }
         }
 

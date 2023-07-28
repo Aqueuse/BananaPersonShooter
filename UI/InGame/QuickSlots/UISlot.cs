@@ -1,4 +1,5 @@
-﻿using TMPro;
+﻿using Enums;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 

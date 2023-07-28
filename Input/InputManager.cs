@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Enums;
 using Input.interactables;
 using Input.UIActions;
+using UI.InGame;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -22,11 +23,30 @@ namespace Input {
         private string controllerId;
         private bool wasConnected;
         private bool isConnected;
+        
+        public SchemaContext schemaContext = SchemaContext.KEYBOARD;
 
         private void Start() {
             _gameActions = GetComponent<GameActions>();
             uiSchemaSwitcher = GetComponent<UISchemaSwitcher>();
-            
+
+            currentControllers = UnityEngine.Input.GetJoystickNames();
+
+            if (currentControllers.Length > 0) {
+                ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.BUILD_HELPER_GAMEPAD].alpha = 1;
+                ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.SLOTS_HELPER_GAMEPAD].alpha = 1;
+                ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.BUILD_HELPER_KEYBOARD].alpha = 0;
+                ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.SLOTS_HELPER_KEYBOARD].alpha = 0;
+                schemaContext = SchemaContext.GAMEPAD;
+            }
+            else {
+                ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.BUILD_HELPER_GAMEPAD].alpha = 0;
+                ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.SLOTS_HELPER_GAMEPAD].alpha = 0;
+                ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.BUILD_HELPER_KEYBOARD].alpha = 1;
+                ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.SLOTS_HELPER_KEYBOARD].alpha = 1;
+                schemaContext = SchemaContext.KEYBOARD;
+            }
+
             InvokeRepeating(nameof(CheckControllerConnection), 0, 1f);
         }
         
@@ -47,12 +67,24 @@ namespace Input {
                         ObjectsReference.Instance.gameManager.PauseGame(true);
                         ObjectsReference.Instance.uiManager.Show_game_menu();
                         ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.GAMEPAD_DISCONNECTED].alpha = 1;
+                        
+                        ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.BUILD_HELPER_GAMEPAD].alpha = 0;
+                        ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.SLOTS_HELPER_GAMEPAD].alpha = 0;
+                        ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.BUILD_HELPER_KEYBOARD].alpha = 1;
+                        ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.SLOTS_HELPER_KEYBOARD].alpha = 1;
+                        schemaContext = SchemaContext.KEYBOARD;
                     }
                 }
                 else if (!wasConnected && isConnected) {
                     if (ObjectsReference.Instance.gameManager.gameContext == GameContext.IN_GAME) {
                         ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.GAMEPAD_DISCONNECTED].alpha = 0;
+                        
+                        ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.BUILD_HELPER_GAMEPAD].alpha = 1;
+                        ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.SLOTS_HELPER_GAMEPAD].alpha = 1;
+                        ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.BUILD_HELPER_KEYBOARD].alpha = 0;
+                        ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.SLOTS_HELPER_KEYBOARD].alpha = 0;
                         ObjectsReference.Instance.uiManager.Hide_menus();                        
+                        schemaContext = SchemaContext.GAMEPAD;
                     }
                 }
 

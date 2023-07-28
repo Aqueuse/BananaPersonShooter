@@ -43,5 +43,9 @@ namespace Cameras {
                 _cinemachineCameraOffset.m_Offset.z -= 0.1f;
             }
         }
+
+        public void AddToFOV(float acceleration) {
+            //_cinemachineFollowZoom.m_Width = acceleration;
+        }
     }
 }

@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using Random = UnityEngine.Random;
 
-namespace Monkeys.Gorilla {
+namespace Monkeys.Ancestors.Gorilla {
     internal enum GorillaAttackType {
         SHOCKWAVE = 0,
         CATCHPLAYER = 1,
@@ -23,7 +23,8 @@ namespace Monkeys.Gorilla {
 
         private Vector2 _velocity;
         private Vector2 _smoothDeltaPosition;
-        private Vector3 _bananaManPosition;
+        private Vector3 bananaManPosition;
+        private Vector3 bananaManPositionXY;
 
         public bool isAttackingPlayer;
 
@@ -78,13 +79,12 @@ namespace Monkeys.Gorilla {
         private void Update() {
             if (ObjectsReference.Instance.gameManager.isGamePlaying) {
                 SynchronizeAnimatorAndAgent();
+                bananaManPosition = ObjectsReference.Instance.bananaMan.transform.position;
 
                 if (_monkey.monkeyState == MonkeyState.ANGRY) {
-                    var bananaManPosition = ObjectsReference.Instance.bananaMan.transform.position;
-                    var bananaManPositionXY = new Vector3(bananaManPosition.x, 0, bananaManPosition.z);
 
                     if (_navMeshAgent.isOnNavMesh) {
-                        _navMeshAgent.SetDestination(bananaManPositionXY);
+                        _navMeshAgent.SetDestination(bananaManPosition);
 
                         if (_navMeshAgent.remainingDistance <= 7) _gorillaAttackType = GorillaAttackType.TOURBISMASH;
                         if (_navMeshAgent.remainingDistance is > 7 and <= 10)
@@ -111,7 +111,13 @@ namespace Monkeys.Gorilla {
                     }
                 }
 
-                if (_monkey.monkeyState == MonkeyState.SAD || _monkey.monkeyState == MonkeyState.HAPPY) {
+                if (_monkey.hasGrabbedBanana || _monkey.monkeyState == MonkeyState.HAPPY) {
+                    _navMeshAgent.SetDestination(bananaManPosition);
+                    bananaManPositionXY = new Vector3(bananaManPosition.x, transform.position.y, bananaManPosition.z);
+                    if (_navMeshAgent.remainingDistance < 5) transform.LookAt(bananaManPositionXY);
+                }
+
+                if (_monkey.monkeyState == MonkeyState.SAD) {
                     if (_navMeshAgent.remainingDistance < 10) {
                         _navMeshAgent.SetDestination(RandomNavmeshLocation(1000));
                     }
@@ -148,7 +154,7 @@ namespace Monkeys.Gorilla {
             _animator.SetFloat(VelocityX, _velocity.x);
             _animator.SetFloat(VelocityZ, _velocity.y);
         }
-
+        
         private void TourbiSmash() {
             _randomAttack = Random.Range(0, _nearPlayerAttack.Count);
             _animator.SetTrigger(_nearPlayerAttack[_randomAttack]);
@@ -175,11 +181,6 @@ namespace Monkeys.Gorilla {
         /////  DAMAGES ////
 
         public void BeAttracted() {
-        }
-
-
-        private void OnTriggerEnter(Collider other) {
-            GetComponent<Monkey>().Feed(ObjectsReference.Instance.bananaMan.activeItem.sasiety);
         }
 
         private Vector3 RandomNavmeshLocation(float radius) {

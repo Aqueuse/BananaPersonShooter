@@ -1,5 +1,4 @@
 using System.Linq;
-using Player;
 using Save.Templates;
 using UnityEngine;
 
@@ -16,9 +15,10 @@ namespace Save {
 
         public void ResetGameData() {
             ResetInventory();
+            ResetBlueprints();
             ResetSlots();
             ResetBananaManVitals();
-            ResetAdvancementType();
+            ResetTutorial();
             
             ResetPositionAndLastMap();
             ResetActiveItem();
@@ -34,6 +34,10 @@ namespace Save {
                 ObjectsReference.Instance.inventory.bananaManInventory[bananaSlot.Key] = 0;
                 ObjectsReference.Instance.gameData.bananaManSavedData.inventory[bananaSlot.Key.ToString()] = 0;
             }
+        }
+
+        private static void ResetBlueprints() {
+            ObjectsReference.Instance.uiBlueprints.HideAllBlueprints();
         }
 
         private static void ResetSlots() {
@@ -57,13 +61,17 @@ namespace Save {
         }
 
         private static void ResetPositionAndLastMap() {
-            ObjectsReference.Instance.gameData.lastPositionOnMap = ObjectsReference.Instance.scenesSwitch.spawnPointsBySpawnType[SpawnPoint.COMMAND_ROOM_TELEPORTATION].position;
+            ObjectsReference.Instance.gameData.lastPositionOnMap = ObjectsReference.Instance.scenesSwitch.spawnPointsBySpawnType[SpawnPoint.TELEPORTATION].position;
             ObjectsReference.Instance.gameData.bananaManSavedData.lastMap = "COMMANDROOM";
             ObjectsReference.Instance.bananaMan.transform.position = ObjectsReference.Instance.gameData.lastPositionOnMap;
         }
 
-        private static void ResetAdvancementType() {
-            ObjectsReference.Instance.gameData.bananaManSavedData.playerAdvancements.Clear();
+        private static void ResetTutorial() {
+            ObjectsReference.Instance.bananaMan.tutorialFinished = false;
+            ObjectsReference.Instance.bananaMan.hasRepairedBananaGun = false;
+            
+            ObjectsReference.Instance.gameData.bananaManSavedData.hasFinishedTutorial = false;
+            ObjectsReference.Instance.gameData.bananaManSavedData.hasRepairedBananaGun = false;
         }
 
         private static void ResetActiveItem() {

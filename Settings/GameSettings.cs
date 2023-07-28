@@ -1,3 +1,4 @@
+using System;
 using Building;
 using Cinemachine;
 using Enums;
@@ -27,6 +28,8 @@ namespace Settings {
         [SerializeField] private Toggle horizontalCameraInversionToggle;
         [SerializeField] private Toggle verticalCameraInversionToggle;
 
+        [SerializeField] private Slider debrisFallSlider;
+        
         [SerializeField] private Toggle debrisVisibilityToggle;
         [SerializeField] private Toggle bananaTreesVisibilityToggle;
         [SerializeField] private Toggle monkeysVisibilityToggle;
@@ -48,6 +51,8 @@ namespace Settings {
         private bool _isCameraVerticallyInverted;
         private bool _isCameraHorizontallyInverted;
 
+        public bool areDebrisFallingOnTheTrees;
+        
         public bool isShowingDebris;
         public bool isShowingBananaTrees;
         public bool isShowingMonkeys;
@@ -99,6 +104,8 @@ namespace Settings {
             ToggleFullscreen(_isFullscreen.Equals("True"));
             ToggleVSync(_isVsync.Equals("True"));
             SetResolution(_resolution);
+            
+            areDebrisFallingOnTheTrees = prefs.GetString("areDebrisFallingOnTheTrees", "True").Equals("True");
 
             isShowingDebris = prefs.GetString("areDebrisVisible", "True").Equals("True");
             isShowingBananaTrees = prefs.GetString("areBananaTreesVisible", "True").Equals("True");
@@ -121,6 +128,8 @@ namespace Settings {
     
             languageDropDown.value = languageIndexSelected;
 
+            debrisFallSlider.value = Convert.ToInt32(areDebrisFallingOnTheTrees);
+            
             debrisVisibilityToggle.isOn = isShowingDebris;
             bananaTreesVisibilityToggle.isOn = isShowingBananaTrees;
             monkeysVisibilityToggle.isOn = isShowingMonkeys;
@@ -234,8 +243,15 @@ namespace Settings {
         //     
         // }
 
+        public void SetDebrisFall(float level) {
+            areDebrisFallingOnTheTrees = Convert.ToBoolean((int)level);
+            prefs.SetString("areDebrisFallingOnTheTrees", areDebrisFallingOnTheTrees ? "True" : "False");
+            
+            prefs.Save();
+        }
+
         public void SaveDebrisCanvasVisibility(bool isVisible) {
-            ObjectsReference.Instance.gameSettings.isShowingDebris = isVisible;
+            isShowingDebris = isVisible;
             prefs.SetString("areDebrisVisible", isVisible ? "True" : "False");
             if (ObjectsReference.Instance.gameManager.gameContext == GameContext.IN_GAME) MapItems.Instance.uiCanvasItemsHiddableManager.SetDebrisCanvasVisibility(isVisible);
             
@@ -243,7 +259,7 @@ namespace Settings {
         }
         
         public void SaveBananaTreeCanvasVisibility(bool isVisible) {
-            ObjectsReference.Instance.gameSettings.isShowingBananaTrees = isVisible;
+            isShowingBananaTrees = isVisible;
             prefs.SetString("areBananaTreesVisible", isVisible ? "True" : "False");
             if (ObjectsReference.Instance.gameManager.gameContext == GameContext.IN_GAME) MapItems.Instance.uiCanvasItemsHiddableManager.SetBananaTreeVisibility(isVisible); 
 
@@ -251,7 +267,7 @@ namespace Settings {
         }
 
         public void SaveMonkeysVisibility(bool isVisible) {
-            ObjectsReference.Instance.gameSettings.isShowingMonkeys = isVisible;
+            isShowingMonkeys = isVisible;
 
             prefs.SetString("areMonkeysVisible", isVisible ? "True" : "False");
             if (ObjectsReference.Instance.gameManager.gameContext == GameContext.IN_GAME && ObjectsReference.Instance.mapsManager.currentMap.activeMonkeyType != MonkeyType.NONE) MapItems.Instance.uiCanvasItemsHiddableManager.SetMonkeysVisibility(isVisible);

@@ -27,10 +27,8 @@ MonoBehaviour:
   rawMaterialsWithQuantity:
     list:
     - key: 18
-      value: 8
+      value: 6
     - key: 20
       value: 2
     keyCollision: 0
   buildablePrefab: {fileID: 3045356508486292204, guid: 0630715419ab7f249ba73f9625dea7fb, type: 3}
-  mustSnap: 0
-  buildableGridSize: 3

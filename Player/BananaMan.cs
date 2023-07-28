@@ -1,4 +1,5 @@
 ﻿using Data.Bananas;
+using Enums;
 using UnityEngine;
 
 namespace Player {
@@ -19,6 +20,9 @@ namespace Player {
         public float resistance;
         private static readonly int CutoffHeight = Shader.PropertyToID("Cutoff_Height");
 
+        public bool hasRepairedBananaGun;
+        public bool tutorialFinished;
+        
         private void Start() {
             tpsPlayerAnimator = GetComponentInChildren<Animator>().GetComponent<TpsPlayerAnimator>();
         }

@@ -8,7 +8,8 @@ namespace Input.UIActions {
             Escape();
 
             if (ObjectsReference.Instance.uiSave.selectedSaveSlot == null) return;
-            Save();
+            
+            if (ObjectsReference.Instance.gameManager.isGamePlaying) Save();
             Load();
             Rename();
 

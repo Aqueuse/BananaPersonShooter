@@ -7,7 +7,7 @@ namespace Items {
         public SpawnPoint spawnPoint;
 
         private void Start() {
-            if (ObjectsReference.Instance.gameData.bananaManSavedData.playerAdvancements.Contains(AdvancementState.ASPIRE_SOMETHING)) {
+            if (ObjectsReference.Instance.bananaMan.tutorialFinished) {
                 GetComponent<BoxCollider>().enabled = true;
             }
             else {

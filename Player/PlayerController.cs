@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Building.Buildables.Plateforms;
+using UnityEngine;
 
 namespace Player {
     public class PlayerController : MonoBehaviour {
@@ -25,7 +26,7 @@ namespace Player {
         public bool isGrounded;
         private bool _isHit;
 
-        private float _damageCount;
+        public float _damageCount;
 
         //Stored Values
         private static readonly int IsJumping = Animator.StringToHash("IsJumping");
@@ -116,11 +117,6 @@ namespace Player {
             if (_rigidbody.velocity.y < -20) {
                 _damageCount += 1;
             }
-            
-            if (isGrounded && _damageCount > 0) {
-                ObjectsReference.Instance.bananaMan.TakeDamage(_damageCount);
-                _damageCount = 0;
-            }
 
             // cap max velocity
             if (_rigidbody.velocity.magnitude > 21) {
@@ -140,9 +136,9 @@ namespace Player {
             }
             
             _tpsPlayerAnimatorScript.SetGrounded(isGrounded);
+            
             _tpsPlayerAnimatorScript.UpdateMovementAnimation(_rawInputMovement.z*speed, _rawInputMovement.x*speed);
             ObjectsReference.Instance.uiFace.MoveFaceAnimation(_rawInputMovement.magnitude);
-
         }
 
         public void PlayerJump() {
@@ -174,11 +170,15 @@ namespace Player {
             canMove = false;
             speed = 0;
             _tpsPlayerAnimatorScript.UpdateMovementAnimation(0, 0);
+            _rigidbody.velocity = Vector3.zero;
+            _damageCount = 0;
         }
 
         public void ResetPlayer() {
             speed = BaseMovementSpeed;
             _tpsPlayerAnimatorScript.UpdateMovementAnimation(0, 0);
+            _rigidbody.velocity = Vector3.zero;
+            _damageCount = 0;
         }
 
         private bool IsOnSlope() {
@@ -192,6 +192,23 @@ namespace Player {
 
         private Vector3 GetSlopeMoveDirection(Vector3 movementDirection) {
             return Vector3.ProjectOnPlane(movementDirection, _slopeHit.normal);
+        }
+
+        private void OnCollisionEnter(Collision other) {
+            if (!ObjectsReference.Instance.gameManager.isGamePlaying) return;
+            
+            if (other.gameObject.GetComponent<Plateform>() != null) {
+                _damageCount = 0;
+            }
+
+            else {
+                if (isInWater) _damageCount = 0;
+
+                if (!isInWater && _damageCount > 0) {
+                    ObjectsReference.Instance.bananaMan.TakeDamage(_damageCount);
+                    _damageCount = 0;
+                }
+            }
         }
     }
 }

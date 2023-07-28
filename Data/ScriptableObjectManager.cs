@@ -1,4 +1,5 @@
 using Data.Bananas;
+using Enums;
 using UnityEngine;
 
 namespace Data {
@@ -43,23 +44,6 @@ namespace Data {
             }
 
             return null;
-        }
-
-        public GenericDictionary<ItemType, int> GetBuildableCraftingIngredients(BuildableType buildableType) {
-            return _meshReferenceScriptableObject.buildablesDataScriptableObject[buildableType].rawMaterialsWithQuantity;
-        }
-
-        public BuildableGridSize GetBuildableGridSizeByMesh(Mesh sharedMesh) {
-            var buildableType = _meshReferenceScriptableObject.buildableTypeByMesh[sharedMesh];
-            return _meshReferenceScriptableObject.buildablesDataScriptableObject[buildableType].buildableGridSize;
-        }
-        
-        public BuildableType GetBuildableTypeByMesh(Mesh sharedMesh) {
-            return _meshReferenceScriptableObject.buildableTypeByMesh[sharedMesh];
-        }
-
-        public GameObject BuildablePrefabByBuildableType(BuildableType buildableType) {
-            return _meshReferenceScriptableObject.buildablePrefabByBuildableType[buildableType];
         }
     }
 }

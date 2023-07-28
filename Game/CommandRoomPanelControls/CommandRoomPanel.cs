@@ -3,7 +3,7 @@ using UnityEngine;
 namespace Game.CommandRoomPanelControls {
     public class CommandRoomPanel : MonoBehaviour {
         [SerializeField] private MeshRenderer keyboardMeshRenderer;
-        [SerializeField] private CanvasGroup panelCanvasGroup;
+        [SerializeField] private GameObject panel; 
         
         public CommandRoomPanelType commandRoomPanelType;
         
@@ -11,16 +11,16 @@ namespace Game.CommandRoomPanelControls {
         
         public void Activate() {
             keyboardMeshRenderer.material.SetColor(KeyboardColorPropertie, CommandRoomControlPanelsManager.Instance.activatedKeybard);
-            panelCanvasGroup.alpha = 1f;
+            panel.SetActive(true);
         }
 
         public void Desactivate() {
             keyboardMeshRenderer.material.SetColor(KeyboardColorPropertie, CommandRoomControlPanelsManager.Instance.desactivatedKeybard);
-            panelCanvasGroup.alpha = 0f;
+            panel.SetActive(false);
         }
 
         public bool isVisible() {
-            return panelCanvasGroup.alpha > 0.1f;
+            return panel.activeInHierarchy;
         }
     }
 }

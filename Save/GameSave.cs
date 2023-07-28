@@ -20,6 +20,8 @@ namespace Save {
 
             SaveBananaManVitals();
             SavePositionAndRotation();
+
+            SaveTutorialState();
             
             ObjectsReference.Instance.saveData.Save(saveUuid, date);
         }
@@ -31,12 +33,11 @@ namespace Save {
         }
 
         private static void SaveBlueprints() {
-            var activeBlueprintsSlots = ObjectsReference.Instance.uiBlueprints.GetActivatedBlueprints();
+            var playerBlueprints = ObjectsReference.Instance.buildablesManager.playerBlueprints;
 
-            foreach (var blueprintsSlot in activeBlueprintsSlots) {
-                if (!ObjectsReference.Instance.gameData.bananaManSavedData.blueprints.Contains(blueprintsSlot.buildableType
-                        .ToString())) {
-                    ObjectsReference.Instance.gameData.bananaManSavedData.blueprints.Add(blueprintsSlot.buildableType.ToString());
+            foreach (var blueprint in playerBlueprints) {
+                if (!ObjectsReference.Instance.gameData.bananaManSavedData.blueprints.Contains(blueprint.ToString())) {
+                    ObjectsReference.Instance.gameData.bananaManSavedData.blueprints.Add(blueprint.ToString());
                 }
             }
         }
@@ -82,6 +83,13 @@ namespace Save {
             ObjectsReference.Instance.gameData.bananaManSavedData.xWorldRotation = ObjectsReference.Instance.gameData.lastRotationOnMap.x;
             ObjectsReference.Instance.gameData.bananaManSavedData.yWorldRotation = ObjectsReference.Instance.gameData.lastRotationOnMap.y;
             ObjectsReference.Instance.gameData.bananaManSavedData.zWorldRotation = ObjectsReference.Instance.gameData.lastRotationOnMap.z;
+        }
+
+        private void SaveTutorialState() {
+            ObjectsReference.Instance.gameData.bananaManSavedData.hasFinishedTutorial =
+                ObjectsReference.Instance.bananaMan.tutorialFinished;
+            ObjectsReference.Instance.gameData.bananaManSavedData.hasRepairedBananaGun =
+                ObjectsReference.Instance.bananaMan.hasRepairedBananaGun;
         }
 
         private static void SaveActiveItem() {

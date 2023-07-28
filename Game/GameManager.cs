@@ -41,7 +41,7 @@ namespace Game {
             if (isNewGame) {
                 ObjectsReference.Instance.scenesSwitch.SwitchScene(
                     "COMMANDROOM", 
-                    SpawnPoint.COMMAND_ROOM_TELEPORTATION,
+                    SpawnPoint.TELEPORTATION,
                     true, true);
             }
             else {
@@ -73,6 +73,7 @@ namespace Game {
                 ObjectsReference.Instance.inputManager.SwitchContext(InputContext.GAME);
                 
                 ObjectsReference.Instance.mainCamera.SetNormalSensibility();
+                ObjectsReference.Instance.bananaGun.UngrabBananaGun();
 
                 if (ObjectsReference.Instance.mapsManager.currentMap.activeMonkeyType != MonkeyType.NONE) {
                     foreach (var monkey in MapItems.Instance.monkeys) {

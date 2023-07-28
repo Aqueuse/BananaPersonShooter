@@ -14,21 +14,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemType: 0
   itemCategory: 1
-  buildableType: 0
+  buildableType: 3
   itemName:
-  - plateform
-  - plateforme
-  - plataforma
-  itemSprite: {fileID: 21300000, guid: 3728d82037057e341bbbd20d9d44c435, type: 3}
+  - ticket booth
+  - guichet
+  - taquilla
+  itemSprite: {fileID: 21300000, guid: 1ac5432bc8bba7c4b85c522197955c0d, type: 3}
   itemDescription:
-  - a plateform than can be feeded with bananas
-  - "une plateforme qui peut \xEAtre aliment\xE9e en bananes"
-  - "Una plataforma que puede ser alimentada con pl\xE1tanos"
+  - A ticket booth to welcome visitors to the reserve
+  - "un guichet pour accueillir les visiteurs de la r\xE9serve"
+  - Una taquilla para recibir a los visitantes de la reserva
   rawMaterialsWithQuantity:
     list:
     - key: 18
       value: 10
     keyCollision: 0
-  buildablePrefab: {fileID: 3045356508486292204, guid: 0630715419ab7f249ba73f9625dea7fb, type: 3}
-  mustSnap: 1
-  buildableGridSize: 3
+  buildablePrefab: {fileID: 5196617759513621631, guid: fdc0a3f945f15074a968af548517735b, type: 3}

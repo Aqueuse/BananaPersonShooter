@@ -1,5 +1,6 @@
 using Cinemachine;
 using Enums;
+using Items.ItemsActions;
 using TMPro;
 using UnityEngine;
 
@@ -8,6 +9,8 @@ namespace Game.BananaCannonMiniGame {
         [SerializeField] private CinemachineVirtualCamera bananaCannonVirtualCamera;
         [SerializeField] private ProjectilesManager projectilesManager;
         
+        public string _mapName = "MAP01";
+
         public SpaceshipsSpawner spaceshipsSpawner;
         
         public CanvasGroup interactionCanvasGroup;
@@ -15,16 +18,14 @@ namespace Game.BananaCannonMiniGame {
         ///////////////////
 
         [SerializeField] private TextMeshProUGUI debrisQuantityText;
-        [SerializeField] private TextMeshProUGUI bananasQuantityText;
+        [SerializeField] private TextMeshProUGUI bottomBananasQuantityText;
+        
         public TextMeshProUGUI spaceshipQuantityText;
 
         [SerializeField] private Transform cannon;
         [SerializeField] private RectTransform target;
 
         private Vector3 _targetPosition;
-
-        private string _mapName = "MAP01";
-        [SerializeField] private SpawnPoint spawnPoint;
         
         private int _debrisQuantity;
         private int _debrisToSpawn;
@@ -33,18 +34,20 @@ namespace Game.BananaCannonMiniGame {
         private ItemType _bananaType;
 
         private void Start() {
-            _debrisToSpawn = 0;
             _bananaType = ItemType.CAVENDISH;
-            bananasQuantityText.text = ObjectsReference.Instance.inventory.GetQuantity(ItemType.CAVENDISH).ToString();
+            bottomBananasQuantityText.text = ObjectsReference.Instance.inventory.GetQuantity(ItemType.CAVENDISH).ToString();
+            ObjectsReference.Instance.uIbananaCannonMiniGame.playButtonBananasQuantityText.text = ObjectsReference.Instance.inventory.GetQuantity(ItemType.CAVENDISH).ToString();
             
-            _debrisQuantity = Map.GetDebrisQuantity();
+            _debrisQuantity = ObjectsReference.Instance.mapsManager.mapBySceneName[_mapName].GetDebrisQuantity();
             debrisQuantityText.text = _debrisQuantity.ToString();
-            
-            _spaceshipsQuantity = 6;
+            _debrisToSpawn = _debrisQuantity;
+
+            _spaceshipsQuantity = Random.Range(1, 7);
             spaceshipQuantityText.text = _spaceshipsQuantity.ToString();
         }
         
         public void SwitchToMiniGame() {
+            ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.CROSSHAIRS].alpha = 0;
             ObjectsReference.Instance.inputManager.uiSchemaContext = UISchemaSwitchType.BANANA_CANNON_MINI_GAME;
             ObjectsReference.Instance.inputManager.SwitchContext(InputContext.UI);
 
@@ -67,7 +70,7 @@ namespace Game.BananaCannonMiniGame {
         }
 
         public void Teleport() {
-            ObjectsReference.Instance.scenesSwitch.Teleport(spawnPoint);
+            GetComponent<PortalDestinationItemAction>().Activate();
         }
 
         public static void PauseMiniGame() {
@@ -89,12 +92,14 @@ namespace Game.BananaCannonMiniGame {
             bananaCannonVirtualCamera.Priority = 1;
             ObjectsReference.Instance.inputManager.SwitchContext(InputContext.GAME);
 
+            ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.CROSSHAIRS].alpha = 1;
+            Cursor.visible = false;
+            Cursor.lockState = CursorLockMode.Locked;
+
             ObjectsReference.Instance.uIbananaCannonMiniGame.HideStartMenu();
             ObjectsReference.Instance.uIbananaCannonMiniGame.HidePauseMenu();
             ObjectsReference.Instance.uIbananaCannonMiniGame.HideGameUI();
-
-            spaceshipsSpawner.DestroyAllSpaceships();
-
+            
             ObjectsReference.Instance.mapsManager.mapBySceneName[_mapName].debrisToSpawn = _debrisToSpawn;
 
             ObjectsReference.Instance.gameManager.gameContext = GameContext.IN_GAME;
@@ -115,25 +120,28 @@ namespace Game.BananaCannonMiniGame {
         }
 
         public void Shoot() {
+            if (ObjectsReference.Instance.inventory.GetQuantity(_bananaType) == 0) {
+                projectilesManager.AlertNoBanana();
+                ObjectsReference.Instance.audioManager.PlayEffect(EffectType.NO_BANANA, 0);
+            }
+
             if (ObjectsReference.Instance.inventory.GetQuantity(_bananaType) > 0) {
                 projectilesManager.Shoot();
+                ObjectsReference.Instance.audioManager.PlayEffect(EffectType.CANNON_SHOOT, 0);
                 ObjectsReference.Instance.inventory.RemoveQuantity(ItemCategory.BANANA, _bananaType, 1);
-                bananasQuantityText.text = ObjectsReference.Instance.inventory.GetQuantity(_bananaType).ToString();
             }
         }
 
         public void RefreshDebrisQuantity() {
             _debrisToSpawn += 1;
+            ObjectsReference.Instance.mapsManager.mapBySceneName[_mapName].debrisToSpawn = _debrisToSpawn;
+
             debrisQuantityText.text = (_debrisQuantity+_debrisToSpawn).ToString();
         }
 
         public void DecrementeSpaceshipQuantity() {
             _spaceshipsQuantity -= 1;
             spaceshipQuantityText.text = _spaceshipsQuantity.ToString();
-
-            if (_spaceshipsQuantity == 0) {
-                QuitMiniGame();
-            }
         }
     }
 }

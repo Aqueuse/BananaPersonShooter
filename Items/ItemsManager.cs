@@ -1,11 +1,5 @@
-﻿using Building.Buildables.DoorLeft;
-using Building.Buildables.DoorRight;
-using Enums;
-using Game.BananaCannonMiniGame;
-using Game.CommandRoomPanelControls;
-using Game.Steam;
-using Monkeys.MiniChimps;
-using UnityEngine;
+﻿using UnityEngine;
+using Items.ItemsActions;
 
 namespace Items {
     public class ItemsManager : MonoBehaviour {
@@ -47,38 +41,28 @@ namespace Items {
 
                 switch (_interactedItemStaticType) {
                     case ItemStaticType.DOOR_BEETWEEN_LEVELS:
-                        ObjectsReference.Instance.audioManager.PlayEffect(EffectType.OPEN_DOOR, 0);
-
-                        ObjectsReference.Instance.scenesSwitch.SwitchScene(_interactedObject.GetComponent<Door>().destinationMap.ToUpper(), _interactedObject.GetComponent<Door>().spawnPoint, false, false);
-                        _interactedObject = null;
+                        DoorBeetweenLevelsItemAction.Activate(_interactedObject);
                         break;
                     case ItemStaticType.MINI_CHIMP_COMMAND_ROOM:
-                        _interactedObject.GetComponent<MiniChimpDialogue>().Play();
+                        MiniChimpItemAction.Activate(_interactedObject);
                         break;
                     case ItemStaticType.BANANAGUN:
-                        ObjectsReference.Instance.uiManager.Set_active(UICanvasGroupType.HUD, true);
-                        ObjectsReference.Instance.bananaGun.bananaGunInBack.SetActive(true);
-                        // TODO : animation take banana gun
-
-                        ObjectsReference.Instance.gameData.bananaManSavedData.playerAdvancements.Add(AdvancementState.GET_BANANAGUN);
-                        ObjectsReference.Instance.steamIntegration.UnlockAchievement(SteamAchievement.STEAM_ACHIEVEMENT_BANAGUN_RECONSTRUCTED);
-                        
-                        CommandRoomControlPanelsManager.Instance.SetMiniChimpDialogue(AdvancementState.GET_BANANAGUN);
-                        CommandRoomControlPanelsManager.Instance.miniChimpCommandRoomMiniChimpDialogue.Play();
-
-                        _interactedObject.SetActive(false);
+                        BananaGunItemAction.Activate(_interactedObject);
                         break;
                     case ItemStaticType.COMMAND_ROOM_PANEL:
-                        CommandRoomControlPanelsManager.Instance.ShowHidePanel(_interactedObject.GetComponent<CommandRoomPanel>().commandRoomPanelType);
+                        CommandRoomPanelItemAction.Activate(_interactedObject);
                         break;
                     case ItemStaticType.BANANA_CANNON_MINI_GAME:
-                        if (ObjectsReference.Instance.gameData.bananaManSavedData.playerAdvancements.Contains(AdvancementState.USE_BANANA_CANNON)) BananaCannonMiniGameManager.Instance.SwitchToMiniGame();
+                        BananaCannonMiniGameItemAction.Activate();
                         break;
-                    case ItemStaticType.DOOR_LEFT:
-                        _interactedObject.GetComponent<RotationDoorLeft>().Action();
+                    case ItemStaticType.RETRIEVER:
+                        RetrieverItemAction.Activate(_interactedObject);
                         break;
-                    case ItemStaticType.DOOR_RIGHT:
-                        _interactedObject.GetComponent<RotationDoorRight>().Action();
+                    case ItemStaticType.BLUEPRINTS_DATA:
+                        BlueprintsData.Activate();
+                        break;
+                    case ItemStaticType.PORTAL_DESTINATION:
+                        _interactedObject.GetComponent<PortalDestinationItemAction>().Activate();
                         break;
                 }
             }

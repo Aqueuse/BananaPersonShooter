@@ -1,16 +1,22 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Building;
 using Enums;
-using Monkeys.Chimployee;
-using UI.InGame;
+using Items;
 using UnityEngine;
 
 namespace Save {
     public class GameLoad : MonoBehaviour {
         private GameObject aspirable;
         private GameObject prefab;
-        
+
+        private BuildablesManager buildablesManager;
+
+        private void Start() {
+            buildablesManager = ObjectsReference.Instance.buildablesManager;
+        }
+
         public void LoadLastSave() {
             ObjectsReference.Instance.gameManager.loadingScreen.SetActive(true);
             ObjectsReference.Instance.uiManager.Set_active(UICanvasGroupType.DEATH, false);
@@ -39,7 +45,7 @@ namespace Save {
 
             ObjectsReference.Instance.loadData.LoadMapAspirablesDataByUuid(saveUuid);
 
-            LoadAdvancements();
+            CheckTutorialFinished();
 
             ObjectsReference.Instance.gameSave.StartAutoSave();
         }
@@ -51,9 +57,22 @@ namespace Save {
             }
         }
 
-        private static void LoadBlueprints() {
-            foreach (var blueprint in ObjectsReference.Instance.gameData.bananaManSavedData.blueprints) {
+        private void LoadBlueprints() {
+            buildablesManager.playerBlueprints = new List<BuildableType>();
+
+            var playerBlueprints = ObjectsReference.Instance.gameData.bananaManSavedData.blueprints;
+            
+            foreach (var blueprint in playerBlueprints) {
+                buildablesManager.playerBlueprints.Add(Enum.Parse<BuildableType>(blueprint));
                 ObjectsReference.Instance.uiBlueprints.SetVisible(Enum.Parse<BuildableType>(blueprint));
+            }
+
+            var buildablesAvailable = ObjectsReference.Instance.scriptableObjectManager._meshReferenceScriptableObject.buildablesDataScriptableObject;
+
+            foreach (var buildableDataScriptableObject in buildablesAvailable) {
+                if (!buildablesManager.playerBlueprints.Contains(buildableDataScriptableObject.Value.buildableType)) {
+                    buildablesManager.buildablesToGive.Add(buildableDataScriptableObject.Value.buildableType);
+                }
             }
         }
 
@@ -118,43 +137,22 @@ namespace Save {
             }
         }
 
-        private static void LoadAdvancements() {
-            var playerAdvancements = ObjectsReference.Instance.gameData.bananaManSavedData.playerAdvancements;
-            ObjectsReference.Instance.uIadvancements.SetAdvancementBanana(ObjectsReference.Instance.advancements.GetBestAdvancement());
-            
-            //////////////////// GET BANANA GUN ////////////////////////////
-            if (playerAdvancements.Contains(AdvancementState.GET_BANANAGUN)) {
+        private static void CheckTutorialFinished() {
+            ObjectsReference.Instance.bananaMan.tutorialFinished = ObjectsReference.Instance.gameData.bananaManSavedData.hasFinishedTutorial;
+            ObjectsReference.Instance.bananaMan.hasRepairedBananaGun = ObjectsReference.Instance.gameData.bananaManSavedData.hasRepairedBananaGun;
+
+            if (ObjectsReference.Instance.bananaMan.hasRepairedBananaGun) {
                 ObjectsReference.Instance.bananaGun.bananaGunInBack.SetActive(true);
                 ObjectsReference.Instance.uiManager.Set_active(UICanvasGroupType.HUD, true);
             }
 
             else {
-                ObjectsReference.Instance.uiManager.Set_active(UICanvasGroupType.HUD, false);
                 ObjectsReference.Instance.bananaGun.bananaGunInBack.SetActive(false);
+                ObjectsReference.Instance.uiManager.Set_active(UICanvasGroupType.HUD, false);
                 ObjectsReference.Instance.uiCrosshairs.SetCrosshair(ItemCategory.EMPTY, ItemType.EMPTY);
             }
-
-            //////////////////// ASPIRE SOMETHING ////////////////////////////
-            if (playerAdvancements.Contains(AdvancementState.ASPIRE_SOMETHING)) {
-                ObjectsReference.Instance.uihud.Activate_Chimployee_Tab();
-                Uihud.AuthorizeTp();
-            }
-            
-            //////////////////// CLEANED MAP ////////////////////////////
-            //////////////////// FEED MONKEY ////////////////////////////
-            if (playerAdvancements.Contains(AdvancementState.CLEANED_MAP)) {
-                ObjectsReference.Instance.chimployee.ShowAllDialogue(ChimployeeDialogue.chimployee_please_clean_map);
-            }
-            
-            else {
-                if (playerAdvancements.Contains(AdvancementState.FEED_MONKEY)) {
-                    ObjectsReference.Instance.chimployee.ShowAllDialogue(ChimployeeDialogue.chimployee_please_feed_monkey);
-                }
-            }
         }
-
-        /////////////////// MAPS ///////////////////////
-
+        
         private static void LoadMapsData() {
             foreach (var map in ObjectsReference.Instance.mapsManager.mapBySceneName) {
                 var savedMapData = ObjectsReference.Instance.loadData.GetMapDataByUuid(ObjectsReference.Instance.gameData.currentSaveUuid, map.Key);
@@ -190,7 +188,7 @@ namespace Save {
                     }
                     
                     if (mapData.aspirablesCategories[i] == ItemCategory.BUILDABLE) {
-                        prefab = ObjectsReference.Instance.scriptableObjectManager.BuildablePrefabByBuildableType(mapData.aspirablesBuildableTypes[i]);
+                        prefab = ObjectsReference.Instance.buildablesManager.BuildablePrefabByBuildableType(mapData.aspirablesBuildableTypes[i]);
 
                         aspirable = Instantiate(prefab, MapItems.Instance.aspirablesContainer.transform, true);
                     
@@ -230,8 +228,14 @@ namespace Save {
                     aspirable.transform.rotation = MapItems.Instance.aspirablesContainer.transform.rotation;
                 }
             }
-            
-            if (mapData.debrisToSpawn > 0) MapItems.Instance.debrisSpawner.SpawnNewDebrisOnMap(MapItems.Instance.aspirablesContainer.transform);
+
+            if (mapData.debrisToSpawn > 0) {
+                if (ObjectsReference.Instance.gameSettings.areDebrisFallingOnTheTrees) MapItems.Instance.debrisSpawner.SpawnNewDebrisOnRaycastHit(MapItems.Instance.aspirablesContainer.transform);
+
+                else {
+                    MapItems.Instance.debrisSpawner.SpawnNewDebripOnNavMesh(MapItems.Instance.aspirablesContainer.transform);
+                }
+            }
         }
     }
 }

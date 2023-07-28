@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
 using Data;
-using Game.CommandRoomPanelControls;
-using Items;
 using TMPro;
 using UnityEngine;
 
@@ -22,10 +20,6 @@ namespace Monkeys.MiniChimps {
         }
 
         public void Play() {
-            if (GetComponent<ItemStatic>().itemStaticType == ItemStaticType.MINI_CHIMP_COMMAND_ROOM) {
-                CommandRoomControlPanelsManager.Instance.SetMiniChimpDialogue(ObjectsReference.Instance.advancements.GetBestAdvancement());
-            }
-
             if (_clipsQueue.Count > 0) return;
             
             bubbleGameObject.SetActive(true);
@@ -42,22 +36,11 @@ namespace Monkeys.MiniChimps {
         private void Update() {
             if (miniChimpAudioSource.isPlaying) return;
             
-            if (_clipsQueue.Count == 1) {
-                if (GetComponent<ItemStatic>().itemStaticType == ItemStaticType.MINI_CHIMP_COMMAND_ROOM) {
-                    ObjectsReference.Instance.uIadvancements.SetBestAdvancement();
-                    // Invoke(nameof(HideBubble), 4);
-                }
-            }
-
             if (_clipsQueue.Count <= 0) return;
             
             miniChimpAudioSource.clip = _clipsQueue.Dequeue();
             miniChimpAudioSource.volume = ObjectsReference.Instance.audioManager.voicesLevel;
             miniChimpAudioSource.Play();
-        }
-
-        public void HideBubble() {
-            bubbleGameObject.SetActive(false);
         }
     }
 }

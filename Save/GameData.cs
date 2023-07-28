@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Save.Templates;
 using UnityEngine;
 
@@ -11,6 +12,8 @@ namespace Save {
         public Vector3 lastRotationOnMap;
         
         public GenericDictionary<string, MapSavedData> mapSavedDatasByMapName;
+
+        public Dictionary<string, Vector3> portalsTeleportPositionByName;
 
         private void Start() {
             mapSavedDatasByMapName = new GenericDictionary<string, MapSavedData>();

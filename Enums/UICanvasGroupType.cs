@@ -10,8 +10,6 @@ namespace Enums {
         HUD,
         INVENTORY,
         BLUEPRINTS,
-        CHIMPLOYEE,
-        ADVANCEMENTS,
         MINIGAME,
         AUDIO_VIDEO_TAB,
         KEYBOARD_TAB,
@@ -19,6 +17,10 @@ namespace Enums {
         GAMEPLAY_TAB,
         LANGUAGE_TAB,
         CROSSHAIRS,
-        GAMEPAD_DISCONNECTED
+        GAMEPAD_DISCONNECTED,
+        BUILD_HELPER_GAMEPAD,
+        BUILD_HELPER_KEYBOARD,
+        SLOTS_HELPER_GAMEPAD,
+        SLOTS_HELPER_KEYBOARD
     }
 }

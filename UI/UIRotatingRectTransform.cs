@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 namespace UI {
     public class UIRotatingRectTransform : MonoBehaviour {
@@ -7,13 +7,13 @@ namespace UI {
 
         private Vector3 rotationEuler = Vector3.forward;
         private Quaternion rotation;
-        
-        void Update() {
+
+        private void Update() {
             rotationEuler.z -= Time.deltaTime * speed;
             if (rotationEuler.z < -360) rotationEuler.z = 0;
-            
+
             rotation = Quaternion.Euler(rotationEuler);
-            
+
             _loadingImageRectTransform.rotation = rotation;
         }
     }

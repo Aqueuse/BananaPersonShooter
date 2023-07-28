@@ -1,9 +1,12 @@
 using Game.BananaCannonMiniGame;
+using TMPro;
 using UnityEngine;
+using UnityEngine.Localization.Settings;
 
 namespace UI.InGame {
     public class UIbananaCannonMiniGame : MonoBehaviour {
         [SerializeField] private GameObject pauseButton;
+        public TextMeshProUGUI playButtonBananasQuantityText;
 
         public CanvasGroup pauseMenuCanvasGroup;
         public CanvasGroup startMenuCanvasGroup;
@@ -42,6 +45,8 @@ namespace UI.InGame {
             canvasGroup.alpha = isVisible ? 1 : 0;
             canvasGroup.interactable = isVisible;
             canvasGroup.blocksRaycasts = isVisible;
+            
+            RefreshBananasQuantity();
         }
 
         public void PlayMiniGame() {
@@ -67,6 +72,19 @@ namespace UI.InGame {
         
         public void UnpauseMiniGame() {
             BananaCannonMiniGameManager.UnpauseMiniGame();
+        }
+
+        private void RefreshBananasQuantity() {
+            var bananasQuantity = ObjectsReference.Instance.inventory.GetQuantity(ItemType.CAVENDISH);
+            
+            if (bananasQuantity == 0) playButtonBananasQuantityText.text = LocalizationSettings.StringDatabase.GetLocalizedString("UI", "no_bananas");
+            else {
+                playButtonBananasQuantityText.text = "("+
+                                                     ObjectsReference.Instance.inventory.GetQuantity(ItemType.CAVENDISH)+
+                                                     " "+
+                                                     LocalizationSettings.StringDatabase.GetLocalizedString("UI", "bananas")+
+                                                     ")";
+            }
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Data.Bananas;
+﻿using System;
+using Data.Bananas;
 using Monkeys;
 using UnityEngine;
 
@@ -10,14 +11,8 @@ namespace Bananas {
         [SerializeField] private LayerMask bananaSplashLayerMask;
         
         public BananasDataScriptableObject bananasDataScriptableObject;
-
+        
         private void OnCollisionEnter(Collision collision) {
-            if (collision.gameObject.CompareTag("Monkey")) {
-                collision.gameObject.GetComponent<Monkey>().Feed(bananasDataScriptableObject.sasiety);
-                DestroyMe();
-                return;
-            }
-
             if (bananaSplashLayerMask == (bananaSplashLayerMask | 1 << collision.gameObject.layer)) {
                 // trasnformation en peau de banane
                 bananaMeshRenderer.enabled = false;

@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemType: 4
   itemCategory: 0
-  buildableType: 6
+  buildableType: 5
   itemName:
   - cavendish
   - cavendish

@@ -14,6 +14,7 @@ namespace Game {
                 
                 ObjectsReference.Instance.uiFace.Die(true);
                 ObjectsReference.Instance.bananaMan.tpsPlayerAnimator.FallFrontward();
+                ObjectsReference.Instance.playerController.StopPlayer();
                 
                 ObjectsReference.Instance.bananaMan.GetComponent<Rigidbody>().isKinematic = true;
                 ObjectsReference.Instance.audioManager.PlayEffect(EffectType.BANANASPLASH, 0);

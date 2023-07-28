@@ -1,8 +1,9 @@
-﻿using Enums;
-using Monkeys.Chimployee;
+﻿using Bananas;
+using Game.Steam;
 using UI.InGame;
 using UnityEngine;
 using UnityEngine.AI;
+using Random = UnityEngine.Random;
 
 namespace Monkeys {
     public class Monkey : MonoBehaviour {
@@ -22,7 +23,10 @@ namespace Monkeys {
         private bool _isCatchingPlayer;
 
         private bool _isNearPlayer;
+        public bool hasGrabbedBanana;
 
+        private static readonly int Grab = Animator.StringToHash("GRAB");
+        
         private void Start() {
             sasiety = ObjectsReference.Instance.mapsManager.currentMap.monkeySasiety;
             ObjectsReference.Instance.mapsManager.currentMap.RecalculateHappiness();
@@ -42,17 +46,17 @@ namespace Monkeys {
             transform.localScale = new Vector3(1, 1, 1);
         }
 
-        public void Feed(float addedBananaValue) {
+        private void Feed(float addedBananaValue) {
+            _animator.SetTrigger(Grab);
+
             if (sasiety < 50) {
-                _navMeshAgent.SetDestination(ObjectsReference.Instance.bananaMan.transform.position);
                 sasiety += addedBananaValue;
                 ObjectsReference.Instance.mapsManager.currentMap.monkeySasiety = sasiety;
                 ObjectsReference.Instance.mapsManager.currentMap.RecalculateHappiness();
             }
 
-            if (sasiety >= 50 && !ObjectsReference.Instance.gameData.bananaManSavedData.playerAdvancements.Contains(AdvancementState.FEED_MONKEY)) {
-                ObjectsReference.Instance.gameData.bananaManSavedData.playerAdvancements.Add(AdvancementState.FEED_MONKEY);
-                ObjectsReference.Instance.chimployee.InitDialogue(ChimployeeDialogue.chimployee_please_feed_monkey);
+            if (sasiety >= 50 && ObjectsReference.Instance.steamIntegration.isGameOnSteam) {
+                ObjectsReference.Instance.steamIntegration.UnlockAchievement(SteamAchievement.STEAM_ACHIEVEMENT_MONKEY_FEEDED); 
             }
         }
         
@@ -64,6 +68,15 @@ namespace Monkeys {
         public void UnpauseMonkey() {
             _navMeshAgent.speed = 3.5f;
             _animator.speed = 1;
+        }
+
+        private void OnTriggerEnter(Collider other) {
+            if (!other.CompareTag("Banana")) return;
+            
+            hasGrabbedBanana = true;
+
+            Feed(other.GetComponent<Banana>().bananasDataScriptableObject.sasiety);
+            Destroy(other.gameObject);
         }
     }
 }

@@ -25,7 +25,7 @@ namespace UI.InGame {
         }
 
         public void SetBananaGunPiecesQuantity(int newQuantity) {
-            bananaGunPiecesQuantityText.text = newQuantity + "/8";
+            bananaGunPiecesQuantityText.text = newQuantity + "/4";
         }
     }
 }

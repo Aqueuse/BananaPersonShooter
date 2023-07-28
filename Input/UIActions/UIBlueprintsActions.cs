@@ -24,7 +24,6 @@ namespace Input.UIActions {
             Switch_To_Right();
             
             Switch_To_Inventory();
-            Switch_To_Chimployee();
             
             SwitchToUpperSlot();
             SwitchToLowerSlot();
@@ -55,12 +54,6 @@ namespace Input.UIActions {
             }
         }
         
-        private void Switch_To_Chimployee() {
-            if (UnityEngine.Input.GetKeyDown(KeyCode.Alpha3)) {
-                ObjectsReference.Instance.uihud.Switch_To_Chimployee();
-            }
-        }
-
         private void SwitchToUpperSlot() {
             if (UnityEngine.Input.GetAxis("DpadVertical") > 0 && !_scrolledUp) {
                 _counter+=Time.deltaTime;

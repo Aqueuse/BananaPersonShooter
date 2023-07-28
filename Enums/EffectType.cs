@@ -7,5 +7,7 @@ public enum EffectType {
     OPEN_DOOR,
     EAT_BANANA,
     GUITAR_RYTHM_01,
-    GRAB_SOMETHING
+    GRAB_SOMETHING,
+    NO_BANANA,
+    CANNON_SHOOT
 }

@@ -8,7 +8,9 @@ namespace Building.Buildables.Plateforms {
         [SerializeField] private Color emissionColor;
         [SerializeField] private Color unactiveColor;
 
-        private UpDownEffect _upDownEffect;
+        [SerializeField] private MeshRenderer upDownEffectVizualisation;
+        
+        private UpEffect upEffect;
         private MeshRenderer _meshRenderer;
         private AudioSource _audioSource;
 
@@ -24,7 +26,7 @@ namespace Building.Buildables.Plateforms {
         private void Start() {
             _meshRenderer = GetComponent<MeshRenderer>();
             _audioSource = GetComponent<AudioSource>();
-            _upDownEffect = GetComponent<UpDownEffect>();
+            upEffect = GetComponent<UpEffect>();
 
             _plateformMaterials = new Material[1];
 
@@ -53,7 +55,7 @@ namespace Building.Buildables.Plateforms {
         public void SetUnactiveMaterial() {
             _meshRenderer = GetComponent<MeshRenderer>();
             _normalPlateformMaterial = _meshRenderer.materials[0];
-            
+
             _normalPlateformMaterial.SetColor(AlimentationColor, unactiveColor);
             _normalPlateformMaterial.SetColor(EmissionColor, unactiveColor);
 
@@ -63,19 +65,20 @@ namespace Building.Buildables.Plateforms {
             _meshRenderer.materials = _plateformMaterials;
         }
 
-        private void ActivePlateform(ItemType itemType) {
+        public void ActivePlateform(ItemType itemType) {
             _meshRenderer = GetComponent<MeshRenderer>();
             _audioSource = GetComponent<AudioSource>();
-            _upDownEffect = GetComponent<UpDownEffect>();
+            upEffect = GetComponent<UpEffect>();
             
             switch (itemType) {
                 case ItemType.CAVENDISH:
                     SetActivatedMaterial(ObjectsReference.Instance.scriptableObjectManager.GetBananaScriptableObject(ItemType.CAVENDISH).bananaColor);
                     _audioSource.enabled = true;
-                    _upDownEffect.isActive = true;
+                    upEffect.isActive = true;
 
                     plateformType = ItemType.CAVENDISH;
                     ObjectsReference.Instance.mapsManager.currentMap.RefreshAspirablesItemsDataMap();
+                    upDownEffectVizualisation.enabled = true;
                     break;
             }
         }

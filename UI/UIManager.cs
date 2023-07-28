@@ -190,9 +190,6 @@ namespace UI {
                         case InterfaceContext.BLUEPRINTS:
                             ObjectsReference.Instance.uihud.Switch_To_Blueprints();
                             break;
-                        case InterfaceContext.CHIMPLOYEE:
-                            ObjectsReference.Instance.uihud.Switch_To_Chimployee();
-                            break;
                     }
                 }
                 else {

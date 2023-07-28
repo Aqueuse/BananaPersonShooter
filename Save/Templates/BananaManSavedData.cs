@@ -19,7 +19,8 @@ namespace Save.Templates {
         public ItemCategory activeItemCategory = ItemCategory.EMPTY;
         public BuildableType activeBuildableType = BuildableType.EMPTY;
 
-        public HashSet<AdvancementState> playerAdvancements = new HashSet<AdvancementState>();
+        public bool hasRepairedBananaGun = false;
+        public bool hasFinishedTutorial = false;
         
         public Dictionary<string, int> inventory = new() {
             {ItemType.EMPTY.ToString(), 0},

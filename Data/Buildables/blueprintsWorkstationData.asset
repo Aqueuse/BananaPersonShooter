@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemType: 0
   itemCategory: 1
-  buildableType: 5
+  buildableType: 2
   itemName:
   - blueprint workstation
   - "station \xE0 blueprints"
@@ -30,9 +30,7 @@ MonoBehaviour:
       value: 4
     - key: 20
       value: 2
-    - key: 20
+    - key: 19
       value: 1
-    keyCollision: 1
+    keyCollision: 0
   buildablePrefab: {fileID: 5006133390569365907, guid: 6473fc63d7b38244cacef9e82e267f96, type: 3}
-  mustSnap: 0
-  buildableGridSize: 0

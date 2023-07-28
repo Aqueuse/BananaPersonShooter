@@ -1,7 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using Building;
-using Game;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,6 +7,7 @@ namespace UI.InGame {
     public class UICanvasItemsHiddableManager : MonoBehaviour {
         [SerializeField] private RectTransform canvasBananaTree;
         [SerializeField] private RectTransform[] canvasMonkeys;
+        private List<GameObject> debrisGameObjects;
         public List<Canvas> _debrisCanvasList;
         
         private Transform _cameraTransform;
@@ -20,7 +19,7 @@ namespace UI.InGame {
         public bool areMonkeysVisible;
         
         private void Start() {
-            _debrisCanvasList = MapItems.Instance.aspirablesContainer.GetComponentsInChildren<Canvas>().ToList();
+            RefreshDebrisCanvasList();
             _cameraTransform = ObjectsReference.Instance.mainCamera.transform;
 
             areDebrisVisible = ObjectsReference.Instance.gameSettings.isShowingDebris;
@@ -73,9 +72,17 @@ namespace UI.InGame {
             _debrisCanvasList.Remove(canvasToRemove);
         }
 
+        private void RefreshDebrisCanvasList() {
+            debrisGameObjects = GameObject.FindGameObjectsWithTag("Debris").ToList();
+            _debrisCanvasList = new List<Canvas>();
+            foreach (var debrisGameObject in debrisGameObjects.Where(debrisGameObject => debrisGameObject.CompareTag("Debris"))) {
+                _debrisCanvasList.Add(debrisGameObject.GetComponentInChildren<Canvas>());
+            }
+        }
+
         public void SetDebrisCanvasVisibility(bool isVisible) {
-            if (Map.GetDebrisQuantity() > 0) {
-                _debrisCanvasList = MapItems.Instance.aspirablesContainer.GetComponentsInChildren<Canvas>().ToList();
+            if (ObjectsReference.Instance.mapsManager.currentMap.GetDebrisQuantity() > 0) {
+                RefreshDebrisCanvasList();
                 
                 foreach (var canva in _debrisCanvasList) {
                     canva.enabled = isVisible;

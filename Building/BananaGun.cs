@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Building {
     public class BananaGun : MonoBehaviour {
-        public GameObject moverTarget;
+        [SerializeField] private Transform bananaGunTargetTransform;
         [SerializeField] private LayerMask aspirableLayerMask;
         private PlayerController _playerController;
         
@@ -21,7 +21,7 @@ namespace Building {
         
         private void Update() {
             if (!ObjectsReference.Instance.bananaMan.isGrabingBananaGun) return;
-            ObjectsReference.Instance.bananaGun.transform.LookAt(moverTarget.transform, Vector3.up);
+            bananaGun.gameObject.transform.LookAt(bananaGunTargetTransform, Vector3.up);
 
             if (ObjectsReference.Instance.gameActions.isBuildModeActivated) {
                 if (Physics.Raycast(ObjectsReference.Instance.gameManager.cameraMain.transform.position, ObjectsReference.Instance.gameManager.cameraMain.transform.forward, out var raycastHit, 100, layerMask:aspirableLayerMask)) {
@@ -29,7 +29,7 @@ namespace Building {
                     targetedGameObject = raycastHit.transform.gameObject;
                     if (targetedGameObject.layer == 7) {
                         HighlightSelectedObject();
-                        ObjectsReference.Instance.uiHelper.Show_retrieve_confirmation();
+                        ObjectsReference.Instance.uihud.GetCurrentUIHelper().Show_retrieve_confirmation();
                     }
                 }
                 else {
@@ -59,13 +59,16 @@ namespace Building {
             ObjectsReference.Instance.gameActions.isBuildModeActivated = false;
             ObjectsReference.Instance.bananaMan.tpsPlayerAnimator.FocusCamera(wasFocus);
             ObjectsReference.Instance.bananaMan.GetComponent<PlayerIK>().SetAimConstraint(false);
+            
+            ObjectsReference.Instance.slotSwitch.CancelGhost();
+            ObjectsReference.Instance.uihud.GetCurrentUIHelper().show_default_helper();
         }
         
         private void HighlightSelectedObject() {
             aspirableMaterials = targetedGameObject.GetComponent<Renderer>().materials;
             aspirableMaterials[0].SetFloat(Emission, 0.2f);
             targetedGameObject.GetComponent<Renderer>().materials = aspirableMaterials;
-            ObjectsReference.Instance.uiHelper.Show_retrieve_confirmation();
+            ObjectsReference.Instance.uihud.GetCurrentUIHelper().Show_retrieve_confirmation();
         }
 
         public void UnhighlightSelectedObject() {
@@ -73,7 +76,7 @@ namespace Building {
                 aspirableMaterials = targetedGameObject.GetComponent<Renderer>().materials;
                 aspirableMaterials[0].SetFloat(Emission, 0f);
                 targetedGameObject.GetComponent<Renderer>().materials = aspirableMaterials;
-                ObjectsReference.Instance.uiHelper.Hide_retrieve_confirmation();
+                ObjectsReference.Instance.uihud.GetCurrentUIHelper().Hide_retrieve_confirmation();
             }
         }
     }

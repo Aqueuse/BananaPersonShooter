@@ -3,23 +3,19 @@ using Building;
 using Cameras;
 using Data;
 using Game;
-using Game.Advancement;
 using Game.Steam;
 using Input;
 using Items;
-using Monkeys.Chimployee;
 using Player;
 using Save;
 using Settings;
 using UI;
 using UI.InGame;
-using UI.InGame.Advancements;
 using UI.InGame.Blueprints;
 using UI.InGame.Inventory;
 using UI.InGame.QuickSlots;
 using UI.Menus;
 using UI.Save;
-using UI.Tutorials;
 using VFX;
 
 public class ObjectsReference : MonoSingleton<ObjectsReference> {
@@ -28,6 +24,7 @@ public class ObjectsReference : MonoSingleton<ObjectsReference> {
     public MapsManager mapsManager;
     public AudioManager audioManager;
     public ItemsManager itemsManager;
+    public BuildablesManager buildablesManager;
 
     public BananaMan bananaMan;
     public PlayerController playerController;
@@ -48,7 +45,6 @@ public class ObjectsReference : MonoSingleton<ObjectsReference> {
     public ScenesSwitch scenesSwitch;
 
     public GameActions gameActions;
-    public Advancements advancements;
 
     public GameData gameData;
     public GameSave gameSave;
@@ -66,10 +62,7 @@ public class ObjectsReference : MonoSingleton<ObjectsReference> {
     public UInventory uInventory;
     public UIBlueprints uiBlueprints;
     public UISlotsManager uiSlotsManager;
-    public Chimployee chimployee;
     public UICrosshairs uiCrosshairs;
-    public UIadvancements uIadvancements;
-    public UIHelper uiHelper;
     public UIFace uiFace;
     public Uihud uihud;
     public UIQueuedMessages uiQueuedMessages;

@@ -1,11 +1,11 @@
 using UnityEngine;
 
 namespace Building.Buildables.Plateforms {
-    public class UpDownEffect : MonoBehaviour {
+    public class UpEffect : MonoBehaviour {
         public float force;
         public bool isActive;
         public bool isPlayerOn;
-
+        
         private void OnCollisionExit(Collision other) {
             if (!isActive) return;
 
@@ -13,7 +13,7 @@ namespace Building.Buildables.Plateforms {
                 isPlayerOn = false;
             }
         }
-
+        
         private void OnCollisionStay(Collision other) {
             if (!isActive) return;
             
@@ -27,6 +27,7 @@ namespace Building.Buildables.Plateforms {
         }
 
         private void Activate() {
+            ObjectsReference.Instance.playerController._damageCount = 0;
             ObjectsReference.Instance.bananaMan.GetComponent<Rigidbody>().AddForce(transform.up * force, ForceMode.Acceleration);
         }
     }

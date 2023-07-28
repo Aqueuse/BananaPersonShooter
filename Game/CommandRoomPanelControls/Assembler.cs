@@ -1,4 +1,3 @@
-using Enums;
 using Items;
 using UI.InGame;
 using UnityEngine;
@@ -8,6 +7,8 @@ namespace Game.CommandRoomPanelControls {
         [SerializeField] private GenericDictionary<GameObject, Transform> bananaGunPiecesRepairedPosition;
         [SerializeField] private GameObject bananaGunRepaired;
         [SerializeField] private GameObject bananaGunPieces;
+        
+        [SerializeField] private GameObject blueprintsDataGameObject;
         
         [SerializeField] private MeshRenderer assemblerZoneMeshRenderer;
         [SerializeField] private Color activatedColor;
@@ -25,9 +26,16 @@ namespace Game.CommandRoomPanelControls {
             assemblerAudioSource = GetComponent<AudioSource>();
             assemblerAudioSource.volume = ObjectsReference.Instance.audioManager.effectsLevel;
             
-            if (ObjectsReference.Instance.gameData.bananaManSavedData.playerAdvancements.Contains(AdvancementState.GET_BANANAGUN)) {
+            if (ObjectsReference.Instance.bananaMan.hasRepairedBananaGun) {
                 _bananaGunRepaired = true;
                 bananaGunPieces.SetActive(false);
+            }
+            
+            if (ObjectsReference.Instance.gameData.bananaManSavedData.hasFinishedTutorial) {
+                if (ObjectsReference.Instance.buildablesManager.buildablesToGive.Count != ObjectsReference.Instance.buildablesManager.playerBlueprints.Count) ShowBlueprintsData(); 
+            }
+            else {
+                HideBlueprintsData();
             }
         }
 
@@ -62,7 +70,7 @@ namespace Game.CommandRoomPanelControls {
                             if (uIassembler.assemblerMode != AssemblerMode.BANANA_GUN) uIassembler.SwitchToBananaGunReparationMode();
                             uIassembler.SetBananaGunPiecesQuantity(bananaGunPiecesRepaired);
                     
-                            if (bananaGunPiecesRepaired == 8) {
+                            if (bananaGunPiecesRepaired == bananaGunPiecesRepairedPosition.Count) {
                                 assemblerZoneMeshRenderer.material.SetColor(colorPropertie, baseColor);
 
                                 // setActive false all the pieces and setActive true the grabbable banana Gun
@@ -86,6 +94,14 @@ namespace Game.CommandRoomPanelControls {
 
         public void SetAssemblerAudioVolume(float level) {
             assemblerAudioSource.volume = level;
+        }
+
+        public void ShowBlueprintsData() {
+            blueprintsDataGameObject.SetActive(true);
+        }
+
+        public void HideBlueprintsData() {
+            blueprintsDataGameObject.SetActive(false);
         }
     }
 }

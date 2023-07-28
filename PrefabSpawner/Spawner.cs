@@ -4,16 +4,13 @@ using UnityEngine;
 namespace PrefabSpawner {
     public class Spawner : MonoBehaviour {
         [SerializeField] private GameObject[] prefabs;
-
         [SerializeField] private GameObject terrain;
-        [SerializeField] private GameObject deplacables;
 
         private Mesh _mesh;
         private int _treesCounter;
 
         public void SpawnThemAll() {
             if (terrain.GetComponent<MeshCollider>() == null) terrain.AddComponent<MeshCollider>();
-            terrain.tag = "vegetationMask";
             transform.position = terrain.transform.position;
 
             _mesh = terrain.GetComponent<MeshCollider>().sharedMesh;
@@ -29,14 +26,12 @@ namespace PrefabSpawner {
                 var randomPosition = terrain.transform.TransformPoint(random2);
                     
                 if (Physics.Raycast(randomPosition, Vector3.down, out var raycastHit)) {
-                    if (raycastHit.transform.tag.Equals("vegetationMask")) {
-                        var prefabIndex = Random.Range(0, prefabs.Length);
+                    var prefabIndex = Random.Range(0, prefabs.Length);
                         
-                        var spawnedPrefab = Instantiate(prefabs[prefabIndex], raycastHit.point, Quaternion.identity, deplacables.transform);
-                        spawnedPrefab.transform.rotation = new Quaternion(0, Random.Range(-1, 1), 0, 1f);
+                    var spawnedPrefab = Instantiate(prefabs[prefabIndex], raycastHit.point, Quaternion.identity, transform);
+                    spawnedPrefab.transform.rotation = new Quaternion(0, Random.Range(-1, 1), 0, 1f);
                         
-                        _treesCounter++;
-                    }
+                    _treesCounter++;
                 }
             }
             Debug.Log("spawned "+_treesCounter);
@@ -47,11 +42,11 @@ namespace PrefabSpawner {
         }
 
         public void RemoveThemAll() {
-            foreach (Transform prefab in deplacables.transform) {
+            foreach (Transform prefab in transform) {
                 DestroyImmediate(prefab.gameObject);
             }
 
-            Debug.Log(deplacables.GetComponentsInChildren<Transform>().Length);
+            Debug.Log(GetComponentsInChildren<Transform>().Length);
         }
     }
 }

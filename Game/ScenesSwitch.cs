@@ -5,13 +5,13 @@ using UnityEngine.SceneManagement;
 
 namespace Game {
     public class ScenesSwitch : MonoBehaviour {
-        [SerializeField] private GameObject teleportationGameObject;
-
         public GenericDictionary<SpawnPoint, Transform> spawnPointsBySpawnType;
-        public GenericDictionary<SpawnPoint, string> sceneNameBySpawnPoint;
         private Vector3 _bananaManRotation;
 
         private Transform _bananaManTransform;
+
+        public Vector3 teleportDestination;
+        public Quaternion teleportRotation;
         
         private void Start() {
             _bananaManTransform = ObjectsReference.Instance.bananaMan.transform;
@@ -44,8 +44,6 @@ namespace Game {
 
                     ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.HUD].alpha = 0f;
                     ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.CROSSHAIRS].alpha = 0f;
-                    ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.ADVANCEMENTS].alpha = 0f;
-                    ObjectsReference.Instance.uIadvancements.FlushAdvancements();
                     
                     ObjectsReference.Instance.mainCamera.Set0Sensibility();
 
@@ -60,8 +58,12 @@ namespace Game {
 
                 else {
                     //// spawning banana man
-                    if (isTeleporting) ObjectsReference.Instance.teleportation.TeleportDown();
-
+                    if (isTeleporting) {
+                        ObjectsReference.Instance.teleportation.TeleportDown();
+                        _bananaManTransform.position = teleportDestination;
+                        _bananaManTransform.rotation = teleportRotation;
+                    }
+                    
                     if (spawnPoint == SpawnPoint.LAST_MAP) {
                         _bananaManTransform.position = ObjectsReference.Instance.gameData.lastPositionOnMap;
                         _bananaManRotation = ObjectsReference.Instance.gameData.lastRotationOnMap;
@@ -85,16 +87,13 @@ namespace Game {
                     Cursor.lockState = CursorLockMode.Locked;
                     ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.CROSSHAIRS].alpha = 1f;
                     ObjectsReference.Instance.uiCrosshairs.SetCrosshair(ObjectsReference.Instance.bananaMan.activeItemCategory, ObjectsReference.Instance.bananaMan.activeItemType);
-                    ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.ADVANCEMENTS].alpha = 1f;
-
+                    
                     ObjectsReference.Instance.inputManager.SwitchContext(InputContext.GAME);
                     ObjectsReference.Instance.gameManager.gameContext = GameContext.IN_GAME;
                     ObjectsReference.Instance.gameManager.isGamePlaying = true;
                     
                     ObjectsReference.Instance.uiManager.Hide_Game_Menu();
                     ObjectsReference.Instance.uiManager.Hide_home_menu();
-                    
-                    ObjectsReference.Instance.chimployee.TpButton.SetActive(sceneName != "COMMANDROOM");
                     
                     ObjectsReference.Instance.mainCamera.Return_back_To_Player();
                     ObjectsReference.Instance.mainCamera.SetNormalSensibility();
@@ -116,13 +115,13 @@ namespace Game {
                     Cursor.visible = true;
                     Cursor.lockState = CursorLockMode.None;
 
-                    ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.CROSSHAIRS].alpha = 1f;
+                    ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.CROSSHAIRS].alpha = 0f;
                     ObjectsReference.Instance.uiCrosshairs.SetCrosshair(ItemCategory.EMPTY, ItemType.EMPTY);
 
                     ObjectsReference.Instance.inputManager.uiSchemaContext = UISchemaSwitchType.CINEMATIQUE;
                     ObjectsReference.Instance.inputManager.SwitchContext(InputContext.UI);
                     
-                    ObjectsReference.Instance.uihud.Unactivate_Chimployee_Tab();
+                    ObjectsReference.Instance.bananaGun.bananaGunInBack.SetActive(false);
 
                     ObjectsReference.Instance.cinematiques.Play(CinematiqueType.NEW_GAME);
                 }
@@ -137,11 +136,7 @@ namespace Game {
             ObjectsReference.Instance.uiManager.Hide_home_menu();
             
             // prevent banana man to fall while loading scene
-            ObjectsReference.Instance.playerController.canMove = false;
-
-            if (!isNewGame && ObjectsReference.Instance.gameManager.gameContext == GameContext.IN_GAME && ObjectsReference.Instance.mapsManager.currentMap.isDiscovered) {
-                ObjectsReference.Instance.mapsManager.currentMap.RefreshAspirablesItemsDataMap();
-            }
+            ObjectsReference.Instance.playerController.StopPlayer();
             
             ObjectsReference.Instance.mapsManager.currentMap = ObjectsReference.Instance.mapsManager.mapBySceneName[sceneName];
             
@@ -149,22 +144,7 @@ namespace Game {
         }
 
         public void ReturnHome() {
-            if (ObjectsReference.Instance.gameData.currentSaveUuid != null) ObjectsReference.Instance.gameSave.SaveGame(ObjectsReference.Instance.gameData.currentSaveUuid);
-        
             SwitchScene("HOME", SpawnPoint.HOME, false, false);
-        }
-
-        public void Teleport(SpawnPoint spawnPoint) {
-            teleportationGameObject.SetActive(true);
-
-            ObjectsReference.Instance.teleportation.TeleportUp();
-
-            SwitchScene(sceneNameBySpawnPoint[spawnPoint].ToUpper(), spawnPoint, true, false);
-        }
-
-        public void TeleportToCommandRoom() {
-            ObjectsReference.Instance.uiManager.HideInterface();
-            Teleport(SpawnPoint.COMMAND_ROOM_TELEPORTATION);
         }
     }
 }
