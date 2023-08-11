@@ -1,3 +1,4 @@
+using Enums;
 using UnityEngine;
 
 namespace Game.CommandRoomPanelControls {
@@ -7,15 +8,20 @@ namespace Game.CommandRoomPanelControls {
         
         public CommandRoomPanelType commandRoomPanelType;
         
-        private static readonly int KeyboardColorPropertie = Shader.PropertyToID("_Color");
+        private static readonly int KeyboardColorPropertie = Shader.PropertyToID("_emission_color");
+        private static readonly int KeyboardEmissionStrengthPropertie = Shader.PropertyToID("_emission");
         
         public void Activate() {
             keyboardMeshRenderer.material.SetColor(KeyboardColorPropertie, CommandRoomControlPanelsManager.Instance.activatedKeybard);
+            keyboardMeshRenderer.material.SetFloat(KeyboardEmissionStrengthPropertie, 1);
+            
             panel.SetActive(true);
         }
 
         public void Desactivate() {
             keyboardMeshRenderer.material.SetColor(KeyboardColorPropertie, CommandRoomControlPanelsManager.Instance.desactivatedKeybard);
+            keyboardMeshRenderer.material.SetFloat(KeyboardEmissionStrengthPropertie, 0);
+
             panel.SetActive(false);
         }
 

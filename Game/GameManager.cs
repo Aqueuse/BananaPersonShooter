@@ -17,6 +17,7 @@ namespace Game {
         private void Start() {
             isGamePlaying = false;
             gameContext = GameContext.IN_HOME;
+            RenderSettings.ambientLight = Color.white; 
             
             ObjectsReference.Instance.gameSettings.LoadSettings(); 
             ObjectsReference.Instance.audioManager.PlayMusic(MusicType.HOME, 0);
@@ -39,6 +40,8 @@ namespace Game {
             playerCamera.Priority = 10;
             
             if (isNewGame) {
+                ObjectsReference.Instance.bananaMan.tutorialFinished = false;
+
                 ObjectsReference.Instance.scenesSwitch.SwitchScene(
                     "COMMANDROOM", 
                     SpawnPoint.TELEPORTATION,
@@ -65,7 +68,7 @@ namespace Game {
                         monkey.PauseMonkey();
                     }
                 }
-                
+
                 isGamePlaying = false;
             }
 
@@ -73,7 +76,7 @@ namespace Game {
                 ObjectsReference.Instance.inputManager.SwitchContext(InputContext.GAME);
                 
                 ObjectsReference.Instance.mainCamera.SetNormalSensibility();
-                ObjectsReference.Instance.bananaGun.UngrabBananaGun();
+                if (ObjectsReference.Instance.bananaMan.tutorialFinished) ObjectsReference.Instance.bananaGun.UngrabBananaGun();
 
                 if (ObjectsReference.Instance.mapsManager.currentMap.activeMonkeyType != MonkeyType.NONE) {
                     foreach (var monkey in MapItems.Instance.monkeys) {

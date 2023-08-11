@@ -12,7 +12,7 @@ namespace Game {
 
         public Vector3 teleportDestination;
         public Quaternion teleportRotation;
-        
+
         private void Start() {
             _bananaManTransform = ObjectsReference.Instance.bananaMan.transform;
         }
@@ -29,7 +29,6 @@ namespace Game {
                 SceneManager.SetActiveScene(SceneManager.GetSceneByName(sceneName));
                 
                 if (spawnPoint == SpawnPoint.HOME) {
-                    ObjectsReference.Instance.gameManager.cameraMain.clearFlags = CameraClearFlags.SolidColor;
                     Cursor.visible = true;
                     Cursor.lockState = CursorLockMode.None;
 
@@ -47,6 +46,8 @@ namespace Game {
                     
                     ObjectsReference.Instance.mainCamera.Set0Sensibility();
 
+                    RenderSettings.ambientLight = Color.white; 
+
                     ObjectsReference.Instance.playerController.canMove = false;
 
                     ObjectsReference.Instance.gameData.currentSaveUuid = null;
@@ -54,11 +55,13 @@ namespace Game {
                     ObjectsReference.Instance.bananaMan.transform.position = ObjectsReference.Instance.scenesSwitch.spawnPointsBySpawnType[SpawnPoint.HOME].position;
                     
                     ObjectsReference.Instance.gameSave.CancelAutoSave();
+                    
+                    
                 }
 
                 else {
                     //// spawning banana man
-                    if (isTeleporting) {
+                    if (isTeleporting && !isNewGame) {
                         ObjectsReference.Instance.teleportation.TeleportDown();
                         _bananaManTransform.position = teleportDestination;
                         _bananaManTransform.rotation = teleportRotation;
@@ -104,26 +107,12 @@ namespace Game {
                 
                 ObjectsReference.Instance.gameManager.loadingScreen.SetActive(false);
 
-                if (!isNewGame) ObjectsReference.Instance.audioManager.SetMusiqueAndAmbianceBySceneName(sceneName);
-                
-                if (isNewGame) {
-                    ObjectsReference.Instance.gameReset.ResetGameData();
-                    ObjectsReference.Instance.uiSave.CreateNewSave();
-                    
-                    ObjectsReference.Instance.gameManager.cameraMain.clearFlags = CameraClearFlags.SolidColor;
-                    
-                    Cursor.visible = true;
-                    Cursor.lockState = CursorLockMode.None;
+                if (!ObjectsReference.Instance.bananaMan.tutorialFinished && sceneName == "COMMANDROOM") {
+                    ObjectsReference.Instance.tutorial.StartTutorial();
+                }
 
-                    ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.CROSSHAIRS].alpha = 0f;
-                    ObjectsReference.Instance.uiCrosshairs.SetCrosshair(ItemCategory.EMPTY, ItemType.EMPTY);
-
-                    ObjectsReference.Instance.inputManager.uiSchemaContext = UISchemaSwitchType.CINEMATIQUE;
-                    ObjectsReference.Instance.inputManager.SwitchContext(InputContext.UI);
-                    
-                    ObjectsReference.Instance.bananaGun.bananaGunInBack.SetActive(false);
-
-                    ObjectsReference.Instance.cinematiques.Play(CinematiqueType.NEW_GAME);
+                else {
+                    ObjectsReference.Instance.audioManager.SetMusiqueAndAmbianceBySceneName(sceneName);
                 }
             }
         }

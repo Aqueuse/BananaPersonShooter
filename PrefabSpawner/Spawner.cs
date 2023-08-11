@@ -27,10 +27,10 @@ namespace PrefabSpawner {
                     
                 if (Physics.Raycast(randomPosition, Vector3.down, out var raycastHit)) {
                     var prefabIndex = Random.Range(0, prefabs.Length);
-                        
+
                     var spawnedPrefab = Instantiate(prefabs[prefabIndex], raycastHit.point, Quaternion.identity, transform);
                     spawnedPrefab.transform.rotation = new Quaternion(0, Random.Range(-1, 1), 0, 1f);
-                        
+
                     _treesCounter++;
                 }
             }

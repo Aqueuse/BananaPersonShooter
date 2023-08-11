@@ -1,4 +1,5 @@
 using Bananas;
+using Items;
 using UnityEngine;
 
 namespace Building.Buildables.Plateforms {
@@ -29,14 +30,13 @@ namespace Building.Buildables.Plateforms {
             upEffect = GetComponent<UpEffect>();
 
             _plateformMaterials = new Material[1];
-
-            plateformType = ItemType.EMPTY;
             _normalPlateformMaterial = _meshRenderer.materials[0];
         }
 
         private void OnCollisionEnter(Collision other) {
             if (!other.gameObject.CompareTag("Banana")) return;
             ActivePlateform(other.gameObject.GetComponent<Banana>().bananasDataScriptableObject.itemType);
+            ObjectsReference.Instance.mapsManager.currentMap.RefreshAspirablesItemsDataMap();
         }
         
         private void SetActivatedMaterial(Color color) {
@@ -77,7 +77,7 @@ namespace Building.Buildables.Plateforms {
                     upEffect.isActive = true;
 
                     plateformType = ItemType.CAVENDISH;
-                    ObjectsReference.Instance.mapsManager.currentMap.RefreshAspirablesItemsDataMap();
+                    GetComponent<ItemThrowable>().itemType = ItemType.CAVENDISH;
                     upDownEffectVizualisation.enabled = true;
                     break;
             }

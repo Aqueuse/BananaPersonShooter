@@ -59,7 +59,7 @@ namespace Input {
 
             ZoomDezoomCamera();
             
-            if (ObjectsReference.Instance.bananaMan.hasRepairedBananaGun) {
+            if (ObjectsReference.Instance.bananaMan.tutorialFinished) {
                 if (!ObjectsReference.Instance.uiManager.Is_Interface_Visible()) {
                     if (!isBuildModeActivated) Show_Inventory();
 

@@ -1,12 +1,13 @@
 using System.Collections.Generic;
+using UI.InGame;
 using UnityEngine;
 
 namespace Building.Buildables {
     public class BananasDryer : MonoBehaviour {
         [SerializeField] private List<BananaDryerSlot> bananasDryerSlots;
 
-        [SerializeField] private GameObject placeInteractionUI;
-        public GameObject takeInteractionUI;
+        [SerializeField] private ItemInteraction placeInteractionUI;
+        public ItemInteraction takeInteractionUI;
         
         public int peelsQuantity;
         public int fabricQuantity;
@@ -50,8 +51,8 @@ namespace Building.Buildables {
             
             fabricQuantity = 0;
             
-            takeInteractionUI.SetActive(false);
-            placeInteractionUI.SetActive(true);
+            takeInteractionUI.HideUI();
+            placeInteractionUI.ShowUI();
         }
 
         public void RetrieveRawMaterials() {

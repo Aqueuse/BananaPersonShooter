@@ -1,14 +1,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace UI.InGame {
     public class UICanvasItemsHiddableManager : MonoBehaviour {
-        [SerializeField] private RectTransform canvasBananaTree;
+        [SerializeField] private Transform bananaTreeSpriteTransform;
         [SerializeField] private RectTransform[] canvasMonkeys;
         private List<GameObject> debrisGameObjects;
-        public List<Canvas> _debrisCanvasList;
+        public List<SpriteRenderer> _debrisSpriteRendererList;
         
         private Transform _cameraTransform;
         private Vector3 _localScale;
@@ -19,7 +18,7 @@ namespace UI.InGame {
         public bool areMonkeysVisible;
         
         private void Start() {
-            RefreshDebrisCanvasList();
+            RefreshDebrisSpriteRendererList();
             _cameraTransform = ObjectsReference.Instance.mainCamera.transform;
 
             areDebrisVisible = ObjectsReference.Instance.gameSettings.isShowingDebris;
@@ -29,13 +28,13 @@ namespace UI.InGame {
 
         private void Update() {
             if (isBananaTreeVisible) {
-                _cameraDistance = Vector3.Distance(canvasBananaTree.transform.position, _cameraTransform.position);
+                _cameraDistance = Vector3.Distance(bananaTreeSpriteTransform.transform.position, _cameraTransform.position);
 
                 _localScale.x = _cameraDistance / 6000f; // ugly optimisation, yeah
                 _localScale.y = _cameraDistance / 6000f;
 
-                canvasBananaTree.LookAt(_cameraTransform);
-                canvasBananaTree.localScale = _localScale;
+                bananaTreeSpriteTransform.LookAt(_cameraTransform);
+                bananaTreeSpriteTransform.localScale = _localScale;
             }
 
             if (areMonkeysVisible) {
@@ -53,40 +52,39 @@ namespace UI.InGame {
             if (areDebrisVisible) {
                 var cameraPosition = _cameraTransform.position;
                 
-                foreach (var canva in _debrisCanvasList) {
-                    if (canva != null) {
-                        var canvaTransform = canva.transform;
+                foreach (var spriteRenderer in _debrisSpriteRendererList) {
+                    if (spriteRenderer != null) {
+                        var canvaTransform = spriteRenderer.transform;
                 
                         _cameraDistance = Vector3.Distance(canvaTransform.position, cameraPosition);
                         canvaTransform.LookAt(_cameraTransform);
                         
                         if (_cameraDistance < 30f) {
-                            canva.GetComponentInChildren<Image>().GetComponent<RectTransform>().sizeDelta = new Vector2(_cameraDistance/5, _cameraDistance/5);
+                            spriteRenderer.GetComponent<Transform>().localScale = new Vector2(_cameraDistance/40, _cameraDistance/40);
                         }
                     }
                 }
             }
         }
 
-        public void RemoveCanva(Canvas canvasToRemove) {
-            _debrisCanvasList.Remove(canvasToRemove);
+        public void RemoveSpriteRenderer(SpriteRenderer spriteRenderer) {
+            _debrisSpriteRendererList.Remove(spriteRenderer);
         }
 
-        private void RefreshDebrisCanvasList() {
+        private void RefreshDebrisSpriteRendererList() {
             debrisGameObjects = GameObject.FindGameObjectsWithTag("Debris").ToList();
-            _debrisCanvasList = new List<Canvas>();
-            foreach (var debrisGameObject in debrisGameObjects.Where(debrisGameObject => debrisGameObject.CompareTag("Debris"))) {
-                _debrisCanvasList.Add(debrisGameObject.GetComponentInChildren<Canvas>());
+            _debrisSpriteRendererList = new List<SpriteRenderer>();
+            foreach (var debrisGameObject in debrisGameObjects) {
+                _debrisSpriteRendererList.Add(debrisGameObject.GetComponentInChildren<SpriteRenderer>());
             }
         }
 
-        public void SetDebrisCanvasVisibility(bool isVisible) {
+        public void SetDebrisSpriteRendererVisibility(bool isVisible) {
             if (ObjectsReference.Instance.mapsManager.currentMap.GetDebrisQuantity() > 0) {
-                RefreshDebrisCanvasList();
+                RefreshDebrisSpriteRendererList();
                 
-                foreach (var canva in _debrisCanvasList) {
-                    canva.enabled = isVisible;
-                    canva.GetComponent<CanvasGroup>().alpha = 1;
+                foreach (var spriteRenderer in _debrisSpriteRendererList) {
+                    spriteRenderer.enabled = isVisible;
                 }
 
                 areDebrisVisible = isVisible;
@@ -103,7 +101,7 @@ namespace UI.InGame {
         
         public void SetBananaTreeVisibility(bool isVisible) {
             isBananaTreeVisible = isVisible;
-            if (canvasBananaTree != null) canvasBananaTree.GetComponent<Canvas>().enabled = isVisible;
+            if (bananaTreeSpriteTransform != null) bananaTreeSpriteTransform.GetComponent<SpriteRenderer>().enabled = isVisible;
         }
     }
 }

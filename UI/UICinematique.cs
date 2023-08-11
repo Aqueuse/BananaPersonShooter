@@ -17,6 +17,7 @@ namespace UI {
             if (_slider.value >= 1f) {
                 _slider.value = 0;
                 ObjectsReference.Instance.cinematiques.Skip();
+                isAdding = false;
             }
 
             _slider.value -= Time.deltaTime;

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Building;
+using Building.Buildables.Plateforms;
 using Enums;
 using Items;
 using UnityEngine;
@@ -139,9 +140,8 @@ namespace Save {
 
         private static void CheckTutorialFinished() {
             ObjectsReference.Instance.bananaMan.tutorialFinished = ObjectsReference.Instance.gameData.bananaManSavedData.hasFinishedTutorial;
-            ObjectsReference.Instance.bananaMan.hasRepairedBananaGun = ObjectsReference.Instance.gameData.bananaManSavedData.hasRepairedBananaGun;
 
-            if (ObjectsReference.Instance.bananaMan.hasRepairedBananaGun) {
+            if (ObjectsReference.Instance.bananaMan.tutorialFinished) {
                 ObjectsReference.Instance.bananaGun.bananaGunInBack.SetActive(true);
                 ObjectsReference.Instance.uiManager.Set_active(UICanvasGroupType.HUD, true);
             }
@@ -186,21 +186,25 @@ namespace Save {
                         aspirable.transform.position = mapData.aspirablesPositions[i];
                         aspirable.transform.rotation = mapData.aspirablesRotations[i];
                     }
-                    
+
                     if (mapData.aspirablesCategories[i] == ItemCategory.BUILDABLE) {
                         prefab = ObjectsReference.Instance.buildablesManager.BuildablePrefabByBuildableType(mapData.aspirablesBuildableTypes[i]);
 
                         aspirable = Instantiate(prefab, MapItems.Instance.aspirablesContainer.transform, true);
-                    
+
                         aspirable.transform.position = mapData.aspirablesPositions[i];
                         aspirable.transform.rotation = mapData.aspirablesRotations[i];
+
+                        if (mapData.aspirablesBuildableTypes[i] == BuildableType.PLATEFORM) {
+                            aspirable.GetComponent<Plateform>().ActivePlateform(mapData.aspirablesItemTypes[i]);
+                        }
                     }
 
                     if (mapData.aspirablesCategories[i] == ItemCategory.RUINE) {
                         prefab = ObjectsReference.Instance.scriptableObjectManager._meshReferenceScriptableObject.ruinesPrefab[mapData.aspirablesPrefabsIndex[i]];
 
                         aspirable = Instantiate(prefab, MapItems.Instance.aspirablesContainer.transform, true);
-                    
+
                         aspirable.transform.position = mapData.aspirablesPositions[i];
                         aspirable.transform.rotation = mapData.aspirablesRotations[i];
                     }

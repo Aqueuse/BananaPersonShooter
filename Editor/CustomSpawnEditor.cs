@@ -1,20 +1,22 @@
- using PrefabSpawner;
- using UnityEngine;
- using UnityEditor;
- 
-[CustomEditor(typeof(Spawner))]
-public class customSpawnInspector: UnityEditor.Editor {
-	public override void OnInspectorGUI() {
-		DrawDefaultInspector();
-		
-		Spawner spawner = (Spawner)target;
+using PrefabSpawner;
+using UnityEditor;
+using UnityEngine;
 
-		if(GUILayout.Button("Spawn Prefabs")) {
-			spawner.SpawnThemAll();
-		}
+namespace Editor {
+	[CustomEditor(typeof(Spawner))]
+	public class customSpawnInspector: UnityEditor.Editor {
+		public override void OnInspectorGUI() {
+			DrawDefaultInspector();
 		
-		if (GUILayout.Button("Remove Prefabs")) {
-			spawner.RemoveThemAll();
+			Spawner spawner = (Spawner)target;
+
+			if(GUILayout.Button("Spawn Prefabs")) {
+				spawner.SpawnThemAll();
+			}
+		
+			if (GUILayout.Button("Remove Prefabs")) {
+				spawner.RemoveThemAll();
+			}
 		}
 	}
 }

@@ -68,10 +68,8 @@ namespace Save {
 
         private static void ResetTutorial() {
             ObjectsReference.Instance.bananaMan.tutorialFinished = false;
-            ObjectsReference.Instance.bananaMan.hasRepairedBananaGun = false;
             
             ObjectsReference.Instance.gameData.bananaManSavedData.hasFinishedTutorial = false;
-            ObjectsReference.Instance.gameData.bananaManSavedData.hasRepairedBananaGun = false;
         }
 
         private static void ResetActiveItem() {

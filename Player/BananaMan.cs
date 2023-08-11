@@ -5,13 +5,15 @@ using UnityEngine;
 namespace Player {
     public class BananaMan : MonoBehaviour {
         [SerializeField] private Material bodyMaterial;
+        [SerializeField] private GameObject facePlane;
+        [SerializeField] private CanvasRenderer faceCanvasRenderer;
         public TpsPlayerAnimator tpsPlayerAnimator;
-
+        
 		public BananasDataScriptableObject activeItem;
         public ItemType activeItemType = ItemType.EMPTY;
         public ItemCategory activeItemCategory = ItemCategory.EMPTY;
         public BuildableType activeBuildableType = BuildableType.EMPTY; 
-        
+
         public bool isInWater;
         public bool isGrabingBananaGun;
 
@@ -20,11 +22,11 @@ namespace Player {
         public float resistance;
         private static readonly int CutoffHeight = Shader.PropertyToID("Cutoff_Height");
 
-        public bool hasRepairedBananaGun;
         public bool tutorialFinished;
         
         private void Start() {
             tpsPlayerAnimator = GetComponentInChildren<Animator>().GetComponent<TpsPlayerAnimator>();
+            faceCanvasRenderer.SetMesh(facePlane.GetComponent<MeshFilter>().mesh);
         }
         
         public void GainHealth() {

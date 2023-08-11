@@ -7,8 +7,13 @@ namespace PrefabSpawner {
         [SerializeField] private ItemType plateformType;
 
         private void Start() {
-            foreach (var plateforme in plateformes) {
-                plateforme.ActivePlateform(plateformType);
+            if (!ObjectsReference.Instance.mapsManager.currentMap.isDiscovered) {
+                foreach (var plateforme in plateformes) {
+                    plateforme.ActivePlateform(plateformType);
+                }
+
+                ObjectsReference.Instance.mapsManager.currentMap.isDiscovered = true;
+                ObjectsReference.Instance.mapsManager.currentMap.RefreshAspirablesItemsDataMap();
             }
         }
     }

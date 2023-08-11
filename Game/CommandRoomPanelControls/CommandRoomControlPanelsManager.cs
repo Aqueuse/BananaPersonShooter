@@ -1,53 +1,48 @@
+using Enums;
+using Monkeys.Chimployees;
 using Monkeys.MiniChimps;
+using UI.InGame;
 using UnityEngine;
-using UnityEngine.Localization;
-using UnityEngine.Localization.Components;
 
 namespace Game.CommandRoomPanelControls {
     public class CommandRoomControlPanelsManager : MonoSingleton<CommandRoomControlPanelsManager> {
-        public Color activatedKeybard;
-        public Color desactivatedKeybard;
-
-        [SerializeField] private GenericDictionary<CommandRoomPanelType, CommandRoomPanel> commandRoomPanels;
-
         [SerializeField] private BoxCollider door1BoxCollider;
         [SerializeField] private BoxCollider door2BoxCollider;
         [SerializeField] private GameObject accessDeniedDoor1;
         [SerializeField] private GameObject accessDeniedDoor2;
+        
+        [SerializeField] private GameObject mapAccessDoor1;
+        [SerializeField] private GameObject mapAccessDoor2;
 
         [SerializeField] private GameObject bananaCannonMiniGameAccessDenied;
         [SerializeField] private BoxCollider miniGameCanonBananaInteractionCollider;
-        [SerializeField] private CanvasGroup miniGameCannonBananaInteractionCanvas;
+        [SerializeField] private ItemInteraction miniGameCannonBananaPlayInteraction;
 
+        public Light[] gardensLight;
+
+        public Color activatedKeybard;
+        public Color desactivatedKeybard;
+
+        [SerializeField] private GenericDictionary<CommandRoomPanelType, CommandRoomPanel> commandRoomPanels;
+        
         public Assembler assembler;
 
-        public MiniChimpDialogue commandRoomMiniChimpDialogue;
-        [SerializeField] private LocalizeStringEvent _miniChimpLocalizeStringEvent;
-        [SerializeField] private GenericDictionary<miniChimpDialogue, LocalizedString> miniChimpTextByAdvancement;
+        public ChimployeeCommandRoom chimployeeCommandRoom;
+        public Transform apeResourcesChimployeeTransform;
 
-        private void Start() {
-            ShowHidePanel(CommandRoomPanelType.JOURNAL);
+        public MiniChimp miniChimp;
 
-            if (!ObjectsReference.Instance.bananaMan.hasRepairedBananaGun) {
-                SetMiniChimpDialogue(miniChimpDialogue.REPAIR_BANANA_GUN);
-                ForbidDoorsAccess();
-                ForbidBananaCannonMiniGameAccess();
-            }
-
-            else {
-                if (!ObjectsReference.Instance.bananaMan.tutorialFinished) {
-                    SetMiniChimpDialogue(miniChimpDialogue.ASPIRE_CHIMPLOYEE);
-                    ForbidDoorsAccess();
-                    ForbidBananaCannonMiniGameAccess();
-                }
-                
-                else {
-                    SetMiniChimpDialogue(miniChimpDialogue.BANANA_ON_PLATEFORM);
-                }
-            }
+        public void ShowPanel(CommandRoomPanelType commandRoomPanelType) {
+            commandRoomPanels[commandRoomPanelType].Activate();
         }
-        
+
+        public void HidePanel(CommandRoomPanelType commandRoomPanelType) {
+            commandRoomPanels[commandRoomPanelType].Desactivate();
+        }
+
         public void ShowHidePanel(CommandRoomPanelType commandRoomPanelType) {
+            if (!ObjectsReference.Instance.bananaMan.tutorialFinished) return;
+            
             if (commandRoomPanels[commandRoomPanelType].isVisible()) commandRoomPanels[commandRoomPanelType].Desactivate();
             else {
                 commandRoomPanels[commandRoomPanelType].Activate();
@@ -55,39 +50,43 @@ namespace Game.CommandRoomPanelControls {
             
             ObjectsReference.Instance.audioManager.PlayEffect(EffectType.BUTTON_INTERACTION, 0);
         }
+        
+        public void SetAssemblerVolume(float level) {
+            assembler.SetAssemblerAudioVolume(level);
+        }
 
-        public void SetMiniChimpDialogue(miniChimpDialogue miniChimpDialogue) {
-            _miniChimpLocalizeStringEvent.StringReference = miniChimpTextByAdvancement[miniChimpDialogue];
+        public void ForbidDoorsAccess() {
+            door1BoxCollider.enabled = false;
+            door2BoxCollider.enabled = false;
+            
+            accessDeniedDoor1.SetActive(true);
+            accessDeniedDoor2.SetActive(true);
+            
+            mapAccessDoor1.SetActive(false);
+            mapAccessDoor2.SetActive(false);
         }
         
+        public void ForbidBananaCannonMiniGameAccess() {
+            bananaCannonMiniGameAccessDenied.SetActive(true);
+            miniGameCanonBananaInteractionCollider.enabled = false;
+            miniGameCannonBananaPlayInteraction.HideUI();
+        }
+
         public void AuthorizeDoorsAccess() {
             door1BoxCollider.enabled = true;
             door2BoxCollider.enabled = true;
+            
             accessDeniedDoor1.SetActive(false);
             accessDeniedDoor2.SetActive(false);
+            
+            mapAccessDoor1.SetActive(true);
+            mapAccessDoor2.SetActive(true);
         }
         
         public void AuthorizeBananaCannonMiniGameAccess() {
             bananaCannonMiniGameAccessDenied.SetActive(false);
             miniGameCanonBananaInteractionCollider.enabled = true;
-            miniGameCannonBananaInteractionCanvas.alpha = 1;
-        }
-
-        private void ForbidDoorsAccess() {
-            door1BoxCollider.enabled = false;
-            door2BoxCollider.enabled = false;
-            accessDeniedDoor1.SetActive(true);
-            accessDeniedDoor2.SetActive(true);
-        }
-
-        private void ForbidBananaCannonMiniGameAccess() {
-            bananaCannonMiniGameAccessDenied.SetActive(true);
-            miniGameCanonBananaInteractionCollider.enabled = false;
-            miniGameCannonBananaInteractionCanvas.alpha = 0;
-        }
-
-        public void SetAssemblerVolume(float level) {
-            assembler.SetAssemblerAudioVolume(level);
+            miniGameCannonBananaPlayInteraction.ShowUI();
         }
     }
 }

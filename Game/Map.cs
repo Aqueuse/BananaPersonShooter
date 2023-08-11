@@ -3,6 +3,7 @@ using Building;
 using Building.Buildables.Plateforms;
 using Enums;
 using Game.Steam;
+using Items;
 using UnityEngine;
 
 namespace Game {
@@ -40,7 +41,7 @@ namespace Game {
             if (activeMonkeyType != MonkeyType.NONE) {
                 RecalculateHappiness();
                 MapItems.Instance.uiCanvasItemsHiddableManager.SetMonkeysVisibility(ObjectsReference.Instance.gameSettings.isShowingMonkeys);
-                MapItems.Instance.uiCanvasItemsHiddableManager.SetDebrisCanvasVisibility(ObjectsReference.Instance.gameSettings.isShowingDebris);
+                MapItems.Instance.uiCanvasItemsHiddableManager.SetDebrisSpriteRendererVisibility(ObjectsReference.Instance.gameSettings.isShowingDebris);
                 MapItems.Instance.uiCanvasItemsHiddableManager.SetBananaTreeVisibility(ObjectsReference.Instance.gameSettings.isShowingBananaTrees); 
             }
         }
@@ -112,7 +113,12 @@ namespace Game {
                 aspirablesPrefabsIndex.Add(0);
                 var aspirableBuildableType = ObjectsReference.Instance.buildablesManager.GetBuildableTypeByMesh(buildable.GetComponent<MeshFilter>().sharedMesh);
                 aspirablesBuildableTypes.Add(aspirableBuildableType);
-                aspirablesItemTypes.Add(aspirableBuildableType == BuildableType.PLATEFORM ? buildable.GetComponent<Plateform>().plateformType : ItemType.EMPTY);
+                if (aspirableBuildableType == BuildableType.PLATEFORM) {
+                    aspirablesItemTypes.Add(buildable.GetComponent<Plateform>().plateformType);
+                }
+                else {
+                    aspirablesItemTypes.Add(ItemType.EMPTY);
+                }
             }
             
             var chimployee = GameObject.FindGameObjectWithTag("Monkeyman");

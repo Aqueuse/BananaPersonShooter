@@ -88,8 +88,6 @@ namespace Save {
         private void SaveTutorialState() {
             ObjectsReference.Instance.gameData.bananaManSavedData.hasFinishedTutorial =
                 ObjectsReference.Instance.bananaMan.tutorialFinished;
-            ObjectsReference.Instance.gameData.bananaManSavedData.hasRepairedBananaGun =
-                ObjectsReference.Instance.bananaMan.hasRepairedBananaGun;
         }
 
         private static void SaveActiveItem() {

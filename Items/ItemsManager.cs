@@ -43,7 +43,7 @@ namespace Items {
                     case ItemStaticType.DOOR_BEETWEEN_LEVELS:
                         DoorBeetweenLevelsItemAction.Activate(_interactedObject);
                         break;
-                    case ItemStaticType.MINI_CHIMP_COMMAND_ROOM:
+                    case ItemStaticType.BUBBLE:
                         MiniChimpItemAction.Activate(_interactedObject);
                         break;
                     case ItemStaticType.BANANAGUN:
@@ -61,7 +61,7 @@ namespace Items {
                     case ItemStaticType.BLUEPRINTS_DATA:
                         BlueprintsData.Activate();
                         break;
-                    case ItemStaticType.PORTAL_DESTINATION:
+                    case ItemStaticType.TELEPORT_TO_PORTAL_DESTINATION:
                         _interactedObject.GetComponent<PortalDestinationItemAction>().Activate();
                         break;
                 }

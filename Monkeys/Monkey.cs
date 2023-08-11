@@ -25,6 +25,8 @@ namespace Monkeys {
         private bool _isNearPlayer;
         public bool hasGrabbedBanana;
 
+        private float bananaValue;
+        
         private static readonly int Grab = Animator.StringToHash("GRAB");
         
         private void Start() {
@@ -47,10 +49,13 @@ namespace Monkeys {
         }
 
         private void Feed(float addedBananaValue) {
+            bananaValue = addedBananaValue;
             _animator.SetTrigger(Grab);
+        }
 
+        public void Eat() {
             if (sasiety < 50) {
-                sasiety += addedBananaValue;
+                sasiety += bananaValue;
                 ObjectsReference.Instance.mapsManager.currentMap.monkeySasiety = sasiety;
                 ObjectsReference.Instance.mapsManager.currentMap.RecalculateHappiness();
             }

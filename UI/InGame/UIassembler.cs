@@ -8,20 +8,22 @@ namespace UI.InGame {
     }
 
     public class UIassembler : MonoBehaviour {
-        [SerializeField] private CanvasGroup basicTextCanvasGroup;
-        [SerializeField] private CanvasGroup bananaGunReparationCanvasGroup;
-        [SerializeField] private TextMeshProUGUI bananaGunPiecesQuantityText;
+        [SerializeField] private TextMeshPro basicText;
+        [SerializeField] private TextMeshPro bananaGunReparationText;
+        [SerializeField] private TextMeshPro bananaGunPiecesQuantityText;
 
         public AssemblerMode assemblerMode = AssemblerMode.IDLE;
         
         public void SwitchToBananaGunReparationMode() {
-            basicTextCanvasGroup.alpha = 0;
-            bananaGunReparationCanvasGroup.alpha = 1;
+            basicText.alpha = 0;
+            bananaGunPiecesQuantityText.alpha = 1;
+            bananaGunReparationText.alpha = 1;
         }
 
         public void SwitchToIdleMode() {
-            basicTextCanvasGroup.alpha = 1;
-            bananaGunReparationCanvasGroup.alpha = 0;
+            basicText.alpha = 1;
+            bananaGunPiecesQuantityText.alpha = 0;
+            bananaGunReparationText.alpha = 0;
         }
 
         public void SetBananaGunPiecesQuantity(int newQuantity) {

@@ -2,18 +2,18 @@ using Cinemachine;
 using Enums;
 using Items.ItemsActions;
 using TMPro;
+using UI.InGame;
 using UnityEngine;
 
 namespace Game.BananaCannonMiniGame {
     public class BananaCannonMiniGameManager : MonoSingleton<BananaCannonMiniGameManager> {
         [SerializeField] private CinemachineVirtualCamera bananaCannonVirtualCamera;
         [SerializeField] private ProjectilesManager projectilesManager;
+        [SerializeField] private ItemInteraction playItemInteraction;        
         
         public string _mapName = "MAP01";
 
         public SpaceshipsSpawner spaceshipsSpawner;
-        
-        public CanvasGroup interactionCanvasGroup;
         
         ///////////////////
 
@@ -51,7 +51,7 @@ namespace Game.BananaCannonMiniGame {
             ObjectsReference.Instance.inputManager.uiSchemaContext = UISchemaSwitchType.BANANA_CANNON_MINI_GAME;
             ObjectsReference.Instance.inputManager.SwitchContext(InputContext.UI);
 
-            interactionCanvasGroup.alpha = 0;
+            playItemInteraction.HideUI();
 
             bananaCannonVirtualCamera.Priority = 20;
             Cursor.visible = true;
@@ -88,7 +88,7 @@ namespace Game.BananaCannonMiniGame {
         public void QuitMiniGame() {
             Time.timeScale = 1;
 
-            interactionCanvasGroup.alpha = 1;
+            playItemInteraction.ShowUI();
             bananaCannonVirtualCamera.Priority = 1;
             ObjectsReference.Instance.inputManager.SwitchContext(InputContext.GAME);
 

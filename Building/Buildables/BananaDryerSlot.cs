@@ -15,7 +15,7 @@ namespace Building.Buildables {
             bananaPeel.enabled = false;
             fabric.enabled = true;
             
-            GetComponentInParent<BananasDryer>().takeInteractionUI.SetActive(true);
+            GetComponentInParent<BananasDryer>().takeInteractionUI.ShowUI();
         }
 
         public MeshRenderer BananaPeel => bananaPeel;

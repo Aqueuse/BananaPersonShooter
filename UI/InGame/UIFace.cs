@@ -2,8 +2,6 @@
 
 namespace UI.InGame {
     public class UIFace : MonoBehaviour {
-        [SerializeField] private GameObject facePlane;
-        
         private Animator _faceAnimator;
         private static readonly int Move = Animator.StringToHash("MOVE");
         private static readonly int Hurted = Animator.StringToHash("HURTED");
@@ -15,8 +13,6 @@ namespace UI.InGame {
 
         private void Start() {
             _faceAnimator = GetComponent<Animator>();
-            
-            GetComponent<CanvasRenderer>().SetMesh(facePlane.GetComponent<MeshFilter>().mesh);
         }
         
         public void MoveFaceAnimation(float speed) {

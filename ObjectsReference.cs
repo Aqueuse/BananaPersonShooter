@@ -43,6 +43,7 @@ public class ObjectsReference : MonoSingleton<ObjectsReference> {
     public Cinematiques cinematiques;
     public Death death;
     public ScenesSwitch scenesSwitch;
+    public Tutorial tutorial;
 
     public GameActions gameActions;
 

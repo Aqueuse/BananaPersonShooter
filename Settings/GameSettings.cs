@@ -253,7 +253,7 @@ namespace Settings {
         public void SaveDebrisCanvasVisibility(bool isVisible) {
             isShowingDebris = isVisible;
             prefs.SetString("areDebrisVisible", isVisible ? "True" : "False");
-            if (ObjectsReference.Instance.gameManager.gameContext == GameContext.IN_GAME) MapItems.Instance.uiCanvasItemsHiddableManager.SetDebrisCanvasVisibility(isVisible);
+            if (ObjectsReference.Instance.gameManager.gameContext == GameContext.IN_GAME) MapItems.Instance.uiCanvasItemsHiddableManager.SetDebrisSpriteRendererVisibility(isVisible);
             
             prefs.Save();
         }

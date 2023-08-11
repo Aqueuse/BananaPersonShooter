@@ -54,7 +54,7 @@ namespace Building {
                     break;
                 
                 case "Debris":
-                    MapItems.Instance.uiCanvasItemsHiddableManager.RemoveCanva(bananaGun.targetedGameObject.GetComponentInChildren<Canvas>());
+                    MapItems.Instance.uiCanvasItemsHiddableManager.RemoveSpriteRenderer(bananaGun.targetedGameObject.GetComponentInChildren<SpriteRenderer>());
 
                     foreach (var buildableCraftingIngredient in buildablesManager.GetBuildableCraftingIngredients(BuildableType.PLATEFORM)) {
                         ObjectsReference.Instance.inventory.AddQuantity(ItemCategory.RAW_MATERIAL, buildableCraftingIngredient.Key, buildableCraftingIngredient.Value);
@@ -79,25 +79,6 @@ namespace Building {
                     bananaGun.targetedGameObject = null;
 
                     ObjectsReference.Instance.mapsManager.currentMap.RefreshAspirablesItemsDataMap();
-
-                    break;
-                case "Monkeyman" :
-                    CommandRoomControlPanelsManager.Instance.SetMiniChimpDialogue(miniChimpDialogue.BANANA_ON_PLATEFORM);
-                    
-                    ObjectsReference.Instance.inventory.AddQuantity(ItemCategory.RAW_MATERIAL, ItemType.METAL, 8);
-                    ObjectsReference.Instance.inventory.AddQuantity(ItemCategory.RAW_MATERIAL, ItemType.ELECTRONIC, 2);
-                    ObjectsReference.Instance.inventory.AddQuantity(ItemCategory.RAW_MATERIAL, ItemType.BATTERY, 1);
-                    
-                    DestroyImmediate(bananaGun.targetedGameObject.transform.parent.gameObject);
-                    bananaGun.targetedGameObject = null;
-
-                    ObjectsReference.Instance.mapsManager.currentMap.RefreshAspirablesItemsDataMap();
-
-                    CommandRoomControlPanelsManager.Instance.AuthorizeBananaCannonMiniGameAccess();
-                    CommandRoomControlPanelsManager.Instance.AuthorizeDoorsAccess();
-                    CommandRoomControlPanelsManager.Instance.assembler.ShowBlueprintsData();
-
-                    ObjectsReference.Instance.bananaMan.tutorialFinished = true;
 
                     break;
             }

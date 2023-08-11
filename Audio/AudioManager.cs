@@ -119,7 +119,7 @@ namespace Audio {
             }
         }
 
-        private void PlayAmbiance(AmbianceType ambianceType) {
+        public void PlayAmbiance(AmbianceType ambianceType) {
             var audioData = audioAmbianceDictionnary[ambianceType];
 
             audioAmbianceSource.volume = ambianceLevel * audioMusicsSource.volume;

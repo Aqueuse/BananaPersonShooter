@@ -16,6 +16,8 @@ namespace Game {
         private VideoPlayer _cinematiqueVideoPlayer;
         private MeshRenderer _meshRenderer;
         private CinemachineVirtualCamera _cinematiqueCamera;
+
+        private CinematiqueType cinematiqueType;
         
         private void Start() {
             _cinematiqueVideoPlayer = GetComponentInChildren<VideoPlayer>();
@@ -31,6 +33,7 @@ namespace Game {
         }
 
         public void Play(CinematiqueType playedCinematiqueType) {
+            cinematiqueType = playedCinematiqueType;
             ObjectsReference.Instance.audioManager.StopAudioSource(AudioSourcesType.MUSIC);
 
             _cinematiqueVideoPlayer.enabled = true;
@@ -74,14 +77,21 @@ namespace Game {
             ObjectsReference.Instance.inputManager.SwitchContext(InputContext.GAME);
             ObjectsReference.Instance.gameManager.gameContext = GameContext.IN_GAME;
             ObjectsReference.Instance.gameManager.isGamePlaying = true;
-            
+
             ObjectsReference.Instance.mainCamera.Return_back_To_Player();
             ObjectsReference.Instance.mainCamera.SetNormalSensibility();
-                    
+
             ObjectsReference.Instance.playerController.canMove = true;
             ObjectsReference.Instance.bananaMan.GetComponent<Rigidbody>().isKinematic = false;
-            
-            ObjectsReference.Instance.audioManager.SetMusiqueAndAmbianceBySceneName(ObjectsReference.Instance.mapsManager.currentMap.mapName);
+
+            if (cinematiqueType == CinematiqueType.NEW_GAME) {
+                ObjectsReference.Instance.teleportation.TeleportDown();
+                ObjectsReference.Instance.audioManager.StopAudioSource(AudioSourcesType.MUSIC);
+                ObjectsReference.Instance.audioManager.PlayAmbiance(AmbianceType.DRONE_COMMANDROOM);
+            }
+            else {
+                ObjectsReference.Instance.audioManager.SetMusiqueAndAmbianceBySceneName(ObjectsReference.Instance.mapsManager.currentMap.mapName);
+            }
         }
 
         void EndReached(VideoPlayer videoPlayer) {
