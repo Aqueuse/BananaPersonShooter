@@ -1,3 +1,4 @@
+using Enums;
 using Game.BananaCannonMiniGame;
 using TMPro;
 using UnityEngine;
@@ -75,12 +76,12 @@ namespace UI.InGame {
         }
 
         private void RefreshBananasQuantity() {
-            var bananasQuantity = ObjectsReference.Instance.inventory.GetQuantity(ItemType.CAVENDISH);
+            var bananasQuantity = ObjectsReference.Instance.bananasInventory.GetQuantity(BananaType.CAVENDISH);
             
             if (bananasQuantity == 0) playButtonBananasQuantityText.text = LocalizationSettings.StringDatabase.GetLocalizedString("UI", "no_bananas");
             else {
                 playButtonBananasQuantityText.text = "("+
-                                                     ObjectsReference.Instance.inventory.GetQuantity(ItemType.CAVENDISH)+
+                                                     ObjectsReference.Instance.bananasInventory.GetQuantity(BananaType.CAVENDISH)+
                                                      " "+
                                                      LocalizationSettings.StringDatabase.GetLocalizedString("UI", "bananas")+
                                                      ")";

@@ -73,7 +73,7 @@ namespace Save {
                 // synchronize data beetween classes and templates
                 map.Value.isDiscovered = mapClass.isDiscovered;
                 map.Value.cleanliness = mapClass.cleanliness;
-                map.Value.monkeySasiety = mapClass.monkeySasiety;
+                map.Value.monkeySasiety = mapClass.mapDataScriptableObject.monkeyDataScriptableObject.sasiety;
                 
                 var jsonMapSavedData = JsonConvert.SerializeObject(ObjectsReference.Instance.gameData.mapSavedDatasByMapName[map.Key]);
                 var mapSavefilePath = Path.Combine(savefilePath, map.Key+".json");
@@ -90,7 +90,7 @@ namespace Save {
                 if (map.Value.aspirablesCategories.Count == 0) {
                     // delete file
                     var mapDataSavesPath = Path.Combine(savePath, "MAPDATA");
-                    var filePath = Path.Combine(mapDataSavesPath, map.Value.mapName+"_aspirables.data");
+                    var filePath = Path.Combine(mapDataSavesPath, map.Value.mapDataScriptableObject.sceneName+"_aspirables.data");
 
                     File.Delete(filePath);
                 }
@@ -99,7 +99,7 @@ namespace Save {
                     var mapToSave = map.Value;
 
                     SaveMapData(
-                        mapName: mapToSave.mapName,
+                        mapName: mapToSave.mapDataScriptableObject.sceneName,
                         aspirablesPositions: mapToSave.aspirablesPositions,
                         aspirablesRotations:mapToSave.aspirablesRotations,
                         debrisPrefabsIndex: mapToSave.aspirablesPrefabsIndex,
@@ -145,7 +145,7 @@ namespace Save {
             List<ItemCategory> aspirablesCategories,
             [NotNull] List<int> debrisPrefabsIndex,
             [NotNull] List<BuildableType> buildableTypes,
-            [NotNull] List<ItemType> itemTypes
+            [NotNull] List<BananaType> itemTypes
         ) {
 
             var mapDataSavesPath = Path.Combine(savePath, "MAPDATA");

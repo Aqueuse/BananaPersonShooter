@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using Data.Bananas;
 using Data.Buildables;
-using Data.RawMaterial;
 using Enums;
+using Tags;
 using UnityEngine;
 
 namespace Data {
@@ -13,14 +13,15 @@ namespace Data {
 
         public GameObject[] debrisPrefab;
         public GameObject[] ruinesPrefab;
-        
+
         public List<Mesh> debrisMeshes;
         public List<Mesh> ruinesMeshes;
-        
+
         public GameObject chimployeePrefab;
+
+        public GenericDictionary<GAME_OBJECT_TAG, ItemScriptableObject> gameObjectDataScriptableObjectsByTag;
         
-        public GenericDictionary<ItemType, BananasDataScriptableObject> bananasDataScriptableObject;
-        public GenericDictionary<BuildableType, BuildableDataScriptableObject> buildablesDataScriptableObject;
-        public GenericDictionary<ItemType, RawMaterialDataScriptableObject> rawMaterialDataScriptableObjects;
+        public GenericDictionary<BuildableType, BuildableDataScriptableObject> buildableDataScriptableObjects;
+        public GenericDictionary<BananaType, BananasDataScriptableObject> bananasDataScriptableObjects;
     }
 }

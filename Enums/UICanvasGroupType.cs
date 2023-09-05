@@ -8,7 +8,7 @@ namespace Enums {
         CREDITS,
         DEATH,
         HUD,
-        INVENTORY,
+        INVENTORY_AND_INFORMATION,
         BLUEPRINTS,
         MINIGAME,
         AUDIO_VIDEO_TAB,
@@ -20,7 +20,9 @@ namespace Enums {
         GAMEPAD_DISCONNECTED,
         BUILD_HELPER_GAMEPAD,
         BUILD_HELPER_KEYBOARD,
-        SLOTS_HELPER_GAMEPAD,
-        SLOTS_HELPER_KEYBOARD
+        BANANAS_INVENTORY,
+        INGREDIENTS_INVENTORY,
+        RAW_MATERIALS_INVENTORY,
+        BLUEPRINTS_INVENTORY
     }
 }

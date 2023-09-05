@@ -1,3 +1,4 @@
+using Tags;
 using UnityEngine;
 
 namespace Game.BananaCannonMiniGame {
@@ -7,11 +8,11 @@ namespace Game.BananaCannonMiniGame {
         private void OnTriggerEnter(Collider other) {
             if (!spaceship.isExploded) return;
             
-            if (other.CompareTag("banana_cannon_game_dome")) {
+            if (TagsManager.Instance.HasTag(other.gameObject, GAME_OBJECT_TAG.CANNON_MINI_GAME_DOME)) {
                 SpawnDebrisOnMap();
             }
             
-            if (other.CompareTag("miniGameLimits")) Destroy(gameObject);
+            if (TagsManager.Instance.HasTag(other.gameObject, GAME_OBJECT_TAG.CANNON_MINI_GAME_LIMITS)) Destroy(gameObject);
         }
         
         private void SpawnDebrisOnMap() {

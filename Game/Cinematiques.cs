@@ -72,7 +72,7 @@ namespace Game {
             Cursor.visible = false;
             Cursor.lockState = CursorLockMode.Locked;
             ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.CROSSHAIRS].alpha = 1f;
-            ObjectsReference.Instance.uiCrosshairs.SetCrosshair(ObjectsReference.Instance.bananaMan.activeItemCategory, ObjectsReference.Instance.bananaMan.activeItemType);
+            ObjectsReference.Instance.uiCrosshairs.SetCrosshair(ObjectsReference.Instance.bananaMan.activeItemCategory, ObjectsReference.Instance.bananaMan.activeBananaType);
             
             ObjectsReference.Instance.inputManager.SwitchContext(InputContext.GAME);
             ObjectsReference.Instance.gameManager.gameContext = GameContext.IN_GAME;
@@ -90,7 +90,7 @@ namespace Game {
                 ObjectsReference.Instance.audioManager.PlayAmbiance(AmbianceType.DRONE_COMMANDROOM);
             }
             else {
-                ObjectsReference.Instance.audioManager.SetMusiqueAndAmbianceBySceneName(ObjectsReference.Instance.mapsManager.currentMap.mapName);
+                ObjectsReference.Instance.audioManager.SetMusiqueAndAmbianceBySceneName(ObjectsReference.Instance.mapsManager.currentMap.mapDataScriptableObject.sceneName);
             }
         }
 

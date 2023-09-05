@@ -4,7 +4,7 @@ using UI.InGame;
 using UnityEngine;
 
 namespace Monkeys.Chimployees {
-    public class ChimployeeCommandRoom : MonoBehaviour {
+    public class ChimployeeCommandRoom : Chimployee {
         [SerializeField] private RuntimeAnimatorController initialAnimatorCharacterController;
         [SerializeField] private RuntimeAnimatorController apeRessourcesCharacterController;
 

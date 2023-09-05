@@ -4,21 +4,35 @@ using UnityEngine;
 
 namespace UI.InGame.QuickSlots {
     public class UISlotsManager : MonoBehaviour {
-        public List<UISlot> uiSlotsScripts;
+        public List<UIQuickSlot> uiSlotsScripts;
         public int selectedSlotIndex;
         
-        public void RefreshQuantityInQuickSlot(ItemCategory itemCategory, ItemType itemType = ItemType.EMPTY) {
+        public void RefreshQuantityInQuickSlot() {
             foreach (var uiSlotsScript in uiSlotsScripts) {
-                if (itemCategory != ItemCategory.BUILDABLE && uiSlotsScript.itemType == itemType) {
-                    uiSlotsScript.SetAmmoQuantity(ObjectsReference.Instance.inventory.bananaManInventory[itemType]);
+                if (uiSlotsScript.slotItemScriptableObject == null) return;
+                
+                if (uiSlotsScript.slotItemScriptableObject.itemCategory == ItemCategory.BUILDABLE || uiSlotsScript.slotItemScriptableObject.itemCategory == ItemCategory.EMPTY) return;
+                
+                if (uiSlotsScript.slotItemScriptableObject.itemCategory == ItemCategory.BANANA) {
+                    uiSlotsScript.SetQuantity(ObjectsReference.Instance.bananasInventory.bananasInventory[uiSlotsScript.slotItemScriptableObject.bananaType]);
 
-                    if (ObjectsReference.Instance.inventory.GetQuantity(uiSlotsScript.itemType) <= 0) {
+                    if (ObjectsReference.Instance.bananasInventory.GetQuantity(uiSlotsScript.slotItemScriptableObject.bananaType) <= 0) {
+                        uiSlotsScript.EmptySlot();
+                    }
+                }
+                
+                if (uiSlotsScript.slotItemScriptableObject.itemCategory == ItemCategory.RAW_MATERIAL) {
+                    uiSlotsScript.SetQuantity(ObjectsReference.Instance.rawMaterialsInventory.rawMaterialsInventory[uiSlotsScript.slotItemScriptableObject.rawMaterialType]);
+
+                    if (ObjectsReference.Instance.rawMaterialsInventory.GetQuantity(uiSlotsScript.slotItemScriptableObject.rawMaterialType) <= 0) {
                         uiSlotsScript.EmptySlot();
                     }
                 }
 
-                else {
-                    if (uiSlotsScript.itemCategory == ItemCategory.EMPTY) {
+                if (uiSlotsScript.slotItemScriptableObject.itemCategory == ItemCategory.INGREDIENT) {
+                    uiSlotsScript.SetQuantity(ObjectsReference.Instance.ingredientsInventory.ingredientsInventory[uiSlotsScript.slotItemScriptableObject.ingredientsType]);
+
+                    if (ObjectsReference.Instance.ingredientsInventory.GetQuantity(uiSlotsScript.slotItemScriptableObject.ingredientsType) <= 0) {
                         uiSlotsScript.EmptySlot();
                     }
                 }
@@ -54,9 +68,9 @@ namespace UI.InGame.QuickSlots {
                 Switch_To_SelectedSlot();
             }
         }
-        
+
         public void Select_Lower_Slot() {
-            if (selectedSlotIndex < uiSlotsScripts.Count-1) {
+            if (selectedSlotIndex < uiSlotsScripts.Count - 1) {
                 selectedSlotIndex++;
                 Switch_To_SelectedSlot();
             }
@@ -66,79 +80,12 @@ namespace UI.InGame.QuickSlots {
             }
         }
         
-        public void AssignToSelectedSlot(ItemCategory itemCategory, ItemType itemType = ItemType.EMPTY, BuildableType buildableType = BuildableType.EMPTY) {
-            foreach (var uiSlot in uiSlotsScripts) {
-                if (itemCategory == ItemCategory.BUILDABLE && uiSlot.buildableType == buildableType) {
-                    uiSlot.EmptySlot();
-                }
-                if (itemCategory != ItemCategory.BUILDABLE && uiSlot.itemType == itemType) {
-                    uiSlot.EmptySlot();
-                }
-            }
-            
-            Get_Selected_Slot().SetSlot(itemCategory, slotItemType:itemType, slotBuildableType:buildableType);
-        }
-
-        public void TryToPutOnSlot(ItemCategory itemCategory, ItemType itemType = ItemType.EMPTY, BuildableType buildableType = BuildableType.EMPTY) {
-            if (IsAlreadyInQuickSlot(itemCategory, itemType, buildableType)) {
-                var uislot = GetSlotWithItemCategoryAndType(itemCategory, itemType, buildableType);
-                
-                uislot.SetSlot(itemCategory, slotItemType:itemType, slotBuildableType:buildableType);
-            }
-
-            else {
-                foreach (var uiSlot in uiSlotsScripts) {
-                    if (uiSlot.itemCategory == ItemCategory.EMPTY && uiSlot.itemType == ItemType.EMPTY) {
-                        uiSlot.SetSlot(itemCategory, slotItemType:itemType, slotBuildableType:buildableType);
-                        return;
-                    }
-                }
-            }
-        }
-
-        public void SetActiveSlot() {
-            var activeItemCategory = ObjectsReference.Instance.bananaMan.activeItemCategory;
-            var activeItemType = ObjectsReference.Instance.bananaMan.activeItemType;
-            var activeBuilableType = ObjectsReference.Instance.bananaMan.activeBuildableType;
-            
-            var uiSlot = GetSlotWithItemCategoryAndType(activeItemCategory, activeItemType, activeBuilableType);
-            selectedSlotIndex = uiSlot != null ? uiSlotsScripts.IndexOf(uiSlot) : 0;
-            Switch_to_Slot_Index(selectedSlotIndex);
-        }
-
-        private bool IsAlreadyInQuickSlot(ItemCategory itemCategory, ItemType itemType = ItemType.EMPTY, BuildableType buildableType = BuildableType.EMPTY) {
-            foreach (var uiSlot in uiSlotsScripts) {
-                if (itemCategory == ItemCategory.BUILDABLE && uiSlot.buildableType == buildableType) {
-                    return true;
-                }
-
-                if (itemCategory != ItemCategory.BUILDABLE && uiSlot.itemType == itemType) {
-                    return true;
-                }
-            }
-            return false;
-        }
-        
-        public UISlot Get_Selected_Slot() {
+        public UIQuickSlot Get_Selected_Slot() {
             return uiSlotsScripts[selectedSlotIndex];
         }
 
-        private UISlot GetSlotWithItemCategoryAndType(ItemCategory itemCategory, ItemType itemType = ItemType.EMPTY, BuildableType buildableType = BuildableType.EMPTY) {
-            foreach (var uiSlot in uiSlotsScripts) {
-                if (itemCategory == ItemCategory.BUILDABLE && uiSlot.buildableType == buildableType) {
-                    return uiSlot;
-                }
-
-                if (itemCategory != ItemCategory.BUILDABLE && uiSlot.itemType == itemType) {
-                    return uiSlot;
-                }
-            }
-
-            return null;
-        }
-        
-        public ItemType Get_Selected_Slot_Type() {
-            return uiSlotsScripts[selectedSlotIndex].itemType;
+        public BananaType Get_Selected_Slot_Type() {
+            return uiSlotsScripts[selectedSlotIndex].slotItemScriptableObject.bananaType;
         }
     }
 }

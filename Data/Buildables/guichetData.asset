@@ -12,8 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6e11e44741351774ca1f8261e4d989f1, type: 3}
   m_Name: guichetData
   m_EditorClassIdentifier: 
-  itemType: 0
+  gameObjectTag: 11
   itemCategory: 1
+  bananaType: 0
+  rawMaterialType: 5
+  ingredientsType: 1
   buildableType: 3
   itemName:
   - ticket booth
@@ -26,7 +29,7 @@ MonoBehaviour:
   - Una taquilla para recibir a los visitantes de la reserva
   rawMaterialsWithQuantity:
     list:
-    - key: 18
+    - key: 0
       value: 10
     keyCollision: 0
   buildablePrefab: {fileID: 5196617759513621631, guid: fdc0a3f945f15074a968af548517735b, type: 3}

@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Enums;
+﻿using Enums;
 using Player;
 using UnityEngine;
 
@@ -17,17 +16,6 @@ namespace Input {
         public bool rightTriggerActivated;
         public bool leftClickActivated;
         
-        private float leftRotateIncrementer;
-        private float rightRotateIncrementer;
-        private float topRotateIncrementer;
-        private float downRotateIncrementer;
-
-        private const float _rotationSpeed = 0.2f;
-        
-        private Dictionary<RotationAxis, Vector3> rotationAxisToVector3Direction;
-
-        public bool isBuildModeActivated;
-
         private void Start() {
             move = new Vector2();
 
@@ -36,18 +24,11 @@ namespace Input {
             _playerController = ObjectsReference.Instance.playerController;
             
             _leftTriggerActivated = false;
-
-            isBuildModeActivated = false;
-            
-            rotationAxisToVector3Direction = new Dictionary<RotationAxis, Vector3>() {
-                {RotationAxis.Y, Vector3.up},
-                {RotationAxis.Z, Vector3.forward}
-            };
         }
 
         private void Update() {
             Move();
-            if (!isBuildModeActivated) Jump();
+            Jump();
             Run();
             Roll();
             
@@ -60,33 +41,19 @@ namespace Input {
             ZoomDezoomCamera();
             
             if (ObjectsReference.Instance.bananaMan.tutorialFinished) {
-                if (!ObjectsReference.Instance.uiManager.Is_Interface_Visible()) {
-                    if (!isBuildModeActivated) Show_Inventory();
+                Scroll_Slots();
+                SwitchToUpperSlot();
+                SwitchToLowerSlot();
+        
+                SwitchToSlotIndex0();
+                SwitchToSlotIndex1();
+                SwitchToSlotIndex2();
+                SwitchToSlotIndex3();
 
-                    Shoot();
-                    Eat();
+                Shoot();
+                Eat();
 
-                    if (_playerController.isGrounded) CheckBuildMode();
-                }
-            
-                if (isBuildModeActivated) {
-                    Harvest();
-                    TranslateZBananaGunTarget();
-                    
-                    Build();
-                    Rotate();
-                }
-
-                else {
-                    Scroll_Slots();
-                    SwitchToUpperSlot();
-                    SwitchToLowerSlot();
-            
-                    SwitchToSlotIndex0();
-                    SwitchToSlotIndex1();
-                    SwitchToSlotIndex2();
-                    SwitchToSlotIndex3();
-                }
+                if (_playerController.isGrounded) CheckBuildMode();
             }
         }
         
@@ -135,34 +102,31 @@ namespace Input {
 
         private static void Grab() {
             if (UnityEngine.Input.GetKeyDown(KeyCode.F) || UnityEngine.Input.GetKeyDown(KeyCode.JoystickButton5)) {
-                if (!ObjectsReference.Instance.itemsManager.isGrabbing) {
-                    ObjectsReference.Instance.itemsManager.Grab();
+                if (!ObjectsReference.Instance.interactionsManager.isGrabbing) {
+                    ObjectsReference.Instance.interactionsManager.Grab();
                 }
             }
         }
 
         private static void Release() {
             if (UnityEngine.Input.GetKeyUp(KeyCode.F) || UnityEngine.Input.GetKeyUp(KeyCode.JoystickButton2)) {
-                ObjectsReference.Instance.itemsManager.Release();
+                ObjectsReference.Instance.interactionsManager.Release();
             }
         }
 
         private static void Interact() {
             if (UnityEngine.Input.GetKeyDown(KeyCode.E) || UnityEngine.Input.GetKeyDown(KeyCode.JoystickButton2)) {
-                ObjectsReference.Instance.itemsManager.Validate();
-            }
-        }
-
-        private static void Show_Inventory() {
-            if (UnityEngine.Input.GetKeyDown(KeyCode.I) || UnityEngine.Input. GetAxis("DpadHorizontal") < 0) {
-                ObjectsReference.Instance.uiManager.Show_Hide_interface();
+                ObjectsReference.Instance.interactionsManager.Validate();
             }
         }
 
         private static void PauseGame() {
             if (UnityEngine.Input.GetKeyDown(KeyCode.Escape) || UnityEngine.Input.GetKeyDown(KeyCode.JoystickButton7) || UnityEngine.Input.GetKeyDown(KeyCode.JoystickButton15)) {
-                ObjectsReference.Instance.inputManager.uiSchemaContext = UISchemaSwitchType.GAME_MENU;
-                ObjectsReference.Instance.gameManager.PauseGame(true);
+                
+                ObjectsReference.Instance.inputManager.uiSchemaSwitcher.SwitchUISchema(UISchemaSwitchType.GAME_MENU);
+                ObjectsReference.Instance.inputManager.SwitchContext(InputContext.UI);
+                
+                ObjectsReference.Instance.gameManager.PauseGame();
                 ObjectsReference.Instance.uiManager.Show_game_menu();
             }
         }
@@ -267,29 +231,24 @@ namespace Input {
                 ObjectsReference.Instance.bananaGun.GrabBananaGun();
                 
                 if (ObjectsReference.Instance.bananaMan.activeItemCategory == ItemCategory.BUILDABLE) {
-                    ObjectsReference.Instance.uiCrosshairs.SetCrosshair(ItemCategory.BUILDABLE, ItemType.EMPTY);
+                    ObjectsReference.Instance.uiCrosshairs.SetCrosshair(ItemCategory.BUILDABLE, BananaType.EMPTY);
 
-                    ObjectsReference.Instance.uihud.GetCurrentUIHelper().show_build_helper();
+                    ObjectsReference.Instance.uInventoriesManager.GetCurrentUIHelper().show_build_helper();
                     ObjectsReference.Instance.slotSwitch.ActivateGhost();
                 }
-                
-                isBuildModeActivated = true;
             }
 
             if (UnityEngine.Input.GetKeyUp(KeyCode.Mouse1)) {
                 ObjectsReference.Instance.bananaGun.UngrabBananaGun();
                 
-                ObjectsReference.Instance.bananaGun.UnhighlightSelectedObject();
-                ObjectsReference.Instance.uiCrosshairs.SetCrosshair(ItemCategory.EMPTY, ItemType.EMPTY);
+                ObjectsReference.Instance.uiCrosshairs.SetCrosshair(ItemCategory.EMPTY, BananaType.EMPTY);
 
-                if (ObjectsReference.Instance.bananaMan.activeItemCategory == ItemCategory.BANANA) ObjectsReference.Instance.uihud.GetCurrentUIHelper().show_banana_helper();
+                if (ObjectsReference.Instance.bananaMan.activeItemCategory == ItemCategory.BANANA) ObjectsReference.Instance.uInventoriesManager.GetCurrentUIHelper().show_banana_helper();
                 else {
-                    ObjectsReference.Instance.uihud.GetCurrentUIHelper().show_default_helper();
+                    ObjectsReference.Instance.uInventoriesManager.GetCurrentUIHelper().show_default_helper();
                 }
                
                 ObjectsReference.Instance.slotSwitch.CancelGhost();
-                
-                isBuildModeActivated = false;
             }
 
             if (UnityEngine.Input.GetAxis("LeftTrigger") <= -0.1 &&
@@ -300,12 +259,10 @@ namespace Input {
                 
                 if (ObjectsReference.Instance.bananaMan.activeItemCategory == ItemCategory.BUILDABLE) {
                     ObjectsReference.Instance.slotSwitch.ActivateGhost();
-                    ObjectsReference.Instance.uihud.GetCurrentUIHelper().show_build_helper();
+                    ObjectsReference.Instance.uInventoriesManager.GetCurrentUIHelper().show_build_helper();
 
-                    ObjectsReference.Instance.uiCrosshairs.SetCrosshair(ItemCategory.BUILDABLE, ItemType.EMPTY);
+                    ObjectsReference.Instance.uiCrosshairs.SetCrosshair(ItemCategory.BUILDABLE, BananaType.EMPTY);
                 }
-
-                isBuildModeActivated = true;
             }
 
             if (UnityEngine.Input.GetAxis("LeftTrigger") >= 0 && 
@@ -314,112 +271,14 @@ namespace Input {
                 
                 ObjectsReference.Instance.bananaGun.UngrabBananaGun();
                 
-                ObjectsReference.Instance.uiCrosshairs.SetCrosshair(ItemCategory.EMPTY, ItemType.EMPTY);
-                ObjectsReference.Instance.bananaGun.UnhighlightSelectedObject();
+                ObjectsReference.Instance.uiCrosshairs.SetCrosshair(ItemCategory.EMPTY, BananaType.EMPTY);
                 
-                if (ObjectsReference.Instance.bananaMan.activeItemCategory == ItemCategory.BANANA) ObjectsReference.Instance.uihud.GetCurrentUIHelper().show_banana_helper();
+                if (ObjectsReference.Instance.bananaMan.activeItemCategory == ItemCategory.BANANA) ObjectsReference.Instance.uInventoriesManager.GetCurrentUIHelper().show_banana_helper();
                 else {
-                    ObjectsReference.Instance.uihud.GetCurrentUIHelper().show_default_helper();
+                    ObjectsReference.Instance.uInventoriesManager.GetCurrentUIHelper().show_default_helper();
                 }
 
                 ObjectsReference.Instance.slotSwitch.CancelGhost();
-
-                isBuildModeActivated = false;
-            }
-        }
-        
-        private static void Harvest() {
-            if (UnityEngine.Input.GetKeyDown(KeyCode.F) || UnityEngine.Input.GetKeyDown(KeyCode.JoystickButton1)) {
-                ObjectsReference.Instance.bananaGunGet.Harvest();
-            }
-        }
-        
-        private static void Build() {
-            if (UnityEngine.Input.GetKeyDown(KeyCode.E) || UnityEngine.Input.GetKeyDown(KeyCode.JoystickButton0)) {
-                ObjectsReference.Instance.slotSwitch.ValidateBuildable();
-            }
-        }
-
-        private void TranslateZBananaGunTarget() {
-            if (isBuildModeActivated) {
-                scrollSlotsValue = UnityEngine.Input.mouseScrollDelta;
-                var scrollValue = scrollSlotsValue.y;
-
-                if (UnityEngine.Input.GetKeyDown(KeyCode.JoystickButton3) || scrollValue > 0) {
-                    var bananaGunLocalPosition = ObjectsReference.Instance.slotSwitch.plateformPlacementTransform.localPosition;
-                    if (bananaGunLocalPosition.z < 25) {
-                        bananaGunLocalPosition.z += 1f;
-                        ObjectsReference.Instance.slotSwitch.plateformPlacementTransform.localPosition = bananaGunLocalPosition;
-                    }
-                }
-                
-                if (UnityEngine.Input.GetKeyDown(KeyCode.JoystickButton2) || scrollValue < 0) {
-                    var bananaGunLocalPosition = ObjectsReference.Instance.slotSwitch.plateformPlacementTransform.localPosition;
-                    if (bananaGunLocalPosition.z > 4) {
-                        bananaGunLocalPosition.z -= 1f;
-                        ObjectsReference.Instance.slotSwitch.plateformPlacementTransform.localPosition = bananaGunLocalPosition;
-                    }
-                }
-            }
-        }
-
-        private void Rotate() {
-            if (isBuildModeActivated) {
-                if (UnityEngine.Input.GetAxis("DpadHorizontal") < 0) {
-                    leftRotateIncrementer += Time.deltaTime;
-                    if (leftRotateIncrementer >= _rotationSpeed) {
-                        leftRotateIncrementer = 0;
-                        ObjectsReference.Instance.slotSwitch.RotateGhost(rotationAxisToVector3Direction[RotationAxis.Y]);
-                    }
-                    return;
-                }
-                if (UnityEngine.Input.GetAxis("DpadHorizontal") > 0) {
-                    rightRotateIncrementer += Time.deltaTime;
-                    if (rightRotateIncrementer >= _rotationSpeed) {
-                        rightRotateIncrementer = 0;
-                        ObjectsReference.Instance.slotSwitch.RotateGhost(-rotationAxisToVector3Direction[RotationAxis.Y]);
-                    }
-                }
-
-                if (UnityEngine.Input.GetKeyDown(KeyCode.LeftArrow)) {
-                    ObjectsReference.Instance.slotSwitch.RotateGhost(-rotationAxisToVector3Direction[RotationAxis.Y]);
-                    return;
-                }
-
-                if (UnityEngine.Input.GetKeyDown(KeyCode.RightArrow)) {
-                    ObjectsReference.Instance.slotSwitch.RotateGhost(rotationAxisToVector3Direction[RotationAxis.Y]);
-                }
-                
-                if (ObjectsReference.Instance.bananaMan.activeBuildableType == BuildableType.PLATEFORM) {
-                    if (UnityEngine.Input.GetAxis("DpadVertical") < 0) {
-                        topRotateIncrementer += Time.deltaTime;
-                        if (topRotateIncrementer >= _rotationSpeed) {
-                            topRotateIncrementer = 0;
-                            ObjectsReference.Instance.slotSwitch.RotateGhost(rotationAxisToVector3Direction[RotationAxis.Z]);
-                        }
-                        return;
-                    }
-                
-                    if (UnityEngine.Input.GetAxis("DpadVertical") > 0) {
-                        downRotateIncrementer += Time.deltaTime;
-                        if (downRotateIncrementer >= _rotationSpeed) {
-                            downRotateIncrementer = 0;
-                            ObjectsReference.Instance.slotSwitch.RotateGhost(-rotationAxisToVector3Direction[RotationAxis.Z]);
-                        }
-                        return;
-                    }
-                    
-                    if (UnityEngine.Input.GetKeyDown(KeyCode.UpArrow)) {
-                        ObjectsReference.Instance.slotSwitch.RotateGhost(rotationAxisToVector3Direction[RotationAxis.Z]);
-                        return;
-                    }
-
-                    if (UnityEngine.Input.GetKeyDown(KeyCode.DownArrow)) {
-                        ObjectsReference.Instance.slotSwitch.RotateGhost(-rotationAxisToVector3Direction[RotationAxis.Z]);
-                    }
-                }
-                
-
             }
         }
 

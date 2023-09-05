@@ -12,8 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9aa579ee7e77bb468bc13896355d2a8, type: 3}
   m_Name: BlueJavaBananaData
   m_EditorClassIdentifier: 
-  itemType: 2
+  gameObjectTag: 3
   itemCategory: 0
+  bananaType: 2
+  rawMaterialType: 5
+  ingredientsType: 1
   buildableType: 6
   itemName:
   - blue java
@@ -28,7 +31,6 @@ MonoBehaviour:
   - Creates an area of ice that slows down monkeys for 10 seconds
   - "Cr\xE9e une zone de glace qui ralenti les singes pendant 10 secondes"
   - Crea una zona de hielo que ralentiza a los monos durante 10 segundos
-  regimeQuantity: 60
   sasiety: 5
   damageTime: 0
   healthBonus: 0.5

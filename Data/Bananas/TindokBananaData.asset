@@ -12,8 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9aa579ee7e77bb468bc13896355d2a8, type: 3}
   m_Name: TindokBananaData
   m_EditorClassIdentifier: 
-  itemType: 17
+  gameObjectTag: 3
   itemCategory: 0
+  bananaType: 17
+  rawMaterialType: 5
+  ingredientsType: 1
   buildableType: 6
   itemName:
   - tindok
@@ -30,7 +33,6 @@ MonoBehaviour:
     et aux troncs des arbres
   - "No tiene valor nutricional, pero se adhiere a paredes, plataformas y troncos
     de \xE1rboles"
-  regimeQuantity: 30
   sasiety: 5
   damageTime: 0
   healthBonus: 1

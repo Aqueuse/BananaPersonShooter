@@ -12,8 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9aa579ee7e77bb468bc13896355d2a8, type: 3}
   m_Name: BaranganBananaData
   m_EditorClassIdentifier: 
-  itemType: 1
+  gameObjectTag: 3
   itemCategory: 0
+  bananaType: 1
+  rawMaterialType: 5
+  ingredientsType: 1
   buildableType: 6
   itemName:
   - barangan
@@ -28,7 +31,6 @@ MonoBehaviour:
   - aphrodisiac grenade, attracts monkeys during a few seconds
   - Grenade aphrodisiaque, attire les singes pendant quelques secondes
   - "Granada afrodis\xEDaca, atrae a los monos durante unos segundos"
-  regimeQuantity: 30
   sasiety: 5
   damageTime: 0
   healthBonus: 0.5

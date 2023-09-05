@@ -1,3 +1,4 @@
+using Tags;
 using UnityEngine;
 
 namespace Game.BananaCannonMiniGame {
@@ -54,7 +55,7 @@ namespace Game.BananaCannonMiniGame {
         }
 
         private void OnTriggerEnter(Collider other) {
-            if (!other.CompareTag("cannonMiniGameProjectile")) return;
+            if (!TagsManager.Instance.HasTag(other.gameObject, GAME_OBJECT_TAG.CANNON_MINI_GAME_PROJECTILE)) return;
 
             other.GetComponent<Projectile>().Destroy();
             

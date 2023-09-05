@@ -12,8 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9aa579ee7e77bb468bc13896355d2a8, type: 3}
   m_Name: GrosMichelBananaData
   m_EditorClassIdentifier: 
-  itemType: 6
+  gameObjectTag: 3
   itemCategory: 0
+  bananaType: 6
+  rawMaterialType: 5
+  ingredientsType: 1
   buildableType: 6
   itemName:
   - gros michel
@@ -28,7 +31,6 @@ MonoBehaviour:
   - Much much more nourishing, much more resistance
   - "Beaucoup beaucoup plus nourrissante, beaucoup plus de r\xE9sistance"
   - "Pl\xE1tano mucho, mucho m\xE1s nutritivo, con mucha, mucha m\xE1s resistencia"
-  regimeQuantity: 60
   sasiety: 5
   damageTime: 0
   healthBonus: 1

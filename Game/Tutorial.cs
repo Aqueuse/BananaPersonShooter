@@ -15,7 +15,7 @@ namespace Game {
             Cursor.lockState = CursorLockMode.None;
 
             ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.CROSSHAIRS].alpha = 0f;
-            ObjectsReference.Instance.uiCrosshairs.SetCrosshair(ItemCategory.EMPTY, ItemType.EMPTY);
+            ObjectsReference.Instance.uiCrosshairs.SetCrosshair(ItemCategory.EMPTY, BananaType.EMPTY);
 
             ObjectsReference.Instance.inputManager.uiSchemaContext = UISchemaSwitchType.CINEMATIQUE;
             ObjectsReference.Instance.inputManager.SwitchContext(InputContext.UI);
@@ -26,11 +26,11 @@ namespace Game {
             ObjectsReference.Instance.bananaGun.bananaGunInBack.SetActive(false);
 
             ObjectsReference.Instance.bananaMan.tutorialFinished = false;
-            
+
             CommandRoomControlPanelsManager.Instance.HidePanel(CommandRoomPanelType.GESTION);
             CommandRoomControlPanelsManager.Instance.HidePanel(CommandRoomPanelType.JOURNAL);
             CommandRoomControlPanelsManager.Instance.HidePanel(CommandRoomPanelType.BANANA_CANNON);
-            
+
             CommandRoomControlPanelsManager.Instance.ForbidDoorsAccess();
             CommandRoomControlPanelsManager.Instance.ForbidBananaCannonMiniGameAccess();
 
@@ -38,10 +38,6 @@ namespace Game {
             CommandRoomControlPanelsManager.Instance.chimployeeCommandRoom.SetInitialChimployeeConfiguration();
 
             RenderSettings.ambientLight = penumbraAmbientLightColor; 
-
-            foreach (var gardenLight in CommandRoomControlPanelsManager.Instance.gardensLight) {
-                gardenLight.enabled = true;
-            }
         }
         
         public void FinishTutorial() {
@@ -50,7 +46,7 @@ namespace Game {
             // TODO : animation take banana gun
 
             ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.CROSSHAIRS].alpha = 1f;
-            ObjectsReference.Instance.uiCrosshairs.SetCrosshair(ItemCategory.EMPTY, ItemType.EMPTY);
+            ObjectsReference.Instance.uiCrosshairs.SetCrosshair(ItemCategory.EMPTY, BananaType.EMPTY);
 
             ObjectsReference.Instance.bananaMan.tutorialFinished = true;
             ObjectsReference.Instance.steamIntegration.UnlockAchievement(SteamAchievement.STEAM_ACHIEVEMENT_BANAGUN_RECONSTRUCTED);
@@ -68,13 +64,9 @@ namespace Game {
             CommandRoomControlPanelsManager.Instance.miniChimp.bubbleDialogue.SetBubbleDialogue(dialogueSet.REPAIRED_BANANA_GUN);
             
             CommandRoomControlPanelsManager.Instance.assembler.HideAssemblerActivatedZone();
-            CommandRoomControlPanelsManager.Instance.assembler.ShowBlueprintDataIfAvailable();
+            CommandRoomControlPanelsManager.Instance.assembler.blueprintsDataInteraction.ShowBlueprintDataIfAvailable();
             
             RenderSettings.ambientLight = Color.white; 
-            
-            foreach (var gardenLight in CommandRoomControlPanelsManager.Instance.gardensLight) {
-                gardenLight.enabled = false;
-            }
             
             ObjectsReference.Instance.audioManager.SetMusiqueAndAmbianceBySceneName("COMMANDROOM");
         }

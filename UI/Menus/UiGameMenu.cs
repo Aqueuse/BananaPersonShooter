@@ -18,6 +18,12 @@ namespace UI.Menus {
             _selectedButton = 0;
             _gameMenuButtons = GetComponentsInChildren<Image>();
         }
+
+        public void ReturnToGame() {
+            ObjectsReference.Instance.inputManager.SwitchContext(InputContext.GAME);
+            ObjectsReference.Instance.gameManager.UnpauseGame();
+            ObjectsReference.Instance.uiManager.Hide_Game_Menu();
+        }
         
         public void Quit() {
             ObjectsReference.Instance.scenesSwitch.ReturnHome();

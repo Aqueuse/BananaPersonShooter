@@ -12,8 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6e11e44741351774ca1f8261e4d989f1, type: 3}
   m_Name: portalData
   m_EditorClassIdentifier: 
-  itemType: 0
+  gameObjectTag: 11
   itemCategory: 1
+  bananaType: 0
+  rawMaterialType: 5
+  ingredientsType: 1
   buildableType: 5
   itemName:
   - portal
@@ -26,11 +29,11 @@ MonoBehaviour:
   - "Viaja a trav\xE9s de la dimensi\xF3n banana a otro portal"
   rawMaterialsWithQuantity:
     list:
-    - key: 18
+    - key: 0
       value: 6
-    - key: 19
-      value: 1
-    - key: 20
+    - key: 2
       value: 2
+    - key: 1
+      value: 1
     keyCollision: 0
   buildablePrefab: {fileID: 4483800605340694416, guid: ac2cf78f5c670804bae340e29edca3bb, type: 3}

@@ -1,3 +1,4 @@
+using Tags;
 using UnityEngine;
 
 namespace Building.Regimes {
@@ -44,7 +45,7 @@ namespace Building.Regimes {
         }
 
         private void OnTriggerEnter(Collider other) {
-            if (other.CompareTag("MoverUnvalid")) {
+            if (!TagsManager.Instance.HasTag(other.gameObject, GAME_OBJECT_TAG.MOVER_UNVALID)) {
                 _verticalState = _verticalState == VerticalState.UP ? VerticalState.DOWN : VerticalState.UP;
             }
         }

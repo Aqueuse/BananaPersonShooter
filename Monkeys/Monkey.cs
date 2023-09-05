@@ -1,23 +1,20 @@
 ﻿using Bananas;
+using Data.Monkeys;
 using Game.Steam;
-using UI.InGame;
+using Tags;
 using UnityEngine;
 using UnityEngine.AI;
 using Random = UnityEngine.Random;
 
 namespace Monkeys {
     public class Monkey : MonoBehaviour {
-        public UIMonkey associatedUI;
+        public MonkeyDataScriptableObject monkeyDataScriptableObject;
+        
         public MonkeySounds monkeySounds;
-        private NavMeshAgent _navMeshAgent;
-        private Animator _animator;
+        [SerializeField] private NavMeshAgent _navMeshAgent;
+        [SerializeField] private Animator _animator;
 
-        private float _maxHappiness;
-        public float happiness;
         public MonkeyState monkeyState;
-
-        public float sasiety;
-
         private bool _isRunningToPlayer;
         private bool _isAttackingPlayer;
         private bool _isCatchingPlayer;
@@ -30,13 +27,6 @@ namespace Monkeys {
         private static readonly int Grab = Animator.StringToHash("GRAB");
         
         private void Start() {
-            sasiety = ObjectsReference.Instance.mapsManager.currentMap.monkeySasiety;
-            ObjectsReference.Instance.mapsManager.currentMap.RecalculateHappiness();
-            
-            _navMeshAgent = GetComponent<NavMeshAgent>();
-            _animator = GetComponent<Animator>();
-            monkeySounds = GetComponentInChildren<MonkeySounds>();
-            
             var navMeshTriangulation = NavMesh.CalculateTriangulation();
                 
             var vertexIndex = Random.Range(0, navMeshTriangulation.vertices.Length);
@@ -54,13 +44,12 @@ namespace Monkeys {
         }
 
         public void Eat() {
-            if (sasiety < 50) {
-                sasiety += bananaValue;
-                ObjectsReference.Instance.mapsManager.currentMap.monkeySasiety = sasiety;
-                ObjectsReference.Instance.mapsManager.currentMap.RecalculateHappiness();
+            if (monkeyDataScriptableObject.sasiety < 50) {
+                monkeyDataScriptableObject.sasiety += bananaValue;
+                ObjectsReference.Instance.mapsManager.currentMap.RecalculateHappiness(this);
             }
 
-            if (sasiety >= 50 && ObjectsReference.Instance.steamIntegration.isGameOnSteam) {
+            if (monkeyDataScriptableObject.sasiety >= 50 && ObjectsReference.Instance.steamIntegration.isGameOnSteam) {
                 ObjectsReference.Instance.steamIntegration.UnlockAchievement(SteamAchievement.STEAM_ACHIEVEMENT_MONKEY_FEEDED); 
             }
         }
@@ -76,7 +65,7 @@ namespace Monkeys {
         }
 
         private void OnTriggerEnter(Collider other) {
-            if (!other.CompareTag("Banana")) return;
+            if (!TagsManager.Instance.HasTag(other.gameObject, GAME_OBJECT_TAG.BANANA)) return;
             
             hasGrabbedBanana = true;
 

@@ -1,3 +1,4 @@
+using Tags;
 using UnityEngine;
 
 namespace Building.Buildables.Plateforms {
@@ -9,7 +10,7 @@ namespace Building.Buildables.Plateforms {
         private void OnCollisionExit(Collision other) {
             if (!isActive) return;
 
-            if (other.gameObject.CompareTag("Player")) {
+            if (TagsManager.Instance.HasTag(other.gameObject, GAME_OBJECT_TAG.PLAYER)) {
                 isPlayerOn = false;
             }
         }
@@ -17,7 +18,7 @@ namespace Building.Buildables.Plateforms {
         private void OnCollisionStay(Collision other) {
             if (!isActive) return;
             
-            if (other.gameObject.CompareTag("Player")) {
+            if (TagsManager.Instance.HasTag(other.gameObject, GAME_OBJECT_TAG.PLAYER)) {
 
                 if (!isPlayerOn) {
                     isPlayerOn = true;

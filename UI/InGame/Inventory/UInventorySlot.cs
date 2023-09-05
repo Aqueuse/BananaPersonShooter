@@ -1,34 +1,32 @@
-﻿using Enums;
+﻿using Data;
+using Enums;
 using TMPro;
 using UnityEngine;
 
 namespace UI.InGame.Inventory {
     public class UInventorySlot : MonoBehaviour {
-        public ItemType itemType;
-        public ItemCategory itemCategory;
+        public ItemScriptableObject itemScriptableObject;
 
         [SerializeField] private TextMeshProUGUI quantityText;
-        
+
         public void AssignToSlot() {
             SetDescriptionAndName();
-            
-            ObjectsReference.Instance.bananaMan.SetActiveItemTypeAndCategory(itemType, itemCategory, BuildableType.EMPTY);
-            ObjectsReference.Instance.uInventory.lastselectedInventoryItem = gameObject;
 
-            ObjectsReference.Instance.uiSlotsManager.AssignToSelectedSlot(itemCategory, itemType);
+            ObjectsReference.Instance.bananaMan.SetActiveItemTypeAndCategory(itemScriptableObject.bananaType, itemScriptableObject.itemCategory, itemScriptableObject.buildableType);
+            ObjectsReference.Instance.uInventoriesManager.SetLastSelectedItem(itemScriptableObject.itemCategory, gameObject);
 
-            if (itemCategory == ItemCategory.BANANA) {
-                ObjectsReference.Instance.bananaMan.activeItem = ObjectsReference.Instance.scriptableObjectManager.GetBananaScriptableObject(itemType);
+            if (itemScriptableObject.itemCategory == ItemCategory.BANANA) {
+                ObjectsReference.Instance.bananaMan.activeItem = ObjectsReference.Instance.scriptableObjectManager.GetBananaScriptableObject(itemScriptableObject.bananaType);
             }
         }
-        
+
         public void SetQuantity(int quantity) {
             quantityText.text = quantity > 999 ? "999+" : quantity.ToString();
         }
 
         public void SetDescriptionAndName() {
-            ObjectsReference.Instance.uInventory.itemName.text = ObjectsReference.Instance.scriptableObjectManager.GetName(itemCategory, itemType);
-            ObjectsReference.Instance.uInventory.itemDescription.text = ObjectsReference.Instance.scriptableObjectManager.GetDescription(itemCategory, itemType);
+            ObjectsReference.Instance.descriptionsManager.ShowPanel(itemScriptableObject.gameObjectTag);
+            ObjectsReference.Instance.descriptionsManager.inventoryGestionPanel.SetDescription(itemScriptableObject);
         }
     }
 }

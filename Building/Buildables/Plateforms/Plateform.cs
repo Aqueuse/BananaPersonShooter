@@ -1,5 +1,7 @@
 using Bananas;
-using Items;
+using Data.Bananas;
+using Enums;
+using Tags;
 using UnityEngine;
 
 namespace Building.Buildables.Plateforms {
@@ -17,7 +19,7 @@ namespace Building.Buildables.Plateforms {
 
         private Material[] _plateformMaterials;
         
-        public ItemType plateformType;
+        public BananaType plateformType;
 
         private bool _isPlayerOn;
         
@@ -34,8 +36,10 @@ namespace Building.Buildables.Plateforms {
         }
 
         private void OnCollisionEnter(Collision other) {
-            if (!other.gameObject.CompareTag("Banana")) return;
-            ActivePlateform(other.gameObject.GetComponent<Banana>().bananasDataScriptableObject.itemType);
+            if (other.gameObject.GetComponent<Tag>() == null) return;
+            if (other.gameObject.GetComponent<Tag>().gameObjectTag != GAME_OBJECT_TAG.BANANA) return;
+            
+            ActivePlateform(other.gameObject.GetComponent<Banana>().bananasDataScriptableObject);
             ObjectsReference.Instance.mapsManager.currentMap.RefreshAspirablesItemsDataMap();
         }
         
@@ -65,19 +69,18 @@ namespace Building.Buildables.Plateforms {
             _meshRenderer.materials = _plateformMaterials;
         }
 
-        public void ActivePlateform(ItemType itemType) {
+        public void ActivePlateform(BananasDataScriptableObject bananasDataScriptableObject) {
             _meshRenderer = GetComponent<MeshRenderer>();
             _audioSource = GetComponent<AudioSource>();
             upEffect = GetComponent<UpEffect>();
             
-            switch (itemType) {
-                case ItemType.CAVENDISH:
-                    SetActivatedMaterial(ObjectsReference.Instance.scriptableObjectManager.GetBananaScriptableObject(ItemType.CAVENDISH).bananaColor);
+            switch (bananasDataScriptableObject.bananaType) {
+                case BananaType.CAVENDISH:
+                    SetActivatedMaterial(bananasDataScriptableObject.bananaColor);
                     _audioSource.enabled = true;
                     upEffect.isActive = true;
 
-                    plateformType = ItemType.CAVENDISH;
-                    GetComponent<ItemThrowable>().itemType = ItemType.CAVENDISH;
+                    plateformType = BananaType.CAVENDISH;
                     upDownEffectVizualisation.enabled = true;
                     break;
             }

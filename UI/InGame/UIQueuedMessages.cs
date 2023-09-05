@@ -1,3 +1,4 @@
+using Data;
 using Enums;
 using UnityEngine;
 using UnityEngine.Localization;
@@ -8,6 +9,8 @@ namespace UI.InGame {
         [SerializeField] private GameObject queuedMessagePrefab;
         [SerializeField] private LocalizedString nothingToRetrieve;
 
+        private GenericDictionary<ItemCategory, LocalizedStringTable> translationTableByItemCategory;
+
         public void UnlockBlueprint(BuildableType buildableType) {
             ObjectsReference.Instance.uiQueuedMessages.AddMessage(
                 LocalizationSettings.StringDatabase.GetTable("UI").GetEntry("unlocked").GetLocalizedString()+
@@ -16,8 +19,8 @@ namespace UI.InGame {
             );
         }
 
-        public void AddToInventory(ItemType itemType, int quantity) {
-            ObjectsReference.Instance.uiQueuedMessages.AddMessage("+ "+ quantity+" "+ LocalizationSettings.StringDatabase.GetTable("items").GetEntry(itemType.ToString().ToLower()).GetLocalizedString());
+        public void AddToInventory(ItemScriptableObject itemScriptableObject, int quantity) {
+            ObjectsReference.Instance.uiQueuedMessages.AddMessage("+ "+ quantity+" "+ itemScriptableObject.GetName());
         }
 
         public void AddMessage(string message) {

@@ -1,5 +1,4 @@
 using System;
-using Building;
 using Cinemachine;
 using Enums;
 using TMPro;
@@ -30,10 +29,6 @@ namespace Settings {
 
         [SerializeField] private Slider debrisFallSlider;
         
-        [SerializeField] private Toggle debrisVisibilityToggle;
-        [SerializeField] private Toggle bananaTreesVisibilityToggle;
-        [SerializeField] private Toggle monkeysVisibilityToggle;
-
         [SerializeField] private Slider saveDelaySlider;
         [SerializeField] private TextMeshProUGUI saveDelayText;
 
@@ -130,10 +125,6 @@ namespace Settings {
 
             debrisFallSlider.value = Convert.ToInt32(areDebrisFallingOnTheTrees);
             
-            debrisVisibilityToggle.isOn = isShowingDebris;
-            bananaTreesVisibilityToggle.isOn = isShowingBananaTrees;
-            monkeysVisibilityToggle.isOn = isShowingMonkeys;
-
             saveDelaySlider.value = Mathf.Abs(saveDelay/60);
         }
 
@@ -249,32 +240,7 @@ namespace Settings {
             
             prefs.Save();
         }
-
-        public void SaveDebrisCanvasVisibility(bool isVisible) {
-            isShowingDebris = isVisible;
-            prefs.SetString("areDebrisVisible", isVisible ? "True" : "False");
-            if (ObjectsReference.Instance.gameManager.gameContext == GameContext.IN_GAME) MapItems.Instance.uiCanvasItemsHiddableManager.SetDebrisSpriteRendererVisibility(isVisible);
-            
-            prefs.Save();
-        }
         
-        public void SaveBananaTreeCanvasVisibility(bool isVisible) {
-            isShowingBananaTrees = isVisible;
-            prefs.SetString("areBananaTreesVisible", isVisible ? "True" : "False");
-            if (ObjectsReference.Instance.gameManager.gameContext == GameContext.IN_GAME) MapItems.Instance.uiCanvasItemsHiddableManager.SetBananaTreeVisibility(isVisible); 
-
-            prefs.Save();
-        }
-
-        public void SaveMonkeysVisibility(bool isVisible) {
-            isShowingMonkeys = isVisible;
-
-            prefs.SetString("areMonkeysVisible", isVisible ? "True" : "False");
-            if (ObjectsReference.Instance.gameManager.gameContext == GameContext.IN_GAME && ObjectsReference.Instance.mapsManager.currentMap.activeMonkeyType != MonkeyType.NONE) MapItems.Instance.uiCanvasItemsHiddableManager.SetMonkeysVisibility(isVisible);
-
-            prefs.Save();
-        }
-
         public void SetSaveDelay(float delay) {
             saveDelay = (int)delay*60;
             prefs.SetInt("saveDelay", (int)delay*60);

@@ -19,9 +19,11 @@ namespace Input.UIActions {
         
         private static void PauseCinematique() {
             if (UnityEngine.Input.GetKeyDown(KeyCode.Escape) || UnityEngine.Input.GetKeyDown(KeyCode.JoystickButton7)) {
+
                 ObjectsReference.Instance.inputManager.uiSchemaContext = UISchemaSwitchType.GAME_MENU;
+                ObjectsReference.Instance.inputManager.SwitchContext(InputContext.UI);
                 
-                ObjectsReference.Instance.gameManager.PauseGame(true);
+                ObjectsReference.Instance.gameManager.PauseGame();
                 ObjectsReference.Instance.cinematiques.Pause();
                 ObjectsReference.Instance.uiManager.Show_game_menu();
             }

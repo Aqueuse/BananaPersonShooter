@@ -92,12 +92,12 @@ namespace Player {
                 _cameraForward = Vector3.Scale(mainCameraTransform.forward, new Vector3(1, 0, 1)).normalized;
                 _movement = (_rawInputMovement.z * _cameraForward + _rawInputMovement.x * mainCameraTransform.right).normalized * (speed * Time.fixedDeltaTime);
             }
-            
+
             if (IsOnSlope()) _movement = GetSlopeMoveDirection(_movement);
-            
+
             // collision prevention
             _isHit = _rigidbody.SweepTest(_movement.normalized, out hitTest, _maxDistanceToCollide);
-            
+
             if (_isHit && !hitTest.collider.isTrigger) {
                 // Vérifie si la normale de la collision est orientée vers le haut (collide contre le sol ne veux rien dire)
                 _newPosition = hitTest.normal.y > 0.5f ? _rigidbody.position + _movement : _rigidbody.position;
@@ -105,14 +105,14 @@ namespace Player {
             else {
                 _newPosition = _rigidbody.position + _movement;
             }
-            
+
             if (canMove) {
                 _rigidbody.MovePosition(_newPosition);
             }
             else {
                 speed = 0;
             }
-            
+
             // damage
             if (_rigidbody.velocity.y < -20) {
                 _damageCount += 1;

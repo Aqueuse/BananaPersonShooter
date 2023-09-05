@@ -39,7 +39,7 @@ namespace Game {
                     ObjectsReference.Instance.gameManager.gameContext = GameContext.IN_HOME;
 
                     ObjectsReference.Instance.uiManager.Hide_Game_Menu();
-                    ObjectsReference.Instance.uiManager.Show_home_menu();
+                    ObjectsReference.Instance.uiManager.Show_Home_Menu();
 
                     ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.HUD].alpha = 0f;
                     ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.CROSSHAIRS].alpha = 0f;
@@ -49,6 +49,7 @@ namespace Game {
                     RenderSettings.ambientLight = Color.white; 
 
                     ObjectsReference.Instance.playerController.canMove = false;
+                    ObjectsReference.Instance.bananaMan.SetBananaSkinHealth();
 
                     ObjectsReference.Instance.gameData.currentSaveUuid = null;
 
@@ -89,7 +90,7 @@ namespace Game {
                     Cursor.visible = false;
                     Cursor.lockState = CursorLockMode.Locked;
                     ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.CROSSHAIRS].alpha = 1f;
-                    ObjectsReference.Instance.uiCrosshairs.SetCrosshair(ObjectsReference.Instance.bananaMan.activeItemCategory, ObjectsReference.Instance.bananaMan.activeItemType);
+                    ObjectsReference.Instance.uiCrosshairs.SetCrosshair(ObjectsReference.Instance.bananaMan.activeItemCategory, ObjectsReference.Instance.bananaMan.activeBananaType);
                     
                     ObjectsReference.Instance.inputManager.SwitchContext(InputContext.GAME);
                     ObjectsReference.Instance.gameManager.gameContext = GameContext.IN_GAME;

@@ -235,7 +235,29 @@ MonoBehaviour:
   - {fileID: -3567536348642646520, guid: 29948b1ff0011fa47aab979ff90a3b6c, type: 3}
   - {fileID: 5598176472754341090, guid: 29948b1ff0011fa47aab979ff90a3b6c, type: 3}
   chimployeePrefab: {fileID: 6098640880184996834, guid: ff9890695793b93498b48d35be8c1c2b, type: 3}
-  bananasDataScriptableObject:
+  gameObjectDataScriptableObjectsByTag:
+    list:
+    - key: 12
+      value: {fileID: 11400000, guid: d5b4590573af23743ac12926d45ad810, type: 2}
+    - key: 14
+      value: {fileID: 11400000, guid: 524b22c17db141e45b4e4558a065b6aa, type: 2}
+    keyCollision: 0
+  buildableDataScriptableObjects:
+    list:
+    - key: 0
+      value: {fileID: 11400000, guid: 3e10ce84627d20f45abaec480164343f, type: 2}
+    - key: 1
+      value: {fileID: 11400000, guid: dd912d8aa9ba03a448f781baa2ec0739, type: 2}
+    - key: 2
+      value: {fileID: 11400000, guid: 951c8da1d85b9634a9d57dc6e85b43f7, type: 2}
+    - key: 3
+      value: {fileID: 11400000, guid: 6c4bbb5d13ab06545a383895797a16f4, type: 2}
+    - key: 4
+      value: {fileID: 11400000, guid: 9e1e3f9a1bf0fc240a9bac4b15174226, type: 2}
+    - key: 5
+      value: {fileID: 11400000, guid: 5b15ae11c35e4cd4abe9b05ef6ad65dc, type: 2}
+    keyCollision: 0
+  bananasDataScriptableObjects:
     list:
     - key: 1
       value: {fileID: 11400000, guid: 6ee2d98cd3dcd9647a2668efe34a40cf, type: 2}
@@ -271,32 +293,4 @@ MonoBehaviour:
       value: {fileID: 11400000, guid: c19717ece404cce4cba4f06399764d78, type: 2}
     - key: 17
       value: {fileID: 11400000, guid: 61e0d2a93b2f9a241a901e776267942d, type: 2}
-    keyCollision: 0
-  buildablesDataScriptableObject:
-    list:
-    - key: 0
-      value: {fileID: 11400000, guid: 3e10ce84627d20f45abaec480164343f, type: 2}
-    - key: 1
-      value: {fileID: 11400000, guid: dd912d8aa9ba03a448f781baa2ec0739, type: 2}
-    - key: 2
-      value: {fileID: 11400000, guid: 951c8da1d85b9634a9d57dc6e85b43f7, type: 2}
-    - key: 3
-      value: {fileID: 11400000, guid: 6c4bbb5d13ab06545a383895797a16f4, type: 2}
-    - key: 4
-      value: {fileID: 11400000, guid: 9e1e3f9a1bf0fc240a9bac4b15174226, type: 2}
-    - key: 5
-      value: {fileID: 11400000, guid: 5b15ae11c35e4cd4abe9b05ef6ad65dc, type: 2}
-    keyCollision: 0
-  rawMaterialDataScriptableObjects:
-    list:
-    - key: 18
-      value: {fileID: 11400000, guid: d14e403b3094f5c429b243314cf49b91, type: 2}
-    - key: 19
-      value: {fileID: 11400000, guid: c952d96f9612ca7468daa21b69880c7c, type: 2}
-    - key: 20
-      value: {fileID: 11400000, guid: 5736b26edab4ca44d953de06357d6dfa, type: 2}
-    - key: 21
-      value: {fileID: 11400000, guid: 74668e5c315d9d94ab8aaf0693fed5b8, type: 2}
-    - key: 22
-      value: {fileID: 11400000, guid: 9d6fb37980769de4aa2562c46fe6478c, type: 2}
     keyCollision: 0

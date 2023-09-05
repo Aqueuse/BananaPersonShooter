@@ -1,4 +1,5 @@
 ﻿using Cameras;
+using Tags;
 using UnityEngine;
 
 namespace Monkeys.Effects {
@@ -28,7 +29,7 @@ namespace Monkeys.Effects {
         }
 
         private void OnTriggerEnter(Collider other) {
-            if (other.CompareTag("Player")) {
+            if (TagsManager.Instance.HasTag(other.gameObject, GAME_OBJECT_TAG.PLAYER)) {
                 // play pushed back animation
             }
         }

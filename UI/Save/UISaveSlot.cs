@@ -7,19 +7,19 @@ using UnityEngine.UI;
 
 namespace UI.Save {
     public class UISaveSlot : MonoBehaviour {
-        [SerializeField] private GameObject activatedMask;
-        [SerializeField] private GameObject loadButtonGameObject;
-        [SerializeField] private GameObject saveButtonGameObject;
-        [SerializeField] private GameObject renameButtonGameObject;
-        [SerializeField] private GameObject renameInputFieldGameObject;
-        [SerializeField] private GameObject deleteButtonGameObject;
+        [SerializeField] private CanvasGroup activatedMaskCanvasGroup;
+        [SerializeField] private CanvasGroup loadButtonGameObjectCanvasGroup;
+        [SerializeField] private CanvasGroup saveButtonGameObjectCanvasGroup;
+        [SerializeField] private CanvasGroup renameButtonGameObjectCanvasGroup;
+        [SerializeField] private CanvasGroup renameInputFieldGameObjectCanvasGroup;
+        [SerializeField] private CanvasGroup deleteButtonGameObjectCanvasGroup;
 
-        [SerializeField] private GameObject yesButton;
-        [SerializeField] private GameObject noButton;
+        [SerializeField] private CanvasGroup yesButtonCanvasGroup;
+        [SerializeField] private CanvasGroup noButtonCanvasGroup;
 
         [SerializeField] private GameObject saveRootGameObject;
 
-        [SerializeField] private GameObject textPanel;
+        [SerializeField] private CanvasGroup textPanelCanvasGroup;
         public TextMeshProUGUI saveName;
         public TextMeshProUGUI saveDate;
         [SerializeField] private Image thumbail;
@@ -29,28 +29,30 @@ namespace UI.Save {
         public void Select() {
             ObjectsReference.Instance.uiSave.selectedSaveSlot = this;
             ObjectsReference.Instance.uiSave.UnselectAll();
-            activatedMask.SetActive(true);
+            
+            SetActive(activatedMaskCanvasGroup, true);
         }
 
         public void Unselect() {
-            activatedMask.SetActive(false);
-            loadButtonGameObject.SetActive(false);
-            saveButtonGameObject.SetActive(false);
-            renameButtonGameObject.SetActive(false);
-            deleteButtonGameObject.SetActive(false);
-            yesButton.SetActive(false);
-            noButton.SetActive(false);
-            textPanel.SetActive(true);
+            SetActive(activatedMaskCanvasGroup, false);
+            
+            SetActive(loadButtonGameObjectCanvasGroup, false);
+            SetActive(saveButtonGameObjectCanvasGroup, false);
+            SetActive(renameButtonGameObjectCanvasGroup, false);
+            SetActive(deleteButtonGameObjectCanvasGroup, false);
+            SetActive(yesButtonCanvasGroup, false);
+            SetActive(noButtonCanvasGroup, false);
+            SetActive(textPanelCanvasGroup, false);
         }
 
         public void ShowSaveOptions() {
-            loadButtonGameObject.SetActive(true);
-            renameButtonGameObject.SetActive(true);
-            deleteButtonGameObject.SetActive(true);
-            textPanel.SetActive(false);
+            SetActive(loadButtonGameObjectCanvasGroup, true);
+            SetActive(renameButtonGameObjectCanvasGroup, true);
+            SetActive(deleteButtonGameObjectCanvasGroup, true);
+            SetActive(textPanelCanvasGroup, false);
 
             if (ObjectsReference.Instance.gameManager.gameContext == GameContext.IN_GAME) {
-                saveButtonGameObject.SetActive(true);
+                SetActive(saveButtonGameObjectCanvasGroup, true);
             }
         }
         
@@ -80,13 +82,14 @@ namespace UI.Save {
         }
         
         public void Rename() {
-            renameInputFieldGameObject.SetActive(true);
+            SetActive(renameButtonGameObjectCanvasGroup, true);
         }
 
         public void ValidateRename() {
-            saveName.text = renameInputFieldGameObject.GetComponentInChildren<TMP_InputField>().text;
+            saveName.text = renameInputFieldGameObjectCanvasGroup.GetComponentInChildren<TMP_InputField>().text;
             ObjectsReference.Instance.saveData.SaveName(saveUuid, saveName.text);
-            renameInputFieldGameObject.SetActive(false);
+            
+            SetActive(renameButtonGameObjectCanvasGroup, false);
         }
         
         public void UpdateThumbail() {
@@ -102,21 +105,34 @@ namespace UI.Save {
         }
 
         public void ShowDeleteConfirmationButtons() {
-            deleteButtonGameObject.SetActive(false);
-            yesButton.SetActive(true);
-            noButton.SetActive(true);
+            SetActive(deleteButtonGameObjectCanvasGroup, false);
+            SetActive(yesButtonCanvasGroup, true);
+            SetActive(noButtonCanvasGroup, true);
         }
 
         public void HideDeleteConfirmationButtons() {
-            deleteButtonGameObject.SetActive(true);
-            yesButton.SetActive(false);
-            noButton.SetActive(false);
+            SetActive(deleteButtonGameObjectCanvasGroup, true);
+            SetActive(yesButtonCanvasGroup, false);
+            SetActive(noButtonCanvasGroup, false);
         }
 
         public void Delete() {
             ObjectsReference.Instance.audioManager.PlayEffect(EffectType.BUTTON_INTERACTION, 0);
             Destroy(saveRootGameObject);
             ObjectsReference.Instance.saveData.DeleteSave(saveUuid);
+        }
+
+        private void SetActive(CanvasGroup canvasGroup, bool isActive) {
+            if (isActive) {
+                canvasGroup.alpha = 1;
+                canvasGroup.interactable = true;
+                canvasGroup.blocksRaycasts = true;
+            }
+            else {
+                canvasGroup.alpha = 0;
+                canvasGroup.interactable = false;
+                canvasGroup.blocksRaycasts = false;
+            }
         }
     }
 }

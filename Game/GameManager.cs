@@ -57,35 +57,28 @@ namespace Game {
             }
         }
 
-        public void PauseGame(bool pause) {
-            if (pause) {
-                ObjectsReference.Instance.inputManager.SwitchContext(InputContext.UI);
-
-                ObjectsReference.Instance.mainCamera.Set0Sensibility();
-
-                if (gameContext == GameContext.IN_GAME && ObjectsReference.Instance.mapsManager.currentMap.activeMonkeyType != MonkeyType.NONE) {
-                    foreach (var monkey in MapItems.Instance.monkeys) {
-                        monkey.PauseMonkey();
-                    }
+        public void PauseGame() {
+            ObjectsReference.Instance.mainCamera.Set0Sensibility();
+            
+            if (gameContext == GameContext.IN_GAME && ObjectsReference.Instance.mapsManager.currentMap.mapDataScriptableObject.monkeysQuantity > 0) {
+                foreach (var monkey in MapItems.Instance.monkeys) {
+                    monkey.PauseMonkey();
                 }
-
-                isGamePlaying = false;
             }
 
-            if (!pause) {
-                ObjectsReference.Instance.inputManager.SwitchContext(InputContext.GAME);
-                
-                ObjectsReference.Instance.mainCamera.SetNormalSensibility();
-                if (ObjectsReference.Instance.bananaMan.tutorialFinished) ObjectsReference.Instance.bananaGun.UngrabBananaGun();
+            isGamePlaying = false;
+        }
 
-                if (ObjectsReference.Instance.mapsManager.currentMap.activeMonkeyType != MonkeyType.NONE) {
-                    foreach (var monkey in MapItems.Instance.monkeys) {
-                        monkey.UnpauseMonkey();
-                    }
+        public void UnpauseGame() {
+            ObjectsReference.Instance.mainCamera.SetNormalSensibility();
+            
+            if (ObjectsReference.Instance.mapsManager.currentMap.mapDataScriptableObject.monkeysQuantity > 0) {
+                foreach (var monkey in MapItems.Instance.monkeys) {
+                    monkey.UnpauseMonkey();
                 }
-
-                isGamePlaying = true;
             }
+            
+            isGamePlaying = true;
         }
 
         public void Quit() {

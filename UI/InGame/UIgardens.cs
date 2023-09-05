@@ -13,8 +13,8 @@ namespace UI.InGame {
             var maps = ObjectsReference.Instance.mapsManager.mapBySceneName;
             
             foreach (var sliders in slidersByMapName) {
-                sliders.Value[0].value = maps[sliders.Key].monkeySasiety;
-                sliders.Value[1].value = maps[sliders.Key].cleanliness;
+                sliders.Value[0].value = maps[sliders.Key].mapDataScriptableObject.monkeyDataScriptableObject.sasiety;
+                sliders.Value[1].value = maps[sliders.Key].mapDataScriptableObject.cleanliness;
             }
         }
     }

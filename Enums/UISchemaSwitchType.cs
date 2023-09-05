@@ -9,11 +9,8 @@ namespace Enums {
         GAMEPAD_TAB,
         LANGUAGES_TAB,
         GAMEPLAY_TAB,
-        INVENTAIRE,
-        BLUEPRINTS,
-        CHIMPLOYEE,
+        INVENTORIES,
         BANANA_CANNON_MINI_GAME,
-        TUTORIAL,
         CINEMATIQUE,
         DEATH,
         LOAD

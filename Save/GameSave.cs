@@ -1,5 +1,6 @@
 using System;
 using System.Globalization;
+using Enums;
 using UnityEngine;
 
 namespace Save {
@@ -10,9 +11,12 @@ namespace Save {
             var date = DateTime.ParseExact(DateTime.Now.ToString("U"), "U", CultureInfo.CurrentCulture).ToString(CultureInfo.CurrentCulture);
             
             ObjectsReference.Instance.mapsManager.currentMap.RefreshAspirablesItemsDataMap();
-            SaveInventory();
-
-            SaveBlueprints();
+            
+            SaveBananasInventory();
+            SaveRawMaterialsInventory();
+            SaveIngredientsInventory();
+            SaveBlueprintsInventory();
+            
             SaveSlots();
             SaveActiveItem();
 
@@ -26,19 +30,27 @@ namespace Save {
             ObjectsReference.Instance.saveData.Save(saveUuid, date);
         }
 
-        private static void SaveInventory() {
-            foreach (var inventorySlot in ObjectsReference.Instance.inventory.bananaManInventory) {
-                ObjectsReference.Instance.gameData.bananaManSavedData.inventory[inventorySlot.Key.ToString()] = inventorySlot.Value;
+        private static void SaveBananasInventory() {
+            foreach (var inventorySlot in ObjectsReference.Instance.bananasInventory.bananasInventory) {
+                ObjectsReference.Instance.gameData.bananaManSavedData.bananaInventory[inventorySlot.Key.ToString()] = inventorySlot.Value;
             }
         }
 
-        private static void SaveBlueprints() {
-            var playerBlueprints = ObjectsReference.Instance.buildablesManager.playerBlueprints;
+        private static void SaveRawMaterialsInventory() {
+            foreach (var inventorySlot in ObjectsReference.Instance.rawMaterialsInventory.rawMaterialsInventory) {
+                ObjectsReference.Instance.gameData.bananaManSavedData.rawMaterialsInventory[inventorySlot.Key.ToString()] = inventorySlot.Value;
+            }
+        }
 
-            foreach (var blueprint in playerBlueprints) {
-                if (!ObjectsReference.Instance.gameData.bananaManSavedData.blueprints.Contains(blueprint.ToString())) {
-                    ObjectsReference.Instance.gameData.bananaManSavedData.blueprints.Add(blueprint.ToString());
-                }
+        private static void SaveIngredientsInventory() {
+            foreach (var inventorySlot in ObjectsReference.Instance.ingredientsInventory.ingredientsInventory) {
+                ObjectsReference.Instance.gameData.bananaManSavedData.ingredientsInventory[inventorySlot.Key.ToString()] = inventorySlot.Value;
+            }
+        }
+
+        private static void SaveBlueprintsInventory() {
+            foreach (var inventorySlot in ObjectsReference.Instance.blueprintsInventory.blueprintsInventory) {
+                ObjectsReference.Instance.gameData.bananaManSavedData.blueprintsInventory[inventorySlot.Key.ToString()] = inventorySlot.Value;
             }
         }
 
@@ -53,15 +65,23 @@ namespace Save {
             for (var i = 0; i < ObjectsReference.Instance.uiSlotsManager.uiSlotsScripts.Count; i++) {
                 var uiSlotScript = ObjectsReference.Instance.uiSlotsManager.uiSlotsScripts[i];
                 
-                var itemCategory = uiSlotScript.itemCategory;
-                var itemType = uiSlotScript.itemType;
-                var buildableType = uiSlotScript.buildableType;
+                if (uiSlotScript.slotItemScriptableObject == null) continue;
+                
+                var itemCategory = uiSlotScript.slotItemScriptableObject.itemCategory;
 
-                if (itemCategory == ItemCategory.BUILDABLE) {
-                    ObjectsReference.Instance.gameData.bananaManSavedData.slots[i] = itemCategory+","+buildableType;
-                }
-                else {
-                    ObjectsReference.Instance.gameData.bananaManSavedData.slots[i] = itemCategory+","+itemType;
+                switch (itemCategory) {
+                    case ItemCategory.BUILDABLE:
+                        ObjectsReference.Instance.gameData.bananaManSavedData.slots[i] = itemCategory+","+uiSlotScript.slotItemScriptableObject.buildableType;
+                        break;
+                    case ItemCategory.BANANA:
+                        ObjectsReference.Instance.gameData.bananaManSavedData.slots[i] = itemCategory+","+uiSlotScript.slotItemScriptableObject.bananaType;
+                        break;
+                    case ItemCategory.RAW_MATERIAL:
+                        ObjectsReference.Instance.gameData.bananaManSavedData.slots[i] = itemCategory+","+uiSlotScript.slotItemScriptableObject.rawMaterialType;
+                        break;
+                    case ItemCategory.INGREDIENT:
+                        ObjectsReference.Instance.gameData.bananaManSavedData.slots[i] = itemCategory+","+uiSlotScript.slotItemScriptableObject.ingredientsType;
+                        break;
                 }
             }
         }
@@ -91,7 +111,7 @@ namespace Save {
         }
 
         private static void SaveActiveItem() {
-            ObjectsReference.Instance.gameData.bananaManSavedData.activeItem = ObjectsReference.Instance.bananaMan.activeItemType;
+            ObjectsReference.Instance.gameData.bananaManSavedData.activeBanana = ObjectsReference.Instance.bananaMan.activeBananaType;
             ObjectsReference.Instance.gameData.bananaManSavedData.activeItemCategory = ObjectsReference.Instance.bananaMan.activeItemCategory;
             ObjectsReference.Instance.gameData.bananaManSavedData.activeBuildableType = ObjectsReference.Instance.bananaMan.activeBuildableType;
         }
@@ -99,7 +119,7 @@ namespace Save {
         private static void SaveMonkeysSatiety() {
             foreach (var map in ObjectsReference.Instance.mapsManager.mapBySceneName) {
                 // add other monkeys and other maps
-                ObjectsReference.Instance.gameData.mapSavedDatasByMapName[map.Key].monkeySasiety = map.Value.monkeySasiety;
+                ObjectsReference.Instance.gameData.mapSavedDatasByMapName[map.Key].monkeySasiety = map.Value.mapDataScriptableObject.monkeyDataScriptableObject.sasiety;
             }
         }
 

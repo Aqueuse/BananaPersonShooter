@@ -12,8 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6e11e44741351774ca1f8261e4d989f1, type: 3}
   m_Name: bananasDryerData
   m_EditorClassIdentifier: 
-  itemType: 0
+  gameObjectTag: 11
   itemCategory: 1
+  bananaType: 0
+  rawMaterialType: 5
+  ingredientsType: 1
   buildableType: 1
   itemName:
   - banana dryer
@@ -26,11 +29,9 @@ MonoBehaviour:
   - "Con eso, puedes secar las c\xE1scaras de pl\xE1tano para hacer tela con ellas"
   rawMaterialsWithQuantity:
     list:
-    - key: 18
+    - key: 0
       value: 4
-    - key: 19
+    - key: 1
       value: 1
     keyCollision: 0
   buildablePrefab: {fileID: 637136286764793117, guid: fe03facf4bdab3f4e8e3d03d49cef23d, type: 3}
-  mustSnap: 0
-  buildableGridSize: 0

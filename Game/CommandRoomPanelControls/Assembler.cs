@@ -1,3 +1,4 @@
+using Interactions;
 using Items;
 using UI.InGame;
 using UnityEngine;
@@ -8,42 +9,37 @@ namespace Game.CommandRoomPanelControls {
         [SerializeField] private GameObject bananaGunRepaired;
         [SerializeField] private GameObject bananaGunPieces;
         
-        [SerializeField] private GameObject blueprintsDataGameObject;
+        public BlueprintsDataInteraction blueprintsDataInteraction;
         
         [SerializeField] private MeshRenderer assemblerZoneMeshRenderer;
 
         [SerializeField] private Color activatedEmissionColor;
+        [SerializeField] private Light assemblerSpotLight;
 
         [SerializeField] private UIassembler uIassembler;
 
         private AudioSource assemblerAudioSource;
 
         private int bananaGunPiecesRepaired;
+        private static readonly int EmissionColor = Shader.PropertyToID("_emission_color");
+        private static readonly int Emission = Shader.PropertyToID("_emission");
 
         private void Start() {
             assemblerAudioSource = GetComponent<AudioSource>();
             assemblerAudioSource.volume = ObjectsReference.Instance.audioManager.effectsLevel;
 
             bananaGunPieces.SetActive(!ObjectsReference.Instance.bananaMan.tutorialFinished);
+            assemblerSpotLight.enabled = !ObjectsReference.Instance.bananaMan.tutorialFinished;
             
-            ShowBlueprintDataIfAvailable();
+            blueprintsDataInteraction.ShowBlueprintDataIfAvailable();
         }
-
-        public void ShowBlueprintDataIfAvailable() {
-            if (ObjectsReference.Instance.gameData.bananaManSavedData.hasFinishedTutorial) {
-                if (ObjectsReference.Instance.buildablesManager.buildablesToGive.Count != ObjectsReference.Instance.buildablesManager.playerBlueprints.Count) ShowBlueprintsData(); 
-            }
-            else {
-                HideBlueprintsData();
-            }
-        }
-
+        
         private void OnTriggerEnter(Collider other) {
             if (!ObjectsReference.Instance.bananaMan.tutorialFinished) {
-                var itemStaticClass = other.gameObject.GetComponent<ItemStatic>(); 
+                var itemStaticClass = other.gameObject.GetComponent<Interaction>(); 
                 
                 if (itemStaticClass != null) {
-                    if (itemStaticClass.itemStaticType == ItemStaticType.GRABBABLE_PIECE &&
+                    if (itemStaticClass.interactionType == InteractionType.GRABBABLE_PIECE &&
                         itemStaticClass.GetComponent<Grabbable>().grabbablePieceType == GrabbablePieceType.BANANA_GUN) {
                         
                         if (bananaGunPiecesRepairedPositionByBananaGunPieceGameObject.ContainsKey(other.gameObject)) {
@@ -52,12 +48,12 @@ namespace Game.CommandRoomPanelControls {
                             if (!assemblerAudioSource.isPlaying) assemblerAudioSource.Play();
 
                             assemblerZoneMeshRenderer.enabled = true;
-                            assemblerZoneMeshRenderer.material.SetColor("_emission_color", activatedEmissionColor);
-                            assemblerZoneMeshRenderer.material.SetFloat("_emission", 1f);
+                            assemblerZoneMeshRenderer.material.SetColor(EmissionColor, activatedEmissionColor);
+                            assemblerZoneMeshRenderer.material.SetFloat(Emission, 1f);
 
                             var bananaGunPiece = other.gameObject;
                 
-                            ObjectsReference.Instance.itemsManager.Release();
+                            ObjectsReference.Instance.interactionsManager.Release();
                             bananaGunPiece.layer = 0;
 
                             Destroy(bananaGunPiece.GetComponent<Rigidbody>());
@@ -91,17 +87,10 @@ namespace Game.CommandRoomPanelControls {
         public void SetAssemblerAudioVolume(float level) {
             assemblerAudioSource.volume = level;
         }
-
-        private void ShowBlueprintsData() {
-            blueprintsDataGameObject.SetActive(true);
-        }
-
-        private void HideBlueprintsData() {
-            blueprintsDataGameObject.SetActive(false);
-        }
-
+        
         public void HideAssemblerActivatedZone() {
             assemblerZoneMeshRenderer.enabled = false;
+            assemblerSpotLight.enabled = false;
         }
     }
 }

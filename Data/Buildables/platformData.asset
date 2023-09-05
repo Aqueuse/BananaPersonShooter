@@ -12,8 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6e11e44741351774ca1f8261e4d989f1, type: 3}
   m_Name: platformData
   m_EditorClassIdentifier: 
-  itemType: 0
+  gameObjectTag: 11
   itemCategory: 1
+  bananaType: 0
+  rawMaterialType: 5
+  ingredientsType: 1
   buildableType: 0
   itemName:
   - plateform
@@ -26,9 +29,9 @@ MonoBehaviour:
   - "Una plataforma que puede ser alimentada con pl\xE1tanos"
   rawMaterialsWithQuantity:
     list:
-    - key: 18
+    - key: 0
       value: 6
-    - key: 20
+    - key: 2
       value: 2
     keyCollision: 0
   buildablePrefab: {fileID: 3045356508486292204, guid: 0630715419ab7f249ba73f9625dea7fb, type: 3}

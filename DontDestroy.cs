@@ -1,16 +1,17 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using Tags;
+using UnityEngine;
 
 public class DontDestroy : MonoBehaviour {
-    private const string GlobalContainerTag = "Global Container";
-    private GameObject[] globalContainers;
-    
+    private List<GameObject> globalContainers;
+
     private void Awake() {
-        globalContainers = GameObject.FindGameObjectsWithTag(GlobalContainerTag);
-
-        if (globalContainers.Length > 1) {
-            Destroy(GameObject.FindWithTag(GlobalContainerTag));
+        globalContainers = TagsManager.Instance.GetAllGameObjectsWithTag(GAME_OBJECT_TAG.GLOBAL_CONTAINER);
+        
+        if (globalContainers.Count > 1) {
+            Destroy(TagsManager.Instance.GetFirstGameObjectWithTag(GAME_OBJECT_TAG.GLOBAL_CONTAINER));
         }
-
-        DontDestroyOnLoad(GameObject.FindWithTag(GlobalContainerTag));
+        
+        DontDestroyOnLoad( TagsManager.Instance.GetFirstGameObjectWithTag(GAME_OBJECT_TAG.GLOBAL_CONTAINER));
     }
 }

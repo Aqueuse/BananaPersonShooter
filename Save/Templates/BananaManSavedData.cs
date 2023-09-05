@@ -15,39 +15,52 @@ namespace Save.Templates {
         public float zWorldRotation = 0;
         
         public string lastMap = "COMMANDROOM";
-        public ItemType activeItem = ItemType.EMPTY;
+        public BananaType activeBanana = BananaType.EMPTY;
         public ItemCategory activeItemCategory = ItemCategory.EMPTY;
         public BuildableType activeBuildableType = BuildableType.EMPTY;
 
         public bool hasFinishedTutorial = false;
         
-        public Dictionary<string, int> inventory = new() {
-            {ItemType.EMPTY.ToString(), 0},
-            {ItemType.BARANGAN.ToString(), 0},
-            {ItemType.BLUE_JAVA.ToString(), 0},
-            {ItemType.BURRO.ToString(), 0},
-            {ItemType.CAVENDISH.ToString(), 0},
-            {ItemType.GOLD_FINGER.ToString(), 0},
-            {ItemType.GROS_MICHEL.ToString(), 0},
-            {ItemType.LADY_FINGER.ToString(), 0},
-            {ItemType.MANZANO.ToString(), 0},
-            {ItemType.MATOKE.ToString(), 0},
-            {ItemType.MUSA_VELUTINA.ToString(), 0},
-            {ItemType.NANJANGUD.ToString(), 0},
-            {ItemType.PISANG_RAJA.ToString(), 0},
-            {ItemType.PLANTAIN.ToString(), 0},
-            {ItemType.PRAYING_HANDS.ToString(), 0},
-            {ItemType.RED.ToString(), 0},
-            {ItemType.RINO_HORN.ToString(), 0},
-            {ItemType.TINDOK.ToString(), 0},
-            {ItemType.METAL.ToString(), 0},
-            {ItemType.BATTERY.ToString(), 0},
-            {ItemType.FABRIC.ToString(), 0},
-            {ItemType.ELECTRONIC.ToString(), 0},
-            {ItemType.BANANA_PEEL.ToString(), 0}
+        public Dictionary<string, int> bananaInventory = new() {
+            {BananaType.BARANGAN.ToString(), 0},
+            {BananaType.BLUE_JAVA.ToString(), 0},
+            {BananaType.BURRO.ToString(), 0},
+            {BananaType.CAVENDISH.ToString(), 0},
+            {BananaType.GOLD_FINGER.ToString(), 0},
+            {BananaType.GROS_MICHEL.ToString(), 0},
+            {BananaType.LADY_FINGER.ToString(), 0},
+            {BananaType.MANZANO.ToString(), 0},
+            {BananaType.MATOKE.ToString(), 0},
+            {BananaType.MUSA_VELUTINA.ToString(), 0},
+            {BananaType.NANJANGUD.ToString(), 0},
+            {BananaType.PISANG_RAJA.ToString(), 0},
+            {BananaType.PLANTAIN.ToString(), 0},
+            {BananaType.PRAYING_HANDS.ToString(), 0},
+            {BananaType.RED.ToString(), 0},
+            {BananaType.RINO_HORN.ToString(), 0},
+            {BananaType.TINDOK.ToString(), 0}
+        };
+        
+        public Dictionary<string, int> rawMaterialsInventory = new() {
+            {RawMaterialType.ELECTRONIC.ToString(), 0},
+            {RawMaterialType.BANANA_PEEL.ToString(), 0},
+            {RawMaterialType.METAL.ToString(), 0},
+            {RawMaterialType.FABRIC.ToString(), 0},
+            {RawMaterialType.BATTERY.ToString(), 0}
         };
 
-        public List<string> blueprints = new List<string>();
+        public Dictionary<string, int> ingredientsInventory = new() {
+            {IngredientsType.EMPTY.ToString(), 0}
+        };
+
+        public Dictionary<string, int> blueprintsInventory = new() {
+            {BuildableType.PLATEFORM.ToString(), 0},
+            {BuildableType.PORTAL.ToString(), 0},
+            {BuildableType.GUICHET.ToString(), 0},
+            {BuildableType.BANANA_DRYER.ToString(), 0},
+            {BuildableType.RETRIEVER.ToString(), 0},
+            {BuildableType.BLUEPRINTS_WORKSTATION.ToString(), 0},
+        };
         
         public List<string> slots = new List<string>();
     }

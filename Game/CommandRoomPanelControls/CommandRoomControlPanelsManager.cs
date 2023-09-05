@@ -1,4 +1,5 @@
 using Enums;
+using Interactions;
 using Monkeys.Chimployees;
 using Monkeys.MiniChimps;
 using UI.InGame;
@@ -16,7 +17,7 @@ namespace Game.CommandRoomPanelControls {
 
         [SerializeField] private GameObject bananaCannonMiniGameAccessDenied;
         [SerializeField] private BoxCollider miniGameCanonBananaInteractionCollider;
-        [SerializeField] private ItemInteraction miniGameCannonBananaPlayInteraction;
+        [SerializeField] private Interaction miniGameCannonBananaPlayInteraction;
 
         public Light[] gardensLight;
 

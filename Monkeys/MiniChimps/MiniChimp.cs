@@ -1,12 +1,15 @@
+using Data.Characters;
+using Interactions;
 using Items;
 using UI.InGame;
 using UnityEngine;
 
 namespace Monkeys.MiniChimps {
     public class MiniChimp : MonoBehaviour {
-        [SerializeField] private ItemInteraction itemInteraction;
+        [SerializeField] private Interaction interaction;
         [SerializeField] private BoxCollider interactionCollider;
-
+        public MiniChimpDataScriptableObject miniChimpDataScriptableObject;
+        
         public BubbleDialogue bubbleDialogue;
 
         private void OnTriggerEnter(Collider other) {
@@ -16,7 +19,7 @@ namespace Monkeys.MiniChimps {
 
         private void OnTriggerExit(Collider other) {
             bubbleDialogue.HideBubble();
-            itemInteraction.HideUI();
+            interaction.HideUI();
             interactionCollider.enabled = false;
         }
     }

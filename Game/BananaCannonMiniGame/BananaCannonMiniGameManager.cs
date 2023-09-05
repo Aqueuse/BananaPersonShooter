@@ -1,15 +1,14 @@
 using Cinemachine;
 using Enums;
-using Items.ItemsActions;
+using Interactions.InteractionsActions;
 using TMPro;
-using UI.InGame;
 using UnityEngine;
 
 namespace Game.BananaCannonMiniGame {
     public class BananaCannonMiniGameManager : MonoSingleton<BananaCannonMiniGameManager> {
         [SerializeField] private CinemachineVirtualCamera bananaCannonVirtualCamera;
         [SerializeField] private ProjectilesManager projectilesManager;
-        [SerializeField] private ItemInteraction playItemInteraction;        
+        [SerializeField] private GameObject playItemInteractionGameObject;        
         
         public string _mapName = "MAP01";
 
@@ -31,12 +30,12 @@ namespace Game.BananaCannonMiniGame {
         private int _debrisToSpawn;
         private int _spaceshipsQuantity;
 
-        private ItemType _bananaType;
+        private BananaType _bananaType;
 
         private void Start() {
-            _bananaType = ItemType.CAVENDISH;
-            bottomBananasQuantityText.text = ObjectsReference.Instance.inventory.GetQuantity(ItemType.CAVENDISH).ToString();
-            ObjectsReference.Instance.uIbananaCannonMiniGame.playButtonBananasQuantityText.text = ObjectsReference.Instance.inventory.GetQuantity(ItemType.CAVENDISH).ToString();
+            _bananaType = BananaType.CAVENDISH;
+            bottomBananasQuantityText.text = ObjectsReference.Instance.bananasInventory.GetQuantity(BananaType.CAVENDISH).ToString();
+            ObjectsReference.Instance.uIbananaCannonMiniGame.playButtonBananasQuantityText.text = ObjectsReference.Instance.bananasInventory.GetQuantity(BananaType.CAVENDISH).ToString();
             
             _debrisQuantity = ObjectsReference.Instance.mapsManager.mapBySceneName[_mapName].GetDebrisQuantity();
             debrisQuantityText.text = _debrisQuantity.ToString();
@@ -51,7 +50,7 @@ namespace Game.BananaCannonMiniGame {
             ObjectsReference.Instance.inputManager.uiSchemaContext = UISchemaSwitchType.BANANA_CANNON_MINI_GAME;
             ObjectsReference.Instance.inputManager.SwitchContext(InputContext.UI);
 
-            playItemInteraction.HideUI();
+            playItemInteractionGameObject.SetActive(false);
 
             bananaCannonVirtualCamera.Priority = 20;
             Cursor.visible = true;
@@ -70,7 +69,7 @@ namespace Game.BananaCannonMiniGame {
         }
 
         public void Teleport() {
-            GetComponent<PortalDestinationItemAction>().Activate();
+            GetComponent<PortalDestinationInteraction>().Activate();
         }
 
         public static void PauseMiniGame() {
@@ -88,7 +87,7 @@ namespace Game.BananaCannonMiniGame {
         public void QuitMiniGame() {
             Time.timeScale = 1;
 
-            playItemInteraction.ShowUI();
+            playItemInteractionGameObject.SetActive(true);
             bananaCannonVirtualCamera.Priority = 1;
             ObjectsReference.Instance.inputManager.SwitchContext(InputContext.GAME);
 
@@ -120,15 +119,15 @@ namespace Game.BananaCannonMiniGame {
         }
 
         public void Shoot() {
-            if (ObjectsReference.Instance.inventory.GetQuantity(_bananaType) == 0) {
+            if (ObjectsReference.Instance.bananasInventory.GetQuantity(_bananaType) == 0) {
                 projectilesManager.AlertNoBanana();
                 ObjectsReference.Instance.audioManager.PlayEffect(EffectType.NO_BANANA, 0);
             }
 
-            if (ObjectsReference.Instance.inventory.GetQuantity(_bananaType) > 0) {
+            if (ObjectsReference.Instance.bananasInventory.GetQuantity(_bananaType) > 0) {
                 projectilesManager.Shoot();
                 ObjectsReference.Instance.audioManager.PlayEffect(EffectType.CANNON_SHOOT, 0);
-                ObjectsReference.Instance.inventory.RemoveQuantity(ItemCategory.BANANA, _bananaType, 1);
+                ObjectsReference.Instance.bananasInventory.RemoveQuantity(_bananaType, 1);
             }
         }
 

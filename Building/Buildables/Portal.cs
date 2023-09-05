@@ -1,4 +1,4 @@
-using Items.ItemsActions;
+using Interactions.InteractionsActions;
 using UnityEngine;
 
 namespace Building.Buildables {
@@ -9,7 +9,7 @@ namespace Building.Buildables {
             foreach (var map in ObjectsReference.Instance.mapsManager.mapBySceneName) {
                 foreach (var portal in map.Value.portals) {
                     var dot = Instantiate(dotPrefab, transform);
-                    var dotItemAction = dot.GetComponent<PortalDestinationItemAction>(); 
+                    var dotItemAction = dot.GetComponent<PortalDestinationInteraction>(); 
 
                     dotItemAction.destinationPosition = portal.position;
                     dotItemAction.destinationRotation = portal.rotation;

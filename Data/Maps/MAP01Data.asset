@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b155f80f87c1d094a9834f59a26e94dc, type: 3}
+  m_Name: MAP01Data
+  m_EditorClassIdentifier: 
+  gameObjectTag: 0
+  itemCategory: 5
+  bananaType: 0
+  rawMaterialType: 5
+  ingredientsType: 1
+  buildableType: 6
+  itemName:
+  - the gorilla king jungle
+  - la jungle du roi gorille
+  - la jungla del rey gorila
+  itemSprite: {fileID: 0}
+  itemDescription:
+  - "A humid jungle where Kelsa\xEFk, a solitary gorilla, lives."
+  - "Une jungle humide o\xF9 vit Kelsa\xEFk, un gorille solitaire"
+  - "Una jungla h\xFAmeda donde vive Kelsa\xEFk, un gorila solitario"
+  sceneName: MAP01
+  monkeysQuantity: 1
+  monkeyType: 1
+  monkeyDataScriptableObject: {fileID: 11400000, guid: 77d2cf22a335dae49baa4a5fa53fcbd6, type: 2}
+  visitorsQuantity: 0
+  cleanliness: 0

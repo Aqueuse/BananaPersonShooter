@@ -3,6 +3,7 @@ using Building;
 using Cameras;
 using Data;
 using Game;
+using Game.Inventory;
 using Game.Steam;
 using Input;
 using Items;
@@ -11,7 +12,7 @@ using Save;
 using Settings;
 using UI;
 using UI.InGame;
-using UI.InGame.Blueprints;
+using UI.InGame.Gestion;
 using UI.InGame.Inventory;
 using UI.InGame.QuickSlots;
 using UI.Menus;
@@ -23,7 +24,7 @@ public class ObjectsReference : MonoSingleton<ObjectsReference> {
     public InputManager inputManager;
     public MapsManager mapsManager;
     public AudioManager audioManager;
-    public ItemsManager itemsManager;
+    public InteractionsManager interactionsManager;
     public BuildablesManager buildablesManager;
 
     public BananaMan bananaMan;
@@ -32,7 +33,11 @@ public class ObjectsReference : MonoSingleton<ObjectsReference> {
     public BananaGunGet bananaGunGet;
     public BananaGunPut bananaGunPut;
 
-    public Inventory inventory;
+    public BananasInventory bananasInventory;
+    public RawMaterialsInventory rawMaterialsInventory;
+    public IngredientsInventory ingredientsInventory;
+    public BlueprintsInventory blueprintsInventory;
+    
     public SlotSwitch slotSwitch;
     public ScriptableObjectManager scriptableObjectManager;
     public GhostsReference ghostsReference;
@@ -60,12 +65,16 @@ public class ObjectsReference : MonoSingleton<ObjectsReference> {
     public Teleportation teleportation;
 
     public UIManager uiManager;
-    public UInventory uInventory;
-    public UIBlueprints uiBlueprints;
+    public UInventoriesManager uInventoriesManager;
+
+    public UIBananasInventory uiBananasInventory;
+    public UIRawMaterialsInventory uiRawMaterialsInventory;
+    public UIIngredientsInventory uiIngredientsInventory;
+    public UIBlueprintsInventory uiBlueprintsInventory;
+    
     public UISlotsManager uiSlotsManager;
     public UICrosshairs uiCrosshairs;
     public UIFace uiFace;
-    public Uihud uihud;
     public UIQueuedMessages uiQueuedMessages;
     public UIHomeMenu uiHomeMenu;
     public UiGameMenu uiGameMenu;
@@ -73,4 +82,6 @@ public class ObjectsReference : MonoSingleton<ObjectsReference> {
     public UICredits uiCredits;
     public UISave uiSave;
     public UIbananaCannonMiniGame uIbananaCannonMiniGame;
+
+    public descriptionsManager descriptionsManager;
 }

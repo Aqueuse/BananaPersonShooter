@@ -1,4 +1,5 @@
 using System.Linq;
+using Enums;
 using Save.Templates;
 using UnityEngine;
 
@@ -30,19 +31,19 @@ namespace Save {
         }
 
         private static void ResetInventory() {
-            foreach (var bananaSlot in ObjectsReference.Instance.inventory.bananaManInventory.ToList()) {
-                ObjectsReference.Instance.inventory.bananaManInventory[bananaSlot.Key] = 0;
-                ObjectsReference.Instance.gameData.bananaManSavedData.inventory[bananaSlot.Key.ToString()] = 0;
+            foreach (var bananaSlot in ObjectsReference.Instance.bananasInventory.bananasInventory.ToList()) {
+                ObjectsReference.Instance.bananasInventory.bananasInventory[bananaSlot.Key] = 0;
+                ObjectsReference.Instance.gameData.bananaManSavedData.bananaInventory[bananaSlot.Key.ToString()] = 0;
             }
         }
 
         private static void ResetBlueprints() {
-            ObjectsReference.Instance.uiBlueprints.HideAllBlueprints();
+            ObjectsReference.Instance.uiBlueprintsInventory.HideAllBlueprints();
         }
 
         private static void ResetSlots() {
             for (var i = 0; i < ObjectsReference.Instance.gameData.bananaManSavedData.slots.Count; i++) {
-                ObjectsReference.Instance.gameData.bananaManSavedData.slots[i] = ItemType.EMPTY.ToString();
+                ObjectsReference.Instance.gameData.bananaManSavedData.slots[i] = BananaType.EMPTY.ToString();
             }
             
             foreach (var uiSlot in ObjectsReference.Instance.uiSlotsManager.uiSlotsScripts) {
@@ -73,15 +74,15 @@ namespace Save {
         }
 
         private static void ResetActiveItem() {
-            ObjectsReference.Instance.bananaMan.activeItemType = ItemType.EMPTY;
+            ObjectsReference.Instance.bananaMan.activeBananaType = BananaType.EMPTY;
             ObjectsReference.Instance.bananaMan.activeItemCategory = ItemCategory.EMPTY;
 
-            ObjectsReference.Instance.gameData.bananaManSavedData.activeItem = 0;
+            ObjectsReference.Instance.gameData.bananaManSavedData.activeBanana = 0;
         }
 
         private static void ResetMonkeysSasiety() {
             foreach (var mapData in ObjectsReference.Instance.mapsManager.mapBySceneName) {
-                mapData.Value.monkeySasiety = 0;
+                mapData.Value.mapDataScriptableObject.monkeyDataScriptableObject.sasiety = 0;
             }
         }
     }

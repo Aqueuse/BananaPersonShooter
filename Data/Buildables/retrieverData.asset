@@ -12,8 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6e11e44741351774ca1f8261e4d989f1, type: 3}
   m_Name: retrieverData
   m_EditorClassIdentifier: 
-  itemType: 0
+  gameObjectTag: 11
   itemCategory: 1
+  bananaType: 0
+  rawMaterialType: 5
+  ingredientsType: 1
   buildableType: 4
   itemName:
   - retriever
@@ -26,9 +29,9 @@ MonoBehaviour:
   - "Permite recuperar todas las plataformas de una zona de la estaci\xF3n"
   rawMaterialsWithQuantity:
     list:
-    - key: 18
+    - key: 0
       value: 4
-    - key: 20
+    - key: 2
       value: 1
     keyCollision: 0
   buildablePrefab: {fileID: 1245519440109076037, guid: 63783d9373ac3de41987b5eaedf948b1, type: 3}

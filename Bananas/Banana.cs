@@ -1,6 +1,6 @@
-﻿using System;
-using Data.Bananas;
-using Monkeys;
+﻿using Data.Bananas;
+using Enums;
+using Tags;
 using UnityEngine;
 
 namespace Bananas {
@@ -21,9 +21,9 @@ namespace Bananas {
                 Invoke(nameof(DestroyMe), 10);
                 return;
             }
-        
-            if (collision.gameObject.CompareTag("Player")) {
-                ObjectsReference.Instance.inventory.AddQuantity(ItemCategory.RAW_MATERIAL, ItemType.BANANA_PEEL, 1);
+
+            if (TagsManager.Instance.HasTag(collision.gameObject, GAME_OBJECT_TAG.PLAYER)) {
+                ObjectsReference.Instance.rawMaterialsInventory.AddQuantity(RawMaterialType.BANANA_PEEL, 1);
                 DestroyMe();
                 return;
             }

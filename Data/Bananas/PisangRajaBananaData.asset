@@ -12,8 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9aa579ee7e77bb468bc13896355d2a8, type: 3}
   m_Name: PisangRajaBananaData
   m_EditorClassIdentifier: 
-  itemType: 12
+  gameObjectTag: 3
   itemCategory: 0
+  bananaType: 12
+  rawMaterialType: 5
+  ingredientsType: 1
   buildableType: 6
   itemName:
   - pisang raja
@@ -28,7 +31,6 @@ MonoBehaviour:
   - ordinary nourishing, double healing
   - "sati\xE9t\xE9 ordinaire, soins doubl\xE9s"
   - "saciedad normal, curaci\xF3n duplicada"
-  regimeQuantity: 60
   sasiety: 5
   damageTime: 0
   healthBonus: 2

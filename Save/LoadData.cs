@@ -143,7 +143,7 @@ namespace Save {
                         mapToLoad.aspirablesCategories = new List<ItemCategory>();
                         mapToLoad.aspirablesPrefabsIndex = new List<int>();
                         mapToLoad.aspirablesBuildableTypes = new List<BuildableType>();
-                        mapToLoad.aspirablesItemTypes = new List<ItemType>();
+                        mapToLoad.aspirablesItemTypes = new List<BananaType>();
 
                         foreach (var aspirable in aspirablesData) {
                             var dataSplit = aspirable.Split("/");
@@ -154,7 +154,7 @@ namespace Save {
                             mapToLoad.aspirablesCategories.Add((ItemCategory)Enum.Parse(typeof(ItemCategory), dataSplit[2]));
                             mapToLoad.aspirablesPrefabsIndex.Add(Convert.ToInt32(dataSplit[3]));
                             mapToLoad.aspirablesBuildableTypes.Add((BuildableType)Enum.Parse(typeof(BuildableType), dataSplit[4]));
-                            mapToLoad.aspirablesItemTypes.Add((ItemType)Enum.Parse(typeof(ItemType), dataSplit[5]));
+                            mapToLoad.aspirablesItemTypes.Add((BananaType)Enum.Parse(typeof(BananaType), dataSplit[5]));
                         }
                     }
                 }

@@ -1,20 +1,21 @@
 using System.Collections.Generic;
 using Building;
 using Building.Buildables.Plateforms;
+using Data.Maps;
 using Enums;
 using Game.Steam;
-using Items;
+using Monkeys;
+using Tags;
 using UnityEngine;
 
 namespace Game {
     public class Map : MonoBehaviour {
-        public string mapName;
+        public MapDataScriptableObject mapDataScriptableObject;
+        
         public bool isDiscovered;
 
         public int debrisToSpawn;
 
-        public MonkeyType activeMonkeyType;
-        public float monkeySasiety;
         public float cleanliness;
 
         public int maxDebrisQuantity;
@@ -28,7 +29,7 @@ namespace Game {
         public List<ItemCategory> aspirablesCategories;
         public List<int> aspirablesPrefabsIndex;
         public List<BuildableType> aspirablesBuildableTypes;
-        public List<ItemType> aspirablesItemTypes;
+        public List<BananaType> aspirablesItemTypes;
 
         public List<PortalDestination> portals;
 
@@ -38,15 +39,14 @@ namespace Game {
         }
 
         public void Init() {
-            if (activeMonkeyType != MonkeyType.NONE) {
-                RecalculateHappiness();
-                MapItems.Instance.uiCanvasItemsHiddableManager.SetMonkeysVisibility(ObjectsReference.Instance.gameSettings.isShowingMonkeys);
-                MapItems.Instance.uiCanvasItemsHiddableManager.SetDebrisSpriteRendererVisibility(ObjectsReference.Instance.gameSettings.isShowingDebris);
-                MapItems.Instance.uiCanvasItemsHiddableManager.SetBananaTreeVisibility(ObjectsReference.Instance.gameSettings.isShowingBananaTrees); 
+            if (mapDataScriptableObject.monkeyType != MonkeyType.NONE) {
+                foreach (var monkey in MapItems.Instance.monkeys) {
+                    RecalculateHappiness(monkey);
+                }
             }
         }
 
-        public void RecalculateHappiness() {
+        public void RecalculateHappiness(Monkey monkey) {
             _actualDebrisQuantity = MapItems.Instance.aspirablesContainer.GetComponentsInChildren<MeshFilter>().Length;
 
             cleanliness = 50-_actualDebrisQuantity /(float)maxDebrisQuantity*50;
@@ -55,30 +55,23 @@ namespace Game {
                 ObjectsReference.Instance.steamIntegration.UnlockAchievement(SteamAchievement.STEAM_ACHIEVEMENT_JUNGLE_CLEANED); 
             }
 
+            monkey.monkeyDataScriptableObject.happiness = monkey.monkeyDataScriptableObject.sasiety + cleanliness;
             
-            foreach (var monkey in MapItems.Instance.monkeys) {
-                monkey.happiness = monkey.sasiety + cleanliness;
-
-                if (monkey.happiness < 20 && monkey.monkeyState != MonkeyState.ANGRY) {
-                    monkey.monkeyState = MonkeyState.ANGRY;
-                    monkey.monkeySounds.PlayRoarsSounds();
-                }
-
-                if (monkey.happiness is >= 20 and < 60 && monkey.monkeyState != MonkeyState.SAD) {
-                    monkey.monkeyState = MonkeyState.SAD;
-                    monkey.monkeySounds.PlayQuickMonkeySounds();
-                }
-
-                if (monkey.happiness >= 60 && monkey.monkeyState != MonkeyState.HAPPY) {
-                    monkey.monkeyState = MonkeyState.HAPPY;
-                    monkey.monkeySounds.PlayQuickMonkeySounds();
-                }
+            if (monkey.monkeyDataScriptableObject.happiness < 20 && monkey.monkeyState != MonkeyState.ANGRY) {
+                monkey.monkeyState = MonkeyState.ANGRY;
+                monkey.monkeySounds.PlayRoarsSounds();
             }
             
-            foreach (var monkey in MapItems.Instance.monkeys) {
-                monkey.associatedUI.SetSasietySliderValue(monkey.sasiety);
-                monkey.associatedUI.SetCleanlinessSliderValue(cleanliness);
+            if (monkey.monkeyDataScriptableObject.happiness is >= 20 and < 60 && monkey.monkeyState != MonkeyState.SAD) {
+                monkey.monkeyState = MonkeyState.SAD;
+                monkey.monkeySounds.PlayQuickMonkeySounds();
             }
+            
+            if (monkey.monkeyDataScriptableObject.happiness >= 60 && monkey.monkeyState != MonkeyState.HAPPY) {
+                monkey.monkeyState = MonkeyState.HAPPY;
+                monkey.monkeySounds.PlayQuickMonkeySounds();
+            }
+            
         }
 
         public void RefreshAspirablesItemsDataMap() {
@@ -89,10 +82,10 @@ namespace Game {
             aspirablesRotations = new List<Quaternion>();
             aspirablesPrefabsIndex = new List<int>();
             aspirablesBuildableTypes = new List<BuildableType>();
-            aspirablesItemTypes = new List<ItemType>();
+            aspirablesItemTypes = new List<BananaType>();
             
             // get the debris list
-            var debrisList = GameObject.FindGameObjectsWithTag("Debris");
+            var debrisList = TagsManager.Instance.GetAllGameObjectsWithTag(GAME_OBJECT_TAG.DEBRIS);
             
             foreach (var debris in debrisList) {
                 aspirablesCategories.Add(ItemCategory.DEBRIS);
@@ -100,39 +93,29 @@ namespace Game {
                 aspirablesRotations.Add(debris.transform.rotation);
                 aspirablesPrefabsIndex.Add(ObjectsReference.Instance.scriptableObjectManager._meshReferenceScriptableObject.debrisMeshes.IndexOf(debris.GetComponent<MeshFilter>().sharedMesh));
                 aspirablesBuildableTypes.Add(BuildableType.EMPTY);
-                aspirablesItemTypes.Add(ItemType.EMPTY);
+                aspirablesItemTypes.Add(BananaType.EMPTY);
             }
             
             // get the buildables list
-            var buildablesList = GameObject.FindGameObjectsWithTag("Buildable");
+            var buildablesList = TagsManager.Instance.GetAllGameObjectsWithTag(GAME_OBJECT_TAG.BUILDABLE);
                 
             foreach (var buildable in buildablesList) {
                 aspirablesCategories.Add(ItemCategory.BUILDABLE);
                 aspirablesPositions.Add(buildable.transform.position);
                 aspirablesRotations.Add(buildable.transform.rotation);
                 aspirablesPrefabsIndex.Add(0);
-                var aspirableBuildableType = ObjectsReference.Instance.buildablesManager.GetBuildableTypeByMesh(buildable.GetComponent<MeshFilter>().sharedMesh);
+                var aspirableBuildableType = ObjectsReference.Instance.scriptableObjectManager.GetBuildableTypeByMesh(buildable.GetComponent<MeshFilter>().sharedMesh);
                 aspirablesBuildableTypes.Add(aspirableBuildableType);
+                
                 if (aspirableBuildableType == BuildableType.PLATEFORM) {
                     aspirablesItemTypes.Add(buildable.GetComponent<Plateform>().plateformType);
                 }
                 else {
-                    aspirablesItemTypes.Add(ItemType.EMPTY);
+                    aspirablesItemTypes.Add(BananaType.EMPTY);
                 }
             }
-            
-            var chimployee = GameObject.FindGameObjectWithTag("Monkeyman");
 
-            if (chimployee != null) {
-                aspirablesCategories.Add(ItemCategory.CHIMPLOYEE);
-                aspirablesPositions.Add(chimployee.transform.position);
-                aspirablesRotations.Add(chimployee.transform.rotation);
-                aspirablesPrefabsIndex.Add(0);
-                aspirablesBuildableTypes.Add(BuildableType.EMPTY);
-                aspirablesItemTypes.Add(ItemType.EMPTY);
-            }
-
-            var ruinesList = GameObject.FindGameObjectsWithTag("Ruine");
+            var ruinesList = TagsManager.Instance.GetAllGameObjectsWithTag(GAME_OBJECT_TAG.RUINE);
 
             foreach (var ruine in ruinesList) {
                 aspirablesCategories.Add(ItemCategory.RUINE);
@@ -141,18 +124,16 @@ namespace Game {
                 
                 aspirablesPrefabsIndex.Add(ObjectsReference.Instance.scriptableObjectManager._meshReferenceScriptableObject.ruinesMeshes.IndexOf(ruine.GetComponent<MeshFilter>().sharedMesh));
                 aspirablesBuildableTypes.Add(BuildableType.EMPTY);
-                aspirablesItemTypes.Add(ItemType.EMPTY);
+                aspirablesItemTypes.Add(BananaType.EMPTY);
             }
         }
 
         public int GetDebrisQuantity() {
-            return debrisToSpawn+GameObject.FindGameObjectsWithTag("Debris").Length;
+            return debrisToSpawn+TagsManager.Instance.GetAllGameObjectsWithTag(GAME_OBJECT_TAG.DEBRIS).Count;
         }
 
         public void StartBossFight(MonkeyType monkeyType) {
             ObjectsReference.Instance.audioManager.PlayMusic(MusicType.FIGHT, 0);
-
-            activeMonkeyType = monkeyType;
         }
     }
 }

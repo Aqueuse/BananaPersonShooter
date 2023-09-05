@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Building {
     public class BananaGunPut : MonoBehaviour {
         [SerializeField] private Transform launchingBananaPoint;
-        [SerializeField] private GenericDictionary<ItemType, GameObject> weaponsGameObjects;
+        [SerializeField] private GenericDictionary<BananaType, GameObject> weaponsGameObjects;
 
         private GameObject banana;
         private BananasDataScriptableObject activeWeaponData;
@@ -13,7 +13,7 @@ namespace Building {
         public void LoadingGun() {
             if (ObjectsReference.Instance.bananaMan.activeItemCategory == ItemCategory.BANANA) {
                 ObjectsReference.Instance.bananaGun.GrabBananaGun();
-                ObjectsReference.Instance.uiCrosshairs.SetCrosshair(ItemCategory.BANANA, ItemType.CAVENDISH);
+                ObjectsReference.Instance.uiCrosshairs.SetCrosshair(ItemCategory.BANANA, BananaType.CAVENDISH);
 
                 Invoke(nameof(ThrowBanana), 0.3f);
             }
@@ -25,10 +25,10 @@ namespace Building {
         }
 
         public void ThrowBanana() {
-            if (ObjectsReference.Instance.inventory.GetQuantity(ObjectsReference.Instance.bananaMan.activeItemType) <= 0) return;
+            if (ObjectsReference.Instance.bananasInventory.GetQuantity(ObjectsReference.Instance.bananaMan.activeBananaType) <= 0) return;
 
             if (ObjectsReference.Instance.gameActions.leftClickActivated || ObjectsReference.Instance.gameActions.rightTriggerActivated) {
-                banana = Instantiate(weaponsGameObjects[ObjectsReference.Instance.bananaMan.activeItem.itemType],
+                banana = Instantiate(weaponsGameObjects[ObjectsReference.Instance.bananaMan.activeItem.bananaType],
                     launchingBananaPoint.transform.position, Quaternion.identity, null);
 
                 // Instantiate Banana of this type
@@ -44,19 +44,19 @@ namespace Building {
 
                 switch (activeWeaponData.bananaEffect) {
                     case BananaEffect.TWO_SPLIT:
-                        ObjectsReference.Instance.inventory.RemoveQuantity(ItemCategory.BANANA, activeWeaponData.itemType, 2);
+                        ObjectsReference.Instance.bananasInventory.RemoveQuantity(activeWeaponData.bananaType, 2);
                         break;
                     case BananaEffect.FIVE_SPLIT:
-                        ObjectsReference.Instance.inventory.RemoveQuantity(ItemCategory.BANANA, activeWeaponData.itemType, 5);
+                        ObjectsReference.Instance.bananasInventory.RemoveQuantity(activeWeaponData.bananaType, 5);
                         break;
                     default:
-                        ObjectsReference.Instance.inventory.RemoveQuantity(ItemCategory.BANANA, activeWeaponData.itemType, 1);
+                        ObjectsReference.Instance.bananasInventory.RemoveQuantity(activeWeaponData.bananaType, 1);
                         break;
                 }
 
-                var newAmmoQuantity = ObjectsReference.Instance.inventory.bananaManInventory[activeWeaponData.itemType];
+                var newAmmoQuantity = ObjectsReference.Instance.bananasInventory.bananasInventory[activeWeaponData.bananaType];
 
-                ObjectsReference.Instance.uiSlotsManager.Get_Selected_Slot().SetAmmoQuantity(newAmmoQuantity);
+                ObjectsReference.Instance.uiSlotsManager.Get_Selected_Slot().SetQuantity(newAmmoQuantity);
                     
                 Invoke(nameof(ThrowBanana), 1f);
             }

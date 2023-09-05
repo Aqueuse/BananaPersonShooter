@@ -1,87 +1,89 @@
 using Building.Buildables;
+using Data;
+using Data.Waste;
 using Enums;
-using Game.CommandRoomPanelControls;
-using Items;
+using Interactions;
+using Tags;
 using UnityEngine;
 
 namespace Building {
     public class BananaGunGet : MonoBehaviour {
-        private BuildablesManager buildablesManager;
+        private Mesh _targetedGameObjectMesh;
+        private BananaType _targetType;
         private BananaGun bananaGun;
 
-        private Mesh _targetedGameObjectMesh;
-        private ItemType _targetType;
-        
+        private GenericDictionary<RawMaterialType, int> rawMaterialsWithQuantity;
+        private ScriptableObjectManager scriptableObjectManager;
+        private WasteDataScriptableObject wasteDataScriptableObject;
+
         private void Start() {
-            buildablesManager = ObjectsReference.Instance.buildablesManager;
+            scriptableObjectManager = ObjectsReference.Instance.scriptableObjectManager;
             bananaGun = ObjectsReference.Instance.bananaGun;
         }
-        
+
         public void Harvest() {
-            if (bananaGun.targetedGameObject == null || bananaGun.targetedGameObject.layer != 7) return;
-            ObjectsReference.Instance.uihud.GetCurrentUIHelper().Hide_retrieve_confirmation();
+            if (bananaGun.targetedGameObject == null || bananaGun.targetedGameObject.layer != 11) return;
+
+            ObjectsReference.Instance.uInventoriesManager.GetCurrentUIHelper().Hide_retrieve_confirmation();
             ObjectsReference.Instance.audioManager.PlayEffect(EffectType.TAKE_SOMETHING, 0);
             ObjectsReference.Instance.mapsManager.currentMap.isDiscovered = true;
 
-            switch (bananaGun.targetedGameObject.tag) {
-                case "Regime":
+            GAME_OBJECT_TAG gameObjectTag = bananaGun.targetedGameObject.GetComponent<Tag>().gameObjectTag;
+
+            switch (gameObjectTag) {
+                case GAME_OBJECT_TAG.REGIME:
                     var regimeClass = bananaGun.targetedGameObject.GetComponent<Regime>();
-                    var bananaType = regimeClass.bananasDataScriptableObject.itemType;
-                    var quantity = regimeClass.bananasDataScriptableObject.regimeQuantity;
-            
-                    ObjectsReference.Instance.inventory.AddQuantity(ItemCategory.BANANA, bananaType, quantity);
-            
+                    var quantity = regimeClass.regimeDataScriptableObject.regimeQuantity;
+
+                    ObjectsReference.Instance.bananasInventory.AddQuantity(regimeClass.regimeDataScriptableObject.associatedBananasDataScriptableObject, quantity);
+
                     regimeClass.GrabBananas();
                     break;
 
-                case "Buildable":
+                case GAME_OBJECT_TAG.BUILDABLE:
                     _targetedGameObjectMesh = bananaGun.targetedGameObject.GetComponent<MeshFilter>().sharedMesh;
 
-                    var buildableType = buildablesManager.GetBuildableTypeByMesh(_targetedGameObjectMesh);
-                    var craftingMaterials = buildablesManager.GetBuildableCraftingIngredients(buildableType);
+                    var buildableType = scriptableObjectManager.GetBuildableTypeByMesh(_targetedGameObjectMesh);
+
+                    var craftingMaterials = scriptableObjectManager.GetBuildableCraftingIngredients(buildableType);
 
                     foreach (var craftingMaterial in craftingMaterials) {
-                        ObjectsReference.Instance.inventory.AddQuantity(ItemCategory.RAW_MATERIAL, craftingMaterial.Key, craftingMaterial.Value);
+                        ObjectsReference.Instance.rawMaterialsInventory.AddQuantity(craftingMaterial.Key, craftingMaterial.Value);
                     }
 
                     if (buildableType == BuildableType.BANANA_DRYER) GetComponent<BananasDryer>().RetrieveRawMaterials();
 
                     DestroyImmediate(bananaGun.targetedGameObject);
-                    bananaGun.targetedGameObject = null;
-                    
-                    ObjectsReference.Instance.mapsManager.currentMap.RefreshAspirablesItemsDataMap();
-                    
                     break;
                 
-                case "Debris":
-                    MapItems.Instance.uiCanvasItemsHiddableManager.RemoveSpriteRenderer(bananaGun.targetedGameObject.GetComponentInChildren<SpriteRenderer>());
+                case GAME_OBJECT_TAG.DEBRIS:
+                    wasteDataScriptableObject = (WasteDataScriptableObject)scriptableObjectManager._meshReferenceScriptableObject.gameObjectDataScriptableObjectsByTag[GAME_OBJECT_TAG.DEBRIS];
+                    rawMaterialsWithQuantity = wasteDataScriptableObject.GetRawMaterialsWithQuantity();
 
-                    foreach (var buildableCraftingIngredient in buildablesManager.GetBuildableCraftingIngredients(BuildableType.PLATEFORM)) {
-                        ObjectsReference.Instance.inventory.AddQuantity(ItemCategory.RAW_MATERIAL, buildableCraftingIngredient.Key, buildableCraftingIngredient.Value);
+                    foreach (var debrisRawMaterialIngredient in rawMaterialsWithQuantity) {
+                        ObjectsReference.Instance.rawMaterialsInventory.AddQuantity(debrisRawMaterialIngredient.Key, debrisRawMaterialIngredient.Value);
                     }
 
-                    if (Random.Range(0, 5) == 4) {
-                        ObjectsReference.Instance.inventory.AddQuantity(ItemCategory.RAW_MATERIAL, ItemType.BATTERY, 1);                        
+                    foreach (var monkey in MapItems.Instance.monkeys) {
+                        ObjectsReference.Instance.mapsManager.currentMap.RecalculateHappiness(monkey);
                     }
-
-                    ObjectsReference.Instance.mapsManager.currentMap.RecalculateHappiness();
 
                     Destroy(bananaGun.targetedGameObject);
-                    bananaGun.targetedGameObject = null;
-
-                    ObjectsReference.Instance.mapsManager.currentMap.RefreshAspirablesItemsDataMap();
-
                     break;
-                case "Ruine":
-                    ObjectsReference.Instance.inventory.AddQuantity(ItemCategory.RAW_MATERIAL, ItemType.METAL, 10);
+                case GAME_OBJECT_TAG.RUINE:
+                    wasteDataScriptableObject = (WasteDataScriptableObject)scriptableObjectManager._meshReferenceScriptableObject.gameObjectDataScriptableObjectsByTag[gameObjectTag];
+                    rawMaterialsWithQuantity = wasteDataScriptableObject.GetRawMaterialsWithQuantity();
 
+                    foreach (var debrisRawMaterialIngredient in rawMaterialsWithQuantity) {
+                        ObjectsReference.Instance.rawMaterialsInventory.AddQuantity(debrisRawMaterialIngredient.Key, debrisRawMaterialIngredient.Value);
+                    }
+                    
                     Destroy(bananaGun.targetedGameObject);
-                    bananaGun.targetedGameObject = null;
-
-                    ObjectsReference.Instance.mapsManager.currentMap.RefreshAspirablesItemsDataMap();
-
                     break;
             }
+            
+            bananaGun.targetedGameObject = null;
+            ObjectsReference.Instance.mapsManager.currentMap.RefreshAspirablesItemsDataMap();
         }
     }
 }

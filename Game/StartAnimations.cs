@@ -32,13 +32,13 @@ namespace Game {
         }
 
         private void Update() {
-            if (UnityEngine.Input.GetMouseButtonDown(0) && !ObjectsReference.Instance.uiManager.isOnMenu) {
+            if (UnityEngine.Input.GetMouseButtonDown(0) && !ObjectsReference.Instance.uiManager.isOnSubMenus) {
                 var ray = ObjectsReference.Instance.gameManager.cameraMain.ScreenPointToRay(UnityEngine.Input.mousePosition);
                 var direction = ray.GetPoint(1) - ray.GetPoint(0);
                 var spawnedBanana = Instantiate(bananaPrefab, ray.GetPoint(2), Quaternion.LookRotation(direction));
                 spawnedBanana.GetComponent<Rigidbody>().velocity = spawnedBanana.transform.forward * 10f;
             }
-            else if(UnityEngine.Input.GetMouseButtonDown(1) && !ObjectsReference.Instance.uiManager.isOnMenu) {
+            else if(UnityEngine.Input.GetMouseButtonDown(1) && !ObjectsReference.Instance.uiManager.isOnSubMenus) {
 				var ray = ObjectsReference.Instance.gameManager.cameraMain.ScreenPointToRay(UnityEngine.Input.mousePosition);
 				var direction = ray.GetPoint(1) - ray.GetPoint(0);
 				var spawnedBanana = Instantiate(bananaPrefab, ray.GetPoint(2), Quaternion.LookRotation(direction));

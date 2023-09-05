@@ -15,8 +15,8 @@ namespace Monkeys.Ancestors.Gorilla {
         public Transform gorillaHandRight;
         public Transform gorillaHandLeft;
         private NavMeshAgent _navMeshAgent;
-        private Monkey _monkey;
-
+        [SerializeField] private Monkey _monkey;
+        
         private Vector3 _gorillaHandLeftPosition;
 
         private Animator _animator;
@@ -64,7 +64,6 @@ namespace Monkeys.Ancestors.Gorilla {
         private void Start() {
             _navMeshAgent = GetComponent<NavMeshAgent>();
             _animator = GetComponent<Animator>();
-            _monkey = GetComponent<Monkey>();
 
             _nearPlayerAttack = new List<int> { Roar, Flex, Tourbismash };
             _mediumPlayerAttack = new List<int> { Punch, PunchRight, Swip, SwipRight };

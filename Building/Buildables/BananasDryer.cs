@@ -1,13 +1,14 @@
 using System.Collections.Generic;
-using UI.InGame;
+using Enums;
+using Interactions;
 using UnityEngine;
 
 namespace Building.Buildables {
     public class BananasDryer : MonoBehaviour {
         [SerializeField] private List<BananaDryerSlot> bananasDryerSlots;
 
-        [SerializeField] private ItemInteraction placeInteractionUI;
-        public ItemInteraction takeInteractionUI;
+        [SerializeField] private Interaction placeInteractionUI;
+        public Interaction takeInteractionUI;
         
         public int peelsQuantity;
         public int fabricQuantity;
@@ -28,12 +29,12 @@ namespace Building.Buildables {
         }
 
         public void AddBananaPeel() {
-            if (ObjectsReference.Instance.inventory.bananaManInventory[ItemType.BANANA_PEEL] == 0) return;
+            if (ObjectsReference.Instance.rawMaterialsInventory.rawMaterialsInventory[RawMaterialType.BANANA_PEEL] == 0) return;
             
             if (peelsQuantity < 20) {
                 GetEmptySlot().AddBananaPeel();
 
-                ObjectsReference.Instance.inventory.RemoveQuantity(ItemCategory.RAW_MATERIAL, ItemType.BANANA_PEEL, 1);
+                ObjectsReference.Instance.rawMaterialsInventory.RemoveQuantity(RawMaterialType.BANANA_PEEL, 1);
                 peelsQuantity += 1;
             }
         }
@@ -43,7 +44,7 @@ namespace Building.Buildables {
             
             if (fabricQuantity == 0) return;
 
-            ObjectsReference.Instance.inventory.AddQuantity(ItemCategory.RAW_MATERIAL, ItemType.FABRIC, fabricQuantity);
+            ObjectsReference.Instance.rawMaterialsInventory.AddQuantity(RawMaterialType.FABRIC, fabricQuantity);
             
             foreach (var bananasDryerSlot in bananasDryerSlots) {
                 bananasDryerSlot.Fabric.enabled = false;
@@ -56,8 +57,8 @@ namespace Building.Buildables {
         }
 
         public void RetrieveRawMaterials() {
-            ObjectsReference.Instance.inventory.AddQuantity(ItemCategory.RAW_MATERIAL, ItemType.FABRIC, fabricQuantity);
-            ObjectsReference.Instance.inventory.AddQuantity(ItemCategory.RAW_MATERIAL, ItemType.BANANA_PEEL, peelsQuantity);
+            ObjectsReference.Instance.rawMaterialsInventory.AddQuantity(RawMaterialType.FABRIC, fabricQuantity);
+            ObjectsReference.Instance.rawMaterialsInventory.AddQuantity(RawMaterialType.BANANA_PEEL, peelsQuantity);
         }
 
         private int GetFabricQuantity() {

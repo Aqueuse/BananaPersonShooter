@@ -1,4 +1,5 @@
 using Data.Bananas;
+using Enums;
 using Game.BananaCannonMiniGame.projectilesBehaviours;
 using TMPro;
 using UnityEngine;
@@ -6,14 +7,14 @@ using UnityEngine;
 namespace Game.BananaCannonMiniGame {
     public class ProjectilesManager : MonoBehaviour {
         [SerializeField] private Transform cannonLauncherTransform;
-        [SerializeField] private GenericDictionary<ItemType, BananasDataScriptableObject> bananasDataScriptableObjectsByBananaType;
+        [SerializeField] private GenericDictionary<BananaType, BananasDataScriptableObject> bananasDataScriptableObjectsByBananaType;
         [SerializeField] private TextMeshProUGUI bananaSelectorQuantityText;
         
         private ProjectilesPool _projectilesPool;
 
         private Projectile _projectile;
 
-        public ItemType _projectileType;
+        public BananaType _projectileType;
         private Color _projectileColor;
         
         private void Start() {
@@ -24,30 +25,30 @@ namespace Game.BananaCannonMiniGame {
         }
 
         public void AlertNoBanana() {
-            bananaSelectorQuantityText.text = "0";
+            bananaSelectorQuantityText.text = "no banana";
             bananaSelectorQuantityText.color = Color.red;
             
             Invoke(nameof(SetNormalBananaQuantityColor), 0.5f);
         }
 
         private void SetBananasQuantity() {
-            bananaSelectorQuantityText.text = ObjectsReference.Instance.inventory.GetQuantity(_projectileType).ToString();
-            if (ObjectsReference.Instance.inventory.GetQuantity(_projectileType) == 0) AlertNoBanana();
+            bananaSelectorQuantityText.text = ObjectsReference.Instance.bananasInventory.GetQuantity(_projectileType).ToString();
+            if (ObjectsReference.Instance.bananasInventory.GetQuantity(_projectileType) == 0) AlertNoBanana();
         }
 
         private void SetNormalBananaQuantityColor() {
             bananaSelectorQuantityText.color = Color.white;
         }
 
-        private void SwitchBanana(ItemType bananaType) {
+        private void SwitchBanana(BananaType bananaType) {
             _projectileType = bananaType;
             _projectileColor = bananasDataScriptableObjectsByBananaType[bananaType].bananaColor;
             SetBananasQuantity();
         }
 
-        private static void SetBehaviour(Projectile projectile, ItemType bananaType) {
+        private static void SetBehaviour(Projectile projectile, BananaType bananaType) {
             switch (bananaType) {
-                case ItemType.CAVENDISH:
+                case BananaType.CAVENDISH:
                     if (projectile.gameObject.GetComponent<CavendishBehaviour>() != null) {
                         Destroy(projectile.gameObject.GetComponent<CavendishBehaviour>());
                     }

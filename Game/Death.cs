@@ -21,7 +21,6 @@ namespace Game {
 
                 Cursor.visible = true;
                 Cursor.lockState = CursorLockMode.None;
-                ObjectsReference.Instance.inputManager.SwitchContext(InputContext.UI);
                 ObjectsReference.Instance.mainCamera.Set0Sensibility();
 
                 ObjectsReference.Instance.uiManager.Set_active(UICanvasGroupType.DEATH, true);
@@ -30,6 +29,8 @@ namespace Game {
                 deathVideoPlayer.enabled = true;
 
                 UISchemaSwitcher.Instance.SwitchUISchema(UISchemaSwitchType.DEATH);
+                ObjectsReference.Instance.inputManager.SwitchContext(InputContext.UI);
+
                 ObjectsReference.Instance.gameManager.gameContext = GameContext.DEAD;
                 
                 deathVideoPlayer.frame = 0;
@@ -40,6 +41,7 @@ namespace Game {
         public void HideDeath() {
             deathPlaneMeshRenderer.enabled = false;
             ObjectsReference.Instance.bananaMan.tpsPlayerAnimator.GetUp();
+            ObjectsReference.Instance.uiFace.Die(false);
         }
     }
 }

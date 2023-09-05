@@ -12,8 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9aa579ee7e77bb468bc13896355d2a8, type: 3}
   m_Name: MusaVelutinaBananaData
   m_EditorClassIdentifier: 
-  itemType: 10
+  gameObjectTag: 3
   itemCategory: 0
+  bananaType: 10
+  rawMaterialType: 5
+  ingredientsType: 1
   buildableType: 6
   itemName:
   - musa velutina
@@ -29,7 +32,6 @@ MonoBehaviour:
   - "Cr\xE9e une zone o\xF9 les singes arr\xEAtent de se battre pendant quelques\r
     secondes"
   - Crear una zona donde los monos dejan de pelear durante unos segundos
-  regimeQuantity: 60
   sasiety: 5
   damageTime: 0
   healthBonus: 1

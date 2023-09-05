@@ -12,7 +12,7 @@ namespace Building {
         public Ghost _activeGhostClass;
         private GameObject _buildable;
         private Mesh targetMesh;
-        private GenericDictionary<ItemType, int> _craftingIngredients;
+        private GenericDictionary<RawMaterialType, int> _craftingIngredients;
 
         private Transform _mainCameraTransform;
         private Quaternion _normalRotation;
@@ -43,7 +43,6 @@ namespace Building {
         private void FixedUpdate() {
             if (ObjectsReference.Instance.bananaMan.activeItemCategory != ItemCategory.BUILDABLE || _activeGhost == null) return;
             if (ObjectsReference.Instance.uiManager.Is_Interface_Visible()) return;
-            if (!ObjectsReference.Instance.gameActions.isBuildModeActivated) return;
 
             if (_activeGhostClass.buildableDataScriptableObject.buildableType == BuildableType.PLATEFORM) {
                 _activeGhost.transform.position = plateformPlacementTransform.position;
@@ -57,45 +56,47 @@ namespace Building {
 
             _craftingIngredients = _activeGhostClass.buildableDataScriptableObject.rawMaterialsWithQuantity;
 
-            if (ObjectsReference.Instance.inventory.HasCraftingIngredients(_craftingIngredients)) {
+            if (ObjectsReference.Instance.rawMaterialsInventory.HasCraftingIngredients(_craftingIngredients)) {
                 _activeGhostClass.SetGhostState(GhostState.VALID);
-                ObjectsReference.Instance.uihud.GetCurrentUIHelper().ShowNormalPlaceHelper();
+                ObjectsReference.Instance.uInventoriesManager.GetCurrentUIHelper().ShowNormalPlaceHelper();
             }
 
             else {
                 _activeGhostClass.SetGhostState(GhostState.UNBUILDABLE);
-                ObjectsReference.Instance.uihud.GetCurrentUIHelper().ShowNetEnoughMaterialsHelper();
+                ObjectsReference.Instance.uInventoriesManager.GetCurrentUIHelper().ShowNetEnoughMaterialsHelper();
             }
         }
         
-        public void SwitchSlot(UISlot slot) {
-            ObjectsReference.Instance.bananaMan.SetActiveItemTypeAndCategory(slot.itemType, slot.itemCategory, slot.buildableType);
-            
+        public void SwitchSlot(UIQuickSlot slot) {
             CancelGhost();
 
             switch (ObjectsReference.Instance.bananaMan.activeItemCategory) {
                 case ItemCategory.BANANA:
+                    ObjectsReference.Instance.bananaMan.SetActiveItemTypeAndCategory(slot.slotItemScriptableObject.bananaType, slot.slotItemScriptableObject.itemCategory, slot.slotItemScriptableObject.buildableType);
+
                     ObjectsReference.Instance.bananaMan.activeItem =
                         ObjectsReference.Instance.scriptableObjectManager.GetBananaScriptableObject(ObjectsReference.Instance
                             .uiSlotsManager.Get_Selected_Slot_Type());
 
-                    ObjectsReference.Instance.uiCrosshairs.SetCrosshair(slot.itemCategory, slot.itemType);
-                    ObjectsReference.Instance.uihud.GetCurrentUIHelper().show_banana_helper();
+                    ObjectsReference.Instance.uiCrosshairs.SetCrosshair(slot.slotItemScriptableObject.itemCategory, slot.slotItemScriptableObject.bananaType);
+                    ObjectsReference.Instance.uInventoriesManager.GetCurrentUIHelper().show_banana_helper();
 
                     break;
 
                 case ItemCategory.BUILDABLE:
-                    if (ObjectsReference.Instance.gameActions.isBuildModeActivated) ActivateGhost();
+                    ObjectsReference.Instance.bananaMan.SetActiveItemTypeAndCategory(slot.slotItemScriptableObject.bananaType, slot.slotItemScriptableObject.itemCategory, slot.slotItemScriptableObject.buildableType);
 
-                    ObjectsReference.Instance.uiCrosshairs.SetCrosshair(slot.itemCategory, ItemType.EMPTY);
-                    ObjectsReference.Instance.uihud.GetCurrentUIHelper().show_default_helper();
+                    ActivateGhost();
+
+                    ObjectsReference.Instance.uiCrosshairs.SetCrosshair(slot.slotItemScriptableObject.itemCategory, BananaType.EMPTY);
+                    ObjectsReference.Instance.uInventoriesManager.GetCurrentUIHelper().show_default_helper();
                     break;
 
                 case ItemCategory.EMPTY or ItemCategory.RAW_MATERIAL:
-                    ObjectsReference.Instance.bananaGun.UngrabBananaGun();
+                    if (ObjectsReference.Instance.gameManager.isGamePlaying) ObjectsReference.Instance.bananaGun.UngrabBananaGun();
                     
-                    ObjectsReference.Instance.uiCrosshairs.SetCrosshair(ItemCategory.EMPTY, ItemType.EMPTY);
-                    ObjectsReference.Instance.uihud.GetCurrentUIHelper().show_default_helper();
+                    ObjectsReference.Instance.uiCrosshairs.SetCrosshair(ItemCategory.EMPTY, BananaType.EMPTY);
+                    ObjectsReference.Instance.uInventoriesManager.GetCurrentUIHelper().show_default_helper();
                     break;
             }
         }
@@ -137,10 +138,8 @@ namespace Building {
                 _buildable.transform.parent = MapItems.Instance.aspirablesContainer.transform;
 
                 foreach (var craftingIngredient in _craftingIngredients) {
-                    ObjectsReference.Instance.inventory.RemoveQuantity(ItemCategory.RAW_MATERIAL, craftingIngredient.Key,
-                        craftingIngredient.Value);
-                    ObjectsReference.Instance.uiSlotsManager.RefreshQuantityInQuickSlot(ItemCategory.RAW_MATERIAL,
-                        craftingIngredient.Key);
+                    ObjectsReference.Instance.rawMaterialsInventory.RemoveQuantity(craftingIngredient.Key, craftingIngredient.Value);
+                    ObjectsReference.Instance.uiSlotsManager.RefreshQuantityInQuickSlot();
                 }
                 
                 ObjectsReference.Instance.mapsManager.currentMap.RefreshAspirablesItemsDataMap();

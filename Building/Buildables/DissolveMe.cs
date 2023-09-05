@@ -15,7 +15,7 @@ namespace Building.Buildables {
         private bool _isDissolving;
         
         private ItemCategory _itemCategory;
-        private ItemType _itemType;
+        private BananaType bananaType;
         private BuildableType _buildableType;
         
         private void Start() {
@@ -39,10 +39,10 @@ namespace Building.Buildables {
             }
         }
 
-        public void Dissolve(ItemCategory itemCategory, BuildableType buildableType, ItemType itemType) {
+        public void Dissolve(ItemCategory itemCategory, BuildableType buildableType, BananaType bananaType) {
             _itemCategory = itemCategory;
             _buildableType = buildableType;
-            _itemType = itemType;
+            this.bananaType = bananaType;
             _isDissolving = true;
         }
     }
