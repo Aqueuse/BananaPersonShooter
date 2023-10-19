@@ -31,8 +31,7 @@ namespace Input.UIActions {
 
         private static void Escape() {
             if (UnityEngine.Input.GetKeyDown(KeyCode.Escape) || UnityEngine.Input.GetKeyDown(KeyCode.JoystickButton1)) {
-                ObjectsReference.Instance.uiManager.Hide_Game_Menu();
-                ObjectsReference.Instance.gameManager.UnpauseGame();
+                ObjectsReference.Instance.uiGameMenu.ReturnToGame();
             }
         }
 

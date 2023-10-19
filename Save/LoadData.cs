@@ -137,24 +137,24 @@ namespace Save {
                     if (aspirablesQuantity > 0) {
                         mapToLoad = ObjectsReference.Instance.mapsManager.mapBySceneName[map.Key];
                         
-                        mapToLoad.aspirablesPositions = new List<Vector3>();
-                        mapToLoad.aspirablesRotations = new List<Quaternion>();
+                        mapToLoad.itemsPositions = new List<Vector3>();
+                        mapToLoad.itemsRotations = new List<Quaternion>();
 
-                        mapToLoad.aspirablesCategories = new List<ItemCategory>();
-                        mapToLoad.aspirablesPrefabsIndex = new List<int>();
-                        mapToLoad.aspirablesBuildableTypes = new List<BuildableType>();
-                        mapToLoad.aspirablesItemTypes = new List<BananaType>();
+                        mapToLoad.itemsCategories = new List<ItemCategory>();
+                        mapToLoad.itemsPrefabsIndex = new List<int>();
+                        mapToLoad.itemsBuildableTypes = new List<BuildableType>();
+                        mapToLoad.itemBananaTypes = new List<BananaType>();
 
                         foreach (var aspirable in aspirablesData) {
                             var dataSplit = aspirable.Split("/");
                     
-                            mapToLoad.aspirablesPositions.Add(Vector3FromString(dataSplit[0]));
-                            mapToLoad.aspirablesRotations.Add(QuaternionFromString(dataSplit[1]));
+                            mapToLoad.itemsPositions.Add(Vector3FromString(dataSplit[0]));
+                            mapToLoad.itemsRotations.Add(QuaternionFromString(dataSplit[1]));
                         
-                            mapToLoad.aspirablesCategories.Add((ItemCategory)Enum.Parse(typeof(ItemCategory), dataSplit[2]));
-                            mapToLoad.aspirablesPrefabsIndex.Add(Convert.ToInt32(dataSplit[3]));
-                            mapToLoad.aspirablesBuildableTypes.Add((BuildableType)Enum.Parse(typeof(BuildableType), dataSplit[4]));
-                            mapToLoad.aspirablesItemTypes.Add((BananaType)Enum.Parse(typeof(BananaType), dataSplit[5]));
+                            mapToLoad.itemsCategories.Add((ItemCategory)Enum.Parse(typeof(ItemCategory), dataSplit[2]));
+                            mapToLoad.itemsPrefabsIndex.Add(Convert.ToInt32(dataSplit[3]));
+                            mapToLoad.itemsBuildableTypes.Add((BuildableType)Enum.Parse(typeof(BuildableType), dataSplit[4]));
+                            mapToLoad.itemBananaTypes.Add((BananaType)Enum.Parse(typeof(BananaType), dataSplit[5]));
                         }
                     }
                 }

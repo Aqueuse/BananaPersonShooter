@@ -1,4 +1,5 @@
 ﻿using Data.Door;
+using Enums;
 using UnityEngine;
 
 namespace Interactions {
@@ -10,6 +11,8 @@ namespace Interactions {
         [SerializeField] private Interaction interaction;
 
         private void Start() {
+            if (spawnPoint == SpawnPoint.OUTER_SPACE) return;
+
             if (ObjectsReference.Instance.bananaMan.tutorialFinished) {
                 GetComponent<Collider>().enabled = true;
             }

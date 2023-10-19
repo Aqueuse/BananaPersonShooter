@@ -4,6 +4,8 @@ using UnityEngine;
 
 namespace UI.InGame.Inventory {
     public class UIBananasInventory : MonoBehaviour {
+        [SerializeField] private Transform inventoryContentTransform; 
+
         public GenericDictionary<BananaType, UInventorySlot> inventorySlotsByBananaType;
         
         private Dictionary<BananaType, int> _itemsIndexByType;
@@ -18,6 +20,25 @@ namespace UI.InGame.Inventory {
                 }
 
                 else inventorySlotsByBananaType[inventoryItem.Key].gameObject.SetActive(false);
+            }
+        }
+
+        public void UnselectAllSlots() {
+            foreach (var inventoryItem in inventorySlotsByBananaType) {
+                inventoryItem.Value.UnselectInventorySlot();
+            }
+        }
+
+        public void SelectFirstSlot() {
+            UnselectAllSlots();
+
+            if (inventoryContentTransform.childCount == 0) return;
+
+            foreach (var slot in inventoryContentTransform.GetComponentsInChildren<UInventorySlot>()) {
+                if (slot.gameObject.activeInHierarchy) {
+                    slot.GetComponent<UInventorySlot>().SelectInventorySlot();
+                    break;
+                }
             }
         }
     }

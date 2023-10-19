@@ -46,7 +46,7 @@ namespace Save {
                 ObjectsReference.Instance.gameData.bananaManSavedData.slots[i] = BananaType.EMPTY.ToString();
             }
             
-            foreach (var uiSlot in ObjectsReference.Instance.uiSlotsManager.uiSlotsScripts) {
+            foreach (var uiSlot in ObjectsReference.Instance.uiQuickSlotsManager.uiQuickSlotsScripts) {
                 uiSlot.EmptySlot();
             }
         }
@@ -62,8 +62,8 @@ namespace Save {
         }
 
         private static void ResetPositionAndLastMap() {
-            ObjectsReference.Instance.gameData.lastPositionOnMap = ObjectsReference.Instance.scenesSwitch.spawnPointsBySpawnType[SpawnPoint.TELEPORTATION].position;
-            ObjectsReference.Instance.gameData.bananaManSavedData.lastMap = "COMMANDROOM";
+            ObjectsReference.Instance.gameData.lastPositionOnMap = ObjectsReference.Instance.scenesSwitch.spawnPointsBySpawnType[SpawnPoint.NEW_GAME].position;
+            ObjectsReference.Instance.gameData.bananaManSavedData.lastMap = "COROLLE";
             ObjectsReference.Instance.bananaMan.transform.position = ObjectsReference.Instance.gameData.lastPositionOnMap;
         }
 
@@ -82,7 +82,11 @@ namespace Save {
 
         private static void ResetMonkeysSasiety() {
             foreach (var mapData in ObjectsReference.Instance.mapsManager.mapBySceneName) {
-                mapData.Value.mapDataScriptableObject.monkeyDataScriptableObject.sasiety = 0;
+                if (mapData.Value.mapDataScriptableObject.monkeyDataScriptableObjectsByMonkeyId.Count > 0) {
+                    foreach (var monkeyDataScriptableObject in mapData.Value.mapDataScriptableObject.monkeyDataScriptableObjectsByMonkeyId) {
+                        monkeyDataScriptableObject.Value.sasiety = 0;
+                    }
+                }
             }
         }
     }

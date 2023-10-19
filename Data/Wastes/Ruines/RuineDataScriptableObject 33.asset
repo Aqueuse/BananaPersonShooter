@@ -1,0 +1,44 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2efe82fac9935d94292c9bd5f7555208, type: 3}
+  m_Name: RuineDataScriptableObject 33
+  m_EditorClassIdentifier: 
+  gameObjectTag: 14
+  itemCategory: 6
+  bananaType: 0
+  rawMaterialType: 5
+  ingredientsType: 1
+  buildableType: 6
+  prefabIndex: 32
+  itemName:
+  - ruin
+  - ruine
+  - ruina
+  itemSprite: {fileID: 0}
+  itemDescription:
+  - 'The Banana Appeal
+
+
+    <i>* Connection with management interface impossible
+    *</i>"'
+  - 'Restaurant L''Appeau de Banane
+
+
+    <i>* connexion avec l''interface de gestion
+    impossible *</i>'
+  - "Restaurante El Extremo Bueno de la Banana\n\n<i>* Conexi\xF3n con la interfaz
+    de gesti\xF3n imposible *</i>"
+  rawMaterialsWithQuantity:
+    list:
+    - key: 0
+      value: 10
+    keyCollision: 0

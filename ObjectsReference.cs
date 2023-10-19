@@ -1,12 +1,13 @@
 using Audio;
-using Building;
+using Gestion;
+using Gestion.Actions;
 using Cameras;
 using Data;
 using Game;
 using Game.Inventory;
 using Game.Steam;
 using Input;
-using Items;
+using Interactions;
 using Player;
 using Save;
 using Settings;
@@ -25,13 +26,13 @@ public class ObjectsReference : MonoSingleton<ObjectsReference> {
     public MapsManager mapsManager;
     public AudioManager audioManager;
     public InteractionsManager interactionsManager;
-    public BuildablesManager buildablesManager;
 
     public BananaMan bananaMan;
     public PlayerController playerController;
     public BananaGun bananaGun;
-    public BananaGunGet bananaGunGet;
-    public BananaGunPut bananaGunPut;
+    public Harvest harvest;
+    public Build build;
+    public ThrowBanana throwBanana;
 
     public BananasInventory bananasInventory;
     public RawMaterialsInventory rawMaterialsInventory;
@@ -41,8 +42,11 @@ public class ObjectsReference : MonoSingleton<ObjectsReference> {
     public SlotSwitch slotSwitch;
     public ScriptableObjectManager scriptableObjectManager;
     public GhostsReference ghostsReference;
+    public GestionMode gestionMode;
 
     public MainCamera mainCamera;
+    public CameraOneAxisRotation topDownCamera;
+    public CameraOneAxisRotation sideCamera;
     public SurfaceDetector surfaceDetector;
 
     public Cinematiques cinematiques;
@@ -66,13 +70,14 @@ public class ObjectsReference : MonoSingleton<ObjectsReference> {
 
     public UIManager uiManager;
     public UInventoriesManager uInventoriesManager;
+    public UIHud uiHud;
 
     public UIBananasInventory uiBananasInventory;
     public UIRawMaterialsInventory uiRawMaterialsInventory;
     public UIIngredientsInventory uiIngredientsInventory;
     public UIBlueprintsInventory uiBlueprintsInventory;
     
-    public UISlotsManager uiSlotsManager;
+    public UIQuickSlotsManager uiQuickSlotsManager;
     public UICrosshairs uiCrosshairs;
     public UIFace uiFace;
     public UIQueuedMessages uiQueuedMessages;

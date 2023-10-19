@@ -7,7 +7,8 @@ using UnityEngine.EventSystems;
 namespace UI {
     public class UIManager : MonoBehaviour {
         [SerializeField] private UIBananapedia uiBananapedia;
-        
+        [SerializeField] private GameObject inventoriesPanelSpacer;
+
         public GenericDictionary<UICanvasGroupType, CanvasGroup> canvasGroupsByUICanvasType;
         public bool isOnSubMenus;
         
@@ -128,25 +129,29 @@ namespace UI {
         }
 
         /// IN GAME ///
-
         public void Show_Interface() {
-            Set_active(UICanvasGroupType.INVENTORY_AND_INFORMATION, true);
-
             ObjectsReference.Instance.inputManager.uiSchemaContext = UISchemaSwitchType.INVENTORIES;
             ObjectsReference.Instance.inputManager.SwitchContext(InputContext.UI);
             
+            inventoriesPanelSpacer.SetActive(false);
             ObjectsReference.Instance.uInventoriesManager.Focus_interface();
+
+            canvasGroupsByUICanvasType[UICanvasGroupType.CAMERAS_HELPER].alpha = 1;
+            
+            ObjectsReference.Instance.uiBananasInventory.RefreshUInventory();
+            ObjectsReference.Instance.uiRawMaterialsInventory.RefreshUInventory();
+            ObjectsReference.Instance.uiIngredientsInventory.RefreshUInventory();
+            ObjectsReference.Instance.uiBlueprintsInventory.RefreshUInventory();
+
+            ObjectsReference.Instance.build.CancelBuild();
         }
         
         public void Hide_Interface() {
-            Set_active(UICanvasGroupType.INVENTORY_AND_INFORMATION, false);
+            inventoriesPanelSpacer.SetActive(true);
+            canvasGroupsByUICanvasType[UICanvasGroupType.CAMERAS_HELPER].alpha = 0;
 
             ObjectsReference.Instance.inputManager.SwitchContext(InputContext.GAME);
             ObjectsReference.Instance.gameManager.UnpauseGame();
-        }
-
-        public bool Is_Interface_Visible() {
-            return canvasGroupsByUICanvasType[UICanvasGroupType.INVENTORY_AND_INFORMATION].alpha > 0;
         }
         
         public void Set_active(UICanvasGroupType uiCanvasGroupType, bool visible) {

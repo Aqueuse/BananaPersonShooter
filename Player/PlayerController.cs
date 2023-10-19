@@ -1,4 +1,4 @@
-﻿using Building.Buildables.Plateforms;
+﻿using Gestion.Buildables.Plateforms;
 using UnityEngine;
 
 namespace Player {
@@ -9,6 +9,7 @@ namespace Player {
         private Rigidbody _rigidbody;
         private Animator _animator;
         private CapsuleCollider _capsuleCollider;
+        private BananaMan bananaMan;
 
         private RaycastHit _slopeHit;
         private RaycastHit hitTest;
@@ -48,6 +49,7 @@ namespace Player {
             _animator = GetComponent<Animator>();
             _capsuleCollider = GetComponent<CapsuleCollider>();
             _tpsPlayerAnimatorScript = gameObject.GetComponent<TpsPlayerAnimator>();
+            bananaMan = GetComponent<BananaMan>();
 
             if (Camera.main != null) mainCameraTransform = Camera.main.transform;
 
@@ -113,9 +115,11 @@ namespace Player {
                 speed = 0;
             }
 
-            // damage
-            if (_rigidbody.velocity.y < -20) {
-                _damageCount += 1;
+            // fall damage
+            if (bananaMan.canTakeFallDamage) {
+                if (_rigidbody.velocity.y < -20) {
+                    _damageCount += 1;
+                }
             }
 
             // cap max velocity

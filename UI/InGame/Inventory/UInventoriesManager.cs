@@ -17,7 +17,7 @@ namespace UI.InGame.Inventory {
 
         [SerializeField] private GenericDictionary<ItemCategory, CanvasGroup> canvasGroupByInventoryCategory;
 
-        [SerializeField] private GenericDictionary<ItemCategory, GameObject> lastSelectedItemByInventoryCategory;
+        public GenericDictionary<ItemCategory, GameObject> lastSelectedItemByInventoryCategory;
         
         [SerializeField] private Color activatedColor;
         [SerializeField] private Color unactivatedColor;
@@ -28,25 +28,64 @@ namespace UI.InGame.Inventory {
         
         private void Start() {
             lastFocusedInventory = ItemCategory.BANANA;
-            
             Switch_To_Bananas_Inventory();
         }
 
-        public GameObject GetLastSelectedItem(ItemCategory itemCategory) {
+        public GameObject GetLastSelectedItemByCategory(ItemCategory itemCategory) {
             return lastSelectedItemByInventoryCategory[itemCategory];
         }
 
-        public void SetLastSelectedItem(ItemCategory itemCategory, GameObject lastSelectedItem) {
-            lastFocusedInventory = itemCategory;
-
-            lastSelectedItemByInventoryCategory[itemCategory] = lastSelectedItem;
-        }
-
-        public void Focus_interface() {
-            if (lastSelectedItemByInventoryCategory[lastFocusedInventory] != null)
-                EventSystem.current.SetSelectedGameObject(lastSelectedItemByInventoryCategory[lastFocusedInventory]);
+        public GameObject GetLastSelectedItem() {
+            if (lastSelectedItemByInventoryCategory[lastFocusedInventory] == null) return null;
+            return lastSelectedItemByInventoryCategory[lastFocusedInventory];
         }
         
+        public void SetLastSelectedItem(ItemCategory itemCategory, GameObject lastSelectedItem) {
+            lastFocusedInventory = itemCategory;
+            lastSelectedItemByInventoryCategory[itemCategory] = lastSelectedItem;
+        }
+        
+        public void Focus_interface() {
+            if (lastSelectedItemByInventoryCategory[lastFocusedInventory] != null) {
+                EventSystem.current.SetSelectedGameObject(lastSelectedItemByInventoryCategory[lastFocusedInventory]);
+                FocusFirstSlotInInventory(lastFocusedInventory);
+            }
+        }
+
+        public void UnselectInventorySlots(ItemCategory inventoryCategory) {
+            switch (inventoryCategory) {
+                case ItemCategory.BANANA:
+                    ObjectsReference.Instance.uiBananasInventory.UnselectAllSlots();
+                    break;
+                case ItemCategory.INGREDIENT:
+                    ObjectsReference.Instance.uiIngredientsInventory.UnselectAllSlots();
+                    break;
+                case ItemCategory.RAW_MATERIAL:
+                    ObjectsReference.Instance.uiRawMaterialsInventory.UnselectAllSlots();
+                    break;
+                case ItemCategory.BUILDABLE:
+                    ObjectsReference.Instance.uiBlueprintsInventory.UnselectAllSlots();
+                    break;
+            }
+        }
+
+        private void FocusFirstSlotInInventory(ItemCategory inventoryCategory) {
+            switch (inventoryCategory) {
+                case ItemCategory.BANANA:
+                    ObjectsReference.Instance.uiBananasInventory.SelectFirstSlot();
+                    break;
+                case ItemCategory.INGREDIENT:
+                    ObjectsReference.Instance.uiIngredientsInventory.SelectFirstSlot();
+                    break;
+                case ItemCategory.RAW_MATERIAL:
+                    ObjectsReference.Instance.uiRawMaterialsInventory.SelectFirstSlot();
+                    break;
+                case ItemCategory.BUILDABLE:
+                    ObjectsReference.Instance.uiBlueprintsInventory.SelectFirstSlot();
+                    break;
+            }
+        }
+
         public void Switch_To_Left_Tab() {
             switch (lastFocusedInventory) {
                 case ItemCategory.BANANA:
@@ -82,6 +121,8 @@ namespace UI.InGame.Inventory {
         }
 
         public void Switch_To_Tab(ItemCategory itemCategory) {
+            UnselectInventorySlots(lastFocusedInventory);
+
             lastFocusedInventory = itemCategory;
             
             foreach (var (category, canvasGroup) in canvasGroupByInventoryCategory) {

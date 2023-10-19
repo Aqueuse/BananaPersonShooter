@@ -14,10 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gameObjectTag: 13
   itemCategory: 3
-  bananaType: 0
+  bananaType: 4
   rawMaterialType: 5
   ingredientsType: 1
   buildableType: 6
+  prefabIndex: 0
   itemName:
   - bunch of bananas
   - "r\xE9gime de bananes"

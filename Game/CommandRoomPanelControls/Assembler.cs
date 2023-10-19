@@ -1,4 +1,6 @@
+using Enums;
 using Interactions;
+using Interactions.InteractionsActions;
 using Items;
 using UI.InGame;
 using UnityEngine;

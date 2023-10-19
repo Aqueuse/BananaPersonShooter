@@ -1,8 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
-using Tags;
+using Data;
+using Enums;
 using UnityEngine;
 
-public class Tag : MonoBehaviour {
-    public GAME_OBJECT_TAG gameObjectTag;
+namespace Tags {
+    public class Tag : MonoBehaviour {
+        public GAME_OBJECT_TAG gameObjectTag;
+        public ItemScriptableObject itemScriptableObject;
+    }
 }

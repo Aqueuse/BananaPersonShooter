@@ -27,5 +27,6 @@ MonoBehaviour:
   - the gorilla king jungle
   - la jungle du roi gorille
   - la jungla del rey gorila
+  monkeyType: 1
   happiness: 0
   sasiety: 0

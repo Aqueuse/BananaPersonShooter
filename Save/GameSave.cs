@@ -10,7 +10,7 @@ namespace Save {
         public void SaveGame(string saveUuid) {
             var date = DateTime.ParseExact(DateTime.Now.ToString("U"), "U", CultureInfo.CurrentCulture).ToString(CultureInfo.CurrentCulture);
             
-            ObjectsReference.Instance.mapsManager.currentMap.RefreshAspirablesItemsDataMap();
+            ObjectsReference.Instance.mapsManager.currentMap.RefreshItemsDataMap();
             
             SaveBananasInventory();
             SaveRawMaterialsInventory();
@@ -19,9 +19,7 @@ namespace Save {
             
             SaveSlots();
             SaveActiveItem();
-
-            SaveMonkeysSatiety();
-
+            
             SaveBananaManVitals();
             SavePositionAndRotation();
 
@@ -62,8 +60,8 @@ namespace Save {
                 "EMPTY,EMPTY" 
             };
 
-            for (var i = 0; i < ObjectsReference.Instance.uiSlotsManager.uiSlotsScripts.Count; i++) {
-                var uiSlotScript = ObjectsReference.Instance.uiSlotsManager.uiSlotsScripts[i];
+            for (var i = 0; i < ObjectsReference.Instance.uiQuickSlotsManager.uiQuickSlotsScripts.Count; i++) {
+                var uiSlotScript = ObjectsReference.Instance.uiQuickSlotsManager.uiQuickSlotsScripts[i];
                 
                 if (uiSlotScript.slotItemScriptableObject == null) continue;
                 
@@ -115,14 +113,7 @@ namespace Save {
             ObjectsReference.Instance.gameData.bananaManSavedData.activeItemCategory = ObjectsReference.Instance.bananaMan.activeItemCategory;
             ObjectsReference.Instance.gameData.bananaManSavedData.activeBuildableType = ObjectsReference.Instance.bananaMan.activeBuildableType;
         }
-
-        private static void SaveMonkeysSatiety() {
-            foreach (var map in ObjectsReference.Instance.mapsManager.mapBySceneName) {
-                // add other monkeys and other maps
-                ObjectsReference.Instance.gameData.mapSavedDatasByMapName[map.Key].monkeySasiety = map.Value.mapDataScriptableObject.monkeyDataScriptableObject.sasiety;
-            }
-        }
-
+        
         public void StartAutoSave() {
             if (ObjectsReference.Instance.gameSettings.saveDelay > 0) InvokeRepeating(nameof(AutoSave), ObjectsReference.Instance.gameSettings.saveDelay, ObjectsReference.Instance.gameSettings.saveDelay);
         }

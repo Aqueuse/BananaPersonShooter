@@ -64,22 +64,27 @@ namespace Save {
             var savefilePath = Path.Combine(savePath, "data.json");
             
             File.WriteAllText(savefilePath, jsonSavedData);
-            
+
             savefilePath = Path.Combine(savePath, "MAPS");
-            
+
             foreach (var map in ObjectsReference.Instance.gameData.mapSavedDatasByMapName) {
                 var mapClass = ObjectsReference.Instance.mapsManager.mapBySceneName[map.Key];
-                
+
                 // synchronize data beetween classes and templates
                 map.Value.isDiscovered = mapClass.isDiscovered;
                 map.Value.cleanliness = mapClass.cleanliness;
-                map.Value.monkeySasiety = mapClass.mapDataScriptableObject.monkeyDataScriptableObject.sasiety;
+
+                if (mapClass.mapDataScriptableObject.monkeyDataScriptableObjectsByMonkeyId.Count > 0) {
+                    foreach (var monkeyDataScriptableObject in mapClass.mapDataScriptableObject.monkeyDataScriptableObjectsByMonkeyId) {
+                        map.Value.monkeysSasietyByMonkeyId[monkeyDataScriptableObject.Key] = monkeyDataScriptableObject.Value.sasiety;
+                    }
+                }
                 
                 var jsonMapSavedData = JsonConvert.SerializeObject(ObjectsReference.Instance.gameData.mapSavedDatasByMapName[map.Key]);
                 var mapSavefilePath = Path.Combine(savefilePath, map.Key+".json");
                 File.WriteAllText(mapSavefilePath, jsonMapSavedData);
             }
-            
+
             savefilePath = Path.Combine(savePath, "player.json");
             File.WriteAllText(savefilePath, jsonbananaManSavedData);
             
@@ -87,7 +92,7 @@ namespace Save {
             SaveCameraView(screenshotFilePath);
             
             foreach (var map in ObjectsReference.Instance.mapsManager.mapBySceneName) {
-                if (map.Value.aspirablesCategories.Count == 0) {
+                if (map.Value.itemsCategories.Count == 0) {
                     // delete file
                     var mapDataSavesPath = Path.Combine(savePath, "MAPDATA");
                     var filePath = Path.Combine(mapDataSavesPath, map.Value.mapDataScriptableObject.sceneName+"_aspirables.data");
@@ -100,12 +105,12 @@ namespace Save {
 
                     SaveMapData(
                         mapName: mapToSave.mapDataScriptableObject.sceneName,
-                        aspirablesPositions: mapToSave.aspirablesPositions,
-                        aspirablesRotations:mapToSave.aspirablesRotations,
-                        debrisPrefabsIndex: mapToSave.aspirablesPrefabsIndex,
-                        aspirablesCategories:mapToSave.aspirablesCategories,
-                        buildableTypes: mapToSave.aspirablesBuildableTypes,
-                        itemTypes:mapToSave.aspirablesItemTypes
+                        aspirablesPositions: mapToSave.itemsPositions,
+                        aspirablesRotations:mapToSave.itemsRotations,
+                        debrisPrefabsIndex: mapToSave.itemsPrefabsIndex,
+                        aspirablesCategories:mapToSave.itemsCategories,
+                        buildableTypes: mapToSave.itemsBuildableTypes,
+                        itemTypes:mapToSave.itemBananaTypes
                     );
                 }
             }

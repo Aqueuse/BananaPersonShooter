@@ -14,7 +14,7 @@ namespace Save.Templates {
         public float yWorldRotation = -0.495293289f;
         public float zWorldRotation = 0;
         
-        public string lastMap = "COMMANDROOM";
+        public string lastMap = "COROLLE";
         public BananaType activeBanana = BananaType.EMPTY;
         public ItemCategory activeItemCategory = ItemCategory.EMPTY;
         public BuildableType activeBuildableType = BuildableType.EMPTY;

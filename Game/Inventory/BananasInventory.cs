@@ -6,8 +6,6 @@ namespace Game.Inventory {
     public class BananasInventory : MonoBehaviour {
         public GenericDictionary<BananaType, int> bananasInventory;
 
-        public GameObject lastselectedInventoryItem;
-
         public void AddQuantity(BananasDataScriptableObject bananasDataScriptableObject, int quantity) {
             if (bananasInventory[bananasDataScriptableObject.bananaType] > 10000) return;
             
@@ -17,7 +15,7 @@ namespace Game.Inventory {
             bananaItem.gameObject.SetActive(true);
             bananaItem.SetQuantity(bananasInventory[bananasDataScriptableObject.bananaType]);
             
-            ObjectsReference.Instance.uiSlotsManager.RefreshQuantityInQuickSlot();
+            ObjectsReference.Instance.uiQuickSlotsManager.RefreshQuantityInQuickSlot();
             
             ObjectsReference.Instance.uiQueuedMessages.AddToInventory(bananasDataScriptableObject, quantity);
         }
@@ -40,7 +38,7 @@ namespace Game.Inventory {
                 bananaItem.gameObject.SetActive(false);
             }
             
-            ObjectsReference.Instance.uiSlotsManager.RefreshQuantityInQuickSlot();
+            ObjectsReference.Instance.uiQuickSlotsManager.RefreshQuantityInQuickSlot();
         }
     }
 }

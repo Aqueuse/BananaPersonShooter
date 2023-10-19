@@ -4,7 +4,6 @@ using UnityEngine;
 namespace Game.Inventory {
     public class RawMaterialsInventory : MonoBehaviour {
         public GenericDictionary<RawMaterialType, int> rawMaterialsInventory;
-        public GameObject lastselectedInventoryItem;
 
         public void AddQuantity(RawMaterialType rawMaterialType, int quantity) {
             if (rawMaterialsInventory[rawMaterialType] > 10000) return;
@@ -16,7 +15,7 @@ namespace Game.Inventory {
             rawMaterialItem.gameObject.SetActive(true);
             rawMaterialItem.SetQuantity(rawMaterialsInventory[rawMaterialType]);
             
-            ObjectsReference.Instance.uiSlotsManager.RefreshQuantityInQuickSlot();
+            ObjectsReference.Instance.uiQuickSlotsManager.RefreshQuantityInQuickSlot();
             
             ObjectsReference.Instance.uiQueuedMessages.AddToInventory(rawMaterialItem.itemScriptableObject, quantity);
         }
@@ -39,7 +38,7 @@ namespace Game.Inventory {
                 rawMaterialItem.gameObject.SetActive(false);
             }
 
-            ObjectsReference.Instance.uiSlotsManager.RefreshQuantityInQuickSlot();
+            ObjectsReference.Instance.uiQuickSlotsManager.RefreshQuantityInQuickSlot();
         }
         
         public bool HasCraftingIngredients(GenericDictionary<RawMaterialType, int> craftingIngredients) {

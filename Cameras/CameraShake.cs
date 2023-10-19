@@ -8,7 +8,7 @@ namespace Cameras {
         private float _timeAtLastFrame;
         private float _fakeDelta;
 
-        void Update() {
+        private void Update() {
             // Calculate a fake delta time, so we can Shake while game is paused.
             _timeAtCurrentFrame = Time.realtimeSinceStartup;
             _fakeDelta = _timeAtCurrentFrame - _timeAtLastFrame;

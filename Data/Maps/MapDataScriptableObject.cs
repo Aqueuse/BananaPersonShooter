@@ -6,9 +6,7 @@ namespace Data.Maps {
     public class MapDataScriptableObject : ItemScriptableObject {
         public string sceneName;
         
-        public int monkeysQuantity;
-        public MonkeyType monkeyType;
-        public MonkeyDataScriptableObject monkeyDataScriptableObject;
+        public GenericDictionary<string, MonkeyDataScriptableObject> monkeyDataScriptableObjectsByMonkeyId;
 
         public int visitorsQuantity;
         public float cleanliness;

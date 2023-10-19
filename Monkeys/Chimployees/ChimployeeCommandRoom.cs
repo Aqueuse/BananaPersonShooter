@@ -14,8 +14,6 @@ namespace Monkeys.Chimployees {
         [SerializeField] private BubbleDialogue bubbleDialogue;
 
         private void Start() {
-            animator = GetComponent<Animator>();
-
             if (ObjectsReference.Instance.bananaMan.tutorialFinished) {
                 SetNormalChimployeeConfiguration();
             }

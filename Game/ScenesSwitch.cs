@@ -105,10 +105,10 @@ namespace Game {
                     ObjectsReference.Instance.playerController.canMove = true;
                     ObjectsReference.Instance.bananaMan.GetComponent<Rigidbody>().isKinematic = false;
                 }
-                
+
                 ObjectsReference.Instance.gameManager.loadingScreen.SetActive(false);
 
-                if (!ObjectsReference.Instance.bananaMan.tutorialFinished && sceneName == "COMMANDROOM") {
+                if (!ObjectsReference.Instance.bananaMan.tutorialFinished) {
                     ObjectsReference.Instance.tutorial.StartTutorial();
                 }
 

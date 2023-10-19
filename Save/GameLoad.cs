@@ -1,7 +1,7 @@
 using System;
 using System.Linq;
-using Building;
-using Building.Buildables.Plateforms;
+using Gestion;
+using Gestion.Buildables.Plateforms;
 using Data;
 using Enums;
 using UnityEngine;
@@ -32,12 +32,12 @@ namespace Save {
             LoadPositionAndRotationOnLastMap();
             LoadBananaManVitals();
             LoadActiveItem();
-            
+
             LoadBananasInventory();
             LoadRawMaterialsInventory();
             LoadIngredientsInventory();
             LoadBuildablesInventory();
-            
+
             LoadSlots();
 
             LoadMapsData();
@@ -50,7 +50,7 @@ namespace Save {
             ObjectsReference.Instance.gameSave.StartAutoSave();
         }
 
-        private static void LoadBananasInventory() {
+        public void LoadBananasInventory() {
             foreach (var bananaSlot in ObjectsReference.Instance.bananasInventory.bananasInventory.ToList()) {
                 if (bananaSlot.Key == BananaType.EMPTY) continue;
                 
@@ -70,7 +70,7 @@ namespace Save {
             }
         }
 
-        private static void LoadRawMaterialsInventory() {
+        public void LoadRawMaterialsInventory() {
             foreach (var rawMaterialSlot in ObjectsReference.Instance.rawMaterialsInventory.rawMaterialsInventory.ToList()) {
                 if (rawMaterialSlot.Key == RawMaterialType.EMPTY) continue;
                 
@@ -90,7 +90,7 @@ namespace Save {
             }
         }
 
-        private static void LoadIngredientsInventory() {
+        public void LoadIngredientsInventory() {
             foreach (var ingredientsSlot in ObjectsReference.Instance.ingredientsInventory.ingredientsInventory.ToList()) {
                 if (ingredientsSlot.Key == IngredientsType.EMPTY) continue;
                 
@@ -110,7 +110,7 @@ namespace Save {
             }
         }
 
-        private static void LoadBuildablesInventory() {
+        public void LoadBuildablesInventory() {
             foreach (var buildableSlot in ObjectsReference.Instance.blueprintsInventory.blueprintsInventory.ToList()) {
                 if (buildableSlot.Key == BuildableType.EMPTY) continue;
                 
@@ -118,20 +118,14 @@ namespace Save {
 
                 ObjectsReference.Instance.blueprintsInventory.blueprintsInventory[buildableSlot.Key] = blueprintQuantity;
 
-                var inventorySlot = ObjectsReference.Instance.uiBlueprintsInventory.inventorySlotsByBuildableType[buildableSlot.Key]; 
+                var inventorySlot = ObjectsReference.Instance.uiBlueprintsInventory.inventorySlotsByBuildableType[buildableSlot.Key];
 
-                if (blueprintQuantity > 0) {
-                    inventorySlot.gameObject.SetActive(true);
-                    inventorySlot.SetQuantity(blueprintQuantity);
-                }
-                else {
-                    inventorySlot.gameObject.SetActive(false);
-                }
+                inventorySlot.gameObject.SetActive(blueprintQuantity > 0);
             }
         }
 
         private void LoadSlots() {
-            for (var i = 0; i < ObjectsReference.Instance.uiSlotsManager.uiSlotsScripts.Count; i++) {
+            for (var i = 0; i < ObjectsReference.Instance.uiQuickSlotsManager.uiQuickSlotsScripts.Count; i++) {
                 var itemCategoriesAndTypes = ObjectsReference.Instance.gameData.bananaManSavedData.slots[i].Split(",");
                 var itemCategoryString = itemCategoriesAndTypes[0];
                 var itemTypeString = itemCategoriesAndTypes[1];
@@ -144,7 +138,7 @@ namespace Save {
                     var bananaScriptableObject = ObjectsReference.Instance.uiBananasInventory
                         .inventorySlotsByBananaType[bananaType].itemScriptableObject;
                     
-                    ObjectsReference.Instance.uiSlotsManager.uiSlotsScripts[i].SetSlot(bananaScriptableObject);
+                    ObjectsReference.Instance.uiQuickSlotsManager.uiQuickSlotsScripts[i].SetSlot(bananaScriptableObject);
                 }
                 
                 if (itemCategory == ItemCategory.RAW_MATERIAL) {
@@ -153,7 +147,7 @@ namespace Save {
                     var rawMaterialScriptableObject = ObjectsReference.Instance.uiRawMaterialsInventory.
                         inventorySlotsByRawMaterialType[rawMaterialType].itemScriptableObject;
                     
-                    ObjectsReference.Instance.uiSlotsManager.uiSlotsScripts[i].SetSlot(rawMaterialScriptableObject);
+                    ObjectsReference.Instance.uiQuickSlotsManager.uiQuickSlotsScripts[i].SetSlot(rawMaterialScriptableObject);
                 }
 
                 if (itemCategory == ItemCategory.INGREDIENT) {
@@ -162,7 +156,7 @@ namespace Save {
                     var ingredientScriptableObject = ObjectsReference.Instance.uiIngredientsInventory
                         .inventorySlotsByIngredientsType[ingredientsType].itemScriptableObject;
                     
-                    ObjectsReference.Instance.uiSlotsManager.uiSlotsScripts[i].SetSlot(ingredientScriptableObject);
+                    ObjectsReference.Instance.uiQuickSlotsManager.uiQuickSlotsScripts[i].SetSlot(ingredientScriptableObject);
                 }
                 
                 if (itemCategory == ItemCategory.BUILDABLE) {
@@ -171,11 +165,11 @@ namespace Save {
                     var buildableScriptableObject = ObjectsReference.Instance.uiBlueprintsInventory
                         .inventorySlotsByBuildableType[buildableType].itemScriptableObject;
                     
-                    ObjectsReference.Instance.uiSlotsManager.uiSlotsScripts[i].SetSlot(buildableScriptableObject);
+                    ObjectsReference.Instance.uiQuickSlotsManager.uiQuickSlotsScripts[i].SetSlot(buildableScriptableObject);
                 }
             }
 
-            ObjectsReference.Instance.uiSlotsManager.Switch_to_Slot_Index(0);
+            ObjectsReference.Instance.uiQuickSlotsManager.Switch_to_Slot_Index(0);
         }
 
         private static void LoadBananaManVitals() {
@@ -214,8 +208,11 @@ namespace Save {
 
         private static void LoadMonkeysSatiety() {
             foreach (var mapData in ObjectsReference.Instance.mapsManager.mapBySceneName) {
-                if (mapData.Value.mapDataScriptableObject.monkeyDataScriptableObject != null)
-                    mapData.Value.mapDataScriptableObject.monkeyDataScriptableObject.sasiety = ObjectsReference.Instance.gameData.mapSavedDatasByMapName[mapData.Key].monkeySasiety;
+                if (mapData.Value.mapDataScriptableObject.monkeyDataScriptableObjectsByMonkeyId.Count > 0) {
+                    foreach (var monkeyDataScriptableObject in mapData.Value.mapDataScriptableObject.monkeyDataScriptableObjectsByMonkeyId) {
+                        mapData.Value.mapDataScriptableObject.monkeyDataScriptableObjectsByMonkeyId[monkeyDataScriptableObject.Key].sasiety = monkeyDataScriptableObject.Value.sasiety;
+                    }
+                }
             }
         }
 
@@ -256,39 +253,28 @@ namespace Save {
                     }
                 };
 
-                for (var i = 0; i < mapData.aspirablesCategories.Count; i++) {
-                    if (mapData.aspirablesCategories[i] == ItemCategory.DEBRIS) {
-                        aspirable = Instantiate(
-                            ObjectsReference.Instance.scriptableObjectManager._meshReferenceScriptableObject.debrisPrefab[mapData.aspirablesPrefabsIndex[i]], 
-                            MapItems.Instance.aspirablesContainer.transform, 
-                            true
-                        );
-
-                        aspirable.transform.position = mapData.aspirablesPositions[i];
-                        aspirable.transform.rotation = mapData.aspirablesRotations[i];
+                for (var i = 0; i < mapData.itemsCategories.Count; i++) {
+                    if (mapData.itemsCategories[i] == ItemCategory.DEBRIS) {
+                        prefab = ObjectsReference.Instance.scriptableObjectManager._meshReferenceScriptableObject.debrisPrefab[mapData.itemsPrefabsIndex[i]];
                     }
 
-                    if (mapData.aspirablesCategories[i] == ItemCategory.BUILDABLE) {
-                        prefab = ObjectsReference.Instance.scriptableObjectManager.BuildablePrefabByBuildableType(mapData.aspirablesBuildableTypes[i]);
-
-                        aspirable = Instantiate(prefab, MapItems.Instance.aspirablesContainer.transform, true);
-
-                        aspirable.transform.position = mapData.aspirablesPositions[i];
-                        aspirable.transform.rotation = mapData.aspirablesRotations[i];
-
-                        if (mapData.aspirablesBuildableTypes[i] == BuildableType.PLATEFORM) {
-                            aspirable.GetComponent<Plateform>().ActivePlateform(ObjectsReference.Instance.scriptableObjectManager._meshReferenceScriptableObject.bananasDataScriptableObjects[mapData.aspirablesItemTypes[i]]);
-                        }
+                    if (mapData.itemsCategories[i] == ItemCategory.BUILDABLE) {
+                        prefab = ObjectsReference.Instance.scriptableObjectManager.BuildablePrefabByBuildableType(mapData.itemsBuildableTypes[i]);
                     }
 
-                    if (mapData.aspirablesCategories[i] == ItemCategory.RUINE) {
-                        prefab = ObjectsReference.Instance.scriptableObjectManager._meshReferenceScriptableObject.ruinesPrefab[mapData.aspirablesPrefabsIndex[i]];
-
-                        aspirable = Instantiate(prefab, MapItems.Instance.aspirablesContainer.transform, true);
-
-                        aspirable.transform.position = mapData.aspirablesPositions[i];
-                        aspirable.transform.rotation = mapData.aspirablesRotations[i];
+                    if (mapData.itemsCategories[i] == ItemCategory.RUINE) {
+                        prefab = ObjectsReference.Instance.scriptableObjectManager._meshReferenceScriptableObject.ruinesPrefab[mapData.itemsPrefabsIndex[i]];
                     }
+
+                    aspirable = Instantiate(prefab, MapItems.Instance.aspirablesContainer.transform, true);
+
+                    if (mapData.itemsBuildableTypes[i] == BuildableType.PLATEFORM &&
+                        mapData.itemBananaTypes[i] != BananaType.EMPTY) {
+                        aspirable.GetComponent<Plateform>().ActivePlateform(ObjectsReference.Instance.scriptableObjectManager._meshReferenceScriptableObject.bananasDataScriptableObjects[mapData.itemBananaTypes[i]]);
+                    }
+
+                    aspirable.transform.position = mapData.itemsPositions[i];
+                    aspirable.transform.rotation = mapData.itemsRotations[i];
                 }
             }
             

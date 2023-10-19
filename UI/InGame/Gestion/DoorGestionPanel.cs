@@ -14,7 +14,7 @@ namespace UI.InGame.Gestion {
             itemName.text = doorDataScriptableObject.GetName();
             itemDescription.text = doorDataScriptableObject.GetDescription();
 
-            monkeysQuantityText.text = doorDataScriptableObject.associatedMapDataScriptableObject.monkeysQuantity.ToString();
+            monkeysQuantityText.text = doorDataScriptableObject.associatedMapDataScriptableObject.monkeyDataScriptableObjectsByMonkeyId.Count.ToString();
         }
     }
 }

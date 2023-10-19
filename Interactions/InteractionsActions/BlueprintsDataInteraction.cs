@@ -1,11 +1,9 @@
-using System.Runtime.CompilerServices;
 using UnityEngine;
 
-namespace Interactions {
+namespace Interactions.InteractionsActions {
     public class BlueprintsDataInteraction : MonoBehaviour {
-        [SerializeField] private MeshRenderer blueprintDataMeshRenderer;
         [SerializeField] private GameObject interactionGameObject;
-            
+        
         public void Activate() {
             var scriptableObjectManager = ObjectsReference.Instance.scriptableObjectManager;
             var buildablesToGive = scriptableObjectManager.buildablesToGive;
@@ -21,11 +19,9 @@ namespace Interactions {
         }
 
         public void ShowBlueprintDataIfAvailable() {
-            if (ObjectsReference.Instance.gameData.bananaManSavedData.hasFinishedTutorial) {
-                if (AreNewBlueprintsAvailable()) ShowBlueprintsData();
-                else {
-                    HideBlueprintsData();
-                }
+            if (AreNewBlueprintsAvailable()) ShowBlueprintsData();
+            else {
+                HideBlueprintsData();
             }
         }
 
@@ -43,7 +39,7 @@ namespace Interactions {
             interactionGameObject.SetActive(true);
         }
 
-        private void HideBlueprintsData() {
+        public void HideBlueprintsData() {
             GetComponent<MeshRenderer>().enabled = false;
             GetComponent<MeshRenderer>().gameObject.layer = 0;
             interactionGameObject.SetActive(false);

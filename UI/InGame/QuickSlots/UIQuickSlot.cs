@@ -1,4 +1,3 @@
-using System;
 using Data;
 using Enums;
 using TMPro;
@@ -30,6 +29,8 @@ namespace UI.InGame.QuickSlots {
         }
         
         public void SetSlot(ItemScriptableObject itemScriptableObject) {
+            if (itemScriptableObject == null) return;
+            
             slotItemScriptableObject = itemScriptableObject;
 
             iconImage.sprite = itemScriptableObject.GetSprite();

@@ -1,6 +1,6 @@
 using System.Linq;
-using Building;
-using Building.Buildables.Plateforms;
+using Gestion;
+using Gestion.Buildables.Plateforms;
 using Enums;
 using Items;
 using UnityEngine;
@@ -12,17 +12,17 @@ namespace Interactions.InteractionsActions {
             var plateformsCount = plateforms.Count;
 
             if (plateformsCount > 0) {
-                //var craftingMaterials = ObjectsReference.Instance.scriptableObjectManager.;
+                var craftingMaterials = ObjectsReference.Instance.scriptableObjectManager.GetBuildableCraftingIngredients(BuildableType.PLATEFORM);
 
-                // foreach (var craftingMaterial in craftingMaterials) {
-                //     ObjectsReference.Instance.rawMaterialsInventory.AddQuantity(craftingMaterial.Key, craftingMaterial.Value*plateformsCount);
-                // }
+                 foreach (var craftingMaterial in craftingMaterials) {
+                     ObjectsReference.Instance.rawMaterialsInventory.AddQuantity(craftingMaterial.Key, craftingMaterial.Value*plateformsCount);
+                 }
 
                 foreach (var plateform in plateforms) {
                     DestroyImmediate(plateform.gameObject);
                 }
 
-                ObjectsReference.Instance.mapsManager.currentMap.RefreshAspirablesItemsDataMap();
+                ObjectsReference.Instance.mapsManager.currentMap.RefreshItemsDataMap();
 
                 if (interactedGameObject.GetComponent<RotateTransform>() == null) interactedGameObject.AddComponent<RotateTransform>();
             }

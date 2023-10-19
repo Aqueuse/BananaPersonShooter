@@ -1,4 +1,4 @@
-﻿using Building;
+﻿using Gestion;
 using Cinemachine;
 using Enums;
 using UnityEngine;
@@ -17,7 +17,7 @@ namespace Game {
         private void Start() {
             isGamePlaying = false;
             gameContext = GameContext.IN_HOME;
-            RenderSettings.ambientLight = Color.white; 
+            RenderSettings.ambientLight = Color.white;
             
             ObjectsReference.Instance.gameSettings.LoadSettings(); 
             ObjectsReference.Instance.audioManager.PlayMusic(MusicType.HOME, 0);
@@ -43,8 +43,8 @@ namespace Game {
                 ObjectsReference.Instance.bananaMan.tutorialFinished = false;
 
                 ObjectsReference.Instance.scenesSwitch.SwitchScene(
-                    "COMMANDROOM", 
-                    SpawnPoint.TELEPORTATION,
+                    "COROLLE",
+                    SpawnPoint.NEW_GAME,
                     true, true);
             }
             else {
@@ -60,7 +60,7 @@ namespace Game {
         public void PauseGame() {
             ObjectsReference.Instance.mainCamera.Set0Sensibility();
             
-            if (gameContext == GameContext.IN_GAME && ObjectsReference.Instance.mapsManager.currentMap.mapDataScriptableObject.monkeysQuantity > 0) {
+            if (gameContext == GameContext.IN_GAME && ObjectsReference.Instance.mapsManager.currentMap.mapDataScriptableObject.monkeyDataScriptableObjectsByMonkeyId.Count > 0) {
                 foreach (var monkey in MapItems.Instance.monkeys) {
                     monkey.PauseMonkey();
                 }
@@ -71,13 +71,13 @@ namespace Game {
 
         public void UnpauseGame() {
             ObjectsReference.Instance.mainCamera.SetNormalSensibility();
-            
-            if (ObjectsReference.Instance.mapsManager.currentMap.mapDataScriptableObject.monkeysQuantity > 0) {
+
+            if (ObjectsReference.Instance.mapsManager.currentMap.mapDataScriptableObject.monkeyDataScriptableObjectsByMonkeyId.Count > 0) {
                 foreach (var monkey in MapItems.Instance.monkeys) {
                     monkey.UnpauseMonkey();
                 }
             }
-            
+
             isGamePlaying = true;
         }
 

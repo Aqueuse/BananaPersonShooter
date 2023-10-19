@@ -1,7 +1,9 @@
+using System.Collections.Generic;
+
 namespace Save.Templates {
     public class MapSavedData {
         public bool isDiscovered = false;
-        public float monkeySasiety = 0;
+        public Dictionary<string, float> monkeysSasietyByMonkeyId;
         public float cleanliness = 30;
     }
 }

@@ -12,7 +12,7 @@ namespace Interactions {
         public RegimeDataScriptableObject regimeDataScriptableObject;
         
         public void GrabBananas() {
-            gameObject.GetComponent<Tag>().gameObjectTag = GAME_OBJECT_TAG.UNTAGGED;
+            gameObject.layer = 0;
 
             babyBananierMeshRenderer.enabled = true;
             youngBananierMeshRenderer.enabled = false;
@@ -30,7 +30,7 @@ namespace Interactions {
         }
         
         private void Grown_mature_bananier() {
-            gameObject.GetComponent<Tag>().gameObjectTag = GAME_OBJECT_TAG.REGIME;
+            gameObject.layer = 7;
             
             babyBananierMeshRenderer.enabled = false;
             youngBananierMeshRenderer.enabled = false;

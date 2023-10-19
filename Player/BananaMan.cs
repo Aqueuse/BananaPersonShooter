@@ -17,6 +17,8 @@ namespace Player {
         public bool isInWater;
         public bool isGrabingBananaGun;
 
+        public bool canTakeFallDamage;
+
         private const float _maxHealth = 100;
         public float health;
         public float resistance;

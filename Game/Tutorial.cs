@@ -31,8 +31,8 @@ namespace Game {
             CommandRoomControlPanelsManager.Instance.HidePanel(CommandRoomPanelType.JOURNAL);
             CommandRoomControlPanelsManager.Instance.HidePanel(CommandRoomPanelType.BANANA_CANNON);
 
-            CommandRoomControlPanelsManager.Instance.ForbidDoorsAccess();
             CommandRoomControlPanelsManager.Instance.ForbidBananaCannonMiniGameAccess();
+            CommandRoomControlPanelsManager.Instance.assembler.blueprintsDataInteraction.HideBlueprintsData();
 
             CommandRoomControlPanelsManager.Instance.miniChimp.bubbleDialogue.SetBubbleDialogue(dialogueSet.REPAIR_BANANA_GUN);
             CommandRoomControlPanelsManager.Instance.chimployeeCommandRoom.SetInitialChimployeeConfiguration();
@@ -48,12 +48,16 @@ namespace Game {
             ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.CROSSHAIRS].alpha = 1f;
             ObjectsReference.Instance.uiCrosshairs.SetCrosshair(ItemCategory.EMPTY, BananaType.EMPTY);
 
+            ObjectsReference.Instance.gameLoad.LoadBananasInventory();
+            ObjectsReference.Instance.gameLoad.LoadRawMaterialsInventory();
+            ObjectsReference.Instance.gameLoad.LoadIngredientsInventory();
+            ObjectsReference.Instance.gameLoad.LoadBuildablesInventory();
+            
             ObjectsReference.Instance.bananaMan.tutorialFinished = true;
             ObjectsReference.Instance.steamIntegration.UnlockAchievement(SteamAchievement.STEAM_ACHIEVEMENT_BANAGUN_RECONSTRUCTED);
-            
-            CommandRoomControlPanelsManager.Instance.AuthorizeDoorsAccess();
+
             CommandRoomControlPanelsManager.Instance.AuthorizeBananaCannonMiniGameAccess();
-            
+
             CommandRoomControlPanelsManager.Instance.ShowPanel(CommandRoomPanelType.GESTION);
             CommandRoomControlPanelsManager.Instance.ShowPanel(CommandRoomPanelType.JOURNAL);
             CommandRoomControlPanelsManager.Instance.ShowPanel(CommandRoomPanelType.BANANA_CANNON);
@@ -63,7 +67,6 @@ namespace Game {
             
             CommandRoomControlPanelsManager.Instance.miniChimp.bubbleDialogue.SetBubbleDialogue(dialogueSet.REPAIRED_BANANA_GUN);
             
-            CommandRoomControlPanelsManager.Instance.assembler.HideAssemblerActivatedZone();
             CommandRoomControlPanelsManager.Instance.assembler.blueprintsDataInteraction.ShowBlueprintDataIfAvailable();
             
             RenderSettings.ambientLight = Color.white; 

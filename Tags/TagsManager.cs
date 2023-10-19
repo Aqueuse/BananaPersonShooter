@@ -49,7 +49,7 @@ namespace Tags {
 
             return gameObjectsWithTag;
         }
-
+        
         public GAME_OBJECT_TAG GetTag(GameObject myGameObject) {
             if (myGameObject.GetComponent<Tag>() != null) return myGameObject.GetComponent<Tag>().gameObjectTag;
             return GAME_OBJECT_TAG.UNTAGGED;

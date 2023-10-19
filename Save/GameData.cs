@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Enums;
 using Save.Templates;
 using UnityEngine;
 
@@ -20,7 +19,11 @@ namespace Save {
             mapSavedDatasByMapName = new GenericDictionary<string, MapSavedData>();
             
             foreach (var map in ObjectsReference.Instance.mapsManager.mapBySceneName) {
-                mapSavedDatasByMapName.Add(map.Key, new MapSavedData());
+                var mapData = new MapSavedData();
+
+                mapData.monkeysSasietyByMonkeyId = new Dictionary<string, float>();
+                
+                mapSavedDatasByMapName.Add(map.Key, mapData);
             }
         }
     }

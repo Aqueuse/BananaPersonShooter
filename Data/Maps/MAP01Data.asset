@@ -28,8 +28,10 @@ MonoBehaviour:
   - "Une jungle humide o\xF9 vit Kelsa\xEFk, un gorille solitaire"
   - "Una jungla h\xFAmeda donde vive Kelsa\xEFk, un gorila solitario"
   sceneName: MAP01
-  monkeysQuantity: 1
-  monkeyType: 1
-  monkeyDataScriptableObject: {fileID: 11400000, guid: 77d2cf22a335dae49baa4a5fa53fcbd6, type: 2}
+  monkeyDataScriptableObjectsByMonkeyId:
+    list:
+    - key: "Kelsa\xEFkGorilla"
+      value: {fileID: 11400000, guid: 77d2cf22a335dae49baa4a5fa53fcbd6, type: 2}
+    keyCollision: 0
   visitorsQuantity: 0
   cleanliness: 0

@@ -20,9 +20,10 @@ namespace UI.Menus {
         }
 
         public void ReturnToGame() {
-            ObjectsReference.Instance.inputManager.SwitchContext(InputContext.GAME);
             ObjectsReference.Instance.gameManager.UnpauseGame();
             ObjectsReference.Instance.uiManager.Hide_Game_Menu();
+
+            ObjectsReference.Instance.inputManager.SwitchContext(InputContext.GAME);
         }
         
         public void Quit() {

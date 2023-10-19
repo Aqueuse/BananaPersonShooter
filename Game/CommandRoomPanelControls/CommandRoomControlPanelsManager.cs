@@ -2,19 +2,10 @@ using Enums;
 using Interactions;
 using Monkeys.Chimployees;
 using Monkeys.MiniChimps;
-using UI.InGame;
 using UnityEngine;
 
 namespace Game.CommandRoomPanelControls {
     public class CommandRoomControlPanelsManager : MonoSingleton<CommandRoomControlPanelsManager> {
-        [SerializeField] private BoxCollider door1BoxCollider;
-        [SerializeField] private BoxCollider door2BoxCollider;
-        [SerializeField] private GameObject accessDeniedDoor1;
-        [SerializeField] private GameObject accessDeniedDoor2;
-        
-        [SerializeField] private GameObject mapAccessDoor1;
-        [SerializeField] private GameObject mapAccessDoor2;
-
         [SerializeField] private GameObject bananaCannonMiniGameAccessDenied;
         [SerializeField] private BoxCollider miniGameCanonBananaInteractionCollider;
         [SerializeField] private Interaction miniGameCannonBananaPlayInteraction;
@@ -55,33 +46,11 @@ namespace Game.CommandRoomPanelControls {
         public void SetAssemblerVolume(float level) {
             assembler.SetAssemblerAudioVolume(level);
         }
-
-        public void ForbidDoorsAccess() {
-            door1BoxCollider.enabled = false;
-            door2BoxCollider.enabled = false;
-            
-            accessDeniedDoor1.SetActive(true);
-            accessDeniedDoor2.SetActive(true);
-            
-            mapAccessDoor1.SetActive(false);
-            mapAccessDoor2.SetActive(false);
-        }
         
         public void ForbidBananaCannonMiniGameAccess() {
             bananaCannonMiniGameAccessDenied.SetActive(true);
             miniGameCanonBananaInteractionCollider.enabled = false;
             miniGameCannonBananaPlayInteraction.HideUI();
-        }
-
-        public void AuthorizeDoorsAccess() {
-            door1BoxCollider.enabled = true;
-            door2BoxCollider.enabled = true;
-            
-            accessDeniedDoor1.SetActive(false);
-            accessDeniedDoor2.SetActive(false);
-            
-            mapAccessDoor1.SetActive(true);
-            mapAccessDoor2.SetActive(true);
         }
         
         public void AuthorizeBananaCannonMiniGameAccess() {

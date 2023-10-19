@@ -4,13 +4,11 @@ namespace Game.Inventory {
     public class IngredientsInventory : MonoBehaviour {
         public GenericDictionary<IngredientsType, int> ingredientsInventory;
         
-        public GameObject lastselectedInventoryItem;
-
         public void AddQuantity(IngredientsType ingredientsType, int quantity) {
             if (ingredientsInventory[ingredientsType] > 10000) return;
             
             ingredientsInventory[ingredientsType] += quantity;
-            ObjectsReference.Instance.uiSlotsManager.RefreshQuantityInQuickSlot();
+            ObjectsReference.Instance.uiQuickSlotsManager.RefreshQuantityInQuickSlot();
 
             var ingredientItem = ObjectsReference.Instance.uiIngredientsInventory.inventorySlotsByIngredientsType[ingredientsType];
             ingredientItem.gameObject.SetActive(true);
@@ -37,7 +35,7 @@ namespace Game.Inventory {
                 ingredientItem.gameObject.SetActive(false);
             }
             
-            ObjectsReference.Instance.uiSlotsManager.RefreshQuantityInQuickSlot();
+            ObjectsReference.Instance.uiQuickSlotsManager.RefreshQuantityInQuickSlot();
         }
     }
 }

@@ -1,7 +1,5 @@
-using Building.Buildables.Plateforms;
-using Data;
+using Gestion.Buildables.Plateforms;
 using Data.Bananas;
-using Enums;
 using UnityEngine;
 
 namespace PrefabSpawner {
@@ -16,7 +14,7 @@ namespace PrefabSpawner {
                 }
 
                 ObjectsReference.Instance.mapsManager.currentMap.isDiscovered = true;
-                ObjectsReference.Instance.mapsManager.currentMap.RefreshAspirablesItemsDataMap();
+                ObjectsReference.Instance.mapsManager.currentMap.RefreshItemsDataMap();
             }
         }
     }
