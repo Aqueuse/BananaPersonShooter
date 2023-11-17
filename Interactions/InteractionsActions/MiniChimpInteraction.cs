@@ -1,4 +1,3 @@
-using Items;
 using UnityEngine;
 
 namespace Interactions.InteractionsActions {

@@ -20,13 +20,14 @@ MonoBehaviour:
   buildableType: 6
   prefabIndex: 0
   itemName:
-  - bunch of bananas
-  - "r\xE9gime de bananes"
-  - "racimo de pl\xE1tanos"
+  - bunch
+  - "r\xE9gime"
+  - racimo
   itemSprite: {fileID: 0}
   itemDescription:
-  - 
-  - 
-  - 
+  - bunch of bananas cavendish
+  - "r\xE9gime de bananes cavendish"
+  - racimo de bananas cavendish
   associatedBananasDataScriptableObject: {fileID: 11400000, guid: fbdea4ee522232544a53d6cc909f2728, type: 2}
   regimeQuantity: 60
+  regimeStade: 0

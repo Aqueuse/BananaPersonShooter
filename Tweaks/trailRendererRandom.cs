@@ -58,23 +58,23 @@ namespace Tweaks {
         }
 
         private void Update() {
-            if (UnityEngine.Input.GetKeyUp(KeyCode.T) && !userColor) {
-                _trailRenderer.emitting = !_trailRenderer.emitting;
-
-                if (disableRandom) {
-                    _alpha = 1.0f;
-                    _time = 0.0f;
-                    _keyUpdate = 1f;
-
-                    colorList.Clear();
-                    _keyUpdate = 1f / keyNb;
-                    _trailRenderer.colorGradient = NewGrad(keyNb);
-
-                    for (var i = 0; i < _trailRenderer.colorGradient.colorKeys.Length; i++) {
-                        colorList.Add(_trailRenderer.colorGradient.colorKeys[i].color);
-                    }
-                }
-            }
+            // if (UnityEngine.Input.GetKeyUp(KeyCode.T) && !userColor) {
+            //     _trailRenderer.emitting = !_trailRenderer.emitting;
+            //
+            //     if (disableRandom) {
+            //         _alpha = 1.0f;
+            //         _time = 0.0f;
+            //         _keyUpdate = 1f;
+            //
+            //         colorList.Clear();
+            //         _keyUpdate = 1f / keyNb;
+            //         _trailRenderer.colorGradient = NewGrad(keyNb);
+            //
+            //         for (var i = 0; i < _trailRenderer.colorGradient.colorKeys.Length; i++) {
+            //             colorList.Add(_trailRenderer.colorGradient.colorKeys[i].color);
+            //         }
+            //     }
+            // }
         }
 
         private void FixedUpdate() {

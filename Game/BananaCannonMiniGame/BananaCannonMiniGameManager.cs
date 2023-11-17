@@ -47,14 +47,11 @@ namespace Game.BananaCannonMiniGame {
         
         public void SwitchToMiniGame() {
             ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.CROSSHAIRS].alpha = 0;
-            ObjectsReference.Instance.inputManager.uiSchemaContext = UISchemaSwitchType.BANANA_CANNON_MINI_GAME;
             ObjectsReference.Instance.inputManager.SwitchContext(InputContext.UI);
 
             playItemInteractionGameObject.SetActive(false);
 
             bananaCannonVirtualCamera.Priority = 20;
-            Cursor.visible = true;
-            Cursor.lockState = CursorLockMode.None;
 
             ObjectsReference.Instance.uIbananaCannonMiniGame.ShowGameUI();
             ObjectsReference.Instance.uIbananaCannonMiniGame.ShowStartMenu();

@@ -3,14 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using Data;
 using Enums;
-using Interactions;
 using TMPro;
-using UI.InGame;
 using UnityEngine;
 using UnityEngine.Localization;
 using UnityEngine.Localization.Components;
 
-namespace Items {
+namespace Interactions {
     public class BubbleDialogue : MonoBehaviour {
         [SerializeField] private Interaction interaction;
         [SerializeField] private RectTransform visualTransform;
@@ -48,6 +46,10 @@ namespace Items {
         public void SetBubbleDialogue(dialogueSet dialogueSet) {
             thisBubbleDialogueSet = dialogueSet;
             _bubbleLocalizeStringEvent.StringReference = dialogueTextByAdvancement[thisBubbleDialogueSet][0];
+        }
+
+        public dialogueSet GetCurrentDialogueSet() {
+            return thisBubbleDialogueSet;
         }
 
         public void PlayDialogue() {

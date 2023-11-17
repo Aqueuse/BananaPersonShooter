@@ -7,11 +7,15 @@ namespace Bananas {
     public class Banana : MonoBehaviour {
         [SerializeField] private GameObject bananaSkin;
         [SerializeField] private MeshRenderer bananaMeshRenderer;
-
+        
         [SerializeField] private LayerMask bananaSplashLayerMask;
         
         public BananasDataScriptableObject bananasDataScriptableObject;
-        
+
+        private void Start() {
+            Invoke(nameof(DestroyMe), 10);
+        }
+
         private void OnCollisionEnter(Collision collision) {
             if (bananaSplashLayerMask == (bananaSplashLayerMask | 1 << collision.gameObject.layer)) {
                 // trasnformation en peau de banane

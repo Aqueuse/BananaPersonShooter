@@ -12,12 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 145b73ac3666c3f44bd8b125c331f2eb, type: 3}
   m_Name: BananaSkinData
   m_EditorClassIdentifier: 
-  gameObjectTag: 20
+  gameObjectTag: 19
   itemCategory: 2
   bananaType: 0
   rawMaterialType: 4
   ingredientsType: 1
   buildableType: 6
+  prefabIndex: 0
   itemName:
   - banana peel
   - peau de banane

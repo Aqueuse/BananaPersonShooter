@@ -45,7 +45,7 @@ namespace Bananas.Regimes {
         }
 
         private void OnTriggerEnter(Collider other) {
-            if (!TagsManager.Instance.HasTag(other.gameObject, GAME_OBJECT_TAG.MOVER_UNVALID)) {
+            if (!TagsManager.Instance.HasTag(other.gameObject, GAME_OBJECT_TAG.BUILD_UNVALID)) {
                 _verticalState = _verticalState == VerticalState.UP ? VerticalState.DOWN : VerticalState.UP;
             }
         }

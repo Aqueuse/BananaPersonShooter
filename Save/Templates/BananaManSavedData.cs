@@ -16,8 +16,6 @@ namespace Save.Templates {
         
         public string lastMap = "COROLLE";
         public BananaType activeBanana = BananaType.EMPTY;
-        public ItemCategory activeItemCategory = ItemCategory.EMPTY;
-        public BuildableType activeBuildableType = BuildableType.EMPTY;
 
         public bool hasFinishedTutorial = false;
         
@@ -58,10 +56,9 @@ namespace Save.Templates {
             {BuildableType.PORTAL.ToString(), 0},
             {BuildableType.GUICHET.ToString(), 0},
             {BuildableType.BANANA_DRYER.ToString(), 0},
-            {BuildableType.RETRIEVER.ToString(), 0},
-            {BuildableType.BLUEPRINTS_WORKSTATION.ToString(), 0},
+            {BuildableType.RETRIEVER.ToString(), 0}
         };
         
-        public List<string> slots = new List<string>();
+        public string bananaSlot = BananaType.EMPTY.ToString();
     }
 }

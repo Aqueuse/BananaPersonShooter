@@ -35,7 +35,7 @@ namespace UI.InGame.Inventory {
             if (inventoryContentTransform.childCount == 0) return;
 
             foreach (var slot in inventoryContentTransform.GetComponentsInChildren<UInventorySlot>()) {
-                if (slot.gameObject.activeInHierarchy) {
+                if (slot.gameObject.activeInHierarchy && slot.itemScriptableObject != null) {
                     slot.GetComponent<UInventorySlot>().SelectInventorySlot();
                     break;
                 }

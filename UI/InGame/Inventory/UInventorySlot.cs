@@ -17,26 +17,24 @@ namespace UI.InGame.Inventory {
             if (quantityText != null) quantityText.text = quantity > 999 ? "999+" : quantity.ToString();
         }
 
-        private void SetDescriptionAndName() {
-            ObjectsReference.Instance.descriptionsManager.ShowPanel(itemScriptableObject.gameObjectTag);
+        public void SetDescriptionAndName() {
             ObjectsReference.Instance.descriptionsManager.SetDescription(itemScriptableObject);
-            ObjectsReference.Instance.descriptionsManager.inventoryGestionPanel.SetDescription(itemScriptableObject);
         }
 
         public void SelectInventorySlot() {
+            if (itemScriptableObject == null) return;
+            
             ObjectsReference.Instance.uInventoriesManager.UnselectInventorySlots(itemScriptableObject.itemCategory);
 
             GetComponent<Image>().color = Color.yellow;
             if (quantityText != null) quantityText.color = Color.black;
-            
-            SetDescriptionAndName();
             
             ObjectsReference.Instance.uInventoriesManager.SetLastSelectedItem(itemScriptableObject.itemCategory, gameObject);
         }
 
         public void UnselectInventorySlot() {
             GetComponent<Image>().color = Color.black;
-            
+
             if (quantityText != null) quantityText.color = Color.yellow;
         }
     }

@@ -75,11 +75,18 @@ namespace Game.CommandRoomPanelControls {
                                 
                                 DesactivateBananaGunPieces();
                                 bananaGunRepaired.SetActive(true);
+                                HideAssemblerActivatedZone();
+                                CommandRoomControlPanelsManager.Instance.miniChimp.bubbleDialogue.SetBubbleDialogue(dialogueSet.REPAIRED_BANANA_GUN);
+                                CommandRoomControlPanelsManager.Instance.miniChimp.bubbleDialogue.PlayDialogue();
                             }
                         }
                     }
                 }
             }
+        }
+
+        public void HideBananaGunInteractableGameObject() {
+            bananaGunRepaired.SetActive(false);
         }
 
         private void DesactivateBananaGunPieces() {
@@ -90,7 +97,7 @@ namespace Game.CommandRoomPanelControls {
             assemblerAudioSource.volume = level;
         }
         
-        public void HideAssemblerActivatedZone() {
+        private void HideAssemblerActivatedZone() {
             assemblerZoneMeshRenderer.enabled = false;
             assemblerSpotLight.enabled = false;
         }

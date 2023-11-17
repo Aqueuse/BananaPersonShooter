@@ -17,7 +17,7 @@ namespace Save {
         public void ResetGameData() {
             ResetInventory();
             ResetBlueprints();
-            ResetSlots();
+            ResetBananaSlot();
             ResetBananaManVitals();
             ResetTutorial();
             
@@ -41,14 +41,8 @@ namespace Save {
             ObjectsReference.Instance.uiBlueprintsInventory.HideAllBlueprints();
         }
 
-        private static void ResetSlots() {
-            for (var i = 0; i < ObjectsReference.Instance.gameData.bananaManSavedData.slots.Count; i++) {
-                ObjectsReference.Instance.gameData.bananaManSavedData.slots[i] = BananaType.EMPTY.ToString();
-            }
-            
-            foreach (var uiSlot in ObjectsReference.Instance.uiQuickSlotsManager.uiQuickSlotsScripts) {
-                uiSlot.EmptySlot();
-            }
+        private static void ResetBananaSlot() {
+            ObjectsReference.Instance.gameData.bananaManSavedData.bananaSlot = BananaType.CAVENDISH.ToString();
         }
 
         private static void ResetBananaManVitals() {
@@ -74,8 +68,7 @@ namespace Save {
         }
 
         private static void ResetActiveItem() {
-            ObjectsReference.Instance.bananaMan.activeBananaType = BananaType.EMPTY;
-            ObjectsReference.Instance.bananaMan.activeItemCategory = ItemCategory.EMPTY;
+            ObjectsReference.Instance.bananaMan.activeItem = ObjectsReference.Instance.scriptableObjectManager.GetBananaScriptableObject(BananaType.EMPTY);
 
             ObjectsReference.Instance.gameData.bananaManSavedData.activeBanana = 0;
         }

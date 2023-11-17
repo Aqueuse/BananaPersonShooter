@@ -1,11 +1,12 @@
 ﻿using Data.Bananas;
 using Enums;
+using Gestion;
 using UnityEngine;
 
 namespace Game.Inventory {
     public class BananasInventory : MonoBehaviour {
         public GenericDictionary<BananaType, int> bananasInventory;
-
+        
         public void AddQuantity(BananasDataScriptableObject bananasDataScriptableObject, int quantity) {
             if (bananasInventory[bananasDataScriptableObject.bananaType] > 10000) return;
             
@@ -14,10 +15,15 @@ namespace Game.Inventory {
             var bananaItem = ObjectsReference.Instance.uiBananasInventory.inventorySlotsByBananaType[bananasDataScriptableObject.bananaType];
             bananaItem.gameObject.SetActive(true);
             bananaItem.SetQuantity(bananasInventory[bananasDataScriptableObject.bananaType]);
-            
-            ObjectsReference.Instance.uiQuickSlotsManager.RefreshQuantityInQuickSlot();
+
+            if (ObjectsReference.Instance.quickSlotsManager.bananaSlotItemScriptableObject == bananasDataScriptableObject)
+                ObjectsReference.Instance.quickSlotsManager.SetBananaQuantity(bananasInventory[bananasDataScriptableObject.bananaType]);
             
             ObjectsReference.Instance.uiQueuedMessages.AddToInventory(bananasDataScriptableObject, quantity);
+
+            foreach (var monkey in MapItems.Instance.monkeys) {
+                monkey.SearchForBananaManBananas();
+            }
         }
 
         public int GetQuantity(BananaType bananaType) {
@@ -38,7 +44,16 @@ namespace Game.Inventory {
                 bananaItem.gameObject.SetActive(false);
             }
             
-            ObjectsReference.Instance.uiQuickSlotsManager.RefreshQuantityInQuickSlot();
+            if (ObjectsReference.Instance.quickSlotsManager.bananaSlotItemScriptableObject.bananaType == bananaType)
+                ObjectsReference.Instance.quickSlotsManager.SetBananaQuantity(bananasInventory[bananaType]);
+        }
+
+        public bool HasBananas() {
+            foreach (var bananas in bananasInventory) {
+                if (bananas.Value > 0) return true;
+            }
+
+            return false;
         }
     }
 }

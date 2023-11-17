@@ -1,4 +1,5 @@
 using Data.Buildables;
+using Tags;
 using UnityEngine;
 
 namespace Gestion {
@@ -17,7 +18,7 @@ namespace Gestion {
             _buildableMaterials = new []{_ghostMaterial};
             _ghostMaterial = _meshRenderer.materials[0];
 
-            _ghostState = GhostState.VALID;
+            _ghostState = GhostState.UNBUILDABLE;
         }
         
         public void SetGhostState(GhostState newGhostState) {
@@ -28,8 +29,23 @@ namespace Gestion {
             _meshRenderer.materials = _buildableMaterials;
         }
 
-        public GhostState GetPlateformState() {
+        public GhostState GetGhostState() {
             return _ghostState;
+        }
+
+        private void OnTriggerEnter(Collider other) {
+            if (TagsManager.Instance.HasTag(other.gameObject, GAME_OBJECT_TAG.BUILD_UNVALID)) {
+                SetGhostState(GhostState.UNBUILDABLE);
+            }
+        }
+
+        private void OnTriggerExit(Collider other) {
+            if (!ObjectsReference.Instance.rawMaterialsInventory.HasCraftingIngredients(buildableDataScriptableObject)) {
+                SetGhostState(GhostState.NOT_ENOUGH_MATERIALS);
+                return;
+            }
+
+            SetGhostState(GhostState.VALID);
         }
     }
 }

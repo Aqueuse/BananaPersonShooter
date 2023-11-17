@@ -11,28 +11,33 @@ namespace Gestion.Buildables.Plateforms {
         [SerializeField] private Color emissionColor;
         [SerializeField] private Color unactiveColor;
 
-        [SerializeField] private MeshRenderer upDownEffectVizualisation;
+        [SerializeField] private SpriteRenderer upDownEffectVizualisation;
+
+        [SerializeField] private Animator _animator;
+
+        [SerializeField] private GameObject workbench;
         
         private UpEffect upEffect;
-        private MeshRenderer _meshRenderer;
         private AudioSource _audioSource;
 
         private Material[] _plateformMaterials;
-        
+
         public BananaType plateformType;
 
         private bool _isPlayerOn;
-        
+        public bool isWorkBenchActivated;
+
         private static readonly int AlimentationColor = Shader.PropertyToID("_Color");
         private static readonly int EmissionColor = Shader.PropertyToID("Emission_Color");
-
+        private static readonly int Close = Animator.StringToHash("close");
+        private static readonly int Open = Animator.StringToHash("open");
+        
         private void Start() {
-            _meshRenderer = GetComponent<MeshRenderer>();
             _audioSource = GetComponent<AudioSource>();
             upEffect = GetComponent<UpEffect>();
 
             _plateformMaterials = new Material[1];
-            _normalPlateformMaterial = _meshRenderer.materials[0];
+            _normalPlateformMaterial = GetComponent<MeshRenderer>().materials[0];
         }
 
         private void OnCollisionEnter(Collision other) {
@@ -44,8 +49,7 @@ namespace Gestion.Buildables.Plateforms {
         }
         
         private void SetActivatedMaterial(Color color) {
-            _meshRenderer = GetComponent<MeshRenderer>();
-            _normalPlateformMaterial = _meshRenderer.materials[0];
+            _normalPlateformMaterial = GetComponent<MeshRenderer>().materials[0];
             
             _normalPlateformMaterial.SetColor(AlimentationColor, color);
             _normalPlateformMaterial.SetColor(EmissionColor, emissionColor);
@@ -53,12 +57,11 @@ namespace Gestion.Buildables.Plateforms {
             _plateformMaterials = new Material[1];
             _plateformMaterials[0] = _normalPlateformMaterial;
 
-            _meshRenderer.materials = _plateformMaterials;
+            GetComponent<MeshRenderer>().materials = _plateformMaterials;
         }
 
-        public void SetUnactiveMaterial() {
-            _meshRenderer = GetComponent<MeshRenderer>();
-            _normalPlateformMaterial = _meshRenderer.materials[0];
+        private void SetUnactiveMaterial() {
+            _normalPlateformMaterial = GetComponent<MeshRenderer>().materials[0];
 
             _normalPlateformMaterial.SetColor(AlimentationColor, unactiveColor);
             _normalPlateformMaterial.SetColor(EmissionColor, unactiveColor);
@@ -66,11 +69,10 @@ namespace Gestion.Buildables.Plateforms {
             _plateformMaterials = new Material[1];
             _plateformMaterials[0] = _normalPlateformMaterial;
 
-            _meshRenderer.materials = _plateformMaterials;
+            GetComponent<MeshRenderer>().materials = _plateformMaterials;
         }
 
         public void ActivePlateform(BananasDataScriptableObject bananasDataScriptableObject) {
-            _meshRenderer = GetComponent<MeshRenderer>();
             _audioSource = GetComponent<AudioSource>();
             upEffect = GetComponent<UpEffect>();
             
@@ -84,6 +86,49 @@ namespace Gestion.Buildables.Plateforms {
                     upDownEffectVizualisation.enabled = true;
                     break;
             }
+        }
+
+        private void Desactivate() {
+            plateformType = BananaType.EMPTY;
+            _audioSource.enabled = false;
+            upEffect.isActive = false;
+            upDownEffectVizualisation.enabled = false;
+        }
+
+        public void ShowHideWorkbench() {
+            if (!isWorkBenchActivated) {
+                StartShowingBenchWork();
+            }
+            else {
+                StartHidingWorkbench();
+            }
+        }
+
+        private void StartShowingBenchWork() {
+            GetComponent<MeshRenderer>().enabled = false;
+            GetComponent<MeshCollider>().isTrigger = true;
+            
+            workbench.SetActive(true);
+            _animator.SetTrigger(Open);
+            
+            Desactivate();
+
+            isWorkBenchActivated = true;
+        }
+        
+        private void StartHidingWorkbench() {
+            _animator.SetTrigger(Close);
+        }
+
+        public void FinishHidingWorkbench() {
+            GetComponent<MeshRenderer>().enabled = true;
+            GetComponent<MeshCollider>().isTrigger = false;
+            
+            workbench.SetActive(false);
+            
+            SetUnactiveMaterial();
+
+            isWorkBenchActivated = false;
         }
     }
 }

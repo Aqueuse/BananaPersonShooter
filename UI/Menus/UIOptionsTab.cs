@@ -11,26 +11,29 @@ namespace UI.Menus {
         [SerializeField] private UICanvasGroupType _canvasGroupType;
         [SerializeField] private Image tabButtonImage;
         
-        private Color activatedColor;
-        private Color unactivatedColor;
+        private Color activatedTabColor;
+        private Color unactivatedTabColor;
+        
+        private UIOptionsMenu uiOptionsMenu;
         
         private void Start() {
-            activatedColor = ObjectsReference.Instance.uiOptionsMenu.tabButtonActivatedColor;
-            unactivatedColor = ObjectsReference.Instance.uiOptionsMenu.tabButtonUnactivatedColor;
+            uiOptionsMenu = ObjectsReference.Instance.uiOptionsMenu;
+            activatedTabColor = uiOptionsMenu.tabButtonActivatedColor;
+            unactivatedTabColor = uiOptionsMenu.tabButtonUnactivatedColor;
         }
 
         public void Enable() {
-            ObjectsReference.Instance.uiManager.Set_active(_canvasGroupType, true);
-            tabButtonImage.color = activatedColor;
+            ObjectsReference.Instance.uiManager.SetActive(_canvasGroupType, true);
+            tabButtonImage.color = activatedTabColor;
             tabButtonImage.GetComponentInChildren<TextMeshProUGUI>().color = Color.black;
             
             SelectFirstElement();
         }
 
         public void Disable() {
-            ObjectsReference.Instance.uiManager.Set_active(_canvasGroupType, false);
-            tabButtonImage.color = unactivatedColor;
-            tabButtonImage.GetComponentInChildren<TextMeshProUGUI>().color = activatedColor;
+            ObjectsReference.Instance.uiManager.SetActive(_canvasGroupType, false);
+            tabButtonImage.color = unactivatedTabColor;
+            tabButtonImage.GetComponentInChildren<TextMeshProUGUI>().color = activatedTabColor;
         }
         
         private void SelectFirstElement() {

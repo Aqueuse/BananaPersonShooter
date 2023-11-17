@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using TMPro;
+using UnityEngine;
+using UnityEngine.UI;
 
 namespace UI.InGame {
     public class UIFace : MonoBehaviour {
@@ -11,6 +13,17 @@ namespace UI.InGame {
         private static readonly int Intrigued = Animator.StringToHash("INTRIGUED");
         private static readonly int GooglyEyes = Animator.StringToHash("GOOGLY_EYES");
 
+        [SerializeField] private Image eyeLeft;
+        [SerializeField] private Image eyePupilLeft;
+        [SerializeField] private Image eyeLidLeft;
+        [SerializeField] private Image eyeRight;
+        [SerializeField] private Image eyePupilRight;
+        [SerializeField] private Image eyeLidRight;
+
+        [SerializeField] private TextMeshProUGUI deadEyeLeft;
+        [SerializeField] private TextMeshProUGUI deadEyeRight;
+        [SerializeField] private TextMeshProUGUI disorientedMouth;
+        
         private void Start() {
             _faceAnimator = GetComponent<Animator>();
         }
@@ -29,6 +42,16 @@ namespace UI.InGame {
 
         public void Die(bool isDead) {
             _faceAnimator.SetBool(Dead, isDead);
+            eyeLeft.enabled = !isDead;
+            eyePupilLeft.enabled = !isDead;
+            eyeRight.enabled = !isDead;
+            eyePupilRight.enabled = !isDead;
+            eyeLidLeft.enabled = !isDead;
+            eyeLidRight.enabled = !isDead;
+
+            deadEyeLeft.enabled = isDead;
+            deadEyeRight.enabled = isDead;
+            disorientedMouth.enabled = isDead;
         }
 
         public void GetHorrified() {

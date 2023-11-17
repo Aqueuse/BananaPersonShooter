@@ -1,6 +1,5 @@
 using System;
 using System.Globalization;
-using Enums;
 using UnityEngine;
 
 namespace Save {
@@ -17,7 +16,7 @@ namespace Save {
             SaveIngredientsInventory();
             SaveBlueprintsInventory();
             
-            SaveSlots();
+            SaveBananaSlot();
             SaveActiveItem();
             
             SaveBananaManVitals();
@@ -52,36 +51,9 @@ namespace Save {
             }
         }
 
-        private static void SaveSlots() {
-            ObjectsReference.Instance.gameData.bananaManSavedData.slots = new() {
-                "EMPTY,EMPTY",
-                "EMPTY,EMPTY",
-                "EMPTY,EMPTY",
-                "EMPTY,EMPTY" 
-            };
-
-            for (var i = 0; i < ObjectsReference.Instance.uiQuickSlotsManager.uiQuickSlotsScripts.Count; i++) {
-                var uiSlotScript = ObjectsReference.Instance.uiQuickSlotsManager.uiQuickSlotsScripts[i];
-                
-                if (uiSlotScript.slotItemScriptableObject == null) continue;
-                
-                var itemCategory = uiSlotScript.slotItemScriptableObject.itemCategory;
-
-                switch (itemCategory) {
-                    case ItemCategory.BUILDABLE:
-                        ObjectsReference.Instance.gameData.bananaManSavedData.slots[i] = itemCategory+","+uiSlotScript.slotItemScriptableObject.buildableType;
-                        break;
-                    case ItemCategory.BANANA:
-                        ObjectsReference.Instance.gameData.bananaManSavedData.slots[i] = itemCategory+","+uiSlotScript.slotItemScriptableObject.bananaType;
-                        break;
-                    case ItemCategory.RAW_MATERIAL:
-                        ObjectsReference.Instance.gameData.bananaManSavedData.slots[i] = itemCategory+","+uiSlotScript.slotItemScriptableObject.rawMaterialType;
-                        break;
-                    case ItemCategory.INGREDIENT:
-                        ObjectsReference.Instance.gameData.bananaManSavedData.slots[i] = itemCategory+","+uiSlotScript.slotItemScriptableObject.ingredientsType;
-                        break;
-                }
-            }
+        private static void SaveBananaSlot() {
+            if (ObjectsReference.Instance.quickSlotsManager.bananaSlotItemScriptableObject != null)
+               ObjectsReference.Instance.gameData.bananaManSavedData.bananaSlot = ObjectsReference.Instance.quickSlotsManager.bananaSlotItemScriptableObject.bananaType.ToString();
         }
 
         private static void SaveBananaManVitals() {
@@ -109,18 +81,17 @@ namespace Save {
         }
 
         private static void SaveActiveItem() {
-            ObjectsReference.Instance.gameData.bananaManSavedData.activeBanana = ObjectsReference.Instance.bananaMan.activeBananaType;
-            ObjectsReference.Instance.gameData.bananaManSavedData.activeItemCategory = ObjectsReference.Instance.bananaMan.activeItemCategory;
-            ObjectsReference.Instance.gameData.bananaManSavedData.activeBuildableType = ObjectsReference.Instance.bananaMan.activeBuildableType;
+            ObjectsReference.Instance.gameData.bananaManSavedData.activeBanana =
+                ObjectsReference.Instance.bananaMan.activeItem.bananaType;
         }
         
         public void StartAutoSave() {
-            if (ObjectsReference.Instance.gameSettings.saveDelay > 0) InvokeRepeating(nameof(AutoSave), ObjectsReference.Instance.gameSettings.saveDelay, ObjectsReference.Instance.gameSettings.saveDelay);
+            if (ObjectsReference.Instance.gameSettings.saveDelayMinute > 0) InvokeRepeating(nameof(AutoSave), ObjectsReference.Instance.gameSettings.saveDelayMinute, ObjectsReference.Instance.gameSettings.saveDelayMinute);
         }
         
         public void ResetAutoSave() {
             CancelInvoke();
-            if (ObjectsReference.Instance.gameSettings.saveDelay > 0) InvokeRepeating(nameof(AutoSave), ObjectsReference.Instance.gameSettings.saveDelay, ObjectsReference.Instance.gameSettings.saveDelay);
+            if (ObjectsReference.Instance.gameSettings.saveDelayMinute > 0) InvokeRepeating(nameof(AutoSave), ObjectsReference.Instance.gameSettings.saveDelayMinute, ObjectsReference.Instance.gameSettings.saveDelayMinute);
         }
 
         public void CancelAutoSave() {

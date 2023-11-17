@@ -1,6 +1,6 @@
-﻿using TMPro;
+﻿using Enums;
+using TMPro;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace UI.Menus {
@@ -11,8 +11,8 @@ namespace UI.Menus {
 
         private Image[] _gameMenuButtons;
         private int _selectedButton;
-
-        public EventTrigger selectedTrigger;
+        
+        public GameObject firstSelectedGameObject;
 
         private void Start() {
             _selectedButton = 0;
@@ -21,7 +21,7 @@ namespace UI.Menus {
 
         public void ReturnToGame() {
             ObjectsReference.Instance.gameManager.UnpauseGame();
-            ObjectsReference.Instance.uiManager.Hide_Game_Menu();
+            ObjectsReference.Instance.uiManager.HideGameMenu();
 
             ObjectsReference.Instance.inputManager.SwitchContext(InputContext.GAME);
         }
@@ -54,8 +54,6 @@ namespace UI.Menus {
 
             buttonImage.color = activatedColor;
             buttonImage.GetComponentInChildren<TextMeshProUGUI>().color = activatedTextColor;
-            
-            selectedTrigger = buttonImage.GetComponent<EventTrigger>();
         }
     }
 }

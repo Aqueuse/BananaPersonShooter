@@ -1,6 +1,5 @@
-using System;
 using Data;
-using Data.Waste;
+using Data.Wastes;
 using Enums;
 using Gestion.Buildables;
 using Interactions;
@@ -10,6 +9,7 @@ using UnityEngine;
 namespace Gestion.Actions {
     public class Harvest : MonoBehaviour {
         private Mesh _targetedGameObjectMesh;
+        private Tag targetedGameObjectTag;
         private BananaType _targetType;
         private GestionMode gestionMode;
 
@@ -30,39 +30,52 @@ namespace Gestion.Actions {
         private void Update() {
             if (!isDirectHarvestActivated) return;
             
-            if (Physics.Raycast(mainCamera.transform.position, mainCamera.transform.forward, out RaycastHit hit, Single.PositiveInfinity, layerMask: gestionMode.GestionModeSelectableLayerMask)) {
+            if (Physics.Raycast(mainCamera.transform.position, mainCamera.transform.forward, out RaycastHit hit, 2000, layerMask: gestionMode.GestionModeSelectableLayerMask)) {
                 gestionMode.targetedGameObject = hit.transform.gameObject;
-                ObjectsReference.Instance.uInventoriesManager.GetCurrentUIHelper().Show_retrieve_confirmation();
+                ObjectsReference.Instance.uInventoriesManager.GetCurrentUIHelper().ShowRetrieveConfirmation();
+
+                targetedGameObjectTag = hit.transform.GetComponent<Tag>();
+                
+                if (targetedGameObjectTag.gameObjectTag == GAME_OBJECT_TAG.REGIME)
+                    ObjectsReference.Instance.descriptionsManager.SetDescription(targetedGameObjectTag.itemScriptableObject, targetedGameObjectTag.gameObject);
+
+                else {
+                    ObjectsReference.Instance.descriptionsManager.SetDescription(targetedGameObjectTag.itemScriptableObject);
+                }
             }
             else {
                 gestionMode.targetedGameObject = null;
-                ObjectsReference.Instance.uInventoriesManager.GetCurrentUIHelper().show_default_helper();
+                ObjectsReference.Instance.uInventoriesManager.GetCurrentUIHelper().ShowDefaultHelper();
+                ObjectsReference.Instance.descriptionsManager.HideAllPanels();
             }
         }
 
         public void harvest() {
+            if (!gestionMode.isGestionModeActivated
+                && !ObjectsReference.Instance.bananaMan.isGrabingBananaGun) return;
+            
             if (gestionMode.targetedGameObject == null) return;
-
-            ObjectsReference.Instance.uInventoriesManager.GetCurrentUIHelper().Hide_retrieve_confirmation();
-            ObjectsReference.Instance.audioManager.PlayEffect(EffectType.TAKE_SOMETHING, 0);
-            ObjectsReference.Instance.mapsManager.currentMap.isDiscovered = true;
-
-            GAME_OBJECT_TAG gameObjectTag = gestionMode.targetedGameObject.GetComponent<Tag>().gameObjectTag;
-
+            Tag gameObjectTagClass = gestionMode.targetedGameObject.GetComponent<Tag>();
+            GAME_OBJECT_TAG gameObjectTag = gameObjectTagClass.gameObjectTag;
+            
             switch (gameObjectTag) {
                 case GAME_OBJECT_TAG.REGIME:
                     var regimeClass = gestionMode.targetedGameObject.GetComponent<Regime>();
+                    if (regimeClass.regimeStade != RegimeStade.MATURE) return;
+                    
                     var quantity = regimeClass.regimeDataScriptableObject.regimeQuantity;
 
                     ObjectsReference.Instance.bananasInventory.AddQuantity(regimeClass.regimeDataScriptableObject.associatedBananasDataScriptableObject, quantity);
     
                     regimeClass.GrabBananas();
+                    
+                    foreach (var monkey in MapItems.Instance.monkeys) {
+                        monkey.SearchForBananaManBananas();
+                    }
                     break;
 
                 case GAME_OBJECT_TAG.BUILDABLE:
-                    _targetedGameObjectMesh = gestionMode.targetedGameObject.GetComponent<MeshFilter>().sharedMesh;
-
-                    var buildableType = scriptableObjectManager.GetBuildableTypeByMesh(_targetedGameObjectMesh);
+                    var buildableType = gameObjectTagClass.itemScriptableObject.buildableType;
 
                     var craftingMaterials = scriptableObjectManager.GetBuildableCraftingIngredients(buildableType);
 
@@ -74,7 +87,7 @@ namespace Gestion.Actions {
 
                     DestroyImmediate(gestionMode.targetedGameObject);
                     break;
-                
+
                 case GAME_OBJECT_TAG.DEBRIS:
                     wasteDataScriptableObject = (WasteDataScriptableObject)scriptableObjectManager._meshReferenceScriptableObject.gameObjectDataScriptableObjectsByTag[GAME_OBJECT_TAG.DEBRIS];
                     rawMaterialsWithQuantity = wasteDataScriptableObject.GetRawMaterialsWithQuantity();
@@ -83,26 +96,20 @@ namespace Gestion.Actions {
                         ObjectsReference.Instance.rawMaterialsInventory.AddQuantity(debrisRawMaterialIngredient.Key, debrisRawMaterialIngredient.Value);
                     }
 
-                    foreach (var monkey in MapItems.Instance.monkeys) {
-                        ObjectsReference.Instance.mapsManager.currentMap.RecalculateHappiness(monkey);
-                    }
+                    ObjectsReference.Instance.mapsManager.currentMap.RecalculateCleanliness();
 
-                    Destroy(gestionMode.targetedGameObject);
-                    break;
-                case GAME_OBJECT_TAG.RUINE:
-                    wasteDataScriptableObject = (WasteDataScriptableObject)scriptableObjectManager._meshReferenceScriptableObject.gameObjectDataScriptableObjectsByTag[gameObjectTag];
-                    rawMaterialsWithQuantity = wasteDataScriptableObject.GetRawMaterialsWithQuantity();
-
-                    foreach (var debrisRawMaterialIngredient in rawMaterialsWithQuantity) {
-                        ObjectsReference.Instance.rawMaterialsInventory.AddQuantity(debrisRawMaterialIngredient.Key, debrisRawMaterialIngredient.Value);
-                    }
-                    
                     Destroy(gestionMode.targetedGameObject);
                     break;
             }
-            
+
+            ObjectsReference.Instance.uInventoriesManager.GetCurrentUIHelper().HideRetrieveConfirmation();
+            ObjectsReference.Instance.audioManager.PlayEffect(EffectType.TAKE_SOMETHING, 0);
+            ObjectsReference.Instance.mapsManager.currentMap.isDiscovered = true;
+
             gestionMode.targetedGameObject = null;
             ObjectsReference.Instance.mapsManager.currentMap.RefreshItemsDataMap();
+            ObjectsReference.Instance.quickSlotsManager.SetPlateformSlotAvailability();
+            ObjectsReference.Instance.build.setGhostColor();
         }
     }
 }

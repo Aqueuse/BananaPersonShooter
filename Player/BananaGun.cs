@@ -1,8 +1,7 @@
 using Enums;
-using Player;
 using UnityEngine;
 
-namespace Gestion {
+namespace Player {
     public class BananaGun : MonoBehaviour {
         [SerializeField] private Transform bananaGunTargetTransform;
 
@@ -54,7 +53,7 @@ namespace Gestion {
             ObjectsReference.Instance.bananaMan.tpsPlayerAnimator.FocusCamera(wasFocus);
             ObjectsReference.Instance.bananaMan.GetComponent<PlayerIK>().SetAimConstraint(false);
             
-            ObjectsReference.Instance.uInventoriesManager.GetCurrentUIHelper().show_default_helper();
+            ObjectsReference.Instance.uInventoriesManager.GetCurrentUIHelper().ShowDefaultHelper();
             
             ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.CROSSHAIRS].alpha = 1;
         }

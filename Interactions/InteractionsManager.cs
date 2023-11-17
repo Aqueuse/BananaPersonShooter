@@ -1,4 +1,6 @@
 ﻿using Enums;
+using Game.CommandRoomPanelControls;
+using Gestion.Buildables.Plateforms;
 using Interactions.InteractionsActions;
 using UnityEngine;
 
@@ -10,13 +12,15 @@ namespace Interactions {
         [SerializeField] private LayerMask itemsLayerMask;
         [SerializeField] private Transform grabbableTarget;
 
+        [SerializeField] private GameObject workbench;
+
         public bool isGrabbing;
         private Vector3 grabbablePosition;
         private Rigidbody grabbableRigidbody;
 
         private GameObject _interactedObject;
         private InteractionType interactedInteractionType;
-
+        
         private void Update() {
             if (!ObjectsReference.Instance.gameManager.isGamePlaying || ObjectsReference.Instance.gameManager.gameContext != GameContext.IN_GAME || isGrabbing) return;
 
@@ -38,7 +42,7 @@ namespace Interactions {
                 grabbableRigidbody.velocity = (grabbableTarget.position - _interactedObject.transform.position) * 10;
             }
         }
-
+    
         public void Validate() {
             if (_interactedObject == null || isGrabbing) return;
         
@@ -52,7 +56,10 @@ namespace Interactions {
                     MiniChimpInteraction.Activate(_interactedObject);
                     break;
                 case InteractionType.BANANAGUN:
-                    BananaGunInteraction.Activate(_interactedObject);
+                    BananaGunInteraction.Activate();
+                    CommandRoomControlPanelsManager.Instance.assembler.blueprintsDataInteraction.ShowBlueprintDataIfAvailable();
+                    CommandRoomControlPanelsManager.Instance.miniChimp.bubbleDialogue.SetBubbleDialogue(dialogueSet.GIFTS_BLUEPRINTS);
+                    CommandRoomControlPanelsManager.Instance.miniChimp.bubbleDialogue.PlayDialogue();
                     break;
                 case InteractionType.COMMAND_ROOM_PANEL:
                     CommandRoomPanelInteraction.Activate(_interactedObject);
@@ -65,12 +72,17 @@ namespace Interactions {
                     break;
                 case InteractionType.BLUEPRINTS_DATA:
                     _interactedObject.GetComponent<BlueprintsDataInteraction>().Activate();
+                    CommandRoomControlPanelsManager.Instance.miniChimp.bubbleDialogue.SetBubbleDialogue(dialogueSet.EAT_BANANAS);
+                    CommandRoomControlPanelsManager.Instance.miniChimp.bubbleDialogue.PlayDialogue();
                     break;
                 case InteractionType.TELEPORT_TO_PORTAL_DESTINATION:
                     _interactedObject.GetComponent<PortalDestinationInteraction>().Activate();
                     break;
-                case InteractionType.VERTICAL_PROPULSOR:
-                    _interactedObject.GetComponent<VerticalPropulsorInteraction>().Activate();
+                case InteractionType.PLATEFORM:
+                    _interactedObject.GetComponentInParent<Plateform>().ShowHideWorkbench();
+                    break;
+                case InteractionType.MANAGEMENT_WORKSTATION:
+                    ObjectsReference.Instance.gestionMode.SwitchToGestionMode();
                     break;
             }
         }

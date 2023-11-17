@@ -3,8 +3,6 @@ using Gestion;
 using Gestion.Buildables.Plateforms;
 using Data.Maps;
 using Enums;
-using Game.Steam;
-using Monkeys;
 using Tags;
 using UnityEngine;
 
@@ -37,42 +35,7 @@ namespace Game {
             maxDebrisQuantity = 99;
             debrisToSpawn = 0;
         }
-
-        public void Init() {
-            if (mapDataScriptableObject.monkeyDataScriptableObjectsByMonkeyId.Count > 0) {
-                foreach (var monkey in MapItems.Instance.monkeys) {
-                    RecalculateHappiness(monkey);
-                }
-            }
-        }
-
-        public void RecalculateHappiness(Monkey monkey) {
-            _actualDebrisQuantity = MapItems.Instance.aspirablesContainer.GetComponentsInChildren<MeshFilter>().Length;
-
-            cleanliness = 50-_actualDebrisQuantity /(float)maxDebrisQuantity*50;
-
-            if (cleanliness >= 50 && ObjectsReference.Instance.steamIntegration.isGameOnSteam) {
-                ObjectsReference.Instance.steamIntegration.UnlockAchievement(SteamAchievement.STEAM_ACHIEVEMENT_JUNGLE_CLEANED); 
-            }
-
-            monkey.monkeyDataScriptableObject.happiness = monkey.monkeyDataScriptableObject.sasiety + cleanliness;
-
-            if (monkey.monkeyDataScriptableObject.happiness < 20 && monkey.monkeyState != MonkeyState.ANGRY) {
-                monkey.monkeyState = MonkeyState.ANGRY;
-                monkey.monkeySounds.PlayRoarsSounds();
-            }
-
-            if (monkey.monkeyDataScriptableObject.happiness is >= 20 and < 60 && monkey.monkeyState != MonkeyState.SAD) {
-                monkey.monkeyState = MonkeyState.SAD;
-                monkey.monkeySounds.PlayQuickMonkeySounds();
-            }
-
-            if (monkey.monkeyDataScriptableObject.happiness >= 60 && monkey.monkeyState != MonkeyState.HAPPY) {
-                monkey.monkeyState = MonkeyState.HAPPY;
-                monkey.monkeySounds.PlayQuickMonkeySounds();
-            }
-        }
-
+        
         public void RefreshItemsDataMap() {
             if (MapItems.Instance == null) return;
 
@@ -87,6 +50,8 @@ namespace Game {
             var itemsList = MapItems.Instance.GetAllItemsInAspirableContainer();
             
             foreach (var item in itemsList) {
+                if (item.GetComponent<Tag>().gameObjectTag != GAME_OBJECT_TAG.BUILDABLE) break;
+                
                 var itemData = item.GetComponent<Tag>().itemScriptableObject;
 
                 itemsCategories.Add(itemData.itemCategory);
@@ -105,8 +70,10 @@ namespace Game {
             return debrisToSpawn+TagsManager.Instance.GetAllGameObjectsWithTag(GAME_OBJECT_TAG.DEBRIS).Count;
         }
 
-        public void StartBossFight(MonkeyType monkeyType) {
-            ObjectsReference.Instance.audioManager.PlayMusic(MusicType.FIGHT, 0);
+        public void RecalculateCleanliness() {
+            _actualDebrisQuantity = MapItems.Instance.aspirablesContainer.GetComponentsInChildren<MeshFilter>().Length;
+            ObjectsReference.Instance.mapsManager.currentMap.cleanliness = 50-_actualDebrisQuantity /(float)maxDebrisQuantity*50;
+
         }
     }
 }

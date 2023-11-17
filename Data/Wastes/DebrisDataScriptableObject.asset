@@ -18,6 +18,7 @@ MonoBehaviour:
   rawMaterialType: 5
   ingredientsType: 1
   buildableType: 6
+  prefabIndex: 0
   itemName:
   - Debris
   - "D\xE9bris"
@@ -32,9 +33,9 @@ MonoBehaviour:
   rawMaterialsWithQuantity:
     list:
     - key: 0
-      value: 5
+      value: 30
     - key: 2
-      value: 1
+      value: 6
     - key: 1
       value: 0
     keyCollision: 0

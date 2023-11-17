@@ -12,18 +12,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac982772f9a062c45ba10f85ffe692e7, type: 3}
   m_Name: miniChimpAssemblerData
   m_EditorClassIdentifier: 
-  gameObjectTag: 16
+  gameObjectTag: 15
   itemCategory: 11
   bananaType: 0
   rawMaterialType: 5
   ingredientsType: 1
   buildableType: 6
+  prefabIndex: 0
   itemName:
-  - 
-  - 
-  - 
+  - mini chimp
+  - mini chimp
+  - mini chimp
   itemSprite: {fileID: 0}
   itemDescription:
-  - 
-  - 
-  - 
+  - the mini himp of the assembler
+  - le mini chimp de l'assembleur
+  - el mini chimp ensamblador

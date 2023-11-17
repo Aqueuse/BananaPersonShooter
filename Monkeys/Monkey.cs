@@ -1,6 +1,5 @@
 ﻿using Bananas;
 using Data.Monkeys;
-using Game.Steam;
 using Tags;
 using UnityEngine;
 using UnityEngine.AI;
@@ -13,45 +12,61 @@ namespace Monkeys {
         public MonkeySounds monkeySounds;
         [SerializeField] private NavMeshAgent _navMeshAgent;
         [SerializeField] private Animator _animator;
-
-        public MonkeyState monkeyState;
-        private bool _isRunningToPlayer;
-        private bool _isAttackingPlayer;
-        private bool _isCatchingPlayer;
-
+        
         private bool _isNearPlayer;
-        public bool hasGrabbedBanana;
 
+        public bool smelledBananasOnBananaMan;
+        
         private float bananaValue;
         
         private static readonly int Grab = Animator.StringToHash("GRAB");
         
         private void Start() {
             var navMeshTriangulation = NavMesh.CalculateTriangulation();
-                
+
             var vertexIndex = Random.Range(0, navMeshTriangulation.vertices.Length);
-                
+
             if (NavMesh.SamplePosition(navMeshTriangulation.vertices[vertexIndex], out var navMeshHit, 2f, 0)) {
                 _navMeshAgent.Warp(navMeshHit.position);
             }
 
             transform.localScale = new Vector3(1, 1, 1);
+
+            InvokeRepeating(nameof(IncreaseHunger), 0, 30);
         }
 
+        public void SearchForBananaManBananas() {
+            if (monkeyDataScriptableObject.sasiety < 5 & !smelledBananasOnBananaMan) {
+                smelledBananasOnBananaMan = true;
+                ObjectsReference.Instance.uiQueuedMessages.AddMessage("the monkey smelled bananas !");
+            }
+        }
+        
         private void Feed(float addedBananaValue) {
             bananaValue = addedBananaValue;
+            _navMeshAgent.speed = 0;
             _animator.SetTrigger(Grab);
         }
 
         public void Eat() {
-            if (monkeyDataScriptableObject.sasiety < 50) {
+            if (monkeyDataScriptableObject.sasiety < 10) {
                 monkeyDataScriptableObject.sasiety += bananaValue;
-                ObjectsReference.Instance.mapsManager.currentMap.RecalculateHappiness(this);
             }
 
-            if (monkeyDataScriptableObject.sasiety >= 50 && ObjectsReference.Instance.steamIntegration.isGameOnSteam) {
-                ObjectsReference.Instance.steamIntegration.UnlockAchievement(SteamAchievement.STEAM_ACHIEVEMENT_MONKEY_FEEDED); 
+            else {
+                if (smelledBananasOnBananaMan) {
+                    smelledBananasOnBananaMan = false;
+                    ObjectsReference.Instance.uiQueuedMessages.AddMessage("Monkey had enough bananas");
+                }
             }
+            
+            _navMeshAgent.speed = 3.5f;
+        }
+
+        private void IncreaseHunger() {
+            if (monkeyDataScriptableObject.sasiety > 0)
+                monkeyDataScriptableObject.sasiety -= 1;
+            SearchForBananaManBananas();
         }
         
         public void PauseMonkey() {
@@ -66,8 +81,6 @@ namespace Monkeys {
 
         private void OnTriggerEnter(Collider other) {
             if (!TagsManager.Instance.HasTag(other.gameObject, GAME_OBJECT_TAG.BANANA)) return;
-            
-            hasGrabbedBanana = true;
 
             Feed(other.GetComponent<Banana>().bananasDataScriptableObject.sasiety);
             Destroy(other.gameObject);

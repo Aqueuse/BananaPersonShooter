@@ -1,7 +1,6 @@
 ﻿using Cinemachine;
-using Enums;
-using Input.UIActions;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 
 namespace Cameras {
     public enum CAMERA_MODE {
@@ -12,49 +11,17 @@ namespace Cameras {
     public class MainCamera : MonoBehaviour {
         [SerializeField] private CinemachineFreeLook bananaManCamera;
         [SerializeField] private CinemachineVirtualCamera topDownCamera;
-
-        [SerializeField] private UIInventoriesActions uiInventoriesActions;
         
+        private UniversalAdditionalCameraData URP_Asset;
+        
+        public CameraGestion cameraGestion;
         private CinemachineCameraOffset _bananaManCameraOffset;
 
-        public CAMERA_MODE cameraMode;
-        
+        [SerializeField] private Material foliageMaterial;
+        private static readonly int Alpha = Shader.PropertyToID("_Alpha");
+
         private void Start() {
-            _bananaManCameraOffset = bananaManCamera.GetComponentInChildren<CinemachineCameraOffset>();
-            cameraMode = CAMERA_MODE.PLAYER_VIEW;
-        }
-        
-        public void Return_back_To_Player() {
-            bananaManCamera.ForceCameraPosition (
-                new Vector3(0.0053f,-5.9258f,-0.2389f),
-                new Quaternion(0.00127450912f,-0.997444868f,0.0690134689f,-0.0184203554f)
-            );
-        }
-
-        public void Set0Sensibility() {
-            bananaManCamera.m_YAxis.m_MaxSpeed = 0;
-            bananaManCamera.m_XAxis.m_MaxSpeed = 0;
-        }
-
-        public void SetNormalSensibility() {
-            bananaManCamera.m_YAxis.m_MaxSpeed = ObjectsReference.Instance.gameSettings.lookSensibility;
-            bananaManCamera.m_XAxis.m_MaxSpeed = ObjectsReference.Instance.gameSettings.lookSensibility * 400;
-        }
-        
-        public void ZoomCamera() {
-            if (_bananaManCameraOffset.m_Offset.z > 1.73f) return;
-            
-            if (_bananaManCameraOffset.m_Offset.z <= 1.73f) {
-                _bananaManCameraOffset.m_Offset.z += 0.1f;
-            }
-        }
-        
-        public void DezoomCamera() {
-            if (_bananaManCameraOffset.m_Offset.z < 0f) return;
-            
-            if (_bananaManCameraOffset.m_Offset.z >= 0f) {
-                _bananaManCameraOffset.m_Offset.z -= 0.1f;
-            }
+            URP_Asset = GetComponent<UniversalAdditionalCameraData>();
         }
 
         public void AddToFOV(float acceleration) {
@@ -66,20 +33,27 @@ namespace Cameras {
                 case CAMERA_MODE.PLAYER_VIEW:
                     bananaManCamera.m_Priority = 20;
                     topDownCamera.m_Priority = 5;
-                    this.cameraMode = cameraMode;
-                    ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.MOVE_ONE_AXIS_CAMERA].alpha = 0;
-                    ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.ROTATE_ONE_AXIS_CAMERA].alpha = 0;
+
+                    foliageMaterial.SetFloat(Alpha, 1);
                     break;
                 case CAMERA_MODE.TOP_DOWN_VIEW:
                     bananaManCamera.m_Priority = 5;
                     topDownCamera.m_Priority = 20;
-                    uiInventoriesActions.activatedOneAxisRotationCamera = ObjectsReference.Instance.topDownCamera;
-                    uiInventoriesActions.activatedOneAxisRotationCamera.ResetPosition();
-                    this.cameraMode = cameraMode;
-                    ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.MOVE_ONE_AXIS_CAMERA].alpha = 1;
-                    ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.ROTATE_ONE_AXIS_CAMERA].alpha = 1;
+                    cameraGestion = ObjectsReference.Instance.gestionCamera;
+                    cameraGestion.ResetPosition();
+                    
+                    foliageMaterial.SetFloat(Alpha, 0);
                     break;
             }
+        }
+        
+        public void SetNormalRenderer() {
+            URP_Asset.SetRenderer(0);
+        }
+
+        public void SetOutlineRenderer() {
+            // render objects in the layer BananaGunSelectable with a white outline
+            URP_Asset.SetRenderer(1);
         }
     }
 }

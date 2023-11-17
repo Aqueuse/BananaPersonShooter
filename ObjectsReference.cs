@@ -5,17 +5,16 @@ using Cameras;
 using Data;
 using Game;
 using Game.Inventory;
-using Game.Steam;
 using Input;
 using Interactions;
 using Player;
 using Save;
 using Settings;
 using UI;
+using UI.Bananapedia;
 using UI.InGame;
 using UI.InGame.Gestion;
 using UI.InGame.Inventory;
-using UI.InGame.QuickSlots;
 using UI.Menus;
 using UI.Save;
 using VFX;
@@ -38,15 +37,14 @@ public class ObjectsReference : MonoSingleton<ObjectsReference> {
     public RawMaterialsInventory rawMaterialsInventory;
     public IngredientsInventory ingredientsInventory;
     public BlueprintsInventory blueprintsInventory;
-    
-    public SlotSwitch slotSwitch;
+
     public ScriptableObjectManager scriptableObjectManager;
     public GhostsReference ghostsReference;
     public GestionMode gestionMode;
 
     public MainCamera mainCamera;
-    public CameraOneAxisRotation topDownCamera;
-    public CameraOneAxisRotation sideCamera;
+    public CameraPlayer cameraPlayer;
+    public CameraGestion gestionCamera;
     public SurfaceDetector surfaceDetector;
 
     public Cinematiques cinematiques;
@@ -55,6 +53,7 @@ public class ObjectsReference : MonoSingleton<ObjectsReference> {
     public Tutorial tutorial;
 
     public GameActions gameActions;
+    public UiActions uiActions;
 
     public GameData gameData;
     public GameSave gameSave;
@@ -64,7 +63,6 @@ public class ObjectsReference : MonoSingleton<ObjectsReference> {
     public SaveData saveData;
 
     public GameSettings gameSettings;
-    public SteamIntegration steamIntegration;
     
     public Teleportation teleportation;
 
@@ -77,15 +75,17 @@ public class ObjectsReference : MonoSingleton<ObjectsReference> {
     public UIIngredientsInventory uiIngredientsInventory;
     public UIBlueprintsInventory uiBlueprintsInventory;
     
-    public UIQuickSlotsManager uiQuickSlotsManager;
+    public QuickSlotsManager quickSlotsManager;
     public UICrosshairs uiCrosshairs;
     public UIFace uiFace;
     public UIQueuedMessages uiQueuedMessages;
     public UIHomeMenu uiHomeMenu;
     public UiGameMenu uiGameMenu;
     public UIOptionsMenu uiOptionsMenu;
+    public UIBananapedia uiBananapedia;
     public UICredits uiCredits;
     public UISave uiSave;
+    public UISettings uiSettings;
     public UIbananaCannonMiniGame uIbananaCannonMiniGame;
 
     public descriptionsManager descriptionsManager;

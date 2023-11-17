@@ -1,5 +1,4 @@
 using Enums;
-using Input.UIActions;
 using UnityEngine;
 using UnityEngine.Video;
 
@@ -21,14 +20,13 @@ namespace Game {
 
                 Cursor.visible = true;
                 Cursor.lockState = CursorLockMode.None;
-                ObjectsReference.Instance.mainCamera.Set0Sensibility();
+                ObjectsReference.Instance.cameraPlayer.Set0Sensibility();
 
-                ObjectsReference.Instance.uiManager.Set_active(UICanvasGroupType.DEATH, true);
+                ObjectsReference.Instance.uiManager.SetActive(UICanvasGroupType.DEATH, true);
 
                 deathPlaneMeshRenderer.enabled = true;
                 deathVideoPlayer.enabled = true;
 
-                UISchemaSwitcher.Instance.SwitchUISchema(UISchemaSwitchType.DEATH);
                 ObjectsReference.Instance.inputManager.SwitchContext(InputContext.UI);
 
                 ObjectsReference.Instance.gameManager.gameContext = GameContext.DEAD;

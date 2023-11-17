@@ -1,7 +1,8 @@
 using Data;
+using Data.Buildables;
 using Enums;
-using UI.InGame.Inventory;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace Gestion.Actions {
     public class Build : MonoBehaviour {
@@ -9,6 +10,7 @@ namespace Gestion.Actions {
         [SerializeField] private Camera mainCamera;
         
         [SerializeField] private GhostsReference ghostsReference;
+        [SerializeField] private BuildableDataScriptableObject plateformBuildableDataScriptableObject;
 
         public ItemScriptableObject activatedItemScriptableObject;
 
@@ -18,8 +20,6 @@ namespace Gestion.Actions {
         private Ray ray;
         private RaycastHit raycastHit;
         
-        private GenericDictionary<RawMaterialType, int> _craftingIngredients;
-
         private Quaternion _normalRotation;
         private Vector3 _ghostPosition;
         private Vector3 customRotation;
@@ -46,43 +46,44 @@ namespace Gestion.Actions {
         private void FixedUpdate() {
             if (!isActivated) return;
             
+            ray = mainCamera.ScreenPointToRay(Mouse.current.position.value);
+
             if (activatedItemScriptableObject.buildableType == BuildableType.PLATEFORM) {
                 _activeGhost.transform.position = ObjectsReference.Instance.uiHud.buildablePlacementTransform.position;
+                if (Physics.Raycast(ray, out raycastHit, 40)) {
+                    _activeGhost.transform.position = raycastHit.point;
+                }
             }
+
+            else {
+                if(Physics.Raycast(ray, out raycastHit, 2000, layerMask:buildingLayerMask)) {
+                    _activeGhost.transform.position = raycastHit.point;
+                }
+            }
+        }
+
+        public void ActivateGhostByScriptableObject(BuildableDataScriptableObject buildableDataScriptableObject) {
+            _activeGhost = ghostsReference.GetGhostByBuildableType(buildableDataScriptableObject.buildableType);
+            _activeGhostClass = _activeGhost.GetComponent<Ghost>();
+            activatedItemScriptableObject = buildableDataScriptableObject;
             
-            ray = mainCamera.ScreenPointToRay(UnityEngine.Input.mousePosition);
-
-            if (Physics.Raycast(
-                    ray:ray, 
-                    out raycastHit,
-                    15f,
-                    layerMask:buildingLayerMask)) {
-                raycastHitPoint = raycastHit.point;
-                _activeGhost.transform.position = raycastHitPoint;
-            }
-
-            _craftingIngredients = _activeGhostClass.buildableDataScriptableObject.rawMaterialsWithQuantity;
-
-            if (ObjectsReference.Instance.rawMaterialsInventory.HasCraftingIngredients(_craftingIngredients)) {
+            if (ObjectsReference.Instance.rawMaterialsInventory.HasCraftingIngredients(buildableDataScriptableObject)) {
                 _activeGhostClass.SetGhostState(GhostState.VALID);
                 ObjectsReference.Instance.uInventoriesManager.GetCurrentUIHelper().ShowNormalPlaceHelper();
             }
 
             else {
-                _activeGhostClass.SetGhostState(GhostState.UNBUILDABLE);
-                ObjectsReference.Instance.uInventoriesManager.GetCurrentUIHelper().ShowNetEnoughMaterialsHelper();
+                _activeGhostClass.SetGhostState(GhostState.NOT_ENOUGH_MATERIALS);
+                ObjectsReference.Instance.uInventoriesManager.GetCurrentUIHelper().ShowNotEnoughMaterialsHelper();
             }
-        }
-    
-        public void ActivateGhost(BuildableType ghostItemBuildableType) {
-            // take the corresponding ghost in the buildable ghost list
-            _activeGhost = ghostsReference.GetGhostByBuildableType(ghostItemBuildableType);
-            _activeGhostClass = _activeGhost.GetComponent<Ghost>();
-            activatedItemScriptableObject = _activeGhostClass.buildableDataScriptableObject;
-
+            
             isActivated = true;
         }
 
+        public void ActivatePlateformGhost() {
+            ActivateGhostByScriptableObject(plateformBuildableDataScriptableObject);
+        }
+        
         public void CancelGhost() {
             isActivated = false;
 
@@ -106,40 +107,41 @@ namespace Gestion.Actions {
         public void ValidateBuildable() {
             if (_activeGhost == null) return;
 
-            if (_activeGhostClass.GetPlateformState() == GhostState.VALID) {
+            if (_activeGhostClass.GetGhostState() == GhostState.VALID) {
                 ObjectsReference.Instance.mapsManager.currentMap.isDiscovered = true;
-
+                
                 _buildable = Instantiate(original: _activeGhostClass.buildableDataScriptableObject.buildablePrefab,
                     position: _activeGhost.transform.position, rotation: _activeGhost.transform.rotation);
 
                 _buildable.transform.parent = MapItems.Instance.aspirablesContainer.transform;
-
+                
+                var _craftingIngredients = _activeGhostClass.buildableDataScriptableObject.rawMaterialsWithQuantity;
+                
                 foreach (var craftingIngredient in _craftingIngredients) {
                     ObjectsReference.Instance.rawMaterialsInventory.RemoveQuantity(craftingIngredient.Key,
                         craftingIngredient.Value);
-                    ObjectsReference.Instance.uiQuickSlotsManager.RefreshQuantityInQuickSlot();
                 }
 
                 ObjectsReference.Instance.mapsManager.currentMap.RefreshItemsDataMap();
+                ObjectsReference.Instance.quickSlotsManager.SetPlateformSlotAvailability();
             }
-        }
-        
-        public void QuickBuild() {
-            ObjectsReference.Instance.bananaGun.GrabBananaGun();
-            
-            // Hide interface
-            ObjectsReference.Instance.uiManager.Hide_Interface();
-            ObjectsReference.Instance.gestionMode.CloseGestionMode();
-
-            ObjectsReference.Instance.uInventoriesManager.GetCurrentUIHelper().show_build_helper();
-            
-            // activate ghost
-            ObjectsReference.Instance.build.ActivateGhost(ObjectsReference.Instance.uInventoriesManager.lastSelectedItemByInventoryCategory[ItemCategory.BUILDABLE].GetComponent<UInventorySlot>().itemScriptableObject.buildableType);
         }
 
         public void CancelBuild() {
             CancelGhost();
             ObjectsReference.Instance.bananaGun.UngrabBananaGun();
+        }
+
+        public void setGhostColor() {
+            if (_activeGhost != null)
+                if (ObjectsReference.Instance.rawMaterialsInventory.HasCraftingIngredientsForPlateform()) {
+                    _activeGhostClass.SetGhostState(GhostState.VALID);
+                }
+                else {
+                    if (_activeGhostClass.GetGhostState() != GhostState.UNBUILDABLE)
+                        _activeGhostClass.SetGhostState(GhostState.NOT_ENOUGH_MATERIALS);
+                }
+            
         }
     }
 }

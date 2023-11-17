@@ -10,9 +10,6 @@ namespace Player {
         public TpsPlayerAnimator tpsPlayerAnimator;
         
 		public BananasDataScriptableObject activeItem;
-        public BananaType activeBananaType = BananaType.EMPTY;
-        public ItemCategory activeItemCategory = ItemCategory.EMPTY;
-        public BuildableType activeBuildableType = BuildableType.EMPTY; 
 
         public bool isInWater;
         public bool isGrabingBananaGun;
@@ -32,11 +29,11 @@ namespace Player {
         }
         
         public void GainHealth() {
-            if (ObjectsReference.Instance.bananasInventory.bananasInventory[activeBananaType] > 0 && health < _maxHealth) {
+            if (ObjectsReference.Instance.bananasInventory.bananasInventory[activeItem.bananaType] > 0 && health < _maxHealth) {
                 health += activeItem.healthBonus;
                 resistance += activeItem.resistanceBonus;
 
-                ObjectsReference.Instance.bananasInventory.RemoveQuantity(activeBananaType, 1);
+                ObjectsReference.Instance.bananasInventory.RemoveQuantity(activeItem.bananaType, 1);
                 ObjectsReference.Instance.rawMaterialsInventory.AddQuantity(RawMaterialType.BANANA_PEEL, 1);
                 SetBananaSkinHealth();
                 ObjectsReference.Instance.audioManager.PlayEffect(EffectType.EAT_BANANA, 0);
@@ -52,12 +49,6 @@ namespace Player {
 
         public void SetBananaSkinHealth() {
             bodyMeshRenderer.materials[0].SetFloat(CutoffHeight, (_maxHealth-health)/100);
-        }
-
-        public void SetActiveItemTypeAndCategory(BananaType bananaType, ItemCategory itemCategory, BuildableType itemBuildableType) {
-            activeBananaType = bananaType;
-            activeItemCategory = itemCategory;
-            activeBuildableType = itemBuildableType;
         }
     }
 }

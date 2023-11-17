@@ -3,6 +3,7 @@ using Gestion;
 using Gestion.Buildables.Plateforms;
 using Enums;
 using Items;
+using Tags;
 using UnityEngine;
 
 namespace Interactions.InteractionsActions {
@@ -21,10 +22,16 @@ namespace Interactions.InteractionsActions {
                 foreach (var plateform in plateforms) {
                     DestroyImmediate(plateform.gameObject);
                 }
-
+                
                 ObjectsReference.Instance.mapsManager.currentMap.RefreshItemsDataMap();
 
-                if (interactedGameObject.GetComponent<RotateTransform>() == null) interactedGameObject.AddComponent<RotateTransform>();
+                var logo = TagsManager.Instance.GetFirstGameObjectWithTagInGameObject(
+                    interactedGameObject.transform.parent.gameObject,
+                    GAME_OBJECT_TAG.RETRIEVER_ROTATING_LOGO
+                );
+
+                if (logo != null && logo.GetComponent<RotateTransform>() == null)
+                    logo.AddComponent<RotateTransform>();
             }
 
             else {

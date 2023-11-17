@@ -10,6 +10,8 @@ namespace Gestion {
 
         public DebrisSpawner debrisSpawner;
         public Monkey[] monkeys;
+
+        public Collider cameraBounds;
         
         public List<GameObject> GetAllItemsInAspirableContainer() {
             var gameObjects = aspirablesContainer.GetComponentsInChildren<Tag>();
@@ -22,6 +24,5 @@ namespace Gestion {
 
             return gameObjectsWithTag;
         }
-
     }
 }

@@ -31,13 +31,13 @@ namespace Player {
 
         //Stored Values
         private static readonly int IsJumping = Animator.StringToHash("IsJumping");
-        private Vector3 _rawInputMovement;
+        public Vector3 _rawInputMovement;
         public Transform mainCameraTransform;
         private Vector3 _cameraForward;
         private float _inputAngle;
 
         private readonly float _maxDistanceToCollide = 0.3f;
-        private Vector3 _movement;
+        public Vector3 _movement;
         private Vector3 _newPosition;
         private float _slopeAngle;
         private readonly float _maxSlopeAngle = 60f;

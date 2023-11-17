@@ -1,9 +1,9 @@
 using System;
 using Cameras;
 using Enums;
+using Input;
 using Tags;
 using UnityEngine;
-using UnityEngine.Rendering.Universal;
 
 namespace Gestion {
     public class GestionMode : MonoBehaviour {
@@ -12,90 +12,83 @@ namespace Gestion {
         
         public LayerMask GestionModeSelectableLayerMask;
         
-        private UniversalAdditionalCameraData URP_Asset;
         private Camera mainCamera;
         private Ray ray;
-       
+
+        private UiActions uiActions;
+
+        private Tag targetedGameObjectTag;
+        
         private void Start() {
             mainCamera = Camera.main;
-            URP_Asset = GetComponent<UniversalAdditionalCameraData>();
+            uiActions = ObjectsReference.Instance.uiActions;
         }
 
         private void Update() {
             if (!isGestionModeActivated) return;
-            
-            ray = mainCamera.ScreenPointToRay(UnityEngine.Input.mousePosition);
+
+            ray = mainCamera.ScreenPointToRay(uiActions.pointerPosition);
 
             if (Physics.Raycast(ray, out RaycastHit hit, Single.PositiveInfinity, layerMask: GestionModeSelectableLayerMask)) {
                 if (targetedGameObject == null) {
                     targetedGameObject = hit.transform.gameObject;
                 }
-
-                else {
-                    targetedGameObject.layer = 7; // Gestion Mode Selectable layer
-
-                    targetedGameObject = hit.transform.gameObject;
-                    targetedGameObject.layer = 11; // Gestion Mode Selected layer
-                }
-
-                ObjectsReference.Instance.descriptionsManager.SetDescription(targetedGameObject.GetComponent<Tag>().itemScriptableObject);
-                ObjectsReference.Instance.descriptionsManager.ShowPanel(targetedGameObject.GetComponent<Tag>().gameObjectTag);
+                
+                targetedGameObjectTag = targetedGameObject.GetComponent<Tag>();
+                
+                ObjectsReference.Instance.descriptionsManager.SetDescription(targetedGameObjectTag.itemScriptableObject);
             }
 
             else {
-                if (targetedGameObject != null) {
-                    targetedGameObject.layer = 7; // GestionMode Selectable layer
-                    targetedGameObject = null;
-                }
-                ObjectsReference.Instance.uInventoriesManager.GetCurrentUIHelper().show_default_helper();
+                targetedGameObject = null;
+
+                ObjectsReference.Instance.uInventoriesManager.GetCurrentUIHelper().ShowDefaultHelper();
             }
         }
 
         public void SwitchToGestionMode() {
-            SetOutlineRenderer();
-
             ObjectsReference.Instance.descriptionsManager.HideAllPanels();
-            ObjectsReference.Instance.uiManager.Show_Interface();
-
-            Cursor.visible = true;
-            Cursor.lockState = CursorLockMode.None;
+            ObjectsReference.Instance.uiManager.ShowInventories();
+            ObjectsReference.Instance.uiBlueprintsInventory.RefreshUInventory();
+            
+            ObjectsReference.Instance.uiManager.SetActive(UICanvasGroupType.BUILDABLES, true);
 
             ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.CROSSHAIRS].alpha = 0;
-            ObjectsReference.Instance.mainCamera.Set0Sensibility();
+            ObjectsReference.Instance.cameraPlayer.Set0Sensibility();
             
+            ObjectsReference.Instance.gestionCamera.enabled = true;
+            
+            ObjectsReference.Instance.mainCamera.Switch_To_Camera_View(CAMERA_MODE.TOP_DOWN_VIEW);
+
+            ObjectsReference.Instance.inputManager.SwitchContext(InputContext.GESTION);
+
             isGestionModeActivated = true;
         }
-
-        private void SetNormalRenderer() {
-            URP_Asset.SetRenderer(0);
-        }
-
-        private void SetOutlineRenderer() {
-            // render objects in the layer BananaGunSelectable with a white outline
-            URP_Asset.SetRenderer(1);
-        }
-
+        
         public void CloseGestionMode() {
             ObjectsReference.Instance.build.CancelGhost();
-            ObjectsReference.Instance.uInventoriesManager.GetCurrentUIHelper().show_default_helper();
-
-            SetNormalRenderer();
+            ObjectsReference.Instance.uInventoriesManager.GetCurrentUIHelper().ShowDefaultHelper();
             
             ObjectsReference.Instance.mainCamera.Switch_To_Camera_View(CAMERA_MODE.PLAYER_VIEW);
             
-            ObjectsReference.Instance.uiManager.Hide_Interface();
+            ObjectsReference.Instance.uiManager.HideInventories();
             Cursor.visible = false;
             Cursor.lockState = CursorLockMode.Locked;
             
+            ObjectsReference.Instance.uiManager.SetActive(UICanvasGroupType.BUILDABLES, false);
             ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.CROSSHAIRS].alpha = 1;
-            ObjectsReference.Instance.mainCamera.SetNormalSensibility();
+            ObjectsReference.Instance.cameraPlayer.SetNormalSensibility();
             
             if (targetedGameObject != null) {
-                targetedGameObject.layer = 7; // Gestion Mode Selectable layer
                 targetedGameObject.GetComponent<Renderer>().material.color = Color.white;
             }
 
             isGestionModeActivated = false;
+            
+            ObjectsReference.Instance.inputManager.SwitchContext(InputContext.GAME);
+            
+            ObjectsReference.Instance.gestionCamera.enabled = false;
+            ObjectsReference.Instance.descriptionsManager.HideAllPanels();
         }
     }
 }

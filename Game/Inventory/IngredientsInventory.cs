@@ -8,7 +8,6 @@ namespace Game.Inventory {
             if (ingredientsInventory[ingredientsType] > 10000) return;
             
             ingredientsInventory[ingredientsType] += quantity;
-            ObjectsReference.Instance.uiQuickSlotsManager.RefreshQuantityInQuickSlot();
 
             var ingredientItem = ObjectsReference.Instance.uiIngredientsInventory.inventorySlotsByIngredientsType[ingredientsType];
             ingredientItem.gameObject.SetActive(true);
@@ -34,8 +33,6 @@ namespace Game.Inventory {
                 ingredientItem.SetQuantity(0);
                 ingredientItem.gameObject.SetActive(false);
             }
-            
-            ObjectsReference.Instance.uiQuickSlotsManager.RefreshQuantityInQuickSlot();
         }
     }
 }

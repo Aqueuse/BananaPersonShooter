@@ -1,6 +1,6 @@
 using Enums;
 using Game.CommandRoomPanelControls;
-using Game.Steam;
+using Tags;
 using UnityEngine;
 
 namespace Game {
@@ -10,43 +10,47 @@ namespace Game {
         public void StartTutorial() {
             ObjectsReference.Instance.gameReset.ResetGameData();
             ObjectsReference.Instance.uiSave.CreateNewSave();
+            
+            ObjectsReference.Instance.uiCrosshairs.SetCrosshair(BananaType.EMPTY);
 
-            Cursor.visible = true;  
-            Cursor.lockState = CursorLockMode.None;
-
-            ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.CROSSHAIRS].alpha = 0f;
-            ObjectsReference.Instance.uiCrosshairs.SetCrosshair(ItemCategory.EMPTY, BananaType.EMPTY);
-
-            ObjectsReference.Instance.inputManager.uiSchemaContext = UISchemaSwitchType.CINEMATIQUE;
             ObjectsReference.Instance.inputManager.SwitchContext(InputContext.UI);
 
             ObjectsReference.Instance.cinematiques.Play(CinematiqueType.NEW_GAME);
 
-            ObjectsReference.Instance.uiManager.Set_active(UICanvasGroupType.HUD, false);
+            ObjectsReference.Instance.uInventoriesManager.HideUIHelpers();
+            ObjectsReference.Instance.uiManager.SetActive(UICanvasGroupType.QUICKSLOTS, false);
+            ObjectsReference.Instance.uiManager.SetActive(UICanvasGroupType.BANANAGUN_HELPER_KEYBOARD, false);
+            ObjectsReference.Instance.uiManager.SetActive(UICanvasGroupType.BANANAGUN_HELPER_GAMEPAD, false);
+            
             ObjectsReference.Instance.bananaGun.bananaGunInBack.SetActive(false);
 
             ObjectsReference.Instance.bananaMan.tutorialFinished = false;
+            
+            CommandRoomControlPanelsManager.Instance.ShowPanel(CommandRoomPanelType.GESTION);
+            CommandRoomControlPanelsManager.Instance.ShowPanel(CommandRoomPanelType.JOURNAL);
+            CommandRoomControlPanelsManager.Instance.ShowPanel(CommandRoomPanelType.BANANA_CANNON);
 
-            CommandRoomControlPanelsManager.Instance.HidePanel(CommandRoomPanelType.GESTION);
-            CommandRoomControlPanelsManager.Instance.HidePanel(CommandRoomPanelType.JOURNAL);
-            CommandRoomControlPanelsManager.Instance.HidePanel(CommandRoomPanelType.BANANA_CANNON);
-
-            CommandRoomControlPanelsManager.Instance.ForbidBananaCannonMiniGameAccess();
             CommandRoomControlPanelsManager.Instance.assembler.blueprintsDataInteraction.HideBlueprintsData();
+
+            foreach (var accessManagedGameObject in TagsManager.Instance.GetAllGameObjectsWithTag(GAME_OBJECT_TAG.ACCESS_MANAGED)) {
+                accessManagedGameObject.GetComponent<ManageAccess>().ForbidUsage();
+            }
 
             CommandRoomControlPanelsManager.Instance.miniChimp.bubbleDialogue.SetBubbleDialogue(dialogueSet.REPAIR_BANANA_GUN);
             CommandRoomControlPanelsManager.Instance.chimployeeCommandRoom.SetInitialChimployeeConfiguration();
 
-            RenderSettings.ambientLight = penumbraAmbientLightColor; 
+            RenderSettings.ambientLight = penumbraAmbientLightColor;
         }
         
         public void FinishTutorial() {
-            ObjectsReference.Instance.uiManager.Set_active(UICanvasGroupType.HUD, true);
+            ObjectsReference.Instance.uInventoriesManager.ShowCurrentUIHelper();
+            ObjectsReference.Instance.uiManager.SetActive(UICanvasGroupType.QUICKSLOTS, true);
+            
             ObjectsReference.Instance.bananaGun.bananaGunInBack.SetActive(true);
             // TODO : animation take banana gun
 
             ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.CROSSHAIRS].alpha = 1f;
-            ObjectsReference.Instance.uiCrosshairs.SetCrosshair(ItemCategory.EMPTY, BananaType.EMPTY);
+            ObjectsReference.Instance.uiCrosshairs.SetCrosshair(BananaType.EMPTY);
 
             ObjectsReference.Instance.gameLoad.LoadBananasInventory();
             ObjectsReference.Instance.gameLoad.LoadRawMaterialsInventory();
@@ -54,24 +58,14 @@ namespace Game {
             ObjectsReference.Instance.gameLoad.LoadBuildablesInventory();
             
             ObjectsReference.Instance.bananaMan.tutorialFinished = true;
-            ObjectsReference.Instance.steamIntegration.UnlockAchievement(SteamAchievement.STEAM_ACHIEVEMENT_BANAGUN_RECONSTRUCTED);
-
-            CommandRoomControlPanelsManager.Instance.AuthorizeBananaCannonMiniGameAccess();
-
-            CommandRoomControlPanelsManager.Instance.ShowPanel(CommandRoomPanelType.GESTION);
-            CommandRoomControlPanelsManager.Instance.ShowPanel(CommandRoomPanelType.JOURNAL);
-            CommandRoomControlPanelsManager.Instance.ShowPanel(CommandRoomPanelType.BANANA_CANNON);
-            
-            Cursor.visible = false;
-            Cursor.lockState = CursorLockMode.Locked;
-            
-            CommandRoomControlPanelsManager.Instance.miniChimp.bubbleDialogue.SetBubbleDialogue(dialogueSet.REPAIRED_BANANA_GUN);
-            
-            CommandRoomControlPanelsManager.Instance.assembler.blueprintsDataInteraction.ShowBlueprintDataIfAvailable();
             
             RenderSettings.ambientLight = Color.white; 
             
             ObjectsReference.Instance.audioManager.SetMusiqueAndAmbianceBySceneName("COMMANDROOM");
+            
+            foreach (var accessManagedGameObject in TagsManager.Instance.GetAllGameObjectsWithTag(GAME_OBJECT_TAG.ACCESS_MANAGED)) {
+                accessManagedGameObject.GetComponent<ManageAccess>().AuthorizeUsage();
+            }
         }
     }
 }

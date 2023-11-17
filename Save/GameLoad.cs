@@ -1,4 +1,3 @@
-using System;
 using System.Linq;
 using Gestion;
 using Gestion.Buildables.Plateforms;
@@ -15,7 +14,7 @@ namespace Save {
         
         public void LoadLastSave() {
             ObjectsReference.Instance.gameManager.loadingScreen.SetActive(true);
-            ObjectsReference.Instance.uiManager.Set_active(UICanvasGroupType.DEATH, false);
+            ObjectsReference.Instance.uiManager.SetActive(UICanvasGroupType.DEATH, false);
             ObjectsReference.Instance.death.HideDeath();
 
             if (ObjectsReference.Instance.gameData.currentSaveUuid == null) ObjectsReference.Instance.scenesSwitch.ReturnHome();
@@ -38,7 +37,7 @@ namespace Save {
             LoadIngredientsInventory();
             LoadBuildablesInventory();
 
-            LoadSlots();
+            LoadSelectedBanana();
 
             LoadMapsData();
             LoadMonkeysSatiety();
@@ -124,52 +123,10 @@ namespace Save {
             }
         }
 
-        private void LoadSlots() {
-            for (var i = 0; i < ObjectsReference.Instance.uiQuickSlotsManager.uiQuickSlotsScripts.Count; i++) {
-                var itemCategoriesAndTypes = ObjectsReference.Instance.gameData.bananaManSavedData.slots[i].Split(",");
-                var itemCategoryString = itemCategoriesAndTypes[0];
-                var itemTypeString = itemCategoriesAndTypes[1];
-
-                var itemCategory = (ItemCategory)Enum.Parse(typeof(ItemCategory), itemCategoryString);
-
-                if (itemCategory == ItemCategory.BANANA) {
-                    var bananaType = (BananaType)Enum.Parse(typeof(BananaType), itemTypeString);
-
-                    var bananaScriptableObject = ObjectsReference.Instance.uiBananasInventory
-                        .inventorySlotsByBananaType[bananaType].itemScriptableObject;
-                    
-                    ObjectsReference.Instance.uiQuickSlotsManager.uiQuickSlotsScripts[i].SetSlot(bananaScriptableObject);
-                }
-                
-                if (itemCategory == ItemCategory.RAW_MATERIAL) {
-                    var rawMaterialType = (RawMaterialType)Enum.Parse(typeof(RawMaterialType), itemTypeString);
-
-                    var rawMaterialScriptableObject = ObjectsReference.Instance.uiRawMaterialsInventory.
-                        inventorySlotsByRawMaterialType[rawMaterialType].itemScriptableObject;
-                    
-                    ObjectsReference.Instance.uiQuickSlotsManager.uiQuickSlotsScripts[i].SetSlot(rawMaterialScriptableObject);
-                }
-
-                if (itemCategory == ItemCategory.INGREDIENT) {
-                    var ingredientsType = (IngredientsType)Enum.Parse(typeof(IngredientsType), itemTypeString);
-
-                    var ingredientScriptableObject = ObjectsReference.Instance.uiIngredientsInventory
-                        .inventorySlotsByIngredientsType[ingredientsType].itemScriptableObject;
-                    
-                    ObjectsReference.Instance.uiQuickSlotsManager.uiQuickSlotsScripts[i].SetSlot(ingredientScriptableObject);
-                }
-                
-                if (itemCategory == ItemCategory.BUILDABLE) {
-                    var buildableType = (BuildableType)Enum.Parse(typeof(BuildableType), itemTypeString);
-
-                    var buildableScriptableObject = ObjectsReference.Instance.uiBlueprintsInventory
-                        .inventorySlotsByBuildableType[buildableType].itemScriptableObject;
-                    
-                    ObjectsReference.Instance.uiQuickSlotsManager.uiQuickSlotsScripts[i].SetSlot(buildableScriptableObject);
-                }
-            }
-
-            ObjectsReference.Instance.uiQuickSlotsManager.Switch_to_Slot_Index(0);
+        private void LoadSelectedBanana() {
+            var bananaScriptableObject = ObjectsReference.Instance.quickSlotsManager.bananaSlotItemScriptableObject;
+            ObjectsReference.Instance.quickSlotsManager.SetBananaSlot(bananaScriptableObject);
+            ObjectsReference.Instance.quickSlotsManager.SetBananaQuantity(ObjectsReference.Instance.bananasInventory.bananasInventory[bananaScriptableObject.bananaType]);
         }
 
         private static void LoadBananaManVitals() {
@@ -194,16 +151,8 @@ namespace Save {
         
         private static void LoadActiveItem() {
             var activeItemType = ObjectsReference.Instance.gameData.bananaManSavedData.activeBanana;
-            var activeItemCategory = ObjectsReference.Instance.gameData.bananaManSavedData.activeItemCategory;
-            var activeBuildableType = ObjectsReference.Instance.gameData.bananaManSavedData.activeBuildableType;
-
-            if (activeItemCategory == ItemCategory.BANANA) {
-                ObjectsReference.Instance.bananaMan.activeItem = ObjectsReference.Instance.scriptableObjectManager.GetBananaScriptableObject(activeItemType);
-            }
-
-            ObjectsReference.Instance.bananaMan.activeBananaType = activeItemType;
-            ObjectsReference.Instance.bananaMan.activeItemCategory = activeItemCategory;
-            ObjectsReference.Instance.bananaMan.activeBuildableType = activeBuildableType;
+            
+            ObjectsReference.Instance.bananaMan.activeItem = ObjectsReference.Instance.scriptableObjectManager.GetBananaScriptableObject(activeItemType);
         }
 
         private static void LoadMonkeysSatiety() {
@@ -221,13 +170,13 @@ namespace Save {
 
             if (ObjectsReference.Instance.bananaMan.tutorialFinished) {
                 ObjectsReference.Instance.bananaGun.bananaGunInBack.SetActive(true);
-                ObjectsReference.Instance.uiManager.Set_active(UICanvasGroupType.HUD, true);
+                ObjectsReference.Instance.uiManager.SetActive(UICanvasGroupType.HUD, true);
             }
 
             else {
                 ObjectsReference.Instance.bananaGun.bananaGunInBack.SetActive(false);
-                ObjectsReference.Instance.uiManager.Set_active(UICanvasGroupType.HUD, false);
-                ObjectsReference.Instance.uiCrosshairs.SetCrosshair(ItemCategory.EMPTY, BananaType.EMPTY);
+                ObjectsReference.Instance.uiManager.SetActive(UICanvasGroupType.HUD, false);
+                ObjectsReference.Instance.uiCrosshairs.SetCrosshair(BananaType.EMPTY);
             }
         }
         
@@ -261,11 +210,7 @@ namespace Save {
                     if (mapData.itemsCategories[i] == ItemCategory.BUILDABLE) {
                         prefab = ObjectsReference.Instance.scriptableObjectManager.BuildablePrefabByBuildableType(mapData.itemsBuildableTypes[i]);
                     }
-
-                    if (mapData.itemsCategories[i] == ItemCategory.RUINE) {
-                        prefab = ObjectsReference.Instance.scriptableObjectManager._meshReferenceScriptableObject.ruinesPrefab[mapData.itemsPrefabsIndex[i]];
-                    }
-
+                    
                     aspirable = Instantiate(prefab, MapItems.Instance.aspirablesContainer.transform, true);
 
                     if (mapData.itemsBuildableTypes[i] == BuildableType.PLATEFORM &&

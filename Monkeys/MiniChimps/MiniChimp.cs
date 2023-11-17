@@ -1,16 +1,23 @@
-using Data.Characters;
+using Enums;
 using Interactions;
-using Items;
-using UI.InGame;
 using UnityEngine;
 
 namespace Monkeys.MiniChimps {
     public class MiniChimp : MonoBehaviour {
         [SerializeField] private Interaction interaction;
         [SerializeField] private BoxCollider interactionCollider;
-        public MiniChimpDataScriptableObject miniChimpDataScriptableObject;
         
         public BubbleDialogue bubbleDialogue;
+
+        private void Awake() {
+            if (ObjectsReference.Instance.bananaMan.tutorialFinished) {
+                bubbleDialogue.SetBubbleDialogue(dialogueSet.EAT_BANANAS);
+            }
+
+            else {
+                bubbleDialogue.SetBubbleDialogue(dialogueSet.REPAIR_BANANA_GUN);
+            }
+        }
 
         private void OnTriggerEnter(Collider other) {
             bubbleDialogue.ShowBubble();

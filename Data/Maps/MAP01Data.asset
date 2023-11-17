@@ -18,11 +18,12 @@ MonoBehaviour:
   rawMaterialType: 5
   ingredientsType: 1
   buildableType: 6
+  prefabIndex: 0
   itemName:
   - the gorilla king jungle
   - la jungle du roi gorille
   - la jungla del rey gorila
-  itemSprite: {fileID: 0}
+  itemSprite: {fileID: 21300000, guid: 9b6bd2285c3129447bcdb4ec02ff0a21, type: 3}
   itemDescription:
   - "A humid jungle where Kelsa\xEFk, a solitary gorilla, lives."
   - "Une jungle humide o\xF9 vit Kelsa\xEFk, un gorille solitaire"

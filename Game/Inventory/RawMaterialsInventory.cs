@@ -1,9 +1,17 @@
-﻿using Enums;
+﻿using System;
+using Data.Buildables;
+using Enums;
 using UnityEngine;
 
 namespace Game.Inventory {
     public class RawMaterialsInventory : MonoBehaviour {
         public GenericDictionary<RawMaterialType, int> rawMaterialsInventory;
+        public GenericDictionary<RawMaterialType, int> rawMaterialsForPlateform;
+
+        private void Start() {
+            rawMaterialsForPlateform = ObjectsReference.Instance.scriptableObjectManager._meshReferenceScriptableObject
+                .buildableDataScriptableObjects[BuildableType.PLATEFORM].rawMaterialsWithQuantity;
+        }
 
         public void AddQuantity(RawMaterialType rawMaterialType, int quantity) {
             if (rawMaterialsInventory[rawMaterialType] > 10000) return;
@@ -14,8 +22,6 @@ namespace Game.Inventory {
             
             rawMaterialItem.gameObject.SetActive(true);
             rawMaterialItem.SetQuantity(rawMaterialsInventory[rawMaterialType]);
-            
-            ObjectsReference.Instance.uiQuickSlotsManager.RefreshQuantityInQuickSlot();
             
             ObjectsReference.Instance.uiQueuedMessages.AddToInventory(rawMaterialItem.itemScriptableObject, quantity);
         }
@@ -37,12 +43,20 @@ namespace Game.Inventory {
                 rawMaterialItem.SetQuantity(0);
                 rawMaterialItem.gameObject.SetActive(false);
             }
+        }
+            
+        public bool HasCraftingIngredients(BuildableDataScriptableObject buildableDataScriptableObject) {
+            var _craftingIngredients = buildableDataScriptableObject.rawMaterialsWithQuantity;
 
-            ObjectsReference.Instance.uiQuickSlotsManager.RefreshQuantityInQuickSlot();
+            foreach (var craftingIngredient in _craftingIngredients) {
+                if (rawMaterialsInventory[craftingIngredient.Key] < craftingIngredient.Value) return false;
+            }
+
+            return true;
         }
         
-        public bool HasCraftingIngredients(GenericDictionary<RawMaterialType, int> craftingIngredients) {
-            foreach (var craftingIngredient in craftingIngredients) {
+        public bool HasCraftingIngredientsForPlateform() {
+            foreach (var craftingIngredient in rawMaterialsForPlateform) {
                 if (rawMaterialsInventory[craftingIngredient.Key] < craftingIngredient.Value) return false;
             }
 

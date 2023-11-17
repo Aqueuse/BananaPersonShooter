@@ -1,6 +1,5 @@
 using Cinemachine;
 using Enums;
-using Input.UIActions;
 using UnityEngine;
 using UnityEngine.Video;
 
@@ -39,7 +38,6 @@ namespace Game {
             _cinematiqueVideoPlayer.enabled = true;
             skipCinematiqueGameObject.SetActive(true);
 
-            UISchemaSwitcher.Instance.SwitchUISchema(UISchemaSwitchType.CINEMATIQUE);
             ObjectsReference.Instance.gameManager.gameContext = GameContext.IN_CINEMATIQUE;
 
             _cinematiqueCamera.Priority = 200;
@@ -59,27 +57,26 @@ namespace Game {
         public void Unpause() {
             if(_cinematiqueVideoPlayer.enabled)
                 _cinematiqueVideoPlayer.Play();
-            UISchemaSwitcher.Instance.SwitchUISchema(UISchemaSwitchType.CINEMATIQUE);
         }
 
         public void Skip() {
             _cinematiqueCamera.Priority = 3;
-            
+
             skipCinematiqueGameObject.SetActive(false);
 
             _cinematiqueVideoPlayer.enabled = false;
-            
+
             Cursor.visible = false;
             Cursor.lockState = CursorLockMode.Locked;
             ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.CROSSHAIRS].alpha = 1f;
-            ObjectsReference.Instance.uiCrosshairs.SetCrosshair(ObjectsReference.Instance.bananaMan.activeItemCategory, ObjectsReference.Instance.bananaMan.activeBananaType);
-            
+            ObjectsReference.Instance.uiCrosshairs.SetCrosshair(ObjectsReference.Instance.bananaMan.activeItem.bananaType);
+
             ObjectsReference.Instance.inputManager.SwitchContext(InputContext.GAME);
             ObjectsReference.Instance.gameManager.gameContext = GameContext.IN_GAME;
             ObjectsReference.Instance.gameManager.isGamePlaying = true;
 
-            ObjectsReference.Instance.mainCamera.Return_back_To_Player();
-            ObjectsReference.Instance.mainCamera.SetNormalSensibility();
+            ObjectsReference.Instance.cameraPlayer.Return_back_To_Player();
+            ObjectsReference.Instance.cameraPlayer.SetNormalSensibility();
 
             ObjectsReference.Instance.playerController.canMove = true;
             ObjectsReference.Instance.bananaMan.GetComponent<Rigidbody>().isKinematic = false;

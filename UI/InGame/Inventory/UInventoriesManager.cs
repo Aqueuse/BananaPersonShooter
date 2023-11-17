@@ -2,18 +2,13 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 namespace UI.InGame.Inventory {
-    public enum SchemaContext {
-        KEYBOARD,
-        GAMEPAD
-    }
-
     public class UInventoriesManager : MonoBehaviour {
         [SerializeField] private GenericDictionary<ItemCategory, Image> buttonImageByInventoryCategory;
         [SerializeField] private GenericDictionary<ItemCategory, TextMeshProUGUI> buttonTextByInventoryCategory;
-        public GenericDictionary<ItemCategory, GameObject> firstItemByInventoryCategory;
 
         [SerializeField] private GenericDictionary<ItemCategory, CanvasGroup> canvasGroupByInventoryCategory;
 
@@ -23,21 +18,12 @@ namespace UI.InGame.Inventory {
         [SerializeField] private Color unactivatedColor;
         
         public ItemCategory lastFocusedInventory;
-     
-        [SerializeField] private GenericDictionary<SchemaContext, UIHelper> uiHelpersBySchemaContext;
+
+        [SerializeField] private UIHelper gamepadUIHelper;
+        [SerializeField] private UIHelper keyboardUIHelper;
         
         private void Start() {
-            lastFocusedInventory = ItemCategory.BANANA;
             Switch_To_Bananas_Inventory();
-        }
-
-        public GameObject GetLastSelectedItemByCategory(ItemCategory itemCategory) {
-            return lastSelectedItemByInventoryCategory[itemCategory];
-        }
-
-        public GameObject GetLastSelectedItem() {
-            if (lastSelectedItemByInventoryCategory[lastFocusedInventory] == null) return null;
-            return lastSelectedItemByInventoryCategory[lastFocusedInventory];
         }
         
         public void SetLastSelectedItem(ItemCategory itemCategory, GameObject lastSelectedItem) {
@@ -45,7 +31,7 @@ namespace UI.InGame.Inventory {
             lastSelectedItemByInventoryCategory[itemCategory] = lastSelectedItem;
         }
         
-        public void Focus_interface() {
+        public void FocusInventory() {
             if (lastSelectedItemByInventoryCategory[lastFocusedInventory] != null) {
                 EventSystem.current.SetSelectedGameObject(lastSelectedItemByInventoryCategory[lastFocusedInventory]);
                 FocusFirstSlotInInventory(lastFocusedInventory);
@@ -63,9 +49,6 @@ namespace UI.InGame.Inventory {
                 case ItemCategory.RAW_MATERIAL:
                     ObjectsReference.Instance.uiRawMaterialsInventory.UnselectAllSlots();
                     break;
-                case ItemCategory.BUILDABLE:
-                    ObjectsReference.Instance.uiBlueprintsInventory.UnselectAllSlots();
-                    break;
             }
         }
 
@@ -80,25 +63,19 @@ namespace UI.InGame.Inventory {
                 case ItemCategory.RAW_MATERIAL:
                     ObjectsReference.Instance.uiRawMaterialsInventory.SelectFirstSlot();
                     break;
-                case ItemCategory.BUILDABLE:
-                    ObjectsReference.Instance.uiBlueprintsInventory.SelectFirstSlot();
-                    break;
             }
         }
 
         public void Switch_To_Left_Tab() {
             switch (lastFocusedInventory) {
                 case ItemCategory.BANANA:
-                    Switch_To_Tab(ItemCategory.BUILDABLE);
+                    Switch_To_Tab(ItemCategory.INGREDIENT);
                     break;
                 case ItemCategory.RAW_MATERIAL:
                     Switch_To_Tab(ItemCategory.BANANA);
                     break;
                 case ItemCategory.INGREDIENT:
                     Switch_To_Tab(ItemCategory.RAW_MATERIAL);
-                    break;
-                case ItemCategory.BUILDABLE:
-                    Switch_To_Tab(ItemCategory.INGREDIENT);
                     break;
             }
         }
@@ -112,9 +89,6 @@ namespace UI.InGame.Inventory {
                     Switch_To_Tab(ItemCategory.INGREDIENT);
                     break;
                 case ItemCategory.INGREDIENT:
-                    Switch_To_Tab(ItemCategory.BUILDABLE);
-                    break;
-                case ItemCategory.BUILDABLE:
                     Switch_To_Tab(ItemCategory.BANANA);
                     break;
             }
@@ -145,11 +119,34 @@ namespace UI.InGame.Inventory {
                 }
             }
 
-            Focus_interface();
+            FocusInventory();
+        }
+        
+        public void ShowBananasInventory() {
+            Switch_To_Bananas_Inventory();
+        }
+
+        public void ShowRawMaterialInventory() {
+            Switch_To_Raw_Materials_Inventory();
+        }
+
+        public void ShowIngredientsInventory() {
+            Switch_To_Ingredients_Inventory();
         }
         
         public UIHelper GetCurrentUIHelper() {
-            return uiHelpersBySchemaContext[ObjectsReference.Instance.inputManager.schemaContext];
+            if (Gamepad.current == null) return gamepadUIHelper;
+            return keyboardUIHelper;
+        }
+
+        public void ShowCurrentUIHelper() {
+            HideUIHelpers();
+            GetCurrentUIHelper().ShowHelper();
+        }
+
+        public void HideUIHelpers() {
+            keyboardUIHelper.HideHelper();
+            gamepadUIHelper.HideHelper();
         }
 
         public void Switch_To_Bananas_Inventory() {
@@ -162,10 +159,6 @@ namespace UI.InGame.Inventory {
 
         public void Switch_To_Ingredients_Inventory() {
             Switch_To_Tab(ItemCategory.INGREDIENT);
-        }
-
-        public void Switch_To_Blueprints_Inventory() {
-            Switch_To_Tab(ItemCategory.BUILDABLE);
         }
     }
 }

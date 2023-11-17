@@ -18,11 +18,7 @@ namespace Game {
             isGamePlaying = false;
             gameContext = GameContext.IN_HOME;
             RenderSettings.ambientLight = Color.white;
-            
-            ObjectsReference.Instance.gameSettings.LoadSettings(); 
-            ObjectsReference.Instance.audioManager.PlayMusic(MusicType.HOME, 0);
 
-            ObjectsReference.Instance.inputManager.uiSchemaContext = UISchemaSwitchType.HOME_MENU;
             ObjectsReference.Instance.inputManager.SwitchContext(InputContext.UI);
         }
         
@@ -31,7 +27,7 @@ namespace Game {
         }
 
         public void Play(string saveUuid, bool isNewGame) {
-            ObjectsReference.Instance.uiManager.Hide_home_menu();
+            ObjectsReference.Instance.uiManager.HideHomeMenu();
             Cursor.visible = false;
             Cursor.lockState = CursorLockMode.Locked;
             loadingScreen.SetActive(true);
@@ -58,7 +54,7 @@ namespace Game {
         }
 
         public void PauseGame() {
-            ObjectsReference.Instance.mainCamera.Set0Sensibility();
+            ObjectsReference.Instance.cameraPlayer.Set0Sensibility();
             
             if (gameContext == GameContext.IN_GAME && ObjectsReference.Instance.mapsManager.currentMap.mapDataScriptableObject.monkeyDataScriptableObjectsByMonkeyId.Count > 0) {
                 foreach (var monkey in MapItems.Instance.monkeys) {
@@ -70,7 +66,7 @@ namespace Game {
         }
 
         public void UnpauseGame() {
-            ObjectsReference.Instance.mainCamera.SetNormalSensibility();
+            ObjectsReference.Instance.cameraPlayer.SetNormalSensibility();
 
             if (ObjectsReference.Instance.mapsManager.currentMap.mapDataScriptableObject.monkeyDataScriptableObjectsByMonkeyId.Count > 0) {
                 foreach (var monkey in MapItems.Instance.monkeys) {
@@ -82,7 +78,6 @@ namespace Game {
         }
 
         public void Quit() {
-            ObjectsReference.Instance.gameSettings.prefs.Save();
             Application.Quit();
         }
     }

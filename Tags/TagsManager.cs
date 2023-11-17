@@ -9,7 +9,7 @@ namespace Tags {
         BANANA,
         PLAYER,
         TELEPORTATION,
-        MOVER_UNVALID,
+        BUILD_UNVALID,
         CANNON_MINI_GAME_PROJECTILE,
         CANNON_MINI_GAME_LIMITS,
         CANNON_MINI_GAME_DOME,
@@ -17,19 +17,30 @@ namespace Tags {
         BUILDABLE,
         DEBRIS,
         REGIME,
-        RUINE,
         MONKEY,
         MINI_CHIMP,
         CHIMPLOYEE,
         VISITOR,
         COMMAND_ROOM_PANEL,
         RAW_MATERIAL,
-        INGREDIENT
+        INGREDIENT,
+        ACCESS_MANAGED,
+        RETRIEVER_ROTATING_LOGO
     }
 
     public class TagsManager : MonoSingleton<TagsManager> {
         public GameObject GetFirstGameObjectWithTag(GAME_OBJECT_TAG myTag) {
             var gameObjects = FindObjectsOfType<Tag>();
+
+            foreach (var objectTag in gameObjects) {
+                if (objectTag.gameObjectTag == myTag) return objectTag.gameObject;
+            }
+
+            return null;
+        }
+
+        public GameObject GetFirstGameObjectWithTagInGameObject(GameObject parent, GAME_OBJECT_TAG myTag) {
+            var gameObjects = parent.gameObject.GetComponentsInChildren<Tag>();
 
             foreach (var objectTag in gameObjects) {
                 if (objectTag.gameObjectTag == myTag) return objectTag.gameObject;
@@ -61,7 +72,6 @@ namespace Tags {
 
         public bool HasTag(GameObject myGameObject, GAME_OBJECT_TAG myTag) {
             if (myGameObject.GetComponent<Tag>() == null) {
-                Debug.Log("GameObject has no Tag script component");
                 return false;
             }
 

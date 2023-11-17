@@ -1,4 +1,5 @@
 using Game.CommandRoomPanelControls;
+using Interactions;
 using Items;
 using UI.InGame;
 using UnityEngine;

@@ -9,8 +9,7 @@ namespace Interactions.InteractionsActions {
             var buildablesToGive = scriptableObjectManager.buildablesToGive;
 
             foreach (var buildable in buildablesToGive) {
-                ObjectsReference.Instance.uiBlueprintsInventory.inventorySlotsByBuildableType[buildable].gameObject
-                    .SetActive(true);
+                ObjectsReference.Instance.uiBlueprintsInventory.inventorySlotsByBuildableType[buildable].gameObject.SetActive(true);
                 ObjectsReference.Instance.blueprintsInventory.blueprintsInventory[buildable] = 1;
                 ObjectsReference.Instance.uiQueuedMessages.UnlockBlueprint(buildable);
             }
@@ -25,7 +24,7 @@ namespace Interactions.InteractionsActions {
             }
         }
 
-        private bool AreNewBlueprintsAvailable() {
+        public bool AreNewBlueprintsAvailable() {
             foreach (var buildableType in ObjectsReference.Instance.scriptableObjectManager.buildablesToGive) {
                 if (ObjectsReference.Instance.blueprintsInventory.blueprintsInventory[buildableType] == 0) return true;
             }

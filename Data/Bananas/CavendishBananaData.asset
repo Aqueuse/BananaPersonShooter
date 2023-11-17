@@ -18,6 +18,7 @@ MonoBehaviour:
   rawMaterialType: 5
   ingredientsType: 1
   buildableType: 6
+  prefabIndex: 0
   itemName:
   - cavendish
   - cavendish
@@ -31,7 +32,7 @@ MonoBehaviour:
   - No particular effect, just tasty
   - Aucun effet particulier, juste savoureuse
   - "No tiene ning\xFAn efecto especial, simplemente deliciosa"
-  sasiety: 5
+  sasiety: 1
   damageTime: 0
   healthBonus: 10
   resistanceBonus: 10

@@ -13,7 +13,9 @@ namespace Settings {
 
 	public class FPSDisplayPlusPlus : MonoBehaviour
 	{
-		[SerializeField] private Rect startRect = new Rect(10, 10, 145, 50);
+		[SerializeField] private float rectWidth;
+		[SerializeField] private float rectHeight;
+		[SerializeField] private Rect startRect;
 		[SerializeField] private float fps;
 		[SerializeField] private int maxFPS;
 		[SerializeField] private int minFPS = 9999;
@@ -39,7 +41,7 @@ namespace Settings {
 		private float _accum;
 		private Color _color = Color.white;
 		private int _frames;
-		private GUIStyle _style;
+		public GUIStyle _style;
 		private ProfilerRecorder _gcReservedMemory;
 		private ProfilerRecorder _gcUsedMemory;  
 		private ProfilerRecorder _systemUsedMemory;
@@ -54,13 +56,14 @@ namespace Settings {
 		private ProfilerRecorder _profilerReservedMemory;
 
 		private ProfilerRecorder _totalReservedMemoryRecorder;
-		private void Start()
-		{
+		private void Start() {
+			startRect =  new(10, 10, rectWidth, rectHeight);
+			
 			StartCoroutine(FPS());
 			InvokeRepeating(nameof(GetMinMax), 1f, 1f);
 			if (moreOptionInUI)
 			{
-				startRect = new(10, 10, 145, 140);
+				startRect = new(10, 10, rectWidth, rectHeight);
 				StartCoroutine(Stats());
 			}
 		}

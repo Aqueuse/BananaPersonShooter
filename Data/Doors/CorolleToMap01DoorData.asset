@@ -18,11 +18,12 @@ MonoBehaviour:
   rawMaterialType: 5
   ingredientsType: 1
   buildableType: 6
+  prefabIndex: 0
   itemName:
   - door
   - porte
   - puerta
-  itemSprite: {fileID: 0}
+  itemSprite: {fileID: 21300000, guid: 9b6bd2285c3129447bcdb4ec02ff0a21, type: 3}
   itemDescription:
   - door to the jungle
   - porte vers la jungle

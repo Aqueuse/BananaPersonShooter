@@ -12,12 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a7bd2aa6b8050144da67d341e7a0adb4, type: 3}
   m_Name: ChimployeeApeRessourcesData
   m_EditorClassIdentifier: 
-  gameObjectTag: 17
+  gameObjectTag: 16
   itemCategory: 12
   bananaType: 0
   rawMaterialType: 5
   ingredientsType: 1
   buildableType: 6
+  prefabIndex: 0
   itemName:
   - chimployee
   - "chimploy\xE9"

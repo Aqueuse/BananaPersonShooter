@@ -1,6 +1,5 @@
-﻿using Data.Bananas;
-using Data.Regimes;
-using Tags;
+﻿using Data.Regimes;
+using Enums;
 using UnityEngine;
 
 namespace Interactions {
@@ -8,29 +7,33 @@ namespace Interactions {
         [SerializeField] private MeshRenderer babyBananierMeshRenderer;
         [SerializeField] private MeshRenderer youngBananierMeshRenderer;
         [SerializeField] private MeshRenderer matureBananierMeshRenderer;
-        
+
+        public RegimeStade regimeStade;
+
         public RegimeDataScriptableObject regimeDataScriptableObject;
-        
+
         public void GrabBananas() {
-            gameObject.layer = 0;
+            regimeStade = RegimeStade.BABY;
 
             babyBananierMeshRenderer.enabled = true;
             youngBananierMeshRenderer.enabled = false;
             matureBananierMeshRenderer.enabled = false;
-            
+
             Invoke(nameof(Grown_young_bananier), 60);
         }
 
         private void Grown_young_bananier() {
+            regimeStade = RegimeStade.YOUNG;
+            
             babyBananierMeshRenderer.enabled = false;
             youngBananierMeshRenderer.enabled = true;
             matureBananierMeshRenderer.enabled = false;
-            
+
             Invoke(nameof(Grown_mature_bananier), 60);
         }
         
         private void Grown_mature_bananier() {
-            gameObject.layer = 7;
+            regimeStade = RegimeStade.MATURE;
             
             babyBananierMeshRenderer.enabled = false;
             youngBananierMeshRenderer.enabled = false;
