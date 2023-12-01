@@ -1,9 +1,9 @@
-using Enums;
 using UnityEngine;
 
 namespace Game.CommandRoomPanelControls {
     public class CommandRoomPanel : MonoBehaviour {
         [SerializeField] private MeshRenderer keyboardMeshRenderer;
+        [SerializeField] private MeshRenderer activationkeyboardMeshRenderer;
         [SerializeField] private GameObject panel; 
         
         public CommandRoomPanelType commandRoomPanelType;
@@ -15,12 +15,18 @@ namespace Game.CommandRoomPanelControls {
             keyboardMeshRenderer.material.SetColor(KeyboardColorPropertie, CommandRoomControlPanelsManager.Instance.activatedKeybard);
             keyboardMeshRenderer.material.SetFloat(KeyboardEmissionStrengthPropertie, 1);
             
+            activationkeyboardMeshRenderer.material.SetColor(KeyboardColorPropertie, CommandRoomControlPanelsManager.Instance.activablePanelKeybard);
+            activationkeyboardMeshRenderer.material.SetFloat(KeyboardEmissionStrengthPropertie, 1);
+            
             panel.SetActive(true);
         }
 
         public void Desactivate() {
             keyboardMeshRenderer.material.SetColor(KeyboardColorPropertie, CommandRoomControlPanelsManager.Instance.desactivatedKeybard);
             keyboardMeshRenderer.material.SetFloat(KeyboardEmissionStrengthPropertie, 0);
+
+            activationkeyboardMeshRenderer.material.SetColor(KeyboardColorPropertie, CommandRoomControlPanelsManager.Instance.desactivatedKeybard);
+            activationkeyboardMeshRenderer.material.SetFloat(KeyboardEmissionStrengthPropertie, 0);
 
             panel.SetActive(false);
         }

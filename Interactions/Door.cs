@@ -1,5 +1,4 @@
 ﻿using Data.Door;
-using Enums;
 using UnityEngine;
 
 namespace Interactions {

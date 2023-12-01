@@ -1,86 +1,67 @@
+using System.Collections.Generic;
 using Cinemachine;
-using Enums;
-using Interactions.InteractionsActions;
 using TMPro;
+using UI;
+using UI.InGame.CommandRoomControlPanels;
 using UnityEngine;
 
 namespace Game.BananaCannonMiniGame {
     public class BananaCannonMiniGameManager : MonoSingleton<BananaCannonMiniGameManager> {
         [SerializeField] private CinemachineVirtualCamera bananaCannonVirtualCamera;
         [SerializeField] private ProjectilesManager projectilesManager;
-        [SerializeField] private GameObject playItemInteractionGameObject;        
-        
+        [SerializeField] private GameObject playItemInteractionGameObject;
+
         public string _mapName = "MAP01";
 
         public SpaceshipsSpawner spaceshipsSpawner;
-        
-        ///////////////////
 
+       ///////////////////
+        [SerializeField] private UICanvasFadeInOut visitorsUICanvasFadeInOut;
+        [SerializeField] private TextMeshProUGUI visitorsInCorolleText;
+
+        [SerializeField] private UICanvasFadeInOut piratesUICanvasFadeInOut;
+        [SerializeField] private TextMeshProUGUI piratesInCorolleText;
+        
+        [SerializeField] private UICanvasFadeInOut debrisUICanvasFadeInOut;
         [SerializeField] private TextMeshProUGUI debrisQuantityText;
-        [SerializeField] private TextMeshProUGUI bottomBananasQuantityText;
         
-        public TextMeshProUGUI spaceshipQuantityText;
-
         [SerializeField] private Transform cannon;
         [SerializeField] private RectTransform target;
 
         private Vector3 _targetPosition;
         
         private int _debrisQuantity;
-        private int _debrisToSpawn;
-        private int _spaceshipsQuantity;
+        public int _spaceshipsQuantity;
+        
+        public int piratesInCorolleQuantity;
+        public int visitorsInCorolleQuantity;
 
         private BananaType _bananaType;
 
+        [SerializeField] private UIbananaCannonMiniGame uIbananaCannonMiniGame;
+        
         private void Start() {
             _bananaType = BananaType.CAVENDISH;
-            bottomBananasQuantityText.text = ObjectsReference.Instance.bananasInventory.GetQuantity(BananaType.CAVENDISH).ToString();
-            ObjectsReference.Instance.uIbananaCannonMiniGame.playButtonBananasQuantityText.text = ObjectsReference.Instance.bananasInventory.GetQuantity(BananaType.CAVENDISH).ToString();
-            
-            _debrisQuantity = ObjectsReference.Instance.mapsManager.mapBySceneName[_mapName].GetDebrisQuantity();
-            debrisQuantityText.text = _debrisQuantity.ToString();
-            _debrisToSpawn = _debrisQuantity;
-
-            _spaceshipsQuantity = Random.Range(1, 7);
-            spaceshipQuantityText.text = _spaceshipsQuantity.ToString();
+            uIbananaCannonMiniGame.RefreshBananasQuantity(_bananaType);
         }
         
-        public void SwitchToMiniGame() {
+        public void PlayMiniGame() {
+            _bananaType = ObjectsReference.Instance.bananaMan.activeItem.bananaType;
+
             ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.CROSSHAIRS].alpha = 0;
-            ObjectsReference.Instance.inputManager.SwitchContext(InputContext.UI);
+            ObjectsReference.Instance.inputManager.SwitchContext(InputContext.BANANA_CANNON_MINI_GAME);
 
             playItemInteractionGameObject.SetActive(false);
 
             bananaCannonVirtualCamera.Priority = 20;
-
-            ObjectsReference.Instance.uIbananaCannonMiniGame.ShowGameUI();
-            ObjectsReference.Instance.uIbananaCannonMiniGame.ShowStartMenu();
-        }
-
-        public void PlayMiniGame() {
-            ObjectsReference.Instance.gameManager.gameContext = GameContext.IN_MINI_GAME;
-
-            ObjectsReference.Instance.uIbananaCannonMiniGame.HideStartMenu();
             
-            spaceshipsSpawner.SpawnSpaceships(_spaceshipsQuantity);
+            uIbananaCannonMiniGame.RefreshBananasQuantity(_bananaType);
+            
+            uIbananaCannonMiniGame.ShowGameUI();
+
+            ObjectsReference.Instance.gameManager.gameContext = GameContext.IN_MINI_GAME;
         }
-
-        public void Teleport() {
-            GetComponent<PortalDestinationInteraction>().Activate();
-        }
-
-        public static void PauseMiniGame() {
-            Time.timeScale = 0;
-
-            ObjectsReference.Instance.uIbananaCannonMiniGame.ShowPauseMenu();
-        }
-
-        public static void UnpauseMiniGame() {
-            Time.timeScale = 1;
-
-            ObjectsReference.Instance.uIbananaCannonMiniGame.HidePauseMenu();
-        }
-
+        
         public void QuitMiniGame() {
             Time.timeScale = 1;
 
@@ -92,15 +73,20 @@ namespace Game.BananaCannonMiniGame {
             Cursor.visible = false;
             Cursor.lockState = CursorLockMode.Locked;
 
-            ObjectsReference.Instance.uIbananaCannonMiniGame.HideStartMenu();
-            ObjectsReference.Instance.uIbananaCannonMiniGame.HidePauseMenu();
-            ObjectsReference.Instance.uIbananaCannonMiniGame.HideGameUI();
+            uIbananaCannonMiniGame.HideGameUI();
             
-            ObjectsReference.Instance.mapsManager.mapBySceneName[_mapName].debrisToSpawn = _debrisToSpawn;
-
             ObjectsReference.Instance.gameManager.gameContext = GameContext.IN_GAME;
         }
 
+        ///  MINIGAME
+
+        public void AddNewWave(List<CharacterType> spaceshipsToSpawn) {
+            ObjectsReference.Instance.audioManager.PlayEffect(SoundEffectType.LAUNCH_SIGNAL, 0.1f);
+
+            _spaceshipsQuantity = spaceshipsToSpawn.Count;
+            spaceshipsSpawner.SpawnSpaceships(spaceshipsToSpawn);
+        }
+        
         public void MoveTarget(float xQuantity, float yQuantity) {
             _targetPosition = target.localPosition;
 
@@ -118,26 +104,48 @@ namespace Game.BananaCannonMiniGame {
         public void Shoot() {
             if (ObjectsReference.Instance.bananasInventory.GetQuantity(_bananaType) == 0) {
                 projectilesManager.AlertNoBanana();
-                ObjectsReference.Instance.audioManager.PlayEffect(EffectType.NO_BANANA, 0);
+                ObjectsReference.Instance.audioManager.PlayEffect(SoundEffectType.NO_BANANA, 0);
             }
 
             if (ObjectsReference.Instance.bananasInventory.GetQuantity(_bananaType) > 0) {
                 projectilesManager.Shoot();
-                ObjectsReference.Instance.audioManager.PlayEffect(EffectType.CANNON_SHOOT, 0);
+                ObjectsReference.Instance.audioManager.PlayEffect(SoundEffectType.CANNON_SHOOT, 0);
                 ObjectsReference.Instance.bananasInventory.RemoveQuantity(_bananaType, 1);
             }
         }
 
-        public void RefreshDebrisQuantity() {
-            _debrisToSpawn += 1;
-            ObjectsReference.Instance.mapsManager.mapBySceneName[_mapName].debrisToSpawn = _debrisToSpawn;
+        public void AddPirateDebris() {
+            _debrisQuantity += 1;
 
-            debrisQuantityText.text = (_debrisQuantity+_debrisToSpawn).ToString();
+            ObjectsReference.Instance.mapsManager.mapBySceneName[_mapName].piratesDebrisToSpawn += 1;
+            ObjectsReference.Instance.mapsManager.mapBySceneName[_mapName].debrisToSPawnByCharacterType.Add(CharacterType.PIRATE);
+
+            debrisQuantityText.text = _debrisQuantity.ToString();
+            debrisUICanvasFadeInOut.enabled = true;
         }
 
-        public void DecrementeSpaceshipQuantity() {
-            _spaceshipsQuantity -= 1;
-            spaceshipQuantityText.text = _spaceshipsQuantity.ToString();
+        public void AddVisitorDebris() {
+            _debrisQuantity += 1;
+            
+            ObjectsReference.Instance.mapsManager.mapBySceneName[_mapName].visitorsDebrisToSpawn += 1;
+            ObjectsReference.Instance.mapsManager.mapBySceneName[_mapName].debrisToSPawnByCharacterType.Add(CharacterType.VISITOR);
+
+            debrisQuantityText.text = _debrisQuantity.ToString();
+            debrisUICanvasFadeInOut.enabled = true;
+        }
+
+        public void AddVisitor() {
+            visitorsInCorolleQuantity += 1;
+            visitorsInCorolleText.text = visitorsInCorolleQuantity.ToString();
+
+            visitorsUICanvasFadeInOut.enabled = true;
+        }
+        
+        public void AddPirate() {
+            piratesInCorolleQuantity += 1;
+            piratesInCorolleText.text = piratesInCorolleQuantity.ToString();
+
+            piratesUICanvasFadeInOut.enabled = true;
         }
     }
 }

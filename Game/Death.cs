@@ -1,4 +1,3 @@
-using Enums;
 using UnityEngine;
 using UnityEngine.Video;
 
@@ -16,7 +15,7 @@ namespace Game {
                 ObjectsReference.Instance.playerController.StopPlayer();
                 
                 ObjectsReference.Instance.bananaMan.GetComponent<Rigidbody>().isKinematic = true;
-                ObjectsReference.Instance.audioManager.PlayEffect(EffectType.BANANASPLASH, 0);
+                ObjectsReference.Instance.audioManager.PlayEffect(SoundEffectType.BANANASPLASH, 0);
 
                 Cursor.visible = true;
                 Cursor.lockState = CursorLockMode.None;

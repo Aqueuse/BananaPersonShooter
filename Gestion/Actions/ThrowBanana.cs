@@ -1,5 +1,4 @@
 using Data.Bananas;
-using Enums;
 using UnityEngine;
 
 namespace Gestion.Actions {
@@ -29,7 +28,7 @@ namespace Gestion.Actions {
             // throw it with good speed forward the player
             banana.GetComponent<Rigidbody>().AddForce(launchingBananaPoint.transform.forward * 100, ForceMode.Impulse);
             banana.GetComponent<Rigidbody>().AddForce(transform.forward * 100, ForceMode.Impulse);
-            ObjectsReference.Instance.audioManager.PlayEffect(EffectType.THROW_BANANA, 0);
+            ObjectsReference.Instance.audioManager.PlayEffect(SoundEffectType.THROW_BANANA, 0);
 
             // ammo reduce
             activeWeaponData = ObjectsReference.Instance.bananaMan.activeItem;

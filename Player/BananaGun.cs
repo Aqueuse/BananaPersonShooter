@@ -1,4 +1,3 @@
-using Enums;
 using UnityEngine;
 
 namespace Player {
@@ -13,8 +12,7 @@ namespace Player {
         private Vector3 targetPosition;
         
         private PlayerController _playerController;
-
-
+        
         private void Start() {
             _playerController = ObjectsReference.Instance.playerController;
         }
@@ -41,6 +39,8 @@ namespace Player {
             ObjectsReference.Instance.bananaMan.tpsPlayerAnimator.GrabBananaGun();
             ObjectsReference.Instance.bananaMan.GetComponent<PlayerIK>().SetAimConstraint(true);
             wasFocus = _playerController.isFocusCamera;
+            
+            ObjectsReference.Instance.uiCrosshairs.SetCrosshair(BananaType.CAVENDISH);
         }
         
         public void UngrabBananaGun() {
@@ -55,7 +55,7 @@ namespace Player {
             
             ObjectsReference.Instance.uInventoriesManager.GetCurrentUIHelper().ShowDefaultHelper();
             
-            ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.CROSSHAIRS].alpha = 1;
+            ObjectsReference.Instance.uiCrosshairs.SetCrosshair(BananaType.EMPTY);
         }
     }
 }

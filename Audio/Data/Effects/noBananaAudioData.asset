@@ -16,4 +16,4 @@ MonoBehaviour:
   - {fileID: 8300000, guid: f85f72517e4fc3941b59f5d3c18c0fd8, type: 3}
   isLooping: 0
   isRandomlySilenced: 0
-  volume: 0
+  volume: 0.038

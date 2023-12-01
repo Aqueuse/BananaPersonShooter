@@ -1,5 +1,4 @@
 using Cinemachine;
-using Enums;
 using UnityEngine;
 using UnityEngine.Video;
 
@@ -11,18 +10,18 @@ namespace Game {
         [SerializeField] private Material transparentVideoMaterial;
 
         [SerializeField] private GameObject skipCinematiqueGameObject;
-        
+
         private VideoPlayer _cinematiqueVideoPlayer;
         private MeshRenderer _meshRenderer;
         private CinemachineVirtualCamera _cinematiqueCamera;
 
         private CinematiqueType cinematiqueType;
-        
+
         private void Start() {
             _cinematiqueVideoPlayer = GetComponentInChildren<VideoPlayer>();
             _meshRenderer = GetComponentInChildren<MeshRenderer>();
             _cinematiqueCamera = GetComponentInChildren<CinemachineVirtualCamera>();
-            
+
             RenderTexture.active = _cinematiqueVideoPlayer.targetTexture;
             GL.Clear(true, true, Color.black);
             RenderTexture.active = null;
@@ -38,6 +37,7 @@ namespace Game {
             _cinematiqueVideoPlayer.enabled = true;
             skipCinematiqueGameObject.SetActive(true);
 
+            ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.CROSSHAIRS].alpha = 0f;
             ObjectsReference.Instance.gameManager.gameContext = GameContext.IN_CINEMATIQUE;
 
             _cinematiqueCamera.Priority = 200;

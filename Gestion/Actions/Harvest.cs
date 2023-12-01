@@ -1,6 +1,5 @@
 using Data;
 using Data.Wastes;
-using Enums;
 using Gestion.Buildables;
 using Interactions;
 using Tags;
@@ -18,9 +17,9 @@ namespace Gestion.Actions {
         private WasteDataScriptableObject wasteDataScriptableObject;
 
         public bool isDirectHarvestActivated;
-        
+
         private Camera mainCamera;
-        
+
         private void Start() {
             mainCamera = Camera.main;
             scriptableObjectManager = ObjectsReference.Instance.scriptableObjectManager;
@@ -29,13 +28,13 @@ namespace Gestion.Actions {
 
         private void Update() {
             if (!isDirectHarvestActivated) return;
-            
+
             if (Physics.Raycast(mainCamera.transform.position, mainCamera.transform.forward, out RaycastHit hit, 2000, layerMask: gestionMode.GestionModeSelectableLayerMask)) {
                 gestionMode.targetedGameObject = hit.transform.gameObject;
                 ObjectsReference.Instance.uInventoriesManager.GetCurrentUIHelper().ShowRetrieveConfirmation();
 
                 targetedGameObjectTag = hit.transform.GetComponent<Tag>();
-                
+
                 if (targetedGameObjectTag.gameObjectTag == GAME_OBJECT_TAG.REGIME)
                     ObjectsReference.Instance.descriptionsManager.SetDescription(targetedGameObjectTag.itemScriptableObject, targetedGameObjectTag.gameObject);
 
@@ -62,13 +61,13 @@ namespace Gestion.Actions {
                 case GAME_OBJECT_TAG.REGIME:
                     var regimeClass = gestionMode.targetedGameObject.GetComponent<Regime>();
                     if (regimeClass.regimeStade != RegimeStade.MATURE) return;
-                    
+
                     var quantity = regimeClass.regimeDataScriptableObject.regimeQuantity;
 
                     ObjectsReference.Instance.bananasInventory.AddQuantity(regimeClass.regimeDataScriptableObject.associatedBananasDataScriptableObject, quantity);
-    
+
                     regimeClass.GrabBananas();
-                    
+
                     foreach (var monkey in MapItems.Instance.monkeys) {
                         monkey.SearchForBananaManBananas();
                     }
@@ -89,21 +88,20 @@ namespace Gestion.Actions {
                     break;
 
                 case GAME_OBJECT_TAG.DEBRIS:
-                    wasteDataScriptableObject = (WasteDataScriptableObject)scriptableObjectManager._meshReferenceScriptableObject.gameObjectDataScriptableObjectsByTag[GAME_OBJECT_TAG.DEBRIS];
+                    wasteDataScriptableObject = (WasteDataScriptableObject)gameObjectTagClass.itemScriptableObject;
+                    
                     rawMaterialsWithQuantity = wasteDataScriptableObject.GetRawMaterialsWithQuantity();
 
                     foreach (var debrisRawMaterialIngredient in rawMaterialsWithQuantity) {
                         ObjectsReference.Instance.rawMaterialsInventory.AddQuantity(debrisRawMaterialIngredient.Key, debrisRawMaterialIngredient.Value);
                     }
-
-                    ObjectsReference.Instance.mapsManager.currentMap.RecalculateCleanliness();
-
+                    
                     Destroy(gestionMode.targetedGameObject);
                     break;
             }
 
             ObjectsReference.Instance.uInventoriesManager.GetCurrentUIHelper().HideRetrieveConfirmation();
-            ObjectsReference.Instance.audioManager.PlayEffect(EffectType.TAKE_SOMETHING, 0);
+            ObjectsReference.Instance.audioManager.PlayEffect(SoundEffectType.TAKE_SOMETHING, 0);
             ObjectsReference.Instance.mapsManager.currentMap.isDiscovered = true;
 
             gestionMode.targetedGameObject = null;

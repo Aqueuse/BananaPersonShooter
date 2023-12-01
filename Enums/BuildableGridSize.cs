@@ -1,6 +1,0 @@
-public enum BuildableGridSize {
-    BUILDING_BLOCK_1X1,
-    BUILDING_BLOCK_1X2,
-    BUILDING_BLOCK_2X1,
-    BUILDING_BLOCK_2X2
-}

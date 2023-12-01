@@ -17,12 +17,12 @@ MonoBehaviour:
   bananaType: 0
   rawMaterialType: 5
   ingredientsType: 1
-  buildableType: 4
+  buildableType: 3
   itemName:
   - retriever
   - recycleuse
   - recicladora
-  itemSprite: {fileID: 21300000, guid: 052d1723775c8c04ba61a0852003e4b6, type: 3}
+  itemSprite: {fileID: 21300000, guid: b727c8dbf22824c4ea685718a0494885, type: 3}
   itemDescription:
   - Allows you to retrieve all platforms from an area of the station
   - "Permet de r\xE9cup\xE9rer toutes les plateformes d'une zone de la station"

@@ -1,14 +1,10 @@
-using System.Collections.Generic;
 using Data.Bananas;
-using Enums;
 using UnityEngine;
 
 namespace Data {
     public class ScriptableObjectManager : MonoBehaviour {
         public MeshReferenceScriptableObject _meshReferenceScriptableObject;
-
-        public List<BuildableType> buildablesToGive;
-
+        
         public BananasDataScriptableObject GetBananaScriptableObject(BananaType bananaType) {
             return _meshReferenceScriptableObject.bananasDataScriptableObjects[bananaType];
         }

@@ -1,4 +1,3 @@
-using Enums;
 using UnityEngine;
 
 namespace Data.Monkeys {

@@ -1,7 +1,4 @@
-using Enums;
 using Interactions;
-using Interactions.InteractionsActions;
-using Items;
 using UI.InGame;
 using UnityEngine;
 
@@ -10,8 +7,6 @@ namespace Game.CommandRoomPanelControls {
         [SerializeField] private GenericDictionary<GameObject, Transform> bananaGunPiecesRepairedPositionByBananaGunPieceGameObject;
         [SerializeField] private GameObject bananaGunRepaired;
         [SerializeField] private GameObject bananaGunPieces;
-        
-        public BlueprintsDataInteraction blueprintsDataInteraction;
         
         [SerializeField] private MeshRenderer assemblerZoneMeshRenderer;
 
@@ -32,8 +27,6 @@ namespace Game.CommandRoomPanelControls {
 
             bananaGunPieces.SetActive(!ObjectsReference.Instance.bananaMan.tutorialFinished);
             assemblerSpotLight.enabled = !ObjectsReference.Instance.bananaMan.tutorialFinished;
-            
-            blueprintsDataInteraction.ShowBlueprintDataIfAvailable();
         }
         
         private void OnTriggerEnter(Collider other) {
@@ -42,11 +35,11 @@ namespace Game.CommandRoomPanelControls {
                 
                 if (itemStaticClass != null) {
                     if (itemStaticClass.interactionType == InteractionType.GRABBABLE_PIECE &&
-                        itemStaticClass.GetComponent<Grabbable>().grabbablePieceType == GrabbablePieceType.BANANA_GUN) {
+                        itemStaticClass.GetComponent<GrabbableInteraction>().grabbablePieceType == GrabbablePieceType.BANANA_GUN) {
                         
                         if (bananaGunPiecesRepairedPositionByBananaGunPieceGameObject.ContainsKey(other.gameObject)) {
                             assemblerAudioSource.pitch += 0.02f;
-                            CommandRoomControlPanelsManager.Instance.SetAssemblerVolume(ObjectsReference.Instance.audioManager.effectsLevel);
+                            SetAssemblerAudioVolume(ObjectsReference.Instance.audioManager.effectsLevel);
                             if (!assemblerAudioSource.isPlaying) assemblerAudioSource.Play();
 
                             assemblerZoneMeshRenderer.enabled = true;
@@ -93,7 +86,7 @@ namespace Game.CommandRoomPanelControls {
             bananaGunPieces.SetActive(false);
         }
 
-        public void SetAssemblerAudioVolume(float level) {
+        private void SetAssemblerAudioVolume(float level) {
             assemblerAudioSource.volume = level;
         }
         

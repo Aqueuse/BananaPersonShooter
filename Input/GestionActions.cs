@@ -115,7 +115,7 @@ namespace Input {
         private void MoveCameraWithMouse(InputAction.CallbackContext context) {
             if (mouseMode != MouseMode.MOVE) return;
             
-            _gestionCamera.Move(context.ReadValue<Vector2>().x, context.ReadValue<Vector2>().y);
+            _gestionCamera.Move(context.ReadValue<Vector2>().y, context.ReadValue<Vector2>().x);
         }
         
         private void MoveCameraWithKeyboard(InputAction.CallbackContext context) {

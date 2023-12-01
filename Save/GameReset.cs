@@ -1,5 +1,4 @@
 using System.Linq;
-using Enums;
 using Save.Templates;
 using UnityEngine;
 
@@ -16,7 +15,6 @@ namespace Save {
 
         public void ResetGameData() {
             ResetInventory();
-            ResetBlueprints();
             ResetBananaSlot();
             ResetBananaManVitals();
             ResetTutorial();
@@ -35,10 +33,6 @@ namespace Save {
                 ObjectsReference.Instance.bananasInventory.bananasInventory[bananaSlot.Key] = 0;
                 ObjectsReference.Instance.gameData.bananaManSavedData.bananaInventory[bananaSlot.Key.ToString()] = 0;
             }
-        }
-
-        private static void ResetBlueprints() {
-            ObjectsReference.Instance.uiBlueprintsInventory.HideAllBlueprints();
         }
 
         private static void ResetBananaSlot() {

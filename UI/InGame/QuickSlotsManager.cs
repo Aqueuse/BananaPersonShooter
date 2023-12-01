@@ -36,12 +36,7 @@ namespace UI.InGame {
         public void SetBananaQuantity(int quantity) {
             bananaQuantityText.text = quantity > 999 ? "999+" : quantity.ToString();
         }
-
-        public void EmptyBananaSlot() {
-            bananaSlotItemScriptableObject = null;
-            bananaQuantityText.text = "";
-        }
-
+        
         public void SetPlateformSlotAvailability() {
             if (ObjectsReference.Instance.rawMaterialsInventory.HasCraftingIngredientsForPlateform()) {
                 SetPlateformSlotAvailable();

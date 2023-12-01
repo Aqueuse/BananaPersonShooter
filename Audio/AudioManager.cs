@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Enums;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -13,7 +12,7 @@ namespace Audio {
         
         [SerializeField] private AudioSource audioFootstepsSource;
 
-        [SerializeField] public GenericDictionary<EffectType, AudioDataScriptableObject> audioEffectsDictionnary;
+        [SerializeField] public GenericDictionary<SoundEffectType, AudioDataScriptableObject> audioEffectsDictionnary;
         [SerializeField] private GenericDictionary<AmbianceType, AudioDataScriptableObject> audioAmbianceDictionnary;
         [SerializeField] private GenericDictionary<MusicType, AudioDataScriptableObject> audioMusicsDictionnary;
         public GenericDictionary<FootStepType, AudioDataScriptableObject> audioFootStepsDictionnary;
@@ -129,8 +128,8 @@ namespace Audio {
             audioAmbianceSource.Play();
         }
 
-        public void PlayEffect(EffectType effectType, ulong delay) {
-            var audioData = audioEffectsDictionnary[effectType]; 
+        public void PlayEffect(SoundEffectType soundEffectType, float delay) {
+            var audioData = audioEffectsDictionnary[soundEffectType]; 
     
             audioEffectsSource.volume = effectsLevel;
             audioEffectsSource.clip = audioData.clip[Random.Range(0, audioData.clip.Length)];
@@ -169,7 +168,7 @@ namespace Audio {
         }
 
         public void TestEffectLevel() {
-            PlayEffect(EffectType.BUTTON_INTERACTION, 0);
+            PlayEffect(SoundEffectType.BUTTON_INTERACTION, 0);
         }
     }
 }

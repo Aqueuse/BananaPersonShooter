@@ -1,5 +1,4 @@
 ﻿using Data.Bananas;
-using Enums;
 using Tags;
 using UnityEngine;
 
@@ -25,14 +24,15 @@ namespace Bananas {
                 Invoke(nameof(DestroyMe), 10);
                 return;
             }
+            
+            Invoke(nameof(DestroyMe), 10);
+        }
 
-            if (TagsManager.Instance.HasTag(collision.gameObject, GAME_OBJECT_TAG.PLAYER)) {
+        private void OnTriggerEnter(Collider other) {
+            if (TagsManager.Instance.HasTag(other.gameObject, GAME_OBJECT_TAG.PLAYER)) {
                 ObjectsReference.Instance.rawMaterialsInventory.AddQuantity(RawMaterialType.BANANA_PEEL, 1);
                 DestroyMe();
-                return;
             }
-
-            Invoke(nameof(DestroyMe), 10);
         }
 
         private void DestroyMe() {

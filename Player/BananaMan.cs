@@ -1,5 +1,4 @@
 ﻿using Data.Bananas;
-using Enums;
 using UnityEngine;
 
 namespace Player {
@@ -36,7 +35,7 @@ namespace Player {
                 ObjectsReference.Instance.bananasInventory.RemoveQuantity(activeItem.bananaType, 1);
                 ObjectsReference.Instance.rawMaterialsInventory.AddQuantity(RawMaterialType.BANANA_PEEL, 1);
                 SetBananaSkinHealth();
-                ObjectsReference.Instance.audioManager.PlayEffect(EffectType.EAT_BANANA, 0);
+                ObjectsReference.Instance.audioManager.PlayEffect(SoundEffectType.EAT_BANANA, 0);
             }
         }
 

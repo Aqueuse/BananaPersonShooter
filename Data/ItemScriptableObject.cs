@@ -1,4 +1,3 @@
-using Enums;
 using Tags;
 using UnityEngine;
 
@@ -11,7 +10,6 @@ namespace Data {
         public RawMaterialType rawMaterialType;
         public IngredientsType ingredientsType;
         public BuildableType buildableType;
-        public int prefabIndex;
         
         public string[] itemName;
     

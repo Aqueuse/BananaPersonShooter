@@ -1,5 +1,4 @@
-﻿using Enums;
-using UI.Save;
+﻿using UI.Save;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -140,7 +139,7 @@ namespace UI {
         
         public void SetActive(UICanvasGroupType uiCanvasGroupType, bool visible) {
             var canvasGroup = canvasGroupsByUICanvasType[uiCanvasGroupType];
-            
+
             canvasGroup.alpha = visible ? 1 : 0;
             canvasGroup.interactable = visible;
             canvasGroup.blocksRaycasts = visible;

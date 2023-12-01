@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Enums;
 
 namespace Save.Templates {
     public class BananaManSavedData {
@@ -49,14 +48,6 @@ namespace Save.Templates {
 
         public Dictionary<string, int> ingredientsInventory = new() {
             {IngredientsType.EMPTY.ToString(), 0}
-        };
-
-        public Dictionary<string, int> blueprintsInventory = new() {
-            {BuildableType.PLATEFORM.ToString(), 0},
-            {BuildableType.PORTAL.ToString(), 0},
-            {BuildableType.GUICHET.ToString(), 0},
-            {BuildableType.BANANA_DRYER.ToString(), 0},
-            {BuildableType.RETRIEVER.ToString(), 0}
         };
         
         public string bananaSlot = BananaType.EMPTY.ToString();

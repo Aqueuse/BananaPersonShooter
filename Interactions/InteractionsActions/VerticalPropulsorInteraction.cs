@@ -1,10 +1,10 @@
 using UnityEngine;
 
 namespace Interactions.InteractionsActions {
-    public class VerticalPropulsorInteraction : MonoBehaviour {
+    public class VerticalPropulsorInteraction : Interact {
         [SerializeField] private float propulsionForce;
         
-        public void Activate() {
+        public override void Activate(GameObject interactedGameObject) {
             ObjectsReference.Instance.bananaMan.GetComponent<Rigidbody>().AddForce(Vector3.up * propulsionForce, ForceMode.Acceleration);
         }
     }

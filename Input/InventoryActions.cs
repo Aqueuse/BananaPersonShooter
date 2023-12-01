@@ -1,4 +1,3 @@
-using Enums;
 using UI.InGame.Inventory;
 using UnityEngine;
 using UnityEngine.InputSystem;

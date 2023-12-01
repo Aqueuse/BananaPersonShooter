@@ -2,8 +2,6 @@ using System.Collections.Generic;
 using Data;
 using Data.Door;
 using Data.Monkeys;
-using Data.Regimes;
-using Enums;
 using Interactions;
 using UI.InGame.Gestion.blocks;
 using UnityEngine;
@@ -25,12 +23,10 @@ namespace UI.InGame.Gestion {
         
         private List<int> itemsQuantities;
         private List<string> itemsNames;
-        //private List<string> itemsIDs;
 
         private void Start() {
             itemsQuantities = new List<int>();
             itemsNames = new List<string>();
-            //itemsIDs = new List<string>();
         }
         
         public void SetDescription(ItemScriptableObject itemScriptableObject, GameObject targetedGameObject = null) {
@@ -51,8 +47,7 @@ namespace UI.InGame.Gestion {
                     
                     itemsQuantities = new List<int>();
                     itemsNames = new List<string>();
-                    //List<string> itemsIDs = new List<string>();
-
+                    
                     var rawMaterialsWithQuantities =
                         ObjectsReference.Instance.scriptableObjectManager.GetBuildableCraftingIngredients(itemScriptableObject
                             .buildableType);
@@ -129,15 +124,14 @@ namespace UI.InGame.Gestion {
                     var doorData = (DoorDataScriptableObject)itemScriptableObject;
                     var mapData = doorData.associatedMapDataScriptableObject;
 
-                    var cleanliness = ObjectsReference.Instance.mapsManager.mapBySceneName[mapData.sceneName].cleanliness;
                     var visitors = 0; // TODO : get the true value
 
-                    var cleanlinessName = LocalizationSettings.StringDatabase.GetTable("UI").GetEntry("cleanliness").GetLocalizedString();
+                    var pollutionName = LocalizationSettings.StringDatabase.GetTable("UI").GetEntry("pollution").GetLocalizedString();
                     var visitorsName = LocalizationSettings.StringDatabase.GetTable("UI").GetEntry("visitors").GetLocalizedString();
-                    
+
                     _multiSlidersBlock.SetBlock(
                         new [] {
-                            ((int)cleanliness, cleanlinessName),
+                            ((int)(mapData.piratesDebris+mapData.visitorsDebris), pollutionName),
                             (visitors, visitorsName)
                         },
                         100);

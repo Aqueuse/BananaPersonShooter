@@ -1,6 +1,5 @@
 ﻿using Gestion;
 using Cinemachine;
-using Enums;
 using UnityEngine;
 
 namespace Game {
@@ -19,7 +18,7 @@ namespace Game {
             gameContext = GameContext.IN_HOME;
             RenderSettings.ambientLight = Color.white;
 
-            ObjectsReference.Instance.inputManager.SwitchContext(InputContext.UI);
+            ObjectsReference.Instance.inputManager.SwitchContext(InputContext.HOME);
         }
         
         public static void Prepare_New_Game() {
@@ -28,6 +27,7 @@ namespace Game {
 
         public void Play(string saveUuid, bool isNewGame) {
             ObjectsReference.Instance.uiManager.HideHomeMenu();
+            
             Cursor.visible = false;
             Cursor.lockState = CursorLockMode.Locked;
             loadingScreen.SetActive(true);

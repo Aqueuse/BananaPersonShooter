@@ -17,8 +17,7 @@ MonoBehaviour:
   bananaType: 0
   rawMaterialType: 5
   ingredientsType: 1
-  buildableType: 6
-  prefabIndex: 0
+  buildableType: 5
   itemName:
   - Debris
   - "D\xE9bris"

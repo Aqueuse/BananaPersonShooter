@@ -2,16 +2,15 @@ using System.Linq;
 using Gestion;
 using Gestion.Buildables.Plateforms;
 using Data;
-using Enums;
 using UnityEngine;
 
 namespace Save {
     public class GameLoad : MonoBehaviour {
         private GameObject aspirable;
         private GameObject prefab;
-        
+
         private ItemScriptableObject itemScriptableObject;
-        
+
         public void LoadLastSave() {
             ObjectsReference.Instance.gameManager.loadingScreen.SetActive(true);
             ObjectsReference.Instance.uiManager.SetActive(UICanvasGroupType.DEATH, false);
@@ -35,14 +34,14 @@ namespace Save {
             LoadBananasInventory();
             LoadRawMaterialsInventory();
             LoadIngredientsInventory();
-            LoadBuildablesInventory();
 
             LoadSelectedBanana();
 
             LoadMapsData();
             LoadMonkeysSatiety();
 
-            ObjectsReference.Instance.loadData.LoadMapAspirablesDataByUuid(saveUuid);
+            ObjectsReference.Instance.loadData.LoadMapBuildablesDataByUuid(saveUuid);
+            ObjectsReference.Instance.loadData.LoadMapDebrisDataByUuid(saveUuid);
 
             CheckTutorialFinished();
 
@@ -52,7 +51,7 @@ namespace Save {
         public void LoadBananasInventory() {
             foreach (var bananaSlot in ObjectsReference.Instance.bananasInventory.bananasInventory.ToList()) {
                 if (bananaSlot.Key == BananaType.EMPTY) continue;
-                
+
                 var bananaQuantity = ObjectsReference.Instance.gameData.bananaManSavedData.bananaInventory[bananaSlot.Key.ToString()];
 
                 ObjectsReference.Instance.bananasInventory.bananasInventory[bananaSlot.Key] = bananaQuantity;
@@ -72,7 +71,7 @@ namespace Save {
         public void LoadRawMaterialsInventory() {
             foreach (var rawMaterialSlot in ObjectsReference.Instance.rawMaterialsInventory.rawMaterialsInventory.ToList()) {
                 if (rawMaterialSlot.Key == RawMaterialType.EMPTY) continue;
-                
+
                 var rawMaterialQuantity = ObjectsReference.Instance.gameData.bananaManSavedData.rawMaterialsInventory[rawMaterialSlot.Key.ToString()];
 
                 ObjectsReference.Instance.rawMaterialsInventory.rawMaterialsInventory[rawMaterialSlot.Key] = rawMaterialQuantity;
@@ -108,21 +107,7 @@ namespace Save {
                 }
             }
         }
-
-        public void LoadBuildablesInventory() {
-            foreach (var buildableSlot in ObjectsReference.Instance.blueprintsInventory.blueprintsInventory.ToList()) {
-                if (buildableSlot.Key == BuildableType.EMPTY) continue;
-                
-                var blueprintQuantity = ObjectsReference.Instance.gameData.bananaManSavedData.blueprintsInventory[buildableSlot.Key.ToString()];
-
-                ObjectsReference.Instance.blueprintsInventory.blueprintsInventory[buildableSlot.Key] = blueprintQuantity;
-
-                var inventorySlot = ObjectsReference.Instance.uiBlueprintsInventory.inventorySlotsByBuildableType[buildableSlot.Key];
-
-                inventorySlot.gameObject.SetActive(blueprintQuantity > 0);
-            }
-        }
-
+        
         private void LoadSelectedBanana() {
             var bananaScriptableObject = ObjectsReference.Instance.quickSlotsManager.bananaSlotItemScriptableObject;
             ObjectsReference.Instance.quickSlotsManager.SetBananaSlot(bananaScriptableObject);
@@ -203,10 +188,6 @@ namespace Save {
                 };
 
                 for (var i = 0; i < mapData.itemsCategories.Count; i++) {
-                    if (mapData.itemsCategories[i] == ItemCategory.DEBRIS) {
-                        prefab = ObjectsReference.Instance.scriptableObjectManager._meshReferenceScriptableObject.debrisPrefab[mapData.itemsPrefabsIndex[i]];
-                    }
-
                     if (mapData.itemsCategories[i] == ItemCategory.BUILDABLE) {
                         prefab = ObjectsReference.Instance.scriptableObjectManager.BuildablePrefabByBuildableType(mapData.itemsBuildableTypes[i]);
                     }
@@ -233,14 +214,6 @@ namespace Save {
 
                     aspirable.transform.position = MapItems.Instance.aspirablesContainer.transform.position;
                     aspirable.transform.rotation = MapItems.Instance.aspirablesContainer.transform.rotation;
-                }
-            }
-
-            if (mapData.debrisToSpawn > 0) {
-                if (ObjectsReference.Instance.gameSettings.areDebrisFallingOnTheTrees) MapItems.Instance.debrisSpawner.SpawnNewDebrisOnRaycastHit(MapItems.Instance.aspirablesContainer.transform);
-
-                else {
-                    MapItems.Instance.debrisSpawner.SpawnNewDebripOnNavMesh(MapItems.Instance.aspirablesContainer.transform);
                 }
             }
         }

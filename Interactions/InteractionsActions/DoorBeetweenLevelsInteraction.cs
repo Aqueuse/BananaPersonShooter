@@ -1,10 +1,9 @@
-using Items;
 using UnityEngine;
 
 namespace Interactions.InteractionsActions {
-    public class DoorBeetweenLevelsInteraction : MonoBehaviour {
-        public static void Activate(GameObject interactedObject) {
-            ObjectsReference.Instance.audioManager.PlayEffect(EffectType.OPEN_DOOR, 0);
+    public class DoorBeetweenLevelsInteraction : Interact {
+        public override void Activate(GameObject interactedObject) {
+            ObjectsReference.Instance.audioManager.PlayEffect(SoundEffectType.OPEN_DOOR, 0);
 
             if (interactedObject != null) 
                 ObjectsReference.Instance.scenesSwitch.SwitchScene(

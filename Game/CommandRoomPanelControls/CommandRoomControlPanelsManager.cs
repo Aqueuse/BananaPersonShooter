@@ -1,9 +1,9 @@
 using System;
-using Enums;
 using Interactions;
 using Monkeys.Chimployees;
 using Monkeys.MiniChimps;
 using Tags;
+using UI.InGame.CommandRoomControlPanels;
 using UnityEngine;
 
 namespace Game.CommandRoomPanelControls {
@@ -11,11 +11,13 @@ namespace Game.CommandRoomPanelControls {
         public Light[] gardensLight;
 
         public Color activatedKeybard;
+        public Color activablePanelKeybard;
         public Color desactivatedKeybard;
 
         [SerializeField] private GenericDictionary<CommandRoomPanelType, CommandRoomPanel> commandRoomPanels;
         
         public Assembler assembler;
+        public UIMarketingPanel uIMarketingPanel; 
 
         public ChimployeeCommandRoom chimployeeCommandRoom;
         public Transform apeResourcesChimployeeTransform;
@@ -32,11 +34,7 @@ namespace Game.CommandRoomPanelControls {
                 commandRoomPanels[commandRoomPanelType].Activate();
             }
             
-            ObjectsReference.Instance.audioManager.PlayEffect(EffectType.BUTTON_INTERACTION, 0);
-        }
-        
-        public void SetAssemblerVolume(float level) {
-            assembler.SetAssemblerAudioVolume(level);
+            ObjectsReference.Instance.audioManager.PlayEffect(SoundEffectType.BUTTON_INTERACTION, 0);
         }
     }
 }

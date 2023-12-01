@@ -16,9 +16,9 @@ namespace Game.BananaCannonMiniGame {
         private Vector3 _spaceshipPosition;
 
         public bool isExploded;
-        
-        private SpaceshipDestination _spaceshipDestination = SpaceshipDestination.EXIT;
 
+        public CharacterType spaceshipType;
+        
         private void Start() {
             _spaceshipTransform = transform;
             isExploded = false;
@@ -35,21 +35,18 @@ namespace Game.BananaCannonMiniGame {
 
             _distanceToArrival = Vector3.Distance(_spaceshipPosition, _arrivalPosition);
 
-            if (_distanceToArrival > 0.1f) return;
-            
-            if (_spaceshipDestination == SpaceshipDestination.EXIT) {
-                _arrivalPosition = BananaCannonMiniGameManager.Instance.spaceshipsSpawner.entryTransform.position;
-                _spaceshipDestination = SpaceshipDestination.ENTRY;
-            }
+            if (_distanceToArrival < 0.1f) {
+                if (spaceshipType == CharacterType.VISITOR)
+                    BananaCannonMiniGameManager.Instance.AddVisitor();
+                else if (spaceshipType == CharacterType.PIRATE)
+                    BananaCannonMiniGameManager.Instance.AddPirate();
 
-            else {
-                _arrivalPosition = BananaCannonMiniGameManager.Instance.spaceshipsSpawner.exitTransform.position;
-                _spaceshipDestination = SpaceshipDestination.EXIT;
+                GetComponent<BoxCollider>().enabled = false;
+                enabled = false;
             }
         }
 
         public void InitiatePropulsion(Vector3 destination, float speed) {
-            _spaceshipDestination = SpaceshipDestination.EXIT;
             _arrivalPosition = destination;
             _propulsionSpeed = speed;
         }
@@ -60,7 +57,6 @@ namespace Game.BananaCannonMiniGame {
             other.GetComponent<Projectile>().Destroy();
             
             isExploded = true;
-            BananaCannonMiniGameManager.Instance.DecrementeSpaceshipQuantity();
             
             GetComponent<BoxCollider>().enabled = false;
             

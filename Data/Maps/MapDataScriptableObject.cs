@@ -9,6 +9,7 @@ namespace Data.Maps {
         public GenericDictionary<string, MonkeyDataScriptableObject> monkeyDataScriptableObjectsByMonkeyId;
 
         public int visitorsQuantity;
-        public float cleanliness;
+        public float piratesDebris;
+        public float visitorsDebris;
     }
 }

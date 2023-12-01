@@ -1,14 +1,13 @@
 using System.Linq;
 using Gestion;
 using Gestion.Buildables.Plateforms;
-using Enums;
 using Items;
 using Tags;
 using UnityEngine;
 
 namespace Interactions.InteractionsActions {
-    public class RetrieverInteraction : MonoBehaviour {
-        public static void Activate(GameObject interactedGameObject) {
+    public class RetrieverInteraction : Interact {
+        public override void Activate(GameObject interactedGameObject) {
             var plateforms = MapItems.Instance.aspirablesContainer.GetComponentsInChildren<Plateform>().ToList();
             var plateformsCount = plateforms.Count;
 

@@ -14,7 +14,6 @@ namespace Save {
             SaveBananasInventory();
             SaveRawMaterialsInventory();
             SaveIngredientsInventory();
-            SaveBlueprintsInventory();
             
             SaveBananaSlot();
             SaveActiveItem();
@@ -44,13 +43,7 @@ namespace Save {
                 ObjectsReference.Instance.gameData.bananaManSavedData.ingredientsInventory[inventorySlot.Key.ToString()] = inventorySlot.Value;
             }
         }
-
-        private static void SaveBlueprintsInventory() {
-            foreach (var inventorySlot in ObjectsReference.Instance.blueprintsInventory.blueprintsInventory) {
-                ObjectsReference.Instance.gameData.bananaManSavedData.blueprintsInventory[inventorySlot.Key.ToString()] = inventorySlot.Value;
-            }
-        }
-
+        
         private static void SaveBananaSlot() {
             if (ObjectsReference.Instance.quickSlotsManager.bananaSlotItemScriptableObject != null)
                ObjectsReference.Instance.gameData.bananaManSavedData.bananaSlot = ObjectsReference.Instance.quickSlotsManager.bananaSlotItemScriptableObject.bananaType.ToString();

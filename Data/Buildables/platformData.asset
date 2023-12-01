@@ -22,7 +22,7 @@ MonoBehaviour:
   - plateform
   - plateforme
   - plataforma
-  itemSprite: {fileID: 21300000, guid: 3728d82037057e341bbbd20d9d44c435, type: 3}
+  itemSprite: {fileID: 21300000, guid: 7b1e88bc9983f07479cf5dedc53d5910, type: 3}
   itemDescription:
   - a plateform than can be feeded with bananas
   - "une plateforme qui peut \xEAtre aliment\xE9e en bananes"

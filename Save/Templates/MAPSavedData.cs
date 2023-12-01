@@ -4,6 +4,7 @@ namespace Save.Templates {
     public class MapSavedData {
         public bool isDiscovered = false;
         public Dictionary<string, float> monkeysSasietyByMonkeyId;
-        public float cleanliness = 30;
+        public float piratesDebris = 0;
+        public float visitorsDebris = 0;
     }
 }

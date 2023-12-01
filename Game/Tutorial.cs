@@ -1,4 +1,3 @@
-using Enums;
 using Game.CommandRoomPanelControls;
 using Tags;
 using UnityEngine;
@@ -30,8 +29,6 @@ namespace Game {
             CommandRoomControlPanelsManager.Instance.ShowPanel(CommandRoomPanelType.JOURNAL);
             CommandRoomControlPanelsManager.Instance.ShowPanel(CommandRoomPanelType.BANANA_CANNON);
 
-            CommandRoomControlPanelsManager.Instance.assembler.blueprintsDataInteraction.HideBlueprintsData();
-
             foreach (var accessManagedGameObject in TagsManager.Instance.GetAllGameObjectsWithTag(GAME_OBJECT_TAG.ACCESS_MANAGED)) {
                 accessManagedGameObject.GetComponent<ManageAccess>().ForbidUsage();
             }
@@ -45,7 +42,7 @@ namespace Game {
         public void FinishTutorial() {
             ObjectsReference.Instance.uInventoriesManager.ShowCurrentUIHelper();
             ObjectsReference.Instance.uiManager.SetActive(UICanvasGroupType.QUICKSLOTS, true);
-            
+
             ObjectsReference.Instance.bananaGun.bananaGunInBack.SetActive(true);
             // TODO : animation take banana gun
 
@@ -55,7 +52,6 @@ namespace Game {
             ObjectsReference.Instance.gameLoad.LoadBananasInventory();
             ObjectsReference.Instance.gameLoad.LoadRawMaterialsInventory();
             ObjectsReference.Instance.gameLoad.LoadIngredientsInventory();
-            ObjectsReference.Instance.gameLoad.LoadBuildablesInventory();
             
             ObjectsReference.Instance.bananaMan.tutorialFinished = true;
             

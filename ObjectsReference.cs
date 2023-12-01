@@ -13,6 +13,7 @@ using Settings;
 using UI;
 using UI.Bananapedia;
 using UI.InGame;
+using UI.InGame.CommandRoomControlPanels;
 using UI.InGame.Gestion;
 using UI.InGame.Inventory;
 using UI.Menus;
@@ -36,8 +37,7 @@ public class ObjectsReference : MonoSingleton<ObjectsReference> {
     public BananasInventory bananasInventory;
     public RawMaterialsInventory rawMaterialsInventory;
     public IngredientsInventory ingredientsInventory;
-    public BlueprintsInventory blueprintsInventory;
-
+    
     public ScriptableObjectManager scriptableObjectManager;
     public GhostsReference ghostsReference;
     public GestionMode gestionMode;

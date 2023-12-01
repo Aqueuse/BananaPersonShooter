@@ -1,10 +1,14 @@
 using Game.BananaCannonMiniGame;
+using Game.CommandRoomPanelControls;
 using UnityEngine;
 
 namespace Interactions.InteractionsActions {
-    public class BananaCannonMiniGameInteraction : MonoBehaviour {
-        public static void Activate() {
-            if (ObjectsReference.Instance.bananaMan.tutorialFinished) BananaCannonMiniGameManager.Instance.SwitchToMiniGame();
+    public class BananaCannonMiniGameInteraction : Interact {
+        public override void Activate(GameObject interactedGameObject) {
+            if (ObjectsReference.Instance.bananaMan.tutorialFinished) {
+                CommandRoomControlPanelsManager.Instance.ShowPanel(CommandRoomPanelType.BANANA_CANNON);
+                BananaCannonMiniGameManager.Instance.PlayMiniGame();
+            }
         }
     }
 }

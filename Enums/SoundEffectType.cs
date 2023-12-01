@@ -1,4 +1,4 @@
-public enum EffectType {
+public enum SoundEffectType {
     BANANASPLASH,
     BUTTON_INTERACTION,
     DESINTEGRATION,
@@ -9,5 +9,6 @@ public enum EffectType {
     GUITAR_RYTHM_01,
     GRAB_SOMETHING,
     NO_BANANA,
-    CANNON_SHOOT
+    CANNON_SHOOT,
+    LAUNCH_SIGNAL
 }

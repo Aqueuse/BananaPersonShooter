@@ -12,7 +12,17 @@ namespace Gestion {
         public Monkey[] monkeys;
 
         public Collider cameraBounds;
-        
+
+        public void SpawnDebris() {
+            if (ObjectsReference.Instance.mapsManager.currentMap.piratesDebrisToSpawn > 0) {
+                if (ObjectsReference.Instance.gameSettings.areDebrisFallingOnTheTrees) debrisSpawner.SpawnNewDebrisOnRaycastHit();
+
+                else {
+                    debrisSpawner.SpawnNewDebrisOnNavMesh();
+                }
+            }
+        }
+
         public List<GameObject> GetAllItemsInAspirableContainer() {
             var gameObjects = aspirablesContainer.GetComponentsInChildren<Tag>();
             

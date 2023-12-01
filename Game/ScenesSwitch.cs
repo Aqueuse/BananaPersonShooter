@@ -1,5 +1,5 @@
 using System.Collections;
-using Enums;
+using Gestion;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -17,7 +17,7 @@ namespace Game {
             _bananaManTransform = ObjectsReference.Instance.bananaMan.transform;
         }
 
-        private IEnumerator LoadScene(string sceneName, SpawnPoint spawnPoint, bool isNewGame) {
+        private IEnumerator LoadScene(string sceneName, SpawnPoint spawnPoint, bool isTeleporting) {
             var load = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Single);
 
             // Wait until the asynchronous scene fully loads
@@ -40,8 +40,8 @@ namespace Game {
                     ObjectsReference.Instance.uiManager.HideGameMenu();
                     ObjectsReference.Instance.uiManager.ShowHomeMenu();
 
-                    ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.HUD].alpha = 0f;
-                    ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.CROSSHAIRS].alpha = 0f;
+                    ObjectsReference.Instance.uiManager.SetActive(UICanvasGroupType.HUD, false);
+                    ObjectsReference.Instance.uiManager.SetActive(UICanvasGroupType.CROSSHAIRS, false);
                     
                     ObjectsReference.Instance.cameraPlayer.Set0Sensibility();
 
@@ -61,13 +61,7 @@ namespace Game {
 
                 else {
                     //// spawning banana man
-                    if (isNewGame) {
-                        ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.CROSSHAIRS].alpha = 0f;
-                    }
-
-                    if (!isNewGame) {
-                        ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.CROSSHAIRS].alpha = 1f;
-
+                    if (!isTeleporting) {
                         ObjectsReference.Instance.teleportation.TeleportDown();
                         _bananaManTransform.position = teleportDestination;
                         _bananaManTransform.rotation = teleportRotation;
@@ -86,38 +80,31 @@ namespace Game {
 
                         _bananaManTransform.rotation = Quaternion.Euler(_bananaManRotation);
                     }
-                    
+
                     ObjectsReference.Instance.gameData.bananaManSavedData.lastMap = sceneName;
-                    
+
                     ObjectsReference.Instance.gameLoad.RespawnAspirablesOnMap();
-                    
-                    Cursor.visible = false;
-                    Cursor.lockState = CursorLockMode.Locked;
-                    ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.HUD].alpha = 1f;
+                    MapItems.Instance.SpawnDebris();
+
+                    ObjectsReference.Instance.uiManager.SetActive(UICanvasGroupType.HUD, true);
+                    ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.CROSSHAIRS].alpha = 1f;
                     ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.QUICKSLOTS].alpha = 1f;
+                    ObjectsReference.Instance.quickSlotsManager.SetPlateformSlotAvailability();
                     ObjectsReference.Instance.uInventoriesManager.ShowCurrentUIHelper();
-                    
+
                     ObjectsReference.Instance.inputManager.SwitchContext(InputContext.GAME);
                     ObjectsReference.Instance.gameManager.gameContext = GameContext.IN_GAME;
                     ObjectsReference.Instance.gameManager.isGamePlaying = true;
-                    
+
                     ObjectsReference.Instance.uiManager.HideGameMenu();
                     ObjectsReference.Instance.uiManager.HideHomeMenu();
-                    
+
                     ObjectsReference.Instance.cameraPlayer.Return_back_To_Player();
-                    ObjectsReference.Instance.cameraPlayer.SetNormalSensibility();
-                    
-                    ObjectsReference.Instance.playerController.canMove = true;
-                    ObjectsReference.Instance.bananaMan.GetComponent<Rigidbody>().isKinematic = false;
-                    
-                    ObjectsReference.Instance.inputManager.homeActions.enabled = false;
+
+                    ObjectsReference.Instance.audioManager.SetMusiqueAndAmbianceBySceneName(sceneName);
 
                     if (!ObjectsReference.Instance.bananaMan.tutorialFinished) {
                         ObjectsReference.Instance.tutorial.StartTutorial();
-                    }
-
-                    else {
-                        ObjectsReference.Instance.audioManager.SetMusiqueAndAmbianceBySceneName(sceneName);
                     }
                 }
 

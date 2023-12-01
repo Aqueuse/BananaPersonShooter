@@ -1,5 +1,4 @@
-﻿using Enums;
-using Player;
+﻿using Player;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -94,7 +93,7 @@ namespace Input {
             rotateGhostActionReference.action.performed += Rotate;
             
             moveAwayCloserGhostActionReference.action.Enable();
-            moveAwayCloserGhostActionReference.action.performed += MoveAwayGhostTarget;
+            moveAwayCloserGhostActionReference.action.performed += MoveAwayCloserGhostTarget;
             
             switchToInventoryActionReference.action.Enable();
             switchToInventoryActionReference.action.performed += SwitchToInventory;
@@ -146,7 +145,7 @@ namespace Input {
             rotateGhostActionReference.action.performed -= Rotate;
             
             moveAwayCloserGhostActionReference.action.Disable();
-            moveAwayCloserGhostActionReference.action.performed -= MoveAwayGhostTarget;
+            moveAwayCloserGhostActionReference.action.performed -= MoveAwayCloserGhostTarget;
             
             switchToInventoryActionReference.action.Disable();
             switchToInventoryActionReference.action.performed -= SwitchToInventory;
@@ -258,14 +257,12 @@ namespace Input {
 
             if (context.performed) {
                 ObjectsReference.Instance.bananaGun.GrabBananaGun();
-                //ObjectsReference.Instance.mainCamera.SetOutlineRenderer();
                 
                 ObjectsReference.Instance.harvest.isDirectHarvestActivated = true;
             }
 
             if (context.canceled) {
                 ObjectsReference.Instance.bananaGun.UngrabBananaGun();
-                //ObjectsReference.Instance.mainCamera.SetNormalRenderer();
                 ObjectsReference.Instance.descriptionsManager.HideAllPanels();
                 
                 ObjectsReference.Instance.harvest.isDirectHarvestActivated = false;
@@ -300,12 +297,7 @@ namespace Input {
             }
         }
 
-        private void MoveCloserGhostTarget(InputAction.CallbackContext context) {
-            if (!ObjectsReference.Instance.build.isActivated) return;
-
-        }
-
-        private void MoveAwayGhostTarget(InputAction.CallbackContext context) {
+        private void MoveAwayCloserGhostTarget(InputAction.CallbackContext context) {
             if (!ObjectsReference.Instance.build.isActivated) return;
 
             var placementLocalPosition = ObjectsReference.Instance.uiHud.buildablePlacementTransform.localPosition;

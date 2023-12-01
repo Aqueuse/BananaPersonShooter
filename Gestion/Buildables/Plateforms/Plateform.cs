@@ -1,6 +1,5 @@
 using Bananas;
 using Data.Bananas;
-using Enums;
 using Tags;
 using UnityEngine;
 
@@ -16,6 +15,7 @@ namespace Gestion.Buildables.Plateforms {
         [SerializeField] private Animator _animator;
 
         [SerializeField] private GameObject workbench;
+        [SerializeField] private GameObject plateformInteraction;
         
         private UpEffect upEffect;
         private AudioSource _audioSource;
@@ -107,6 +107,8 @@ namespace Gestion.Buildables.Plateforms {
         private void StartShowingBenchWork() {
             GetComponent<MeshRenderer>().enabled = false;
             GetComponent<MeshCollider>().isTrigger = true;
+
+            plateformInteraction.SetActive(false);
             
             workbench.SetActive(true);
             _animator.SetTrigger(Open);
@@ -125,6 +127,7 @@ namespace Gestion.Buildables.Plateforms {
             GetComponent<MeshCollider>().isTrigger = false;
             
             workbench.SetActive(false);
+            plateformInteraction.SetActive(true);
             
             SetUnactiveMaterial();
 

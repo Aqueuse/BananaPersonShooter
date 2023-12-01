@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
-using Enums;
 using Game;
 using Newtonsoft.Json;
 using Save.Templates;
@@ -106,7 +105,7 @@ namespace Save {
             else {
                 var date = DateTime.ParseExact(DateTime.Now.ToString("U"), "U", CultureInfo.CurrentCulture);
                 ObjectsReference.Instance.saveData.Save(saveUuid, date.ToString(CultureInfo.CurrentCulture));
-                
+
                 var savefilePath = Path.Combine(_savePath, mapName+".json");
 
                 var map01DataString = File.ReadAllText(savefilePath);
@@ -115,52 +114,90 @@ namespace Save {
             }
         }
 
-        public void LoadMapAspirablesDataByUuid(string saveUuid) {
+        public void LoadMapBuildablesDataByUuid(string saveUuid) {
             _savePath = Path.Combine(_savesPath, saveUuid);
             
             var saveMapDatasPath = Path.Combine(_savePath, "MAPDATA");
             
             foreach (var map in ObjectsReference.Instance.mapsManager.mapBySceneName) {
-                var loadfilePath = Path.Combine(saveMapDatasPath, map.Key.ToUpper()+"_aspirables.data");
+                var loadfilePath = Path.Combine(saveMapDatasPath, map.Key.ToUpper()+"_buildables.data");
                 
                 if (File.Exists(loadfilePath)) {
                     using var streamReader = new StreamReader(loadfilePath);
 
-                    var aspirablesData = new List<string>();
+                    var buildablesData = new List<string>();
 
                     while (!streamReader.EndOfStream) {
-                        aspirablesData.Add(streamReader.ReadLine());
+                        buildablesData.Add(streamReader.ReadLine());
                     }
 
-                    var aspirablesQuantity = aspirablesData.Count;
+                    var buildablesQuantity = buildablesData.Count;
                     
-                    if (aspirablesQuantity > 0) {
+                    if (buildablesQuantity > 0) {
                         mapToLoad = ObjectsReference.Instance.mapsManager.mapBySceneName[map.Key];
                         
                         mapToLoad.itemsPositions = new List<Vector3>();
                         mapToLoad.itemsRotations = new List<Quaternion>();
 
                         mapToLoad.itemsCategories = new List<ItemCategory>();
-                        mapToLoad.itemsPrefabsIndex = new List<int>();
                         mapToLoad.itemsBuildableTypes = new List<BuildableType>();
                         mapToLoad.itemBananaTypes = new List<BananaType>();
 
-                        foreach (var aspirable in aspirablesData) {
-                            var dataSplit = aspirable.Split("/");
+                        foreach (var buidable in buildablesData) {
+                            var dataSplit = buidable.Split("/");
                     
                             mapToLoad.itemsPositions.Add(Vector3FromString(dataSplit[0]));
                             mapToLoad.itemsRotations.Add(QuaternionFromString(dataSplit[1]));
                         
                             mapToLoad.itemsCategories.Add((ItemCategory)Enum.Parse(typeof(ItemCategory), dataSplit[2]));
-                            mapToLoad.itemsPrefabsIndex.Add(Convert.ToInt32(dataSplit[3]));
-                            mapToLoad.itemsBuildableTypes.Add((BuildableType)Enum.Parse(typeof(BuildableType), dataSplit[4]));
-                            mapToLoad.itemBananaTypes.Add((BananaType)Enum.Parse(typeof(BananaType), dataSplit[5]));
+                            mapToLoad.itemsBuildableTypes.Add((BuildableType)Enum.Parse(typeof(BuildableType), dataSplit[3]));
+                            mapToLoad.itemBananaTypes.Add((BananaType)Enum.Parse(typeof(BananaType), dataSplit[4]));
                         }
                     }
                 }
             }
         }
         
+        public void LoadMapDebrisDataByUuid(string saveUuid) {
+            _savePath = Path.Combine(_savesPath, saveUuid);
+            
+            var saveMapDatasPath = Path.Combine(_savePath, "MAPDATA");
+            
+            foreach (var map in ObjectsReference.Instance.mapsManager.mapBySceneName) {
+                var loadfilePath = Path.Combine(saveMapDatasPath, map.Key.ToUpper()+"_debris.data");
+                
+                if (File.Exists(loadfilePath)) {
+                    using var streamReader = new StreamReader(loadfilePath);
+
+                    var debrisData = new List<string>();
+
+                    while (!streamReader.EndOfStream) {
+                        debrisData.Add(streamReader.ReadLine());
+                    }
+
+                    var debrisQuantity = debrisData.Count;
+                    
+                    if (debrisQuantity > 0) {
+                        mapToLoad = ObjectsReference.Instance.mapsManager.mapBySceneName[map.Key];
+                        
+                        mapToLoad.debrisPositions = new List<Vector3>();
+                        mapToLoad.debrisRotations = new List<Quaternion>();
+
+                        mapToLoad.debrisTypes = new List<CharacterType>();
+
+                        foreach (var debris in debrisData) {
+                            var dataSplit = debris.Split("/");
+
+                            mapToLoad.debrisPositions.Add(Vector3FromString(dataSplit[0]));
+                            mapToLoad.debrisRotations.Add(QuaternionFromString(dataSplit[1]));
+                        
+                            mapToLoad.debrisTypes.Add((CharacterType)Enum.Parse(typeof(CharacterType), dataSplit[2]));
+                        }
+                    }
+                }
+            }
+        }
+
         public string GetSavePathByUuid(string saveUuid) {
             return Path.Combine(_savesPath, saveUuid);
         }

@@ -1,6 +1,4 @@
-﻿using System;
-using Data.Buildables;
-using Enums;
+﻿using Data.Buildables;
 using UnityEngine;
 
 namespace Game.Inventory {

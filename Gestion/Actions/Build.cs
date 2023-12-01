@@ -1,6 +1,5 @@
 using Data;
 using Data.Buildables;
-using Enums;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -14,7 +13,7 @@ namespace Gestion.Actions {
 
         public ItemScriptableObject activatedItemScriptableObject;
 
-        private GameObject _activeGhost;
+        public GameObject _activeGhost;
         private Ghost _activeGhostClass;
 
         private Ray ray;
@@ -70,14 +69,11 @@ namespace Gestion.Actions {
             if (ObjectsReference.Instance.rawMaterialsInventory.HasCraftingIngredients(buildableDataScriptableObject)) {
                 _activeGhostClass.SetGhostState(GhostState.VALID);
                 ObjectsReference.Instance.uInventoriesManager.GetCurrentUIHelper().ShowNormalPlaceHelper();
+
+                isActivated = true;
             }
 
-            else {
-                _activeGhostClass.SetGhostState(GhostState.NOT_ENOUGH_MATERIALS);
-                ObjectsReference.Instance.uInventoriesManager.GetCurrentUIHelper().ShowNotEnoughMaterialsHelper();
-            }
-            
-            isActivated = true;
+            ghostRotationEuler = _activeGhost.transform.rotation.eulerAngles;
         }
 
         public void ActivatePlateformGhost() {
@@ -114,9 +110,9 @@ namespace Gestion.Actions {
                     position: _activeGhost.transform.position, rotation: _activeGhost.transform.rotation);
 
                 _buildable.transform.parent = MapItems.Instance.aspirablesContainer.transform;
-                
+
                 var _craftingIngredients = _activeGhostClass.buildableDataScriptableObject.rawMaterialsWithQuantity;
-                
+
                 foreach (var craftingIngredient in _craftingIngredients) {
                     ObjectsReference.Instance.rawMaterialsInventory.RemoveQuantity(craftingIngredient.Key,
                         craftingIngredient.Value);
@@ -124,12 +120,17 @@ namespace Gestion.Actions {
 
                 ObjectsReference.Instance.mapsManager.currentMap.RefreshItemsDataMap();
                 ObjectsReference.Instance.quickSlotsManager.SetPlateformSlotAvailability();
+
+                isActivated = false;
+                _activeGhost.transform.position = ghostsReference.transform.position;
+                _activeGhost = null;
             }
         }
 
         public void CancelBuild() {
             CancelGhost();
-            ObjectsReference.Instance.bananaGun.UngrabBananaGun();
+            if (!ObjectsReference.Instance.gestionMode.isGestionModeActivated)
+                ObjectsReference.Instance.bananaGun.UngrabBananaGun();
         }
 
         public void setGhostColor() {
@@ -141,7 +142,6 @@ namespace Gestion.Actions {
                     if (_activeGhostClass.GetGhostState() != GhostState.UNBUILDABLE)
                         _activeGhostClass.SetGhostState(GhostState.NOT_ENOUGH_MATERIALS);
                 }
-            
         }
     }
 }

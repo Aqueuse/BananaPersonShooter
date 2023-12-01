@@ -5,8 +5,9 @@ namespace Cameras {
     public class CameraGestion : MonoBehaviour {
         [SerializeField] private Transform cameraGestionYaxisTransform;
         
-        public float cameraSpeed;
-        public float cameraYposition = 250;
+        public float cameraRotationSpeed;
+        public float cameraMoveSpeed;
+        public float cameraYposition;
         
         private Transform _transform;
         public Vector3 cameraMovement;
@@ -19,35 +20,29 @@ namespace Cameras {
             _transform = transform;
             ResetPosition();
             
-            cameraSpeed = ObjectsReference.Instance.gameSettings.lookSensibility*3;
             cameraBounds = MapItems.Instance.cameraBounds;
         }
 
         private void Update() {
-            _transform.Translate(cameraMovement * cameraSpeed, _transform);
-            
-            if (!cameraBounds.bounds.Contains(cameraGestionYaxisTransform.position))
-                _transform.Translate(-cameraMovement * cameraSpeed, _transform);
+            _transform.Translate(cameraMovement, _transform);
+
+            if (!cameraBounds.bounds.Contains(cameraGestionYaxisTransform.position)) 
+                _transform.Translate(-cameraMovement, _transform);
         }
 
         public void Rotate(Vector2 rotation) {
-            _transform.Rotate(0, rotation.x*cameraSpeed, 0);
-            cameraGestionYaxisTransform.Rotate(-rotation.y*cameraSpeed, 0, 0);
+            _transform.Rotate(0, rotation.x*cameraRotationSpeed, 0);
+            cameraGestionYaxisTransform.Rotate(-rotation.y*cameraRotationSpeed, 0, 0);
         } 
         
         public void Move(float Xmovement, float Zmovement) {
-            cameraMovement.x = Xmovement * cameraSpeed;
+            cameraMovement.x = Xmovement * cameraMoveSpeed;
             cameraMovement.y = 0;
-            cameraMovement.z = Zmovement * cameraSpeed;
+            cameraMovement.z = Zmovement * cameraMoveSpeed;
         }
 
         public void MoveUpDown(float Ymovement) {
-            if (cameraYposition is < 300 and > 200) {
-                cameraMovement.y = Ymovement*2;
-            }
-            else {
-                cameraMovement.y = 0;
-            }
+            cameraMovement.y = Ymovement*2;
         }
         
         public void CancelMove() {
@@ -60,7 +55,7 @@ namespace Cameras {
 
         public void ResetPosition() {
             var cameraTransform = ObjectsReference.Instance.bananaMan.transform.position;
-            cameraTransform.y = cameraYposition;
+            cameraTransform.y += cameraYposition;
             transform.position = cameraTransform;
         }
     }

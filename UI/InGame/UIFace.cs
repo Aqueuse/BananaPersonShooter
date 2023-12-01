@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 namespace UI.InGame {
     public class UIFace : MonoBehaviour {
-        private Animator _faceAnimator;
+        [SerializeField] private Animator _faceAnimator;
         private static readonly int Move = Animator.StringToHash("MOVE");
         private static readonly int Hurted = Animator.StringToHash("HURTED");
         private static readonly int Dead = Animator.StringToHash("DEAD");
@@ -23,10 +23,6 @@ namespace UI.InGame {
         [SerializeField] private TextMeshProUGUI deadEyeLeft;
         [SerializeField] private TextMeshProUGUI deadEyeRight;
         [SerializeField] private TextMeshProUGUI disorientedMouth;
-        
-        private void Start() {
-            _faceAnimator = GetComponent<Animator>();
-        }
         
         public void MoveFaceAnimation(float speed) {
             _faceAnimator.SetFloat(Move, speed);

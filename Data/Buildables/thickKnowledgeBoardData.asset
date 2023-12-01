@@ -10,31 +10,26 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6e11e44741351774ca1f8261e4d989f1, type: 3}
-  m_Name: managementWorkstationData
+  m_Name: thickKnowledgeBoardData
   m_EditorClassIdentifier: 
   gameObjectTag: 11
   itemCategory: 1
   bananaType: 0
   rawMaterialType: 5
   ingredientsType: 1
-  buildableType: 2
-  prefabIndex: 0
+  buildableType: 13
   itemName:
-  - management workstation
-  - bureau de gestion
-  - "oficina de administraci\xF3n"
-  itemSprite: {fileID: 21300000, guid: ab491f16b98a8064fabe9758c563a6e8, type: 3}
+  - modern information panel
+  - panneau d'informations moderne
+  - panel informativo moderno
+  itemSprite: {fileID: 21300000, guid: 89264f61e9d35ec4e97d8c8d49636e49, type: 3}
   itemDescription:
-  - a desk to build and manage the space station
-  - un bureau pour construire et administrer la station spatiale
-  - "Un escritorio para construir y administrar la estaci\xF3n espacial"
+  - a modern touchscreen information panel
+  - "un panneau d'information moderne \xE0 \xE9cran tactile"
+  - "un moderno panel de informaci\xF3n con pantalla t\xE1ctil"
   rawMaterialsWithQuantity:
     list:
     - key: 0
       value: 4
-    - key: 2
-      value: 2
-    - key: 1
-      value: 1
     keyCollision: 0
-  buildablePrefab: {fileID: 5006133390569365907, guid: 6473fc63d7b38244cacef9e82e267f96, type: 3}
+  buildablePrefab: {fileID: 3376277238409772002, guid: f2a91b7ede231154c99d15222202cd73, type: 3}

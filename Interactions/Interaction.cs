@@ -1,6 +1,4 @@
 using System.Collections.Generic;
-using Gestion.Buildables;
-using Enums;
 using TMPro;
 using UnityEngine;
 
@@ -53,22 +51,12 @@ namespace Interactions {
 
             ShowUI();
             _isActive = true;
-
-            if (interactionType == InteractionType.BANANA_DRYER_PLACE_BANANA_PEEL) {
-                ObjectsReference.Instance.inputManager.bananasDryerAction.enabled = true;
-                ObjectsReference.Instance.inputManager.bananasDryerAction.activeBananaDryer = GetComponent<BananasDryer>();
-            }
         }
 
         public void Desactivate() {
             _isActive = false;
 
             HideUI();
-
-            if (interactionType == InteractionType.BANANA_DRYER_PLACE_BANANA_PEEL) {
-                ObjectsReference.Instance.inputManager.bananasDryerAction.enabled = false;
-                ObjectsReference.Instance.inputManager.bananasDryerAction.activeBananaDryer = null;
-            }
         }
     }
 }

@@ -1,7 +1,6 @@
-namespace Enums {
-    enum CharacterType {
-        MINI_CHIMP,
-        CHIMPLOYEE,
-        VISITOR
-    }
+public enum CharacterType {
+    MINI_CHIMP,
+    CHIMPLOYEE,
+    VISITOR,
+    PIRATE
 }

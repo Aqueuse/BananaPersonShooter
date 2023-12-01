@@ -1,57 +1,45 @@
 using Game.BananaCannonMiniGame;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace Input {
     public class BananaCannonMiniGameActions : MonoBehaviour {
-        private static void StartGame() {
-            if (ObjectsReference.Instance.uIbananaCannonMiniGame.startMenuCanvasGroup.alpha > 0) {
-                if (UnityEngine.Input.GetKeyDown(KeyCode.E) || UnityEngine.Input.GetKeyDown(KeyCode.JoystickButton0) ) {
-                    BananaCannonMiniGameManager.Instance.PlayMiniGame();
-                }
-            }
+        [SerializeField] private InputActionReference rotateCannonInputActionReference;
+        [SerializeField] private InputActionReference shootInputActionReference;
+        [SerializeField] private InputActionReference quitInputActionReference;
+        
+        private void OnEnable() {
+            rotateCannonInputActionReference.action.Enable();
+            rotateCannonInputActionReference.action.performed += RotateCannon;
+            
+            shootInputActionReference.action.Enable();
+            shootInputActionReference.action.performed += Shoot;
+            
+            quitInputActionReference.action.Enable();
+            quitInputActionReference.action.performed += Quit;
         }
 
-        private static void Teleport() {
-            if (ObjectsReference.Instance.uIbananaCannonMiniGame.startMenuCanvasGroup.alpha > 0) {
-                if (UnityEngine.Input.GetKeyDown(KeyCode.JoystickButton2) ) {
-                    BananaCannonMiniGameManager.Instance.Teleport();
-                }
-            }
-        }
+        private void OnDisable() {
+            rotateCannonInputActionReference.action.Disable();
+            rotateCannonInputActionReference.action.performed -= RotateCannon;
 
-        private static void UnpauseGame() {
-            if (ObjectsReference.Instance.uIbananaCannonMiniGame.pauseMenuCanvasGroup.alpha > 0) {
-                if (UnityEngine.Input.GetKeyDown(KeyCode.JoystickButton1) ) {
-                    BananaCannonMiniGameManager.UnpauseMiniGame();
-                }
-            }
-        }
-
-        private static void QuitGame() {
-            if (ObjectsReference.Instance.uIbananaCannonMiniGame.startMenuCanvasGroup.alpha > 0) {
-                if (UnityEngine.Input.GetKeyDown(KeyCode.JoystickButton1) ) {
-                    BananaCannonMiniGameManager.Instance.QuitMiniGame();
-                }
-            }
+            shootInputActionReference.action.Disable();
+            shootInputActionReference.action.performed -= Shoot;
+            
+            quitInputActionReference.action.Disable();
+            quitInputActionReference.action.performed -= Quit;
         }
         
-        ////////////////////////////
-
-        private static void PauseGame() {
-            if (UnityEngine.Input.GetKeyDown(KeyCode.Escape) || UnityEngine.Input.GetKeyDown(KeyCode.JoystickButton7) ) {
-                BananaCannonMiniGameManager.PauseMiniGame();
-            }
+        private void RotateCannon(InputAction.CallbackContext context) {
+            BananaCannonMiniGameManager.Instance.MoveTarget(context.ReadValue<Vector2>().x, context.ReadValue<Vector2>().y);
         }
 
-        private static void RotateCannon() {
-            BananaCannonMiniGameManager.Instance.MoveTarget(UnityEngine.Input.GetAxis("Horizontal"), UnityEngine.Input.GetAxis("Vertical"));
-            BananaCannonMiniGameManager.Instance.MoveTarget(UnityEngine.Input.GetAxis("Mouse X"), UnityEngine.Input.GetAxis("Mouse Y"));
+        private void Shoot(InputAction.CallbackContext context) {
+            BananaCannonMiniGameManager.Instance.Shoot();
         }
 
-        private void Shoot() {
-            if (UnityEngine.Input.GetMouseButtonDown(0) || UnityEngine.Input.GetKeyDown(KeyCode.JoystickButton0)) {
-                BananaCannonMiniGameManager.Instance.Shoot();
-            }
+        private void Quit(InputAction.CallbackContext context) {
+            BananaCannonMiniGameManager.Instance.QuitMiniGame();
         }
     }
 }

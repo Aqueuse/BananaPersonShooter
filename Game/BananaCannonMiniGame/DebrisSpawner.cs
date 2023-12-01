@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -6,11 +7,9 @@ namespace Game.BananaCannonMiniGame {
         [SerializeField] private LayerMask raycastLayerMask;
         [SerializeField] private MeshCollider domeCollider;
 
-        private GameObject[] _debrisPrefab;
-        private Transform _debrisContainer;
+        [SerializeField] private Transform _debrisContainer;
 
         private RaycastHit _raycastHit;
-        private int _debrisQuantity;
 
         private Vector2 _randomPositionInCircle;
         private Vector3 _randomPositionInCircleVector3;
@@ -18,70 +17,82 @@ namespace Game.BananaCannonMiniGame {
 
         private NavMeshTriangulation navMeshTriangulation;
 
+        private List<CharacterType> debrisByCharacterType;
+
         private void Start() {
-            _debrisPrefab = ObjectsReference.Instance.scriptableObjectManager._meshReferenceScriptableObject.debrisPrefab;
             _randomPositionInCircle = new Vector2();
             _randomPositionInCircleVector3 = new Vector3();
             _raycastOrigin = new Vector3();
-            
-            navMeshTriangulation = NavMesh.CalculateTriangulation();
         }
 
-        public void SpawnNewDebripOnNavMesh(Transform mapDebrisContainer) {
-            _debrisQuantity = ObjectsReference.Instance.mapsManager.currentMap.debrisToSpawn;
-            _debrisContainer = mapDebrisContainer;
-            
-            for (var i = 0; i < _debrisQuantity; i++) {
-                var vertexIndex = Random.Range(0, navMeshTriangulation.vertices.Length);
-                
-                if (NavMesh.SamplePosition(navMeshTriangulation.vertices[vertexIndex], out var navMeshHit, 2f, 0)) {
-                    Debug.Log(vertexIndex);
+        public void SpawnNewDebrisOnNavMesh() {
+            debrisByCharacterType = ObjectsReference.Instance.mapsManager.currentMap.debrisToSPawnByCharacterType;
 
-                    Instantiate(
-                        original: _debrisPrefab[Random.Range(0, _debrisPrefab.Length - 1)],
+            navMeshTriangulation = NavMesh.CalculateTriangulation();
+
+            Debug.Log(navMeshTriangulation.vertices.Length);
+
+            foreach (var characterType in debrisByCharacterType) {
+                var vertexIndex = Random.Range(0, navMeshTriangulation.vertices.Length);
+
+                if (NavMesh.SamplePosition(navMeshTriangulation.vertices[vertexIndex], out var navMeshHit, 200f, NavMesh.AllAreas)) {
+                    Debug.Log("spawn debris");
+                    Debug.Log(vertexIndex);
+                    
+                    var debris = Instantiate(
+                        original: ObjectsReference.Instance.scriptableObjectManager._meshReferenceScriptableObject.GetRandomDebrisByCharacterType(characterType),
                         position: navMeshHit.position,
                         rotation:Quaternion.FromToRotation(transform.up, navMeshHit.normal),
                         parent: _debrisContainer
                     );
+                    
+                    ObjectsReference.Instance.mapsManager.currentMap.debrisPositions.Add(debris.transform.position);
+                    ObjectsReference.Instance.mapsManager.currentMap.debrisRotations.Add(debris.transform.rotation);
+                    ObjectsReference.Instance.mapsManager.currentMap.debrisTypes.Add(characterType);
                 }
-                
-                // if (i == _debrisQuantity - 1) {
-                //     enabled = false;
-                // }
             }
+
+            domeCollider.enabled = true;
+            enabled = false;
             
-            ObjectsReference.Instance.mapsManager.currentMap.debrisToSpawn = 0;
+            ObjectsReference.Instance.mapsManager.currentMap.piratesDebrisToSpawn = 0;
+            ObjectsReference.Instance.mapsManager.currentMap.visitorsDebrisToSpawn = 0;
+            
+            ObjectsReference.Instance.mapsManager.currentMap.debrisToSPawnByCharacterType.Clear();
         }
 
-        public void SpawnNewDebrisOnRaycastHit(Transform mapDebrisContainer) {
+        public void SpawnNewDebrisOnRaycastHit() {
+            debrisByCharacterType = ObjectsReference.Instance.mapsManager.currentMap.debrisToSPawnByCharacterType;
+            
             domeCollider.enabled = false;
-            _debrisQuantity = ObjectsReference.Instance.mapsManager.currentMap.debrisToSpawn;
-            _debrisContainer = mapDebrisContainer;
 
-            for (var i = 0; i < _debrisQuantity; i++) {
+            foreach (var characterType in debrisByCharacterType) {
                 _randomPositionInCircle = Random.insideUnitCircle * 500;
                 _randomPositionInCircleVector3.x = _randomPositionInCircle.x;
                 _randomPositionInCircleVector3.z = _randomPositionInCircle.y;
                 
                 _raycastOrigin = _randomPositionInCircleVector3 + transform.position;
                 
-                if (Physics.Raycast(origin: _raycastOrigin, direction: Vector3.down,
-                        hitInfo: out _raycastHit, maxDistance:1000, layerMask: raycastLayerMask)) {
-                    Instantiate(
-                        original: _debrisPrefab[Random.Range(0, _debrisPrefab.Length - 1)],
+                if (Physics.Raycast(origin: _raycastOrigin, direction: Vector3.down, hitInfo: out _raycastHit, maxDistance:1000, layerMask: raycastLayerMask)) {
+                    var debris = Instantiate(
+                        original: ObjectsReference.Instance.scriptableObjectManager._meshReferenceScriptableObject.GetRandomDebrisByCharacterType(characterType),
                         position: _raycastHit.point,
                         rotation:Quaternion.FromToRotation(transform.up, _raycastHit.normal),
                         parent: _debrisContainer
                     );
-                }
-                
-                if (i == _debrisQuantity - 1) {
-                    domeCollider.enabled = true;
-                    enabled = false;
+                    
+                    ObjectsReference.Instance.mapsManager.currentMap.debrisPositions.Add(debris.transform.position);
+                    ObjectsReference.Instance.mapsManager.currentMap.debrisRotations.Add(debris.transform.rotation);
+                    ObjectsReference.Instance.mapsManager.currentMap.debrisTypes.Add(characterType);
                 }
             }
 
-            ObjectsReference.Instance.mapsManager.currentMap.debrisToSpawn = 0;
+            domeCollider.enabled = true;
+            enabled = false;
+
+            ObjectsReference.Instance.mapsManager.currentMap.piratesDebrisToSpawn = 0;
+            ObjectsReference.Instance.mapsManager.currentMap.visitorsDebrisToSpawn = 0;
+            ObjectsReference.Instance.mapsManager.currentMap.debrisToSPawnByCharacterType.Clear();
         }
     }
 }

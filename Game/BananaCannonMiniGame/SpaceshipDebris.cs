@@ -16,7 +16,12 @@ namespace Game.BananaCannonMiniGame {
         }
         
         private void SpawnDebrisOnMap() {
-            BananaCannonMiniGameManager.Instance.RefreshDebrisQuantity();
+            if (spaceship.spaceshipType == CharacterType.VISITOR)
+                BananaCannonMiniGameManager.Instance.AddVisitorDebris();
+            
+            if (spaceship.spaceshipType == CharacterType.PIRATE)
+                BananaCannonMiniGameManager.Instance.AddPirateDebris();
+            
             Destroy(gameObject);
         }
     }

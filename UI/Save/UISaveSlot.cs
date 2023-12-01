@@ -57,7 +57,7 @@ namespace UI.Save {
         }
         
         public void Load() {
-            ObjectsReference.Instance.audioManager.PlayEffect(EffectType.BUTTON_INTERACTION, 0);
+            ObjectsReference.Instance.audioManager.PlayEffect(SoundEffectType.BUTTON_INTERACTION, 0);
             ObjectsReference.Instance.gameManager.Play(saveUuid, false);
             ObjectsReference.Instance.uiSave.UnselectAll();
         }
@@ -117,7 +117,7 @@ namespace UI.Save {
         }
 
         public void Delete() {
-            ObjectsReference.Instance.audioManager.PlayEffect(EffectType.BUTTON_INTERACTION, 0);
+            ObjectsReference.Instance.audioManager.PlayEffect(SoundEffectType.BUTTON_INTERACTION, 0);
             Destroy(saveRootGameObject);
             ObjectsReference.Instance.saveData.DeleteSave(saveUuid);
         }

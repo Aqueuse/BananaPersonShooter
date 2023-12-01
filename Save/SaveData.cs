@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.IO;
-using Enums;
 using JetBrains.Annotations;
 using Newtonsoft.Json;
 using Save.Templates;
@@ -9,6 +8,7 @@ using UnityEngine;
 namespace Save {
     public class SaveData : MonoBehaviour {
         private string[] _buildablesDatas;
+        private string[] _debrisDatas;
         private string[] _plateformsDatas;
 
         private string _appPath;
@@ -17,12 +17,12 @@ namespace Save {
 
         private SavedData _savedData;
         private string savePath;
-        
+
         private void Start() {
             _appPath = Path.GetDirectoryName(Application.persistentDataPath);
             if (_appPath != null) {
                 gamePath = Path.Combine(_appPath, "Banana Man The Space Monkeys");
-            
+
                 _savesPath = Path.Combine(gamePath, "Saves");
                 if (!Directory.Exists(_savesPath)) {
                     Directory.CreateDirectory(_savesPath);
@@ -72,7 +72,8 @@ namespace Save {
 
                 // synchronize data beetween classes and templates
                 map.Value.isDiscovered = mapClass.isDiscovered;
-                map.Value.cleanliness = mapClass.cleanliness;
+                map.Value.piratesDebris = mapClass.piratesDebrisToSpawn;
+                map.Value.visitorsDebris = mapClass.visitorsDebrisToSpawn;
 
                 if (mapClass.mapDataScriptableObject.monkeyDataScriptableObjectsByMonkeyId.Count > 0) {
                     foreach (var monkeyDataScriptableObject in mapClass.mapDataScriptableObject.monkeyDataScriptableObjectsByMonkeyId) {
@@ -95,7 +96,7 @@ namespace Save {
                 if (map.Value.itemsCategories.Count == 0) {
                     // delete file
                     var mapDataSavesPath = Path.Combine(savePath, "MAPDATA");
-                    var filePath = Path.Combine(mapDataSavesPath, map.Value.mapDataScriptableObject.sceneName+"_aspirables.data");
+                    var filePath = Path.Combine(mapDataSavesPath, map.Value.mapDataScriptableObject.sceneName+"_buildables.data");
 
                     File.Delete(filePath);
                 }
@@ -103,14 +104,34 @@ namespace Save {
                 else {
                     var mapToSave = map.Value;
 
-                    SaveMapData(
+                    SaveMapBuildablesData(
                         mapName: mapToSave.mapDataScriptableObject.sceneName,
-                        aspirablesPositions: mapToSave.itemsPositions,
-                        aspirablesRotations:mapToSave.itemsRotations,
-                        debrisPrefabsIndex: mapToSave.itemsPrefabsIndex,
-                        aspirablesCategories:mapToSave.itemsCategories,
+                        buildablesPositions: mapToSave.itemsPositions,
+                        buildablesRotations:mapToSave.itemsRotations,
+                        buildablesCategories:mapToSave.itemsCategories,
                         buildableTypes: mapToSave.itemsBuildableTypes,
                         itemTypes:mapToSave.itemBananaTypes
+                    );
+                }
+            }
+            
+            foreach (var map in ObjectsReference.Instance.mapsManager.mapBySceneName) {
+                if (map.Value.itemsCategories.Count == 0) {
+                    // delete file
+                    var mapDataSavesPath = Path.Combine(savePath, "MAPDATA");
+                    var filePath = Path.Combine(mapDataSavesPath, map.Value.mapDataScriptableObject.sceneName+"_debris.data");
+
+                    File.Delete(filePath);
+                }
+
+                else {
+                    var mapToSave = map.Value;
+
+                    SaveMapDebrisData(
+                        mapName: mapToSave.mapDataScriptableObject.sceneName,
+                        debrisPositions: mapToSave.debrisPositions,
+                        debrisRotations:mapToSave.debrisRotations,
+                        debrisType: mapToSave.debrisTypes
                     );
                 }
             }
@@ -142,39 +163,67 @@ namespace Save {
             screenshotCamera.targetTexture = null;
         }
 
-        private void SaveMapData(
+        private void SaveMapBuildablesData(
             string mapName,  
-            List<Vector3> aspirablesPositions, 
-            List<Quaternion> aspirablesRotations,
+            List<Vector3> buildablesPositions, 
+            List<Quaternion> buildablesRotations,
             
-            List<ItemCategory> aspirablesCategories,
-            [NotNull] List<int> debrisPrefabsIndex,
+            List<ItemCategory> buildablesCategories,
             [NotNull] List<BuildableType> buildableTypes,
             [NotNull] List<BananaType> itemTypes
         ) {
 
             var mapDataSavesPath = Path.Combine(savePath, "MAPDATA");
             
-            if (aspirablesCategories.Count > 0) {
-                _buildablesDatas = new string[aspirablesCategories.Count];
+            if (buildablesCategories.Count > 0) {
+                _buildablesDatas = new string[buildablesCategories.Count];
             
                 for (var i = 0; i < _buildablesDatas.Length; i++) {
-                    _buildablesDatas[i] = aspirablesPositions[i] + "/" +
-                                          aspirablesRotations[i] + "/" +
-                                          aspirablesCategories[i] + "/" +
-                                          debrisPrefabsIndex[i] + "/" +
+                    _buildablesDatas[i] = buildablesPositions[i] + "/" +
+                                          buildablesRotations[i] + "/" +
+                                          buildablesCategories[i] + "/" +
                                           buildableTypes[i] + "/" +
                                           itemTypes[i];
                 }
-                
-                var savefilePath = Path.Combine(mapDataSavesPath, mapName+"_aspirables.data");
-                
+
+                var savefilePath = Path.Combine(mapDataSavesPath, mapName+"_buildables.data");
+
                 using var streamWriter = new StreamWriter(savefilePath, append:false);
-            
+
                 foreach (var data in _buildablesDatas) {
                     streamWriter.WriteLine(data);
                 }
+
+                streamWriter.Flush();
+            }
+        }
+        
+        private void SaveMapDebrisData(
+            string mapName,  
+            List<Vector3> debrisPositions, 
+            List<Quaternion> debrisRotations,
+            List<CharacterType> debrisType
+        ) {
+
+            var mapDataSavesPath = Path.Combine(savePath, "MAPDATA");
             
+            if (debrisPositions.Count > 0) {
+                _debrisDatas = new string[debrisPositions.Count];
+            
+                for (var i = 0; i < _debrisDatas.Length; i++) {
+                    _debrisDatas[i] = debrisPositions[i] + "/" +
+                                      debrisRotations[i] + "/" +
+                                      debrisType[i];
+                }
+
+                var savefilePath = Path.Combine(mapDataSavesPath, mapName+"_debris.data");
+
+                using var streamWriter = new StreamWriter(savefilePath, append:false);
+
+                foreach (var data in _debrisDatas) {
+                    streamWriter.WriteLine(data);
+                }
+
                 streamWriter.Flush();
             }
         }

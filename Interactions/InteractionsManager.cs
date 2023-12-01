@@ -1,18 +1,11 @@
-﻿using Enums;
-using Game.CommandRoomPanelControls;
-using Gestion.Buildables.Plateforms;
-using Interactions.InteractionsActions;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Interactions {
-    /// <summary>
     /// interaction manager instance is located in the main camera
-    /// </summary>
+    
     public class InteractionsManager : MonoBehaviour {
         [SerializeField] private LayerMask itemsLayerMask;
         [SerializeField] private Transform grabbableTarget;
-
-        [SerializeField] private GameObject workbench;
 
         public bool isGrabbing;
         private Vector3 grabbablePosition;
@@ -20,6 +13,8 @@ namespace Interactions {
 
         private GameObject _interactedObject;
         private InteractionType interactedInteractionType;
+
+        [SerializeField] private GenericDictionary<InteractionType, Interact> interactClassByInteractionType;
         
         private void Update() {
             if (!ObjectsReference.Instance.gameManager.isGamePlaying || ObjectsReference.Instance.gameManager.gameContext != GameContext.IN_GAME || isGrabbing) return;
@@ -30,10 +25,9 @@ namespace Interactions {
                 _interactedObject.GetComponent<Interaction>().Activate();
             }
             else {
-                if (_interactedObject != null) {
-                    _interactedObject.GetComponent<Interaction>().Desactivate();
-                    _interactedObject = null;
-                }
+                if (_interactedObject == null) return;
+                _interactedObject.GetComponent<Interaction>().Desactivate();
+                _interactedObject = null;
             }
         }
 
@@ -48,43 +42,7 @@ namespace Interactions {
         
             interactedInteractionType = _interactedObject.GetComponent<Interaction>().interactionType;
 
-            switch (interactedInteractionType) {
-                case InteractionType.DOOR_BEETWEEN_LEVELS:
-                    DoorBeetweenLevelsInteraction.Activate(_interactedObject);
-                    break;
-                case InteractionType.BUBBLE:
-                    MiniChimpInteraction.Activate(_interactedObject);
-                    break;
-                case InteractionType.BANANAGUN:
-                    BananaGunInteraction.Activate();
-                    CommandRoomControlPanelsManager.Instance.assembler.blueprintsDataInteraction.ShowBlueprintDataIfAvailable();
-                    CommandRoomControlPanelsManager.Instance.miniChimp.bubbleDialogue.SetBubbleDialogue(dialogueSet.GIFTS_BLUEPRINTS);
-                    CommandRoomControlPanelsManager.Instance.miniChimp.bubbleDialogue.PlayDialogue();
-                    break;
-                case InteractionType.COMMAND_ROOM_PANEL:
-                    CommandRoomPanelInteraction.Activate(_interactedObject);
-                    break;
-                case InteractionType.BANANA_CANNON_MINI_GAME:
-                    BananaCannonMiniGameInteraction.Activate();
-                    break;
-                case InteractionType.RETRIEVER:
-                    RetrieverInteraction.Activate(_interactedObject);
-                    break;
-                case InteractionType.BLUEPRINTS_DATA:
-                    _interactedObject.GetComponent<BlueprintsDataInteraction>().Activate();
-                    CommandRoomControlPanelsManager.Instance.miniChimp.bubbleDialogue.SetBubbleDialogue(dialogueSet.EAT_BANANAS);
-                    CommandRoomControlPanelsManager.Instance.miniChimp.bubbleDialogue.PlayDialogue();
-                    break;
-                case InteractionType.TELEPORT_TO_PORTAL_DESTINATION:
-                    _interactedObject.GetComponent<PortalDestinationInteraction>().Activate();
-                    break;
-                case InteractionType.PLATEFORM:
-                    _interactedObject.GetComponentInParent<Plateform>().ShowHideWorkbench();
-                    break;
-                case InteractionType.MANAGEMENT_WORKSTATION:
-                    ObjectsReference.Instance.gestionMode.SwitchToGestionMode();
-                    break;
-            }
+            interactClassByInteractionType[interactedInteractionType].Activate(_interactedObject);
         }
 
         public void Grab() {
@@ -97,7 +55,7 @@ namespace Interactions {
             _interactedObject.GetComponent<Interaction>().Desactivate();
 
             isGrabbing = true;
-            ObjectsReference.Instance.audioManager.PlayEffect(EffectType.GRAB_SOMETHING, 0);
+            ObjectsReference.Instance.audioManager.PlayEffect(SoundEffectType.GRAB_SOMETHING, 0);
         }
 
         public void Release() {
