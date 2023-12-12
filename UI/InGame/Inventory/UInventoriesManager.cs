@@ -29,7 +29,7 @@ namespace UI.InGame.Inventory {
             lastFocusedInventory = itemCategory;
             lastSelectedItemByInventoryCategory[itemCategory] = lastSelectedItem;
         }
-        
+
         public void FocusInventory() {
             if (lastSelectedItemByInventoryCategory[lastFocusedInventory] != null) {
                 EventSystem.current.SetSelectedGameObject(lastSelectedItemByInventoryCategory[lastFocusedInventory]);
@@ -97,7 +97,7 @@ namespace UI.InGame.Inventory {
             UnselectInventorySlots(lastFocusedInventory);
 
             lastFocusedInventory = itemCategory;
-            
+
             foreach (var (category, canvasGroup) in canvasGroupByInventoryCategory) {
                 if (category == itemCategory) {
                     canvasGroup.alpha = 1;
@@ -132,7 +132,7 @@ namespace UI.InGame.Inventory {
         public void ShowIngredientsInventory() {
             Switch_To_Ingredients_Inventory();
         }
-        
+
         public UIHelper GetCurrentUIHelper() {
             if (Gamepad.current == null) return gamepadUIHelper;
             return keyboardUIHelper;
@@ -151,7 +151,7 @@ namespace UI.InGame.Inventory {
         public void Switch_To_Bananas_Inventory() {
             Switch_To_Tab(ItemCategory.BANANA);
         }
-        
+
         public void Switch_To_Raw_Materials_Inventory() {
             Switch_To_Tab(ItemCategory.RAW_MATERIAL);
         }

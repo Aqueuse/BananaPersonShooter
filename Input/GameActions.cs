@@ -218,8 +218,9 @@ namespace Input {
                 }
 
                 else {
+                    ObjectsReference.Instance.uiTools.ZoomShootIcon();
                     ObjectsReference.Instance.bananaGun.GrabBananaGun();
-                
+
                     if (ObjectsReference.Instance.bananasInventory.GetQuantity(ObjectsReference.Instance.bananaMan.activeItem.bananaType) <= 0) return;
                 
                     ObjectsReference.Instance.throwBanana.LoadingGun();
@@ -228,6 +229,7 @@ namespace Input {
             }
 
             if (context.canceled) {
+                ObjectsReference.Instance.uiTools.UnzoomIcons();
                 ObjectsReference.Instance.bananaGun.UngrabBananaGun();
 
                 ObjectsReference.Instance.throwBanana.CancelThrow();
@@ -238,17 +240,21 @@ namespace Input {
             if (!ObjectsReference.Instance.bananaMan.tutorialFinished) return;
 
             if (context.performed) {
+                ObjectsReference.Instance.uiTools.ZoomPlaceIcon();
+                ObjectsReference.Instance.uInventoriesManager.GetCurrentUIHelper().ShowBuildHelper();
+
                 ObjectsReference.Instance.bananaGun.GrabBananaGun();
 
                 ObjectsReference.Instance.build.ActivatePlateformGhost();
-                ObjectsReference.Instance.uInventoriesManager.GetCurrentUIHelper().ShowBuildHelper();
             }
 
             if (context.canceled) {
+                ObjectsReference.Instance.uInventoriesManager.GetCurrentUIHelper().ShowDefaultHelper();
+                ObjectsReference.Instance.uiTools.UnzoomIcons();
+
                 ObjectsReference.Instance.bananaGun.UngrabBananaGun();
                 
                 ObjectsReference.Instance.build.CancelGhost();
-                ObjectsReference.Instance.uInventoriesManager.GetCurrentUIHelper().ShowDefaultHelper();
             }
         }
         
@@ -257,13 +263,16 @@ namespace Input {
 
             if (context.performed) {
                 ObjectsReference.Instance.bananaGun.GrabBananaGun();
+                ObjectsReference.Instance.uiTools.ZoomTakeIcon();
                 
                 ObjectsReference.Instance.harvest.isDirectHarvestActivated = true;
             }
 
             if (context.canceled) {
-                ObjectsReference.Instance.bananaGun.UngrabBananaGun();
+                ObjectsReference.Instance.uiTools.UnzoomIcons();
                 ObjectsReference.Instance.descriptionsManager.HideAllPanels();
+
+                ObjectsReference.Instance.bananaGun.UngrabBananaGun();
                 
                 ObjectsReference.Instance.harvest.isDirectHarvestActivated = false;
             }
@@ -271,7 +280,7 @@ namespace Input {
 
         private void Harvest(InputAction.CallbackContext context) {
             if (!ObjectsReference.Instance.bananaMan.tutorialFinished) return;
-
+            
             ObjectsReference.Instance.harvest.harvest();
         }
         

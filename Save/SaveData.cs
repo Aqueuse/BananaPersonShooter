@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.IO;
-using JetBrains.Annotations;
+using Game;
+using Gestion;
 using Newtonsoft.Json;
 using Save.Templates;
 using UnityEngine;
@@ -15,7 +16,7 @@ namespace Save {
         public string gamePath;
         private string _savesPath;
 
-        private SavedData _savedData;
+        private Saved _saved;
         private string savePath;
 
         private void Start() {
@@ -36,120 +37,109 @@ namespace Save {
         }
 
         public void Save(string saveUuid, string saveDate) {
+            CreateSave(saveUuid, saveDate);
+            
+            SavePlayer();
+            
+            SaveMaps();
+            
+            SaveCameraView();
+        }
+
+
+        private void CreateSave(string saveUuid, string saveDate) {
             savePath = Path.Combine(_savesPath, saveUuid);
 
+            _saved = new Saved { uuid = saveUuid, saveName = "new save", lastSavedDate = saveDate };
+            
             if (!Directory.Exists(savePath)) {
                 Directory.CreateDirectory(savePath);
                 Directory.CreateDirectory(Path.Combine(savePath, "MAPDATA"));
                 Directory.CreateDirectory(Path.Combine(savePath, "MAPS"));
-
-                _savedData = new SavedData {
-                    uuid = saveUuid,
-                    saveName = "new save",
-                    lastSavedDate = saveDate
-                };
             }
 
-            else {
-                _savedData = new SavedData {
-                    uuid = saveUuid,
-                    saveName = ObjectsReference.Instance.loadData.GetsaveNameByUuid(saveUuid),
-                    lastSavedDate = saveDate
-                };
-            }
+            else _saved.saveName = ObjectsReference.Instance.loadData.GetsaveNameByUuid(saveUuid);
+
+            var jsonSaved = JsonConvert.SerializeObject(_saved);
+            var dataSavefilePath = Path.Combine(savePath, "data.json");
+            File.WriteAllText(dataSavefilePath, jsonSaved);
+        }
+
+        private void SavePlayer() {
+            var jsonbananaManSaved = JsonConvert.SerializeObject(ObjectsReference.Instance.gameData.bananaManSaved);
+            var playerSavefilePath = Path.Combine(savePath, "player.json");
+            File.WriteAllText(playerSavefilePath, jsonbananaManSaved);
+        }
+
+        private void SaveMaps() {
+            Map.Instance.SaveAspirablesOnMap();
             
-            var jsonSavedData = JsonConvert.SerializeObject(_savedData);
-            var jsonbananaManSavedData = JsonConvert.SerializeObject(ObjectsReference.Instance.gameData.bananaManSavedData);
-            
-            var savefilePath = Path.Combine(savePath, "data.json");
-            
-            File.WriteAllText(savefilePath, jsonSavedData);
+            var MAPS_Save_file_Path = Path.Combine(savePath, "MAPS");
 
-            savefilePath = Path.Combine(savePath, "MAPS");
-
-            foreach (var map in ObjectsReference.Instance.gameData.mapSavedDatasByMapName) {
-                var mapClass = ObjectsReference.Instance.mapsManager.mapBySceneName[map.Key];
-
-                // synchronize data beetween classes and templates
-                map.Value.isDiscovered = mapClass.isDiscovered;
-                map.Value.piratesDebris = mapClass.piratesDebrisToSpawn;
-                map.Value.visitorsDebris = mapClass.visitorsDebrisToSpawn;
-
-                if (mapClass.mapDataScriptableObject.monkeyDataScriptableObjectsByMonkeyId.Count > 0) {
-                    foreach (var monkeyDataScriptableObject in mapClass.mapDataScriptableObject.monkeyDataScriptableObjectsByMonkeyId) {
-                        map.Value.monkeysSasietyByMonkeyId[monkeyDataScriptableObject.Key] = monkeyDataScriptableObject.Value.sasiety;
+            foreach (var map in ObjectsReference.Instance.gameData.mapBySceneName) {
+                var mapSavedData = new MapSavedData();
+                
+                if (map.Value.mapPropertiesScriptableObject.monkeyPropertiesScriptableObjectsByMonkeyId.Count > 0) {
+                    mapSavedData.monkeysSasietyByMonkeyId = new Dictionary<string, float>();
+                    
+                    foreach (var monkey in map.Value.mapPropertiesScriptableObject.monkeyPropertiesScriptableObjectsByMonkeyId) {
+                        mapSavedData.monkeysSasietyByMonkeyId.Add(monkey.Key, monkey.Value.sasiety);
                     }
                 }
                 
-                var jsonMapSavedData = JsonConvert.SerializeObject(ObjectsReference.Instance.gameData.mapSavedDatasByMapName[map.Key]);
-                var mapSavefilePath = Path.Combine(savefilePath, map.Key+".json");
-                File.WriteAllText(mapSavefilePath, jsonMapSavedData);
+                mapSavedData.isDiscovered = map.Value.isDiscovered;
+                mapSavedData.visitorsDebris = map.Value.visitorsDebrisToSpawn;
+                mapSavedData.piratesDebris = map.Value.piratesDebrisToSpawn;
+                
+                var jsonMapSaved = JsonConvert.SerializeObject(mapSavedData);
+                var mapSavefilePath = Path.Combine(MAPS_Save_file_Path, map.Key + ".json");
+                File.WriteAllText(mapSavefilePath, jsonMapSaved);
+                
+                SaveMapData(map.Value);
+            }
+        }
+
+        private void SaveMapData(MapData mapDataToSave) {
+            var mapDataSavesPath = Path.Combine(savePath, "MAPDATA");
+            
+            if (mapDataToSave.buildablesDataInMapDictionaryByBuildableType.Count == 0) {
+                var buildableFilePath = Path.Combine(mapDataSavesPath,
+                    mapDataToSave.mapPropertiesScriptableObject.sceneName.ToString().ToLower() + "_buildables.json");
+
+                if (File.Exists(buildableFilePath)) File.Delete(buildableFilePath);
             }
 
-            savefilePath = Path.Combine(savePath, "player.json");
-            File.WriteAllText(savefilePath, jsonbananaManSavedData);
-            
-            var screenshotFilePath = Path.Combine(savePath, "screenshot.png");
-            SaveCameraView(screenshotFilePath);
-            
-            foreach (var map in ObjectsReference.Instance.mapsManager.mapBySceneName) {
-                if (map.Value.itemsCategories.Count == 0) {
-                    // delete file
-                    var mapDataSavesPath = Path.Combine(savePath, "MAPDATA");
-                    var filePath = Path.Combine(mapDataSavesPath, map.Value.mapDataScriptableObject.sceneName+"_buildables.data");
-
-                    File.Delete(filePath);
-                }
-
-                else {
-                    var mapToSave = map.Value;
-
-                    SaveMapBuildablesData(
-                        mapName: mapToSave.mapDataScriptableObject.sceneName,
-                        buildablesPositions: mapToSave.itemsPositions,
-                        buildablesRotations:mapToSave.itemsRotations,
-                        buildablesCategories:mapToSave.itemsCategories,
-                        buildableTypes: mapToSave.itemsBuildableTypes,
-                        itemTypes:mapToSave.itemBananaTypes
-                    );
-                }
+            else {
+                SaveBuildableDataAsDictionnary(mapDataToSave);
             }
-            
-            foreach (var map in ObjectsReference.Instance.mapsManager.mapBySceneName) {
-                if (map.Value.itemsCategories.Count == 0) {
-                    // delete file
-                    var mapDataSavesPath = Path.Combine(savePath, "MAPDATA");
-                    var filePath = Path.Combine(mapDataSavesPath, map.Value.mapDataScriptableObject.sceneName+"_debris.data");
 
-                    File.Delete(filePath);
-                }
+            if (mapDataToSave.debrisDataInMapDictionnaryByCharacterType.Count == 0) {
+                var debrisFilePath = Path.Combine(mapDataSavesPath,
+                    mapDataToSave.mapPropertiesScriptableObject.sceneName.ToString().ToLower() + "_debris.json");
 
-                else {
-                    var mapToSave = map.Value;
+                if (File.Exists(debrisFilePath)) File.Delete(debrisFilePath);
+            }
 
-                    SaveMapDebrisData(
-                        mapName: mapToSave.mapDataScriptableObject.sceneName,
-                        debrisPositions: mapToSave.debrisPositions,
-                        debrisRotations:mapToSave.debrisRotations,
-                        debrisType: mapToSave.debrisTypes
-                    );
-                }
+            else {
+                SaveDebrisDataAsDictionnary(mapDataToSave);
             }
         }
 
         public void SaveName(string saveUuid, string saveName) {
             savePath = Path.Combine(_savesPath, saveUuid);
-            
-            _savedData = ObjectsReference.Instance.loadData.GetSavedDataByUuid(saveUuid);
-            _savedData.saveName = saveName;
-            var jsonSavedData = JsonConvert.SerializeObject(_savedData);
-            
+
+            _saved = ObjectsReference.Instance.loadData.GetSavedByUuid(saveUuid);
+            _saved.saveName = saveName;
+            var jsonSavedData = JsonConvert.SerializeObject(_saved);
+
             var savefilePath = Path.Combine(savePath, "data.json");
 
             File.WriteAllText(savefilePath, jsonSavedData);
         }
 
-        private static void SaveCameraView(string path) {
+        private void SaveCameraView() {
+            var screenshotFilePath = Path.Combine(savePath, "screenshot.png");
+
             var screenshotCamera = ObjectsReference.Instance.gameManager.cameraMain;
             var screenTexture = new RenderTexture(150, 150, 16);
             screenshotCamera.targetTexture = screenTexture;
@@ -159,73 +149,30 @@ namespace Save {
             renderedTexture.ReadPixels(new Rect(0, 0, 150, 150), 0, 0);
             RenderTexture.active = null;
             var byteArray = renderedTexture.EncodeToPNG();
-            File.WriteAllBytes(path, byteArray);
+            File.WriteAllBytes(screenshotFilePath, byteArray);
             screenshotCamera.targetTexture = null;
         }
 
-        private void SaveMapBuildablesData(
-            string mapName,  
-            List<Vector3> buildablesPositions, 
-            List<Quaternion> buildablesRotations,
-            
-            List<ItemCategory> buildablesCategories,
-            [NotNull] List<BuildableType> buildableTypes,
-            [NotNull] List<BananaType> itemTypes
-        ) {
-
+        private void SaveBuildableDataAsDictionnary(MapData mapDataToSave) {
             var mapDataSavesPath = Path.Combine(savePath, "MAPDATA");
             
-            if (buildablesCategories.Count > 0) {
-                _buildablesDatas = new string[buildablesCategories.Count];
+            var savefilePath = Path.Combine(mapDataSavesPath, mapDataToSave.mapPropertiesScriptableObject.sceneName.ToString().ToLower() + "_buildables.json");
+
+            var buildablesToSave = mapDataToSave.buildablesDataInMapDictionaryByBuildableType;
             
-                for (var i = 0; i < _buildablesDatas.Length; i++) {
-                    _buildablesDatas[i] = buildablesPositions[i] + "/" +
-                                          buildablesRotations[i] + "/" +
-                                          buildablesCategories[i] + "/" +
-                                          buildableTypes[i] + "/" +
-                                          itemTypes[i];
-                }
-
-                var savefilePath = Path.Combine(mapDataSavesPath, mapName+"_buildables.data");
-
-                using var streamWriter = new StreamWriter(savefilePath, append:false);
-
-                foreach (var data in _buildablesDatas) {
-                    streamWriter.WriteLine(data);
-                }
-
-                streamWriter.Flush();
-            }
+            var json = JsonConvert.SerializeObject(buildablesToSave);
+            File.WriteAllText(savefilePath, json);
         }
         
-        private void SaveMapDebrisData(
-            string mapName,  
-            List<Vector3> debrisPositions, 
-            List<Quaternion> debrisRotations,
-            List<CharacterType> debrisType
-        ) {
-
+        private void SaveDebrisDataAsDictionnary(MapData mapDataToSave) {
             var mapDataSavesPath = Path.Combine(savePath, "MAPDATA");
             
-            if (debrisPositions.Count > 0) {
-                _debrisDatas = new string[debrisPositions.Count];
+            var savefilePath = Path.Combine(mapDataSavesPath, mapDataToSave.mapPropertiesScriptableObject.sceneName.ToString().ToLower() + "_debris.json");
+
+            var debrisToSave = mapDataToSave.debrisDataInMapDictionnaryByCharacterType;
             
-                for (var i = 0; i < _debrisDatas.Length; i++) {
-                    _debrisDatas[i] = debrisPositions[i] + "/" +
-                                      debrisRotations[i] + "/" +
-                                      debrisType[i];
-                }
-
-                var savefilePath = Path.Combine(mapDataSavesPath, mapName+"_debris.data");
-
-                using var streamWriter = new StreamWriter(savefilePath, append:false);
-
-                foreach (var data in _debrisDatas) {
-                    streamWriter.WriteLine(data);
-                }
-
-                streamWriter.Flush();
-            }
+            var json = JsonConvert.SerializeObject(debrisToSave);
+            File.WriteAllText(savefilePath, json);
         }
     }
 }

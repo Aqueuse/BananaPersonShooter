@@ -1,4 +1,4 @@
-﻿using Data.Bananas;
+﻿using ItemsProperties.Bananas;
 using UnityEngine;
 
 namespace Player {
@@ -8,7 +8,7 @@ namespace Player {
         [SerializeField] private CanvasRenderer faceCanvasRenderer;
         public TpsPlayerAnimator tpsPlayerAnimator;
         
-		public BananasDataScriptableObject activeItem;
+		public BananasPropertiesScriptableObject activeItem;
 
         public bool isInWater;
         public bool isGrabingBananaGun;

@@ -25,7 +25,7 @@ namespace UI.Save {
         
         public void AppendSaveSlot(string saveUuid) {
             var save = Instantiate(savePrefab, transform);
-            var savedData = ObjectsReference.Instance.loadData.GetSavedDataByUuid(saveUuid);
+            var savedData = ObjectsReference.Instance.loadData.GetSavedByUuid(saveUuid);
 
             save.GetComponent<UISaveSlot>().saveUuid = saveUuid;
             save.GetComponent<UISaveSlot>().saveDate.text = savedData.lastSavedDate;

@@ -8,7 +8,6 @@ namespace Game {
         
         public void StartTutorial() {
             ObjectsReference.Instance.gameReset.ResetGameData();
-            ObjectsReference.Instance.uiSave.CreateNewSave();
             
             ObjectsReference.Instance.uiCrosshairs.SetCrosshair(BananaType.EMPTY);
 
@@ -34,9 +33,15 @@ namespace Game {
             }
 
             CommandRoomControlPanelsManager.Instance.miniChimp.bubbleDialogue.SetBubbleDialogue(dialogueSet.REPAIR_BANANA_GUN);
-            CommandRoomControlPanelsManager.Instance.chimployeeCommandRoom.SetInitialChimployeeConfiguration();
+            CommandRoomControlPanelsManager.Instance.chimployeeCommandRoom.SetTutorialChimployeeConfiguration();
 
             RenderSettings.ambientLight = penumbraAmbientLightColor;
+            
+            Invoke(nameof(SaveInitialState), 20);
+        }
+
+        private void SaveInitialState() {
+            ObjectsReference.Instance.uiSave.CreateNewSave();
         }
         
         public void FinishTutorial() {
@@ -57,7 +62,7 @@ namespace Game {
             
             RenderSettings.ambientLight = Color.white; 
             
-            ObjectsReference.Instance.audioManager.SetMusiqueAndAmbianceBySceneName("COMMANDROOM");
+            ObjectsReference.Instance.audioManager.SetMusiqueAndAmbianceBySceneName(SceneType.COROLLE);
             
             foreach (var accessManagedGameObject in TagsManager.Instance.GetAllGameObjectsWithTag(GAME_OBJECT_TAG.ACCESS_MANAGED)) {
                 accessManagedGameObject.GetComponent<ManageAccess>().AuthorizeUsage();

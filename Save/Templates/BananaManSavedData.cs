@@ -13,7 +13,7 @@ namespace Save.Templates {
         public float yWorldRotation = -0.495293289f;
         public float zWorldRotation = 0;
         
-        public string lastMap = "COROLLE";
+        public SceneType lastMap = SceneType.COROLLE;
         public BananaType activeBanana = BananaType.EMPTY;
 
         public bool hasFinishedTutorial = false;

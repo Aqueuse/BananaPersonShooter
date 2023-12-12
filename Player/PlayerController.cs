@@ -1,4 +1,4 @@
-﻿using Gestion.Buildables.Plateforms;
+﻿using Gestion.BuildablesBehaviours;
 using UnityEngine;
 
 namespace Player {
@@ -201,7 +201,7 @@ namespace Player {
         private void OnCollisionEnter(Collision other) {
             if (!ObjectsReference.Instance.gameManager.isGamePlaying) return;
             
-            if (other.gameObject.GetComponent<Plateform>() != null) {
+            if (other.gameObject.GetComponent<PlateformBehaviour>() != null) {
                 _damageCount = 0;
             }
 

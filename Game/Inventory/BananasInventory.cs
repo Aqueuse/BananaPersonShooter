@@ -1,4 +1,4 @@
-﻿using Data.Bananas;
+﻿using ItemsProperties.Bananas;
 using Gestion;
 using UnityEngine;
 
@@ -6,7 +6,7 @@ namespace Game.Inventory {
     public class BananasInventory : MonoBehaviour {
         public GenericDictionary<BananaType, int> bananasInventory;
         
-        public void AddQuantity(BananasDataScriptableObject bananasDataScriptableObject, int quantity) {
+        public void AddQuantity(BananasPropertiesScriptableObject bananasDataScriptableObject, int quantity) {
             if (bananasInventory[bananasDataScriptableObject.bananaType] > 10000) return;
             
             bananasInventory[bananasDataScriptableObject.bananaType] += quantity;
@@ -20,7 +20,7 @@ namespace Game.Inventory {
             
             ObjectsReference.Instance.uiQueuedMessages.AddToInventory(bananasDataScriptableObject, quantity);
 
-            foreach (var monkey in MapItems.Instance.monkeys) {
+            foreach (var monkey in Map.Instance.monkeys) {
                 monkey.SearchForBananaManBananas();
             }
         }

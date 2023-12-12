@@ -2,9 +2,10 @@ using Audio;
 using Gestion;
 using Gestion.Actions;
 using Cameras;
-using Data;
+using ItemsProperties;
 using Game;
 using Game.Inventory;
+using Gestion.PlayerActions;
 using Input;
 using Interactions;
 using Player;
@@ -23,7 +24,6 @@ using VFX;
 public class ObjectsReference : MonoSingleton<ObjectsReference> {
     public GameManager gameManager;
     public InputManager inputManager;
-    public MapsManager mapsManager;
     public AudioManager audioManager;
     public InteractionsManager interactionsManager;
 
@@ -87,6 +87,7 @@ public class ObjectsReference : MonoSingleton<ObjectsReference> {
     public UISave uiSave;
     public UISettings uiSettings;
     public UIbananaCannonMiniGame uIbananaCannonMiniGame;
+    public UITools uiTools;
 
-    public descriptionsManager descriptionsManager;
+    public DescriptionsManager descriptionsManager;
 }

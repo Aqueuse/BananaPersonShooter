@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using Random = UnityEngine.Random;
 
 namespace Game.BananaCannonMiniGame {
     public class DebrisSpawner : MonoBehaviour {
@@ -26,7 +27,7 @@ namespace Game.BananaCannonMiniGame {
         }
 
         public void SpawnNewDebrisOnNavMesh() {
-            debrisByCharacterType = ObjectsReference.Instance.mapsManager.currentMap.debrisToSPawnByCharacterType;
+            debrisByCharacterType = ObjectsReference.Instance.gameData.currentMapData.debrisToSPawnByCharacterType;
 
             navMeshTriangulation = NavMesh.CalculateTriangulation();
 
@@ -45,24 +46,20 @@ namespace Game.BananaCannonMiniGame {
                         rotation:Quaternion.FromToRotation(transform.up, navMeshHit.normal),
                         parent: _debrisContainer
                     );
-                    
-                    ObjectsReference.Instance.mapsManager.currentMap.debrisPositions.Add(debris.transform.position);
-                    ObjectsReference.Instance.mapsManager.currentMap.debrisRotations.Add(debris.transform.rotation);
-                    ObjectsReference.Instance.mapsManager.currentMap.debrisTypes.Add(characterType);
                 }
             }
 
             domeCollider.enabled = true;
             enabled = false;
             
-            ObjectsReference.Instance.mapsManager.currentMap.piratesDebrisToSpawn = 0;
-            ObjectsReference.Instance.mapsManager.currentMap.visitorsDebrisToSpawn = 0;
+            ObjectsReference.Instance.gameData.currentMapData.piratesDebrisToSpawn = 0;
+            ObjectsReference.Instance.gameData.currentMapData.visitorsDebrisToSpawn = 0;
             
-            ObjectsReference.Instance.mapsManager.currentMap.debrisToSPawnByCharacterType.Clear();
+            ObjectsReference.Instance.gameData.currentMapData.debrisToSPawnByCharacterType.Clear();
         }
 
         public void SpawnNewDebrisOnRaycastHit() {
-            debrisByCharacterType = ObjectsReference.Instance.mapsManager.currentMap.debrisToSPawnByCharacterType;
+            debrisByCharacterType = ObjectsReference.Instance.gameData.currentMapData.debrisToSPawnByCharacterType;
             
             domeCollider.enabled = false;
 
@@ -80,19 +77,15 @@ namespace Game.BananaCannonMiniGame {
                         rotation:Quaternion.FromToRotation(transform.up, _raycastHit.normal),
                         parent: _debrisContainer
                     );
-                    
-                    ObjectsReference.Instance.mapsManager.currentMap.debrisPositions.Add(debris.transform.position);
-                    ObjectsReference.Instance.mapsManager.currentMap.debrisRotations.Add(debris.transform.rotation);
-                    ObjectsReference.Instance.mapsManager.currentMap.debrisTypes.Add(characterType);
                 }
             }
 
             domeCollider.enabled = true;
             enabled = false;
 
-            ObjectsReference.Instance.mapsManager.currentMap.piratesDebrisToSpawn = 0;
-            ObjectsReference.Instance.mapsManager.currentMap.visitorsDebrisToSpawn = 0;
-            ObjectsReference.Instance.mapsManager.currentMap.debrisToSPawnByCharacterType.Clear();
+            ObjectsReference.Instance.gameData.currentMapData.piratesDebrisToSpawn = 0;
+            ObjectsReference.Instance.gameData.currentMapData.visitorsDebrisToSpawn = 0;
+            ObjectsReference.Instance.gameData.currentMapData.debrisToSPawnByCharacterType.Clear();
         }
     }
 }

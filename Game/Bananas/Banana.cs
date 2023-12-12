@@ -1,4 +1,4 @@
-﻿using Data.Bananas;
+﻿using ItemsProperties.Bananas;
 using Tags;
 using UnityEngine;
 
@@ -9,7 +9,7 @@ namespace Bananas {
         
         [SerializeField] private LayerMask bananaSplashLayerMask;
         
-        public BananasDataScriptableObject bananasDataScriptableObject;
+        public BananasPropertiesScriptableObject bananasDataScriptableObject;
 
         private void Start() {
             Invoke(nameof(DestroyMe), 10);

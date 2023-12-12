@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using Data;
+using ItemsProperties;
 using TMPro;
 using UnityEngine;
 

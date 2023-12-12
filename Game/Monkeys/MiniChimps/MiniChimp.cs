@@ -10,7 +10,7 @@ namespace Monkeys.MiniChimps {
 
         private void Awake() {
             if (ObjectsReference.Instance.bananaMan.tutorialFinished) {
-                bubbleDialogue.SetBubbleDialogue(dialogueSet.EAT_BANANAS);
+                bubbleDialogue.SetBubbleDialogue(dialogueSet.PRO_TIP);
             }
 
             else {

@@ -7,7 +7,7 @@ namespace Interactions.InteractionsActions {
             CommandRoomControlPanelsManager.Instance.assembler.HideBananaGunInteractableGameObject();
             ObjectsReference.Instance.tutorial.FinishTutorial();
             
-            CommandRoomControlPanelsManager.Instance.miniChimp.bubbleDialogue.SetBubbleDialogue(dialogueSet.EAT_BANANAS);
+            CommandRoomControlPanelsManager.Instance.miniChimp.bubbleDialogue.SetBubbleDialogue(dialogueSet.PRO_TIP);
             CommandRoomControlPanelsManager.Instance.miniChimp.bubbleDialogue.PlayDialogue();
         }
     }

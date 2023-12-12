@@ -1,5 +1,5 @@
 ﻿using Bananas;
-using Data.Monkeys;
+using ItemsProperties.Monkeys;
 using Tags;
 using UnityEngine;
 using UnityEngine.AI;
@@ -7,7 +7,7 @@ using Random = UnityEngine.Random;
 
 namespace Monkeys {
     public class Monkey : MonoBehaviour {
-        public MonkeyDataScriptableObject monkeyDataScriptableObject;
+        public MonkeyPropertiesScriptableObject monkeyPropertiesScriptableObject;
         
         public MonkeySounds monkeySounds;
         [SerializeField] private NavMeshAgent _navMeshAgent;
@@ -36,7 +36,7 @@ namespace Monkeys {
         }
 
         public void SearchForBananaManBananas() {
-            if (monkeyDataScriptableObject.sasiety < 5 & !smelledBananasOnBananaMan) {
+            if (monkeyPropertiesScriptableObject.sasiety < 5 & !smelledBananasOnBananaMan) {
                 smelledBananasOnBananaMan = true;
                 ObjectsReference.Instance.uiQueuedMessages.AddMessage("the monkey smelled bananas !");
             }
@@ -49,8 +49,8 @@ namespace Monkeys {
         }
 
         public void Eat() {
-            if (monkeyDataScriptableObject.sasiety < 10) {
-                monkeyDataScriptableObject.sasiety += bananaValue;
+            if (monkeyPropertiesScriptableObject.sasiety < 10) {
+                monkeyPropertiesScriptableObject.sasiety += bananaValue;
             }
 
             else {
@@ -64,8 +64,8 @@ namespace Monkeys {
         }
 
         private void IncreaseHunger() {
-            if (monkeyDataScriptableObject.sasiety > 0)
-                monkeyDataScriptableObject.sasiety -= 1;
+            if (monkeyPropertiesScriptableObject.sasiety > 0)
+                monkeyPropertiesScriptableObject.sasiety -= 1;
             SearchForBananaManBananas();
         }
         

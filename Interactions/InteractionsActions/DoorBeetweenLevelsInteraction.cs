@@ -7,9 +7,8 @@ namespace Interactions.InteractionsActions {
 
             if (interactedObject != null) 
                 ObjectsReference.Instance.scenesSwitch.SwitchScene(
-                    interactedObject.GetComponent<Door>().destinationMap.ToUpper(), 
+                    interactedObject.GetComponent<Door>().destinationMap, 
                     spawnPoint: interactedObject.GetComponent<Door>().spawnPoint, 
-                    false, 
                     false
                 );
         }

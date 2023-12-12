@@ -39,25 +39,25 @@ namespace Game {
                 ObjectsReference.Instance.bananaMan.tutorialFinished = false;
 
                 ObjectsReference.Instance.scenesSwitch.SwitchScene(
-                    "COROLLE",
+                    SceneType.COROLLE,
                     SpawnPoint.NEW_GAME,
-                    true, true);
+                    true);
             }
             else {
                 ObjectsReference.Instance.gameLoad.LoadGameData(saveUuid);
 
                 ObjectsReference.Instance.scenesSwitch.SwitchScene(
-                    ObjectsReference.Instance.gameData.bananaManSavedData.lastMap, 
-                    SpawnPoint.LAST_MAP,
-                    false, false);
+                    ObjectsReference.Instance.gameData.bananaManSaved.lastMap, 
+                    SpawnPoint.LAST_MAP, 
+                    false);
             }
         }
 
         public void PauseGame() {
             ObjectsReference.Instance.cameraPlayer.Set0Sensibility();
             
-            if (gameContext == GameContext.IN_GAME && ObjectsReference.Instance.mapsManager.currentMap.mapDataScriptableObject.monkeyDataScriptableObjectsByMonkeyId.Count > 0) {
-                foreach (var monkey in MapItems.Instance.monkeys) {
+            if (gameContext == GameContext.IN_GAME && ObjectsReference.Instance.gameData.currentMapData.mapPropertiesScriptableObject.monkeyPropertiesScriptableObjectsByMonkeyId.Count > 0) {
+                foreach (var monkey in Map.Instance.monkeys) {
                     monkey.PauseMonkey();
                 }
             }
@@ -68,8 +68,8 @@ namespace Game {
         public void UnpauseGame() {
             ObjectsReference.Instance.cameraPlayer.SetNormalSensibility();
 
-            if (ObjectsReference.Instance.mapsManager.currentMap.mapDataScriptableObject.monkeyDataScriptableObjectsByMonkeyId.Count > 0) {
-                foreach (var monkey in MapItems.Instance.monkeys) {
+            if (ObjectsReference.Instance.gameData.currentMapData.mapPropertiesScriptableObject.monkeyPropertiesScriptableObjectsByMonkeyId.Count > 0) {
+                foreach (var monkey in Map.Instance.monkeys) {
                     monkey.UnpauseMonkey();
                 }
             }

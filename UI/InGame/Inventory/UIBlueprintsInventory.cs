@@ -1,4 +1,5 @@
-using Data.Buildables;
+using ItemsProperties.Buildables;
+using ItemsProperties.Buildables.VisitorsBuildable;
 using Gestion;
 using UnityEngine;
 
@@ -6,7 +7,7 @@ namespace UI.InGame.Inventory {
     public class UIBlueprintsInventory : MonoBehaviour {
         public GenericDictionary<BuildableType, UIBlueprintSlot> inventorySlotsByBuildableType;
 
-        private BuildableDataScriptableObject buildableDataScriptableObject;
+        private BuildablePropertiesScriptableObject buildableDataScriptableObject;
 
         public void RefreshUInventory() {
             foreach (var blueprintItem in inventorySlotsByBuildableType) {

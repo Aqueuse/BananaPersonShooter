@@ -1,13 +1,13 @@
-using Data.Bananas;
-using Gestion.Buildables.Plateforms;
+using Gestion.BuildablesBehaviours;
+using ItemsProperties.Bananas;
 using UnityEngine;
 
 namespace Game {
     public class ActivatePlateform : MonoBehaviour {
-        [SerializeField] private BananasDataScriptableObject bananasDataScriptableObject;
+        [SerializeField] private BananasPropertiesScriptableObject bananasPropertiesScriptableObject;
     
         private void Start() {
-            GetComponent<Plateform>().ActivePlateform(bananasDataScriptableObject);
+            GetComponent<PlateformBehaviour>().ActivePlateform(bananasPropertiesScriptableObject.bananaType);
         }
     }
 }

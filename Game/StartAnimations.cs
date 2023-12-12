@@ -28,7 +28,7 @@ namespace Game {
 
             gorillaNavMeshAgent.gameObject.transform.localScale = new Vector3(1, 1, 1);
 
-            ObjectsReference.Instance.inputManager.homeActions.enabled = true;
+            ObjectsReference.Instance.inputManager.SwitchContext(InputContext.HOME);
         }
     }
 }

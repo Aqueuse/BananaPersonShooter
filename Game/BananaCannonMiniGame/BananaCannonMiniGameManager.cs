@@ -11,7 +11,7 @@ namespace Game.BananaCannonMiniGame {
         [SerializeField] private ProjectilesManager projectilesManager;
         [SerializeField] private GameObject playItemInteractionGameObject;
 
-        public string _mapName = "MAP01";
+        public SceneType _mapName = SceneType.MAP01;
 
         public SpaceshipsSpawner spaceshipsSpawner;
 
@@ -117,8 +117,8 @@ namespace Game.BananaCannonMiniGame {
         public void AddPirateDebris() {
             _debrisQuantity += 1;
 
-            ObjectsReference.Instance.mapsManager.mapBySceneName[_mapName].piratesDebrisToSpawn += 1;
-            ObjectsReference.Instance.mapsManager.mapBySceneName[_mapName].debrisToSPawnByCharacterType.Add(CharacterType.PIRATE);
+            ObjectsReference.Instance.gameData.mapBySceneName[_mapName].piratesDebrisToSpawn += 1;
+            ObjectsReference.Instance.gameData.mapBySceneName[_mapName].debrisToSPawnByCharacterType.Add(CharacterType.PIRATE);
 
             debrisQuantityText.text = _debrisQuantity.ToString();
             debrisUICanvasFadeInOut.enabled = true;
@@ -127,8 +127,8 @@ namespace Game.BananaCannonMiniGame {
         public void AddVisitorDebris() {
             _debrisQuantity += 1;
             
-            ObjectsReference.Instance.mapsManager.mapBySceneName[_mapName].visitorsDebrisToSpawn += 1;
-            ObjectsReference.Instance.mapsManager.mapBySceneName[_mapName].debrisToSPawnByCharacterType.Add(CharacterType.VISITOR);
+            ObjectsReference.Instance.gameData.mapBySceneName[_mapName].visitorsDebrisToSpawn += 1;
+            ObjectsReference.Instance.gameData.mapBySceneName[_mapName].debrisToSPawnByCharacterType.Add(CharacterType.VISITOR);
 
             debrisQuantityText.text = _debrisQuantity.ToString();
             debrisUICanvasFadeInOut.enabled = true;

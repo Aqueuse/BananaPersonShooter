@@ -1,16 +1,8 @@
 using System.Linq;
-using Gestion;
-using Gestion.Buildables.Plateforms;
-using Data;
 using UnityEngine;
 
 namespace Save {
     public class GameLoad : MonoBehaviour {
-        private GameObject aspirable;
-        private GameObject prefab;
-
-        private ItemScriptableObject itemScriptableObject;
-
         public void LoadLastSave() {
             ObjectsReference.Instance.gameManager.loadingScreen.SetActive(true);
             ObjectsReference.Instance.uiManager.SetActive(UICanvasGroupType.DEATH, false);
@@ -25,7 +17,7 @@ namespace Save {
         public void LoadGameData(string saveUuid) {
             ObjectsReference.Instance.gameData.currentSaveUuid = saveUuid;
 
-            ObjectsReference.Instance.gameData.bananaManSavedData = ObjectsReference.Instance.loadData.GetPlayerDataByUuid(saveUuid);
+            ObjectsReference.Instance.gameData.bananaManSaved = ObjectsReference.Instance.loadData.GetPlayerByUuid(saveUuid);
 
             LoadPositionAndRotationOnLastMap();
             LoadBananaManVitals();
@@ -37,11 +29,7 @@ namespace Save {
 
             LoadSelectedBanana();
 
-            LoadMapsData();
-            LoadMonkeysSatiety();
-
-            ObjectsReference.Instance.loadData.LoadMapBuildablesDataByUuid(saveUuid);
-            ObjectsReference.Instance.loadData.LoadMapDebrisDataByUuid(saveUuid);
+            LoadMaps(saveUuid);
 
             CheckTutorialFinished();
 
@@ -52,7 +40,7 @@ namespace Save {
             foreach (var bananaSlot in ObjectsReference.Instance.bananasInventory.bananasInventory.ToList()) {
                 if (bananaSlot.Key == BananaType.EMPTY) continue;
 
-                var bananaQuantity = ObjectsReference.Instance.gameData.bananaManSavedData.bananaInventory[bananaSlot.Key.ToString()];
+                var bananaQuantity = ObjectsReference.Instance.gameData.bananaManSaved.bananaInventory[bananaSlot.Key.ToString()];
 
                 ObjectsReference.Instance.bananasInventory.bananasInventory[bananaSlot.Key] = bananaQuantity;
 
@@ -72,7 +60,7 @@ namespace Save {
             foreach (var rawMaterialSlot in ObjectsReference.Instance.rawMaterialsInventory.rawMaterialsInventory.ToList()) {
                 if (rawMaterialSlot.Key == RawMaterialType.EMPTY) continue;
 
-                var rawMaterialQuantity = ObjectsReference.Instance.gameData.bananaManSavedData.rawMaterialsInventory[rawMaterialSlot.Key.ToString()];
+                var rawMaterialQuantity = ObjectsReference.Instance.gameData.bananaManSaved.rawMaterialsInventory[rawMaterialSlot.Key.ToString()];
 
                 ObjectsReference.Instance.rawMaterialsInventory.rawMaterialsInventory[rawMaterialSlot.Key] = rawMaterialQuantity;
 
@@ -92,7 +80,7 @@ namespace Save {
             foreach (var ingredientsSlot in ObjectsReference.Instance.ingredientsInventory.ingredientsInventory.ToList()) {
                 if (ingredientsSlot.Key == IngredientsType.EMPTY) continue;
                 
-                var ingredientsQuantity = ObjectsReference.Instance.gameData.bananaManSavedData.ingredientsInventory[ingredientsSlot.Key.ToString()];
+                var ingredientsQuantity = ObjectsReference.Instance.gameData.bananaManSaved.ingredientsInventory[ingredientsSlot.Key.ToString()];
 
                 ObjectsReference.Instance.ingredientsInventory.ingredientsInventory[ingredientsSlot.Key] = ingredientsQuantity;
 
@@ -115,43 +103,33 @@ namespace Save {
         }
 
         private static void LoadBananaManVitals() {
-            ObjectsReference.Instance.bananaMan.health = ObjectsReference.Instance.gameData.bananaManSavedData.health;
-            ObjectsReference.Instance.bananaMan.resistance = ObjectsReference.Instance.gameData.bananaManSavedData.resistance;
+            ObjectsReference.Instance.bananaMan.health = ObjectsReference.Instance.gameData.bananaManSaved.health;
+            ObjectsReference.Instance.bananaMan.resistance = ObjectsReference.Instance.gameData.bananaManSaved.resistance;
             
             ObjectsReference.Instance.bananaMan.SetBananaSkinHealth();
         }
 
         private static void LoadPositionAndRotationOnLastMap() {
             ObjectsReference.Instance.gameData.lastPositionOnMap = new Vector3(
-                ObjectsReference.Instance.gameData.bananaManSavedData.xWorldPosition,
-                ObjectsReference.Instance.gameData.bananaManSavedData.yWorldPosition,
-                ObjectsReference.Instance.gameData.bananaManSavedData.zworldPosition);
+                ObjectsReference.Instance.gameData.bananaManSaved.xWorldPosition,
+                ObjectsReference.Instance.gameData.bananaManSaved.yWorldPosition,
+                ObjectsReference.Instance.gameData.bananaManSaved.zworldPosition);
 
             ObjectsReference.Instance.gameData.lastRotationOnMap = new Vector3(
-                ObjectsReference.Instance.gameData.bananaManSavedData.xWorldRotation,
-                ObjectsReference.Instance.gameData.bananaManSavedData.yWorldRotation,
-                ObjectsReference.Instance.gameData.bananaManSavedData.zWorldRotation
+                ObjectsReference.Instance.gameData.bananaManSaved.xWorldRotation,
+                ObjectsReference.Instance.gameData.bananaManSaved.yWorldRotation,
+                ObjectsReference.Instance.gameData.bananaManSaved.zWorldRotation
              );
         }
         
         private static void LoadActiveItem() {
-            var activeItemType = ObjectsReference.Instance.gameData.bananaManSavedData.activeBanana;
+            var activeItemType = ObjectsReference.Instance.gameData.bananaManSaved.activeBanana;
             
             ObjectsReference.Instance.bananaMan.activeItem = ObjectsReference.Instance.scriptableObjectManager.GetBananaScriptableObject(activeItemType);
         }
-
-        private static void LoadMonkeysSatiety() {
-            foreach (var mapData in ObjectsReference.Instance.mapsManager.mapBySceneName) {
-                if (mapData.Value.mapDataScriptableObject.monkeyDataScriptableObjectsByMonkeyId.Count > 0) {
-                    foreach (var monkeyDataScriptableObject in mapData.Value.mapDataScriptableObject.monkeyDataScriptableObjectsByMonkeyId) {
-                        mapData.Value.mapDataScriptableObject.monkeyDataScriptableObjectsByMonkeyId[monkeyDataScriptableObject.Key].sasiety = monkeyDataScriptableObject.Value.sasiety;
-                    }
-                }
-            }
-        }
-
+        
         private static void CheckTutorialFinished() {
-            ObjectsReference.Instance.bananaMan.tutorialFinished = ObjectsReference.Instance.gameData.bananaManSavedData.hasFinishedTutorial;
+            ObjectsReference.Instance.bananaMan.tutorialFinished = ObjectsReference.Instance.gameData.bananaManSaved.hasFinishedTutorial;
 
             if (ObjectsReference.Instance.bananaMan.tutorialFinished) {
                 ObjectsReference.Instance.bananaGun.bananaGunInBack.SetActive(true);
@@ -165,57 +143,31 @@ namespace Save {
             }
         }
         
-        private static void LoadMapsData() {
-            foreach (var map in ObjectsReference.Instance.mapsManager.mapBySceneName) {
-                var savedMapData = ObjectsReference.Instance.loadData.GetMapDataByUuid(ObjectsReference.Instance.gameData.currentSaveUuid, map.Key);
-                
-                ObjectsReference.Instance.gameData.mapSavedDatasByMapName[map.Key] = savedMapData;
-                
-                ObjectsReference.Instance.mapsManager.mapBySceneName[map.Key].isDiscovered = savedMapData.isDiscovered;
-            }
-        }
+        private static void LoadMaps(string saveUuid) {
+            foreach (var map in ObjectsReference.Instance.gameData.mapBySceneName) {
+                var sceneName = map.Value.mapPropertiesScriptableObject.sceneName.ToString().ToUpper();
 
-        public void RespawnAspirablesOnMap() {
-            var mapData = ObjectsReference.Instance.mapsManager.currentMap;
+                if (ObjectsReference.Instance.loadData.MapDataExist(sceneName, saveUuid)) {
+                    var savedMapData = ObjectsReference.Instance.loadData.GetMapSavedByUuid(ObjectsReference.Instance.gameData.currentSaveUuid, map.Key);
 
-            if (mapData.isDiscovered) {
-                DestroyImmediate(MapItems.Instance.aspirablesContainer);
+                    ObjectsReference.Instance.gameData.mapBySceneName[map.Key].mapPropertiesScriptableObject.piratesDebris = savedMapData.piratesDebris;
+                    ObjectsReference.Instance.gameData.mapBySceneName[map.Key].mapPropertiesScriptableObject.visitorsDebris = savedMapData.visitorsDebris;
 
-                MapItems.Instance.aspirablesContainer = new GameObject("aspirables") {
-                    transform = {
-                        parent = MapItems.Instance.transform
-                    }
-                };
-
-                for (var i = 0; i < mapData.itemsCategories.Count; i++) {
-                    if (mapData.itemsCategories[i] == ItemCategory.BUILDABLE) {
-                        prefab = ObjectsReference.Instance.scriptableObjectManager.BuildablePrefabByBuildableType(mapData.itemsBuildableTypes[i]);
+                    ObjectsReference.Instance.gameData.mapBySceneName[map.Key].mapPropertiesScriptableObject.chimployeesQuantity = savedMapData.chimployeesQuantity;
+                    ObjectsReference.Instance.gameData.mapBySceneName[map.Key].mapPropertiesScriptableObject.piratesQuantity = savedMapData.piratesQuantity;
+                    ObjectsReference.Instance.gameData.mapBySceneName[map.Key].mapPropertiesScriptableObject.visitorsQuantity = savedMapData.visitorsQuantity;
+                    
+                    foreach (var monkey in ObjectsReference.Instance.gameData.mapBySceneName[map.Key].mapPropertiesScriptableObject.monkeyPropertiesScriptableObjectsByMonkeyId) {
+                        monkey.Value.sasiety = savedMapData.monkeysSasietyByMonkeyId[monkey.Key];
                     }
                     
-                    aspirable = Instantiate(prefab, MapItems.Instance.aspirablesContainer.transform, true);
-
-                    if (mapData.itemsBuildableTypes[i] == BuildableType.PLATEFORM &&
-                        mapData.itemBananaTypes[i] != BananaType.EMPTY) {
-                        aspirable.GetComponent<Plateform>().ActivePlateform(ObjectsReference.Instance.scriptableObjectManager._meshReferenceScriptableObject.bananasDataScriptableObjects[mapData.itemBananaTypes[i]]);
-                    }
-
-                    aspirable.transform.position = mapData.itemsPositions[i];
-                    aspirable.transform.rotation = mapData.itemsRotations[i];
+                    map.Value.isDiscovered = savedMapData.isDiscovered;
                 }
-            }
-            
-            else {
-                if (mapData.initialAspirablesOnMap != null) {
-                    aspirable = Instantiate(
-                        mapData.initialAspirablesOnMap, 
-                        MapItems.Instance.aspirablesContainer.transform,
-                        true
-                    );
-
-                    aspirable.transform.position = MapItems.Instance.aspirablesContainer.transform.position;
-                    aspirable.transform.rotation = MapItems.Instance.aspirablesContainer.transform.rotation;
-                }
+                
+                ObjectsReference.Instance.loadData.LoadBuildableDataFromJsonDictionnaryByUuid(map.Value, saveUuid);
+                ObjectsReference.Instance.loadData.LoadDebrisDataFromJsonDictionnaryByUuid(map.Value, saveUuid);
             }
         }
+
     }
 }

@@ -10,5 +10,6 @@ public enum SoundEffectType {
     GRAB_SOMETHING,
     NO_BANANA,
     CANNON_SHOOT,
-    LAUNCH_SIGNAL
+    LAUNCH_SIGNAL,
+    COUNTDOWN
 }

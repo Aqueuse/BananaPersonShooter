@@ -1,11 +1,11 @@
-using Data.Bananas;
+using ItemsProperties.Bananas;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace UI.Bananapedia {
     public class UIBananapediaEntry : MonoBehaviour {
-        [SerializeField] private BananasDataScriptableObject bananasDataScriptableObject;
+        [SerializeField] private BananasPropertiesScriptableObject bananasDataScriptableObject;
         [SerializeField] private Image image;
         [SerializeField] private TextMeshProUGUI descriptionText;
         [SerializeField] private TextMeshProUGUI effectsText;

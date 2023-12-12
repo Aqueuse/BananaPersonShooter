@@ -1,4 +1,4 @@
-using Data;
+using ItemsProperties;
 using UnityEngine;
 
 namespace Monkeys.Visitors {

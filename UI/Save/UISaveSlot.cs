@@ -66,7 +66,7 @@ namespace UI.Save {
             var date = DateTime.ParseExact(DateTime.Now.ToString("U"), "U", CultureInfo.CurrentCulture).ToString(CultureInfo.CurrentCulture);
             
             if (ObjectsReference.Instance.loadData.SaveExists(saveUuid)) {
-                var savedData = ObjectsReference.Instance.loadData.GetSavedDataByUuid(saveUuid);
+                var savedData = ObjectsReference.Instance.loadData.GetSavedByUuid(saveUuid);
             
                 saveName.text = savedData.saveName;
                 saveDate.text = date;

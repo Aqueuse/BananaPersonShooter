@@ -1,10 +1,10 @@
-using Data.Buildables;
+using ItemsProperties.Buildables.VisitorsBuildable;
 using Tags;
 using UnityEngine;
 
 namespace Gestion {
     public class Ghost : MonoBehaviour {
-        public BuildableDataScriptableObject buildableDataScriptableObject;
+        public BuildablePropertiesScriptableObject buildablePropertiesScriptableObject;
 
         private MeshRenderer _meshRenderer;
         private Material _ghostMaterial;
@@ -40,7 +40,7 @@ namespace Gestion {
         }
 
         private void OnTriggerExit(Collider other) {
-            if (!ObjectsReference.Instance.rawMaterialsInventory.HasCraftingIngredients(buildableDataScriptableObject)) {
+            if (!ObjectsReference.Instance.rawMaterialsInventory.HasCraftingIngredients(buildablePropertiesScriptableObject)) {
                 SetGhostState(GhostState.NOT_ENOUGH_MATERIALS);
                 return;
             }

@@ -1,4 +1,4 @@
-using Data.Bananas;
+using ItemsProperties.Bananas;
 using Game.BananaCannonMiniGame.projectilesBehaviours;
 using TMPro;
 using UnityEngine;
@@ -6,7 +6,7 @@ using UnityEngine;
 namespace Game.BananaCannonMiniGame {
     public class ProjectilesManager : MonoBehaviour {
         [SerializeField] private Transform cannonLauncherTransform;
-        [SerializeField] private GenericDictionary<BananaType, BananasDataScriptableObject> bananasDataScriptableObjectsByBananaType;
+        [SerializeField] private GenericDictionary<BananaType, BananasPropertiesScriptableObject> bananasDataScriptableObjectsByBananaType;
         [SerializeField] private TextMeshProUGUI bananaSelectorQuantityText;
         
         private ProjectilesPool _projectilesPool;

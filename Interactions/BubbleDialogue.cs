@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Data;
+using ItemsProperties;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Localization;
@@ -12,7 +12,7 @@ namespace Interactions {
         [SerializeField] private Interaction interaction;
         [SerializeField] private RectTransform visualTransform;
 
-        [SerializeField] private GibberishAudioDataScriptableObject gibberishAudioDataScriptableObject;
+        [SerializeField] private GibberishAudioClipsScriptableObject gibberishAudioClipsScriptableObject;
         [SerializeField] private AudioSource bubbleAudioSource;
 
         [SerializeField] private TextMeshPro bubbleText;
@@ -99,11 +99,11 @@ namespace Interactions {
             
             nextCharacter = nextWord.ToLower().Length > 0 ? nextWord.ToLower()[0] : 'f';
             
-            if (gibberishAudioDataScriptableObject.characterToClip.TryGetValue(nextCharacter, out var clip)) {
+            if (gibberishAudioClipsScriptableObject.characterToClip.TryGetValue(nextCharacter, out var clip)) {
                 bubbleAudioSource.clip = clip;
             }
             else {
-                bubbleAudioSource.clip = gibberishAudioDataScriptableObject.characterToClip['f'];
+                bubbleAudioSource.clip = gibberishAudioClipsScriptableObject.characterToClip['f'];
             }
             bubbleAudioSource.volume = ObjectsReference.Instance.audioManager.voicesLevel;
             bubbleAudioSource.Play();

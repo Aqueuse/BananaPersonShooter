@@ -1,4 +1,4 @@
-using Data;
+using ItemsProperties;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;

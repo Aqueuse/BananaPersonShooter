@@ -20,7 +20,7 @@ namespace Cameras {
             _transform = transform;
             ResetPosition();
             
-            cameraBounds = MapItems.Instance.cameraBounds;
+            cameraBounds = Map.Instance.cameraBounds;
         }
 
         private void Update() {

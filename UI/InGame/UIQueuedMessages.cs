@@ -1,4 +1,4 @@
-using Data;
+using ItemsProperties;
 using UnityEngine;
 using UnityEngine.Localization;
 using UnityEngine.Localization.Settings;

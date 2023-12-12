@@ -1,4 +1,4 @@
-﻿using Data.Regimes;
+﻿using ItemsProperties.Regimes;
 using UnityEngine;
 
 namespace Interactions {
@@ -9,7 +9,7 @@ namespace Interactions {
 
         public RegimeStade regimeStade;
 
-        public RegimeDataScriptableObject regimeDataScriptableObject;
+        public RegimePropertiesScriptableObject regimeDataScriptableObject;
 
         public void GrabBananas() {
             regimeStade = RegimeStade.BABY;

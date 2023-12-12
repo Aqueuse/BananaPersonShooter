@@ -133,6 +133,8 @@ namespace UI {
         
         public void HideInventories() {
             SetActive(UICanvasGroupType.INVENTORIES, false);
+            
+            ObjectsReference.Instance.descriptionsManager.HideAllPanels();
 
             ObjectsReference.Instance.inputManager.SwitchContext(InputContext.GAME);
         }

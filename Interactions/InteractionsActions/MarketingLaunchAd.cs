@@ -1,27 +1,50 @@
 using System.Collections.Generic;
-using System.Linq;
 using Game.BananaCannonMiniGame;
 using Game.CommandRoomPanelControls;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace Interactions.InteractionsActions {
     public class MarketingLaunchAd : Interact {
+        private System.Random systemRandom;
+
+        private int timeBeforeWave;
+
+        private void Start() {
+            systemRandom = new System.Random();
+        }
+
         public override void Activate(GameObject interactedGameObject) {
             CommandRoomControlPanelsManager.Instance.ShowPanel(CommandRoomPanelType.MARKETING);
 
-            var piratesSpaceshipNumber = Random.Range(2, 12);
-            var visitorsSpaceshipNumber = Random.Range(2, 12);
+            timeBeforeWave = 10;
 
-            var spaceships = ShuffleSpaceships(piratesSpaceshipNumber, visitorsSpaceshipNumber);
-
-            foreach (var spaceship in spaceships) {
-                Debug.Log(spaceship);
-            }
+            CommandRoomControlPanelsManager.Instance.uIMarketingPanel.SetNextWaveCountdown();
+            CommandRoomControlPanelsManager.Instance.uIMarketingPanel.SetCountdownValue(timeBeforeWave);
             
-            BananaCannonMiniGameManager.Instance.AddNewWave(spaceships);
-
-            CommandRoomControlPanelsManager.Instance.uIMarketingPanel.SetVisitorsExpected(BananaCannonMiniGameManager.Instance._spaceshipsQuantity.ToString());
+            InvokeRepeating(nameof(DecrementeTime), 1, 1);
         }
+
+        private void DecrementeTime() {
+            timeBeforeWave -= 1;
+            CommandRoomControlPanelsManager.Instance.uIMarketingPanel.SetCountdownValue(timeBeforeWave);
+            
+            ObjectsReference.Instance.audioManager.PlayEffect(SoundEffectType.COUNTDOWN, 0);
+
+            if (timeBeforeWave < 1) {
+                var piratesSpaceshipNumber = Random.Range(2, 12);
+                var visitorsSpaceshipNumber = Random.Range(2, 12);
+
+                var spaceships = ShuffleSpaceships(piratesSpaceshipNumber, visitorsSpaceshipNumber);
+
+                BananaCannonMiniGameManager.Instance.AddNewWave(spaceships);
+
+                CancelInvoke(nameof(DecrementeTime));
+                CommandRoomControlPanelsManager.Instance.uIMarketingPanel.SetNewCampaignAvailable();
+            }
+        }
+        
+        
 
         private List<CharacterType> ShuffleSpaceships(int pirateSpaceshipsQuantity, int visitorsSpaceshipsQuantity) {
             var spaceships = new List<CharacterType>();
@@ -33,16 +56,12 @@ namespace Interactions.InteractionsActions {
             for (int i = 0; i < visitorsSpaceshipsQuantity; i++) {
                 spaceships.Add(CharacterType.VISITOR);
             }
-            
-            var Random = new System.Random();
 
             int listCount = spaceships.Count;
 
             while (listCount > 1) {  
                 listCount--;
-
-                int nextRandomIndex = Random.Next(listCount + 1);
-
+                int nextRandomIndex = systemRandom.Next(listCount + 1);
                 (spaceships[nextRandomIndex], spaceships[listCount]) = (spaceships[listCount], spaceships[nextRandomIndex]);
             }
 

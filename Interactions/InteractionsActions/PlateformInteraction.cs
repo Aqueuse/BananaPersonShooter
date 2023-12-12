@@ -1,10 +1,10 @@
-using Gestion.Buildables.Plateforms;
+using Gestion.BuildablesBehaviours;
 using UnityEngine;
 
 namespace Interactions.InteractionsActions {
     public class PlateformInteraction : Interact {
         public override void Activate(GameObject interactedGameObject) {
-            interactedGameObject.GetComponentInParent<Plateform>().ShowHideWorkbench();
+            interactedGameObject.GetComponentInParent<PlateformBehaviour>().ShowHideWorkbench();
         }
     }
 }

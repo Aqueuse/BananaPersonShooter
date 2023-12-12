@@ -18,11 +18,7 @@ namespace Game.BananaCannonMiniGame {
         
         public void SpawnSpaceships(List<CharacterType> spaceshipsToSpawn) {
             foreach (var spaceship in spaceshipsToSpawn) {
-                if (spaceship == CharacterType.PIRATE)
-                    Invoke(nameof(SpawnPirateSpaceship), 2);
-                else {
-                    Invoke(nameof(SpawnVisitorSpaceship), 2);
-                }
+                Invoke(spaceship == CharacterType.PIRATE ? nameof(SpawnPirateSpaceship) : nameof(SpawnVisitorSpaceship), 2);
             }
         }
         
@@ -35,7 +31,7 @@ namespace Game.BananaCannonMiniGame {
     
         private Vector3 GetRandomizeExitPoint() {
             var exitRandomTransform = exitTransform.localPosition;
-            exitRandomTransform.y = Random.Range(-50, 50);
+            exitRandomTransform.y = Random.Range(-20, 20);
             exitTransform.localPosition = exitRandomTransform;
 
             return exitTransform.position;

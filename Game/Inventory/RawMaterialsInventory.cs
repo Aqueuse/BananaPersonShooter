@@ -1,4 +1,5 @@
-﻿using Data.Buildables;
+﻿using ItemsProperties.Buildables;
+using ItemsProperties.Buildables.VisitorsBuildable;
 using UnityEngine;
 
 namespace Game.Inventory {
@@ -8,7 +9,7 @@ namespace Game.Inventory {
 
         private void Start() {
             rawMaterialsForPlateform = ObjectsReference.Instance.scriptableObjectManager._meshReferenceScriptableObject
-                .buildableDataScriptableObjects[BuildableType.PLATEFORM].rawMaterialsWithQuantity;
+                .buildablePropertiesScriptableObjects[BuildableType.PLATEFORM].rawMaterialsWithQuantity;
         }
 
         public void AddQuantity(RawMaterialType rawMaterialType, int quantity) {
@@ -43,8 +44,8 @@ namespace Game.Inventory {
             }
         }
             
-        public bool HasCraftingIngredients(BuildableDataScriptableObject buildableDataScriptableObject) {
-            var _craftingIngredients = buildableDataScriptableObject.rawMaterialsWithQuantity;
+        public bool HasCraftingIngredients(BuildablePropertiesScriptableObject buildablePropertiesScriptableObject) {
+            var _craftingIngredients = buildablePropertiesScriptableObject.rawMaterialsWithQuantity;
 
             foreach (var craftingIngredient in _craftingIngredients) {
                 if (rawMaterialsInventory[craftingIngredient.Key] < craftingIngredient.Value) return false;

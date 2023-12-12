@@ -1,4 +1,4 @@
-﻿using Data;
+﻿using ItemsProperties;
 using Gestion;
 using TMPro;
 using UnityEngine;

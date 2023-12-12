@@ -6,5 +6,9 @@ namespace Save.Templates {
         public Dictionary<string, float> monkeysSasietyByMonkeyId;
         public float piratesDebris = 0;
         public float visitorsDebris = 0;
+
+        public int piratesQuantity;
+        public int visitorsQuantity;
+        public int chimployeesQuantity;
     }
 }

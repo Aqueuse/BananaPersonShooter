@@ -1,8 +1,9 @@
-using Data.Characters;
+using ItemsProperties.Characters;
+using ItemsProperties.Characters.Chimployees;
 using UnityEngine;
 
 namespace Monkeys.Chimployees {
     public class Chimployee : MonoBehaviour {
-        public ChimployeeDataScriptableObject chimployeeDataScriptableObject;
+        public ChimployeePropertiesScriptableObject chimployeePropertiesScriptableObject;
     }
 }

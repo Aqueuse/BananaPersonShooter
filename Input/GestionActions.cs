@@ -1,5 +1,5 @@
 ﻿using Cameras;
-using Data;
+using ItemsProperties;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -32,6 +32,8 @@ namespace Input {
         [SerializeField] private InputActionReference mouseModeMoveInputActionReference;
         
         public MouseMode mouseMode = MouseMode.NONE;
+
+        [SerializeField] private float mouseMoveSensibility = 0.5f; 
         
         private void Start() {
             _gestionCamera = ObjectsReference.Instance.gestionCamera;
@@ -115,7 +117,7 @@ namespace Input {
         private void MoveCameraWithMouse(InputAction.CallbackContext context) {
             if (mouseMode != MouseMode.MOVE) return;
             
-            _gestionCamera.Move(context.ReadValue<Vector2>().y, context.ReadValue<Vector2>().x);
+            _gestionCamera.Move(context.ReadValue<Vector2>().y * mouseMoveSensibility, -context.ReadValue<Vector2>().x * mouseMoveSensibility);
         }
         
         private void MoveCameraWithKeyboard(InputAction.CallbackContext context) {

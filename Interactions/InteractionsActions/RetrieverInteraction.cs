@@ -1,6 +1,4 @@
-using System.Linq;
 using Gestion;
-using Gestion.Buildables.Plateforms;
 using Items;
 using Tags;
 using UnityEngine;
@@ -8,7 +6,7 @@ using UnityEngine;
 namespace Interactions.InteractionsActions {
     public class RetrieverInteraction : Interact {
         public override void Activate(GameObject interactedGameObject) {
-            var plateforms = MapItems.Instance.aspirablesContainer.GetComponentsInChildren<Plateform>().ToList();
+            var plateforms = Map.Instance.GetAllBuildablesByTypeInAspirableContainer(BuildableType.PLATEFORM);
             var plateformsCount = plateforms.Count;
 
             if (plateformsCount > 0) {
@@ -17,12 +15,10 @@ namespace Interactions.InteractionsActions {
                  foreach (var craftingMaterial in craftingMaterials) {
                      ObjectsReference.Instance.rawMaterialsInventory.AddQuantity(craftingMaterial.Key, craftingMaterial.Value*plateformsCount);
                  }
-
+                 
                 foreach (var plateform in plateforms) {
                     DestroyImmediate(plateform.gameObject);
                 }
-                
-                ObjectsReference.Instance.mapsManager.currentMap.RefreshItemsDataMap();
 
                 var logo = TagsManager.Instance.GetFirstGameObjectWithTagInGameObject(
                     interactedGameObject.transform.parent.gameObject,

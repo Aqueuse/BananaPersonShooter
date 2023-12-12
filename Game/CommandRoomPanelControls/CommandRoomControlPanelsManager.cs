@@ -1,8 +1,6 @@
-using System;
-using Interactions;
+using Game.Monkeys.Chimps.Chimployees;
 using Monkeys.Chimployees;
 using Monkeys.MiniChimps;
-using Tags;
 using UI.InGame.CommandRoomControlPanels;
 using UnityEngine;
 
@@ -17,7 +15,8 @@ namespace Game.CommandRoomPanelControls {
         [SerializeField] private GenericDictionary<CommandRoomPanelType, CommandRoomPanel> commandRoomPanels;
         
         public Assembler assembler;
-        public UIMarketingPanel uIMarketingPanel; 
+        public UIMarketingPanel uIMarketingPanel;
+        public GestionPanel gestionPanel;
 
         public ChimployeeCommandRoom chimployeeCommandRoom;
         public Transform apeResourcesChimployeeTransform;
@@ -29,7 +28,8 @@ namespace Game.CommandRoomPanelControls {
         }
         
         public void ShowHidePanel(CommandRoomPanelType commandRoomPanelType) {
-            if (commandRoomPanels[commandRoomPanelType].isVisible()) commandRoomPanels[commandRoomPanelType].Desactivate();
+            if (commandRoomPanels[commandRoomPanelType].isVisible()) 
+                commandRoomPanels[commandRoomPanelType].Desactivate();
             else {
                 commandRoomPanels[commandRoomPanelType].Activate();
             }

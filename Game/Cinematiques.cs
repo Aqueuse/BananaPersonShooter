@@ -87,7 +87,7 @@ namespace Game {
                 ObjectsReference.Instance.audioManager.PlayAmbiance(AmbianceType.DRONE_COMMANDROOM);
             }
             else {
-                ObjectsReference.Instance.audioManager.SetMusiqueAndAmbianceBySceneName(ObjectsReference.Instance.mapsManager.currentMap.mapDataScriptableObject.sceneName);
+                ObjectsReference.Instance.audioManager.SetMusiqueAndAmbianceBySceneName(ObjectsReference.Instance.gameData.currentMapData.mapPropertiesScriptableObject.sceneName);
             }
         }
 

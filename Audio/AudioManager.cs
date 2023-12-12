@@ -29,26 +29,21 @@ namespace Audio {
             audioFootstepsSource.loop = false;
         }
 
-        public void SetMusiqueAndAmbianceBySceneName(string sceneName) {
+        public void SetMusiqueAndAmbianceBySceneName(SceneType sceneName) {
             switch (sceneName) {
-                case "HOME":
+                case SceneType.HOME:
                     StopAudioSource(AudioSourcesType.AMBIANCE);
                     PlayMusic(MusicType.HOME, 0);
                     break;
                 
-                case "MAP01":
+                case SceneType.MAP01:
                     PlayAmbiance(AmbianceType.DRONE_MAP01);
                     PlayMusic(MusicType.JUNGLE_MAP01, 1);
                     break;
                     
-                case "COROLLE":
+                case SceneType.COROLLE:
                     PlayAmbiance(AmbianceType.DRONE_COROLLE);
                     PlayMusic(MusicType.COROLLE, 1);
-                    break;
-                
-                case "COMMANDROOM":
-                    PlayAmbiance(AmbianceType.DRONE_COMMANDROOM);
-                    PlayMusic(MusicType.COMMANDROOM, 1);
                     break;
             }
         }
