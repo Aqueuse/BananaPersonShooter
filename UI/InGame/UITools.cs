@@ -1,37 +1,38 @@
+using DG.Tweening;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace UI.InGame {
     public class UITools : MonoBehaviour {
-        [SerializeField] private Image shootImage;
-        [SerializeField] private Image takeImage;
-        [SerializeField] private Image placeImage;
+        [SerializeField] private Transform leftFlipperTransform;
+        [SerializeField] private Transform middleFlipperTransform;
+        [SerializeField] private Transform rightFlipperTransform;
+        
+        [SerializeField] private Ease customEase;
 
-        private readonly Vector3 unzoomedScale = new(0.6f, 0.6f, 1);
-        private readonly Vector3 zoomedScale = new(1, 1, 1);
+        private Vector3 initialFlipRotation;
+        private Vector3 rotatedFlipRotation;
+
+        private void Start() {
+            initialFlipRotation = new Vector3(0, 0, 0);
+            rotatedFlipRotation = new Vector3(0, 180, 0);
+        }
 
         public void ZoomShootIcon() {
-            shootImage.rectTransform.localScale = zoomedScale;
-            takeImage.rectTransform.localScale = unzoomedScale;
-            placeImage.rectTransform.localScale = unzoomedScale;
+            leftFlipperTransform.DOLocalRotate(rotatedFlipRotation, 0.3f).SetEase(customEase);
         }
 
         public void ZoomTakeIcon() {
-            shootImage.rectTransform.localScale = unzoomedScale;
-            takeImage.rectTransform.localScale = zoomedScale;
-            placeImage.rectTransform.localScale = unzoomedScale;
+            middleFlipperTransform.DOLocalRotate(rotatedFlipRotation, 0.3f).SetEase(customEase);
         }
 
         public void ZoomPlaceIcon() {
-            shootImage.rectTransform.localScale = unzoomedScale;
-            takeImage.rectTransform.localScale = unzoomedScale;
-            placeImage.rectTransform.localScale = zoomedScale;
+            rightFlipperTransform.DOLocalRotate(rotatedFlipRotation, 0.3f).SetEase(customEase);
         }
 
         public void UnzoomIcons() {
-            shootImage.rectTransform.localScale = unzoomedScale;
-            takeImage.rectTransform.localScale = unzoomedScale;
-            placeImage.rectTransform.localScale = unzoomedScale;
+            leftFlipperTransform.DOLocalRotate(initialFlipRotation, 0.3f).SetEase(customEase);
+            middleFlipperTransform.DOLocalRotate(initialFlipRotation, 0.3f).SetEase(customEase);
+            rightFlipperTransform.DOLocalRotate(initialFlipRotation, 0.3f).SetEase(customEase);
         }
     }
 }

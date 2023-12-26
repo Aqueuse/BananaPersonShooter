@@ -8,7 +8,7 @@ namespace Game.Inventory {
         public GenericDictionary<RawMaterialType, int> rawMaterialsForPlateform;
 
         private void Start() {
-            rawMaterialsForPlateform = ObjectsReference.Instance.scriptableObjectManager._meshReferenceScriptableObject
+            rawMaterialsForPlateform = ObjectsReference.Instance.meshReferenceScriptableObject
                 .buildablePropertiesScriptableObjects[BuildableType.PLATEFORM].rawMaterialsWithQuantity;
         }
 
@@ -21,7 +21,7 @@ namespace Game.Inventory {
             
             rawMaterialItem.gameObject.SetActive(true);
             rawMaterialItem.SetQuantity(rawMaterialsInventory[rawMaterialType]);
-            
+
             ObjectsReference.Instance.uiQueuedMessages.AddToInventory(rawMaterialItem.itemScriptableObject, quantity);
         }
 
@@ -42,10 +42,22 @@ namespace Game.Inventory {
                 rawMaterialItem.SetQuantity(0);
                 rawMaterialItem.gameObject.SetActive(false);
             }
+            
+            ObjectsReference.Instance.uiQueuedMessages.RemoveFromInventory(rawMaterialItem.itemScriptableObject, quantity);
         }
             
         public bool HasCraftingIngredients(BuildablePropertiesScriptableObject buildablePropertiesScriptableObject) {
             var _craftingIngredients = buildablePropertiesScriptableObject.rawMaterialsWithQuantity;
+
+            foreach (var craftingIngredient in _craftingIngredients) {
+                if (rawMaterialsInventory[craftingIngredient.Key] < craftingIngredient.Value) return false;
+            }
+
+            return true;
+        }
+        
+        public bool HasCraftingIngredients(BuildableType buildableType) {
+            var _craftingIngredients = ObjectsReference.Instance.meshReferenceScriptableObject.buildablePropertiesScriptableObjects[buildableType].rawMaterialsWithQuantity;
 
             foreach (var craftingIngredient in _craftingIngredients) {
                 if (rawMaterialsInventory[craftingIngredient.Key] < craftingIngredient.Value) return false;

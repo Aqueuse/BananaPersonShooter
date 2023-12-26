@@ -1,47 +1,48 @@
 using Audio;
 using Gestion;
-using Gestion.Actions;
 using Cameras;
 using ItemsProperties;
 using Game;
 using Game.Inventory;
-using Gestion.PlayerActions;
 using Input;
 using Interactions;
 using Player;
+using Player.PlayerActions;
 using Save;
 using Settings;
 using UI;
 using UI.Bananapedia;
 using UI.InGame;
-using UI.InGame.CommandRoomControlPanels;
 using UI.InGame.Gestion;
 using UI.InGame.Inventory;
+using UI.InGame.VisitorReceptionMiniGameUI;
 using UI.Menus;
 using UI.Save;
 using VFX;
 
 public class ObjectsReference : MonoSingleton<ObjectsReference> {
+    public MeshReferenceScriptableObject meshReferenceScriptableObject;
+
     public GameManager gameManager;
     public InputManager inputManager;
     public AudioManager audioManager;
-    public InteractionsManager interactionsManager;
+    public Interact interact;
 
     public BananaMan bananaMan;
     public PlayerController playerController;
     public BananaGun bananaGun;
-    public Harvest harvest;
+    public PlayerActionsSwitch playerActionsSwitch;
+    public Scan scan;
     public Build build;
     public ThrowBanana throwBanana;
+    public Grab grab;
 
     public BananasInventory bananasInventory;
     public RawMaterialsInventory rawMaterialsInventory;
     public IngredientsInventory ingredientsInventory;
     
-    public ScriptableObjectManager scriptableObjectManager;
     public GhostsReference ghostsReference;
-    public GestionMode gestionMode;
-
+    
     public MainCamera mainCamera;
     public CameraPlayer cameraPlayer;
     public CameraGestion gestionCamera;
@@ -65,7 +66,10 @@ public class ObjectsReference : MonoSingleton<ObjectsReference> {
     public GameSettings gameSettings;
     
     public Teleportation teleportation;
-
+    
+    public DescriptionsManager descriptionsManager;
+    public GestionBuild gestionBuild;
+    
     public UIManager uiManager;
     public UInventoriesManager uInventoriesManager;
     public UIHud uiHud;
@@ -75,7 +79,6 @@ public class ObjectsReference : MonoSingleton<ObjectsReference> {
     public UIIngredientsInventory uiIngredientsInventory;
     public UIBlueprintsInventory uiBlueprintsInventory;
     
-    public QuickSlotsManager quickSlotsManager;
     public UICrosshairs uiCrosshairs;
     public UIFace uiFace;
     public UIQueuedMessages uiQueuedMessages;
@@ -86,8 +89,6 @@ public class ObjectsReference : MonoSingleton<ObjectsReference> {
     public UICredits uiCredits;
     public UISave uiSave;
     public UISettings uiSettings;
-    public UIbananaCannonMiniGame uIbananaCannonMiniGame;
+    public UIVisitorReception uiVisitorReception;
     public UITools uiTools;
-
-    public DescriptionsManager descriptionsManager;
 }

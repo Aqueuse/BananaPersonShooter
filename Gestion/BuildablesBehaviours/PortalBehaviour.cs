@@ -1,4 +1,3 @@
-using System;
 using Data.BuildablesData;
 using Interactions.InteractionsActions;
 using Newtonsoft.Json;
@@ -10,12 +9,6 @@ namespace Gestion.BuildablesBehaviours {
         [SerializeField] private GameObject dotPrefab;
         
         public string portalName;
-
-        private void Start() {
-            if(string.IsNullOrEmpty(buildableGuid)) {
-                buildableGuid = Guid.NewGuid().ToString();
-            }
-        }
 
         public void ShowAllPossibleDestinations() {
             foreach (var map in ObjectsReference.Instance.gameData.mapBySceneName) {
@@ -34,13 +27,10 @@ namespace Gestion.BuildablesBehaviours {
         }
 
         public override void GenerateSaveData() {
-            if(string.IsNullOrEmpty(buildableGuid)) {
-                buildableGuid = Guid.NewGuid().ToString();
-            }
-            
             PortalData basicData = new PortalData {
                 buildableGuid = buildableGuid,
                 buildableType = buildableType,
+                isBreaked = isBreaked,
                 buildablePosition = JsonHelper.FromVector3ToString(transform.position),
                 buildableRotation = JsonHelper.FromQuaternionToString(transform.rotation),
             };
@@ -53,6 +43,7 @@ namespace Gestion.BuildablesBehaviours {
 
             buildableGuid = portalData.buildableGuid;
             buildableType = portalData.buildableType;
+            isBreaked = portalData.isBreaked;
             transform.position = JsonHelper.FromStringToVector3( portalData.buildablePosition);
             transform.rotation = JsonHelper.FromStringToQuaternion(portalData.buildableRotation);
 

@@ -52,23 +52,32 @@ namespace Input {
             if (ObjectsReference.Instance.gameManager.gameContext == GameContext.IN_HOME) {
                 ObjectsReference.Instance.uiManager.ShowHomeMenu();
             }
-        
-            if (ObjectsReference.Instance.gameManager.gameContext == GameContext.IN_GAME) {
-                if (ObjectsReference.Instance.gestionMode.isGestionModeActivated) {
-                    ObjectsReference.Instance.gestionMode.CloseGestionMode();
-                    return;
+
+            if (ObjectsReference.Instance.gameManager.gameContext == GameContext.IN_GESTION_VIEW) {
+                if (ObjectsReference.Instance.playerActionsSwitch.playerActions == PlayerActionsType.BUILD) {
+                    ObjectsReference.Instance.gestionBuild.CancelBuild();
                 }
 
-                if (ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.INVENTORIES].alpha > 0) {
-                    ObjectsReference.Instance.uiManager.HideInventories();
-                    return;
+                else {
+                    ObjectsReference.Instance.mainCamera.CloseGestionView();
+                    ObjectsReference.Instance.gameManager.gameContext = GameContext.IN_GAME;
                 }
-                
+            }
+
+            if (ObjectsReference.Instance.gameManager.gameContext == GameContext.IN_INVENTORY) {
+                ObjectsReference.Instance.uiManager.HideInventories();
+                ObjectsReference.Instance.inputManager.SwitchContext(InputContext.GAME);
+                ObjectsReference.Instance.gameManager.gameContext = GameContext.IN_GAME;
+            }
+            
+            if (ObjectsReference.Instance.gameManager.gameContext == GameContext.IN_GAME_MENU) {
                 if (ObjectsReference.Instance.uiManager.isOnSubMenus) {
                     ObjectsReference.Instance.uiManager.ShowGameMenu();
                 }
                 else {
                     ObjectsReference.Instance.uiManager.HideGameMenu();
+                    ObjectsReference.Instance.gameManager.gameContext = GameContext.IN_GAME;
+                    
                     ObjectsReference.Instance.inputManager.SwitchContext(InputContext.GAME);
                 }
             }

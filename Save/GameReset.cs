@@ -17,15 +17,17 @@ namespace Save {
             ResetInventory();
             ResetBananaSlot();
             ResetBananaManVitals();
+            ResetActiveItem();
+
             ResetTutorial();
             
             ResetPositionAndLastMap();
-            ResetActiveItem();
+            
             ResetMonkeysSasiety();
+            ResetMonkeysPositions();
 
             // lock maps
             // reinit spaceship state
-            // reinit assets positions on maps
         }
 
         private static void ResetInventory() {
@@ -62,18 +64,20 @@ namespace Save {
         }
 
         private static void ResetActiveItem() {
-            ObjectsReference.Instance.bananaMan.activeItem = ObjectsReference.Instance.scriptableObjectManager.GetBananaScriptableObject(BananaType.EMPTY);
+            ObjectsReference.Instance.bananaMan.activeItem = ObjectsReference.Instance.meshReferenceScriptableObject.bananasPropertiesScriptableObjects[BananaType.EMPTY];
 
             ObjectsReference.Instance.gameData.bananaManSaved.activeBanana = 0;
         }
 
         private static void ResetMonkeysSasiety() {
             foreach (var mapData in ObjectsReference.Instance.gameData.mapBySceneName) {
-                if (mapData.Value.mapPropertiesScriptableObject.monkeyPropertiesScriptableObjectsByMonkeyId.Count > 0) {
-                    foreach (var monkeyDataScriptableObject in mapData.Value.mapPropertiesScriptableObject.monkeyPropertiesScriptableObjectsByMonkeyId) {
-                        monkeyDataScriptableObject.Value.sasiety = 0;
-                    }
-                }
+                mapData.Value.monkeysSasietyTimerByMonkeyId = new GenericDictionary<string, int>();
+            }
+        }
+        
+        private static void ResetMonkeysPositions() {
+            foreach (var mapData in ObjectsReference.Instance.gameData.mapBySceneName) {
+                mapData.Value.monkeysPositionByMonkeyId = new GenericDictionary<string, Vector3>();
             }
         }
     }

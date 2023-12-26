@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Monkeys.Ancestors.Gorilla {
+namespace Game.Monkeys.Ancestors.Gorilla {
     public class GorillaAnimationBehaviour : StateMachineBehaviour {
         
         public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {

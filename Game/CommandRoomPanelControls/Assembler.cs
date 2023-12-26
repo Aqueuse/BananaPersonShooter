@@ -1,5 +1,6 @@
 using Interactions;
 using UI.InGame;
+using UI.InGame.CommandRoomControlPanels;
 using UnityEngine;
 
 namespace Game.CommandRoomPanelControls {
@@ -31,12 +32,8 @@ namespace Game.CommandRoomPanelControls {
         
         private void OnTriggerEnter(Collider other) {
             if (!ObjectsReference.Instance.bananaMan.tutorialFinished) {
-                var itemStaticClass = other.gameObject.GetComponent<Interaction>(); 
-                
-                if (itemStaticClass != null) {
-                    if (itemStaticClass.interactionType == InteractionType.GRABBABLE_PIECE &&
-                        itemStaticClass.GetComponent<GrabbableInteraction>().grabbablePieceType == GrabbablePieceType.BANANA_GUN) {
-                        
+                if (other.TryGetComponent(out Grabbable grabbable)) {
+                    if (grabbable.grabbablePieceType == GrabbablePieceType.BANANA_GUN) {
                         if (bananaGunPiecesRepairedPositionByBananaGunPieceGameObject.ContainsKey(other.gameObject)) {
                             assemblerAudioSource.pitch += 0.02f;
                             SetAssemblerAudioVolume(ObjectsReference.Instance.audioManager.effectsLevel);
@@ -48,7 +45,7 @@ namespace Game.CommandRoomPanelControls {
 
                             var bananaGunPiece = other.gameObject;
                 
-                            ObjectsReference.Instance.interactionsManager.Release();
+                            ObjectsReference.Instance.grab.Release();
                             bananaGunPiece.layer = 0;
 
                             Destroy(bananaGunPiece.GetComponent<Rigidbody>());
@@ -56,7 +53,6 @@ namespace Game.CommandRoomPanelControls {
                 
                             bananaGunPiece.transform.position = bananaGunPiecesRepairedPositionByBananaGunPieceGameObject[bananaGunPiece].position;
                             bananaGunPiece.transform.rotation = bananaGunPiecesRepairedPositionByBananaGunPieceGameObject[bananaGunPiece].rotation;
-
                             
                             bananaGunPiecesRepaired += 1;
                             if (uIassembler.assemblerMode != AssemblerMode.BANANA_GUN) uIassembler.SwitchToBananaGunReparationMode();

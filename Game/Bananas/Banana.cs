@@ -1,8 +1,9 @@
-﻿using ItemsProperties.Bananas;
+﻿using Game.Monkeys.Chimpirates;
+using ItemsProperties.Bananas;
 using Tags;
 using UnityEngine;
 
-namespace Bananas {
+namespace Game.Bananas {
     public class Banana : MonoBehaviour {
         [SerializeField] private GameObject bananaSkin;
         [SerializeField] private MeshRenderer bananaMeshRenderer;
@@ -32,6 +33,10 @@ namespace Bananas {
             if (TagsManager.Instance.HasTag(other.gameObject, GAME_OBJECT_TAG.PLAYER)) {
                 ObjectsReference.Instance.rawMaterialsInventory.AddQuantity(RawMaterialType.BANANA_PEEL, 1);
                 DestroyMe();
+            }
+
+            if (TagsManager.Instance.HasTag(other.gameObject, GAME_OBJECT_TAG.PIRATE)) {
+                other.GetComponent<PirateBehaviour>().Flee();
             }
         }
 

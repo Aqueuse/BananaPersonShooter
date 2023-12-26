@@ -1,7 +1,7 @@
 using TMPro;
 using UnityEngine;
 
-namespace UI.InGame {
+namespace UI.InGame.CommandRoomControlPanels {
     public enum AssemblerMode {
         IDLE,
         BANANA_GUN

@@ -1,7 +1,6 @@
 using ItemsProperties;
 using UnityEngine;
 using UnityEngine.Localization;
-using UnityEngine.Localization.Settings;
 
 namespace UI.InGame {
     public class UIQueuedMessages : MonoBehaviour {
@@ -9,17 +8,13 @@ namespace UI.InGame {
         [SerializeField] private LocalizedString nothingToRetrieve;
 
         private GenericDictionary<ItemCategory, LocalizedStringTable> translationTableByItemCategory;
-
-        public void UnlockBlueprint(BuildableType buildableType) {
-            ObjectsReference.Instance.uiQueuedMessages.AddMessage(
-                LocalizationSettings.StringDatabase.GetTable("UI").GetEntry("unlocked").GetLocalizedString()+
-                " "+
-                LocalizationSettings.StringDatabase.GetTable("items").GetEntry(buildableType.ToString().ToLower()).GetLocalizedString()
-            );
-        }
-
+        
         public void AddToInventory(ItemScriptableObject itemScriptableObject, int quantity) {
             ObjectsReference.Instance.uiQueuedMessages.AddMessage("+ "+ quantity+" "+ itemScriptableObject.GetName());
+        }
+
+        public void RemoveFromInventory(ItemScriptableObject itemScriptableObject, int quantity) {
+            ObjectsReference.Instance.uiQueuedMessages.AddMessage("- "+ quantity+" "+ itemScriptableObject.GetName());
         }
 
         public void AddMessage(string message) {

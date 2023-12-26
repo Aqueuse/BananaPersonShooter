@@ -1,5 +1,5 @@
 using ItemsProperties.Bananas;
-using ItemsProperties.Buildables.VisitorsBuildable;
+using ItemsProperties.Buildables;
 using UnityEngine;
 
 namespace ItemsProperties {
@@ -12,6 +12,8 @@ namespace ItemsProperties {
         public GenericDictionary<BuildableType, BuildablePropertiesScriptableObject> buildablePropertiesScriptableObjects;
         public GenericDictionary<BananaType, BananasPropertiesScriptableObject> bananasPropertiesScriptableObjects;
         
+        public GenericDictionary<VisitorType, GameObject> visitorPrefabByPrefabIndex;
+        
         public GameObject GetRandomDebrisByCharacterType(CharacterType characterType) {
             switch (characterType) {
                 case CharacterType.PIRATE:
@@ -22,5 +24,7 @@ namespace ItemsProperties {
 
             return null;
         }
+
+        public GenericDictionary<RawMaterialType, GameObject> prefabByRawMaterialType;
     }
 }

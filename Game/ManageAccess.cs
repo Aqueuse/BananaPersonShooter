@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Game {
     public class ManageAccess : MonoBehaviour {
-        [SerializeField] private GameObject interaction;
+        [SerializeField] private GameObject playInteraction;
         [SerializeField] private GameObject accessDenied;
         [SerializeField] private CanvasGroup authorizedPanelCanvasGroup;
 
@@ -15,13 +15,13 @@ namespace Game {
 
         public void ForbidUsage() {
             authorizedPanelCanvasGroup.alpha = 0.3f;
-            interaction.SetActive(false);
+            playInteraction.SetActive(false);
             accessDenied.SetActive(true);
         }
 
         public void AuthorizeUsage() {
             authorizedPanelCanvasGroup.alpha = 1;
-            interaction.SetActive(true);
+            playInteraction.SetActive(true);
             accessDenied.SetActive(false);
         }
     }

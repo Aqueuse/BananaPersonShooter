@@ -1,4 +1,3 @@
-using System;
 using Data.BuildablesData;
 using Newtonsoft.Json;
 using Save.Helpers;
@@ -6,15 +5,12 @@ using Save.Helpers;
 namespace Gestion.BuildablesBehaviours {
     public class BasicBehaviour : BuildableBehaviour {
         public override void GenerateSaveData() {
-            if(string.IsNullOrEmpty(buildableGuid)) {
-                buildableGuid = Guid.NewGuid().ToString();
-            }
-            
             BasicData basicData = new BasicData {
                 buildableGuid = buildableGuid,
                 buildableType = buildableType,
+                isBreaked = isBreaked,
                 buildablePosition = JsonHelper.FromVector3ToString(transform.position),
-                buildableRotation = JsonHelper.FromQuaternionToString(transform.rotation),
+                buildableRotation = JsonHelper.FromQuaternionToString(transform.rotation)
             };
 
             ObjectsReference.Instance.gameData.currentMapData.AddBuildableToBuildableDictionnary(buildableType, JsonConvert.SerializeObject(basicData));
@@ -25,6 +21,7 @@ namespace Gestion.BuildablesBehaviours {
 
             buildableGuid = basicData.buildableGuid;
             buildableType = basicData.buildableType;
+            isBreaked = basicData.isBreaked;
             transform.position = JsonHelper.FromStringToVector3( basicData.buildablePosition);
             transform.rotation = JsonHelper.FromStringToQuaternion(basicData.buildableRotation);
         }

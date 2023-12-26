@@ -31,17 +31,12 @@ namespace Game.BananaCannonMiniGame {
 
             navMeshTriangulation = NavMesh.CalculateTriangulation();
 
-            Debug.Log(navMeshTriangulation.vertices.Length);
-
             foreach (var characterType in debrisByCharacterType) {
                 var vertexIndex = Random.Range(0, navMeshTriangulation.vertices.Length);
 
                 if (NavMesh.SamplePosition(navMeshTriangulation.vertices[vertexIndex], out var navMeshHit, 200f, NavMesh.AllAreas)) {
-                    Debug.Log("spawn debris");
-                    Debug.Log(vertexIndex);
-                    
-                    var debris = Instantiate(
-                        original: ObjectsReference.Instance.scriptableObjectManager._meshReferenceScriptableObject.GetRandomDebrisByCharacterType(characterType),
+                    Instantiate(
+                        original: ObjectsReference.Instance.meshReferenceScriptableObject.GetRandomDebrisByCharacterType(characterType),
                         position: navMeshHit.position,
                         rotation:Quaternion.FromToRotation(transform.up, navMeshHit.normal),
                         parent: _debrisContainer
@@ -71,8 +66,8 @@ namespace Game.BananaCannonMiniGame {
                 _raycastOrigin = _randomPositionInCircleVector3 + transform.position;
                 
                 if (Physics.Raycast(origin: _raycastOrigin, direction: Vector3.down, hitInfo: out _raycastHit, maxDistance:1000, layerMask: raycastLayerMask)) {
-                    var debris = Instantiate(
-                        original: ObjectsReference.Instance.scriptableObjectManager._meshReferenceScriptableObject.GetRandomDebrisByCharacterType(characterType),
+                    Instantiate(
+                        original: ObjectsReference.Instance.meshReferenceScriptableObject.GetRandomDebrisByCharacterType(characterType),
                         position: _raycastHit.point,
                         rotation:Quaternion.FromToRotation(transform.up, _raycastHit.normal),
                         parent: _debrisContainer

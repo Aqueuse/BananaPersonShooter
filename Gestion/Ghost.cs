@@ -1,4 +1,4 @@
-using ItemsProperties.Buildables.VisitorsBuildable;
+using ItemsProperties.Buildables;
 using Tags;
 using UnityEngine;
 

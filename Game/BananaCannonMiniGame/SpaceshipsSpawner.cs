@@ -18,7 +18,7 @@ namespace Game.BananaCannonMiniGame {
         
         public void SpawnSpaceships(List<CharacterType> spaceshipsToSpawn) {
             foreach (var spaceship in spaceshipsToSpawn) {
-                Invoke(spaceship == CharacterType.PIRATE ? nameof(SpawnPirateSpaceship) : nameof(SpawnVisitorSpaceship), 2);
+                Invoke(spaceship == CharacterType.PIRATE ? nameof(SpawnPirateSpaceship) : nameof(SpawnVisitorSpaceship), Random.Range(0, 30));
             }
         }
         

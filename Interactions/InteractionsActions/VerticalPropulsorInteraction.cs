@@ -1,7 +1,7 @@
 using UnityEngine;
 
 namespace Interactions.InteractionsActions {
-    public class VerticalPropulsorInteraction : Interact {
+    public class VerticalPropulsorInteraction : Interaction {
         [SerializeField] private float propulsionForce;
         
         public override void Activate(GameObject interactedGameObject) {

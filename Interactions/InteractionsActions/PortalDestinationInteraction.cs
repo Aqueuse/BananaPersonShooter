@@ -1,7 +1,7 @@
 using UnityEngine;
 
 namespace Interactions.InteractionsActions {
-    public class PortalDestinationInteraction : Interact {
+    public class PortalDestinationInteraction : Interaction {
         public SceneType sceneName;
         public Vector3 destinationPosition;
         public Quaternion destinationRotation;

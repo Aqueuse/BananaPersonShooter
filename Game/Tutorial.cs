@@ -16,7 +16,6 @@ namespace Game {
             ObjectsReference.Instance.cinematiques.Play(CinematiqueType.NEW_GAME);
 
             ObjectsReference.Instance.uInventoriesManager.HideUIHelpers();
-            ObjectsReference.Instance.uiManager.SetActive(UICanvasGroupType.QUICKSLOTS, false);
             ObjectsReference.Instance.uiManager.SetActive(UICanvasGroupType.BANANAGUN_HELPER_KEYBOARD, false);
             ObjectsReference.Instance.uiManager.SetActive(UICanvasGroupType.BANANAGUN_HELPER_GAMEPAD, false);
             
@@ -46,7 +45,6 @@ namespace Game {
         
         public void FinishTutorial() {
             ObjectsReference.Instance.uInventoriesManager.ShowCurrentUIHelper();
-            ObjectsReference.Instance.uiManager.SetActive(UICanvasGroupType.QUICKSLOTS, true);
 
             ObjectsReference.Instance.bananaGun.bananaGunInBack.SetActive(true);
             // TODO : animation take banana gun

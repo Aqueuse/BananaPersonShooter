@@ -7,8 +7,6 @@ namespace Save {
         [SerializeField] private GameObject autoSaveBanana;
         
         public void SaveGame(string saveUuid) {
-            Debug.Log("save");
-            
             var date = DateTime.ParseExact(DateTime.Now.ToString("U"), "U", CultureInfo.CurrentCulture).ToString(CultureInfo.CurrentCulture);
             
             SaveBananasInventory();
@@ -43,10 +41,9 @@ namespace Save {
                 ObjectsReference.Instance.gameData.bananaManSaved.ingredientsInventory[inventorySlot.Key.ToString()] = inventorySlot.Value;
             }
         }
-        
+
         private static void SaveBananaSlot() {
-            if (ObjectsReference.Instance.quickSlotsManager.bananaSlotItemScriptableObject != null)
-               ObjectsReference.Instance.gameData.bananaManSaved.bananaSlot = ObjectsReference.Instance.quickSlotsManager.bananaSlotItemScriptableObject.bananaType.ToString();
+            ObjectsReference.Instance.gameData.bananaManSaved.bananaSlot = ObjectsReference.Instance.bananaMan.activeItem.bananaType.ToString();
         }
 
         private static void SaveBananaManVitals() {

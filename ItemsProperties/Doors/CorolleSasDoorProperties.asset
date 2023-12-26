@@ -27,4 +27,4 @@ MonoBehaviour:
   - led into the infinity of space
   - "Conduit dans l'infinit\xE9 de l'espace"
   - conducido hacia el infinito del espacio
-  associatedMapDataScriptableObject: {fileID: 11400000, guid: bf94afa5be15d3643b2e497b0f4c1dfd, type: 2}
+  associatedMapPropertiesScriptableObject: {fileID: 11400000, guid: 7db65f25967edc048a3ba1aefeed77bd, type: 2}

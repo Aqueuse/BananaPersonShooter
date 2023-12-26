@@ -1,5 +1,5 @@
-﻿using ItemsProperties.Bananas;
-using Gestion;
+﻿using Data;
+using ItemsProperties.Bananas;
 using UnityEngine;
 
 namespace Game.Inventory {
@@ -15,12 +15,11 @@ namespace Game.Inventory {
             bananaItem.gameObject.SetActive(true);
             bananaItem.SetQuantity(bananasInventory[bananasDataScriptableObject.bananaType]);
 
-            if (ObjectsReference.Instance.quickSlotsManager.bananaSlotItemScriptableObject == bananasDataScriptableObject)
-                ObjectsReference.Instance.quickSlotsManager.SetBananaQuantity(bananasInventory[bananasDataScriptableObject.bananaType]);
+            ObjectsReference.Instance.bananaMan.activeItem = bananasDataScriptableObject;
             
             ObjectsReference.Instance.uiQueuedMessages.AddToInventory(bananasDataScriptableObject, quantity);
 
-            foreach (var monkey in Map.Instance.monkeys) {
+            foreach (var monkey in Map.Instance.monkeysInMap) {
                 monkey.SearchForBananaManBananas();
             }
         }
@@ -42,17 +41,6 @@ namespace Game.Inventory {
                 bananaItem.SetQuantity(0);
                 bananaItem.gameObject.SetActive(false);
             }
-            
-            if (ObjectsReference.Instance.quickSlotsManager.bananaSlotItemScriptableObject.bananaType == bananaType)
-                ObjectsReference.Instance.quickSlotsManager.SetBananaQuantity(bananasInventory[bananaType]);
-        }
-
-        public bool HasBananas() {
-            foreach (var bananas in bananasInventory) {
-                if (bananas.Value > 0) return true;
-            }
-
-            return false;
         }
     }
 }

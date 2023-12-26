@@ -2,7 +2,7 @@ using Game.CommandRoomPanelControls;
 using UnityEngine;
 
 namespace Interactions.InteractionsActions {
-    public class BananaGunInteraction : Interact {
+    public class BananaGunInteraction : Interaction {
         public override void Activate(GameObject interactedGameObject) {
             CommandRoomControlPanelsManager.Instance.assembler.HideBananaGunInteractableGameObject();
             ObjectsReference.Instance.tutorial.FinishTutorial();

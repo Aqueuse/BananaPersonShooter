@@ -19,6 +19,7 @@ namespace Input {
 
         [SerializeField] private InputActionReference buildInputActionReference;
         [SerializeField] private InputActionReference harvestInputActionReference;
+        public InputActionReference repairActionReference;
 
         [SerializeField] private InputActionReference rotateInputActionReference;
         
@@ -46,6 +47,9 @@ namespace Input {
             harvestInputActionReference.action.Enable();
             harvestInputActionReference.action.performed += Harvest;
 
+            repairActionReference.action.Enable();
+            repairActionReference.action.performed += Repair;
+            
             rotateInputActionReference.action.Enable();
             rotateInputActionReference.action.performed += Rotate;
             
@@ -72,7 +76,10 @@ namespace Input {
 
             harvestInputActionReference.action.Disable();
             harvestInputActionReference.action.performed -= Harvest;
-
+            
+            repairActionReference.action.Disable();
+            repairActionReference.action.performed -= Repair;
+            
             rotateInputActionReference.action.Disable();
             rotateInputActionReference.action.performed -= Rotate;
 
@@ -97,20 +104,24 @@ namespace Input {
             var contextValue = context.ReadValue<float>(); 
             
             if (contextValue < 0) {
-                ObjectsReference.Instance.build.RotateGhost(Vector3.up);
+                ObjectsReference.Instance.gestionBuild.RotateGhost(Vector3.up);
             }
 
             if (contextValue > 0) {
-                ObjectsReference.Instance.build.RotateGhost(Vector3.down);
+                ObjectsReference.Instance.gestionBuild.RotateGhost(Vector3.down);
             }
         }
         
         private void Build(InputAction.CallbackContext context) {
-            ObjectsReference.Instance.build.ValidateBuildable();
+            ObjectsReference.Instance.gestionBuild.ValidateBuildable();
         }
         
         private void Harvest(InputAction.CallbackContext context) {
-            ObjectsReference.Instance.harvest.harvest();
+            ObjectsReference.Instance.scan.harvest();
+        }
+        
+        private void Repair(InputAction.CallbackContext context) {
+            ObjectsReference.Instance.gestionBuild.RepairBuildable();
         }
         
         /// /// CAMERA

@@ -1,7 +1,7 @@
 using Tags;
 using UnityEngine;
 
-namespace Bananas.Regimes {
+namespace Game.Bananas.Regimes {
     enum VerticalState {
         UP = 0,
         DOWN = 1

@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using Random = UnityEngine.Random;
 
-namespace Monkeys.Gorilla {
+namespace Game.Monkeys.Ancestors.Gorilla {
     public class CinematiqueGorilla : MonoBehaviour {
         private NavMeshAgent _navMeshAgent;
         private Animator _animator;

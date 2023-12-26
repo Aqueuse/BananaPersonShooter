@@ -1,13 +1,14 @@
-﻿using Bananas;
+﻿using Game.Bananas;
 using ItemsProperties.Monkeys;
 using Tags;
 using UnityEngine;
 using UnityEngine.AI;
-using Random = UnityEngine.Random;
 
-namespace Monkeys {
+namespace Game.Monkeys.Ancestors {
     public class Monkey : MonoBehaviour {
         public MonkeyPropertiesScriptableObject monkeyPropertiesScriptableObject;
+        public string monkeyId;
+        public int sasietyTimer;
         
         public MonkeySounds monkeySounds;
         [SerializeField] private NavMeshAgent _navMeshAgent;
@@ -22,24 +23,28 @@ namespace Monkeys {
         private static readonly int Grab = Animator.StringToHash("GRAB");
         
         private void Start() {
-            var navMeshTriangulation = NavMesh.CalculateTriangulation();
-
-            var vertexIndex = Random.Range(0, navMeshTriangulation.vertices.Length);
-
-            if (NavMesh.SamplePosition(navMeshTriangulation.vertices[vertexIndex], out var navMeshHit, 2f, 0)) {
-                _navMeshAgent.Warp(navMeshHit.position);
+            monkeyId = monkeyPropertiesScriptableObject.monkeyId;
+            
+            if (ObjectsReference.Instance.gameData.currentMapData.monkeysSasietyTimerByMonkeyId.ContainsKey(monkeyId))
+                sasietyTimer = ObjectsReference.Instance.gameData.currentMapData.monkeysSasietyTimerByMonkeyId[monkeyId];
+            else {
+                sasietyTimer = 0;
             }
 
+            if (ObjectsReference.Instance.gameData.currentMapData.monkeysPositionByMonkeyId.ContainsKey(monkeyId)) {
+                if (NavMesh.SamplePosition(ObjectsReference.Instance.gameData.currentMapData.monkeysPositionByMonkeyId[monkeyId], out var navMeshHit, 2f, 0)) {
+                    _navMeshAgent.Warp(navMeshHit.position);
+                }
+            }
+            
             transform.localScale = new Vector3(1, 1, 1);
 
             InvokeRepeating(nameof(IncreaseHunger), 0, 30);
         }
 
         public void SearchForBananaManBananas() {
-            if (monkeyPropertiesScriptableObject.sasiety < 5 & !smelledBananasOnBananaMan) {
-                smelledBananasOnBananaMan = true;
-                ObjectsReference.Instance.uiQueuedMessages.AddMessage("the monkey smelled bananas !");
-            }
+            smelledBananasOnBananaMan = true;
+            ObjectsReference.Instance.uiQueuedMessages.AddMessage("the monkey smelled bananas !");
         }
         
         private void Feed(float addedBananaValue) {
@@ -49,8 +54,8 @@ namespace Monkeys {
         }
 
         public void Eat() {
-            if (monkeyPropertiesScriptableObject.sasiety < 10) {
-                monkeyPropertiesScriptableObject.sasiety += bananaValue;
+            if (sasietyTimer < 10) {
+                sasietyTimer += Mathf.CeilToInt(bananaValue);
             }
 
             else {
@@ -64,9 +69,12 @@ namespace Monkeys {
         }
 
         private void IncreaseHunger() {
-            if (monkeyPropertiesScriptableObject.sasiety > 0)
-                monkeyPropertiesScriptableObject.sasiety -= 1;
-            SearchForBananaManBananas();
+            if (sasietyTimer > 0) {
+                sasietyTimer -= 1;
+            }
+            else {
+                SearchForBananaManBananas();
+            }
         }
         
         public void PauseMonkey() {

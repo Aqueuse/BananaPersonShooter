@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Items {
+namespace Interactions {
     public class RotateTransform : MonoBehaviour {
         private Transform _elementToRotateTransform;
         private const float _speed = 200;

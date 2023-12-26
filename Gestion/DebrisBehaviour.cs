@@ -15,10 +15,6 @@ namespace Gestion {
                 debrisGuid = Guid.NewGuid().ToString();
             }
         }
-    
-        public int GetRandomBattery() {
-            return 1;
-        }
         
         public void GenerateDebrisData() {
             var debrisData = new DebrisData {

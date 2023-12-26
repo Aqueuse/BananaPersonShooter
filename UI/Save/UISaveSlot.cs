@@ -51,7 +51,7 @@ namespace UI.Save {
             SetActive(deleteButtonGameObjectCanvasGroup, true);
             SetActive(textPanelCanvasGroup, false);
 
-            if (ObjectsReference.Instance.gameManager.gameContext == GameContext.IN_GAME) {
+            if (ObjectsReference.Instance.gameManager.gameContext == GameContext.IN_GAME_MENU) {
                 SetActive(saveButtonGameObjectCanvasGroup, true);
             }
         }

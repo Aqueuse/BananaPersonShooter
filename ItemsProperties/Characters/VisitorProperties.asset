@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6e11e44741351774ca1f8261e4d989f1, type: 3}
+  m_Name: VisitorProperties
+  m_EditorClassIdentifier: 
+  gameObjectTag: 17
+  itemCategory: 13
+  bananaType: 0
+  rawMaterialType: 5
+  ingredientsType: 1
+  buildableType: 5
+  itemName:
+  - visitor
+  - visiteur
+  - visitante
+  itemSprite: {fileID: 21300000, guid: 562832850f706204a9e77de1e89a9dc3, type: 3}
+  itemDescription:
+  - A visitor, come from elsewhere!
+  - un visiteur, venu d'ailleurs !
+  - Un visitante, venido de otro lugar!
+  rawMaterialsWithQuantity:
+    list: []
+    keyCollision: 0
+  buildablePrefab: {fileID: 0}
+  needType: 0

@@ -16,23 +16,24 @@ namespace Input {
         private float rightRotateIncrementer;
         private float topRotateIncrementer;
         private float downRotateIncrementer;
-        
+
         public InputActionReference moveActionReference;
         public InputActionReference jumpActionReference;
         public InputActionReference runActionReference;
         public InputActionReference rollActionReference;
         public InputActionReference eatActionReference;
-        
+
         public InputActionReference grabActionReference;
 
         public InputActionReference interactActionReference;
         public InputActionReference pauseGameActionReference;
-        
+
         public InputActionReference shootOrConfirmBuildActionReference;
- 
+
         public InputActionReference buildActionReference;
         public InputActionReference targetObjectActionReference;
         public InputActionReference harvestActionReference;
+        public InputActionReference repairActionReference;
 
         public InputActionReference rotateGhostActionReference;
         public InputActionReference moveAwayCloserGhostActionReference;
@@ -45,7 +46,7 @@ namespace Input {
 
             _playerController = ObjectsReference.Instance.playerController;
         }
-        
+
         private void OnEnable() {
             moveActionReference.action.Enable();
             moveActionReference.action.performed += Move;
@@ -53,7 +54,7 @@ namespace Input {
 
             jumpActionReference.action.Enable();
             jumpActionReference.action.performed += Jump;
-            
+
             runActionReference.action.Enable();
             runActionReference.action.performed += Run;
             runActionReference.action.canceled += Run;
@@ -70,10 +71,10 @@ namespace Input {
 
             interactActionReference.action.Enable();
             interactActionReference.action.performed += Interact;
-            
+
             pauseGameActionReference.action.Enable();
             pauseGameActionReference.action.performed += PauseGame;
-            
+
             shootOrConfirmBuildActionReference.action.Enable();
             shootOrConfirmBuildActionReference.action.performed += ShootOrConfirmBuild;
             shootOrConfirmBuildActionReference.action.canceled += ShootOrConfirmBuild;
@@ -83,18 +84,21 @@ namespace Input {
             buildActionReference.action.canceled += Build;
 
             targetObjectActionReference.action.Enable();
-            targetObjectActionReference.action.performed += TargetObject;
-            targetObjectActionReference.action.canceled += TargetObject;
-            
+            targetObjectActionReference.action.performed += Scan;
+            targetObjectActionReference.action.canceled += Scan;
+
             harvestActionReference.action.Enable();
             harvestActionReference.action.performed += Harvest;
-            
+
+            repairActionReference.action.Enable();
+            repairActionReference.action.performed += Repair;
+
             rotateGhostActionReference.action.Enable();
             rotateGhostActionReference.action.performed += Rotate;
-            
+
             moveAwayCloserGhostActionReference.action.Enable();
             moveAwayCloserGhostActionReference.action.performed += MoveAwayCloserGhostTarget;
-            
+
             switchToInventoryActionReference.action.Enable();
             switchToInventoryActionReference.action.performed += SwitchToInventory;
         }
@@ -102,7 +106,7 @@ namespace Input {
         private void OnDisable() {
             jumpActionReference.action.Disable();
             jumpActionReference.action.performed -= Jump;
-            
+
             moveActionReference.action.Disable();
             moveActionReference.action.performed -= Move;
             moveActionReference.action.canceled -= Move;
@@ -112,17 +116,17 @@ namespace Input {
 
             rollActionReference.action.Disable();
             rollActionReference.action.performed -= Roll;
-            
+
             eatActionReference.action.Disable();
             eatActionReference.action.performed -= Eat;
-            
+
             grabActionReference.action.Disable();
             grabActionReference.action.performed -= Grab;
             grabActionReference.action.canceled -= Grab;
 
             interactActionReference.action.Disable();
             interactActionReference.action.performed -= Interact;
-            
+
             pauseGameActionReference.action.Disable();
             pauseGameActionReference.action.performed -= PauseGame;
             
@@ -135,18 +139,21 @@ namespace Input {
             buildActionReference.action.canceled -= Build;
 
             targetObjectActionReference.action.Disable();
-            targetObjectActionReference.action.performed -= TargetObject;
-            targetObjectActionReference.action.canceled -= TargetObject;
-            
+            targetObjectActionReference.action.performed -= Scan;
+            targetObjectActionReference.action.canceled -= Scan;
+
             harvestActionReference.action.Disable();
             harvestActionReference.action.performed -= Harvest;
+            
+            repairActionReference.action.Disable();
+            repairActionReference.action.performed -= Repair;
 
             rotateGhostActionReference.action.Disable();
             rotateGhostActionReference.action.performed -= Rotate;
-            
+
             moveAwayCloserGhostActionReference.action.Disable();
             moveAwayCloserGhostActionReference.action.performed -= MoveAwayCloserGhostTarget;
-            
+
             switchToInventoryActionReference.action.Disable();
             switchToInventoryActionReference.action.performed -= SwitchToInventory;
         }
@@ -185,12 +192,12 @@ namespace Input {
         }
 
         private static void Grab(InputAction.CallbackContext context) {
-            if (context.performed) ObjectsReference.Instance.interactionsManager.Grab(); 
-            if (context.canceled) ObjectsReference.Instance.interactionsManager.Release();
+            if (context.performed) ObjectsReference.Instance.grab.DoGrab(); 
+            if (context.canceled) ObjectsReference.Instance.grab.Release();
         }
         
         private static void Interact(InputAction.CallbackContext context) {
-            ObjectsReference.Instance.interactionsManager.Validate();
+            ObjectsReference.Instance.interact.Validate();
         }
 
         private static void PauseGame(InputAction.CallbackContext context) {
@@ -208,31 +215,36 @@ namespace Input {
         private void ShootOrConfirmBuild(InputAction.CallbackContext context) {
             if (!ObjectsReference.Instance.bananaMan.tutorialFinished) return;
 
-            ObjectsReference.Instance.bananaMan.activeItem = ObjectsReference.Instance.scriptableObjectManager.GetBananaScriptableObject(BananaType.CAVENDISH);
-            
+            ObjectsReference.Instance.bananaMan.activeItem = ObjectsReference.Instance.meshReferenceScriptableObject.bananasPropertiesScriptableObjects[BananaType.CAVENDISH];
+
             if (context.performed) {
-                if (ObjectsReference.Instance.build.isActivated) {
+                if (ObjectsReference.Instance.playerActionsSwitch.playerActions == PlayerActionsType.BUILD) {
                     ObjectsReference.Instance.build.ValidateBuildable();                    
                     ObjectsReference.Instance.build.CancelGhost();
                     ObjectsReference.Instance.bananaGun.UngrabBananaGun();
+                    
+                    ObjectsReference.Instance.playerActionsSwitch.SwitchToPlayerAction(PlayerActionsType.IDLE);                    
                 }
-
+                
                 else {
+                    ObjectsReference.Instance.playerActionsSwitch.SwitchToPlayerAction(PlayerActionsType.THROW_BANANA);
                     ObjectsReference.Instance.uiTools.ZoomShootIcon();
                     ObjectsReference.Instance.bananaGun.GrabBananaGun();
 
                     if (ObjectsReference.Instance.bananasInventory.GetQuantity(ObjectsReference.Instance.bananaMan.activeItem.bananaType) <= 0) return;
-                
+            
                     ObjectsReference.Instance.throwBanana.LoadingGun();
                     ObjectsReference.Instance.uiCrosshairs.SetCrosshair(ObjectsReference.Instance.bananaMan.activeItem.bananaType);
                 }
             }
-
+            
             if (context.canceled) {
                 ObjectsReference.Instance.uiTools.UnzoomIcons();
                 ObjectsReference.Instance.bananaGun.UngrabBananaGun();
 
                 ObjectsReference.Instance.throwBanana.CancelThrow();
+
+                ObjectsReference.Instance.playerActionsSwitch.SwitchToPlayerAction(PlayerActionsType.IDLE);
             }
         }
         
@@ -240,6 +252,8 @@ namespace Input {
             if (!ObjectsReference.Instance.bananaMan.tutorialFinished) return;
 
             if (context.performed) {
+                ObjectsReference.Instance.playerActionsSwitch.SwitchToPlayerAction(PlayerActionsType.BUILD);
+
                 ObjectsReference.Instance.uiTools.ZoomPlaceIcon();
                 ObjectsReference.Instance.uInventoriesManager.GetCurrentUIHelper().ShowBuildHelper();
 
@@ -255,17 +269,21 @@ namespace Input {
                 ObjectsReference.Instance.bananaGun.UngrabBananaGun();
                 
                 ObjectsReference.Instance.build.CancelGhost();
+                
+                ObjectsReference.Instance.playerActionsSwitch.SwitchToPlayerAction(PlayerActionsType.IDLE);
             }
         }
         
-        private void TargetObject(InputAction.CallbackContext context) {
+        private void Scan(InputAction.CallbackContext context) {
             if (!ObjectsReference.Instance.bananaMan.tutorialFinished) return;
 
             if (context.performed) {
                 ObjectsReference.Instance.bananaGun.GrabBananaGun();
                 ObjectsReference.Instance.uiTools.ZoomTakeIcon();
+
+                ObjectsReference.Instance.build.CancelGhost();
                 
-                ObjectsReference.Instance.harvest.isDirectHarvestActivated = true;
+                ObjectsReference.Instance.playerActionsSwitch.SwitchToPlayerAction(PlayerActionsType.SCAN);
             }
 
             if (context.canceled) {
@@ -273,28 +291,38 @@ namespace Input {
                 ObjectsReference.Instance.descriptionsManager.HideAllPanels();
 
                 ObjectsReference.Instance.bananaGun.UngrabBananaGun();
-                
-                ObjectsReference.Instance.harvest.isDirectHarvestActivated = false;
+
+                ObjectsReference.Instance.playerActionsSwitch.SwitchToPlayerAction(PlayerActionsType.IDLE);
             }
         }
 
         private void Harvest(InputAction.CallbackContext context) {
             if (!ObjectsReference.Instance.bananaMan.tutorialFinished) return;
-            
-            ObjectsReference.Instance.harvest.harvest();
+            if (ObjectsReference.Instance.playerActionsSwitch.playerActions != PlayerActionsType.SCAN) return;
+
+            ObjectsReference.Instance.scan.harvest();
+        }
+
+        private void Repair(InputAction.CallbackContext context) {
+            if (!ObjectsReference.Instance.bananaMan.tutorialFinished) return;
+            if (ObjectsReference.Instance.playerActionsSwitch.playerActions != PlayerActionsType.SCAN) return;
+
+            ObjectsReference.Instance.scan.RepairBuildable();
         }
         
         private void Rotate(InputAction.CallbackContext context) {
-            if (!ObjectsReference.Instance.build.isActivated) return;
+            if (ObjectsReference.Instance.playerActionsSwitch.playerActions != PlayerActionsType.BUILD) return;
 
             var contextValue = context.ReadValue<Vector2>(); 
             
             if (contextValue.x < 0) {
                 ObjectsReference.Instance.build.RotateGhost(Vector3.left);
+                Debug.Log("should rotate left");
             }
 
             if (contextValue.x > 0) {
                 ObjectsReference.Instance.build.RotateGhost(Vector3.right);
+                Debug.Log("should rotate right");
             }
             
             if (contextValue.y < 0) {
@@ -307,7 +335,7 @@ namespace Input {
         }
 
         private void MoveAwayCloserGhostTarget(InputAction.CallbackContext context) {
-            if (!ObjectsReference.Instance.build.isActivated) return;
+            if (ObjectsReference.Instance.playerActionsSwitch.playerActions == PlayerActionsType.BUILD) return;
 
             var placementLocalPosition = ObjectsReference.Instance.uiHud.buildablePlacementTransform.localPosition;
 
@@ -346,6 +374,7 @@ namespace Input {
 
         private void SwitchToInventory(InputAction.CallbackContext context) {
             ObjectsReference.Instance.inputManager.SwitchContext(InputContext.INVENTORY);
+            ObjectsReference.Instance.gameManager.gameContext = GameContext.IN_INVENTORY;
             ObjectsReference.Instance.uiManager.ShowInventories();
         }
     }

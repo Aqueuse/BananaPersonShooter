@@ -1,3 +1,4 @@
+using Game.CommandRoomPanelControls;
 using Tags;
 using UnityEngine;
 
@@ -64,6 +65,8 @@ namespace Game.BananaCannonMiniGame {
                 debrisRigidbody.AddExplosionForce(10f, transform.position, 10f);
                 debrisRigidbody.AddTorque(debrisRigidbody.position, ForceMode.Impulse);
             }
+            
+            CommandRoomControlPanelsManager.Instance.marketingCampaignManager.RemoveGuest();
         }
     }
 }

@@ -1,11 +1,15 @@
-using Gestion.Buildables;
 using Gestion.BuildablesBehaviours;
 using UnityEngine;
 
 namespace Interactions.InteractionsActions {
-    public class BananasDryerTakeFabricInteraction : Interact {
+    public class BananasDryerTakeFabricInteraction : Interaction {
         public override void Activate(GameObject interactedGameObject) {
-            interactedGameObject.GetComponent<BananasDryerBehaviour>().GiveFabric();
+            interactedGameObject.GetComponentInParent<MeshRenderer>().enabled = false;
+            interactedGameObject.GetComponent<BoxCollider>().enabled = false;
+
+            ObjectsReference.Instance.rawMaterialsInventory.AddQuantity(RawMaterialType.FABRIC, 1);
+            interactedGameObject.GetComponentInParent<BananaDryerSlot>().bananasDryerBehaviour.fabricQuantity -= 1;
+            interactedGameObject.GetComponentInParent<BananaDryerSlot>().addBananaPeelBoxCollider.enabled = true;
         }
     }
 }

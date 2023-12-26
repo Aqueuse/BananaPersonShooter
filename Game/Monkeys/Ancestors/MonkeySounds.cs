@@ -3,7 +3,7 @@ using TerrainDetection;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-namespace Monkeys {
+namespace Game.Monkeys.Ancestors {
     public class MonkeySounds : MonoBehaviour {
         [SerializeField] private AudioDataScriptableObject monkeyQuickRoarSounds;
         [SerializeField] private AudioDataScriptableObject monkeyNeutralSounds;

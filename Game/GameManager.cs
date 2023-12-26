@@ -1,5 +1,5 @@
-﻿using Gestion;
-using Cinemachine;
+﻿using Cinemachine;
+using Data;
 using UnityEngine;
 
 namespace Game {
@@ -56,24 +56,26 @@ namespace Game {
         public void PauseGame() {
             ObjectsReference.Instance.cameraPlayer.Set0Sensibility();
             
-            if (gameContext == GameContext.IN_GAME && ObjectsReference.Instance.gameData.currentMapData.mapPropertiesScriptableObject.monkeyPropertiesScriptableObjectsByMonkeyId.Count > 0) {
-                foreach (var monkey in Map.Instance.monkeys) {
+            if (gameContext == GameContext.IN_GAME && Map.Instance.monkeysInMap != null) {
+                foreach (var monkey in Map.Instance.monkeysInMap) {
                     monkey.PauseMonkey();
                 }
             }
 
+            gameContext = GameContext.IN_GAME_MENU;
             isGamePlaying = false;
         }
 
         public void UnpauseGame() {
             ObjectsReference.Instance.cameraPlayer.SetNormalSensibility();
 
-            if (ObjectsReference.Instance.gameData.currentMapData.mapPropertiesScriptableObject.monkeyPropertiesScriptableObjectsByMonkeyId.Count > 0) {
-                foreach (var monkey in Map.Instance.monkeys) {
+            if (gameContext == GameContext.IN_GAME_MENU && Map.Instance.monkeysInMap != null) {
+                foreach (var monkey in Map.Instance.monkeysInMap) {
                     monkey.UnpauseMonkey();
                 }
             }
 
+            gameContext = GameContext.IN_GAME;
             isGamePlaying = true;
         }
 

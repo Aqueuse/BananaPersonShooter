@@ -1,3 +1,4 @@
+using ItemsProperties.Bananas;
 using UI.InGame.Inventory;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -64,11 +65,7 @@ namespace Input {
         private void SelectBanana(InputAction.CallbackContext callbackContext) {
             var lastSelectedBananaItemScriptableObject = ObjectsReference.Instance.uInventoriesManager.lastSelectedItemByInventoryCategory[ItemCategory.BANANA].GetComponent<UInventorySlot>().itemScriptableObject;
 
-            if (lastSelectedBananaItemScriptableObject.bananaType != BananaType.EMPTY) {
-                ObjectsReference.Instance.bananaMan.activeItem =
-                    ObjectsReference.Instance.scriptableObjectManager.GetBananaScriptableObject(lastSelectedBananaItemScriptableObject.bananaType);
-                
-                ObjectsReference.Instance.quickSlotsManager.SetBananaSlot(lastSelectedBananaItemScriptableObject);
+            if (lastSelectedBananaItemScriptableObject.bananaType != BananaType.EMPTY) { ObjectsReference.Instance.bananaMan.activeItem = (BananasPropertiesScriptableObject)lastSelectedBananaItemScriptableObject;
             }
         }
         
@@ -93,9 +90,9 @@ namespace Input {
         }
 
         private void SwitchBackToGame(InputAction.CallbackContext context) {
-            if (ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.INVENTORIES].alpha > 0) {
                 ObjectsReference.Instance.uiManager.HideInventories();
-            }
+                ObjectsReference.Instance.inputManager.SwitchContext(InputContext.GAME);
+                ObjectsReference.Instance.gameManager.gameContext = GameContext.IN_GAME;
         }
     }
 }

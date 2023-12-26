@@ -10,6 +10,7 @@ namespace Game.CommandRoomPanelControls {
         [SerializeField] private CanvasGroup dataNotAvailablePanelCanvasGroup;
 
         [SerializeField] private UIgestionPanel _uIgestionPanel;
+        private SceneType sceneType;
 
         public void SwitchToGestionPanel() {
             ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.CROSSHAIRS].alpha = 0;
@@ -25,23 +26,17 @@ namespace Game.CommandRoomPanelControls {
         }
 
         public void ShowMapData(string sceneTypeString) {
-            if (sceneTypeString != "COROLLE" && sceneTypeString != "MAP01") {
+            sceneType = (SceneType)Enum.Parse(typeof(SceneType), sceneTypeString);
+            _uIgestionPanel.ShowMapCalque(sceneType);
+
+            if (sceneType != SceneType.COROLLE && sceneType != SceneType.MAP01) {
                 ShowDataNotAvailablePanel();
                 return;
             }
-
+            
             dataNotAvailablePanelCanvasGroup.alpha = 0;
-
-            SceneType sceneType = (SceneType)Enum.Parse(typeof(SceneType), sceneTypeString);
-
-            var map = ObjectsReference.Instance.gameData.mapBySceneName[sceneType]; 
-
-            _uIgestionPanel.RefreshMapDataUI(
-                map.mapPropertiesScriptableObject.piratesQuantity,
-                map.mapPropertiesScriptableObject.visitorsQuantity,
-                map.mapPropertiesScriptableObject.chimployeesQuantity,
-                map.piratesDebrisToSpawn+map.visitorsDebrisToSpawn
-            );
+            
+            _uIgestionPanel.RefreshMapDataUI(sceneType);
         }
 
         public void SwitchBackToGame() {

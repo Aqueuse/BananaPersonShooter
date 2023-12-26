@@ -1,5 +1,5 @@
 using System.Collections;
-using Gestion;
+using Data;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -83,14 +83,12 @@ namespace Game {
                     }
 
                     ObjectsReference.Instance.gameData.bananaManSaved.lastMap = sceneName;
-
+                    
                     Map.Instance.RespawnAspirablesOnMap();
                     Map.Instance.SpawnNewDebris();
                     
                     ObjectsReference.Instance.uiManager.SetActive(UICanvasGroupType.HUD, true);
                     ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.CROSSHAIRS].alpha = 1f;
-                    ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.QUICKSLOTS].alpha = 1f;
-                    ObjectsReference.Instance.quickSlotsManager.SetPlateformSlotAvailability();
                     ObjectsReference.Instance.uInventoriesManager.ShowCurrentUIHelper();
 
                     ObjectsReference.Instance.inputManager.SwitchContext(InputContext.GAME);
@@ -121,8 +119,11 @@ namespace Game {
             
             // prevent banana man to fall while loading scene
             ObjectsReference.Instance.playerController.StopPlayer();
-            
-            if (gameManager.gameContext != GameContext.IN_HOME) Map.Instance.SaveAspirablesOnMap();
+
+            if (gameManager.gameContext != GameContext.IN_HOME) {
+                Map.Instance.SaveAspirablesOnMap();
+                Map.Instance.SaveMapMonkeysData();
+            }
             
             ObjectsReference.Instance.gameData.currentMapData = ObjectsReference.Instance.gameData.mapBySceneName[sceneName];
             

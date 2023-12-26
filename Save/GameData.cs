@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using Game;
+using Data;
 using Save.Templates;
 using UnityEngine;
 
@@ -8,6 +8,8 @@ namespace Save {
         public string currentSaveUuid;
         
         public BananaManSavedData bananaManSaved = new();
+
+        public float nextAdCampaignTimer;
         
         public Vector3 lastPositionOnMap;
         public Vector3 lastRotationOnMap;

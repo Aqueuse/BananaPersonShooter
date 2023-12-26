@@ -28,5 +28,6 @@ MonoBehaviour:
   - "Kelsa\xEFk, le roi de la jungle"
   - "Kelsa\xEFk, rey de la jungla"
   monkeyType: 1
+  monkeyId: gorilla
   happiness: 0
-  sasiety: 10
+  sasietyTimer: 0

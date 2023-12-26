@@ -1,8 +1,10 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UICredits : MonoBehaviour {
-    public GameObject firstSelectedGameObject;
+namespace UI.Menus {
+    public class UICredits : MonoBehaviour {
+        public GameObject firstSelectedGameObject;
 
-    public Scrollbar scrollbar;
+        public Scrollbar scrollbar;
+    }
 }

@@ -1,8 +1,7 @@
-using System.Collections.Generic;
 using System.IO;
-using Game;
-using Gestion;
+using Data;
 using Newtonsoft.Json;
+using Save.Helpers;
 using Save.Templates;
 using UnityEngine;
 
@@ -73,29 +72,39 @@ namespace Save {
 
         private void SaveMaps() {
             Map.Instance.SaveAspirablesOnMap();
+            Map.Instance.SaveMapMonkeysData();
             
             var MAPS_Save_file_Path = Path.Combine(savePath, "MAPS");
 
-            foreach (var map in ObjectsReference.Instance.gameData.mapBySceneName) {
+            foreach (var mapData in ObjectsReference.Instance.gameData.mapBySceneName) {
                 var mapSavedData = new MapSavedData();
-                
-                if (map.Value.mapPropertiesScriptableObject.monkeyPropertiesScriptableObjectsByMonkeyId.Count > 0) {
-                    mapSavedData.monkeysSasietyByMonkeyId = new Dictionary<string, float>();
-                    
-                    foreach (var monkey in map.Value.mapPropertiesScriptableObject.monkeyPropertiesScriptableObjectsByMonkeyId) {
-                        mapSavedData.monkeysSasietyByMonkeyId.Add(monkey.Key, monkey.Value.sasiety);
+
+                if (mapData.Value.monkeysPositionByMonkeyId.Count > 0) {
+                    foreach (var monkeyPosition in mapData.Value.monkeysPositionByMonkeyId) {
+                        mapSavedData.monkeysPositionByMonkeyId.Add(monkeyPosition.Key,
+                            JsonHelper.FromVector3ToString(monkeyPosition.Value));
+                    }
+                }
+
+                if (mapData.Value.monkeysSasietyTimerByMonkeyId.Count > 0) {
+                    foreach (var monkeySasiety in mapData.Value.monkeysSasietyTimerByMonkeyId) {
+                        mapSavedData.monkeysSasietyTimerByMonkeyId.Add(monkeySasiety.Key, monkeySasiety.Value);
                     }
                 }
                 
-                mapSavedData.isDiscovered = map.Value.isDiscovered;
-                mapSavedData.visitorsDebris = map.Value.visitorsDebrisToSpawn;
-                mapSavedData.piratesDebris = map.Value.piratesDebrisToSpawn;
+                mapSavedData.isDiscovered = mapData.Value.isDiscovered;
+                mapSavedData.visitorsDebris = mapData.Value.visitorsDebrisToSpawn;
+                mapSavedData.piratesDebris = mapData.Value.piratesDebrisToSpawn;
+
+                mapSavedData.chimployeesQuantity = mapData.Value.chimployeesQuantity;
+                mapSavedData.visitorsQuantity = mapData.Value.visitorsQuantity;
+                mapSavedData.piratesQuantity = mapData.Value.piratesQuantity;
                 
                 var jsonMapSaved = JsonConvert.SerializeObject(mapSavedData);
-                var mapSavefilePath = Path.Combine(MAPS_Save_file_Path, map.Key + ".json");
+                var mapSavefilePath = Path.Combine(MAPS_Save_file_Path, mapData.Key + ".json");
                 File.WriteAllText(mapSavefilePath, jsonMapSaved);
                 
-                SaveMapData(map.Value);
+                SaveMapData(mapData.Value);
             }
         }
 

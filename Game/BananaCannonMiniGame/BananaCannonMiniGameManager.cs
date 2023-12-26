@@ -1,5 +1,8 @@
 using System.Collections.Generic;
 using Cinemachine;
+using Game.CommandRoomPanelControls;
+using Game.Monkeys;
+using Game.VisitorReceptionMiniGame;
 using TMPro;
 using UI;
 using UI.InGame.CommandRoomControlPanels;
@@ -59,7 +62,7 @@ namespace Game.BananaCannonMiniGame {
             
             uIbananaCannonMiniGame.ShowGameUI();
 
-            ObjectsReference.Instance.gameManager.gameContext = GameContext.IN_MINI_GAME;
+            ObjectsReference.Instance.gameManager.gameContext = GameContext.IN_BANANA_CANNON_MINI_GAME;
         }
         
         public void QuitMiniGame() {
@@ -67,15 +70,11 @@ namespace Game.BananaCannonMiniGame {
 
             playItemInteractionGameObject.SetActive(true);
             bananaCannonVirtualCamera.Priority = 1;
-            ObjectsReference.Instance.inputManager.SwitchContext(InputContext.GAME);
 
             ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.CROSSHAIRS].alpha = 1;
             Cursor.visible = false;
             Cursor.lockState = CursorLockMode.Locked;
-
-            uIbananaCannonMiniGame.HideGameUI();
             
-            ObjectsReference.Instance.gameManager.gameContext = GameContext.IN_GAME;
         }
 
         ///  MINIGAME
@@ -139,6 +138,9 @@ namespace Game.BananaCannonMiniGame {
             visitorsInCorolleText.text = visitorsInCorolleQuantity.ToString();
 
             visitorsUICanvasFadeInOut.enabled = true;
+
+            VisitorReception.Instance.AddVisitorInWaitingLine(VisitorType.VISITOR_ADULT_BIG);
+            CommandRoomControlPanelsManager.Instance.marketingCampaignManager.RemoveGuest();
         }
         
         public void AddPirate() {
@@ -146,6 +148,12 @@ namespace Game.BananaCannonMiniGame {
             piratesInCorolleText.text = piratesInCorolleQuantity.ToString();
 
             piratesUICanvasFadeInOut.enabled = true;
+
+            Invoke(nameof(SpawnPirateDelayed), 10);
+        }
+
+        public void SpawnPirateDelayed() {
+            ChimpManager.Instance.SpawnPirate();
         }
     }
 }

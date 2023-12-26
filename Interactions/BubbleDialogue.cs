@@ -1,21 +1,23 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Audio.Data;
 using ItemsProperties;
 using TMPro;
+using UI.InGame;
 using UnityEngine;
 using UnityEngine.Localization;
 using UnityEngine.Localization.Components;
 
 namespace Interactions {
     public class BubbleDialogue : MonoBehaviour {
-        [SerializeField] private Interaction interaction;
         [SerializeField] private RectTransform visualTransform;
 
         [SerializeField] private GibberishAudioClipsScriptableObject gibberishAudioClipsScriptableObject;
         [SerializeField] private AudioSource bubbleAudioSource;
 
         [SerializeField] private TextMeshPro bubbleText;
+        private UInteraction uInteraction;
 
         private Transform _cameraTransform;
         private Transform _bananaManTransform;
@@ -37,6 +39,7 @@ namespace Interactions {
         private void Start() {
             _wordsQueue = new Queue<string>();
             itemsLayer = LayerMask.NameToLayer("Interaction");
+            uInteraction = GetComponent<UInteraction>();
 
             _cameraTransform = ObjectsReference.Instance.mainCamera.transform;
             _bananaManTransform = ObjectsReference.Instance.bananaMan.transform;
@@ -126,7 +129,7 @@ namespace Interactions {
 
         public void DisableBubble() {
             HideBubble();
-            interaction.HideUI();
+            uInteraction.HideUI();
             gameObject.layer = 0; // default
         }
     }

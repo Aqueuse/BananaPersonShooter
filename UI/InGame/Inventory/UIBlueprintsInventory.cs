@@ -1,6 +1,6 @@
-using ItemsProperties.Buildables;
 using ItemsProperties.Buildables.VisitorsBuildable;
 using Gestion;
+using ItemsProperties.Buildables;
 using UnityEngine;
 
 namespace UI.InGame.Inventory {

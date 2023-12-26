@@ -1,4 +1,6 @@
+using System;
 using System.Linq;
+using Save.Helpers;
 using UnityEngine;
 
 namespace Save {
@@ -97,9 +99,9 @@ namespace Save {
         }
         
         private void LoadSelectedBanana() {
-            var bananaScriptableObject = ObjectsReference.Instance.quickSlotsManager.bananaSlotItemScriptableObject;
-            ObjectsReference.Instance.quickSlotsManager.SetBananaSlot(bananaScriptableObject);
-            ObjectsReference.Instance.quickSlotsManager.SetBananaQuantity(ObjectsReference.Instance.bananasInventory.bananasInventory[bananaScriptableObject.bananaType]);
+            var bananaSlotType = Enum.Parse<BananaType>(ObjectsReference.Instance.gameData.bananaManSaved.bananaSlot);
+            var bananaScriptableObject = ObjectsReference.Instance.meshReferenceScriptableObject.bananasPropertiesScriptableObjects[bananaSlotType];
+            ObjectsReference.Instance.bananaMan.activeItem = bananaScriptableObject;
         }
 
         private static void LoadBananaManVitals() {
@@ -125,7 +127,7 @@ namespace Save {
         private static void LoadActiveItem() {
             var activeItemType = ObjectsReference.Instance.gameData.bananaManSaved.activeBanana;
             
-            ObjectsReference.Instance.bananaMan.activeItem = ObjectsReference.Instance.scriptableObjectManager.GetBananaScriptableObject(activeItemType);
+            ObjectsReference.Instance.bananaMan.activeItem = ObjectsReference.Instance.meshReferenceScriptableObject.bananasPropertiesScriptableObjects[activeItemType];
         }
         
         private static void CheckTutorialFinished() {
@@ -150,22 +152,32 @@ namespace Save {
                 if (ObjectsReference.Instance.loadData.MapDataExist(sceneName, saveUuid)) {
                     var savedMapData = ObjectsReference.Instance.loadData.GetMapSavedByUuid(ObjectsReference.Instance.gameData.currentSaveUuid, map.Key);
 
-                    ObjectsReference.Instance.gameData.mapBySceneName[map.Key].mapPropertiesScriptableObject.piratesDebris = savedMapData.piratesDebris;
-                    ObjectsReference.Instance.gameData.mapBySceneName[map.Key].mapPropertiesScriptableObject.visitorsDebris = savedMapData.visitorsDebris;
-
-                    ObjectsReference.Instance.gameData.mapBySceneName[map.Key].mapPropertiesScriptableObject.chimployeesQuantity = savedMapData.chimployeesQuantity;
-                    ObjectsReference.Instance.gameData.mapBySceneName[map.Key].mapPropertiesScriptableObject.piratesQuantity = savedMapData.piratesQuantity;
-                    ObjectsReference.Instance.gameData.mapBySceneName[map.Key].mapPropertiesScriptableObject.visitorsQuantity = savedMapData.visitorsQuantity;
+                    var mapToLoad = ObjectsReference.Instance.gameData.mapBySceneName[map.Key];  
                     
-                    foreach (var monkey in ObjectsReference.Instance.gameData.mapBySceneName[map.Key].mapPropertiesScriptableObject.monkeyPropertiesScriptableObjectsByMonkeyId) {
-                        monkey.Value.sasiety = savedMapData.monkeysSasietyByMonkeyId[monkey.Key];
+                    mapToLoad.piratesDebris = savedMapData.piratesDebris;
+                    mapToLoad.visitorsDebris = savedMapData.visitorsDebris;
+
+                    mapToLoad.chimployeesQuantity = savedMapData.chimployeesQuantity;
+                    mapToLoad.piratesQuantity = savedMapData.piratesQuantity;
+                    mapToLoad.visitorsQuantity = savedMapData.visitorsQuantity;
+                    
+                    if (savedMapData.monkeysPositionByMonkeyId != null) {
+                        foreach (var monkeyPosition in savedMapData.monkeysPositionByMonkeyId) {
+                            mapToLoad.monkeysPositionByMonkeyId.Add(monkeyPosition.Key, JsonHelper.FromStringToVector3(monkeyPosition.Value));
+                        }
+                    }
+
+                    if (savedMapData.monkeysSasietyTimerByMonkeyId != null) {
+                        foreach (var monkeySasiety in savedMapData.monkeysSasietyTimerByMonkeyId) {
+                            mapToLoad.monkeysSasietyTimerByMonkeyId.Add(monkeySasiety.Key, monkeySasiety.Value);
+                        }
                     }
                     
                     map.Value.isDiscovered = savedMapData.isDiscovered;
+                    
+                    ObjectsReference.Instance.loadData.LoadBuildableDataFromJsonDictionnaryByUuid(map.Value, saveUuid);
+                    ObjectsReference.Instance.loadData.LoadDebrisDataFromJsonDictionnaryByUuid(map.Value, saveUuid);
                 }
-                
-                ObjectsReference.Instance.loadData.LoadBuildableDataFromJsonDictionnaryByUuid(map.Value, saveUuid);
-                ObjectsReference.Instance.loadData.LoadDebrisDataFromJsonDictionnaryByUuid(map.Value, saveUuid);
             }
         }
 

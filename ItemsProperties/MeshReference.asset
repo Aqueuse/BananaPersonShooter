@@ -155,3 +155,54 @@ MonoBehaviour:
     - key: 17
       value: {fileID: 11400000, guid: 61e0d2a93b2f9a241a901e776267942d, type: 2}
     keyCollision: 0
+  visitorPrefabByPrefabIndex:
+    list:
+    - key: 0
+      value: {fileID: 5357823790289954071, guid: 60555535b516a73438b141a80deb4d6e, type: 3}
+    - key: 1
+      value: {fileID: 3712416262764098679, guid: 3c9fe1e6c7d8e104ea042cf69c432d8e, type: 3}
+    - key: 2
+      value: {fileID: 2977748936353524564, guid: e23ea75b90789b3478c385f65fd881a9, type: 3}
+    - key: 3
+      value: {fileID: 885533795941922351, guid: cf83ce790d6bccf4483eacc5442f245b, type: 3}
+    - key: 4
+      value: {fileID: 6715319418687989812, guid: daa395b7cae5f1842955ff47fd07541a, type: 3}
+    keyCollision: 0
+  needTypeByBuildableType:
+    list:
+    - key: 6
+      value: 0
+    - key: 7
+      value: 2
+    - key: 8
+      value: 2
+    - key: 9
+      value: 2
+    - key: 10
+      value: 2
+    - key: 11
+      value: 3
+    - key: 12
+      value: 3
+    - key: 13
+      value: 3
+    - key: 14
+      value: 1
+    - key: 15
+      value: 4
+    - key: 16
+      value: 1
+    - key: 17
+      value: 2
+    keyCollision: 0
+  prefabByRawMaterialType:
+    list:
+    - key: 0
+      value: {fileID: 5471364762102479163, guid: 8f3a4dd667df2454f809833a1cb266c1, type: 3}
+    - key: 1
+      value: {fileID: 865080828313005826, guid: 72d40651520d0b647809965b509d085f, type: 3}
+    - key: 2
+      value: {fileID: 2109412899835672179, guid: 6bb93e57cedaa2448a3bcd2a6507ac81, type: 3}
+    - key: 3
+      value: {fileID: 8008376278008712098, guid: 56dd7bfcf6f370947abf55e44adf8bfb, type: 3}
+    keyCollision: 0

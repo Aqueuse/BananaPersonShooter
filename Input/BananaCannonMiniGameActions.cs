@@ -40,6 +40,8 @@ namespace Input {
 
         private void Quit(InputAction.CallbackContext context) {
             BananaCannonMiniGameManager.Instance.QuitMiniGame();
+            ObjectsReference.Instance.inputManager.SwitchContext(InputContext.GAME);
+            ObjectsReference.Instance.gameManager.gameContext = GameContext.IN_GAME;
         }
     }
 }

@@ -22,7 +22,7 @@ MonoBehaviour:
   - corolla
   - corolle
   - corola
-  itemSprite: {fileID: 0}
+  itemSprite: {fileID: 21300000, guid: 1335b2449ccd4f44998d50f5a399f628, type: 3}
   itemDescription:
   - "This is where visitors arrive from the outside. \nThey'll find food, buy souvenirs,
     and can venture \nout to explore the reserve."
@@ -32,7 +32,7 @@ MonoBehaviour:
   - "Aqu\xED es donde llegan los visitantes desde el exterior. \nEncontrar\xE1n comida,
     podr\xE1n comprar recuerdos y \naventurarse a explorar las zonas de la reserva."
   sceneName: 0
-  monkeyDataScriptableObjectsByMonkeyId:
+  monkeyPropertiesScriptableObjectsByMonkeyId:
     list: []
     keyCollision: 0
   piratesDebris: 0

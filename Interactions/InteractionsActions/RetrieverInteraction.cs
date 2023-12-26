@@ -1,16 +1,15 @@
-using Gestion;
-using Items;
+using Data;
 using Tags;
 using UnityEngine;
 
 namespace Interactions.InteractionsActions {
-    public class RetrieverInteraction : Interact {
+    public class RetrieverInteraction : Interaction {
         public override void Activate(GameObject interactedGameObject) {
             var plateforms = Map.Instance.GetAllBuildablesByTypeInAspirableContainer(BuildableType.PLATEFORM);
             var plateformsCount = plateforms.Count;
 
             if (plateformsCount > 0) {
-                var craftingMaterials = ObjectsReference.Instance.scriptableObjectManager.GetBuildableCraftingIngredients(BuildableType.PLATEFORM);
+                var craftingMaterials = ObjectsReference.Instance.meshReferenceScriptableObject.buildablePropertiesScriptableObjects[BuildableType.PLATEFORM].rawMaterialsWithQuantity;
 
                  foreach (var craftingMaterial in craftingMaterials) {
                      ObjectsReference.Instance.rawMaterialsInventory.AddQuantity(craftingMaterial.Key, craftingMaterial.Value*plateformsCount);

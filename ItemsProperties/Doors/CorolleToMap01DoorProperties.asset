@@ -27,4 +27,4 @@ MonoBehaviour:
   - door to the jungle
   - porte vers la jungle
   - puerta a la jungla
-  associatedMapDataScriptableObject: {fileID: 11400000, guid: d38f6f0816db4ac478ff57196fbed126, type: 2}
+  associatedMapPropertiesScriptableObject: {fileID: 11400000, guid: d38f6f0816db4ac478ff57196fbed126, type: 2}

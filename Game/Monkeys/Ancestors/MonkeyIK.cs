@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Monkeys {
+namespace Game.Monkeys.Ancestors {
     public class MonkeyIK : MonoBehaviour {
         [SerializeField] private MonkeySounds _monkeySounds;
         private Animator _animator;

@@ -2,7 +2,7 @@
 using UnityEngine.AI;
 using Random = UnityEngine.Random;
 
-namespace Monkeys.Ancestors.Gorilla {
+namespace Game.Monkeys.Ancestors.Gorilla {
     public class GorillaMonkey : MonoBehaviour {
         private NavMeshAgent _navMeshAgent;
         [SerializeField] private Monkey _monkey;
@@ -19,7 +19,7 @@ namespace Monkeys.Ancestors.Gorilla {
         // animations
         private static readonly int VelocityX = Animator.StringToHash("VelocityX");
         private static readonly int VelocityZ = Animator.StringToHash("VelocityZ");
-        private static readonly int CanMove = Animator.StringToHash("canMove");
+        private static readonly int ShouldMove = Animator.StringToHash("shouldMove");
 
         // syncrhonize navmeshagent with animator
         private Transform _transform;
@@ -32,10 +32,13 @@ namespace Monkeys.Ancestors.Gorilla {
         
         private Vector3 randomDirection;
         private Vector3 finalPosition;
+
+        private NavMeshPath path;
         
         private void Start() {
             _navMeshAgent = GetComponent<NavMeshAgent>();
             _animator = GetComponent<Animator>();
+            _transform = transform;
             
             _navMeshAgent.updatePosition = false;
             _navMeshAgent.updateRotation = true;
@@ -45,21 +48,22 @@ namespace Monkeys.Ancestors.Gorilla {
 
         private void Update() {
             if (ObjectsReference.Instance.gameManager.isGamePlaying) {
-                SynchronizeAnimatorAndAgent();
-
                 if (_monkey.smelledBananasOnBananaMan) {
                     bananaManPosition = ObjectsReference.Instance.bananaMan.transform.position;
-                    _navMeshAgent.SetDestination(bananaManPosition);
 
+                    _navMeshAgent.SetDestination(bananaManPosition);
+                    
                     bananaManPositionXY = new Vector3(bananaManPosition.x, transform.position.y, bananaManPosition.z);
                     if (_navMeshAgent.remainingDistance < 5) transform.LookAt(bananaManPositionXY);
                 }
 
                 else {
                     if (_navMeshAgent.remainingDistance < 10) {
-                        _navMeshAgent.SetDestination(RandomNavmeshLocation(1000));
+                        _navMeshAgent.SetDestination(GetRandomNavmeshLocation(1000));
                     }
                 }
+                
+                SynchronizeAnimatorAndAgent();
             }
         }
 
@@ -70,7 +74,6 @@ namespace Monkeys.Ancestors.Gorilla {
         }
 
         private void SynchronizeAnimatorAndAgent() {
-            _transform = transform;
             _worldDeltaPosition = _navMeshAgent.nextPosition - _transform.position;
 
             // Map 'worldDeltaPosition' to local space
@@ -88,12 +91,12 @@ namespace Monkeys.Ancestors.Gorilla {
             _shouldMove = _velocity.magnitude > 0.5f && _navMeshAgent.remainingDistance > _navMeshAgent.radius;
 
             // Update animation parameters
-            _animator.SetBool(CanMove, _shouldMove);
+            _animator.SetBool(ShouldMove, _shouldMove);
             _animator.SetFloat(VelocityX, _velocity.x);
             _animator.SetFloat(VelocityZ, _velocity.y);
         }
         
-        private Vector3 RandomNavmeshLocation(float radius) {
+        private Vector3 GetRandomNavmeshLocation(float radius) {
             randomDirection = Random.insideUnitSphere * radius;
             randomDirection += transform.position;
             finalPosition = Vector3.zero;

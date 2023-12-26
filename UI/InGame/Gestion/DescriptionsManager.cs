@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Game.Monkeys.Ancestors;
 using ItemsProperties;
 using ItemsProperties.Monkeys;
 using Interactions;
@@ -6,7 +7,6 @@ using ItemsProperties.Doors;
 using UI.InGame.Gestion.blocks;
 using UnityEngine;
 using UnityEngine.Localization.Settings;
-using UnityEngine.UI;
 
 namespace UI.InGame.Gestion {
     public class DescriptionsManager : MonoBehaviour {
@@ -18,20 +18,13 @@ namespace UI.InGame.Gestion {
         [SerializeField] private ItemMultiSlidersBlock _multiSlidersBlock;
         [SerializeField] private ItemListBlock _itemListBlock;
         
-        string growthLocalizedName;
-        string bananasLocalizedName;
+        string GrowthStageLocalizedName;
+        string nextBananaRequestLocalizedName;
         
-        private List<int> itemsQuantities;
-        private List<string> itemsNames;
-
-        private void Start() {
-            itemsQuantities = new List<int>();
-            itemsNames = new List<string>();
-        }
+        private List<int> itemsQuantities = new ();
+        private List<string> itemsNames = new ();
         
         public void SetDescription(ItemScriptableObject itemScriptableObject, GameObject targetedGameObject = null) {
-            GetComponent<Image>().enabled = true;
-
             switch (itemScriptableObject.itemCategory) {
                 case ItemCategory.BUILDABLE:
                     _itemDescriptionBlock.gameObject.SetActive(true);
@@ -40,22 +33,20 @@ namespace UI.InGame.Gestion {
                     _multiSlidersBlock.gameObject.SetActive(false);
                     _itemListBlock.gameObject.SetActive(true);
                     
-                    _itemDescriptionBlock.SetBlock(itemScriptableObject.GetName(), itemScriptableObject.GetDescription());
+                    _itemDescriptionBlock.SetBlock(itemScriptableObject.GetName(), itemScriptableObject.GetDescription(), false);
                     _itemPreviewBlock.SetBlock(itemScriptableObject.itemSprite);
 
                     var compositionName = LocalizationSettings.StringDatabase.GetTable("UI").GetEntry("composition").GetLocalizedString();
                     
                     itemsQuantities = new List<int>();
                     itemsNames = new List<string>();
-                    
-                    var rawMaterialsWithQuantities =
-                        ObjectsReference.Instance.scriptableObjectManager.GetBuildableCraftingIngredients(itemScriptableObject
-                            .buildableType);
-                    
+
+                    var rawMaterialsWithQuantities = ObjectsReference.Instance.meshReferenceScriptableObject.buildablePropertiesScriptableObjects[itemScriptableObject.buildableType].rawMaterialsWithQuantity;
+
                     foreach (var rawMaterialsWithQuantity in rawMaterialsWithQuantities) {
                         itemsQuantities.Add(rawMaterialsWithQuantity.Value);
-                        growthLocalizedName = LocalizationSettings.StringDatabase.GetTable("items").GetEntry(rawMaterialsWithQuantity.Key.ToString().ToLower()).GetLocalizedString();
-                        itemsNames.Add(growthLocalizedName);
+                        GrowthStageLocalizedName = LocalizationSettings.StringDatabase.GetTable("items").GetEntry(rawMaterialsWithQuantity.Key.ToString().ToLower()).GetLocalizedString();
+                        itemsNames.Add(GrowthStageLocalizedName);
                     }
                     
                     _itemListBlock.SetBlock(
@@ -73,7 +64,7 @@ namespace UI.InGame.Gestion {
 
                     _itemDescriptionBlock.SetBlock(
                         itemScriptableObject.GetName(),
-                        itemScriptableObject.GetDescription());
+                        itemScriptableObject.GetDescription(), false);
                     break;
                 case ItemCategory.COMMAND_ROOM_PANEL:
                     _itemDescriptionBlock.gameObject.SetActive(true);
@@ -84,7 +75,7 @@ namespace UI.InGame.Gestion {
 
                     _itemDescriptionBlock.SetBlock(
                         itemScriptableObject.GetName(),
-                        itemScriptableObject.GetDescription());
+                        itemScriptableObject.GetDescription(), false);
                     break;
                 case ItemCategory.DEBRIS:
                     _itemDescriptionBlock.gameObject.SetActive(true);
@@ -95,7 +86,7 @@ namespace UI.InGame.Gestion {
 
                     _itemDescriptionBlock.SetBlock(
                         itemScriptableObject.GetName(),
-                        itemScriptableObject.GetDescription());
+                        itemScriptableObject.GetDescription(), false);
                     break;
                 case ItemCategory.BANANA or ItemCategory.RAW_MATERIAL or ItemCategory.INGREDIENT:
                     _itemDescriptionBlock.gameObject.SetActive(true);
@@ -106,7 +97,7 @@ namespace UI.InGame.Gestion {
                     
                     _itemDescriptionBlock.SetBlock(
                         itemScriptableObject.GetName(),
-                        itemScriptableObject.GetDescription());
+                        itemScriptableObject.GetDescription(), false);
                     _itemPreviewBlock.SetBlock(itemScriptableObject.itemSprite);
                     break;
                 case ItemCategory.DOOR:
@@ -118,11 +109,14 @@ namespace UI.InGame.Gestion {
 
                     _itemDescriptionBlock.SetBlock(
                         itemScriptableObject.GetName(),
-                        itemScriptableObject.GetDescription());
+                        itemScriptableObject.GetDescription(), false);
                     _itemPreviewBlock.SetBlock(itemScriptableObject.itemSprite);
 
                     var doorProperties = (DoorPropertiesScriptableObject)itemScriptableObject;
-                    var mapData = doorProperties.associatedMapPropertiesScriptableObject;
+                    
+                    var mapData =
+                        ObjectsReference.Instance.gameData.mapBySceneName[
+                            doorProperties.associatedMapPropertiesScriptableObject.sceneName];
 
                     var visitors = 0; // TODO : get the true value
 
@@ -131,7 +125,7 @@ namespace UI.InGame.Gestion {
 
                     _multiSlidersBlock.SetBlock(
                         new [] {
-                            ((int)(mapData.piratesDebris+mapData.visitorsDebris), pollutionName),
+                            (mapData.piratesDebris+mapData.visitorsDebris, pollutionName),
                             (visitors, visitorsName)
                         },
                         100);
@@ -145,7 +139,7 @@ namespace UI.InGame.Gestion {
 
                     _itemDescriptionBlock.SetBlock(
                         itemScriptableObject.GetName(),
-                        itemScriptableObject.GetDescription());
+                        itemScriptableObject.GetDescription(), false);
                     break;
                 case ItemCategory.MONKEY:
                     _itemDescriptionBlock.gameObject.SetActive(true);
@@ -154,38 +148,47 @@ namespace UI.InGame.Gestion {
                     _multiSlidersBlock.gameObject.SetActive(false);
                     _itemListBlock.gameObject.SetActive(false);
 
-                    _itemDescriptionBlock.SetBlock(
-                        itemScriptableObject.GetName(),
-                        itemScriptableObject.GetDescription());
-                    _itemPreviewBlock.SetBlock(itemScriptableObject.itemSprite);
+                    if (targetedGameObject != null) {
+                        nextBananaRequestLocalizedName = LocalizationSettings.StringDatabase.GetTable("UI").GetEntry("next_banana_request_in").GetLocalizedString();
 
-                    var monkeyData = (MonkeyPropertiesScriptableObject)itemScriptableObject;
-                    
-                    bananasLocalizedName = LocalizationSettings.StringDatabase.GetTable("UI").GetEntry("bananas").GetLocalizedString();
-                    
-                    _oneItemSliderBlock.SetBlock(
-                        bananasLocalizedName,
-                        (int)monkeyData.sasiety,
-                        10);
+                        var monkey = targetedGameObject.GetComponent<Monkey>();
+
+                        _itemDescriptionBlock.SetBlock(
+                            itemScriptableObject.GetName(),
+                            itemScriptableObject.GetDescription(), 
+                            true,
+                            nextBananaRequestLocalizedName+monkey.sasietyTimer);
+                        _itemPreviewBlock.SetBlock(itemScriptableObject.itemSprite);
+
+                        var monkeyData = (MonkeyPropertiesScriptableObject)itemScriptableObject;
+                        
+                        _oneItemSliderBlock.SetBlock(
+                            nextBananaRequestLocalizedName,
+                            (int)monkeyData.sasietyTimer,
+                            10);
+                    }
+
                     break;
                 case ItemCategory.REGIME:
-                    _itemDescriptionBlock.gameObject.SetActive(true);
-                    _itemPreviewBlock.gameObject.SetActive(false);
-                    _oneItemSliderBlock.gameObject.SetActive(true);
-                    _multiSlidersBlock.gameObject.SetActive(false);
-                    _itemListBlock.gameObject.SetActive(false);
+                    if (targetedGameObject != null) {
+                        var regime = targetedGameObject.GetComponent<Regime>();
+                        
+                        _itemDescriptionBlock.gameObject.SetActive(true);
+                        _itemPreviewBlock.gameObject.SetActive(false);
+                        _oneItemSliderBlock.gameObject.SetActive(false);
+                        _multiSlidersBlock.gameObject.SetActive(false);
+                        _itemListBlock.gameObject.SetActive(false);
 
-                    growthLocalizedName = LocalizationSettings.StringDatabase.GetTable("UI").GetEntry("growth").GetLocalizedString();
+                        GrowthStageLocalizedName = LocalizationSettings.StringDatabase.GetTable("UI").GetEntry("growth_stage").GetLocalizedString();
 
-                    _itemDescriptionBlock.SetBlock(
-                        itemScriptableObject.GetName(),
-                        itemScriptableObject.GetDescription());
+                        _itemDescriptionBlock.SetBlock(
+                            itemScriptableObject.GetName(),
+                            itemScriptableObject.GetDescription(),
+                            true,
+                            GrowthStageLocalizedName+" : "+regime.regimeStade.ToString().ToLower()
+                        );
+                    }
                     
-                    if (targetedGameObject != null)
-                        _oneItemSliderBlock.SetBlock(
-                            growthLocalizedName,
-                            (int)targetedGameObject.GetComponent<Regime>().regimeStade+0.1f,
-                            2);
                     break;
                 case ItemCategory.VISITOR:
                     _itemDescriptionBlock.gameObject.SetActive(true);
@@ -196,7 +199,7 @@ namespace UI.InGame.Gestion {
 
                     _itemDescriptionBlock.SetBlock(
                         itemScriptableObject.GetName(),
-                        itemScriptableObject.GetDescription());
+                        itemScriptableObject.GetDescription(), false);
 //                    _multiSlidersBlock.SetBlock();
                     break;
             }
@@ -208,7 +211,6 @@ namespace UI.InGame.Gestion {
             _oneItemSliderBlock.gameObject.SetActive(false);
             _multiSlidersBlock.gameObject.SetActive(false);
             _itemListBlock.gameObject.SetActive(false);
-            GetComponent<Image>().enabled = false;
         }
     }
 }

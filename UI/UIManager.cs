@@ -14,7 +14,7 @@ namespace UI {
         }
 
         public void ReturnToMainMenu() {
-            if (ObjectsReference.Instance.gameManager.gameContext == GameContext.IN_GAME) ShowGameMenu();
+            if (ObjectsReference.Instance.gameManager.gameContext == GameContext.IN_GAME_MENU) ShowGameMenu();
             else ShowHomeMenu();
         }
 
@@ -50,7 +50,7 @@ namespace UI {
             isOnSubMenus = true;
             HideGameMenu();
 
-            if (ObjectsReference.Instance.gameManager.gameContext == GameContext.IN_GAME) {
+            if (ObjectsReference.Instance.gameManager.gameContext == GameContext.IN_GAME_MENU) {
                 ObjectsReference.Instance.uiSave.newSaveButton.SetActive(true);
                 EventSystem.current.SetSelectedGameObject(ObjectsReference.Instance.uiSave.newSaveButton);
             }
@@ -133,10 +133,7 @@ namespace UI {
         
         public void HideInventories() {
             SetActive(UICanvasGroupType.INVENTORIES, false);
-            
             ObjectsReference.Instance.descriptionsManager.HideAllPanels();
-
-            ObjectsReference.Instance.inputManager.SwitchContext(InputContext.GAME);
         }
         
         public void SetActive(UICanvasGroupType uiCanvasGroupType, bool visible) {

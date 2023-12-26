@@ -1,6 +1,5 @@
-using System;
-using Bananas;
 using Data.BuildablesData;
+using Game.Bananas;
 using Gestion.BuildablesBehaviours.PlateformsEffects;
 using Newtonsoft.Json;
 using Save.Helpers;
@@ -11,7 +10,6 @@ namespace Gestion.BuildablesBehaviours {
     public class PlateformBehaviour : BuildableBehaviour {
         private Material _normalPlateformMaterial;
 
-        [SerializeField] private Color emissionColor;
         [SerializeField] private Color unactiveColor;
 
         [SerializeField] private SpriteRenderer upDownEffectVizualisation;
@@ -32,7 +30,6 @@ namespace Gestion.BuildablesBehaviours {
         public bool isWorkBenchActivated;
 
         private static readonly int AlimentationColor = Shader.PropertyToID("_Color");
-        private static readonly int EmissionColor = Shader.PropertyToID("Emission_Color");
         private static readonly int Close = Animator.StringToHash("close");
         private static readonly int Open = Animator.StringToHash("open");
 
@@ -55,7 +52,6 @@ namespace Gestion.BuildablesBehaviours {
             _normalPlateformMaterial = GetComponent<MeshRenderer>().materials[0];
 
             _normalPlateformMaterial.SetColor(AlimentationColor, color);
-            _normalPlateformMaterial.SetColor(EmissionColor, emissionColor);
 
             _plateformMaterials = new Material[1];
             _plateformMaterials[0] = _normalPlateformMaterial;
@@ -65,9 +61,7 @@ namespace Gestion.BuildablesBehaviours {
 
         private void SetUnactiveMaterial() {
             _normalPlateformMaterial = GetComponent<MeshRenderer>().materials[0];
-
             _normalPlateformMaterial.SetColor(AlimentationColor, unactiveColor);
-            _normalPlateformMaterial.SetColor(EmissionColor, unactiveColor);
 
             _plateformMaterials = new Material[1];
             _plateformMaterials[0] = _normalPlateformMaterial;
@@ -79,7 +73,7 @@ namespace Gestion.BuildablesBehaviours {
             _audioSource = GetComponent<AudioSource>();
             upEffect = GetComponent<UpEffect>();
 
-            var bananaData = ObjectsReference.Instance.scriptableObjectManager.GetBananaScriptableObject(bananaType);
+            var bananaData = ObjectsReference.Instance.meshReferenceScriptableObject.bananasPropertiesScriptableObjects[bananaType];
 
             switch (bananaType) {
                 case BananaType.CAVENDISH:
@@ -90,10 +84,6 @@ namespace Gestion.BuildablesBehaviours {
                     plateformType = BananaType.CAVENDISH;
                     upDownEffectVizualisation.enabled = true;
                     break;
-            }
-
-            if(string.IsNullOrEmpty(buildableGuid)) {
-                buildableGuid = Guid.NewGuid().ToString();
             }
         }
 
@@ -144,13 +134,10 @@ namespace Gestion.BuildablesBehaviours {
         }
 
         public override void GenerateSaveData() {
-            if(string.IsNullOrEmpty(buildableGuid)) {
-                buildableGuid = Guid.NewGuid().ToString();
-            }
-            
             PlateformData plateformData = new PlateformData {
                 buildableGuid = buildableGuid,
                 buildableType = BuildableType.PLATEFORM,
+                isBreaked = isBreaked,
                 buildablePosition = JsonHelper.FromVector3ToString(transform.position),
                 buildableRotation = JsonHelper.FromQuaternionToString(transform.rotation),
                 
@@ -165,6 +152,7 @@ namespace Gestion.BuildablesBehaviours {
 
             buildableGuid = plateformData.buildableGuid;
             buildableType = BuildableType.PLATEFORM;
+            isBreaked = plateformData.isBreaked;
             transform.position = JsonHelper.FromStringToVector3( plateformData.buildablePosition);
             transform.rotation = JsonHelper.FromStringToQuaternion(plateformData.buildableRotation);
             

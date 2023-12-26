@@ -1,6 +1,6 @@
-using Game.Monkeys.Chimps.Chimployees;
-using Monkeys.Chimployees;
-using Monkeys.MiniChimps;
+using Game.MarketingCampaignMiniGame;
+using Game.Monkeys.Chimployees;
+using Game.Monkeys.MiniChimps;
 using UI.InGame.CommandRoomControlPanels;
 using UnityEngine;
 
@@ -17,6 +17,7 @@ namespace Game.CommandRoomPanelControls {
         public Assembler assembler;
         public UIMarketingPanel uIMarketingPanel;
         public GestionPanel gestionPanel;
+        public MarketingCampaignManager marketingCampaignManager;
 
         public ChimployeeCommandRoom chimployeeCommandRoom;
         public Transform apeResourcesChimployeeTransform;

@@ -11,11 +11,19 @@ namespace UI.InGame.CommandRoomControlPanels {
         [SerializeField] private TextMeshProUGUI chimployeesQuantityText;
         [SerializeField] private TextMeshProUGUI debrisQuantityText;
         
-        public void RefreshMapDataUI(int piratesQuantity, int visitorsQuantity, int chimployeesQuantity, int debrisQuantity) {
-            piratesQuantityText.text = piratesQuantity.ToString();
-            visitorsQuantityText.text = visitorsQuantity.ToString();
-            chimployeesQuantityText.text = chimployeesQuantity.ToString();
-            debrisQuantityText.text = debrisQuantity.ToString();
+        public void RefreshMapDataUI(SceneType sceneType) {
+            var map = ObjectsReference.Instance.gameData.mapBySceneName[sceneType];
+
+            piratesQuantityText.text = map.piratesQuantity.ToString();
+            visitorsQuantityText.text = map.visitorsQuantity.ToString();
+            chimployeesQuantityText.text = map.chimployeesQuantity.ToString();
+            debrisQuantityText.text = (map.piratesDebris+map.visitorsDebris).ToString();
+        }
+
+        public void ShowMapCalque(SceneType sceneType) {
+            foreach (var mapCalque in mapCalquesByMapType) {
+                mapCalque.Value.enabled = sceneType == mapCalque.Key;
+            }
         }
     }
 }

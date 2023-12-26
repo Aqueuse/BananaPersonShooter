@@ -25,7 +25,8 @@ namespace Tags {
         RAW_MATERIAL,
         INGREDIENT,
         ACCESS_MANAGED,
-        RETRIEVER_ROTATING_LOGO
+        RETRIEVER_ROTATING_LOGO,
+        PIRATE
     }
 
     public class TagsManager : MonoSingleton<TagsManager> {

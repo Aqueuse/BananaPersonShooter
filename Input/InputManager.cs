@@ -8,6 +8,7 @@ namespace Input {
         [SerializeField] private GestionActions gestionActions;
         [SerializeField] private InventoryActions inventoryActions;
         [SerializeField] private BananaCannonMiniGameActions bananaCannonMiniGameActions;
+        [SerializeField] private VisitorsWaitingListActions visitorsWaitingListActions;
         [SerializeField] private GestionCommandRoomPanelActions gestionCommandRoomPanelActions;
         
         public void SwitchContext(InputContext newInputContext) {
@@ -16,6 +17,7 @@ namespace Input {
                     homeActions.enabled = false;
                     gameActions.enabled = false;
                     bananaCannonMiniGameActions.enabled = false;
+                    visitorsWaitingListActions.enabled = false;
                     gestionActions.enabled = false;
                     inventoryActions.enabled = false;
                     gestionCommandRoomPanelActions.enabled = false;
@@ -29,6 +31,7 @@ namespace Input {
                 
                 case InputContext.GAME:
                     bananaCannonMiniGameActions.enabled = false;
+                    visitorsWaitingListActions.enabled = false;
                     gestionActions.enabled = false;
                     inventoryActions.enabled = false;
                     uiActions.enabled = false;
@@ -48,6 +51,7 @@ namespace Input {
                 case InputContext.GESTION:
                     gameActions.enabled = false;
                     bananaCannonMiniGameActions.enabled = false;
+                    visitorsWaitingListActions.enabled = false;
                     inventoryActions.enabled = false;
                     homeActions.enabled = false;
                     gestionCommandRoomPanelActions.enabled = false;
@@ -64,6 +68,7 @@ namespace Input {
                 case InputContext.INVENTORY:
                     gameActions.enabled = false;
                     bananaCannonMiniGameActions.enabled = false;
+                    visitorsWaitingListActions.enabled = false;
                     gestionActions.enabled = false;
                     homeActions.enabled = false;
                     gestionCommandRoomPanelActions.enabled = false;
@@ -85,11 +90,14 @@ namespace Input {
                     homeActions.enabled = false;
                     gestionCommandRoomPanelActions.enabled = false;
                     bananaCannonMiniGameActions.enabled = true;
+                    visitorsWaitingListActions.enabled = false;
                     uiActions.enabled = true;
 
                     Cursor.visible = true;
                     Cursor.lockState = CursorLockMode.None;
 
+                    ObjectsReference.Instance.cameraPlayer.Set0Sensibility();
+                    
                     ObjectsReference.Instance.playerController.canMove = false;
                     ObjectsReference.Instance.bananaMan.GetComponent<Rigidbody>().isKinematic = true;
                     break;
@@ -98,6 +106,7 @@ namespace Input {
                     gestionActions.enabled = false;
                     inventoryActions.enabled = false;
                     bananaCannonMiniGameActions.enabled = false;
+                    visitorsWaitingListActions.enabled = false;
                     gestionCommandRoomPanelActions.enabled = false;
                     homeActions.enabled = true;
                     uiActions.enabled = true;
@@ -113,6 +122,7 @@ namespace Input {
                     gestionActions.enabled = false;
                     inventoryActions.enabled = false;
                     bananaCannonMiniGameActions.enabled = false;
+                    visitorsWaitingListActions.enabled = false;
                     homeActions.enabled = false;
                     
                     gestionCommandRoomPanelActions.enabled = true;
@@ -120,6 +130,26 @@ namespace Input {
                     
                     Cursor.visible = true;
                     Cursor.lockState = CursorLockMode.None;
+                    
+                    ObjectsReference.Instance.cameraPlayer.Set0Sensibility();
+                    
+                    ObjectsReference.Instance.playerController.canMove = false;
+                    ObjectsReference.Instance.bananaMan.GetComponent<Rigidbody>().isKinematic = true;
+                    break;
+                case InputContext.VISITOR_WAITING_LIST_MINI_GAME:
+                    gameActions.enabled = false;
+                    gestionActions.enabled = false;
+                    inventoryActions.enabled = false;
+                    homeActions.enabled = false;
+                    gestionCommandRoomPanelActions.enabled = false;
+                    bananaCannonMiniGameActions.enabled = false;
+                    visitorsWaitingListActions.enabled = true;
+                    uiActions.enabled = true;
+
+                    Cursor.visible = true;
+                    Cursor.lockState = CursorLockMode.None;
+
+                    ObjectsReference.Instance.cameraPlayer.Set0Sensibility();
 
                     ObjectsReference.Instance.playerController.canMove = false;
                     ObjectsReference.Instance.bananaMan.GetComponent<Rigidbody>().isKinematic = true;
