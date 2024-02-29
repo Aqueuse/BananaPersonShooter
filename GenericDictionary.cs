@@ -9,7 +9,6 @@ using System;
 /// </summary>
 [Serializable]
 public class GenericDictionary<TKey, TValue> : IDictionary<TKey, TValue>, ISerializationCallbackReceiver {
-    // Internal
     [SerializeField] private List<KeyValuePair> list = new();
 
     private Dictionary<TKey, int> _indexByKey = new();

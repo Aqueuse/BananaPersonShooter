@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
-using Data;
 using Newtonsoft.Json;
 using Save.Templates;
 using UnityEngine;
@@ -88,28 +87,25 @@ namespace Save {
             }
         }
         
-        public MapSavedData GetMapSavedByUuid(string saveUuid, SceneType mapName) {
+        public WorldSavedData GetWorldSavedByUuid(string saveUuid) {
             _savePath = Path.Combine(_savesPath, saveUuid);
-            var mapsSavePath = Path.Combine(_savePath, "MAPS");
 
-            var savefilePath = Path.Combine(mapsSavePath, mapName + ".json");
+            var savefilePath = Path.Combine(_savePath, "world.json");
 
-            var mapSavedDataString = File.ReadAllText(savefilePath);
+            var worldSavedDataString = File.ReadAllText(savefilePath);
 
-            return JsonConvert.DeserializeObject<MapSavedData>(mapSavedDataString);
+            return JsonConvert.DeserializeObject<WorldSavedData>(worldSavedDataString);
         }
 
-        public void LoadDebrisDataFromJsonDictionnaryByUuid(MapData mapDataToLoad, string saveUuid) {
+        public void LoadDebrisDataFromJsonDictionnaryByUuid(string saveUuid) {
             _savePath = Path.Combine(_savesPath, saveUuid);
+            var saveMapDatasPath = Path.Combine(_savePath, "WORLD_DATA");
 
-            var saveMapDatasPath = Path.Combine(_savePath, "MAPDATA");
-
-            var loadfilePath = Path.Combine(saveMapDatasPath,
-                mapDataToLoad.mapPropertiesScriptableObject.sceneName.ToString().ToLower() + "_debris.json");
+            var loadfilePath = Path.Combine(saveMapDatasPath, "debris.json");
 
             if (!File.Exists(loadfilePath)) return;
             
-            mapDataToLoad.debrisDataInMapDictionnaryByCharacterType.Clear();
+            ObjectsReference.Instance.gameData.worldData.debrisDataDictionnaryByCharacterType.Clear();
             
             var json = File.ReadAllText(loadfilePath);
 
@@ -119,24 +115,22 @@ namespace Save {
                 CharacterType debrisType = Enum.Parse<CharacterType>(debrisList.Key);
 
                 foreach (var debris in debrisList.Value) {
-                    mapDataToLoad.AddDebrisToDebrisDictionnary(debrisType, debris);
+                    ObjectsReference.Instance.gameData.worldData.AddDebrisToDebrisDictionnary(debrisType, debris);
                 }
             }
         }
 
-        public void LoadBuildableDataFromJsonDictionnaryByUuid(MapData mapDataToLoad, string saveUuid) {
+        public void LoadBuildableDataFromJsonDictionnaryByUuid(string saveUuid) {
             _savePath = Path.Combine(_savesPath, saveUuid);
+            var saveWorldDatasPath = Path.Combine(_savePath, "WORLD_DATA");
 
-            var saveMapDatasPath = Path.Combine(_savePath, "MAPDATA");
-
-            var loadfilePath = Path.Combine(saveMapDatasPath,
-                mapDataToLoad.mapPropertiesScriptableObject.sceneName.ToString().ToLower() + "_buildables.json");
+            var loadfilePath = Path.Combine(saveWorldDatasPath, "buildables.json");
             
             if (!File.Exists(loadfilePath)) return;
             
             var json = File.ReadAllText(loadfilePath);
 
-            mapDataToLoad.buildablesDataInMapDictionaryByBuildableType.Clear();
+            ObjectsReference.Instance.gameData.worldData.buildablesDataDictionaryByBuildableType.Clear();
             
             var buildablesDictionnary = JsonConvert.DeserializeObject<Dictionary<string, List<string>>>(json);
             
@@ -144,18 +138,32 @@ namespace Save {
                 BuildableType buildableType = Enum.Parse<BuildableType>(buildableList.Key);
 
                 foreach (var buildable in buildableList.Value) {
-                    mapDataToLoad.AddBuildableToBuildableDictionnary(buildableType, buildable);
+                    ObjectsReference.Instance.gameData.worldData.AddBuildableToBuildableDictionnary(buildableType, buildable);
                 }
             }
         }
 
-        public bool MapDataExist(string sceneName, string saveUuid) {
+        public void LoadpaceshipsData(string saveUuid) {
             _savePath = Path.Combine(_savesPath, saveUuid);
-            var mapsSavePath = Path.Combine(_savePath, "MAPS");
+            var saveWorldDatasPath = Path.Combine(_savePath, "WORLD_DATA");
 
-            var savefilePath = Path.Combine(mapsSavePath, sceneName.ToLower() + ".json");
-
-            return File.Exists(savefilePath);
+            var loadfilePath = Path.Combine(saveWorldDatasPath, "spaceships.json");
+            
+            var spaceshipsDataString = File.ReadAllText(loadfilePath);
+            var spaceshipsList = JsonConvert.DeserializeObject<List<string>>(spaceshipsDataString);
+            
+            foreach (var spaceship in spaceshipsList) {
+                SpaceshipSavedData spaceshipSavedData = JsonConvert.DeserializeObject<SpaceshipSavedData>(spaceship);
+                
+                ObjectsReference.Instance.spaceTrafficControlManager.LoadSpaceshipBehaviour(spaceshipSavedData.characterType, spaceshipSavedData);
+            }
+        }
+        
+        public bool WorldDataExist(string saveUuid) {
+            _savePath = Path.Combine(_savesPath, saveUuid);
+            var worldSavePath = Path.Combine(_savePath, "WORLD_DATA");
+            
+            return File.Exists(worldSavePath);
         }
 
         public string GetSavePathByUuid(string saveUuid) {

@@ -1,5 +1,5 @@
 ﻿using Cameras;
-using ItemsProperties;
+using InGame.Items.ItemsProperties;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -10,7 +10,7 @@ namespace Input {
         MOVE
     }
     
-    public class GestionActions : MonoBehaviour {
+    public class GestionActions : InputActions {
         private float _counter;
 
         private CameraGestion _gestionCamera;
@@ -41,6 +41,20 @@ namespace Input {
         }
 
         private void OnEnable() {
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.None;
+                    
+            ObjectsReference.Instance.cameraPlayer.Set0Sensibility();
+                    
+            ObjectsReference.Instance.playerController.canMove = false;
+            ObjectsReference.Instance.bananaMan.GetComponent<Rigidbody>().isKinematic = true;
+
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.None;
+
+            ObjectsReference.Instance.playerController.canMove = false;
+            ObjectsReference.Instance.bananaMan.GetComponent<Rigidbody>().isKinematic = true;
+
             buildInputActionReference.action.Enable();
             buildInputActionReference.action.performed += Build;
 

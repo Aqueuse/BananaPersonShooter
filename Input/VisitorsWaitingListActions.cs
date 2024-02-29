@@ -2,10 +2,20 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 namespace Input {
-    public class VisitorsWaitingListActions : MonoBehaviour {
+    public class VisitorsWaitingListActions : InputActions {
         [SerializeField] private InputActionReference quitInputActionReference;
     
         private void OnEnable() {
+            ObjectsReference.Instance.uiActions.enabled = true;
+
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.None;
+
+            ObjectsReference.Instance.cameraPlayer.Set0Sensibility();
+
+            ObjectsReference.Instance.playerController.canMove = false;
+            ObjectsReference.Instance.bananaMan.GetComponent<Rigidbody>().isKinematic = true;
+
             quitInputActionReference.action.Enable();
             quitInputActionReference.action.performed += Quit;
         }

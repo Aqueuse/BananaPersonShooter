@@ -1,4 +1,4 @@
-using PrefabSpawner;
+using Tweaks.PrefabSpawner;
 using UnityEditor;
 using UnityEngine;
 

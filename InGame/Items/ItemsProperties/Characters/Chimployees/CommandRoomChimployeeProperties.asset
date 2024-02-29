@@ -1,0 +1,41 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 930c90b6590de1f4fb1e7520a7577463, type: 3}
+  m_Name: CommandRoomChimployeeProperties
+  m_EditorClassIdentifier: 
+  gameObjectTag: 16
+  itemCategory: 5
+  bananaType: 0
+  rawMaterialType: 5
+  ingredientsType: 2
+  manufacturedItemsType: 1
+  buildableType: 5
+  itemName:
+  - chimployee
+  - chimployee
+  - chimployee
+  itemSprite: {fileID: 21300000, guid: a81fdcb0e909633418fa75c03a290b4d, type: 3}
+  itemDescription:
+  - 
+  - 
+  - 
+  bitKongValue: 0
+  clothColors:
+  - {r: 0, g: 0, b: 0, a: 0}
+  - {r: 0, g: 0, b: 0, a: 0}
+  - {r: 0, g: 0, b: 0, a: 0}
+  - {r: 0, g: 0, b: 0, a: 0}
+  - {r: 0, g: 0, b: 0, a: 0}
+  - {r: 0, g: 0, b: 0, a: 0}
+  - {r: 0, g: 0, b: 0, a: 0}
+  - {r: 0, g: 0, b: 0, a: 0}
+  - {r: 0, g: 0, b: 0, a: 0}

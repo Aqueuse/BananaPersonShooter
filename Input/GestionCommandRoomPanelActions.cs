@@ -1,12 +1,14 @@
-using Game.CommandRoomPanelControls;
+using InGame.CommandRoomPanelControls;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 namespace Input {
-    public class GestionCommandRoomPanelActions : MonoBehaviour {
+    public class GestionCommandRoomPanelActions : InputActions {
         [SerializeField] private InputActionReference quitActionReference;
 
         private void OnEnable() {
+            ObjectsReference.Instance.uiActions.enabled = true;
+            
             quitActionReference.action.Enable();
             quitActionReference.action.performed += Quit;
         }

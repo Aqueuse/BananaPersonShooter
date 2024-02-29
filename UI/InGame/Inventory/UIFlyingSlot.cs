@@ -1,4 +1,4 @@
-using ItemsProperties;
+using InGame.Items.ItemsProperties;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;

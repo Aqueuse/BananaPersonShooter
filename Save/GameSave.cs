@@ -1,20 +1,33 @@
 using System;
 using System.Globalization;
+using InGame.Player;
+using Save.Templates;
 using UnityEngine;
 
 namespace Save {
     public class GameSave : MonoBehaviour {
         [SerializeField] private GameObject autoSaveBanana;
-        
+        private BananaManSavedData bananaManSavedData;
+        private GameData gameData;
+        private BananaMan bananaMan;
+
+        private void Start() {
+            bananaManSavedData = ObjectsReference.Instance.gameData.bananaManSaved;
+            gameData = ObjectsReference.Instance.gameData;
+            bananaMan = ObjectsReference.Instance.bananaMan;
+        }
+
         public void SaveGame(string saveUuid) {
             var date = DateTime.ParseExact(DateTime.Now.ToString("U"), "U", CultureInfo.CurrentCulture).ToString(CultureInfo.CurrentCulture);
             
             SaveBananasInventory();
             SaveRawMaterialsInventory();
             SaveIngredientsInventory();
+            SaveManufacturedItemsInventory();
             
             SaveBananaSlot();
             SaveActiveItem();
+            SaveBitkongQuantity();
             
             SaveBananaManVitals();
             SavePositionAndRotation();
@@ -24,55 +37,63 @@ namespace Save {
             ObjectsReference.Instance.saveData.Save(saveUuid, date);
         }
 
-        private static void SaveBananasInventory() {
-            foreach (var inventorySlot in ObjectsReference.Instance.bananasInventory.bananasInventory) {
-                ObjectsReference.Instance.gameData.bananaManSaved.bananaInventory[inventorySlot.Key.ToString()] = inventorySlot.Value;
+        private void SaveBananasInventory() {
+            foreach (var inventorySlot in bananaMan.inventories.bananasInventory) {
+                bananaManSavedData.bananaInventory[inventorySlot.Key.ToString()] = inventorySlot.Value;
             }
         }
 
-        private static void SaveRawMaterialsInventory() {
-            foreach (var inventorySlot in ObjectsReference.Instance.rawMaterialsInventory.rawMaterialsInventory) {
-                ObjectsReference.Instance.gameData.bananaManSaved.rawMaterialsInventory[inventorySlot.Key.ToString()] = inventorySlot.Value;
+        private void SaveRawMaterialsInventory() {
+            foreach (var inventorySlot in bananaMan.inventories.rawMaterialsInventory) {
+                bananaManSavedData.rawMaterialsInventory[inventorySlot.Key.ToString()] = inventorySlot.Value;
             }
         }
 
-        private static void SaveIngredientsInventory() {
-            foreach (var inventorySlot in ObjectsReference.Instance.ingredientsInventory.ingredientsInventory) {
-                ObjectsReference.Instance.gameData.bananaManSaved.ingredientsInventory[inventorySlot.Key.ToString()] = inventorySlot.Value;
+        private void SaveIngredientsInventory() {
+            foreach (var inventorySlot in bananaMan.inventories.ingredientsInventory) {
+                bananaManSavedData.ingredientsInventory[inventorySlot.Key.ToString()] = inventorySlot.Value;
             }
         }
-
-        private static void SaveBananaSlot() {
-            ObjectsReference.Instance.gameData.bananaManSaved.bananaSlot = ObjectsReference.Instance.bananaMan.activeItem.bananaType.ToString();
+        
+        private void SaveManufacturedItemsInventory() {
+            foreach (var inventorySlot in bananaMan.inventories.manufacturedItemsInventory) {
+                bananaManSavedData.manufacturedInventory[inventorySlot.Key.ToString()] = inventorySlot.Value;
+            }
+        }
+        
+        private void SaveBananaSlot() {
+            bananaManSavedData.bananaSlot = bananaMan.activeItem.bananaType.ToString();
         }
 
-        private static void SaveBananaManVitals() {
-            ObjectsReference.Instance.gameData.bananaManSaved.health = ObjectsReference.Instance.bananaMan.health; 
-            ObjectsReference.Instance.gameData.bananaManSaved.resistance = ObjectsReference.Instance.bananaMan.resistance; 
+        private void SaveBananaManVitals() {
+            bananaManSavedData.health = bananaMan.health; 
+            bananaManSavedData.resistance = bananaMan.resistance; 
         }
 
-        private static void SavePositionAndRotation() {
-            var bananaManTransform = ObjectsReference.Instance.bananaMan.transform;
-            ObjectsReference.Instance.gameData.lastPositionOnMap = bananaManTransform.position;
-            ObjectsReference.Instance.gameData.lastRotationOnMap = bananaManTransform.rotation.eulerAngles;
+        private void SavePositionAndRotation() {
+            var bananaManTransform = bananaMan.transform;
+            gameData.lastPositionOnMap = bananaManTransform.position;
+            gameData.lastRotationOnMap = bananaManTransform.rotation.eulerAngles;
             
-            ObjectsReference.Instance.gameData.bananaManSaved.xWorldPosition = ObjectsReference.Instance.gameData.lastPositionOnMap.x;
-            ObjectsReference.Instance.gameData.bananaManSaved.yWorldPosition = ObjectsReference.Instance.gameData.lastPositionOnMap.y;
-            ObjectsReference.Instance.gameData.bananaManSaved.zworldPosition = ObjectsReference.Instance.gameData.lastPositionOnMap.z;
+            bananaManSavedData.xWorldPosition = gameData.lastPositionOnMap.x;
+            bananaManSavedData.yWorldPosition = gameData.lastPositionOnMap.y;
+            bananaManSavedData.zworldPosition = gameData.lastPositionOnMap.z;
 
-            ObjectsReference.Instance.gameData.bananaManSaved.xWorldRotation = ObjectsReference.Instance.gameData.lastRotationOnMap.x;
-            ObjectsReference.Instance.gameData.bananaManSaved.yWorldRotation = ObjectsReference.Instance.gameData.lastRotationOnMap.y;
-            ObjectsReference.Instance.gameData.bananaManSaved.zWorldRotation = ObjectsReference.Instance.gameData.lastRotationOnMap.z;
+            bananaManSavedData.xWorldRotation = gameData.lastRotationOnMap.x;
+            bananaManSavedData.yWorldRotation = gameData.lastRotationOnMap.y;
+            bananaManSavedData.zWorldRotation = gameData.lastRotationOnMap.z;
         }
 
         private void SaveTutorialState() {
-            ObjectsReference.Instance.gameData.bananaManSaved.hasFinishedTutorial =
-                ObjectsReference.Instance.bananaMan.tutorialFinished;
+            bananaManSavedData.hasFinishedTutorial = bananaMan.tutorialFinished;
         }
 
-        private static void SaveActiveItem() {
-            ObjectsReference.Instance.gameData.bananaManSaved.activeBanana =
-                ObjectsReference.Instance.bananaMan.activeItem.bananaType;
+        private void SaveActiveItem() {
+            bananaManSavedData.activeBanana = bananaMan.activeItem.bananaType;
+        }
+
+        private void SaveBitkongQuantity() {
+            bananaManSavedData.bitKongQuantity = bananaMan.inventories.bitKongQuantity;
         }
         
         public void StartAutoSave() {
@@ -85,7 +106,7 @@ namespace Save {
         
         public void AutoSave() {
             autoSaveBanana.SetActive(true);
-            SaveGame(ObjectsReference.Instance.gameData.currentSaveUuid);
+            SaveGame(gameData.currentSaveUuid);
             Invoke(nameof(HideAutoSaveBanana), 5);
         }
 

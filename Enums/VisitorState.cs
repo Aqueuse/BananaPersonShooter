@@ -4,6 +4,6 @@ public enum VisitorState {
     GO_FILL_NEED,
     FILLING_NEED,
     SEARCH_RANDOM_POINT,
-    GO_RANDOM_POINT,
+    GO_TO_RANDOM_POINT,
     GO_BACK_TO_SAS
 }

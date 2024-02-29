@@ -3,13 +3,16 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 namespace Input {
-    public class HomeActions : MonoBehaviour {
+    public class HomeActions : InputActions {
         [SerializeField] private InputActionReference launchBananaInputActionReference;
         [SerializeField] private InputActionReference launchBananaWithMagicTrailInputActionReference;
 
         [SerializeField] private GameObject bananaPrefab;
-
+        
         private void OnEnable() {
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.None;
+            
             launchBananaInputActionReference.action.Enable();
             launchBananaInputActionReference.action.performed += launchBanana;
             

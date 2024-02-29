@@ -1,4 +1,4 @@
-using Game.VisitorReceptionMiniGame;
+using InGame.MiniGames.VisitorReceptionMiniGame;
 using UnityEngine;
 
 namespace UI.InGame.VisitorReceptionMiniGameUI {

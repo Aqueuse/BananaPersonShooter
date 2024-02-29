@@ -29,19 +29,19 @@ namespace Audio {
             audioFootstepsSource.loop = false;
         }
 
-        public void SetMusiqueAndAmbianceBySceneName(SceneType sceneName) {
-            switch (sceneName) {
-                case SceneType.HOME:
+        public void SetMusiqueAndAmbianceByRegion(RegionType regionName) {
+            switch (regionName) {
+                case RegionType.HOME:
                     StopAudioSource(AudioSourcesType.AMBIANCE);
                     PlayMusic(MusicType.HOME, 0);
                     break;
                 
-                case SceneType.MAP01:
+                case RegionType.MAP01:
                     PlayAmbiance(AmbianceType.DRONE_MAP01);
                     PlayMusic(MusicType.JUNGLE_MAP01, 1);
                     break;
                     
-                case SceneType.COROLLE:
+                case RegionType.COROLLE:
                     PlayAmbiance(AmbianceType.DRONE_COROLLE);
                     PlayMusic(MusicType.COROLLE, 1);
                     break;
@@ -135,7 +135,7 @@ namespace Audio {
 
         public void PlayFootstep() {
             if (ObjectsReference.Instance.gameManager.isGamePlaying) {
-                var audioData = audioFootStepsDictionnary[ObjectsReference.Instance.surfaceDetector.footStepType];
+                var audioData = audioFootStepsDictionnary[ObjectsReference.Instance.footStepSurfaceDetector.footStepType];
                 audioFootstepsSource.volume = effectsLevel-0.2f;
                 audioFootstepsSource.clip = audioData.clip[Random.Range(0, audioData.clip.Length)]; 
                 audioFootstepsSource.Play();

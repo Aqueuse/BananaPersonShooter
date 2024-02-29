@@ -1,9 +1,9 @@
-﻿using Player;
+﻿using InGame.Player;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 namespace Input {
-    public class GameActions : MonoBehaviour {
+    public class GameActions : InputActions {
         public Vector2 move;
         public Vector2 scrollSlotsValue;
 
@@ -48,6 +48,14 @@ namespace Input {
         }
 
         private void OnEnable() {
+            Cursor.visible = false;
+            Cursor.lockState = CursorLockMode.Locked;
+
+            ObjectsReference.Instance.cameraPlayer.SetNormalSensibility();
+                    
+            ObjectsReference.Instance.playerController.canMove = true;
+            ObjectsReference.Instance.bananaMan.GetComponent<Rigidbody>().isKinematic = false;
+            
             moveActionReference.action.Enable();
             moveActionReference.action.performed += Move;
             moveActionReference.action.canceled += Move;
@@ -375,7 +383,8 @@ namespace Input {
         private void SwitchToInventory(InputAction.CallbackContext context) {
             ObjectsReference.Instance.inputManager.SwitchContext(InputContext.INVENTORY);
             ObjectsReference.Instance.gameManager.gameContext = GameContext.IN_INVENTORY;
-            ObjectsReference.Instance.uiManager.ShowInventories();
+            ObjectsReference.Instance.uiManager.SetActive(UICanvasGroupType.INVENTORIES, true);
+            ObjectsReference.Instance.uInventoriesManager.FocusInventory();
         }
     }
 }

@@ -1,4 +1,4 @@
-using ItemsProperties.Bananas;
+using InGame.Items.ItemsProperties.Bananas;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;

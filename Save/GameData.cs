@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using Data;
+using InGame.Items.ItemsData;
 using Save.Templates;
 using UnityEngine;
 
@@ -16,8 +16,6 @@ namespace Save {
         
         public Dictionary<string, Vector3> portalsTeleportPositionByName;
         
-        public GenericDictionary<SceneType, MapData> mapBySceneName;
-
-        public MapData currentMapData;
+        public WorldData worldData;
     }
 }

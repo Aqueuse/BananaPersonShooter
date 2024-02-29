@@ -26,7 +26,10 @@ namespace Tags {
         INGREDIENT,
         ACCESS_MANAGED,
         RETRIEVER_ROTATING_LOGO,
-        PIRATE
+        PIRATE,
+        MERCHANT,
+        FOOD,
+        MANUFACTURED_ITEM
     }
 
     public class TagsManager : MonoSingleton<TagsManager> {
@@ -40,7 +43,7 @@ namespace Tags {
             return null;
         }
 
-        public GameObject GetFirstGameObjectWithTagInGameObject(GameObject parent, GAME_OBJECT_TAG myTag) {
+        public static GameObject GetFirstGameObjectWithTagInGameObject(GameObject parent, GAME_OBJECT_TAG myTag) {
             var gameObjects = parent.gameObject.GetComponentsInChildren<Tag>();
 
             foreach (var objectTag in gameObjects) {
@@ -50,7 +53,7 @@ namespace Tags {
             return null;
         }
 
-        public List<GameObject> GetAllGameObjectsWithTag(GAME_OBJECT_TAG myTag) {
+        public static List<GameObject> GetAllGameObjectsWithTag(GAME_OBJECT_TAG myTag) {
             var gameObjects = FindObjectsOfType<Tag>();
 
             var gameObjectsWithTag = new List<GameObject>();
@@ -63,8 +66,7 @@ namespace Tags {
         }
         
         public GAME_OBJECT_TAG GetTag(GameObject myGameObject) {
-            if (myGameObject.GetComponent<Tag>() != null) return myGameObject.GetComponent<Tag>().gameObjectTag;
-            return GAME_OBJECT_TAG.UNTAGGED;
+            return myGameObject.GetComponent<Tag>() != null ? myGameObject.GetComponent<Tag>().gameObjectTag : GAME_OBJECT_TAG.UNTAGGED;
         }
 
         public void SetTag(GameObject myGameObject, GAME_OBJECT_TAG myTag) {

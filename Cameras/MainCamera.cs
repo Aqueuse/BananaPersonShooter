@@ -55,8 +55,9 @@ namespace Cameras {
             ObjectsReference.Instance.gameManager.gameContext = GameContext.IN_GESTION_VIEW;
 
             ObjectsReference.Instance.descriptionsManager.HideAllPanels();
-            ObjectsReference.Instance.uiManager.ShowInventories();
+            ObjectsReference.Instance.uiManager.SetActive(UICanvasGroupType.INVENTORIES, true);
             ObjectsReference.Instance.uiBlueprintsInventory.RefreshUInventory();
+            ObjectsReference.Instance.uInventoriesManager.FocusInventory();
             
             ObjectsReference.Instance.uiManager.SetActive(UICanvasGroupType.BUILDABLES, true);
 
@@ -73,7 +74,8 @@ namespace Cameras {
         public void CloseGestionView() {
             ObjectsReference.Instance.uInventoriesManager.GetCurrentUIHelper().ShowDefaultHelper();
 
-            ObjectsReference.Instance.uiManager.HideInventories();
+            ObjectsReference.Instance.uiManager.SetActive(UICanvasGroupType.INVENTORIES, false);
+            ObjectsReference.Instance.descriptionsManager.HideAllPanels();
             Cursor.visible = false;
             Cursor.lockState = CursorLockMode.Locked;
             

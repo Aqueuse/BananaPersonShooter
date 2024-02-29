@@ -1,4 +1,4 @@
-using Data;
+using InGame.Items.ItemsData;
 using UnityEngine;
 
 namespace Cameras {
@@ -20,7 +20,7 @@ namespace Cameras {
             _transform = transform;
             ResetPosition();
             
-            cameraBounds = Map.Instance.cameraBounds;
+            cameraBounds = World.Instance.cameraBounds;
         }
 
         private void Update() {

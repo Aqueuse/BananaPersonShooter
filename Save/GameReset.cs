@@ -11,10 +11,10 @@ namespace Save {
         private GameObject _debrisContainer;
         
         private BananaManSavedData _bananaManSavedData;
-        private MapSavedData _mapSavedData;
+        private WorldSavedData _worldSavedData;
 
         public void ResetGameData() {
-            ResetInventory();
+            ResetInventories();
             ResetBananaSlot();
             ResetBananaManVitals();
             ResetActiveItem();
@@ -25,15 +25,27 @@ namespace Save {
             
             ResetMonkeysSasiety();
             ResetMonkeysPositions();
-
-            // lock maps
-            // reinit spaceship state
         }
 
-        private static void ResetInventory() {
-            foreach (var bananaSlot in ObjectsReference.Instance.bananasInventory.bananasInventory.ToList()) {
-                ObjectsReference.Instance.bananasInventory.bananasInventory[bananaSlot.Key] = 0;
+        private static void ResetInventories() {
+            foreach (var bananaSlot in ObjectsReference.Instance.bananaMan.inventories.bananasInventory.ToList()) {
+                ObjectsReference.Instance.bananaMan.inventories.bananasInventory[bananaSlot.Key] = 0;
                 ObjectsReference.Instance.gameData.bananaManSaved.bananaInventory[bananaSlot.Key.ToString()] = 0;
+            }
+            
+            foreach (var ingredientSlot in ObjectsReference.Instance.bananaMan.inventories.ingredientsInventory.ToList()) {
+                ObjectsReference.Instance.bananaMan.inventories.ingredientsInventory[ingredientSlot.Key] = 0;
+                ObjectsReference.Instance.gameData.bananaManSaved.ingredientsInventory[ingredientSlot.Key.ToString()] = 0;
+            }
+
+            foreach (var rawMaterialsSlot in ObjectsReference.Instance.bananaMan.inventories.rawMaterialsInventory.ToList()) {
+                ObjectsReference.Instance.bananaMan.inventories.rawMaterialsInventory[rawMaterialsSlot.Key] = 0;
+                ObjectsReference.Instance.gameData.bananaManSaved.rawMaterialsInventory[rawMaterialsSlot.Key.ToString()] = 0;
+            }
+
+            foreach (var manufacturedItemSlot in ObjectsReference.Instance.bananaMan.inventories.manufacturedItemsInventory.ToList()) {
+                ObjectsReference.Instance.bananaMan.inventories.manufacturedItemsInventory[manufacturedItemSlot.Key] = 0;
+                ObjectsReference.Instance.gameData.bananaManSaved.manufacturedInventory[manufacturedItemSlot.Key.ToString()] = 0;
             }
         }
 
@@ -52,8 +64,8 @@ namespace Save {
         }
 
         private static void ResetPositionAndLastMap() {
-            ObjectsReference.Instance.gameData.lastPositionOnMap = ObjectsReference.Instance.scenesSwitch.spawnPointsBySpawnType[SpawnPoint.NEW_GAME].position;
-            ObjectsReference.Instance.gameData.bananaManSaved.lastMap = SceneType.COROLLE;
+            ObjectsReference.Instance.gameData.lastPositionOnMap = ObjectsReference.Instance.gameManager.spawnPointsBySpawnType[SpawnPoint.NEW_GAME].position;
+            ObjectsReference.Instance.gameData.bananaManSaved.lastMap = RegionType.COROLLE;
             ObjectsReference.Instance.bananaMan.transform.position = ObjectsReference.Instance.gameData.lastPositionOnMap;
         }
 
@@ -70,15 +82,11 @@ namespace Save {
         }
 
         private static void ResetMonkeysSasiety() {
-            foreach (var mapData in ObjectsReference.Instance.gameData.mapBySceneName) {
-                mapData.Value.monkeysSasietyTimerByMonkeyId = new GenericDictionary<string, int>();
-            }
+            ObjectsReference.Instance.gameData.worldData.monkeysSasietyTimerByMonkeyId = new GenericDictionary<string, int>();
         }
         
         private static void ResetMonkeysPositions() {
-            foreach (var mapData in ObjectsReference.Instance.gameData.mapBySceneName) {
-                mapData.Value.monkeysPositionByMonkeyId = new GenericDictionary<string, Vector3>();
-            }
+            ObjectsReference.Instance.gameData.worldData.monkeysPositionByMonkeyId = new GenericDictionary<string, Vector3>();
         }
     }
 }

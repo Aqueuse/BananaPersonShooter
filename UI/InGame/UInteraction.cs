@@ -5,7 +5,6 @@ using UnityEngine;
 namespace UI.InGame {
     public class UInteraction : MonoBehaviour {
         [SerializeField] private List<TextMeshPro> interactionTexts;
-        [SerializeField] private SpriteRenderer icon;
         [SerializeField] private bool canRotate;
 
         private Transform _cameraTransform;
@@ -28,16 +27,12 @@ namespace UI.InGame {
             foreach (var interactionText in interactionTexts) {
                 interactionText.alpha = 1;
             }
-
-            icon.enabled = false;
         }
 
         public void HideUI() {
             foreach (var interactionText in interactionTexts) {
                 interactionText.alpha = 0;
             }
-            
-            icon.enabled = true;
         }
         
         private bool _isActive;

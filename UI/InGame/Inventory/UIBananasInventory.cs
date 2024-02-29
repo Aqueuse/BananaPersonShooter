@@ -1,29 +1,55 @@
-using System.Collections.Generic;
+using InGame.Items.ItemsProperties.Characters;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace UI.InGame.Inventory {
     public class UIBananasInventory : MonoBehaviour {
-        [SerializeField] private Transform inventoryContentTransform; 
-
-        public GenericDictionary<BananaType, UInventorySlot> inventorySlotsByBananaType;
+        public InventoryScriptableObject inventoryScriptableObject;
+        public GenericDictionary<BananaType, UInventorySlot> uInventorySlots;
         
-        private Dictionary<BananaType, int> _itemsIndexByType;
+        [SerializeField] private Transform inventoryContentTransform; 
+    
+        [SerializeField] private CanvasGroup inventoryPanelCanvasGroup;
+        [SerializeField] private Image buttonImage;
+        [SerializeField] private TextMeshProUGUI buttonText;
+
+        [SerializeField] private Color activatedColor;
         
         public void RefreshUInventory() {
-            var inventory = ObjectsReference.Instance.bananasInventory.bananasInventory;
-
-            foreach (var inventoryItem in inventory) {
-                if (inventoryItem.Value > 0) {
-                    inventorySlotsByBananaType[inventoryItem.Key].gameObject.SetActive(true);
-                    inventorySlotsByBananaType[inventoryItem.Key].GetComponent<UInventorySlot>().SetQuantity(inventoryItem.Value);
+            foreach (var inventoryItem in uInventorySlots) {
+                if (inventoryScriptableObject.bananasInventory[inventoryItem.Key] > 0) {
+                    inventoryItem.Value.gameObject.SetActive(true);
+                    inventoryItem.Value.GetComponent<UInventorySlot>()
+                        .SetQuantity(inventoryScriptableObject.bananasInventory[inventoryItem.Key]);
                 }
 
-                else inventorySlotsByBananaType[inventoryItem.Key].gameObject.SetActive(false);
+                else inventoryItem.Value.gameObject.SetActive(false);
             }
         }
+        
+        public void Activate() {
+            ObjectsReference.Instance.uInventoriesManager.lastFocusedInventory = ItemCategory.BANANA;
+        
+            inventoryPanelCanvasGroup.alpha = 1;
+            inventoryPanelCanvasGroup.interactable = true;
+            inventoryPanelCanvasGroup.blocksRaycasts = true;
+                
+            buttonImage.color = activatedColor;
+            buttonText.color = Color.black;
+        }
 
+        public void Desactivate() {
+            inventoryPanelCanvasGroup.alpha = 0;
+            inventoryPanelCanvasGroup.interactable = false;
+            inventoryPanelCanvasGroup.blocksRaycasts = false;
+                
+            buttonImage.color = Color.black;
+            buttonText.color = activatedColor;
+        }
+    
         public void UnselectAllSlots() {
-            foreach (var inventoryItem in inventorySlotsByBananaType) {
+            foreach (var inventoryItem in uInventorySlots) {
                 inventoryItem.Value.UnselectInventorySlot();
             }
         }

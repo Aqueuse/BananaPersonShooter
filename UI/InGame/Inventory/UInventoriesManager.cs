@@ -12,6 +12,8 @@ namespace UI.InGame.Inventory {
         [SerializeField] private GenericDictionary<ItemCategory, CanvasGroup> canvasGroupByInventoryCategory;
 
         public GenericDictionary<ItemCategory, GameObject> lastSelectedItemByInventoryCategory;
+
+        [SerializeField] private TextMeshProUGUI bitkongQuantityText;
         
         [SerializeField] private Color activatedColor;
         [SerializeField] private Color unactivatedColor;
@@ -23,6 +25,11 @@ namespace UI.InGame.Inventory {
         
         private void Start() {
             Switch_To_Bananas_Inventory();
+            
+            ObjectsReference.Instance.uiBananasInventory.RefreshUInventory();
+            ObjectsReference.Instance.uiRawMaterialsInventory.RefreshUInventory();
+            ObjectsReference.Instance.uiIngredientsInventory.RefreshUInventory();
+            ObjectsReference.Instance.uiManufacturedItemsItemsInventory.RefreshUInventory();
         }
         
         public void SetLastSelectedItem(ItemCategory itemCategory, GameObject lastSelectedItem) {
@@ -48,6 +55,9 @@ namespace UI.InGame.Inventory {
                 case ItemCategory.RAW_MATERIAL:
                     ObjectsReference.Instance.uiRawMaterialsInventory.UnselectAllSlots();
                     break;
+                case ItemCategory.MANUFACTURED_ITEM:
+                    ObjectsReference.Instance.uiManufacturedItemsItemsInventory.UnselectAllSlots();
+                    break;
             }
         }
 
@@ -62,19 +72,25 @@ namespace UI.InGame.Inventory {
                 case ItemCategory.RAW_MATERIAL:
                     ObjectsReference.Instance.uiRawMaterialsInventory.SelectFirstSlot();
                     break;
+                case ItemCategory.MANUFACTURED_ITEM:
+                    ObjectsReference.Instance.uiManufacturedItemsItemsInventory.SelectFirstSlot();
+                    break;
             }
         }
 
         public void Switch_To_Left_Tab() {
             switch (lastFocusedInventory) {
                 case ItemCategory.BANANA:
-                    Switch_To_Tab(ItemCategory.INGREDIENT);
+                    Switch_To_Tab(ItemCategory.MANUFACTURED_ITEM);
                     break;
                 case ItemCategory.RAW_MATERIAL:
                     Switch_To_Tab(ItemCategory.BANANA);
                     break;
                 case ItemCategory.INGREDIENT:
                     Switch_To_Tab(ItemCategory.RAW_MATERIAL);
+                    break;
+                case ItemCategory.MANUFACTURED_ITEM:
+                    Switch_To_Tab(ItemCategory.INGREDIENT);
                     break;
             }
         }
@@ -88,6 +104,9 @@ namespace UI.InGame.Inventory {
                     Switch_To_Tab(ItemCategory.INGREDIENT);
                     break;
                 case ItemCategory.INGREDIENT:
+                    Switch_To_Tab(ItemCategory.MANUFACTURED_ITEM);
+                    break;
+                case ItemCategory.MANUFACTURED_ITEM:
                     Switch_To_Tab(ItemCategory.BANANA);
                     break;
             }
@@ -121,18 +140,6 @@ namespace UI.InGame.Inventory {
             FocusInventory();
         }
         
-        public void ShowBananasInventory() {
-            Switch_To_Bananas_Inventory();
-        }
-
-        public void ShowRawMaterialInventory() {
-            Switch_To_Raw_Materials_Inventory();
-        }
-
-        public void ShowIngredientsInventory() {
-            Switch_To_Ingredients_Inventory();
-        }
-
         public UIHelper GetCurrentUIHelper() {
             if (Gamepad.current == null) return gamepadUIHelper;
             return keyboardUIHelper;
@@ -158,6 +165,14 @@ namespace UI.InGame.Inventory {
 
         public void Switch_To_Ingredients_Inventory() {
             Switch_To_Tab(ItemCategory.INGREDIENT);
+        }
+        
+        public void Switch_To_Manufactured_Items_Inventory() {
+            Switch_To_Tab(ItemCategory.MANUFACTURED_ITEM);
+        } 
+
+        public void SetBitKongQuantity(int bitkongQuantity) {
+            bitkongQuantityText.text = bitkongQuantity + " BTK";
         }
     }
 }

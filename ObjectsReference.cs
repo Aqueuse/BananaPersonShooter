@@ -1,13 +1,16 @@
 using Audio;
-using Gestion;
 using Cameras;
-using ItemsProperties;
-using Game;
-using Game.Inventory;
+using InGame;
+using InGame.Interactions;
+using InGame.Inventory;
+using InGame.Items.ItemsBehaviours;
+using InGame.Items.ItemsProperties;
+using InGame.MiniGames.SpaceTrafficControlMiniGame;
+using InGame.Monkeys;
+using InGame.Player;
+using InGame.Player.PlayerActions;
+using InGame.SpaceTrafficControl;
 using Input;
-using Interactions;
-using Player;
-using Player.PlayerActions;
 using Save;
 using Settings;
 using UI;
@@ -15,6 +18,7 @@ using UI.Bananapedia;
 using UI.InGame;
 using UI.InGame.Gestion;
 using UI.InGame.Inventory;
+using UI.InGame.Merchimps;
 using UI.InGame.VisitorReceptionMiniGameUI;
 using UI.Menus;
 using UI.Save;
@@ -28,6 +32,9 @@ public class ObjectsReference : MonoSingleton<ObjectsReference> {
     public AudioManager audioManager;
     public Interact interact;
 
+    public ChimpManager chimpManager;
+    public SpaceTrafficControlMiniGameManager spaceTrafficControlMiniGameManager;
+    
     public BananaMan bananaMan;
     public PlayerController playerController;
     public BananaGun bananaGun;
@@ -36,21 +43,22 @@ public class ObjectsReference : MonoSingleton<ObjectsReference> {
     public Build build;
     public ThrowBanana throwBanana;
     public Grab grab;
+    public Trade trade;
 
     public BananasInventory bananasInventory;
     public RawMaterialsInventory rawMaterialsInventory;
     public IngredientsInventory ingredientsInventory;
+    public ManufacturedItemsInventory manufacturedItemsInventory;
     
     public GhostsReference ghostsReference;
     
     public MainCamera mainCamera;
     public CameraPlayer cameraPlayer;
     public CameraGestion gestionCamera;
-    public SurfaceDetector surfaceDetector;
+    public FootStepSurfaceDetector footStepSurfaceDetector;
 
     public Cinematiques cinematiques;
     public Death death;
-    public ScenesSwitch scenesSwitch;
     public Tutorial tutorial;
 
     public GameActions gameActions;
@@ -69,7 +77,8 @@ public class ObjectsReference : MonoSingleton<ObjectsReference> {
     
     public DescriptionsManager descriptionsManager;
     public GestionBuild gestionBuild;
-    
+    public SpaceTrafficControlManager spaceTrafficControlManager;
+
     public UIManager uiManager;
     public UInventoriesManager uInventoriesManager;
     public UIHud uiHud;
@@ -78,6 +87,7 @@ public class ObjectsReference : MonoSingleton<ObjectsReference> {
     public UIRawMaterialsInventory uiRawMaterialsInventory;
     public UIIngredientsInventory uiIngredientsInventory;
     public UIBlueprintsInventory uiBlueprintsInventory;
+    public UIManufacturedItemsInventory uiManufacturedItemsItemsInventory;
     
     public UICrosshairs uiCrosshairs;
     public UIFace uiFace;
@@ -89,6 +99,9 @@ public class ObjectsReference : MonoSingleton<ObjectsReference> {
     public UICredits uiCredits;
     public UISave uiSave;
     public UISettings uiSettings;
+    
     public UIVisitorReception uiVisitorReception;
+    public UIMerchant uiMerchant;
+    
     public UITools uiTools;
 }

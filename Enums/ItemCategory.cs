@@ -12,5 +12,8 @@ public enum ItemCategory {
     MONKEY,
     MINI_CHIMP,
     CHIMPLOYEE,
-    VISITOR
+    VISITOR,
+    FOOD,
+    MERCHANT,
+    MANUFACTURED_ITEM
 }

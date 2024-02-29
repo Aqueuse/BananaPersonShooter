@@ -1,10 +1,10 @@
-using ItemsProperties.Bananas;
+using InGame.Items.ItemsProperties.Bananas;
 using UI.InGame.Inventory;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 namespace Input {
-    public class InventoryActions : MonoBehaviour {
+    public class InventoryActions : InputActions {
         [SerializeField] private InputActionReference selectBananaInputActionReference;
         
         [SerializeField] private InputActionReference switchToBananaInventoryInputActionReference;
@@ -17,6 +17,15 @@ namespace Input {
         [SerializeField] private InputActionReference switchBackToGameInputActionReference;
         
         private void OnEnable() {
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.None;
+
+            ObjectsReference.Instance.uiActions.enabled = true;
+
+            ObjectsReference.Instance.cameraPlayer.Set0Sensibility();
+            ObjectsReference.Instance.playerController.canMove = false;
+            ObjectsReference.Instance.bananaMan.GetComponent<Rigidbody>().isKinematic = true;
+
             selectBananaInputActionReference.action.Enable();
             selectBananaInputActionReference.action.performed += SelectBanana;
 
@@ -90,7 +99,9 @@ namespace Input {
         }
 
         private void SwitchBackToGame(InputAction.CallbackContext context) {
-                ObjectsReference.Instance.uiManager.HideInventories();
+                ObjectsReference.Instance.uiManager.SetActive(UICanvasGroupType.INVENTORIES, false);
+                ObjectsReference.Instance.descriptionsManager.HideAllPanels();
+                
                 ObjectsReference.Instance.inputManager.SwitchContext(InputContext.GAME);
                 ObjectsReference.Instance.gameManager.gameContext = GameContext.IN_GAME;
         }

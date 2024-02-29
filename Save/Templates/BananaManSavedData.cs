@@ -13,9 +13,10 @@ namespace Save.Templates {
         public float yWorldRotation = -0.495293289f;
         public float zWorldRotation = 0;
         
-        public SceneType lastMap = SceneType.COROLLE;
+        public RegionType lastMap = RegionType.COROLLE;
         public BananaType activeBanana = BananaType.EMPTY;
-
+        public int bitKongQuantity;
+        
         public bool hasFinishedTutorial = false;
         
         public Dictionary<string, int> bananaInventory = new() {
@@ -47,9 +48,16 @@ namespace Save.Templates {
         };
 
         public Dictionary<string, int> ingredientsInventory = new() {
+            {IngredientsType.BANANA_DOG_BREAD.ToString(), 0},
+            {IngredientsType.BANANA_WITHOUT_SKIN.ToString(), 0},
             {IngredientsType.EMPTY.ToString(), 0}
         };
-        
+
+        public Dictionary<string, int> manufacturedInventory = new() {
+            {ManufacturedItemsType.SPACESHIP_TOY.ToString(), 0},
+            {IngredientsType.EMPTY.ToString(), 0}
+        };
+
         public string bananaSlot = BananaType.EMPTY.ToString();
     }
 }

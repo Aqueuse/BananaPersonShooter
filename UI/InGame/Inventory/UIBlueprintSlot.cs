@@ -1,4 +1,4 @@
-using ItemsProperties.Buildables;
+using InGame.Items.ItemsProperties.Buildables;
 using UnityEngine;
 using UnityEngine.UI;
 

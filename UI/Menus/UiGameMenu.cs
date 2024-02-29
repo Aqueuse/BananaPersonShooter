@@ -26,7 +26,7 @@ namespace UI.Menus {
         }
         
         public void Quit() {
-            ObjectsReference.Instance.scenesSwitch.ReturnHome();
+            ObjectsReference.Instance.gameManager.ReturnHome();
         }
 
         public void SwitchToRightButton() {

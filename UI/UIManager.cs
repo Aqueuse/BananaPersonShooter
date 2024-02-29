@@ -7,6 +7,8 @@ namespace UI {
         public GenericDictionary<UICanvasGroupType, CanvasGroup> canvasGroupsByUICanvasType;
         public bool isOnSubMenus;
         
+        public Color activationColor;
+        
         private void Start() {
             isOnSubMenus = false;
             
@@ -118,22 +120,6 @@ namespace UI {
 
         public void HideGameMenu() {
             SetActive(UICanvasGroupType.GAME_MENU, false);
-        }
-
-        /// IN GAME ///
-        public void ShowInventories() {
-            SetActive(UICanvasGroupType.INVENTORIES, true);
-
-            ObjectsReference.Instance.uInventoriesManager.FocusInventory();
-            
-            ObjectsReference.Instance.uiBananasInventory.RefreshUInventory();
-            ObjectsReference.Instance.uiRawMaterialsInventory.RefreshUInventory();
-            ObjectsReference.Instance.uiIngredientsInventory.RefreshUInventory();
-        }
-        
-        public void HideInventories() {
-            SetActive(UICanvasGroupType.INVENTORIES, false);
-            ObjectsReference.Instance.descriptionsManager.HideAllPanels();
         }
         
         public void SetActive(UICanvasGroupType uiCanvasGroupType, bool visible) {

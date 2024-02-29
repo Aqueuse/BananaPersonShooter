@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 namespace Input {
-    public class UiActions : MonoBehaviour {
+    public class UiActions : InputActions {
         [SerializeField] private InputActionReference cancelActionReference;
         [SerializeField] private InputActionReference SwitchToLeftOptionPanel;
         [SerializeField] private InputActionReference SwitchToRightOptionPanel;
@@ -11,6 +11,9 @@ namespace Input {
         public Vector2 pointerPosition;
         
         private void OnEnable() {
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.None;
+            
             cancelActionReference.action.Enable();
             cancelActionReference.action.performed += Escape;
             
@@ -65,7 +68,9 @@ namespace Input {
             }
 
             if (ObjectsReference.Instance.gameManager.gameContext == GameContext.IN_INVENTORY) {
-                ObjectsReference.Instance.uiManager.HideInventories();
+                ObjectsReference.Instance.uiManager.SetActive(UICanvasGroupType.INVENTORIES, false);
+                ObjectsReference.Instance.descriptionsManager.HideAllPanels();
+                
                 ObjectsReference.Instance.inputManager.SwitchContext(InputContext.GAME);
                 ObjectsReference.Instance.gameManager.gameContext = GameContext.IN_GAME;
             }

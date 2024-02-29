@@ -1,28 +1,55 @@
-using System.Collections.Generic;
+using InGame.Items.ItemsProperties.Characters;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace UI.InGame.Inventory {
     public class UIIngredientsInventory : MonoBehaviour {
-        [SerializeField] private Transform inventoryContentTransform; 
-
-        public GenericDictionary<IngredientsType, UInventorySlot> inventorySlotsByIngredientsType;
-        private Dictionary<IngredientsType, int> _itemsIndexByType;
+        public InventoryScriptableObject inventoryScriptableObject;
+        public GenericDictionary<IngredientsType, UInventorySlot> uInventorySlots;
         
-        public void RefreshUInventory() {
-            var inventory = ObjectsReference.Instance.ingredientsInventory.ingredientsInventory;
+        [SerializeField] private Transform inventoryContentTransform; 
+        
+        [SerializeField] private CanvasGroup inventoryPanelCanvasGroup;
+        [SerializeField] private Image buttonImage;
+        [SerializeField] private TextMeshProUGUI buttonText;
 
-            foreach (var inventoryItem in inventory) {
-                if (inventoryItem.Value > 0) {
-                    inventorySlotsByIngredientsType[inventoryItem.Key].gameObject.SetActive(true);
-                    inventorySlotsByIngredientsType[inventoryItem.Key].GetComponent<UInventorySlot>().SetQuantity(inventoryItem.Value);
+        [SerializeField] private Color activatedColor;
+
+        public void RefreshUInventory() {
+            foreach (var inventoryItem in uInventorySlots) {
+                if (inventoryScriptableObject.ingredientsInventory[inventoryItem.Key] > 0) {
+                    inventoryItem.Value.gameObject.SetActive(true);
+                    inventoryItem.Value.GetComponent<UInventorySlot>()
+                        .SetQuantity(inventoryScriptableObject.ingredientsInventory[inventoryItem.Key]);
                 }
 
-                else inventorySlotsByIngredientsType[inventoryItem.Key].gameObject.SetActive(false);
+                else inventoryItem.Value.gameObject.SetActive(false);
             }
         }
         
+        public void Activate() {
+            ObjectsReference.Instance.uInventoriesManager.lastFocusedInventory = ItemCategory.BANANA;
+        
+            inventoryPanelCanvasGroup.alpha = 1;
+            inventoryPanelCanvasGroup.interactable = true;
+            inventoryPanelCanvasGroup.blocksRaycasts = true;
+                
+            buttonImage.color = activatedColor;
+            buttonText.color = Color.black;
+        }
+
+        public void Desactivate() {
+            inventoryPanelCanvasGroup.alpha = 0;
+            inventoryPanelCanvasGroup.interactable = false;
+            inventoryPanelCanvasGroup.blocksRaycasts = false;
+                
+            buttonImage.color = Color.black;
+            buttonText.color = activatedColor;
+        }
+    
         public void UnselectAllSlots() {
-            foreach (var inventoryItem in inventorySlotsByIngredientsType) {
+            foreach (var inventoryItem in uInventorySlots) {
                 inventoryItem.Value.UnselectInventorySlot();
             }
         }
@@ -31,9 +58,9 @@ namespace UI.InGame.Inventory {
             UnselectAllSlots();
 
             if (inventoryContentTransform.childCount == 0) return;
-            
+
             foreach (var slot in inventoryContentTransform.GetComponentsInChildren<UInventorySlot>()) {
-                if (slot.gameObject.activeInHierarchy) {
+                if (slot.gameObject.activeInHierarchy && slot.itemScriptableObject != null) {
                     slot.GetComponent<UInventorySlot>().SelectInventorySlot();
                     break;
                 }

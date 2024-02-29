@@ -4,7 +4,6 @@ using UnityEngine;
 namespace Tweaks {
     [RequireComponent(typeof(TrailRenderer))]
     public class TrailRendererRandom : MonoBehaviour {
-        [SerializeField] private bool userColor, disableRandom;
         [SerializeField] private float widthMultiplier = 0.2f;
         [SerializeField, Range(1, 8)] private int keyNb = 8;
         [SerializeField] private List<Color> colorList = new();
@@ -23,14 +22,10 @@ namespace Tweaks {
             _time = 0f;
             _alpha = 1.0f;
             _keyUpdate = 1.0f;
-
-            userColor = false;
-            disableRandom = false;
-        
+            
             _trailRenderer = gameObject.GetComponent<TrailRenderer>();
             _trailRenderer.material = new Material(Shader.Find("Sprites/Default"));
             if (colorList.Count == 0) {
-                userColor = false;
                 _keyUpdate = 1f / keyNb;
                 _trailRenderer.colorGradient = NewGrad(keyNb);
 
@@ -39,7 +34,6 @@ namespace Tweaks {
                 }
             }
             else {
-                userColor = true;
                 _keyUpdate = 1f / colorList.Count;
                 _trailRenderer.colorGradient = NewGrad(colorList.Count);
             }
