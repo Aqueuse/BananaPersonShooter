@@ -35,7 +35,7 @@ namespace InGame.Interactions {
         public dialogueSet thisBubbleDialogueSet;
         private int itemsLayer;
 
-        private void Start() {
+        private void OnEnable() {
             _wordsQueue = new Queue<string>();
             itemsLayer = LayerMask.NameToLayer("Interaction");
             uInteraction = GetComponent<UInteraction>();

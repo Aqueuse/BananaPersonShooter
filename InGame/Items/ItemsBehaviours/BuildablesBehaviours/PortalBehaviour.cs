@@ -11,7 +11,7 @@ namespace InGame.Items.ItemsBehaviours.BuildablesBehaviours {
         public string portalName;
 
         public void ShowAllPossibleDestinations() {
-            foreach (var portal in ObjectsReference.Instance.gameData.worldData.portals) {
+            foreach (var portal in ObjectsReference.Instance.worldData.portals) {
                 var dot = Instantiate(dotPrefab, transform);
                 var dotItemAction = dot.GetComponent<PortalDestinationInteraction>(); 
 
@@ -32,7 +32,7 @@ namespace InGame.Items.ItemsBehaviours.BuildablesBehaviours {
                 buildableRotation = JsonHelper.FromQuaternionToString(transform.rotation),
             };
             
-            ObjectsReference.Instance.gameData.worldData.AddBuildableToBuildableDictionnary(BuildableType.PORTAL, JsonConvert.SerializeObject(basicData));
+            ObjectsReference.Instance.gameSave.buildablesSave.AddBuildableToBuildableDictionnary(BuildableType.PORTAL, JsonConvert.SerializeObject(basicData));
         }
 
         public override void LoadSavedData(string stringifiedJson) {

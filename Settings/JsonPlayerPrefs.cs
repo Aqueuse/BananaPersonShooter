@@ -129,7 +129,7 @@ namespace Settings {
             // serialize and save file
             var json = JsonUtility.ToJson(this);
             
-            if (_savePath == "") _savePath = ObjectsReference.Instance.saveData.gamePath + "/preferences.json";
+            if (_savePath == "") _savePath = ObjectsReference.Instance.gameSave.gamePath + "/preferences.json";
             
             using var writer = new StreamWriter(_savePath);
             writer.WriteLine(json);

@@ -17,6 +17,7 @@ MonoBehaviour:
   bananaType: 0
   rawMaterialType: 5
   ingredientsType: 2
+  manufacturedItemsType: 1
   buildableType: 5
   itemName:
   - Roger
@@ -27,7 +28,7 @@ MonoBehaviour:
   - Comes to enjoy unforgettable encounters. And drinks at bargain prices.
   - "Viens profiter de rencontres inoubliables. Et de boissons \xE0 prix cass\xE9s."
   - "\xC9l viene a disfrutar de encuentros inolvidables. Y bebidas a precios de ganga."
-  visitorGuid: 
+  bitKongValue: 0
   clothColors:
   - {r: 0.20000002, g: 0.21176472, b: 0.30980393, a: 0}
   - {r: 0.5294118, g: 0.5294118, b: 0.5294118, a: 0}
@@ -38,6 +39,7 @@ MonoBehaviour:
   - {r: 0.18823531, g: 0.47058827, b: 0, a: 0}
   - {r: 0.20000002, g: 0.21176472, b: 0.30980393, a: 0}
   - {r: 0.18823531, g: 0.47058827, b: 0, a: 0}
+  visitorGuid: 
   visitorNeeds:
     list:
     - key: 0

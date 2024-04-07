@@ -16,7 +16,8 @@ MonoBehaviour:
   itemCategory: 3
   bananaType: 4
   rawMaterialType: 5
-  ingredientsType: 1
+  ingredientsType: 2
+  manufacturedItemsType: 1
   buildableType: 5
   itemName:
   - bunch
@@ -27,5 +28,6 @@ MonoBehaviour:
   - bunch of bananas cavendish
   - "r\xE9gime de bananes cavendish"
   - racimo de bananas cavendish
+  bitKongValue: 0
   associatedBananasPropertiesScriptableObject: {fileID: 11400000, guid: fbdea4ee522232544a53d6cc909f2728, type: 2}
   regimeQuantity: 60

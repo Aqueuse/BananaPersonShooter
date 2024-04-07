@@ -1,7 +1,0 @@
-public enum VisitorType {
-    VISITOR_ADULT_BIG = 0,
-    VISITOR_ADULT_MEDIUM = 1,
-    VISITOR_ADULT_SMALL = 2,
-    VISITOR_CHILD_BIG = 3,
-    VISITOR_CHILD_SMALL = 4
-}

@@ -1,99 +1,79 @@
 using System;
 using System.Globalization;
-using InGame.Player;
+using System.IO;
+using InGame.SpaceTrafficControl;
+using Newtonsoft.Json;
 using Save.Templates;
 using UnityEngine;
 
 namespace Save {
     public class GameSave : MonoBehaviour {
         [SerializeField] private GameObject autoSaveBanana;
-        private BananaManSavedData bananaManSavedData;
-        private GameData gameData;
-        private BananaMan bananaMan;
+        public string _appPath;
+        public string gamePath;
+        public string _savesPath;
+        public string savePath;
 
+        private SavedData _savedData;
+        
+        private SpaceTrafficControlManager spaceTrafficControlManager;
+
+        public DataSave dataSave;
+        public PlayerSave playerSave;
+        public BuildablesSave buildablesSave;
+        public DebrisSave debrisSave;
+        public WorldSave worldSave;
+        public SpaceshipsSave spaceshipsSave;
+
+        public string currentSaveUuid;
+        
         private void Start() {
-            bananaManSavedData = ObjectsReference.Instance.gameData.bananaManSaved;
-            gameData = ObjectsReference.Instance.gameData;
-            bananaMan = ObjectsReference.Instance.bananaMan;
-        }
+            _appPath = Path.GetDirectoryName(Application.persistentDataPath);
+            if (_appPath != null) {
+                gamePath = Path.Combine(_appPath, "Banana Man The Space Monkeys");
 
+                _savesPath = Path.Combine(gamePath, "Saves");
+                if (!Directory.Exists(_savesPath)) {
+                    Directory.CreateDirectory(_savesPath);
+                }
+            }
+            
+            LoadSaves();
+        }
+        
+        private void LoadSaves() {
+            var saveFolders = Directory.GetDirectories(_savesPath);
+
+            foreach (var folder in saveFolders) {
+                var saveDataFile = Path.Combine(folder, "data.json");
+                var playerDataFile = Path.Combine(folder, "player.json");
+
+                if (File.Exists(saveDataFile) && File.Exists(playerDataFile)) {
+                    var savedData = JsonConvert.DeserializeObject<SavedData>(File.ReadAllText(saveDataFile));
+
+                    if (savedData.uuid != null) {
+                        ObjectsReference.Instance.uiSave.AppendSaveSlot(savedData.uuid);
+                    }
+                }
+            }
+        }
+        
         public void SaveGame(string saveUuid) {
             var date = DateTime.ParseExact(DateTime.Now.ToString("U"), "U", CultureInfo.CurrentCulture).ToString(CultureInfo.CurrentCulture);
+
+            CreateSave(saveUuid, date);
             
-            SaveBananasInventory();
-            SaveRawMaterialsInventory();
-            SaveIngredientsInventory();
-            SaveManufacturedItemsInventory();
+            playerSave.SavePlayerByUuid(saveUuid);
+            worldSave.SaveWorld(saveUuid);
             
-            SaveBananaSlot();
-            SaveActiveItem();
-            SaveBitkongQuantity();
+            debrisSave.SaveDebrisData(saveUuid);
+            buildablesSave.SaveBuildablesData(saveUuid);
             
-            SaveBananaManVitals();
-            SavePositionAndRotation();
-
-            SaveTutorialState();
+            spaceshipsSave.SaveSpaceships(saveUuid);
             
-            ObjectsReference.Instance.saveData.Save(saveUuid, date);
-        }
-
-        private void SaveBananasInventory() {
-            foreach (var inventorySlot in bananaMan.inventories.bananasInventory) {
-                bananaManSavedData.bananaInventory[inventorySlot.Key.ToString()] = inventorySlot.Value;
-            }
-        }
-
-        private void SaveRawMaterialsInventory() {
-            foreach (var inventorySlot in bananaMan.inventories.rawMaterialsInventory) {
-                bananaManSavedData.rawMaterialsInventory[inventorySlot.Key.ToString()] = inventorySlot.Value;
-            }
-        }
-
-        private void SaveIngredientsInventory() {
-            foreach (var inventorySlot in bananaMan.inventories.ingredientsInventory) {
-                bananaManSavedData.ingredientsInventory[inventorySlot.Key.ToString()] = inventorySlot.Value;
-            }
-        }
-        
-        private void SaveManufacturedItemsInventory() {
-            foreach (var inventorySlot in bananaMan.inventories.manufacturedItemsInventory) {
-                bananaManSavedData.manufacturedInventory[inventorySlot.Key.ToString()] = inventorySlot.Value;
-            }
-        }
-        
-        private void SaveBananaSlot() {
-            bananaManSavedData.bananaSlot = bananaMan.activeItem.bananaType.ToString();
-        }
-
-        private void SaveBananaManVitals() {
-            bananaManSavedData.health = bananaMan.health; 
-            bananaManSavedData.resistance = bananaMan.resistance; 
-        }
-
-        private void SavePositionAndRotation() {
-            var bananaManTransform = bananaMan.transform;
-            gameData.lastPositionOnMap = bananaManTransform.position;
-            gameData.lastRotationOnMap = bananaManTransform.rotation.eulerAngles;
+            SaveCameraView(saveUuid);
             
-            bananaManSavedData.xWorldPosition = gameData.lastPositionOnMap.x;
-            bananaManSavedData.yWorldPosition = gameData.lastPositionOnMap.y;
-            bananaManSavedData.zworldPosition = gameData.lastPositionOnMap.z;
-
-            bananaManSavedData.xWorldRotation = gameData.lastRotationOnMap.x;
-            bananaManSavedData.yWorldRotation = gameData.lastRotationOnMap.y;
-            bananaManSavedData.zWorldRotation = gameData.lastRotationOnMap.z;
-        }
-
-        private void SaveTutorialState() {
-            bananaManSavedData.hasFinishedTutorial = bananaMan.tutorialFinished;
-        }
-
-        private void SaveActiveItem() {
-            bananaManSavedData.activeBanana = bananaMan.activeItem.bananaType;
-        }
-
-        private void SaveBitkongQuantity() {
-            bananaManSavedData.bitKongQuantity = bananaMan.inventories.bitKongQuantity;
+            dataSave.UpdateSaveDate(saveUuid);
         }
         
         public void StartAutoSave() {
@@ -106,12 +86,96 @@ namespace Save {
         
         public void AutoSave() {
             autoSaveBanana.SetActive(true);
-            SaveGame(gameData.currentSaveUuid);
+            SaveGame(currentSaveUuid);
             Invoke(nameof(HideAutoSaveBanana), 5);
+        }
+
+        public void DeleteSave(string saveUuid) {
+            var worldDataSavesPath = Path.Combine(_savesPath, saveUuid);
+            Directory.Delete(worldDataSavesPath, true);
         }
 
         private void HideAutoSaveBanana() {
             autoSaveBanana.SetActive(false);
+        }
+        
+        public string GetSavePathByUuid(string saveUuid) {
+            return Path.Combine(_savesPath, saveUuid);
+        }
+
+        public bool SaveExists(string saveuuid) {
+            return Directory.Exists(Path.Combine(_savesPath, saveuuid));
+        }
+        
+        public void LoadLastSave() {
+            ObjectsReference.Instance.gameManager.loadingScreen.SetActive(true);
+            ObjectsReference.Instance.uiManager.SetActive(UICanvasGroupType.DEATH, false);
+            ObjectsReference.Instance.death.HideDeath();
+
+            if (currentSaveUuid == null) ObjectsReference.Instance.gameManager.ReturnHome();
+            else {
+                ObjectsReference.Instance.gameManager.Play(currentSaveUuid, false);
+            }
+        }
+
+        public void LoadSave(string saveUuid) {
+            currentSaveUuid = saveUuid;
+            
+            if (!Directory.Exists(savePath)) {
+                var date = DateTime.ParseExact(DateTime.Now.ToString("U"), "U", CultureInfo.CurrentCulture);
+                CreateSave(saveUuid, date.ToString(CultureInfo.CurrentCulture));
+            }
+            
+            playerSave.LoadPlayer(saveUuid);
+            worldSave.LoadWorld(saveUuid);
+            buildablesSave.LoadBuildablesDataByUuid(saveUuid);
+            debrisSave.LoadDebrisDataByUuid(saveUuid);
+            spaceshipsSave.LoadpaceshipsData(saveUuid);
+            
+            ObjectsReference.Instance.gameSave.StartAutoSave();
+        }
+        
+        private void CreateSave(string saveUuid, string saveDate) {
+            savePath = Path.Combine(_savesPath, saveUuid);
+
+            _savedData = new SavedData { uuid = saveUuid, saveName = "new save", lastSavedDate = saveDate };
+            
+            if (!Directory.Exists(savePath)) {
+                Directory.CreateDirectory(savePath);
+                Directory.CreateDirectory(Path.Combine(savePath, "WORLD_DATA"));
+            }
+
+            else _savedData.saveName = dataSave.GetsaveNameByUuid(saveUuid);
+
+            var jsonSaved = JsonConvert.SerializeObject(_savedData);
+            var dataSavefilePath = Path.Combine(savePath, "data.json");
+            File.WriteAllText(dataSavefilePath, jsonSaved);
+        }
+        
+        private void SaveCameraView(string saveUuid) {
+            var _savePath = Path.Combine(_savesPath, saveUuid);
+            var screenshotFilePath = Path.Combine(_savePath, "screenshot.png");
+
+            var screenshotCamera = ObjectsReference.Instance.gameManager.cameraMain;
+            var screenTexture = new RenderTexture(150, 150, 16);
+            screenshotCamera.targetTexture = screenTexture;
+            RenderTexture.active = screenTexture;
+            screenshotCamera.Render();
+            var renderedTexture = new Texture2D(150, 150);
+            renderedTexture.ReadPixels(new Rect(0, 0, 150, 150), 0, 0);
+            RenderTexture.active = null;
+            var byteArray = renderedTexture.EncodeToPNG();
+            File.WriteAllBytes(screenshotFilePath, byteArray);
+            screenshotCamera.targetTexture = null;
+        }
+        
+        public SavedData GetSavedByUuid(string saveUuid) {
+            savePath = Path.Combine(_savesPath, saveUuid);
+
+            var savefilePath = Path.Combine(savePath, "data.json");
+            var savedDataString = File.ReadAllText(savefilePath);
+
+            return JsonConvert.DeserializeObject<SavedData>(savedDataString);
         }
     }
 }

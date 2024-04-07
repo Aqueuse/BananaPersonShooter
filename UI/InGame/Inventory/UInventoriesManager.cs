@@ -24,9 +24,6 @@ namespace UI.InGame.Inventory {
         [SerializeField] private UIHelper keyboardUIHelper;
         
         private void Start() {
-            Switch_To_Bananas_Inventory();
-            
-            ObjectsReference.Instance.uiBananasInventory.RefreshUInventory();
             ObjectsReference.Instance.uiRawMaterialsInventory.RefreshUInventory();
             ObjectsReference.Instance.uiIngredientsInventory.RefreshUInventory();
             ObjectsReference.Instance.uiManufacturedItemsItemsInventory.RefreshUInventory();
@@ -46,9 +43,6 @@ namespace UI.InGame.Inventory {
 
         public void UnselectInventorySlots(ItemCategory inventoryCategory) {
             switch (inventoryCategory) {
-                case ItemCategory.BANANA:
-                    ObjectsReference.Instance.uiBananasInventory.UnselectAllSlots();
-                    break;
                 case ItemCategory.INGREDIENT:
                     ObjectsReference.Instance.uiIngredientsInventory.UnselectAllSlots();
                     break;
@@ -63,9 +57,6 @@ namespace UI.InGame.Inventory {
 
         private void FocusFirstSlotInInventory(ItemCategory inventoryCategory) {
             switch (inventoryCategory) {
-                case ItemCategory.BANANA:
-                    ObjectsReference.Instance.uiBananasInventory.SelectFirstSlot();
-                    break;
                 case ItemCategory.INGREDIENT:
                     ObjectsReference.Instance.uiIngredientsInventory.SelectFirstSlot();
                     break;
@@ -80,11 +71,8 @@ namespace UI.InGame.Inventory {
 
         public void Switch_To_Left_Tab() {
             switch (lastFocusedInventory) {
-                case ItemCategory.BANANA:
-                    Switch_To_Tab(ItemCategory.MANUFACTURED_ITEM);
-                    break;
                 case ItemCategory.RAW_MATERIAL:
-                    Switch_To_Tab(ItemCategory.BANANA);
+                    Switch_To_Tab(ItemCategory.MANUFACTURED_ITEM);
                     break;
                 case ItemCategory.INGREDIENT:
                     Switch_To_Tab(ItemCategory.RAW_MATERIAL);
@@ -97,9 +85,6 @@ namespace UI.InGame.Inventory {
 
         public void Switch_To_Right_Tab() {
             switch (lastFocusedInventory) {
-                case ItemCategory.BANANA:
-                    Switch_To_Tab(ItemCategory.RAW_MATERIAL);
-                    break;
                 case ItemCategory.RAW_MATERIAL:
                     Switch_To_Tab(ItemCategory.INGREDIENT);
                     break;
@@ -107,7 +92,7 @@ namespace UI.InGame.Inventory {
                     Switch_To_Tab(ItemCategory.MANUFACTURED_ITEM);
                     break;
                 case ItemCategory.MANUFACTURED_ITEM:
-                    Switch_To_Tab(ItemCategory.BANANA);
+                    Switch_To_Tab(ItemCategory.RAW_MATERIAL);
                     break;
             }
         }
@@ -154,11 +139,7 @@ namespace UI.InGame.Inventory {
             keyboardUIHelper.HideHelper();
             gamepadUIHelper.HideHelper();
         }
-
-        public void Switch_To_Bananas_Inventory() {
-            Switch_To_Tab(ItemCategory.BANANA);
-        }
-
+        
         public void Switch_To_Raw_Materials_Inventory() {
             Switch_To_Tab(ItemCategory.RAW_MATERIAL);
         }

@@ -7,8 +7,6 @@ namespace UI {
         public GenericDictionary<UICanvasGroupType, CanvasGroup> canvasGroupsByUICanvasType;
         public bool isOnSubMenus;
         
-        public Color activationColor;
-        
         private void Start() {
             isOnSubMenus = false;
             

@@ -1,4 +1,3 @@
-﻿using InGame.Items.ItemsData;
 using InGame.Items.ItemsProperties.Bananas;
 using UnityEngine;
 
@@ -8,7 +7,6 @@ namespace InGame.Inventory {
 
         private void Start() {
             bananasInventory = ObjectsReference.Instance.bananaMan.inventories.bananasInventory;
-            ObjectsReference.Instance.uiBananasInventory.inventoryScriptableObject = ObjectsReference.Instance.bananaMan.inventories;
         }
 
         public void AddQuantity(BananasPropertiesScriptableObject bananasDataScriptableObject, int quantity) {
@@ -16,16 +14,16 @@ namespace InGame.Inventory {
             
             bananasInventory[bananasDataScriptableObject.bananaType] += quantity;
             
-            var bananaItem = ObjectsReference.Instance.uiBananasInventory.uInventorySlots[bananasDataScriptableObject.bananaType];
+            var bananaItem = ObjectsReference.Instance.uiBananaSelector.uiBananaSelectorSlots[bananasDataScriptableObject.bananaType];
             bananaItem.gameObject.SetActive(true);
             bananaItem.SetQuantity(bananasInventory[bananasDataScriptableObject.bananaType]);
             ObjectsReference.Instance.uiTools.SetBananaQuantity(bananasInventory[bananasDataScriptableObject.bananaType]);
 
-            ObjectsReference.Instance.bananaMan.activeItem = bananasDataScriptableObject;
+            ObjectsReference.Instance.bananaMan.SetActiveItem(bananasDataScriptableObject);
             
             ObjectsReference.Instance.uiQueuedMessages.AddToInventory(bananasDataScriptableObject, quantity);
 
-            foreach (var monkey in World.Instance.monkeysInMap) {
+            foreach (var monkey in ObjectsReference.Instance.worldData.monkeys) {
                 monkey.SearchForBananaManBananas();
             }
         }
@@ -35,7 +33,7 @@ namespace InGame.Inventory {
         }
 
         public void RemoveQuantity(BananaType bananaType, int quantity) {
-            var bananaItem = ObjectsReference.Instance.uiBananasInventory.uInventorySlots[bananaType];
+            var bananaItem = ObjectsReference.Instance.uiBananaSelector.uiBananaSelectorSlots[bananaType];
 
             if (bananasInventory[bananaType] > quantity) {
                 bananasInventory[bananaType] -= quantity;

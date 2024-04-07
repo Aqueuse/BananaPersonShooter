@@ -1,0 +1,7 @@
+public enum TouristType {
+    TOURIST_ADULT_BIG = 0,
+    TOURIST_ADULT_MEDIUM = 1,
+    TOURIST_ADULT_SMALL = 2,
+    TOURIST_CHILD_BIG = 3,
+    TOURIST_CHILD_SMALL = 4
+}

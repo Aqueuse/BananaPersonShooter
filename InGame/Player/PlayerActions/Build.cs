@@ -1,7 +1,6 @@
 using System;
 using InGame.Items.ItemsBehaviours;
 using InGame.Items.ItemsBehaviours.BuildablesBehaviours;
-using InGame.Items.ItemsData;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -99,7 +98,7 @@ namespace InGame.Player.PlayerActions {
                 _buildable = Instantiate(original: _activeGhostClass.buildablePropertiesScriptableObject.buildablePrefab,
                     position: _activeGhost.transform.position, rotation: _activeGhost.transform.rotation);
 
-                _buildable.transform.parent = World.Instance.buildablesContainer.transform;
+                _buildable.transform.parent = ObjectsReference.Instance.gameSave.buildablesSave.buildablesContainer.transform;
 
                 var _craftingIngredients = _activeGhostClass.buildablePropertiesScriptableObject.rawMaterialsWithQuantity;
 

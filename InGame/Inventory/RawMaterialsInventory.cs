@@ -11,7 +11,6 @@ namespace InGame.Inventory {
                 .buildablePropertiesScriptableObjects[BuildableType.PLATEFORM].rawMaterialsWithQuantity;
             
             rawMaterialsInventory = ObjectsReference.Instance.bananaMan.inventories.rawMaterialsInventory;
-            ObjectsReference.Instance.uiBananasInventory.inventoryScriptableObject = ObjectsReference.Instance.bananaMan.inventories;
         }
 
         public void AddQuantity(RawMaterialType rawMaterialType, int quantity) {

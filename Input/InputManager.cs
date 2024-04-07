@@ -1,19 +1,17 @@
 using UnityEngine;
 
-namespace Input {
-    public class InputManager : MonoBehaviour {
-        [SerializeField] private GenericDictionary<InputContext, InputActions> inputActionsByInputContext;
+public class InputManager : MonoBehaviour {
+    [SerializeField] private GenericDictionary<InputContext, InputActions> inputActionsByInputContext;
 
-        public void SwitchContext(InputContext newInputContext) {
-            DisableAllInputs();
+    public void SwitchContext(InputContext newInputContext) {
+        DisableAllInputs();
 
-            inputActionsByInputContext[newInputContext].enabled = true;
-        }
+        inputActionsByInputContext[newInputContext].enabled = true;
+    }
 
-        private void DisableAllInputs() {
-            foreach (var inputAction in inputActionsByInputContext) {
-                inputAction.Value.enabled = false;
-            }
+    private void DisableAllInputs() {
+        foreach (var inputAction in inputActionsByInputContext) {
+            inputAction.Value.enabled = false;
         }
     }
 }

@@ -1,4 +1,3 @@
-using InGame.CommandRoomPanelControls;
 using Tags;
 using UnityEngine;
 
@@ -26,16 +25,12 @@ namespace InGame {
 
             ObjectsReference.Instance.bananaMan.tutorialFinished = false;
             
-            CommandRoomControlPanelsManager.Instance.ShowPanel(CommandRoomPanelType.GESTION);
-            CommandRoomControlPanelsManager.Instance.ShowPanel(CommandRoomPanelType.JOURNAL);
-            CommandRoomControlPanelsManager.Instance.ShowPanel(CommandRoomPanelType.SPACE_TRAFFIC_CONTROL);
-
             foreach (var accessManagedGameObject in TagsManager.GetAllGameObjectsWithTag(GAME_OBJECT_TAG.ACCESS_MANAGED)) {
                 accessManagedGameObject.GetComponent<ManageAccess>().ForbidUsage();
             }
 
-            CommandRoomControlPanelsManager.Instance.miniChimp.bubbleDialogue.SetBubbleDialogue(dialogueSet.REPAIR_BANANA_GUN);
-            CommandRoomControlPanelsManager.Instance.chimployeeCommandRoom.SetTutorialChimployeeConfiguration();
+            ObjectsReference.Instance.commandRoomControlPanelsManager.miniChimp.bubbleDialogue.SetBubbleDialogue(dialogueSet.REPAIR_BANANA_GUN);
+            ObjectsReference.Instance.commandRoomControlPanelsManager.chimployeeCommandRoom.SetTutorialChimployeeConfiguration();
 
             RenderSettings.ambientLight = penumbraAmbientLightColor;
             
@@ -52,10 +47,6 @@ namespace InGame {
             
             ObjectsReference.Instance.bananaGun.bananaGunInBack.SetActive(true);
             // TODO : animation take banana gun
-            
-            ObjectsReference.Instance.gameLoad.LoadBananasInventory();
-            ObjectsReference.Instance.gameLoad.LoadRawMaterialsInventory();
-            ObjectsReference.Instance.gameLoad.LoadIngredientsInventory();
             
             ObjectsReference.Instance.bananaMan.tutorialFinished = true;
             

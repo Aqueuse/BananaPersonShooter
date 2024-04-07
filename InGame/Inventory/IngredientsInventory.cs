@@ -6,7 +6,6 @@ namespace InGame.Inventory {
         
         private void Start() {
             ingredientsInventory = ObjectsReference.Instance.bananaMan.inventories.ingredientsInventory;
-            ObjectsReference.Instance.uiBananasInventory.inventoryScriptableObject = ObjectsReference.Instance.bananaMan.inventories;
         }
         
         public void AddQuantity(IngredientsType ingredientsType, int quantity) {

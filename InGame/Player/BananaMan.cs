@@ -29,6 +29,11 @@ namespace InGame.Player {
             tpsPlayerAnimator = GetComponentInChildren<Animator>().GetComponent<TpsPlayerAnimator>();
             faceCanvasRenderer.SetMesh(facePlane.GetComponent<MeshFilter>().mesh);
         }
+
+        public void SetActiveItem(BananasPropertiesScriptableObject bananasPropertiesScriptableObject) {
+            activeItem = bananasPropertiesScriptableObject;
+            ObjectsReference.Instance.uiTools.SetBananaType(bananasPropertiesScriptableObject.GetSprite());
+        }
         
         public void GainHealth() {
             if (ObjectsReference.Instance.bananaMan.inventories.bananasInventory[activeItem.bananaType] > 0 && health < _maxHealth) {

@@ -1,6 +1,7 @@
 using DG.Tweening;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace UI.InGame {
     public class UITools : MonoBehaviour {
@@ -9,7 +10,8 @@ namespace UI.InGame {
         [SerializeField] private Transform rightFlipperTransform;
         
         [SerializeField] private Ease customEase;
-        
+
+        [SerializeField] private SpriteRenderer bananaSpriteRenderer;
         [SerializeField] private TextMeshPro bananaQuantityText;
         [SerializeField] private SpriteRenderer plateformSpriteRenderer;
 
@@ -40,6 +42,10 @@ namespace UI.InGame {
 //            leftFlipperTransform.DOLocalRotate(initialFlipRotation, 0.3f).SetEase(customEase);
 //            middleFlipperTransform.DOLocalRotate(initialFlipRotation, 0.3f).SetEase(customEase);
 //            rightFlipperTransform.DOLocalRotate(initialFlipRotation, 0.3f).SetEase(customEase);
+        }
+
+        public void SetBananaType(Sprite bananaSprite) {
+            bananaSpriteRenderer.sprite = bananaSprite;
         }
 
         public void SetBananaQuantity(int bananaQuantity) {

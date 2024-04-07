@@ -1,6 +1,5 @@
 using InGame.Interactions;
 using InGame.Items.ItemsBehaviours.BuildablesBehaviours;
-using InGame.Items.ItemsData;
 using InGame.Items.ItemsProperties.Wastes;
 using Tags;
 using UnityEngine;
@@ -56,7 +55,7 @@ namespace InGame.Player.PlayerActions {
 
                     regimeClass.GrabBananas();
 
-                    foreach (var monkey in World.Instance.monkeysInMap) {
+                    foreach (var monkey in ObjectsReference.Instance.worldData.monkeys) {
                         monkey.SearchForBananaManBananas();
                     }
                     

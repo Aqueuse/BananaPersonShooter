@@ -1,11 +1,12 @@
-using InGame.Items.ItemsData;
+using System.Collections.Generic;
+using InGame.Items.ItemsBehaviours.BuildablesBehaviours;
 using Tags;
 using UnityEngine;
 
 namespace InGame.Interactions.InteractionsActions {
     public class RetrieverInteraction : Interaction {
         public override void Activate(GameObject interactedGameObject) {
-            var plateforms = World.Instance.GetAllBuildablesByTypeInAspirableContainer(BuildableType.PLATEFORM);
+            var plateforms = GetAllBuildablesByTypeInAspirableContainer(BuildableType.PLATEFORM);
             var plateformsCount = plateforms.Count;
 
             if (plateformsCount > 0) {
@@ -31,7 +32,20 @@ namespace InGame.Interactions.InteractionsActions {
             else {
                 ObjectsReference.Instance.uiQueuedMessages.AddNothingToRetrieveMessage();
             }
+        }
+        
+        private List<GameObject> GetAllBuildablesByTypeInAspirableContainer(BuildableType buildableType) {
+            var buildablesBehaviours = FindObjectsByType<BuildableBehaviour>(FindObjectsSortMode.None);
 
+            var gameObjectsWithBuildableType = new List<GameObject>();
+
+            foreach (var buildable in buildablesBehaviours) {
+                if (buildable.buildableType == buildableType) {
+                    gameObjectsWithBuildableType.Add(buildable.gameObject);
+                }
+            }
+
+            return gameObjectsWithBuildableType;
         }
     }
 }

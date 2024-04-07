@@ -48,8 +48,6 @@ MonoBehaviour:
       value: 0
     - key: 16
       value: 0
-    - key: 17
-      value: 0
     keyCollision: 0
   rawMaterialsInventory:
     list:

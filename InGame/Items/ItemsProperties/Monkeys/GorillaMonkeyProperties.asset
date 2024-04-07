@@ -16,7 +16,8 @@ MonoBehaviour:
   itemCategory: 10
   bananaType: 0
   rawMaterialType: 5
-  ingredientsType: 1
+  ingredientsType: 2
+  manufacturedItemsType: 1
   buildableType: 5
   itemName:
   - gorilla
@@ -27,7 +28,10 @@ MonoBehaviour:
   - "Kelsa\xEFk, king of the jungle"
   - "Kelsa\xEFk, le roi de la jungle"
   - "Kelsa\xEFk, rey de la jungla"
+  bitKongValue: 0
   monkeyType: 1
   monkeyId: gorilla
   happiness: 0
-  sasietyTimer: 0
+  sasietyTimer: 120
+  lastPosition: {x: -2043.09, y: 125.51, z: -4427}
+  initialPosition: {x: -2043.09, y: 125.51, z: -4427}

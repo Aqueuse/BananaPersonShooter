@@ -10,5 +10,7 @@ namespace InGame.Items.ItemsProperties.Monkeys {
         public float happiness;
         
         public float sasietyTimer;
+        public Vector3 lastPosition;
+        public Vector3 initialPosition;
     }
 }

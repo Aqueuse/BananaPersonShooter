@@ -1,4 +1,3 @@
-using InGame.CommandRoomPanelControls;
 using InGame.Interactions;
 using UI.InGame;
 using UnityEngine;
@@ -23,8 +22,8 @@ namespace InGame.Monkeys.Chimployees {
         }
 
         private void SetNormalChimployeeConfiguration() {
-            chimployeeTransform.position = CommandRoomControlPanelsManager.Instance.apeResourcesChimployeeTransform.position;
-            chimployeeTransform.rotation = CommandRoomControlPanelsManager.Instance.apeResourcesChimployeeTransform.rotation;
+            chimployeeTransform.position = ObjectsReference.Instance.commandRoomControlPanelsManager.chairLifeSimulatorTransform.position;
+            chimployeeTransform.rotation = ObjectsReference.Instance.commandRoomControlPanelsManager.chairLifeSimulatorTransform.rotation;
 
             uiFace.Die(false);
             animator.SetBool(beDeadAnimatorProperty, false);

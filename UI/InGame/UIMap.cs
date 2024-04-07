@@ -2,6 +2,14 @@ using UnityEngine;
 
 namespace UI.InGame {
     public class UIMap : MonoBehaviour {
-        public SpawnPoint spawnPoint;
+        [SerializeField] private RectTransform mapRectTransform;
+        
+        public void SwitchToFullMap() {
+            
+        }
+
+        public void SwitchToMiniMap() {
+            
+        }
     }
 }

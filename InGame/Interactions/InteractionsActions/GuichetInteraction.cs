@@ -6,7 +6,7 @@ namespace InGame.Interactions.InteractionsActions {
             ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.CROSSHAIRS].alpha = 0;
             ObjectsReference.Instance.inputManager.SwitchContext(InputContext.VISITOR_WAITING_LIST_MINI_GAME);
 
-            ObjectsReference.Instance.uiVisitorReception.RefreshUIWaintingList();
+            ObjectsReference.Instance.uiTouristReception.RefreshUIWaintingList();
             ObjectsReference.Instance.uiManager.SetActive(UICanvasGroupType.VISITOR_WAITING_LIST, true);
         }
     }

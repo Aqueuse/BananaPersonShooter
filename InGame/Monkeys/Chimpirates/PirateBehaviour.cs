@@ -1,4 +1,3 @@
-using InGame.CommandRoomPanelControls;
 using InGame.Items.ItemsBehaviours.BuildablesBehaviours;
 using UnityEngine;
 using UnityEngine.AI;
@@ -126,7 +125,7 @@ namespace InGame.Monkeys.Chimpirates {
                 _navMeshAgent.SetDestination(destination);
                 
                 if (distanceToDestination < 6f) {
-                    CommandRoomControlPanelsManager.Instance.marketingCampaignManager.RemoveGuest();
+                    ObjectsReference.Instance.spaceshipsSpawner.RemoveGuest();
                     
                     Destroy(gameObject);
                 }

@@ -1,86 +1,56 @@
+using System.Collections.Generic;
 using InGame.Items.ItemsBehaviours.SpaceshipsBehaviours;
-using Save.Templates;
 using UnityEngine;
 
 namespace InGame.SpaceTrafficControl {
     public class SpaceTrafficControlManager : MonoBehaviour {
-        [SerializeField] private GameObject[] pirateSpaceshipPrefabs;
-        [SerializeField] private GameObject[] merchantSpaceshipPrefabs;
-        [SerializeField] private GameObject[] visitorsSpaceshipPrefabs;
-
         public GenericDictionary<string, SpaceshipBehaviour> spaceshipBehavioursByGuid;
+        public GenericDictionary<int, bool> hangarAvailabilityByHangarNumber;
 
-        /// LOAD ///
+        public List<Vector3[]> pathsToHangars = new List<Vector3[]>() {
+                new Vector3[] {new(3427.478f,2199.609f,-1796f), new(2361.705f,-20.18628f,-1868.172f), new(-750.5123f,-1298.092f,-2555.486f), new(-1605.884f,-1153.465f,-2702.111f), new(-1605.884f,147.19f,-2702.111f)},
+                new Vector3[] {new(429.1329f,1886.956f,1293.362f), new(-354.4004f,-20.18628f,69.54077f), new(-1281.391f,-1298.092f,-1604.781f), new(-1696.109f,-1196.047f,-2598.885f), new(-1696.109f,147.19f,-2598.885f)},
+                new Vector3[] {new (-3455.312f,1886.956f,1691.814f), new(-3058.228f,-20.18628f,520.2107f), new(-2359.748f,-1298.092f,-1466.763f), new(-1832.673f,-1196.047f,-2593.439f), new(-1835.777f,147.19f,-2595.016f)},
+                new Vector3[] {new (-6593.394f,1886.956f,-415.9173f), new(-5093.8f,-20.18628f,-1318.29f), new(-3016.645f,-1298.092f,-2301.683f), new(-1950.893f,-1196.047f,-2701.864f), new(-1950.893f,147.19f,-2701.864f)},
+                new Vector3[] {new (-7442.096f,1886.956f,-3788.963f), new(-5264.229f,-20.18628f,-3549.354f), new(-2825.072f,-1298.092f,-3059.063f), new(-1952.195f,-1196.047f,-2837.615f), new(-1952.195f,147.19f,-2837.615f)},
+                new Vector3[] {new (-4804.958f,1886.956f,-7220.742f), new(-3369.886f,-20.18628f,-5677.006f), new(-2151.887f,-1298.092f,-3638.466f), new(-1816.3f,-1196.047f,-2925.192f), new(-1817.307f,147.19f,-2925.696f)},
+                new Vector3[] {new (415.8911f,1886.956f,-7253.578f), new(-458.3247f,-20.18628f,-5726.918f), new(-1385.756f,-1298.092f,-3664.557f), new(-1696.243f,-1196.047f,-2921.79f), new(-1696.243f,147.19f,-2921.79f)},
+                new Vector3[] {new (3313.797f,1886.956f,-4828.157f), new(1230.392f,-20.18628f,-4128.994f), new(-878.1141f,-1298.092f,-3127.486f), new(-1600.332f,-1196.047f,-2826.458f), new(-1600.332f,147.19f,-2826.458f)}
+        };
+        
+        private int nextRandomIndex;
+        private System.Random systemRandom;
 
-        public void LoadSpaceshipBehaviour(CharacterType characterType, SpaceshipSavedData spaceshipSavedData) {
-            var spaceship = Instantiate(GetSpaceshipPrefabByIndex(characterType, spaceshipSavedData.prefabIndex));
+        private char letter1;
+        private char letter2;
+        private char letter3;
+        private string number; 
+        
+        
+        public void AssignSpaceshipToHangar(SpaceshipBehaviour spaceshipBehaviour, int hangarNumber) {
+            hangarAvailabilityByHangarNumber[hangarNumber] = false;
+            spaceshipBehaviour.MoveToHangar(hangarNumber);
+        }
+
+        public string GetUniqueSpaceshipName() {
+            systemRandom = new System.Random();
+
+            nextRandomIndex = systemRandom.Next(26);
+            letter1 = (char)('A'+nextRandomIndex);
             
-            spaceshipBehavioursByGuid.Add(spaceship.GetComponent<SpaceshipBehaviour>().spaceshipGuid, spaceship.GetComponent<SpaceshipBehaviour>());
+            nextRandomIndex = systemRandom.Next(26);
+            letter2 = (char)('A'+nextRandomIndex);
 
-            switch (spaceshipSavedData.characterType) {
-                case CharacterType.PIRATE:
-                    spaceship.GetComponent<PirateSpaceshipBehaviour>().piratesData = spaceshipSavedData.pirateDatas;
-                    break;
-                
-                case CharacterType.VISITOR:
-                    spaceship.GetComponent<VisitorSpaceshipBehaviour>().visitorDatas = spaceshipSavedData.visitorDatas;
-                    break;
-                
-                case CharacterType.MERCHIMP:
-                    spaceship.GetComponent<MerchantSpaceshipBehaviour>().merchantData = spaceshipSavedData.merchantData;
-                    break;
-            }
+            nextRandomIndex = systemRandom.Next(26);
+            letter3 = (char)('A'+nextRandomIndex);
+
+            number = $"{systemRandom.Next(999):D3}";
             
-            spaceship.GetComponent<SpaceshipBehaviour>().Init();
+            return string.Concat(letter1, letter2, letter3)+"-"+number;
         }
         
-        ///  SPAWN  ///
-
-        public void SpawnSpaceshipBehaviour(CharacterType characterType, int hangarNumber) {
-            var spaceship = Instantiate(GetRandomSpaceshipByCharacterType(characterType));
-            
-            spaceship.GetComponent<SpaceshipBehaviour>().GenerateGuid();
-            spaceship.GetComponent<SpaceshipBehaviour>().GenerateName();
-            
-            spaceshipBehavioursByGuid.Add(spaceship.GetComponent<SpaceshipBehaviour>().spaceshipGuid, spaceship.GetComponent<PirateSpaceshipBehaviour>());
-            
-            spaceship.GetComponent<SpaceshipBehaviour>().Init();
-        }
-        
-        ///  REMOVE ///
-
-        public void DestroySpacehip(int spaceshipGuid) {
-            
-        }
-        
-        public SpaceshipBehaviour GetSpaceshipBehaviourByGuid(string spaceshipGuid) {
-            return spaceshipBehavioursByGuid[spaceshipGuid];
-        }
-        
-        private GameObject GetRandomSpaceshipByCharacterType(CharacterType characterType) {
-            switch (characterType) {
-                case CharacterType.PIRATE:
-                    return pirateSpaceshipPrefabs[Random.Range(0, pirateSpaceshipPrefabs.Length)];
-                case CharacterType.VISITOR:
-                    return visitorsSpaceshipPrefabs[Random.Range(0, visitorsSpaceshipPrefabs.Length)];
-                case CharacterType.MERCHIMP:
-                    return merchantSpaceshipPrefabs[Random.Range(0, merchantSpaceshipPrefabs.Length)];
-            }
-
-            return null;
-        }
-
-        private GameObject GetSpaceshipPrefabByIndex(CharacterType characterType, int prefabIndex) {
-            switch (characterType) {
-                case CharacterType.PIRATE:
-                    return pirateSpaceshipPrefabs[prefabIndex];
-                case CharacterType.VISITOR:
-                    return visitorsSpaceshipPrefabs[prefabIndex];
-                case CharacterType.MERCHIMP:
-                    return merchantSpaceshipPrefabs[prefabIndex];
-            }
-
-            return null;
+        public Color GetRandomColor() {
+            return Random.ColorHSV();
         }
     }
 }

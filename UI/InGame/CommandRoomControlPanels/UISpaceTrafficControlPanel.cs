@@ -1,35 +1,102 @@
+using System.Collections.Generic;
+using InGame.Items.ItemsBehaviours.SpaceshipsBehaviours;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace UI.InGame.CommandRoomControlPanels {
-    public enum SpaceTrafficControlTab {
-        COMMUNICATIONS,
-        SPACE,
-        CAMERAS
+    public class UISpaceTrafficControlPanel : MonoBehaviour {
+        [SerializeField] private GameObject communicationsPanel;
+        [SerializeField] private GameObject cannonsPanel;
+        [SerializeField] private GameObject cameraPanel;
+
+        [SerializeField] private Transform spaceshipsListContainer;
+        
+        [SerializeField] private GameObject messagePlaceholder;
+        
+        [SerializeField] private CanvasGroup answersListCanvasGroup;
+        
+        [SerializeField] private GameObject spaceshipButtonPrefab;
+
+        [SerializeField] private GenericDictionary<int, Button> hangarButtonsByHangarNumber;
+
+        [SerializeField] private Color hangarAvailableColor;
+        [SerializeField] private Color hangarUnavailableColor;
+        
+        private GameObject spaceshipMessage;
+        public SpaceshipBehaviour selectedSpaceship;
+        public Button selectedButton;
+        
+        public GenericDictionary<CharacterType, List<GameObject>> spaceshipMessagesByCharacterType;
+        
+        public void SwitchToCommunicationsTab() {
+            communicationsPanel.SetActive(true);
+            cannonsPanel.SetActive(false);
+            cameraPanel.SetActive(false);
+        }
+        
+        public void SwitchToCannonsTab() {
+            communicationsPanel.SetActive(false);
+            cannonsPanel.SetActive(true);
+            cameraPanel.SetActive(false);
+        }
+        
+        public void SwitchToHangarCameraTab() {
+            communicationsPanel.SetActive(false);
+            cannonsPanel.SetActive(false);
+            cameraPanel.SetActive(true);
+        }
+        
+        public void AddNewCommunication(SpaceshipBehaviour spaceshipBehaviour) {
+            var spaceshipButton = Instantiate(spaceshipButtonPrefab, spaceshipsListContainer, false);
+            
+            spaceshipButton.GetComponent<UIcommunication>().associatedSpaceshipBehaviour = spaceshipBehaviour;
+            spaceshipButton.GetComponentInChildren<TextMeshProUGUI>().text = spaceshipBehaviour.spaceshipName;
+            spaceshipButton.GetComponent<Image>().color = spaceshipBehaviour.spaceshipUIcolor;
+            
+            foreach (var hangar in ObjectsReference.Instance.spaceTrafficControlManager.hangarAvailabilityByHangarNumber) {
+                if (hangar.Value) { // hangar available
+                    hangarButtonsByHangarNumber[hangar.Key].interactable = true;
+                    hangarButtonsByHangarNumber[hangar.Key].GetComponent<Image>().color = hangarAvailableColor;
+                }
+
+                else {
+                    hangarButtonsByHangarNumber[hangar.Key].interactable = false;
+                    hangarButtonsByHangarNumber[hangar.Key].GetComponent<Image>().color = hangarUnavailableColor;
+                }
+            }
+        }
+        
+        public void ShowCommunicationMessage(SpaceshipBehaviour spaceshipBehaviour, Button selectedButton) {
+            selectedSpaceship = spaceshipBehaviour;
+            this.selectedButton = selectedButton;
+
+            answersListCanvasGroup.alpha = 1;
+            answersListCanvasGroup.interactable = true;
+            answersListCanvasGroup.blocksRaycasts = true;
+
+            if (spaceshipMessage != null) spaceshipMessage.SetActive(false);
+            spaceshipMessage = spaceshipMessagesByCharacterType[spaceshipBehaviour.characterType][spaceshipBehaviour.communicationMessagePrefabIndex]; 
+            
+            spaceshipMessage.SetActive(true);
+            messagePlaceholder.SetActive(false);
+        }
+        
+        public void CloseCommunications() {
+            DestroyImmediate(selectedButton.gameObject);
+            
+            answersListCanvasGroup.alpha = 0;
+            answersListCanvasGroup.interactable = false;
+            answersListCanvasGroup.blocksRaycasts = false;
+            
+            spaceshipMessage.SetActive(false);
+            messagePlaceholder.SetActive(true);
+        }
+
+        public void AssignToHangar(int hangarNumber) {
+            ObjectsReference.Instance.spaceTrafficControlManager.AssignSpaceshipToHangar(selectedSpaceship, hangarNumber);
+            CloseCommunications();
+        }
     }
     
-    public class UISpaceTrafficControlPanel : MonoBehaviour {
-        private Color activationColor;
-
-        [SerializeField] private GenericDictionary<SpaceTrafficControlTab, Image> tabImagesBySpaceTrafficControlTab;
-        [SerializeField] private GenericDictionary<SpaceTrafficControlTab, TextMeshProUGUI> tabTextBySpaceTrafficControlTab;
-        [SerializeField] private GenericDictionary<SpaceTrafficControlTab, Transform> panelsBySpaceTrafficControlTab;
-        
-        private void Start() {
-            activationColor = ObjectsReference.Instance.uiManager.activationColor;
-        }
-
-        public void SwitchToTab(SpaceTrafficControlTab spaceTrafficControlTab) {
-            foreach (var panels in panelsBySpaceTrafficControlTab) {
-                tabImagesBySpaceTrafficControlTab[panels.Key].color = activationColor;
-                tabTextBySpaceTrafficControlTab[panels.Key].color = Color.black;
-                panelsBySpaceTrafficControlTab[panels.Key].gameObject.SetActive(false);
-            }
-            
-            tabImagesBySpaceTrafficControlTab[spaceTrafficControlTab].color = Color.black;
-            tabTextBySpaceTrafficControlTab[spaceTrafficControlTab].color = activationColor;
-            panelsBySpaceTrafficControlTab[spaceTrafficControlTab].gameObject.SetActive(true);
-        }
-    }
 }

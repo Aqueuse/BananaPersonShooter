@@ -13,7 +13,7 @@ namespace InGame.Items.ItemsBehaviours.BuildablesBehaviours {
                 buildableRotation = JsonHelper.FromQuaternionToString(transform.rotation)
             };
 
-            ObjectsReference.Instance.gameData.worldData.AddBuildableToBuildableDictionnary(buildableType, JsonConvert.SerializeObject(basicData));
+            ObjectsReference.Instance.gameSave.buildablesSave.AddBuildableToBuildableDictionnary(buildableType, JsonConvert.SerializeObject(basicData));
         }
 
         public override void LoadSavedData(string stringifiedJson) {

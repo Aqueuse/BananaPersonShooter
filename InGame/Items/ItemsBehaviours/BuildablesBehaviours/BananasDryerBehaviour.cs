@@ -36,7 +36,7 @@ namespace InGame.Items.ItemsBehaviours.BuildablesBehaviours {
                 buildableRotation = JsonHelper.FromQuaternionToString(transform.rotation)
             };
 
-            ObjectsReference.Instance.gameData.worldData.AddBuildableToBuildableDictionnary(BuildableType.BANANA_DRYER, JsonConvert.SerializeObject(bananasDryerData));
+            ObjectsReference.Instance.gameSave.buildablesSave.AddBuildableToBuildableDictionnary(BuildableType.BANANA_DRYER, JsonConvert.SerializeObject(bananasDryerData));
         }
 
         public override void LoadSavedData(string stringifiedJson) {

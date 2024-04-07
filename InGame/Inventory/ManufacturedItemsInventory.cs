@@ -6,7 +6,6 @@ namespace InGame.Inventory {
         
         private void Start() {
             manufacturedItemsInventory = ObjectsReference.Instance.bananaMan.inventories.manufacturedItemsInventory;
-            ObjectsReference.Instance.uiBananasInventory.inventoryScriptableObject = ObjectsReference.Instance.bananaMan.inventories;
         }
         
         public void AddQuantity(ManufacturedItemsType manufacturedItemsType, int quantity) {

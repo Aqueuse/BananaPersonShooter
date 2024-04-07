@@ -65,8 +65,8 @@ namespace UI.Save {
         public void Save () {
             var date = DateTime.ParseExact(DateTime.Now.ToString("U"), "U", CultureInfo.CurrentCulture).ToString(CultureInfo.CurrentCulture);
             
-            if (ObjectsReference.Instance.loadData.SaveExists(saveUuid)) {
-                var savedData = ObjectsReference.Instance.loadData.GetSavedByUuid(saveUuid);
+            if (ObjectsReference.Instance.gameSave.SaveExists(saveUuid)) {
+                var savedData = ObjectsReference.Instance.gameSave.GetSavedByUuid(saveUuid);
             
                 saveName.text = savedData.saveName;
                 saveDate.text = date;
@@ -87,13 +87,13 @@ namespace UI.Save {
 
         public void ValidateRename() {
             saveName.text = renameInputFieldGameObjectCanvasGroup.GetComponentInChildren<TMP_InputField>().text;
-            ObjectsReference.Instance.saveData.SaveName(saveUuid, saveName.text);
+            ObjectsReference.Instance.gameSave.dataSave.SetSaveName(saveUuid, saveName.text);
             
             SetActive(renameButtonGameObjectCanvasGroup, false);
         }
         
         public void UpdateThumbail() {
-            var savePath = ObjectsReference.Instance.loadData.GetSavePathByUuid(saveUuid);
+            var savePath = ObjectsReference.Instance.gameSave.GetSavePathByUuid(saveUuid);
             var screenshotFilePath = Path.Combine(savePath, "screenshot.png");
             
             var bytes = File.ReadAllBytes(screenshotFilePath);
@@ -119,7 +119,7 @@ namespace UI.Save {
         public void Delete() {
             ObjectsReference.Instance.audioManager.PlayEffect(SoundEffectType.BUTTON_INTERACTION, 0);
             Destroy(saveRootGameObject);
-            ObjectsReference.Instance.saveData.DeleteSave(saveUuid);
+            ObjectsReference.Instance.gameSave.DeleteSave(saveUuid);
         }
 
         private void SetActive(CanvasGroup canvasGroup, bool isActive) {

@@ -1,0 +1,13 @@
+using System.Collections.Generic;
+using UI.InGame.CommandRoomControlPanels;
+using UnityEngine;
+
+namespace InGame.MiniGames.MarketingCampaignMiniGame {
+    public class AdMarketingCampaignManager : MonoBehaviour {
+        public AdCampaign currentAdCampaign;
+        
+        private bool isAdCampaignAvailable;
+
+        [SerializeField] private UIMarketingPanel uiMarketingPanel;
+    }
+}

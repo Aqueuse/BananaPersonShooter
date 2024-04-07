@@ -5,15 +5,14 @@ namespace Save.Templates {
         public float health = 100;
         public float resistance = 100;
         
-        public float xWorldPosition = -1022.773f;
-        public float yWorldPosition = 0.809f;
-        public float zworldPosition = -2651.568f;
+        public float xWorldPosition;
+        public float yWorldPosition;
+        public float zworldPosition;
 
         public float xWorldRotation = 0;
-        public float yWorldRotation = -0.495293289f;
+        public float yWorldRotation = 0;
         public float zWorldRotation = 0;
         
-        public RegionType lastMap = RegionType.COROLLE;
         public BananaType activeBanana = BananaType.EMPTY;
         public int bitKongQuantity;
         
@@ -27,7 +26,6 @@ namespace Save.Templates {
             {BananaType.GOLD_FINGER.ToString(), 0},
             {BananaType.GROS_MICHEL.ToString(), 0},
             {BananaType.LADY_FINGER.ToString(), 0},
-            {BananaType.MANZANO.ToString(), 0},
             {BananaType.MATOKE.ToString(), 0},
             {BananaType.MUSA_VELUTINA.ToString(), 0},
             {BananaType.NANJANGUD.ToString(), 0},

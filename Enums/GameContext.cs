@@ -6,5 +6,8 @@ public enum GameContext {
     IN_GESTION_VIEW,
     IN_INVENTORY,
     IN_GAME_MENU,
-    DEAD
+    DEAD,
+    IN_MAP,
+    IN_BANANA_SELECTOR,
+    IN_COMMAND_ROOM_PANEL
 }

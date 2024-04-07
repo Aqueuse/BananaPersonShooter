@@ -146,7 +146,7 @@ namespace InGame.Items.ItemsBehaviours.BuildablesBehaviours {
                 bananaType = plateformType
             };
 
-            ObjectsReference.Instance.gameData.worldData.AddBuildableToBuildableDictionnary(BuildableType.PLATEFORM, JsonConvert.SerializeObject(plateformData));
+            ObjectsReference.Instance.gameSave.buildablesSave.AddBuildableToBuildableDictionnary(BuildableType.PLATEFORM, JsonConvert.SerializeObject(plateformData));
         }
 
         public override void LoadSavedData(string stringifiedJson) {

@@ -1,5 +1,5 @@
-﻿using Cinemachine;
-using InGame.Items.ItemsData;
+﻿using System.Collections.Generic;
+using Cinemachine;
 using UnityEngine;
 
 namespace InGame {
@@ -8,13 +8,14 @@ namespace InGame {
         [SerializeField] private CinemachineFreeLook playerCamera;
 
         public GameObject loadingScreen;
+        
         [SerializeField] private GameObject startAnimations;
-
+        [SerializeField] private List<GameObject> inGameGameObjects;
+        
         public bool isGamePlaying;
 
         public GameContext gameContext;
-
-
+        
         public GenericDictionary<SpawnPoint, Transform> spawnPointsBySpawnType;
         
         private Vector3 _bananaManRotation;
@@ -50,13 +51,6 @@ namespace InGame {
 
             // prevent banana man to fall while loading scene
             ObjectsReference.Instance.playerController.StopPlayer();
-
-            if (gameManager.gameContext != GameContext.IN_HOME) {
-                World.Instance.SaveAspirablesOnWorld();
-                World.Instance.SaveMapMonkeysData();
-            }
-
-            ObjectsReference.Instance.gameData.worldData = ObjectsReference.Instance.gameData.worldData;
             
             if (isNewGame) {
                 ObjectsReference.Instance.bananaMan.tutorialFinished = false;
@@ -64,10 +58,14 @@ namespace InGame {
             }
 
             else {
-                ObjectsReference.Instance.gameLoad.LoadGameData(saveUuid);
+                ObjectsReference.Instance.gameSave.LoadSave(saveUuid);
 
                 ObjectsReference.Instance.bananaMan.tutorialFinished = true;
                 SwitchToInGameSettings();
+            }
+            
+            foreach (var inGameGameObject in inGameGameObjects) {
+                inGameGameObject.SetActive(true);
             }
         }
 
@@ -75,8 +73,8 @@ namespace InGame {
             ObjectsReference.Instance.cameraPlayer.Set0Sensibility();
             ObjectsReference.Instance.playerController.canMove = false;
 
-            if (gameContext == GameContext.IN_GAME && World.Instance.monkeysInMap != null) {
-                foreach (var monkey in World.Instance.monkeysInMap) {
+            if (gameContext == GameContext.IN_GAME) {
+                foreach (var monkey in ObjectsReference.Instance.worldData.monkeys) {
                     monkey.PauseMonkey();
                 }
             }
@@ -89,8 +87,8 @@ namespace InGame {
             ObjectsReference.Instance.cameraPlayer.SetNormalSensibility();
             ObjectsReference.Instance.playerController.canMove = true;
 
-            if (gameContext == GameContext.IN_GAME_MENU && World.Instance.monkeysInMap != null) {
-                foreach (var monkey in World.Instance.monkeysInMap) {
+            if (gameContext == GameContext.IN_GAME_MENU) {
+                foreach (var monkey in ObjectsReference.Instance.worldData.monkeys) {
                     monkey.UnpauseMonkey();
                 }
             }
@@ -109,10 +107,6 @@ namespace InGame {
             // prevent banana man to fall while loading scene
             ObjectsReference.Instance.playerController.StopPlayer();
             
-            // TODO : remove world player objects
-            // TODO : activate banana man in hamac
-            // TODO : activate gorilla in corolle
-
             SwitchToHomeSettings();
 
             gameManager.loadingScreen.SetActive(false);
@@ -120,7 +114,11 @@ namespace InGame {
 
         private void SwitchToHomeSettings() {
             startAnimations.SetActive(true);
-
+            
+            foreach (var inGameGameObject in inGameGameObjects) {
+                inGameGameObject.SetActive(false);
+            }
+            
             Cursor.visible = true;
             Cursor.lockState = CursorLockMode.None;
 
@@ -140,7 +138,7 @@ namespace InGame {
             ObjectsReference.Instance.playerController.canMove = false;
             ObjectsReference.Instance.bananaMan.SetBananaSkinHealth();
 
-            ObjectsReference.Instance.gameData.currentSaveUuid = null;
+            ObjectsReference.Instance.gameSave.currentSaveUuid = null;
 
             ObjectsReference.Instance.bananaMan.transform.position = spawnPointsBySpawnType[SpawnPoint.HOME].position;
 
@@ -152,6 +150,10 @@ namespace InGame {
 
         private void SwitchToNewGameSettings() {
             startAnimations.SetActive(false);
+            
+            foreach (var inGameGameObject in inGameGameObjects) {
+                inGameGameObject.SetActive(true);
+            }
 
             ObjectsReference.Instance.gameSave.CancelAutoSave();
 
@@ -162,26 +164,25 @@ namespace InGame {
 
             _bananaManTransform.rotation = Quaternion.Euler(_bananaManRotation);
             
-            World.Instance.SpawnInitialBuidablesAndDebrisOnWorld();
+            ObjectsReference.Instance.gameSave.buildablesSave.SpawnInitialBuildables();
+            ObjectsReference.Instance.gameSave.debrisSave.SpawnInitialDebris();
 
             loadingScreen.SetActive(false);
-            
+            Init();
+
             ObjectsReference.Instance.tutorial.StartTutorial();
         }
         
         private void SwitchToInGameSettings() {
             startAnimations.SetActive(false);
-
-            _bananaManTransform.position = ObjectsReference.Instance.gameData.lastPositionOnMap;
-            _bananaManRotation = ObjectsReference.Instance.gameData.lastRotationOnMap;
-
-            _bananaManTransform.rotation = Quaternion.Euler(_bananaManRotation);
-            
-            World.Instance.RespawnBuildablesOnWorld();
-            World.Instance.RespawnDebrisOnWorld();
+            foreach (var inGameGameObject in inGameGameObjects) {
+                inGameGameObject.SetActive(true);
+            }
             
             ObjectsReference.Instance.uiManager.SetActive(UICanvasGroupType.HUD, true);
             ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.CROSSHAIRS].alpha = 1f;
+            ObjectsReference.Instance.uiCrosshairs.SetCrosshair(BananaType.EMPTY);
+
             ObjectsReference.Instance.uInventoriesManager.ShowCurrentUIHelper();
 
             ObjectsReference.Instance.inputManager.SwitchContext(InputContext.GAME);
@@ -195,9 +196,13 @@ namespace InGame {
 
             ObjectsReference.Instance.audioManager.SetMusiqueAndAmbianceByRegion(RegionType.COROLLE);
             
+            Init();
             loadingScreen.SetActive(false);
-            
-            ObjectsReference.Instance.spaceTrafficControlMiniGameManager.Init();
+        }
+
+        private void Init() {
+            ObjectsReference.Instance.commandRoomControlPanelsManager.Init();
+            ObjectsReference.Instance.commandRoomControlPanelsManager.assembler.Init();
         }
     }
 }

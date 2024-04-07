@@ -1,21 +1,24 @@
 using Audio;
 using Cameras;
 using InGame;
+using InGame.CommandRoomPanelControls;
 using InGame.Interactions;
 using InGame.Inventory;
 using InGame.Items.ItemsBehaviours;
-using InGame.Items.ItemsProperties;
-using InGame.MiniGames.SpaceTrafficControlMiniGame;
+using InGame.Items.ItemsData;
+using InGame.MiniGames.MarketingCampaignMiniGame;
+using InGame.MiniGames.SpaceTrafficControlMiniGame.Spaceships;
 using InGame.Monkeys;
 using InGame.Player;
 using InGame.Player.PlayerActions;
 using InGame.SpaceTrafficControl;
-using Input;
 using Save;
 using Settings;
 using UI;
 using UI.Bananapedia;
 using UI.InGame;
+using UI.InGame.BananaSelector;
+using UI.InGame.CommandRoomControlPanels;
 using UI.InGame.Gestion;
 using UI.InGame.Inventory;
 using UI.InGame.Merchimps;
@@ -32,9 +35,13 @@ public class ObjectsReference : MonoSingleton<ObjectsReference> {
     public AudioManager audioManager;
     public Interact interact;
 
+    public CommandRoomControlPanelsManager commandRoomControlPanelsManager;
     public ChimpManager chimpManager;
-    public SpaceTrafficControlMiniGameManager spaceTrafficControlMiniGameManager;
-    
+    public AdMarketingCampaignManager adMarketingCampaignManager;
+    public SpaceTrafficControlManager spaceTrafficControlManager;
+    public SpaceshipsSpawner spaceshipsSpawner;
+    public CannonsManagement cannonsManagement;
+
     public BananaMan bananaMan;
     public PlayerController playerController;
     public BananaGun bananaGun;
@@ -50,6 +57,8 @@ public class ObjectsReference : MonoSingleton<ObjectsReference> {
     public IngredientsInventory ingredientsInventory;
     public ManufacturedItemsInventory manufacturedItemsInventory;
     
+    public Map map;
+    
     public GhostsReference ghostsReference;
     
     public MainCamera mainCamera;
@@ -64,12 +73,9 @@ public class ObjectsReference : MonoSingleton<ObjectsReference> {
     public GameActions gameActions;
     public UiActions uiActions;
 
-    public GameData gameData;
+    public WorldData worldData;
     public GameSave gameSave;
-    public GameLoad gameLoad;
     public GameReset gameReset;
-    public LoadData loadData;
-    public SaveData saveData;
 
     public GameSettings gameSettings;
     
@@ -77,17 +83,17 @@ public class ObjectsReference : MonoSingleton<ObjectsReference> {
     
     public DescriptionsManager descriptionsManager;
     public GestionBuild gestionBuild;
-    public SpaceTrafficControlManager spaceTrafficControlManager;
 
     public UIManager uiManager;
     public UInventoriesManager uInventoriesManager;
     public UIHud uiHud;
 
-    public UIBananasInventory uiBananasInventory;
     public UIRawMaterialsInventory uiRawMaterialsInventory;
     public UIIngredientsInventory uiIngredientsInventory;
     public UIBlueprintsInventory uiBlueprintsInventory;
     public UIManufacturedItemsInventory uiManufacturedItemsItemsInventory;
+
+    public UIBananaSelector uiBananaSelector;
     
     public UICrosshairs uiCrosshairs;
     public UIFace uiFace;
@@ -99,8 +105,10 @@ public class ObjectsReference : MonoSingleton<ObjectsReference> {
     public UICredits uiCredits;
     public UISave uiSave;
     public UISettings uiSettings;
-    
-    public UIVisitorReception uiVisitorReception;
+
+    public UIMarketingPanel uiMarketingPanel;
+    public UISpaceTrafficControlPanel uiSpaceTrafficControlPanel;
+    public UIVisitorReception uiTouristReception;
     public UIMerchant uiMerchant;
     
     public UITools uiTools;

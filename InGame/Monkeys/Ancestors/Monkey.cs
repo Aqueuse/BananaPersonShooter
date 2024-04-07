@@ -8,33 +8,26 @@ namespace InGame.Monkeys.Ancestors {
     public class Monkey : MonoBehaviour {
         public MonkeyPropertiesScriptableObject monkeyPropertiesScriptableObject;
         public string monkeyId;
-        public int sasietyTimer;
-        
+        public float sasietyTimer;
+
         public MonkeySounds monkeySounds;
         [SerializeField] private NavMeshAgent _navMeshAgent;
         [SerializeField] private Animator _animator;
-        
+
         private bool _isNearPlayer;
 
         public bool smelledBananasOnBananaMan;
-        
-        private float bananaValue;
-        
-        private static readonly int Grab = Animator.StringToHash("GRAB");
-        
-        private void Start() {
-            monkeyId = monkeyPropertiesScriptableObject.monkeyId;
-            
-            if (ObjectsReference.Instance.gameData.worldData.monkeysSasietyTimerByMonkeyId.ContainsKey(monkeyId))
-                sasietyTimer = ObjectsReference.Instance.gameData.worldData.monkeysSasietyTimerByMonkeyId[monkeyId];
-            else {
-                sasietyTimer = 0;
-            }
 
-            if (ObjectsReference.Instance.gameData.worldData.monkeysPositionByMonkeyId.ContainsKey(monkeyId)) {
-                if (NavMesh.SamplePosition(ObjectsReference.Instance.gameData.worldData.monkeysPositionByMonkeyId[monkeyId], out var navMeshHit, 2f, 0)) {
-                    _navMeshAgent.Warp(navMeshHit.position);
-                }
+        private float bananaValue;
+
+        private static readonly int Grab = Animator.StringToHash("GRAB");
+
+        private void OnEnable() {
+            monkeyId = monkeyPropertiesScriptableObject.monkeyId;
+            sasietyTimer = monkeyPropertiesScriptableObject.sasietyTimer;
+            
+            if (NavMesh.SamplePosition(monkeyPropertiesScriptableObject.lastPosition, out var navMeshHit, 2f, 0)) {
+                _navMeshAgent.Warp(navMeshHit.position);
             }
             
             transform.localScale = new Vector3(1, 1, 1);
@@ -46,7 +39,7 @@ namespace InGame.Monkeys.Ancestors {
             smelledBananasOnBananaMan = true;
             ObjectsReference.Instance.uiQueuedMessages.AddMessage("the monkey smelled bananas !");
         }
-        
+
         private void Feed(float addedBananaValue) {
             bananaValue = addedBananaValue;
             _navMeshAgent.speed = 0;
@@ -64,7 +57,7 @@ namespace InGame.Monkeys.Ancestors {
                     ObjectsReference.Instance.uiQueuedMessages.AddMessage("Monkey had enough bananas");
                 }
             }
-            
+
             _navMeshAgent.speed = 3.5f;
         }
 
@@ -76,7 +69,7 @@ namespace InGame.Monkeys.Ancestors {
                 SearchForBananaManBananas();
             }
         }
-        
+
         public void PauseMonkey() {
             _navMeshAgent.speed = 0;
             _animator.speed = 0;

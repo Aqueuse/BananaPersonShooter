@@ -1,4 +1,4 @@
-using InGame.MiniGames.VisitorReceptionMiniGame;
+using InGame.MiniGames.TouristsReceptionMiniGame;
 using UnityEngine;
 
 namespace UI.InGame.VisitorReceptionMiniGameUI {
@@ -11,25 +11,25 @@ namespace UI.InGame.VisitorReceptionMiniGameUI {
         public void RefreshUIWaintingList() {
             var visitorsButtonList = ScrollListContent.GetComponentsInChildren<UIVisitorReceptionButton>();
 
-            noVisitorInWaitingLineGameObject.SetActive(VisitorReception.Instance.visitorsInWaitingLine.Count == 0);
+            noVisitorInWaitingLineGameObject.SetActive(TouristsReception.Instance.touristsInWaitingLine.Count == 0);
             
             foreach (var uiVisitorReceptionButton in visitorsButtonList) {
                 Destroy(uiVisitorReceptionButton.gameObject);
             }
 
-            foreach (var visitorInWaitingList in VisitorReception.Instance.visitorsInWaitingLine) {
+            foreach (var visitorInWaitingList in TouristsReception.Instance.touristsInWaitingLine) {
                 var visitorButton = Instantiate(visitorReceptionButton, ScrollListContent);
                 visitorButton.GetComponent<UIVisitorReceptionButton>().visitorGameObject = visitorInWaitingList;
             }
         }
         
         public void AcceptVisitor(GameObject visitorGameObject) {
-            VisitorReception.Instance.AcceptVisitorInStation(visitorGameObject);
+            TouristsReception.Instance.AcceptTouristInStation(visitorGameObject);
             RefreshUIWaintingList();
         }
 
         public void RefuseVisitor(GameObject visitorGameObject) {
-            VisitorReception.Instance.RemoveVisitor(visitorGameObject);
+            TouristsReception.Instance.RemoveVisitor(visitorGameObject);
             RefreshUIWaintingList();
         }
     }

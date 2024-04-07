@@ -15,7 +15,7 @@ namespace UI.Save {
         
         public void CreateNewSave() {
             var saveUuid = DateTime.Now.ToString("yyyyMMddHHmmss");
-            ObjectsReference.Instance.gameData.currentSaveUuid = saveUuid;
+            ObjectsReference.Instance.gameSave.currentSaveUuid = saveUuid;
 
             var save = Instantiate(savePrefab, transform);
             save.GetComponent<UISaveSlot>().saveUuid = saveUuid;
@@ -25,7 +25,7 @@ namespace UI.Save {
         
         public void AppendSaveSlot(string saveUuid) {
             var save = Instantiate(savePrefab, transform);
-            var savedData = ObjectsReference.Instance.loadData.GetSavedByUuid(saveUuid);
+            var savedData = ObjectsReference.Instance.gameSave.GetSavedByUuid(saveUuid);
 
             save.GetComponent<UISaveSlot>().saveUuid = saveUuid;
             save.GetComponent<UISaveSlot>().saveDate.text = savedData.lastSavedDate;

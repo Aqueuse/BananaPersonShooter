@@ -18,8 +18,8 @@ namespace InGame.Interactions {
 
             if (Physics.Raycast(transform.position, transform.forward, out var raycastHit, 10, itemsLayerMask)) {
                 if (raycastHit.transform.gameObject.TryGetComponent(out Grabbable grabbable)) {
-                    if (grabbedObject != null) grabbedObject.GetComponentInChildren<UInteraction>().Desactivate(); // magic ( ͡• ͜ʖ ͡• )
-                     grabbedObject = raycastHit.transform.gameObject;
+                    if (grabbedObject != null) grabbable.GetComponentInChildren<UInteraction>().Desactivate(); // magic ( ͡• ͜ʖ ͡• )
+                     grabbedObject = grabbable.transform.gameObject;
                      grabbedObject.GetComponentInChildren<UInteraction>().Activate();
                 }
             }

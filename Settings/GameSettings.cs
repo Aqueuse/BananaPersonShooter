@@ -50,7 +50,7 @@ namespace Settings {
         }
         
         public void LoadSettings() {
-            prefs = new JsonPlayerPrefs(ObjectsReference.Instance.saveData.gamePath + "/preferences.json");
+            prefs = new JsonPlayerPrefs(ObjectsReference.Instance.gameSave.gamePath + "/preferences.json");
             
             ObjectsReference.Instance.audioManager.musicLevel = prefs.GetFloat("musicLevel", 0.5f);
             ObjectsReference.Instance.audioManager.voicesLevel = prefs.GetFloat("voicesLevel", 0.5f);

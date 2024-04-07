@@ -16,7 +16,8 @@ MonoBehaviour:
   itemCategory: 4
   bananaType: 0
   rawMaterialType: 3
-  ingredientsType: 1
+  ingredientsType: 2
+  manufacturedItemsType: 1
   buildableType: 5
   itemName:
   - fabric

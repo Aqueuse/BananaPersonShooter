@@ -1,109 +1,90 @@
-using InGame.Items.ItemsProperties.Bananas;
-using UI.InGame.Inventory;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-namespace Input {
-    public class InventoryActions : InputActions {
-        [SerializeField] private InputActionReference selectBananaInputActionReference;
+public class InventoryActions : InputActions {
+    [SerializeField] private InputActionReference switchToManufacturedItemsInventoryInputActionReference;
+    [SerializeField] private InputActionReference switchToRawMaterialInventoryInputActionReference;
+    [SerializeField] private InputActionReference switchToIngredientsInventoryInputActionReference;
         
-        [SerializeField] private InputActionReference switchToBananaInventoryInputActionReference;
-        [SerializeField] private InputActionReference switchToRawMaterialInventoryInputActionReference;
-        [SerializeField] private InputActionReference switchToIngredientsInventoryInputActionReference;
+    [SerializeField] private InputActionReference switchToLeftInventoryInputActionReference;
+    [SerializeField] private InputActionReference switchToRightInventoryInputActionReference;
+
+    [SerializeField] private InputActionReference switchBackToGameInputActionReference;
         
-        [SerializeField] private InputActionReference switchToLeftInventoryInputActionReference;
-        [SerializeField] private InputActionReference switchToRightInventoryInputActionReference;
+    private void OnEnable() {
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
 
-        [SerializeField] private InputActionReference switchBackToGameInputActionReference;
+        ObjectsReference.Instance.uiActions.enabled = true;
+
+        ObjectsReference.Instance.cameraPlayer.Set0Sensibility();
+        ObjectsReference.Instance.playerController.canMove = false;
+        ObjectsReference.Instance.bananaMan.GetComponent<Rigidbody>().isKinematic = true;
+            
+        switchToManufacturedItemsInventoryInputActionReference.action.Enable();
+        switchToManufacturedItemsInventoryInputActionReference.action.performed += SwitchToManufacturedItemsInventory;
+            
+        switchToRawMaterialInventoryInputActionReference.action.Enable();
+        switchToRawMaterialInventoryInputActionReference.action.performed += SwitchToRawMaterialsInventory;
+            
+        switchToIngredientsInventoryInputActionReference.action.Enable();
+        switchToIngredientsInventoryInputActionReference.action.performed += SwitchToIngredientsInventory;
+            
+        switchToLeftInventoryInputActionReference.action.Enable();
+        switchToLeftInventoryInputActionReference.action.performed += SwitchToLeft;
+
+        switchToRightInventoryInputActionReference.action.Enable();
+        switchToRightInventoryInputActionReference.action.performed += SwitchToRight;
+            
+        switchBackToGameInputActionReference.action.Enable();
+        switchBackToGameInputActionReference.action.performed += SwitchBackToGame;
+    }
         
-        private void OnEnable() {
-            Cursor.visible = true;
-            Cursor.lockState = CursorLockMode.None;
-
-            ObjectsReference.Instance.uiActions.enabled = true;
-
-            ObjectsReference.Instance.cameraPlayer.Set0Sensibility();
-            ObjectsReference.Instance.playerController.canMove = false;
-            ObjectsReference.Instance.bananaMan.GetComponent<Rigidbody>().isKinematic = true;
-
-            selectBananaInputActionReference.action.Enable();
-            selectBananaInputActionReference.action.performed += SelectBanana;
-
-            switchToBananaInventoryInputActionReference.action.Enable();
-            switchToBananaInventoryInputActionReference.action.performed += SwitchToBananasInventory;
+    private void OnDisable() {
+        switchToManufacturedItemsInventoryInputActionReference.action.Disable();
+        switchToManufacturedItemsInventoryInputActionReference.action.performed -= SwitchToManufacturedItemsInventory;
             
-            switchToRawMaterialInventoryInputActionReference.action.Enable();
-            switchToRawMaterialInventoryInputActionReference.action.performed += SwitchToRawMaterialsInventory;
+        switchToRawMaterialInventoryInputActionReference.action.Disable();
+        switchToRawMaterialInventoryInputActionReference.action.performed -= SwitchToRawMaterialsInventory;
             
-            switchToIngredientsInventoryInputActionReference.action.Enable();
-            switchToIngredientsInventoryInputActionReference.action.performed += SwitchToIngredientsInventory;
+        switchToIngredientsInventoryInputActionReference.action.Disable();
+        switchToIngredientsInventoryInputActionReference.action.performed -= SwitchToIngredientsInventory;
             
-            switchToLeftInventoryInputActionReference.action.Enable();
-            switchToLeftInventoryInputActionReference.action.performed += SwitchToLeft;
+        switchToLeftInventoryInputActionReference.action.Disable();
+        switchToLeftInventoryInputActionReference.action.performed -= SwitchToLeft;
 
-            switchToRightInventoryInputActionReference.action.Enable();
-            switchToRightInventoryInputActionReference.action.performed += SwitchToRight;
+        switchToRightInventoryInputActionReference.action.Disable();
+        switchToRightInventoryInputActionReference.action.performed -= SwitchToRight;
             
-            switchBackToGameInputActionReference.action.Enable();
-            switchBackToGameInputActionReference.action.performed += SwitchBackToGame;
-        }
+        switchBackToGameInputActionReference.action.Disable();
+        switchBackToGameInputActionReference.action.performed -= SwitchBackToGame;
+    }
         
-        private void OnDisable() {
-            selectBananaInputActionReference.action.Disable();
-            selectBananaInputActionReference.action.performed -= SelectBanana;
-            
-            switchToBananaInventoryInputActionReference.action.Disable();
-            switchToBananaInventoryInputActionReference.action.performed -= SwitchToBananasInventory;
-            
-            switchToRawMaterialInventoryInputActionReference.action.Disable();
-            switchToRawMaterialInventoryInputActionReference.action.performed -= SwitchToRawMaterialsInventory;
-            
-            switchToIngredientsInventoryInputActionReference.action.Disable();
-            switchToIngredientsInventoryInputActionReference.action.performed -= SwitchToIngredientsInventory;
-            
-            switchToLeftInventoryInputActionReference.action.Disable();
-            switchToLeftInventoryInputActionReference.action.performed -= SwitchToLeft;
-
-            switchToRightInventoryInputActionReference.action.Disable();
-            switchToRightInventoryInputActionReference.action.performed -= SwitchToRight;
-            
-            switchBackToGameInputActionReference.action.Disable();
-            switchBackToGameInputActionReference.action.performed -= SwitchBackToGame;
-        }
-
-        private void SelectBanana(InputAction.CallbackContext callbackContext) {
-            var lastSelectedBananaItemScriptableObject = ObjectsReference.Instance.uInventoriesManager.lastSelectedItemByInventoryCategory[ItemCategory.BANANA].GetComponent<UInventorySlot>().itemScriptableObject;
-
-            if (lastSelectedBananaItemScriptableObject.bananaType != BananaType.EMPTY) { ObjectsReference.Instance.bananaMan.activeItem = (BananasPropertiesScriptableObject)lastSelectedBananaItemScriptableObject;
-            }
-        }
+    private void SwitchToManufacturedItemsInventory(InputAction.CallbackContext callbackContext) {
+        ObjectsReference.Instance.uInventoriesManager.Switch_To_Tab(ItemCategory.MANUFACTURED_ITEM);
+    }
         
-        private void SwitchToBananasInventory(InputAction.CallbackContext callbackContext) {
-            ObjectsReference.Instance.uInventoriesManager.Switch_To_Tab(ItemCategory.BANANA);
-        }
+    private void SwitchToRawMaterialsInventory(InputAction.CallbackContext callbackContext) {
+        ObjectsReference.Instance.uInventoriesManager.Switch_To_Tab(ItemCategory.RAW_MATERIAL);
+    }
+
+    private void SwitchToIngredientsInventory(InputAction.CallbackContext callbackContext) {
+        ObjectsReference.Instance.uInventoriesManager.Switch_To_Tab(ItemCategory.INGREDIENT);
+    }
         
-        private void SwitchToRawMaterialsInventory(InputAction.CallbackContext callbackContext) {
-            ObjectsReference.Instance.uInventoriesManager.Switch_To_Tab(ItemCategory.RAW_MATERIAL);
-        }
+    private static void SwitchToLeft(InputAction.CallbackContext callbackContext) {
+        ObjectsReference.Instance.uInventoriesManager.Switch_To_Left_Tab();
+    }
 
-        private void SwitchToIngredientsInventory(InputAction.CallbackContext callbackContext) {
-            ObjectsReference.Instance.uInventoriesManager.Switch_To_Tab(ItemCategory.INGREDIENT);
-        }
-        
-        private static void SwitchToLeft(InputAction.CallbackContext callbackContext) {
-            ObjectsReference.Instance.uInventoriesManager.Switch_To_Left_Tab();
-        }
+    private static void SwitchToRight(InputAction.CallbackContext callbackContext) {
+        ObjectsReference.Instance.uInventoriesManager.Switch_To_Right_Tab();
+    }
 
-        private static void SwitchToRight(InputAction.CallbackContext callbackContext) {
-            ObjectsReference.Instance.uInventoriesManager.Switch_To_Right_Tab();
-        }
-
-        private void SwitchBackToGame(InputAction.CallbackContext context) {
-                ObjectsReference.Instance.uiManager.SetActive(UICanvasGroupType.INVENTORIES, false);
-                ObjectsReference.Instance.descriptionsManager.HideAllPanels();
+    private void SwitchBackToGame(InputAction.CallbackContext context) {
+        ObjectsReference.Instance.uiManager.SetActive(UICanvasGroupType.INVENTORIES, false);
+        ObjectsReference.Instance.descriptionsManager.HideAllPanels();
                 
-                ObjectsReference.Instance.inputManager.SwitchContext(InputContext.GAME);
-                ObjectsReference.Instance.gameManager.gameContext = GameContext.IN_GAME;
-        }
+        ObjectsReference.Instance.inputManager.SwitchContext(InputContext.GAME);
+        ObjectsReference.Instance.gameManager.gameContext = GameContext.IN_GAME;
     }
 }

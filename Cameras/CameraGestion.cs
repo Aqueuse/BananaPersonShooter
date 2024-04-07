@@ -1,4 +1,3 @@
-using InGame.Items.ItemsData;
 using UnityEngine;
 
 namespace Cameras {
@@ -19,15 +18,10 @@ namespace Cameras {
         private void OnEnable() {
             _transform = transform;
             ResetPosition();
-            
-            cameraBounds = World.Instance.cameraBounds;
         }
 
         private void Update() {
             _transform.Translate(cameraMovement, _transform);
-
-            if (!cameraBounds.bounds.Contains(cameraGestionYaxisTransform.position)) 
-                _transform.Translate(-cameraMovement, _transform);
         }
 
         public void Rotate(Vector2 rotation) {

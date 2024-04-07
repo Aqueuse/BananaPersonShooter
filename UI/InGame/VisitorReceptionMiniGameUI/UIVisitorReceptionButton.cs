@@ -19,11 +19,11 @@ namespace UI.InGame.VisitorReceptionMiniGameUI {
         }
         
         public void RefuseVisitor() {
-            ObjectsReference.Instance.uiVisitorReception.RefuseVisitor(visitorGameObject);
+            ObjectsReference.Instance.uiTouristReception.RefuseVisitor(visitorGameObject);
         }
 
         public void AcceptVisitor() {
-            ObjectsReference.Instance.uiVisitorReception.AcceptVisitor(visitorGameObject);
+            ObjectsReference.Instance.uiTouristReception.AcceptVisitor(visitorGameObject);
         }
     }
 }

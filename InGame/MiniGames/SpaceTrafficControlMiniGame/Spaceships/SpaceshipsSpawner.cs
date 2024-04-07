@@ -1,73 +1,115 @@
-using Save.Templates;
-using UI.InGame.SpaceTrafficControlMiniGame;
+using System.Collections.Generic;
+using InGame.Items.ItemsBehaviours.SpaceshipsBehaviours;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
 namespace InGame.MiniGames.SpaceTrafficControlMiniGame.Spaceships {
     public class SpaceshipsSpawner : MonoBehaviour {
-        public RectTransform[] gatesTransform;
-
-        [HideInInspector] public RectTransform entryTransform;
-        [HideInInspector] public RectTransform exitTransform;
-        
-        [SerializeField] private float spaceshipPropulsionSpeed = 0.4f;
-
-        [SerializeField] private GameObject distantDotPrefab;
-        
-        [SerializeField] private GameObject pirateSpaceshipPrefab;
-        [SerializeField] private GameObject visitorSpaceshipPrefab;
-        [SerializeField] private GameObject merchantSpaceshipPrefab;
-
         [SerializeField] private Transform spaceshipsContainer;
 
+        public float spaceshipPropulsionSpeed = 100f;
+        private Vector3 spaceshipPosition;
+
+        private System.Random systemRandom;
+        private List<CharacterType> spaceships;
+
+        private Queue<CharacterType> spacechipsQueue;
+        
         private GameObject _spaceshipInstance;
-        
-        public void ShowDistantDot(string spaceshipName) {
-            // add a distant dot with the spaceship name and distance on the border of the canvas
-            var distantDotInstance = Instantiate(original: distantDotPrefab, position: GetRandomizeEntryPoint(), 
-                rotation: Quaternion.identity, parent: spaceshipsContainer);
+        private SpaceshipBehaviour spaceshipBehaviourInstance;
 
-            distantDotInstance.GetComponent<UIDistantDot>().NameSpaceship(spaceshipName);
+        private Vector3 spaceshipSpawnerPosition;
+
+        private void Start() {
+            systemRandom = new System.Random();
+            spaceships = new List<CharacterType>();
+            spacechipsQueue = new Queue<CharacterType>();
         }
         
-        private Vector3 GetRandomizeEntryPoint() {
-            var entryRandomTransform = gatesTransform[Random.Range(0, 4)].localPosition;
-            entryRandomTransform.y = Random.Range(-50, 50);
-            entryTransform.localPosition = entryRandomTransform;
-            return entryTransform.position;
+        public void spawnSpaceshipsWithAdCampaign() {
+            ObjectsReference.Instance.uiMarketingPanel.SwitchToCurrentCampaign();
+            ObjectsReference.Instance.commandRoomControlPanelsManager.UnfocusPanel();
+            var adCampaign = ObjectsReference.Instance.adMarketingCampaignManager.currentAdCampaign;
+            
+            spaceships = ShuffleSpaceships(adCampaign.piratesNumber, adCampaign.touristsNumber, adCampaign.merchimpsNumber);
+            
+            foreach (var spaceship in spaceships) {
+                spacechipsQueue.Enqueue(spaceship);
+            }
+            
+            InvokeRepeating(nameof(SpawnSpaceshipInSpace), 2, 2);
         }
-    
-        private Vector3 GetRandomizeExitPoint() {
-            var exitRandomTransform = exitTransform.localPosition;
-            exitRandomTransform.y = Random.Range(-20, 20);
-            exitTransform.localPosition = exitRandomTransform;
-
-            return exitTransform.position;
-        }
-
-        public void Show2DSpaceship(SpaceshipSavedData spaceshipSavedData) {
-            switch (spaceshipSavedData.characterType) {
-                case CharacterType.PIRATE:
-                    _spaceshipInstance = Instantiate(original: pirateSpaceshipPrefab, position: GetRandomizeEntryPoint(), 
-                        rotation: Quaternion.identity, parent: spaceshipsContainer);
-                    break;
-                
-                case CharacterType.VISITOR:
-                    _spaceshipInstance = Instantiate(original: visitorSpaceshipPrefab, position: GetRandomizeEntryPoint(), 
-                        rotation: Quaternion.identity, parent: spaceshipsContainer);
-                    break;
-
-                case CharacterType.MERCHIMP:
-                    _spaceshipInstance = Instantiate(original: merchantSpaceshipPrefab, position: GetRandomizeEntryPoint(), 
-                        rotation: Quaternion.identity, parent: spaceshipsContainer);
-                    break;
+        
+        public void RemoveGuest() {
+            if (spaceships.Count == 0) {
+                ObjectsReference.Instance.uiMarketingPanel.SwitchToCampaignCreator();
             }
 
-            var spaceship2D = _spaceshipInstance.GetComponent<Spaceship2D>(); 
+            else {
+                spaceships.RemoveAt(0);
+            }
+        }
 
-            spaceship2D.spaceshipGuid = spaceshipSavedData.spaceshipGuid;
-            spaceship2D.NameSpaceship(spaceshipSavedData.spaceshipName);
-            spaceship2D.InitiatePropulsion(GetRandomizeExitPoint(), spaceshipPropulsionSpeed);
+        public void SpawnSpaceshipInSpace() {
+            spaceshipSpawnerPosition = transform.position;
+
+            var spaceshipType = spacechipsQueue.Dequeue();
+            
+            var spaceship = Instantiate(
+                ObjectsReference.Instance.meshReferenceScriptableObject.spaceshipByCharacterType[spaceshipType],
+                spaceshipSpawnerPosition,
+                Quaternion.identity,
+                spaceshipsContainer);
+            
+            spaceshipPosition = spaceship.transform.position;
+            
+            var randomPositionInCircle = Random.insideUnitCircle.normalized * 6000;
+            var randomEntryPoint = new Vector3(
+                spaceshipPosition.x + randomPositionInCircle.x, 
+                spaceshipPosition.y, 
+                spaceshipPosition.z +randomPositionInCircle.y
+            );
+
+            spaceship.transform.position = randomEntryPoint;
+            spaceship.transform.rotation = Quaternion.Euler((spaceshipSpawnerPosition - randomEntryPoint).normalized); 
+            
+            spaceshipBehaviourInstance = spaceship.GetComponent<SpaceshipBehaviour>();
+            spaceshipBehaviourInstance.characterType = spaceshipType;
+            
+            spaceshipBehaviourInstance.OpenCommunications();
+            
+            ObjectsReference.Instance.spaceTrafficControlManager.spaceshipBehavioursByGuid.Add(spaceshipBehaviourInstance.spaceshipGuid, spaceship.GetComponent<PirateSpaceshipBehaviour>());
+            spaceshipBehaviourInstance.travelState = TravelState.FREE_FLIGHT;
+
+            spaceshipBehaviourInstance.InitiatePropulsion((spaceshipSpawnerPosition - randomEntryPoint).normalized * 4000);
+            
+            if (spacechipsQueue.Count == 0) CancelInvoke(nameof(SpawnSpaceshipInSpace));
+        }
+        
+        private List<CharacterType> ShuffleSpaceships(int pirateSpaceshipsQuantity, int visitorsSpaceshipsQuantity, int merchantsSpaceshipsQuantity) {
+            spaceships.Clear();
+
+            for (int i = 0; i < pirateSpaceshipsQuantity; i++) {
+                spaceships.Add(CharacterType.PIRATE);
+            }
+
+            for (int i = 0; i < visitorsSpaceshipsQuantity; i++) {
+                spaceships.Add(CharacterType.TOURIST);
+            }
+
+            for (int i = 0; i < merchantsSpaceshipsQuantity; i++) {
+                spaceships.Add(CharacterType.MERCHIMP);
+            }
+
+            int listCount = spaceships.Count;
+
+            while (listCount > 1) {
+                listCount--;
+                int nextRandomIndex = systemRandom.Next(listCount + 1);
+                (spaceships[nextRandomIndex], spaceships[listCount]) = (spaceships[listCount], spaceships[nextRandomIndex]);
+            }
+
+            return spaceships;
         }
     }
 }

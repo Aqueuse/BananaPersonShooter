@@ -18,7 +18,6 @@ namespace UI.InGame.Merchimps {
         [SerializeField] private Image buyButtonImage;
         [SerializeField] private TextMeshProUGUI buyText;
 
-        public UIBananasInventory merchantSellUiBananasInventory;
         public UIIngredientsInventory merchantSellUiIngredientsInventory;
         public UIManufacturedItemsInventory merchantSellUiManufacturedItemsInventory;
     
@@ -52,7 +51,7 @@ namespace UI.InGame.Merchimps {
             sellText.color = Color.black;
             buyText.color = activatedColor;
             
-            SwitchToSellBananasInventory();
+            SwitchToSellIngredientsInventory();
         }
         
         public void Switch_to_Buy_inventory() {
@@ -118,7 +117,6 @@ namespace UI.InGame.Merchimps {
         }
         
         public void RefreshMerchantInventories() {
-            merchantSellUiBananasInventory.RefreshUInventory();
             merchantSellUiIngredientsInventory.RefreshUInventory();
             merchantSellUiManufacturedItemsInventory.RefreshUInventory();
             
@@ -127,21 +125,13 @@ namespace UI.InGame.Merchimps {
             merchantBuyUiManufacturedItemsInventory.RefreshUInventory();
 
         }
-
-        public void SwitchToSellBananasInventory() {
-            merchantSellUiBananasInventory.Activate();
-            merchantSellUiIngredientsInventory.Desactivate();
-            merchantSellUiManufacturedItemsInventory.Desactivate();
-        }
         
         public void SwitchToSellIngredientsInventory() {
-            merchantSellUiBananasInventory.Desactivate();
             merchantSellUiIngredientsInventory.Activate();
             merchantSellUiManufacturedItemsInventory.Desactivate();
         }
         
         public void SwitchToSellManufacturedInventory() {
-            merchantSellUiBananasInventory.Desactivate();
             merchantSellUiIngredientsInventory.Desactivate();
             merchantSellUiManufacturedItemsInventory.Activate();
         }

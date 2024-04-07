@@ -8,5 +8,7 @@ namespace InGame.Items.ItemsData {
         public string debrisRotation;
         public int prefabIndex;
         public CharacterType characterType;
+
+        public bool isInSpace;
     }
 }

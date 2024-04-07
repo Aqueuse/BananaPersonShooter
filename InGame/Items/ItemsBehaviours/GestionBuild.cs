@@ -1,7 +1,6 @@
 using System;
 using InGame.Interactions;
 using InGame.Items.ItemsBehaviours.BuildablesBehaviours;
-using InGame.Items.ItemsData;
 using InGame.Items.ItemsProperties.Buildables;
 using InGame.Items.ItemsProperties.Wastes;
 using Tags;
@@ -105,7 +104,7 @@ namespace InGame.Items.ItemsBehaviours {
                 _buildable = Instantiate(original: _activeGhostClass.buildablePropertiesScriptableObject.buildablePrefab,
                     position: _activeGhost.transform.position, rotation: _activeGhost.transform.rotation);
 
-                _buildable.transform.parent = World.Instance.buildablesContainer.transform;
+                _buildable.transform.parent = ObjectsReference.Instance.gameSave.buildablesSave.buildablesContainer.transform;
 
                 var _craftingIngredients = _activeGhostClass.buildablePropertiesScriptableObject.rawMaterialsWithQuantity;
 
@@ -138,7 +137,7 @@ namespace InGame.Items.ItemsBehaviours {
                 }
         }
         
-                public void harvest() {
+        public void harvest() {
             if (targetedGameObject == null) return;
             
             Tag gameObjectTagClass = targetedGameObject.GetComponent<Tag>();
@@ -155,7 +154,7 @@ namespace InGame.Items.ItemsBehaviours {
 
                     regimeClass.GrabBananas();
 
-                    foreach (var monkey in World.Instance.monkeysInMap) {
+                    foreach (var monkey in ObjectsReference.Instance.worldData.monkeys) {
                         monkey.SearchForBananaManBananas();
                     }
                     

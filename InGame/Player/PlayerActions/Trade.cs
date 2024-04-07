@@ -35,17 +35,6 @@ namespace InGame.Player.PlayerActions {
             sellUiMerchantSliderMenu.quantitySlider.value = 0;
 
             switch (itemScriptableObject.itemCategory) {
-                case ItemCategory.BANANA:
-                    var bananaType = itemScriptableObject.bananaType;
-                    ObjectsReference.Instance.bananasInventory.RemoveQuantity(bananaType, quantityToSell);
-
-                    newItemQuantity = merchantPropertiesScriptableObject.bananasInventory[bananaType] + quantityToSell;
-                    merchantPropertiesScriptableObject.bananasInventory[bananaType] = newItemQuantity;
-
-                    uiMerchant.merchantSellUiBananasInventory.uInventorySlots[bananaType].SetQuantity(newItemQuantity);
-                    uiMerchant.merchantSellUiBananasInventory.RefreshUInventory();
-                    break;
-
                 case ItemCategory.INGREDIENT:
                     var ingredientType = itemScriptableObject.ingredientsType;
                     ObjectsReference.Instance.ingredientsInventory.RemoveQuantity(ingredientType, quantityToSell);

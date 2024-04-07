@@ -6,10 +6,11 @@ namespace InGame.Player.PlayerActions {
     public class ThrowBanana : MonoBehaviour {
         [SerializeField] private Transform launchingBananaPoint;
         [SerializeField] private GenericDictionary<BananaType, GameObject> weaponsGameObjects;
-        private BananasInventory bananasInventory;
         
         private GameObject banana;
         private BananasPropertiesScriptableObject activeWeaponData;
+
+        private BananasInventory bananasInventory;
 
         private void Start() {
             bananasInventory = ObjectsReference.Instance.bananasInventory;
@@ -28,8 +29,6 @@ namespace InGame.Player.PlayerActions {
             banana = Instantiate(weaponsGameObjects[ObjectsReference.Instance.bananaMan.activeItem.bananaType],
                 launchingBananaPoint.transform.position, Quaternion.identity, null);
 
-            // TODO : check if this is normal : two forces ?
-            // throw it with good speed forward the player
             banana.GetComponent<Rigidbody>().AddForce(launchingBananaPoint.transform.forward * 100, ForceMode.Impulse);
             banana.GetComponent<Rigidbody>().AddForce(transform.forward * 100, ForceMode.Impulse);
             
