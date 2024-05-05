@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gameObjectTag: 3
   itemCategory: 0
-  bananaType: 17
+  bananaType: 16
   rawMaterialType: 5
   ingredientsType: 2
   manufacturedItemsType: 1

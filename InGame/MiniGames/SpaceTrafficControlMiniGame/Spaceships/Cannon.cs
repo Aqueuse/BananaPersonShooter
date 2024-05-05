@@ -14,7 +14,7 @@ namespace InGame.MiniGames.SpaceTrafficControlMiniGame.Spaceships {
         public void Shoot() {
             _projectile = projectilesPool.Get_projectile();
 
-            _projectileType = ObjectsReference.Instance.bananaMan.activeItem.bananaType;
+            _projectileType = ObjectsReference.Instance.bananaMan.activeBanana.bananaType;
             _projectileColor = ObjectsReference.Instance.meshReferenceScriptableObject
                 .bananasPropertiesScriptableObjects[_projectileType].bananaColor;
             

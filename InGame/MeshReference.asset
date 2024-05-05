@@ -175,6 +175,7 @@ MonoBehaviour:
     keyCollision: 0
   touristsPrefab:
   - {fileID: 3712416262764098679, guid: 3c9fe1e6c7d8e104ea042cf69c432d8e, type: 3}
+  piratePrefab: {fileID: 2243987608388378733, guid: 6069acb2b431f5246b6615a51bc966f4, type: 3}
   prefabByRawMaterialType:
     list:
     - key: 0

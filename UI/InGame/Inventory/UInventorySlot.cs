@@ -18,17 +18,11 @@ namespace UI.InGame.Inventory {
         }
 
         public void SetDescriptionAndName() {
-            ObjectsReference.Instance.descriptionsManager.SetDescription(itemScriptableObject);
+            ObjectsReference.Instance.uiDescriptionsManager.SetDescription(itemScriptableObject);
         }
-
+        
         public void SelectInventorySlot() {
             if (itemScriptableObject == null) return;
-            
-            ObjectsReference.Instance.uInventoriesManager.UnselectInventorySlots(itemScriptableObject.itemCategory);
-
-            GetComponent<Image>().color = Color.yellow;
-            if (quantityText != null) quantityText.color = Color.black;
-            
             ObjectsReference.Instance.uInventoriesManager.SetLastSelectedItem(itemScriptableObject.itemCategory, gameObject);
         }
 

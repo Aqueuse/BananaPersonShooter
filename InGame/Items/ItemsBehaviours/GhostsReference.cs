@@ -1,3 +1,4 @@
+using InGame.Items.ItemsProperties.Buildables;
 using UnityEngine;
 
 namespace InGame.Items.ItemsBehaviours {
@@ -6,11 +7,30 @@ namespace InGame.Items.ItemsBehaviours {
         NOT_ENOUGH_MATERIALS,
         VALID
     }
-
+    
+    public enum UIState {
+        NOT_ENOUGH_MATERIALS,
+        VALID
+    }
+    
     public class GhostsReference : MonoBehaviour {
         [SerializeField] private GenericDictionary<BuildableType, GameObject> ghostsByBuildablesTypes;
-        [SerializeField] private GenericDictionary<GhostState, Color> colorByGhostState;
 
+        public GenericDictionary<GhostState, Color> colorByGhostState;
+        public GenericDictionary<UIState, Color> colorByUIState;
+
+        public Color GetGhostColorByAvailability(BuildablePropertiesScriptableObject buildablePropertiesScriptableObject) {
+            return !ObjectsReference.Instance.rawMaterialsInventory.HasCraftingIngredients(buildablePropertiesScriptableObject)
+                ? GetColorByGhostState(GhostState.NOT_ENOUGH_MATERIALS)
+                : GetColorByGhostState(GhostState.VALID);
+        }
+
+        public Color GetUIColorByAvailability(BuildablePropertiesScriptableObject buildablePropertiesScriptableObject) {
+            return !ObjectsReference.Instance.rawMaterialsInventory.HasCraftingIngredients(buildablePropertiesScriptableObject)
+                ? colorByUIState[UIState.NOT_ENOUGH_MATERIALS]
+                : colorByUIState[UIState.VALID];
+        }
+        
         public GameObject GetGhostByBuildableType(BuildableType buildableType) {
             return ghostsByBuildablesTypes[buildableType];
         }

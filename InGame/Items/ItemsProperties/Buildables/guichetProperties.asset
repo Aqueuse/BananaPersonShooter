@@ -17,6 +17,7 @@ MonoBehaviour:
   bananaType: 0
   rawMaterialType: 5
   ingredientsType: 1
+  manufacturedItemsType: 0
   buildableType: 2
   itemName:
   - ticket booth
@@ -27,9 +28,11 @@ MonoBehaviour:
   - A ticket booth to welcome visitors to the reserve
   - "un guichet pour accueillir les visiteurs de la r\xE9serve"
   - Una taquilla para recibir a los visitantes de la reserva
+  bitKongValue: 0
   rawMaterialsWithQuantity:
     list:
     - key: 0
       value: 15
     keyCollision: 0
   buildablePrefab: {fileID: 5196617759513621631, guid: fdc0a3f945f15074a968af548517735b, type: 3}
+  blueprintSprite: {fileID: 21300000, guid: 147a896003bfe514bb55c3cc3fe0e111, type: 3}

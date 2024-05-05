@@ -9,7 +9,7 @@ namespace InGame.Interactions.InteractionsActions {
 
             ObjectsReference.Instance.uiManager.SetActive(UICanvasGroupType.MERCHANT_INTERFACE, true);
         
-            ObjectsReference.Instance.inputManager.SwitchContext(InputContext.MERCHANT);
+            ObjectsReference.Instance.inputManager.SwitchContext(InputContext.UI);
         }
     }
 }

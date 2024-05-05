@@ -61,7 +61,7 @@ namespace Save {
         }
 
         private static void ResetActiveItem() {
-            ObjectsReference.Instance.bananaMan.activeItem = ObjectsReference.Instance.meshReferenceScriptableObject.bananasPropertiesScriptableObjects[BananaType.EMPTY];
+            ObjectsReference.Instance.bananaMan.activeBanana = ObjectsReference.Instance.meshReferenceScriptableObject.bananasPropertiesScriptableObjects[BananaType.EMPTY];
         }
 
         private static void ResetMonkeysSasiety() {

@@ -1,12 +1,16 @@
 using System;
+using System.Linq;
 using DG.Tweening;
 using InGame.MiniGames.SpaceTrafficControlMiniGame.projectiles;
+using InGame.SpaceTrafficControl;
 using Save.Templates;
 using Tags;
 using UnityEngine;
 
 namespace InGame.Items.ItemsBehaviours.SpaceshipsBehaviours {
     public class SpaceshipBehaviour : MonoBehaviour {
+        [HideInInspector] public SpaceshipSavedData spaceshipSavedData;
+
         public string spaceshipGuid;
         public string spaceshipName;
         public Color spaceshipUIcolor;
@@ -14,20 +18,19 @@ namespace InGame.Items.ItemsBehaviours.SpaceshipsBehaviours {
         public CharacterType characterType;
 
         public int assignatedHangar;
+        
         private DOTweenPath pathBeetweenSpaceAndHangar;
         private Vector3[] assignatedPathToHangar;
         public float lookAtRotation = 0.01f;
         
         public string savedData;
         
-        protected SpaceshipSavedData spaceshipSavedData;
-        
         [SerializeField] private Transform spaceshipDebris;
         
-        public Vector3 _arrivalPosition;
+        public Vector3 arrivalPosition;
 
         private bool _isPropulsing;
-        private float _propulsionSpeed;
+        private const float _propulsionSpeed = 100f;
         private float _step;
         private float _distanceToArrival;
 
@@ -35,7 +38,6 @@ namespace InGame.Items.ItemsBehaviours.SpaceshipsBehaviours {
         private Vector3 _spaceshipPosition;
         
         public TravelState travelState;
-        public float timeToNextState;
         
         private void Start() {
             _spaceshipTransform = transform;
@@ -44,66 +46,103 @@ namespace InGame.Items.ItemsBehaviours.SpaceshipsBehaviours {
         public virtual void Init() {}
         
         private void Update() {
-            if (travelState == TravelState.FREE_FLIGHT) {
-                _spaceshipPosition = _spaceshipTransform.position;
+            if (travelState == TravelState.GO_TO_PATH) {
+                _step = _propulsionSpeed*4 * Time.deltaTime;
+            
+                _spaceshipTransform.position = Vector3.MoveTowards(_spaceshipTransform.position, assignatedPathToHangar[0], _step);
+                _spaceshipTransform.LookAt(assignatedPathToHangar[0], Vector3.up);
 
+                if (Vector3.Distance(transform.position, assignatedPathToHangar[0]) < 10) {
+                    travelState = TravelState.TRAVEL_ON_PATH;
+                    MoveToElevator();
+                }
+            }
+            
+            if (travelState == TravelState.FREE_FLIGHT || travelState == TravelState.LEAVES_THE_REGION) {
                 _step = _propulsionSpeed * Time.deltaTime;
             
-                _spaceshipPosition = Vector3.MoveTowards(_spaceshipPosition, _arrivalPosition, _step);
-                _spaceshipTransform.position = _spaceshipPosition;
+                _spaceshipTransform.position = Vector3.MoveTowards(_spaceshipTransform.position, arrivalPosition, _step);
             
-                _spaceshipTransform.LookAt(_arrivalPosition, Vector3.up);
+                _spaceshipTransform.LookAt(arrivalPosition, Vector3.up);
                 
-                if (Vector3.Distance(transform.position, _arrivalPosition) < 10) {
-                    ObjectsReference.Instance.spaceTrafficControlManager.spaceshipBehavioursByGuid.Remove(spaceshipGuid);
-                    Destroy(gameObject);
+                if (Vector3.Distance(transform.position, arrivalPosition) < 10) {
+                    LeaveRegion();
                 }
             }
-
-            // TODO : change spaceship Path (HangarDestination)
-            // use Bezier class to calculate docking path
-            if (travelState == TravelState.GO_TO_STATION) {
-                if (Vector3.Distance(transform.position, assignatedPathToHangar[^1]) < 20) {
-                    lookAtRotation = 1;
-                }
-            }
-
-            if (travelState == TravelState.LEAVES_THE_REGION) {
-                
-            }
-        }
-        
-        public void InitiatePropulsion(Vector3 destination) {
-            _arrivalPosition = destination;
-            _propulsionSpeed = ObjectsReference.Instance.spaceshipsSpawner.spaceshipPropulsionSpeed;
         }
 
-        public void OpenCommunications() {
+        public void GenerateSpaceshipData() {
             GenerateGuid();
             GenerateName();
             GenerateUIColor();
             GenerateMessage();
+        }
 
+        public void OpenCommunications() {
             ObjectsReference.Instance.uiSpaceTrafficControlPanel.AddNewCommunication(this);
         }
-        
-        public void MoveToHangar(int hangarNumber) {
+
+        private void WaitInStation() {
+            travelState = TravelState.WAIT_IN_STATION;
+
+            if (characterType == CharacterType.MERCHIMP) {
+                GetComponent<MerchantSpaceshipBehaviour>().StartWaitingTimer();
+            }
+
+            if (characterType == CharacterType.PIRATE) {
+                GetComponent<PirateSpaceshipBehaviour>().SpawnPirates();
+            }
+        }
+
+        public void GoToPath(int hangarNumber) {
             assignatedHangar = hangarNumber;
+            assignatedPathToHangar = ObjectsReference.Instance.spaceTrafficControlManager.pathsToHangars[assignatedHangar];
 
-            assignatedPathToHangar = ObjectsReference.Instance.spaceTrafficControlManager.pathsToHangars[hangarNumber];
-            
-            assignatedPathToHangar[0] = transform.position;
+            travelState = TravelState.GO_TO_PATH;
+        }
+        
+        public void MoveToElevator() {
+            travelState = TravelState.TRAVEL_ON_PATH;
+
             transform.DOPath(
-                ObjectsReference.Instance.spaceTrafficControlManager.pathsToHangars[hangarNumber],
-                60,
-                PathType.CatmullRom).SetLookAt(lookAtRotation);
+                ObjectsReference.Instance.spaceTrafficControlManager.pathsToHangars[assignatedHangar],
+                20,
+                PathType.CatmullRom).SetLookAt(lookAtRotation).SetEase(Ease.Linear).OnComplete(MoveOnElevatorToHangar);
+        }
 
-            travelState = TravelState.GO_TO_STATION;
+        public void MoveOnElevatorToHangar() {
+            transform.DOPath(
+                ObjectsReference.Instance.spaceTrafficControlManager.elevatorsPaths[assignatedHangar],
+                20,
+                PathType.CatmullRom).SetLookAt(
+                ObjectsReference.Instance.spaceTrafficControlManager.teleportUpTransform,
+                stableZRotation:true).OnComplete(WaitInStation);
+        }
+
+        protected void TravelBackOnElevator() {
+            var reversePathFromHangarToElevator = ObjectsReference.Instance.spaceTrafficControlManager.elevatorsPaths[assignatedHangar].Reverse().ToArray(); 
+
+            transform.DOPath(reversePathFromHangarToElevator,
+                20,
+                PathType.CatmullRom).OnComplete(TravelBackToSpace);
+        }
+
+        private void TravelBackToSpace() {
+            travelState = TravelState.LEAVES_THE_REGION;
+            arrivalPosition.y = -10f;
+        }
+
+        private void LeaveRegion() {
+            ObjectsReference.Instance.uiSpaceTrafficControlPanel.CloseCommunications(this);
+            ObjectsReference.Instance.spaceTrafficControlManager.spaceshipBehavioursByGuid.Remove(spaceshipGuid);
+
+            ObjectsReference.Instance.spaceshipsSpawner.RemoveGuest();
+            Destroy(gameObject);
         }
         
         private void GenerateGuid() {
             spaceshipSavedData = new SpaceshipSavedData();
-            
+
             if(string.IsNullOrEmpty(spaceshipGuid)) {
                 spaceshipGuid = Guid.NewGuid().ToString();
             }
@@ -114,7 +153,7 @@ namespace InGame.Items.ItemsBehaviours.SpaceshipsBehaviours {
         }
 
         private void GenerateUIColor() {
-            spaceshipUIcolor = ObjectsReference.Instance.spaceTrafficControlManager.GetRandomColor();
+            spaceshipUIcolor = SpaceTrafficControlManager.GetRandomColor();
         }
 
         private void GenerateMessage() {
@@ -140,14 +179,14 @@ namespace InGame.Items.ItemsBehaviours.SpaceshipsBehaviours {
 
                 debris.transform.parent = ObjectsReference.Instance.gameSave.debrisSave.debrisContainer.transform;
             }
-            
+
             ObjectsReference.Instance.spaceshipsSpawner.RemoveGuest();
-            
-            ObjectsReference.Instance.uiSpaceTrafficControlPanel.CloseCommunications();
-            
+
+            ObjectsReference.Instance.uiSpaceTrafficControlPanel.CloseCommunications(this);
+
             Destroy(gameObject);
         }
-        
+
         public virtual void GenerateSaveData() { }
     }
 }

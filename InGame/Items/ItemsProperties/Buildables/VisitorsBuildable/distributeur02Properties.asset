@@ -17,6 +17,7 @@ MonoBehaviour:
   bananaType: 0
   rawMaterialType: 5
   ingredientsType: 1
+  manufacturedItemsType: 0
   buildableType: 15
   itemName:
   - souvenir dispenser
@@ -27,6 +28,7 @@ MonoBehaviour:
   - 'Please note: banana key rings cannot be eaten'
   - "attention : les portes-cl\xE9s bananes ne se mangent pas"
   - "Tenga en cuenta: los llaveros de pl\xE1tano no se pueden comer"
+  bitKongValue: 0
   rawMaterialsWithQuantity:
     list:
     - key: 0
@@ -35,6 +37,7 @@ MonoBehaviour:
       value: 2
     keyCollision: 0
   buildablePrefab: {fileID: 6077705234436966705, guid: bb8463b61fab7be45a521da6655a294c, type: 3}
+  blueprintSprite: {fileID: 21300000, guid: 34ab1207152813d49b75e1862635dbc6, type: 3}
   needType: 4
   needValue: 2
   isAnimationLooping: 0

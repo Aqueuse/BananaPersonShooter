@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using InGame.Items.ItemsBehaviours.SpaceshipsBehaviours;
+using InGame.MiniGames.MarketingCampaignMiniGame;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -7,7 +8,8 @@ namespace InGame.MiniGames.SpaceTrafficControlMiniGame.Spaceships {
     public class SpaceshipsSpawner : MonoBehaviour {
         [SerializeField] private Transform spaceshipsContainer;
 
-        public float spaceshipPropulsionSpeed = 100f;
+        private AdCampaign adCampaign;
+
         private Vector3 spaceshipPosition;
 
         private System.Random systemRandom;
@@ -20,16 +22,21 @@ namespace InGame.MiniGames.SpaceTrafficControlMiniGame.Spaceships {
 
         private Vector3 spaceshipSpawnerPosition;
 
+        private Vector3 entryPoint;
+        private Vector3 arrivalPoint;
+
         private void Start() {
             systemRandom = new System.Random();
             spaceships = new List<CharacterType>();
             spacechipsQueue = new Queue<CharacterType>();
+            
+            adCampaign = ObjectsReference.Instance.adMarketingCampaignManager.adCampaign;
+
         }
         
         public void spawnSpaceshipsWithAdCampaign() {
             ObjectsReference.Instance.uiMarketingPanel.SwitchToCurrentCampaign();
             ObjectsReference.Instance.commandRoomControlPanelsManager.UnfocusPanel();
-            var adCampaign = ObjectsReference.Instance.adMarketingCampaignManager.currentAdCampaign;
             
             spaceships = ShuffleSpaceships(adCampaign.piratesNumber, adCampaign.touristsNumber, adCampaign.merchimpsNumber);
             
@@ -51,39 +58,36 @@ namespace InGame.MiniGames.SpaceTrafficControlMiniGame.Spaceships {
         }
 
         public void SpawnSpaceshipInSpace() {
-            spaceshipSpawnerPosition = transform.position;
-
-            var spaceshipType = spacechipsQueue.Dequeue();
-            
-            var spaceship = Instantiate(
-                ObjectsReference.Instance.meshReferenceScriptableObject.spaceshipByCharacterType[spaceshipType],
-                spaceshipSpawnerPosition,
-                Quaternion.identity,
-                spaceshipsContainer);
-            
-            spaceshipPosition = spaceship.transform.position;
+            if (spacechipsQueue.Count == 0) {
+                CancelInvoke(nameof(SpawnSpaceshipInSpace));
+                return;
+            }
             
             var randomPositionInCircle = Random.insideUnitCircle.normalized * 6000;
-            var randomEntryPoint = new Vector3(
-                spaceshipPosition.x + randomPositionInCircle.x, 
-                spaceshipPosition.y, 
-                spaceshipPosition.z +randomPositionInCircle.y
-            );
 
-            spaceship.transform.position = randomEntryPoint;
-            spaceship.transform.rotation = Quaternion.Euler((spaceshipSpawnerPosition - randomEntryPoint).normalized); 
+            entryPoint = new Vector3(spaceshipPosition.x + randomPositionInCircle.x, 2631f, spaceshipPosition.z +randomPositionInCircle.y);
+            arrivalPoint = (spaceshipSpawnerPosition - entryPoint).normalized * 4000;
+            arrivalPoint.y = 2631f;
+
+            var spaceshipType = spacechipsQueue.Dequeue();
+            var spaceship = Instantiate(
+                ObjectsReference.Instance.meshReferenceScriptableObject.spaceshipByCharacterType[spaceshipType],
+                entryPoint,
+                Quaternion.identity,
+                null);
             
+            spaceship.transform.rotation = Quaternion.Euler((transform.position - entryPoint).normalized); 
+
             spaceshipBehaviourInstance = spaceship.GetComponent<SpaceshipBehaviour>();
-            spaceshipBehaviourInstance.characterType = spaceshipType;
             
-            spaceshipBehaviourInstance.OpenCommunications();
+            spaceshipBehaviourInstance.GenerateSpaceshipData();
+            spaceshipBehaviourInstance.arrivalPosition = arrivalPoint;
             
-            ObjectsReference.Instance.spaceTrafficControlManager.spaceshipBehavioursByGuid.Add(spaceshipBehaviourInstance.spaceshipGuid, spaceship.GetComponent<PirateSpaceshipBehaviour>());
-            spaceshipBehaviourInstance.travelState = TravelState.FREE_FLIGHT;
+            spaceshipBehaviourInstance.Init();
 
-            spaceshipBehaviourInstance.InitiatePropulsion((spaceshipSpawnerPosition - randomEntryPoint).normalized * 4000);
-            
-            if (spacechipsQueue.Count == 0) CancelInvoke(nameof(SpawnSpaceshipInSpace));
+            ObjectsReference.Instance.spaceTrafficControlManager.spaceshipBehavioursByGuid.Add(spaceshipBehaviourInstance.spaceshipGuid, spaceship.GetComponent<SpaceshipBehaviour>());
+
+            spaceshipBehaviourInstance.OpenCommunications();
         }
         
         private List<CharacterType> ShuffleSpaceships(int pirateSpaceshipsQuantity, int visitorsSpaceshipsQuantity, int merchantsSpaceshipsQuantity) {

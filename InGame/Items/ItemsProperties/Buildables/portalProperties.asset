@@ -17,6 +17,7 @@ MonoBehaviour:
   bananaType: 0
   rawMaterialType: 5
   ingredientsType: 1
+  manufacturedItemsType: 0
   buildableType: 4
   itemName:
   - portal
@@ -27,6 +28,7 @@ MonoBehaviour:
   - Travel through the banana dimension to another portal
   - "Voyagez \xE0 travers la dimension banane vers un autre portail"
   - "Viaja a trav\xE9s de la dimensi\xF3n banana a otro portal"
+  bitKongValue: 0
   rawMaterialsWithQuantity:
     list:
     - key: 0
@@ -37,3 +39,4 @@ MonoBehaviour:
       value: 1
     keyCollision: 0
   buildablePrefab: {fileID: 4483800605340694416, guid: ac2cf78f5c670804bae340e29edca3bb, type: 3}
+  blueprintSprite: {fileID: 21300000, guid: b9072ed395cba6847bc61ffe74054b6b, type: 3}

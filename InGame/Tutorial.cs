@@ -10,11 +10,12 @@ namespace InGame {
             ObjectsReference.Instance.uiCrosshairs.SetCrosshair(BananaType.EMPTY);
 
             ObjectsReference.Instance.uInventoriesManager.HideUIHelpers();
-            ObjectsReference.Instance.uiManager.SetActive(UICanvasGroupType.HUD, false);
+            ObjectsReference.Instance.uiManager.SetActive(UICanvasGroupType.HUD_BANANAMAN, false);
 
             ObjectsReference.Instance.uiManager.SetActive(UICanvasGroupType.BANANAGUN_HELPER_KEYBOARD, false);
             ObjectsReference.Instance.uiManager.SetActive(UICanvasGroupType.BANANAGUN_HELPER_GAMEPAD, false);
-
+            ObjectsReference.Instance.bananaGunActionsSwitch.enabled = false;
+            
             ObjectsReference.Instance.gameReset.ResetGameData();
 
             ObjectsReference.Instance.inputManager.SwitchContext(InputContext.UI);
@@ -43,10 +44,10 @@ namespace InGame {
         
         public void FinishTutorial() {
             ObjectsReference.Instance.uInventoriesManager.ShowCurrentUIHelper();
-            ObjectsReference.Instance.uiManager.SetActive(UICanvasGroupType.HUD, true);
+            ObjectsReference.Instance.uiManager.SetActive(UICanvasGroupType.HUD_BANANAMAN, true);
             
             ObjectsReference.Instance.bananaGun.bananaGunInBack.SetActive(true);
-            // TODO : animation take banana gun
+            ObjectsReference.Instance.bananaGunActionsSwitch.enabled = true;
             
             ObjectsReference.Instance.bananaMan.tutorialFinished = true;
             

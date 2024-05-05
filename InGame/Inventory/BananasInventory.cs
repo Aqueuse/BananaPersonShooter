@@ -17,7 +17,7 @@ namespace InGame.Inventory {
             var bananaItem = ObjectsReference.Instance.uiBananaSelector.uiBananaSelectorSlots[bananasDataScriptableObject.bananaType];
             bananaItem.gameObject.SetActive(true);
             bananaItem.SetQuantity(bananasInventory[bananasDataScriptableObject.bananaType]);
-            ObjectsReference.Instance.uiTools.SetBananaQuantity(bananasInventory[bananasDataScriptableObject.bananaType]);
+            ObjectsReference.Instance.uiFlippers.SetBananaQuantity(bananasInventory[bananasDataScriptableObject.bananaType]);
 
             ObjectsReference.Instance.bananaMan.SetActiveItem(bananasDataScriptableObject);
             
@@ -46,7 +46,7 @@ namespace InGame.Inventory {
                 bananaItem.gameObject.SetActive(false);
             }
             
-            ObjectsReference.Instance.uiTools.SetBananaQuantity(bananasInventory[bananaType]);
+            ObjectsReference.Instance.uiFlippers.SetBananaQuantity(bananasInventory[bananaType]);
         }
     }
 }

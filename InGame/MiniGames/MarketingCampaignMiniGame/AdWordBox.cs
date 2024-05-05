@@ -10,11 +10,11 @@ namespace InGame.MiniGames.MarketingCampaignMiniGame {
 
         public void Activate() {
             if (isInCurrentCampaign) {
-                ObjectsReference.Instance.adMarketingCampaignManager.currentAdCampaign.RemoveAdWordBox(this);
+                ObjectsReference.Instance.adMarketingCampaignManager.adCampaign.RemoveAdWordBox(this);
                 isInCurrentCampaign = false;
             }
             else {
-                ObjectsReference.Instance.adMarketingCampaignManager.currentAdCampaign.TryAddWordToCampaign(this);
+                ObjectsReference.Instance.adMarketingCampaignManager.adCampaign.TryAddWordToCampaign(this);
             }
         }
     }

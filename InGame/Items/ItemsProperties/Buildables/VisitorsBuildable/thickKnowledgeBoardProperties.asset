@@ -17,6 +17,7 @@ MonoBehaviour:
   bananaType: 0
   rawMaterialType: 5
   ingredientsType: 1
+  manufacturedItemsType: 0
   buildableType: 13
   itemName:
   - modern information panel
@@ -27,12 +28,14 @@ MonoBehaviour:
   - a modern touchscreen information panel
   - "un panneau d'information moderne \xE0 \xE9cran tactile"
   - "un moderno panel de informaci\xF3n con pantalla t\xE1ctil"
+  bitKongValue: 0
   rawMaterialsWithQuantity:
     list:
     - key: 0
       value: 4
     keyCollision: 0
   buildablePrefab: {fileID: 3376277238409772002, guid: f2a91b7ede231154c99d15222202cd73, type: 3}
+  blueprintSprite: {fileID: 21300000, guid: 68e25f3625c495b47ac0add69e671fd0, type: 3}
   needType: 3
   needValue: 2
   isAnimationLooping: 0

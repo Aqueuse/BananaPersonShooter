@@ -98,7 +98,7 @@ namespace Save {
         private void HideAutoSaveBanana() {
             autoSaveBanana.SetActive(false);
         }
-        
+
         public string GetSavePathByUuid(string saveUuid) {
             return Path.Combine(_savesPath, saveUuid);
         }
@@ -106,7 +106,7 @@ namespace Save {
         public bool SaveExists(string saveuuid) {
             return Directory.Exists(Path.Combine(_savesPath, saveuuid));
         }
-        
+
         public void LoadLastSave() {
             ObjectsReference.Instance.gameManager.loadingScreen.SetActive(true);
             ObjectsReference.Instance.uiManager.SetActive(UICanvasGroupType.DEATH, false);

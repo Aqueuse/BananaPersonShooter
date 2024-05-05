@@ -6,7 +6,8 @@ namespace InGame.Monkeys.Merchimps {
     public class Merchimp : MonoBehaviour {
         public InventoryScriptableObject merchantPropertiesScriptableObject;
         public CharacterPropertiesScriptableObject merchantCharacterPropertiesScriptableObject;
-
+        public UIMerchantWaitTimer uiMerchantWaitTimer;
+        
         public MerchantType merchantType;
         
         private static readonly int color00 = Shader.PropertyToID("_Color00");

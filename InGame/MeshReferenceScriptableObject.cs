@@ -14,6 +14,7 @@ namespace InGame {
         public GenericDictionary<BananaType, BananasPropertiesScriptableObject> bananasPropertiesScriptableObjects;
         
         public GameObject[] touristsPrefab;
+        public GameObject piratePrefab;
         
         public GenericDictionary<RawMaterialType, GameObject> prefabByRawMaterialType;
 

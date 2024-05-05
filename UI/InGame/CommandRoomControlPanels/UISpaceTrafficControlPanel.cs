@@ -24,8 +24,6 @@ namespace UI.InGame.CommandRoomControlPanels {
         [SerializeField] private Color hangarUnavailableColor;
         
         private GameObject spaceshipMessage;
-        public SpaceshipBehaviour selectedSpaceship;
-        public Button selectedButton;
         
         public GenericDictionary<CharacterType, List<GameObject>> spaceshipMessagesByCharacterType;
         
@@ -53,23 +51,10 @@ namespace UI.InGame.CommandRoomControlPanels {
             spaceshipButton.GetComponent<UIcommunication>().associatedSpaceshipBehaviour = spaceshipBehaviour;
             spaceshipButton.GetComponentInChildren<TextMeshProUGUI>().text = spaceshipBehaviour.spaceshipName;
             spaceshipButton.GetComponent<Image>().color = spaceshipBehaviour.spaceshipUIcolor;
-            
-            foreach (var hangar in ObjectsReference.Instance.spaceTrafficControlManager.hangarAvailabilityByHangarNumber) {
-                if (hangar.Value) { // hangar available
-                    hangarButtonsByHangarNumber[hangar.Key].interactable = true;
-                    hangarButtonsByHangarNumber[hangar.Key].GetComponent<Image>().color = hangarAvailableColor;
-                }
-
-                else {
-                    hangarButtonsByHangarNumber[hangar.Key].interactable = false;
-                    hangarButtonsByHangarNumber[hangar.Key].GetComponent<Image>().color = hangarUnavailableColor;
-                }
-            }
         }
         
-        public void ShowCommunicationMessage(SpaceshipBehaviour spaceshipBehaviour, Button selectedButton) {
-            selectedSpaceship = spaceshipBehaviour;
-            this.selectedButton = selectedButton;
+        public void ShowCommunicationMessage(SpaceshipBehaviour spaceshipBehaviour) {
+            ObjectsReference.Instance.spaceTrafficControlManager.selectedSpaceship = spaceshipBehaviour;
 
             answersListCanvasGroup.alpha = 1;
             answersListCanvasGroup.interactable = true;
@@ -81,21 +66,38 @@ namespace UI.InGame.CommandRoomControlPanels {
             spaceshipMessage.SetActive(true);
             messagePlaceholder.SetActive(false);
         }
+
+        public void CloseCommunicationsFromUI() {
+            CloseCommunications(ObjectsReference.Instance.spaceTrafficControlManager.selectedSpaceship);
+        }
         
-        public void CloseCommunications() {
-            DestroyImmediate(selectedButton.gameObject);
+        public void CloseCommunications(SpaceshipBehaviour spaceshipBehaviour) {
+            foreach (var uIcommunication in spaceshipsListContainer.GetComponentsInChildren<UIcommunication>()) {
+                if (uIcommunication.associatedSpaceshipBehaviour == spaceshipBehaviour)
+                    DestroyImmediate(uIcommunication.gameObject);
+            }
             
             answersListCanvasGroup.alpha = 0;
             answersListCanvasGroup.interactable = false;
             answersListCanvasGroup.blocksRaycasts = false;
             
-            spaceshipMessage.SetActive(false);
+            if (spaceshipMessage != null) spaceshipMessage.SetActive(false);
             messagePlaceholder.SetActive(true);
         }
+        
+        public void RefreshHangarAvailability() {
+            foreach (var hangar in ObjectsReference.Instance.spaceTrafficControlManager.hangarAvailabilityByHangarNumber) {
+                if (hangar.Value) { // hangar available
+                    hangarButtonsByHangarNumber[hangar.Key].interactable = true;
+                    hangarButtonsByHangarNumber[hangar.Key].GetComponent<Image>().color = hangarAvailableColor;
+                }
 
-        public void AssignToHangar(int hangarNumber) {
-            ObjectsReference.Instance.spaceTrafficControlManager.AssignSpaceshipToHangar(selectedSpaceship, hangarNumber);
-            CloseCommunications();
+                else {
+                    hangarButtonsByHangarNumber[hangar.Key].interactable = false;
+                    hangarButtonsByHangarNumber[hangar.Key].GetComponent<Image>().color = hangarUnavailableColor;
+                }
+            }
+
         }
     }
     

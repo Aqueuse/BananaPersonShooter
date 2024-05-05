@@ -10,8 +10,6 @@ namespace UI.InGame {
     }
     
     public class UIHud : MonoBehaviour {
-        public Transform buildablePlacementTransform;
-
         public bool isDragingSlot;
         public UInventorySlot draggedSlot;
 

@@ -1,5 +1,7 @@
 public enum PirateState {
     IDLE,
+    GO_TO_SAS,
+    TRAVEL_IN_SAS,
     SEARCH_RANDOM_POINT,
     GO_TO_RANDOM_POINT,
     SEARCH_THING_TO_BREAK,
@@ -7,5 +9,6 @@ public enum PirateState {
     BREAK_THING,
     FLEE,
     GO_BACK_TO_SAS,
+    GO_BACK_TO_SPACESHIP,
     PLATEFORM_INTERACTION
 }

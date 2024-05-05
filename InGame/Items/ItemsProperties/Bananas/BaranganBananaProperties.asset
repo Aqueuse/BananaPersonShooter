@@ -16,8 +16,9 @@ MonoBehaviour:
   itemCategory: 0
   bananaType: 1
   rawMaterialType: 5
-  ingredientsType: 1
-  buildableType: 6
+  ingredientsType: 2
+  manufacturedItemsType: 1
+  buildableType: 5
   itemName:
   - barangan
   - barangan

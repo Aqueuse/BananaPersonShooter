@@ -21,7 +21,7 @@ namespace UI {
         public void ShowHomeMenu() {
             SetActive(UICanvasGroupType.LOAD, false);
             SetActive(UICanvasGroupType.OPTIONS, false);
-            SetActive(UICanvasGroupType.BANANAPEDIA, false);
+            SetActive(UICanvasGroupType.MINI_CHIMP_BANANAPEDIA_BLOCK, false);
             SetActive(UICanvasGroupType.CREDITS, false);
             SetActive(UICanvasGroupType.HOME_MENU, true);
             SetActive(UICanvasGroupType.GAME_MENU, false);
@@ -33,7 +33,7 @@ namespace UI {
         public void HideHomeMenu() {
             SetActive(UICanvasGroupType.LOAD, false);
             SetActive(UICanvasGroupType.OPTIONS, false);
-            SetActive(UICanvasGroupType.BANANAPEDIA, false);
+            SetActive(UICanvasGroupType.MINI_CHIMP_BANANAPEDIA_BLOCK, false);
             SetActive(UICanvasGroupType.CREDITS, false);
 
             SetActive(UICanvasGroupType.HOME_MENU, false);
@@ -43,7 +43,7 @@ namespace UI {
         public void ShowLoadMenu() {
             SetActive(UICanvasGroupType.LOAD, true);
             SetActive(UICanvasGroupType.OPTIONS, false);
-            SetActive(UICanvasGroupType.BANANAPEDIA, false);
+            SetActive(UICanvasGroupType.MINI_CHIMP_BANANAPEDIA_BLOCK, false);
             SetActive(UICanvasGroupType.CREDITS, false);
             SetActive(UICanvasGroupType.HOME_MENU, false);
 
@@ -67,7 +67,7 @@ namespace UI {
             
             SetActive(UICanvasGroupType.LOAD, false);
             SetActive(UICanvasGroupType.OPTIONS, true);
-            SetActive(UICanvasGroupType.BANANAPEDIA, false);
+            SetActive(UICanvasGroupType.MINI_CHIMP_BANANAPEDIA_BLOCK, false);
             SetActive(UICanvasGroupType.CREDITS, false);
             SetActive(UICanvasGroupType.HOME_MENU, false);
             
@@ -80,7 +80,7 @@ namespace UI {
         public void ShowBananapedia() {
             SetActive(UICanvasGroupType.LOAD, false);
             SetActive(UICanvasGroupType.OPTIONS, false);
-            SetActive(UICanvasGroupType.BANANAPEDIA, true);
+            SetActive(UICanvasGroupType.MINI_CHIMP_BANANAPEDIA_BLOCK, true);
             SetActive(UICanvasGroupType.CREDITS, false);
             SetActive(UICanvasGroupType.HOME_MENU, false);
 
@@ -93,7 +93,7 @@ namespace UI {
         public void ShowCredits() {
             SetActive(UICanvasGroupType.LOAD, false);
             SetActive(UICanvasGroupType.OPTIONS, false);
-            SetActive(UICanvasGroupType.BANANAPEDIA, false);
+            SetActive(UICanvasGroupType.MINI_CHIMP_BANANAPEDIA_BLOCK, false);
             SetActive(UICanvasGroupType.CREDITS, true);
             SetActive(UICanvasGroupType.HOME_MENU, false);
             
@@ -106,7 +106,7 @@ namespace UI {
         public void ShowGameMenu() {
             SetActive(UICanvasGroupType.LOAD, false);
             SetActive(UICanvasGroupType.OPTIONS, false);
-            SetActive(UICanvasGroupType.BANANAPEDIA, false);
+            SetActive(UICanvasGroupType.MINI_CHIMP_BANANAPEDIA_BLOCK, false);
             SetActive(UICanvasGroupType.CREDITS, false);
             SetActive(UICanvasGroupType.HOME_MENU, false);
             
@@ -119,7 +119,36 @@ namespace UI {
         public void HideGameMenu() {
             SetActive(UICanvasGroupType.GAME_MENU, false);
         }
-        
+
+        public void ShowBananaGunUI() {
+            if (!ObjectsReference.Instance.bananaMan.tutorialFinished) return;
+            ObjectsReference.Instance.bananaGunActionsSwitch.DesactiveBananaGun();
+
+            ObjectsReference.Instance.inputManager.SwitchContext(InputContext.BANANAGUN_UI);
+            ObjectsReference.Instance.gameManager.gameContext = GameContext.IN_BANANAGUN_UI;
+            
+            ObjectsReference.Instance.uiManager.SetActive(UICanvasGroupType.INVENTORIES, true);
+            
+            ObjectsReference.Instance.uInventoriesManager.OpenInventories();
+            
+            SetActive(UICanvasGroupType.MINI_CHIMP_BLOCK, true);
+            ObjectsReference.Instance.miniChimpBlockManager.enabled = true;
+        }
+
+        public void HideBananaGunUI() {
+            SetActive(UICanvasGroupType.MINI_CHIMP_BLOCK, false);
+            ObjectsReference.Instance.miniChimpBlockManager.enabled = false;
+            
+            SetActive(UICanvasGroupType.INVENTORIES, false);
+            
+            ObjectsReference.Instance.bananaGun.UngrabBananaGun();
+
+            ObjectsReference.Instance.inputManager.SwitchContext(InputContext.GAME);
+            ObjectsReference.Instance.gameManager.gameContext = GameContext.IN_GAME;
+            
+            ObjectsReference.Instance.bananaGunActionsSwitch.SwitchToBananaGunMode(ObjectsReference.Instance.bananaMan.bananaGunMode);
+        }
+
         public void SetActive(UICanvasGroupType uiCanvasGroupType, bool visible) {
             var canvasGroup = canvasGroupsByUICanvasType[uiCanvasGroupType];
 

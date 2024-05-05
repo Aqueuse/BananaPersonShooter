@@ -6,5 +6,6 @@ namespace InGame.Items.ItemsProperties.Buildables {
         [Header("craft")]
         public GenericDictionary<RawMaterialType, int> rawMaterialsWithQuantity;
         public GameObject buildablePrefab;
+        public Sprite blueprintSprite;
     }
 }

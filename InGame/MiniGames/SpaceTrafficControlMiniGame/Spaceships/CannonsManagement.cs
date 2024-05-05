@@ -48,7 +48,7 @@ namespace InGame.MiniGames.SpaceTrafficControlMiniGame.Spaceships {
             cannonsCameraTransform.position = cameraTransformByRegionType[_activeRegion].position;
             cannonsCameraTransform.rotation = cameraTransformByRegionType[_activeRegion].rotation;
             
-            ObjectsReference.Instance.inputManager.SwitchContext(InputContext.SPACE_TRAFFIC_CONTROL_MINI_GAME);
+            ObjectsReference.Instance.inputManager.SwitchContext(InputContext.CANNONS);
         }
 
         public void StopCannonControl() {

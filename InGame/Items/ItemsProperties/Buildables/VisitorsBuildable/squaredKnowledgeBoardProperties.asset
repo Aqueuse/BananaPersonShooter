@@ -17,6 +17,7 @@ MonoBehaviour:
   bananaType: 0
   rawMaterialType: 5
   ingredientsType: 1
+  manufacturedItemsType: 0
   buildableType: 12
   itemName:
   - square information board
@@ -27,12 +28,14 @@ MonoBehaviour:
   - often found naturally in forests
   - "souvent rencontr\xE9 \xE0 l'\xE9tat naturel dans les for\xEAts"
   - A menudo se encuentra naturalmente en los bosques.
+  bitKongValue: 0
   rawMaterialsWithQuantity:
     list:
     - key: 0
       value: 4
     keyCollision: 0
   buildablePrefab: {fileID: 831826108930951630, guid: 765ba6a4bec0c0b498e259570f1655eb, type: 3}
+  blueprintSprite: {fileID: 21300000, guid: a490acbad4826af4891007a6fc6923a1, type: 3}
   needType: 3
   needValue: 2
   isAnimationLooping: 0

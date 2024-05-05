@@ -5,6 +5,26 @@ using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 namespace UI.InGame.Inventory {
+    public enum BananaGunUITabType {
+        INVENTORY_RAW_MATERIALS = 0,
+        INVENTORY_INGREDIENTS = 1,
+        INVENTORY_MANUFACTURED_ITEMS = 2,
+        INVENTORY_BUILDABLES = 3,
+        MINICHIMPBLOCK_DIALOGUE = 4,
+        MINICHIMPBLOCK_DESCRIPTION = 5,
+        MINICHIMPBLOCK_MAP = 6,
+        MINICHIMPBLOCK_BANANAPEDIA = 7,
+        MINICHIMPBLOCK_HELP = 8
+    }
+    
+    public enum MiniChimpBlockTabType {
+        MINICHIMPBLOCK_DIALOGUE,
+        MINICHIMPBLOCK_DESCRIPTION,
+        MINICHIMPBLOCK_MAP,
+        MINICHIMPBLOCK_BANANAPEDIA,
+        MINICHIMPBLOCK_HELP
+    }
+
     public class UInventoriesManager : MonoBehaviour {
         [SerializeField] private GenericDictionary<ItemCategory, Image> buttonImageByInventoryCategory;
         [SerializeField] private GenericDictionary<ItemCategory, TextMeshProUGUI> buttonTextByInventoryCategory;
@@ -15,23 +35,27 @@ namespace UI.InGame.Inventory {
 
         [SerializeField] private TextMeshProUGUI bitkongQuantityText;
         
-        [SerializeField] private Color activatedColor;
-        [SerializeField] private Color unactivatedColor;
-        
         public ItemCategory lastFocusedInventory;
 
         [SerializeField] private UIHelper gamepadUIHelper;
         [SerializeField] private UIHelper keyboardUIHelper;
         
-        private void Start() {
+        public void RefreshInventories() {
             ObjectsReference.Instance.uiRawMaterialsInventory.RefreshUInventory();
             ObjectsReference.Instance.uiIngredientsInventory.RefreshUInventory();
             ObjectsReference.Instance.uiManufacturedItemsItemsInventory.RefreshUInventory();
+            ObjectsReference.Instance.uiBlueprintsInventory.RefreshUInventory();
         }
         
         public void SetLastSelectedItem(ItemCategory itemCategory, GameObject lastSelectedItem) {
             lastFocusedInventory = itemCategory;
             lastSelectedItemByInventoryCategory[itemCategory] = lastSelectedItem;
+        }
+
+        public void OpenInventories() {
+            RefreshInventories();
+
+            SwitchToInventoryTab(lastFocusedInventory);
         }
 
         public void FocusInventory() {
@@ -40,21 +64,7 @@ namespace UI.InGame.Inventory {
                 FocusFirstSlotInInventory(lastFocusedInventory);
             }
         }
-
-        public void UnselectInventorySlots(ItemCategory inventoryCategory) {
-            switch (inventoryCategory) {
-                case ItemCategory.INGREDIENT:
-                    ObjectsReference.Instance.uiIngredientsInventory.UnselectAllSlots();
-                    break;
-                case ItemCategory.RAW_MATERIAL:
-                    ObjectsReference.Instance.uiRawMaterialsInventory.UnselectAllSlots();
-                    break;
-                case ItemCategory.MANUFACTURED_ITEM:
-                    ObjectsReference.Instance.uiManufacturedItemsItemsInventory.UnselectAllSlots();
-                    break;
-            }
-        }
-
+        
         private void FocusFirstSlotInInventory(ItemCategory inventoryCategory) {
             switch (inventoryCategory) {
                 case ItemCategory.INGREDIENT:
@@ -69,57 +79,11 @@ namespace UI.InGame.Inventory {
             }
         }
 
-        public void Switch_To_Left_Tab() {
-            switch (lastFocusedInventory) {
-                case ItemCategory.RAW_MATERIAL:
-                    Switch_To_Tab(ItemCategory.MANUFACTURED_ITEM);
-                    break;
-                case ItemCategory.INGREDIENT:
-                    Switch_To_Tab(ItemCategory.RAW_MATERIAL);
-                    break;
-                case ItemCategory.MANUFACTURED_ITEM:
-                    Switch_To_Tab(ItemCategory.INGREDIENT);
-                    break;
-            }
-        }
-
-        public void Switch_To_Right_Tab() {
-            switch (lastFocusedInventory) {
-                case ItemCategory.RAW_MATERIAL:
-                    Switch_To_Tab(ItemCategory.INGREDIENT);
-                    break;
-                case ItemCategory.INGREDIENT:
-                    Switch_To_Tab(ItemCategory.MANUFACTURED_ITEM);
-                    break;
-                case ItemCategory.MANUFACTURED_ITEM:
-                    Switch_To_Tab(ItemCategory.RAW_MATERIAL);
-                    break;
-            }
-        }
-
-        public void Switch_To_Tab(ItemCategory itemCategory) {
-            UnselectInventorySlots(lastFocusedInventory);
-
+        public void SwitchToInventoryTab(ItemCategory itemCategory) {
             lastFocusedInventory = itemCategory;
 
             foreach (var (category, canvasGroup) in canvasGroupByInventoryCategory) {
-                if (category == itemCategory) {
-                    canvasGroup.alpha = 1;
-                    canvasGroup.interactable = true;
-                    canvasGroup.blocksRaycasts = true;
-                    
-                    buttonImageByInventoryCategory[category].color = activatedColor;
-                    buttonTextByInventoryCategory[category].color = Color.black;
-                }
-
-                else {
-                    canvasGroup.alpha = 0;
-                    canvasGroup.interactable = false;
-                    canvasGroup.blocksRaycasts = false;
-                    
-                    buttonImageByInventoryCategory[category].color = unactivatedColor;
-                    buttonTextByInventoryCategory[category].color = activatedColor;
-                }
+                SetActive(canvasGroup, category == itemCategory);
             }
 
             FocusInventory();
@@ -140,20 +104,15 @@ namespace UI.InGame.Inventory {
             gamepadUIHelper.HideHelper();
         }
         
-        public void Switch_To_Raw_Materials_Inventory() {
-            Switch_To_Tab(ItemCategory.RAW_MATERIAL);
-        }
-
-        public void Switch_To_Ingredients_Inventory() {
-            Switch_To_Tab(ItemCategory.INGREDIENT);
-        }
-        
-        public void Switch_To_Manufactured_Items_Inventory() {
-            Switch_To_Tab(ItemCategory.MANUFACTURED_ITEM);
-        } 
 
         public void SetBitKongQuantity(int bitkongQuantity) {
             bitkongQuantityText.text = bitkongQuantity + " BTK";
+        }
+        
+        public void SetActive(CanvasGroup canvasGroup, bool visible) {
+            canvasGroup.alpha = visible ? 1 : 0;
+            canvasGroup.interactable = visible;
+            canvasGroup.blocksRaycasts = visible;
         }
     }
 }

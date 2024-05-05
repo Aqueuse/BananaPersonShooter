@@ -17,6 +17,7 @@ MonoBehaviour:
   bananaType: 0
   rawMaterialType: 5
   ingredientsType: 1
+  manufacturedItemsType: 0
   buildableType: 0
   itemName:
   - plateform
@@ -27,6 +28,7 @@ MonoBehaviour:
   - a plateform than can be feeded with bananas
   - "une plateforme qui peut \xEAtre aliment\xE9e en bananes"
   - "Una plataforma que puede ser alimentada con pl\xE1tanos"
+  bitKongValue: 0
   rawMaterialsWithQuantity:
     list:
     - key: 0
@@ -35,3 +37,4 @@ MonoBehaviour:
       value: 2
     keyCollision: 0
   buildablePrefab: {fileID: 3266887563888322151, guid: ed6506629ba94dc48b84997bb6e1c79a, type: 3}
+  blueprintSprite: {fileID: 21300000, guid: 6254ffd6dc2c19144b44b0445809a0d8, type: 3}

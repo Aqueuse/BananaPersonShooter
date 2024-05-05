@@ -14,10 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gameObjectTag: 3
   itemCategory: 0
-  bananaType: 14
+  bananaType: 13
   rawMaterialType: 5
-  ingredientsType: 1
-  buildableType: 6
+  ingredientsType: 2
+  manufacturedItemsType: 1
+  buildableType: 5
   itemName:
   - praying hands
   - praying hands

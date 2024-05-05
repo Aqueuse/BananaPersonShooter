@@ -17,6 +17,7 @@ MonoBehaviour:
   bananaType: 0
   rawMaterialType: 5
   ingredientsType: 1
+  manufacturedItemsType: 0
   buildableType: 9
   itemName:
   - bench
@@ -27,12 +28,14 @@ MonoBehaviour:
   - a simple imitation wood bench with back
   - un simple banc imitation bois avec un dossier
   - "un banco sencillo de imitaci\xF3n de madera con respaldo"
+  bitKongValue: 0
   rawMaterialsWithQuantity:
     list:
     - key: 0
       value: 10
     keyCollision: 0
   buildablePrefab: {fileID: 8975577443026611095, guid: 066d0f08d2184ad409aebbd605d3c47a, type: 3}
+  blueprintSprite: {fileID: 21300000, guid: 959c5729e05411f41b732c168b362631, type: 3}
   needType: 2
   needValue: 2
   isAnimationLooping: 1

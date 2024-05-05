@@ -34,10 +34,14 @@ namespace Save {
             LoadSelectedBanana();
             LoadBananaManVitals();
             LoadPositionAndRotation();
-            
-            LoadActiveItem();
+
+            LoadBananaGunMode();
+            LoadActiveBanana();
+            LoadActiveBuildable();
             LoadBitkongQuantity();
             CheckTutorialFinished();
+            
+            ObjectsReference.Instance.uInventoriesManager.RefreshInventories();
         }
         
         private BananaManSavedData LoadPlayerByUuid(string saveUuid) {
@@ -89,12 +93,18 @@ namespace Save {
                 manufacturedItemsInventory[manufacturedItemSlot.Key] = bananaManSavedData.manufacturedInventory[manufacturedItemSlot.Key.ToString()];
             }
         }
+
+        private void LoadBananaGunMode() {
+            var bananagunMode = Enum.Parse<BananaGunMode>(bananaManSavedData.bananaGunMode);
+            bananaMan.bananaGunMode = bananagunMode;
+            ObjectsReference.Instance.bananaGunActionsSwitch.SwitchToBananaGunMode(bananaMan.bananaGunMode);
+        }
         
         private void LoadSelectedBanana() {
             var bananaSlotType = Enum.Parse<BananaType>(bananaManSavedData.bananaSlot);
             var bananaScriptableObject = ObjectsReference.Instance.meshReferenceScriptableObject.bananasPropertiesScriptableObjects[bananaSlotType];
-            bananaMan.activeItem = bananaScriptableObject;
-            ObjectsReference.Instance.uiTools.SetBananaQuantity(bananaMan.inventories.bananasInventory[bananaScriptableObject.bananaType]);
+            bananaMan.activeBanana = bananaScriptableObject;
+            ObjectsReference.Instance.uiFlippers.SetBananaQuantity(bananaMan.inventories.bananasInventory[bananaScriptableObject.bananaType]);
         }
 
         private void LoadBananaManVitals() {
@@ -111,13 +121,20 @@ namespace Save {
             bananaMan.transform.rotation = Quaternion.Euler(bananaManRotation);
         }
         
-        private void LoadActiveItem() {
-            var activeItemType = bananaManSavedData.activeBanana;
-            
-            bananaMan.activeItem = ObjectsReference.Instance.meshReferenceScriptableObject.bananasPropertiesScriptableObjects[activeItemType];
-            ObjectsReference.Instance.uiTools.SetPlateformPlacementAvailability(ObjectsReference.Instance.rawMaterialsInventory.HasCraftingIngredients(BuildableType.PLATEFORM));
-        }
+        private void LoadActiveBanana() {
+            var activeBananaType = bananaManSavedData.activeBanana;
+            bananaMan.activeBanana = ObjectsReference.Instance.meshReferenceScriptableObject.bananasPropertiesScriptableObjects[activeBananaType];
 
+            ObjectsReference.Instance.uiFlippers.SetBananaQuantity(ObjectsReference.Instance.bananasInventory.GetQuantity(activeBananaType));
+        }
+        
+        private void LoadActiveBuildable() {
+            var activeBuildableType = bananaManSavedData.activeBuildable;
+            
+            bananaMan.activeBuildable = ObjectsReference.Instance.meshReferenceScriptableObject.buildablePropertiesScriptableObjects[activeBuildableType];
+            ObjectsReference.Instance.uiFlippers.SetBuildablePlacementAvailability(ObjectsReference.Instance.rawMaterialsInventory.HasCraftingIngredients(activeBuildableType));
+        }
+        
         private void LoadBitkongQuantity() {
             bananaMan.inventories.bitKongQuantity = bananaManSavedData.bitKongQuantity;
         }
@@ -127,12 +144,12 @@ namespace Save {
 
             if (bananaMan.tutorialFinished) {
                 ObjectsReference.Instance.bananaGun.bananaGunInBack.SetActive(true);
-                ObjectsReference.Instance.uiManager.SetActive(UICanvasGroupType.HUD, true);
+                ObjectsReference.Instance.uiManager.SetActive(UICanvasGroupType.HUD_BANANAMAN, true);
             }
 
             else {
                 ObjectsReference.Instance.bananaGun.bananaGunInBack.SetActive(false);
-                ObjectsReference.Instance.uiManager.SetActive(UICanvasGroupType.HUD, false);
+                ObjectsReference.Instance.uiManager.SetActive(UICanvasGroupType.HUD_BANANAMAN, false);
                 ObjectsReference.Instance.uiCrosshairs.SetCrosshair(BananaType.EMPTY);
             }
         }
@@ -154,8 +171,9 @@ namespace Save {
             foreach (var inventorySlot in bananaMan.inventories.manufacturedItemsInventory) {
                 bananaManSavedData.manufacturedInventory[inventorySlot.Key.ToString()] = inventorySlot.Value;
             }
-    
-            bananaManSavedData.bananaSlot = bananaMan.activeItem.bananaType.ToString();
+
+            bananaManSavedData.bananaGunMode = bananaMan.bananaGunMode.ToString();
+            bananaManSavedData.bananaSlot = bananaMan.activeBanana.bananaType.ToString();
             bananaManSavedData.health = bananaMan.health; 
             bananaManSavedData.resistance = bananaMan.resistance;
 
@@ -173,7 +191,8 @@ namespace Save {
 
             bananaManSavedData.hasFinishedTutorial = bananaMan.tutorialFinished;
 
-            bananaManSavedData.activeBanana = bananaMan.activeItem.bananaType;
+            bananaManSavedData.activeBanana = bananaMan.activeBanana.bananaType;
+            bananaManSavedData.activeBuildable = bananaMan.activeBuildable.buildableType;
 
             bananaManSavedData.bitKongQuantity = bananaMan.inventories.bitKongQuantity;
         

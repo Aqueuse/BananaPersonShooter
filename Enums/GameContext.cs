@@ -3,11 +3,10 @@ public enum GameContext {
     IN_GAME,
     IN_CINEMATIQUE,
     IN_HOME,
-    IN_GESTION_VIEW,
-    IN_INVENTORY,
+    IN_MINICHIMP_VIEW,
+    IN_BANANAGUN_UI,
     IN_GAME_MENU,
     DEAD,
-    IN_MAP,
     IN_BANANA_SELECTOR,
     IN_COMMAND_ROOM_PANEL
 }

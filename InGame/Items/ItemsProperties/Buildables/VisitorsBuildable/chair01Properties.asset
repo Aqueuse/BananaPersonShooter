@@ -17,6 +17,7 @@ MonoBehaviour:
   bananaType: 0
   rawMaterialType: 5
   ingredientsType: 1
+  manufacturedItemsType: 0
   buildableType: 17
   itemName:
   - chair
@@ -27,12 +28,14 @@ MonoBehaviour:
   - bench for one person
   - banc pour une seule personne
   - banco para una persona
+  bitKongValue: 0
   rawMaterialsWithQuantity:
     list:
     - key: 0
       value: 5
     keyCollision: 0
   buildablePrefab: {fileID: 8871149111809520450, guid: f85b9b15c06ad954ea75694550a097ae, type: 3}
+  blueprintSprite: {fileID: 21300000, guid: f671d216d79716b4c81d31e5fd370078, type: 3}
   needType: 2
   needValue: 2
   isAnimationLooping: 1

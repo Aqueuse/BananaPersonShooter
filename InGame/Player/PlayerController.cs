@@ -68,9 +68,9 @@ namespace InGame.Player {
             _cameraRotation.w = mainCameraTransform.rotation.w;
             _cameraRotation = _cameraRotation.normalized;
                 
-            _rawInputMovement.x = ObjectsReference.Instance.gameActions.move.x;
+            _rawInputMovement.x = ObjectsReference.Instance.keyboardGameActions.move.x;
             _rawInputMovement.y = 0;
-            _rawInputMovement.z = ObjectsReference.Instance.gameActions.move.y; // Y en input => Z pour le player (forward)
+            _rawInputMovement.z = ObjectsReference.Instance.keyboardGameActions.move.y; // Y en input => Z pour le player (forward)
                 
             _rawInputMovement = Vector3.ClampMagnitude(_rawInputMovement, 1); // clamp the speed in diagonal
             

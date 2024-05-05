@@ -17,6 +17,7 @@ MonoBehaviour:
   bananaType: 0
   rawMaterialType: 5
   ingredientsType: 1
+  manufacturedItemsType: 0
   buildableType: 10
   itemName:
   - bench
@@ -27,12 +28,14 @@ MonoBehaviour:
   - a garden bench in a particularly metallic wood
   - "un banc de jardin dans un bois particuli\xE8rement m\xE9tallique"
   - "un banco de jard\xEDn de madera especialmente met\xE1lica"
+  bitKongValue: 0
   rawMaterialsWithQuantity:
     list:
     - key: 0
       value: 10
     keyCollision: 0
   buildablePrefab: {fileID: 1991512836727731211, guid: 46a6d640e26506447bc262e143bd448b, type: 3}
+  blueprintSprite: {fileID: 21300000, guid: 476980df6586b4b42851a3627133d4b1, type: 3}
   needType: 2
   needValue: 2
   isAnimationLooping: 1

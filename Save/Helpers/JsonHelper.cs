@@ -26,5 +26,14 @@ namespace Save.Helpers {
 
             return JsonConvert.SerializeObject(serializedQuaternion);
         }
+
+        public static Color FromStringToColor(string color) {
+            ColorUtility.TryParseHtmlString(color, out var colorToRetry);
+            return colorToRetry;
+        }
+
+        public static string FromColorToString(Color color) {
+            return "#"+ColorUtility.ToHtmlStringRGBA(color);
+        }
     }
 }

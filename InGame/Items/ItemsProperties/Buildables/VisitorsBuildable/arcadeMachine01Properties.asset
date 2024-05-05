@@ -17,6 +17,7 @@ MonoBehaviour:
   bananaType: 0
   rawMaterialType: 5
   ingredientsType: 1
+  manufacturedItemsType: 0
   buildableType: 6
   itemName:
   - arcade machine "Poney Kong"
@@ -31,6 +32,7 @@ MonoBehaviour:
     d\u2019arcade d\xE9lirant."
   - "Un valiente pony sale al rescate de su amada, secuestrada por un gorila furioso.
     Salta, galopa y evita los obst\xE1culos en este loco juego de arcade."
+  bitKongValue: 0
   rawMaterialsWithQuantity:
     list:
     - key: 0
@@ -39,6 +41,7 @@ MonoBehaviour:
       value: 5
     keyCollision: 0
   buildablePrefab: {fileID: 2994629068037613359, guid: 117919c6ff3ffc949999e3532ee9bf43, type: 3}
+  blueprintSprite: {fileID: 21300000, guid: d443b30be0c81b342a592683bab3cf94, type: 3}
   needType: 0
   needValue: 2
   isAnimationLooping: 1

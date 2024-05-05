@@ -2,26 +2,30 @@ using Audio;
 using Cameras;
 using InGame;
 using InGame.CommandRoomPanelControls;
+using InGame.Gestion;
 using InGame.Interactions;
 using InGame.Inventory;
 using InGame.Items.ItemsBehaviours;
 using InGame.Items.ItemsData;
+using InGame.MiniChimpBlock;
 using InGame.MiniGames.MarketingCampaignMiniGame;
 using InGame.MiniGames.SpaceTrafficControlMiniGame.Spaceships;
 using InGame.Monkeys;
 using InGame.Player;
-using InGame.Player.PlayerActions;
+using InGame.Player.BananaGunActions;
 using InGame.SpaceTrafficControl;
 using Save;
 using Settings;
+using SharedInputs;
 using UI;
 using UI.Bananapedia;
 using UI.InGame;
 using UI.InGame.BananaSelector;
 using UI.InGame.CommandRoomControlPanels;
-using UI.InGame.Gestion;
 using UI.InGame.Inventory;
 using UI.InGame.Merchimps;
+using UI.InGame.MiniChimpBlock;
+using UI.InGame.MiniChimpBlock.Descriptions;
 using UI.InGame.VisitorReceptionMiniGameUI;
 using UI.Menus;
 using UI.Save;
@@ -45,10 +49,9 @@ public class ObjectsReference : MonoSingleton<ObjectsReference> {
     public BananaMan bananaMan;
     public PlayerController playerController;
     public BananaGun bananaGun;
-    public PlayerActionsSwitch playerActionsSwitch;
     public Scan scan;
     public Build build;
-    public ThrowBanana throwBanana;
+    public Shoot shoot;
     public Grab grab;
     public Trade trade;
 
@@ -56,11 +59,12 @@ public class ObjectsReference : MonoSingleton<ObjectsReference> {
     public RawMaterialsInventory rawMaterialsInventory;
     public IngredientsInventory ingredientsInventory;
     public ManufacturedItemsInventory manufacturedItemsInventory;
-    
+
+    public MiniChimpBlockManager miniChimpBlockManager;
     public Map map;
-    
+
     public GhostsReference ghostsReference;
-    
+
     public MainCamera mainCamera;
     public CameraPlayer cameraPlayer;
     public CameraGestion gestionCamera;
@@ -70,23 +74,25 @@ public class ObjectsReference : MonoSingleton<ObjectsReference> {
     public Death death;
     public Tutorial tutorial;
 
-    public GameActions gameActions;
-    public UiActions uiActions;
+    public GameActions keyboardGameActions;
+    public UiActions keyboardUiActions;
+    public BananaGunActionsSwitch bananaGunActionsSwitch;
 
     public WorldData worldData;
     public GameSave gameSave;
     public GameReset gameReset;
 
     public GameSettings gameSettings;
-    
+
     public Teleportation teleportation;
-    
-    public DescriptionsManager descriptionsManager;
-    public GestionBuild gestionBuild;
+
+    public UIDescriptionsManager uiDescriptionsManager;
+    public GestionMode gestionMode;
 
     public UIManager uiManager;
     public UInventoriesManager uInventoriesManager;
-    public UIHud uiHud;
+    public UIBananaGun uiBananaGun;
+    public UiMiniChimpBlock uiMiniChimpBlock;
 
     public UIRawMaterialsInventory uiRawMaterialsInventory;
     public UIIngredientsInventory uiIngredientsInventory;
@@ -94,7 +100,7 @@ public class ObjectsReference : MonoSingleton<ObjectsReference> {
     public UIManufacturedItemsInventory uiManufacturedItemsItemsInventory;
 
     public UIBananaSelector uiBananaSelector;
-    
+
     public UICrosshairs uiCrosshairs;
     public UIFace uiFace;
     public UIQueuedMessages uiQueuedMessages;
@@ -111,5 +117,5 @@ public class ObjectsReference : MonoSingleton<ObjectsReference> {
     public UIVisitorReception uiTouristReception;
     public UIMerchant uiMerchant;
     
-    public UITools uiTools;
+    public UIFlippers uiFlippers;
 }

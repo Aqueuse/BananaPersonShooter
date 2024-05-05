@@ -17,6 +17,7 @@ MonoBehaviour:
   bananaType: 0
   rawMaterialType: 5
   ingredientsType: 1
+  manufacturedItemsType: 0
   buildableType: 16
   itemName:
   - food dispenser
@@ -27,6 +28,7 @@ MonoBehaviour:
   - not suitable for non-humanoid primates
   - "ne convient pas aux primates non humano\xEFdes"
   - no apto para primates no humanoides
+  bitKongValue: 0
   rawMaterialsWithQuantity:
     list:
     - key: 0
@@ -35,6 +37,7 @@ MonoBehaviour:
       value: 2
     keyCollision: 0
   buildablePrefab: {fileID: 617907147682838640, guid: af271ba40ae07b8439d85e3144af13ee, type: 3}
+  blueprintSprite: {fileID: 21300000, guid: fb1fafd78445fb643b8c1f562427cc31, type: 3}
   needType: 1
   needValue: 2
   isAnimationLooping: 0

@@ -6,7 +6,7 @@ namespace UI.InGame.Merchimps {
         private ItemScriptableObject itemScriptableObject;
         
         public void SetDescriptionAndName() {
-            ObjectsReference.Instance.descriptionsManager.SetDescription(itemScriptableObject);
+            ObjectsReference.Instance.uiDescriptionsManager.SetDescription(itemScriptableObject);
         }
     }
 }

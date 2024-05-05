@@ -17,6 +17,7 @@ MonoBehaviour:
   bananaType: 0
   rawMaterialType: 5
   ingredientsType: 1
+  manufacturedItemsType: 0
   buildableType: 3
   itemName:
   - retriever
@@ -27,6 +28,7 @@ MonoBehaviour:
   - Allows you to retrieve all platforms from an area of the station
   - "Permet de r\xE9cup\xE9rer toutes les plateformes d'une zone de la station"
   - "Permite recuperar todas las plataformas de una zona de la estaci\xF3n"
+  bitKongValue: 0
   rawMaterialsWithQuantity:
     list:
     - key: 0
@@ -35,3 +37,4 @@ MonoBehaviour:
       value: 1
     keyCollision: 0
   buildablePrefab: {fileID: 1245519440109076037, guid: 63783d9373ac3de41987b5eaedf948b1, type: 3}
+  blueprintSprite: {fileID: 21300000, guid: 258daccfb2cfa2249a1180552c3cd6d4, type: 3}

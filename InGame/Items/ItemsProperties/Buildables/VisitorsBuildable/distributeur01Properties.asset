@@ -17,6 +17,7 @@ MonoBehaviour:
   bananaType: 0
   rawMaterialType: 5
   ingredientsType: 1
+  manufacturedItemsType: 0
   buildableType: 14
   itemName:
   - drinks dispenser
@@ -27,6 +28,7 @@ MonoBehaviour:
   - sells banana juice, but not only that!
   - vend du jus de banane, mais pas que !
   - "vende jugo de pl\xE1tano, pero no solo eso!"
+  bitKongValue: 0
   rawMaterialsWithQuantity:
     list:
     - key: 0
@@ -35,6 +37,7 @@ MonoBehaviour:
       value: 2
     keyCollision: 0
   buildablePrefab: {fileID: 2610906788032314510, guid: 2ccb37636ac069340af094d1d703cacb, type: 3}
+  blueprintSprite: {fileID: 21300000, guid: 9d22c92d1ebc47343bf5e4d38b4f7d41, type: 3}
   needType: 1
   needValue: 2
   isAnimationLooping: 0

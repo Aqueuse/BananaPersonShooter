@@ -17,6 +17,7 @@ MonoBehaviour:
   bananaType: 0
   rawMaterialType: 5
   ingredientsType: 1
+  manufacturedItemsType: 0
   buildableType: 1
   itemName:
   - banana dryer
@@ -27,6 +28,7 @@ MonoBehaviour:
   - With that, you can dry bananas peels to make fabric
   - "Avec \xE7a, vous pourrez s\xE9cher vos peaux de bananes pour en faire du tissu"
   - "Con eso, puedes secar las c\xE1scaras de pl\xE1tano para hacer tela con ellas"
+  bitKongValue: 0
   rawMaterialsWithQuantity:
     list:
     - key: 0
@@ -35,3 +37,4 @@ MonoBehaviour:
       value: 1
     keyCollision: 0
   buildablePrefab: {fileID: 637136286764793117, guid: fe03facf4bdab3f4e8e3d03d49cef23d, type: 3}
+  blueprintSprite: {fileID: 21300000, guid: 2d83177f74c78bf4a8b3c20220d7492f, type: 3}

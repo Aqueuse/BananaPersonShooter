@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace InGame.MiniGames.MarketingCampaignMiniGame {
     public class AdMarketingCampaignManager : MonoBehaviour {
-        public AdCampaign currentAdCampaign;
+        public AdCampaign adCampaign;
         
         private bool isAdCampaignAvailable;
 

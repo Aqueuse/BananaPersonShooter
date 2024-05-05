@@ -14,6 +14,7 @@ namespace Save.Templates {
         public float zWorldRotation = 0;
         
         public BananaType activeBanana = BananaType.EMPTY;
+        public BuildableType activeBuildable = BuildableType.PLATEFORM;
         public int bitKongQuantity;
         
         public bool hasFinishedTutorial = false;
@@ -43,10 +44,10 @@ namespace Save.Templates {
             {RawMaterialType.METAL.ToString(), 0},
             {RawMaterialType.FABRIC.ToString(), 0},
             {RawMaterialType.BATTERY.ToString(), 0}
-        };
+        };  
 
         public Dictionary<string, int> ingredientsInventory = new() {
-            {IngredientsType.BANANA_DOG_BREAD.ToString(), 0},
+            {IngredientsType.BANANA_DOG_BREAD.ToString(), 0},   
             {IngredientsType.BANANA_WITHOUT_SKIN.ToString(), 0},
             {IngredientsType.EMPTY.ToString(), 0}
         };
@@ -57,5 +58,7 @@ namespace Save.Templates {
         };
 
         public string bananaSlot = BananaType.EMPTY.ToString();
+
+        public string bananaGunMode = BananaGunMode.SHOOT.ToString();
     }
 }

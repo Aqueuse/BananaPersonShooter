@@ -10,15 +10,16 @@ namespace Cameras {
     public class MainCamera : MonoBehaviour {
         [SerializeField] private CinemachineFreeLook bananaManCamera;
         [SerializeField] private CinemachineVirtualCamera topDownCamera;
-        
+
+        [SerializeField] private Material foliageMaterial;
+
         public CameraGestion cameraGestion;
         private CinemachineCameraOffset _bananaManCameraOffset;
 
-        [SerializeField] private Material foliageMaterial;
         private static readonly int Alpha = Shader.PropertyToID("_Alpha");
 
         public CameraModeType cameraModeType;
-        
+
         private void Start() {
             cameraGestion = ObjectsReference.Instance.gestionCamera;
         }
@@ -27,9 +28,9 @@ namespace Cameras {
             //_cinemachineFollowZoom.m_Width = acceleration;
         }
 
-        public void Switch_To_Camera_View(CameraModeType cameraModeType) {
+        private void Switch_To_Camera_View(CameraModeType cameraModeType) {
             this.cameraModeType = cameraModeType;
-            
+
             switch (cameraModeType) {
                 case CameraModeType.PLAYER_VIEW:
                     bananaManCamera.m_Priority = 20;
@@ -52,48 +53,46 @@ namespace Cameras {
         }
         
         public void SwitchToGestionView() {
-            ObjectsReference.Instance.gameManager.gameContext = GameContext.IN_GESTION_VIEW;
+            ObjectsReference.Instance.gameManager.gameContext = GameContext.IN_MINICHIMP_VIEW;
 
-            ObjectsReference.Instance.descriptionsManager.HideAllPanels();
+            ObjectsReference.Instance.uiDescriptionsManager.HideAllPanels();
             ObjectsReference.Instance.uiManager.SetActive(UICanvasGroupType.INVENTORIES, true);
             ObjectsReference.Instance.uiBlueprintsInventory.RefreshUInventory();
             ObjectsReference.Instance.uInventoriesManager.FocusInventory();
-            
-            ObjectsReference.Instance.uiManager.SetActive(UICanvasGroupType.BUILDABLES, true);
+
+            ObjectsReference.Instance.uiManager.SetActive(UICanvasGroupType.BUILDABLES_INVENTORY, true);
 
             ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.CROSSHAIRS].alpha = 0;
             ObjectsReference.Instance.cameraPlayer.Set0Sensibility();
-            
+
             ObjectsReference.Instance.gestionCamera.enabled = true;
-            
+
             ObjectsReference.Instance.mainCamera.Switch_To_Camera_View(CameraModeType.TOP_DOWN_VIEW);
-            ObjectsReference.Instance.gestionBuild.enabled = true;
-            ObjectsReference.Instance.inputManager.SwitchContext(InputContext.GESTION);
+            ObjectsReference.Instance.gestionMode.enabled = true;
+            ObjectsReference.Instance.inputManager.SwitchContext(InputContext.BANANAGUN_UI);
         }
         
         public void CloseGestionView() {
             ObjectsReference.Instance.uInventoriesManager.GetCurrentUIHelper().ShowDefaultHelper();
 
             ObjectsReference.Instance.uiManager.SetActive(UICanvasGroupType.INVENTORIES, false);
-            ObjectsReference.Instance.descriptionsManager.HideAllPanels();
+            ObjectsReference.Instance.uiDescriptionsManager.HideAllPanels();
             Cursor.visible = false;
             Cursor.lockState = CursorLockMode.Locked;
-            
-            ObjectsReference.Instance.uiManager.SetActive(UICanvasGroupType.BUILDABLES, false);
+
+            ObjectsReference.Instance.uiManager.SetActive(UICanvasGroupType.BUILDABLES_INVENTORY, false);
             ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.CROSSHAIRS].alpha = 1;
 
             ObjectsReference.Instance.build.CancelGhost();
-            ObjectsReference.Instance.gestionBuild.enabled = false;
+            ObjectsReference.Instance.gestionMode.enabled = false;
 
             ObjectsReference.Instance.mainCamera.Switch_To_Camera_View(CameraModeType.PLAYER_VIEW);
-            
+
             ObjectsReference.Instance.cameraPlayer.SetNormalSensibility();
-            
+
             ObjectsReference.Instance.inputManager.SwitchContext(InputContext.GAME);
 
-            ObjectsReference.Instance.descriptionsManager.HideAllPanels();
-            
-            ObjectsReference.Instance.playerActionsSwitch.SwitchToPlayerAction(PlayerActionsType.IDLE);
+            ObjectsReference.Instance.uiDescriptionsManager.HideAllPanels();
         }
     }
 }

@@ -18,13 +18,8 @@ namespace UI.InGame.Inventory {
 
         public void RefreshUInventory() {
             foreach (var inventoryItem in uInventorySlots) {
-                if (inventoryScriptableObject.rawMaterialsInventory[inventoryItem.Key] > 0) {
-                    inventoryItem.Value.gameObject.SetActive(true);
-                    inventoryItem.Value.GetComponent<UInventorySlot>()
-                        .SetQuantity(inventoryScriptableObject.rawMaterialsInventory[inventoryItem.Key]);
-                }
-
-                else inventoryItem.Value.gameObject.SetActive(false);
+                inventoryItem.Value.GetComponent<UInventorySlot>()
+                    .SetQuantity(inventoryScriptableObject.rawMaterialsInventory[inventoryItem.Key]);
             }
         }
         

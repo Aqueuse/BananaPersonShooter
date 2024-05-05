@@ -44,7 +44,7 @@ namespace InGame.Player {
         }
         
         public void UngrabBananaGun() {
-            ObjectsReference.Instance.throwBanana.CancelThrow();
+            ObjectsReference.Instance.shoot.CancelThrow();
             
             bananaGun.SetActive(false);
             bananaGunInBack.SetActive(true);

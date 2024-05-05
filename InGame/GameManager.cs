@@ -38,7 +38,7 @@ namespace InGame {
 
         public void Play(string saveUuid, bool isNewGame) {
             ObjectsReference.Instance.uiManager.HideHomeMenu();
-            ObjectsReference.Instance.uiManager.SetActive(UICanvasGroupType.HUD, false);
+            ObjectsReference.Instance.uiManager.SetActive(UICanvasGroupType.HUD_BANANAMAN, false);
 
             Cursor.visible = false;
             Cursor.lockState = CursorLockMode.Locked;
@@ -72,7 +72,9 @@ namespace InGame {
         public void PauseGame() {
             ObjectsReference.Instance.cameraPlayer.Set0Sensibility();
             ObjectsReference.Instance.playerController.canMove = false;
-
+            
+            ObjectsReference.Instance.bananaGunActionsSwitch.DesactiveBananaGun();
+            
             if (gameContext == GameContext.IN_GAME) {
                 foreach (var monkey in ObjectsReference.Instance.worldData.monkeys) {
                     monkey.PauseMonkey();
@@ -87,6 +89,8 @@ namespace InGame {
             ObjectsReference.Instance.cameraPlayer.SetNormalSensibility();
             ObjectsReference.Instance.playerController.canMove = true;
 
+            ObjectsReference.Instance.bananaGunActionsSwitch.SwitchToBananaGunMode(ObjectsReference.Instance.bananaMan.bananaGunMode);
+            
             if (gameContext == GameContext.IN_GAME_MENU) {
                 foreach (var monkey in ObjectsReference.Instance.worldData.monkeys) {
                     monkey.UnpauseMonkey();
@@ -103,7 +107,8 @@ namespace InGame {
         
         public void ReturnHome() {
             ObjectsReference.Instance.inputManager.SwitchContext(InputContext.UI);
-            
+            ObjectsReference.Instance.bananaGunActionsSwitch.DesactiveBananaGun();
+
             // prevent banana man to fall while loading scene
             ObjectsReference.Instance.playerController.StopPlayer();
             
@@ -128,7 +133,7 @@ namespace InGame {
             ObjectsReference.Instance.uiManager.HideGameMenu();
             ObjectsReference.Instance.uiManager.ShowHomeMenu();
 
-            ObjectsReference.Instance.uiManager.SetActive(UICanvasGroupType.HUD, false);
+            ObjectsReference.Instance.uiManager.SetActive(UICanvasGroupType.HUD_BANANAMAN, false);
             ObjectsReference.Instance.uiManager.SetActive(UICanvasGroupType.CROSSHAIRS, false);
 
             ObjectsReference.Instance.cameraPlayer.Set0Sensibility();
@@ -145,7 +150,7 @@ namespace InGame {
             ObjectsReference.Instance.gameSave.CancelAutoSave();
 
             ObjectsReference.Instance.inputManager.SwitchContext(InputContext.HOME);
-            ObjectsReference.Instance.uiActions.enabled = true;
+            ObjectsReference.Instance.keyboardUiActions.enabled = true;
         }
 
         private void SwitchToNewGameSettings() {
@@ -179,7 +184,7 @@ namespace InGame {
                 inGameGameObject.SetActive(true);
             }
             
-            ObjectsReference.Instance.uiManager.SetActive(UICanvasGroupType.HUD, true);
+            ObjectsReference.Instance.uiManager.SetActive(UICanvasGroupType.HUD_BANANAMAN, true);
             ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.CROSSHAIRS].alpha = 1f;
             ObjectsReference.Instance.uiCrosshairs.SetCrosshair(BananaType.EMPTY);
 

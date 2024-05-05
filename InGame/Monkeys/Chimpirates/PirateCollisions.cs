@@ -15,7 +15,7 @@ namespace InGame.Monkeys.Chimpirates {
             if (other.TryGetComponent(out PlateformBehaviour plateformBehaviour)) {
                 switch (plateformBehaviour.plateformType) {
                     case BananaType.CAVENDISH:
-                        pirateBehaviour.pirateState = PirateState.PLATEFORM_INTERACTION;
+                        pirateBehaviour.pirateSavedData.pirateState = PirateState.PLATEFORM_INTERACTION;
 
                         plateformBehaviour.isPirateTargeted = false;
                         _navMeshAgent.enabled = false;
@@ -38,7 +38,7 @@ namespace InGame.Monkeys.Chimpirates {
         private void OnCollisionEnter(Collision other) {
             if (other.gameObject.layer != 11) return;
 
-            if (pirateBehaviour.pirateState == PirateState.PLATEFORM_INTERACTION) {
+            if (pirateBehaviour.pirateSavedData.pirateState == PirateState.PLATEFORM_INTERACTION) {
                 pirateRigidbody.isKinematic = true;
                 pirateRigidbody.useGravity = false;
                 _navMeshAgent.enabled = true;

@@ -8,24 +8,18 @@ using Save.Templates;
 namespace InGame.Items.ItemsBehaviours.SpaceshipsBehaviours {
     public class TouristSpaceshipBehaviour : SpaceshipBehaviour {
         private List<TouristData> touristDatas;
-        
+
         public override void Init() {
-            transform.position = JsonHelper.FromStringToVector3(spaceshipSavedData.spaceshipPosition);
-            transform.rotation = JsonHelper.FromStringToQuaternion(spaceshipSavedData.spaceshipRotation); 
+            touristDatas = spaceshipSavedData.touristDatas;
 
-            spaceshipName = spaceshipSavedData.spaceshipName;
-            spaceshipGuid = spaceshipSavedData.spaceshipGuid;
-            communicationMessagePrefabIndex = spaceshipSavedData.communicationMessageprefabIndex;
-            travelState = spaceshipSavedData.travelState;
-
-            if (spaceshipSavedData.travelState != TravelState.WAIT_IN_STATION) {
+            if (spaceshipSavedData.travelState == TravelState.WAIT_IN_STATION) {
+                ObjectsReference.Instance.spaceTrafficControlManager.AssignSpaceshipToHangar(assignatedHangar);
+                
                 // TODO : start incrementing timer
                 // spawn character etc
             }
-            
-            touristDatas = spaceshipSavedData.touristDatas;
         }
-    
+
         public override void GenerateSaveData() {
             if(string.IsNullOrEmpty(spaceshipGuid)) {
                 spaceshipGuid = Guid.NewGuid().ToString();
@@ -34,12 +28,15 @@ namespace InGame.Items.ItemsBehaviours.SpaceshipsBehaviours {
             SpaceshipSavedData touristSpaceshipData = new SpaceshipSavedData {
                 spaceshipName = spaceshipName,
                 spaceshipGuid = spaceshipGuid,
-                communicationMessageprefabIndex = communicationMessagePrefabIndex,
+                communicationMessagePrefabIndex = communicationMessagePrefabIndex,
+                uiColor = JsonHelper.FromColorToString(spaceshipUIcolor),
                 touristDatas = touristDatas,
+                characterType = characterType,
                 spaceshipPosition = JsonHelper.FromVector3ToString(transform.position),
                 spaceshipRotation = JsonHelper.FromQuaternionToString(transform.rotation),
                 travelState = travelState,
-                timeToNextState = timeToNextState
+                arrivalPoint = JsonHelper.FromVector3ToString(arrivalPosition),
+                hangarNumber = assignatedHangar
             };
 
             savedData = JsonConvert.SerializeObject(touristSpaceshipData);
