@@ -1,6 +1,5 @@
 ﻿using InGame.Items.ItemsProperties.Bananas;
 using InGame.Items.ItemsProperties.Buildables;
-using InGame.Items.ItemsProperties.Characters;
 using UnityEngine;
 
 namespace InGame.Player {
@@ -10,17 +9,11 @@ namespace InGame.Player {
         [SerializeField] private CanvasRenderer faceCanvasRenderer;
         public TpsPlayerAnimator tpsPlayerAnimator;
 
-		public BananasPropertiesScriptableObject activeBanana;
-        public BuildablePropertiesScriptableObject activeBuildable;
+        public BananaManData bananaManData;
 
-        public InventoryScriptableObject inventories;
-        
-        public bool isInWater;
         public bool isGrabingBananaGun;
         public BananaGunMode bananaGunMode;
-
-        public bool canTakeFallDamage;
-
+        
         private const float _maxHealth = 100;
         public float health;
         public float resistance;
@@ -34,25 +27,25 @@ namespace InGame.Player {
         }
 
         public void SetActiveItem(BananasPropertiesScriptableObject bananasPropertiesScriptableObject) {
-            activeBanana = bananasPropertiesScriptableObject;
+            bananaManData.activeBanana = bananasPropertiesScriptableObject;
             
             ObjectsReference.Instance.uiFlippers.SetBananaType(bananasPropertiesScriptableObject);
             ObjectsReference.Instance.uiFlippers.SetBananaQuantity(ObjectsReference.Instance.bananasInventory.GetQuantity(bananasPropertiesScriptableObject.bananaType));
         }
 
         public void SetActiveBuildable(BuildablePropertiesScriptableObject buildablePropertiesScriptableObject) {
-            activeBuildable = buildablePropertiesScriptableObject;
+            bananaManData.activeBuildable = buildablePropertiesScriptableObject;
             ObjectsReference.Instance.build.SetActiveBuildable(buildablePropertiesScriptableObject.buildableType);
             ObjectsReference.Instance.uiFlippers.SetBuildable(buildablePropertiesScriptableObject.blueprintSprite);
         }
 
         public void GainHealth() {
-            if (ObjectsReference.Instance.bananaMan.inventories.bananasInventory[activeBanana.bananaType] > 0 && health < _maxHealth) {
-                health += activeBanana.healthBonus;
-                resistance += activeBanana.resistanceBonus;
+            if (bananaManData.bananasInventory[bananaManData.activeBanana.bananaType] > 0 && health < _maxHealth) {
+                health += bananaManData.activeBanana.healthBonus;
+                resistance += bananaManData.activeBanana.resistanceBonus;
 
-                ObjectsReference.Instance.bananasInventory.RemoveQuantity(activeBanana.bananaType, 1);
-                ObjectsReference.Instance.rawMaterialsInventory.AddQuantity(RawMaterialType.BANANA_PEEL, 1);
+                ObjectsReference.Instance.bananasInventory.RemoveQuantity(bananaManData.activeBanana.bananaType, 1);
+                ObjectsReference.Instance.droppedInventory.AddQuantity(DroppedType.BANANA_PEEL, 1);
                 SetBananaSkinHealth();
                 ObjectsReference.Instance.audioManager.PlayEffect(SoundEffectType.EAT_BANANA, 0);
             }

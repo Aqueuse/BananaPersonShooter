@@ -1,11 +1,12 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 namespace InGame.Inventory {
     public class IngredientsInventory : MonoBehaviour {
-        private GenericDictionary<IngredientsType, int> ingredientsInventory;
+        private Dictionary<IngredientsType, int> ingredientsInventory;
         
         private void Start() {
-            ingredientsInventory = ObjectsReference.Instance.bananaMan.inventories.ingredientsInventory;
+            ingredientsInventory = ObjectsReference.Instance.bananaMan.bananaManData.ingredientsInventory;
         }
         
         public void AddQuantity(IngredientsType ingredientsType, int quantity) {

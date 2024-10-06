@@ -7,7 +7,7 @@ namespace InGame.Items.ItemsProperties {
 
         public ItemCategory itemCategory;
         public BananaType bananaType;
-        public RawMaterialType rawMaterialType;
+        public DroppedType droppedType;
         public IngredientsType ingredientsType;
         public ManufacturedItemsType manufacturedItemsType;
         public BuildableType buildableType;

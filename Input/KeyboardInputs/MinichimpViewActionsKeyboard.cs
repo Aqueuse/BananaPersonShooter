@@ -6,81 +6,164 @@ namespace KeyboardInputs {
     public class MinichimpViewActionsKeyboard : InputActions {
         [SerializeField] private InputActionReference dragMouseRotateInputActionReference;
         [SerializeField] private InputActionReference dragMouseMoveInputActionReference;
-        
+
         [SerializeField] private InputActionReference deltaMouseActionReference;
 
-        [SerializeField] private float mouseMoveSensibility = 0.5f; 
+        [SerializeField] private InputActionReference moveCameraWithKeyboardActionReference;
+        [SerializeField] private InputActionReference boostCameraMoveActionReference;
 
-        private CameraGestion _gestionCamera;
+        [SerializeField] private InputActionReference moveUpDownCameraInputActionReference;
+
+        [SerializeField] private InputActionReference rotateGhostInputActionReference;
         
-        private bool isDragging;
+        [SerializeField] private InputActionReference showDescription;
+        
+        [SerializeField] private float mouseMoveSensibility = 0.2f;
+
+        [SerializeField] private float scrollSpeed;
+
+        private CameraGestionDragRotate _gestionDragCamera;
+        private CameraGestionRelativeMove _gestionRelativeMove;
 
         private void Start() {
-            _gestionCamera = ObjectsReference.Instance.gestionCamera;
-        }
+            _gestionDragCamera = ObjectsReference.Instance.gestionDragCamera;
+            _gestionRelativeMove = ObjectsReference.Instance.gestionRelativeMoveCamera;
+        }   
         
         private void OnEnable() {
             dragMouseMoveInputActionReference.action.Enable();
-            dragMouseMoveInputActionReference.action.performed += StartToDragMove;
+            dragMouseMoveInputActionReference.action.performed += StartToDragMoveCamera;
+            dragMouseMoveInputActionReference.action.canceled += CancelDragMoveCamera;
 
             dragMouseRotateInputActionReference.action.Enable();
-            dragMouseRotateInputActionReference.action.performed += StartToDragRotate;
+            dragMouseRotateInputActionReference.action.performed += StartToDragRotateCamera;
+            dragMouseRotateInputActionReference.action.canceled += CancelDragRotate;
+            
+            moveCameraWithKeyboardActionReference.action.Enable();
+            moveCameraWithKeyboardActionReference.action.performed += MoveCameraWithKeyboard;
+            moveCameraWithKeyboardActionReference.action.canceled += CancelMoveCameraWithKeyboard;
+            
+            boostCameraMoveActionReference.action.Enable();
+            boostCameraMoveActionReference.action.performed += BoostCameraSpeed;
+            boostCameraMoveActionReference.action.canceled += CancelBoostCameraSpeed;
+            
+            moveUpDownCameraInputActionReference.action.Enable();
+            moveUpDownCameraInputActionReference.action.performed += MoveUpDownCamera;
+            moveUpDownCameraInputActionReference.action.canceled += CancelMoveUpDownCamera;
+            
+            rotateGhostInputActionReference.action.Enable();
+            rotateGhostInputActionReference.action.performed += RotateGhost;
+            
+            showDescription.action.Enable();
+            showDescription.action.performed += ShowDescription;
+            showDescription.action.canceled += StopShowDescription;
         }
-
+        
         private void OnDisable() {
             dragMouseMoveInputActionReference.action.Disable();
-            dragMouseMoveInputActionReference.action.performed -= StartToDragMove;
+            dragMouseMoveInputActionReference.action.performed -= StartToDragMoveCamera;
+            dragMouseMoveInputActionReference.action.canceled -= CancelDragMoveCamera;
 
             dragMouseRotateInputActionReference.action.Disable();
-            dragMouseRotateInputActionReference.action.performed -= StartToDragRotate;
+            dragMouseRotateInputActionReference.action.performed -= StartToDragRotateCamera;
+            dragMouseRotateInputActionReference.action.canceled -= CancelDragRotate;
+            
+            moveCameraWithKeyboardActionReference.action.Disable();
+            moveCameraWithKeyboardActionReference.action.performed -= MoveCameraWithKeyboard;
+            moveCameraWithKeyboardActionReference.action.canceled -= CancelMoveCameraWithKeyboard;
+            
+            boostCameraMoveActionReference.action.Disable();
+            boostCameraMoveActionReference.action.performed -= BoostCameraSpeed;
+            boostCameraMoveActionReference.action.canceled -= CancelBoostCameraSpeed;
+            
+            moveUpDownCameraInputActionReference.action.Disable();
+            moveUpDownCameraInputActionReference.action.performed -= MoveUpDownCamera;
+            moveUpDownCameraInputActionReference.action.canceled -= CancelMoveUpDownCamera;
+            
+            showDescription.action.Disable();
+            showDescription.action.performed -= ShowDescription;
+            showDescription.action.canceled -= StopShowDescription;
         }
 
-        private void StartToDragMove(InputAction.CallbackContext callbackContext) {
-            if (callbackContext.performed && !isDragging) {
-                deltaMouseActionReference.action.Enable();
-                deltaMouseActionReference.action.performed += Move;
-
-                isDragging = true;
-            
-                return;
-            }
-
-            if (callbackContext.performed && isDragging) {
-                deltaMouseActionReference.action.Disable();
-                deltaMouseActionReference.action.performed -= Move;
-                _gestionCamera.CancelMove();
-
-                isDragging = false;
-            }
+        private void StartToDragMoveCamera(InputAction.CallbackContext callbackContext) {
+            deltaMouseActionReference.action.Enable();
+            deltaMouseActionReference.action.performed += MoveCamera;
         }
     
-        private void Move(InputAction.CallbackContext callbackContext) {
+        private void MoveCamera(InputAction.CallbackContext callbackContext) {
             var movement2D = callbackContext.ReadValue<Vector2>();
-            var movement = new Vector3(-movement2D.x, 0, -movement2D.y); 
-        
-            _gestionCamera.Move(movement.y * mouseMoveSensibility, movement.x * mouseMoveSensibility);
-        }
-
-        private void StartToDragRotate(InputAction.CallbackContext callbackContext) {
-            if (callbackContext.performed && !isDragging) {
-                deltaMouseActionReference.action.Enable();
-                deltaMouseActionReference.action.performed += Rotate;
-
-                isDragging = true;
             
-                return;
-            }
-
-            if (callbackContext.performed && isDragging) {
-                deltaMouseActionReference.action.Disable();
-                deltaMouseActionReference.action.performed -= Rotate;
-
-                isDragging = false;
-            }
+            var movement = new Vector3(movement2D.x, -movement2D.y, 0);
+        
+            _gestionDragCamera.Move(movement.y * mouseMoveSensibility, movement.x * mouseMoveSensibility);
         }
 
-        private void Rotate(InputAction.CallbackContext callbackContext) {
-            _gestionCamera.Rotate(callbackContext.ReadValue<Vector2>());
+        private void StartToDragRotateCamera(InputAction.CallbackContext callbackContext) {
+            deltaMouseActionReference.action.Enable();
+            deltaMouseActionReference.action.performed += RotateCamera;
+        }
+
+        private void RotateCamera(InputAction.CallbackContext callbackContext) {
+            _gestionDragCamera.Rotate(callbackContext.ReadValue<Vector2>());
+        }
+
+        private void CancelDragRotate(InputAction.CallbackContext callbackContext) {
+            deltaMouseActionReference.action.Disable();
+            deltaMouseActionReference.action.performed -= RotateCamera;
+        }
+        
+        private void CancelDragMoveCamera(InputAction.CallbackContext callbackContext) {
+            deltaMouseActionReference.action.Disable();
+            deltaMouseActionReference.action.performed -= MoveCamera;
+            _gestionDragCamera.CancelMove();
+        }
+        
+        private void MoveCameraWithKeyboard(InputAction.CallbackContext context) {
+            Vector2 movementInput = context.action.ReadValue<Vector2>(); // Read the input value
+            
+            _gestionRelativeMove.MoveWithKeyboard(movementInput);
+        }
+        
+        private void CancelMoveCameraWithKeyboard(InputAction.CallbackContext context) {
+            _gestionRelativeMove.CancelMove();
+        }
+
+        private void BoostCameraSpeed(InputAction.CallbackContext context) {
+            _gestionRelativeMove.moveSpeed = 60;
+        }
+
+        private void CancelBoostCameraSpeed(InputAction.CallbackContext context) {
+            _gestionRelativeMove.moveSpeed = 30;
+        }
+        
+        private void MoveUpDownCamera(InputAction.CallbackContext context) {
+            var movement = new Vector3(0, context.ReadValue<Vector2>().y * scrollSpeed, 0);
+        
+            _gestionRelativeMove.MoveWithKeyboard(movement);
+        }
+        
+        private void CancelMoveUpDownCamera(InputAction.CallbackContext context) {
+            _gestionRelativeMove.CancelMove();
+        }
+        
+        private void RotateGhost(InputAction.CallbackContext context) {
+            var contextValue = context.ReadValue<float>(); 
+            
+            if (contextValue < 0) {
+                ObjectsReference.Instance.miniChimpViewMode.RotateGhost(Vector3.up); 
+            }
+
+            if (contextValue > 0) {
+                ObjectsReference.Instance.miniChimpViewMode.RotateGhost(Vector3.down);
+            }
+        }
+        
+        private void ShowDescription(InputAction.CallbackContext callbackContext) {
+            ObjectsReference.Instance.scanWithMouseForDescription.enabled = true;
+        }
+
+        private void StopShowDescription(InputAction.CallbackContext context) {
+            ObjectsReference.Instance.scanWithMouseForDescription.enabled = false;
         }
     }
 }

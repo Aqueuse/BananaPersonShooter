@@ -114,8 +114,7 @@ public class GenericDictionary<TKey, TValue> : IDictionary<TKey, TValue>, ISeria
     }
 
     public bool Contains(KeyValuePair<TKey, TValue> pair) {
-        TValue value;
-        if (_dict.TryGetValue(pair.Key, out value)) {
+        if (_dict.TryGetValue(pair.Key, out var value)) {
             return EqualityComparer<TValue>.Default.Equals(value, pair.Value);
         }
         return false;
@@ -136,8 +135,7 @@ public class GenericDictionary<TKey, TValue> : IDictionary<TKey, TValue>, ISeria
     }
 
     public bool Remove(KeyValuePair<TKey, TValue> pair) {
-        TValue value;
-        if (_dict.TryGetValue(pair.Key, out value)) {
+        if (_dict.TryGetValue(pair.Key, out var value)) {
             var valueMatch = EqualityComparer<TValue>.Default.Equals(value, pair.Value);
             if (valueMatch) {
                 return Remove(pair.Key);

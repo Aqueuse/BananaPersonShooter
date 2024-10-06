@@ -7,9 +7,7 @@ namespace InGame.Player {
         [SerializeField] private MeshRenderer deathPlaneMeshRenderer;
         
         public void Die() {
-            if (ObjectsReference.Instance.gameManager.isGamePlaying) {
-                ObjectsReference.Instance.gameManager.isGamePlaying = false;
-                
+            if (ObjectsReference.Instance.gameManager.gameContext == GameContext.IN_GAME) {
                 ObjectsReference.Instance.uiFace.Die(true);
                 ObjectsReference.Instance.bananaMan.tpsPlayerAnimator.FallFrontward();
                 ObjectsReference.Instance.playerController.StopPlayer();

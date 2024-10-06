@@ -1,9 +1,10 @@
 public enum InputContext {
     GAME,
     UI,
-    BANANAGUN_UI,
     CANNONS,
     HOME,
     MAP,
-    MINICHIMP_VIEW
+    MINICHIMP_VIEW,
+    GESTION_MAP,
+    INVENTORIES
 }

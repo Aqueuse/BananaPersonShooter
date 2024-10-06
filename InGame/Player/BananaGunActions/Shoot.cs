@@ -26,16 +26,16 @@ namespace InGame.Player.BananaGunActions {
         }
 
         public void throwBanana() {
-            banana = Instantiate(weaponsGameObjects[ObjectsReference.Instance.bananaMan.activeBanana.bananaType],
+            banana = Instantiate(weaponsGameObjects[ObjectsReference.Instance.bananaMan.bananaManData.activeBanana.bananaType],
                 launchingBananaPoint.transform.position, Quaternion.identity, null);
 
-            banana.GetComponent<Rigidbody>().AddForce(launchingBananaPoint.transform.forward * 100, ForceMode.Impulse);
-            banana.GetComponent<Rigidbody>().AddForce(transform.forward * 100, ForceMode.Impulse);
+            banana.GetComponent<Rigidbody>().AddForce(launchingBananaPoint.transform.forward * 200, ForceMode.Impulse);
+            //banana.GetComponent<Rigidbody>().AddForce(transform.forward * 100, ForceMode.Impulse);
             
             ObjectsReference.Instance.audioManager.PlayEffect(SoundEffectType.THROW_BANANA, 0);
 
             // ammo reduce
-            activeWeaponData = ObjectsReference.Instance.bananaMan.activeBanana;
+            activeWeaponData = ObjectsReference.Instance.bananaMan.bananaManData.activeBanana;
 
             switch (activeWeaponData.bananaEffect) {
                 case BananaEffect.TWO_SPLIT:

@@ -22,7 +22,7 @@ namespace UI.InGame {
 
         [SerializeField] private Color availableBuildableColor;
         [SerializeField] private Color notEnoughMaterialBuildableColor;
-
+        
         private void Start() {
             leftFlipperNormalPosition = leftFlipperTransform.localPosition;
             leftFlipperUpPosition = leftFlipperNormalPosition;
@@ -70,11 +70,17 @@ namespace UI.InGame {
 
             buildableSpriteRenderer.color =
                 ObjectsReference.Instance.ghostsReference.GetGhostColorByAvailability(ObjectsReference.Instance.bananaMan
-                    .activeBuildable);
+                    .bananaManData.activeBuildable);
         }
 
         public void SetBuildablePlacementAvailability(bool canBeBuild) {
             buildableSpriteRenderer.color = canBeBuild ? availableBuildableColor : notEnoughMaterialBuildableColor;
+        }
+
+        public void RefreshActiveBuildableAvailability() {
+            var activeBuildable = ObjectsReference.Instance.bananaMan.bananaManData.activeBuildable;
+            
+            SetBuildablePlacementAvailability(ObjectsReference.Instance.droppedInventory.HasCraftingIngredients(activeBuildable));
         }
     }
 }

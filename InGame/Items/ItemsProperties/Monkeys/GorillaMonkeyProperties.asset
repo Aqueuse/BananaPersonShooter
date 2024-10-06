@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: GorillaMonkeyProperties
   m_EditorClassIdentifier: 
   gameObjectTag: 14
-  itemCategory: 10
+  itemCategory: 8
   bananaType: 0
   rawMaterialType: 5
   ingredientsType: 2

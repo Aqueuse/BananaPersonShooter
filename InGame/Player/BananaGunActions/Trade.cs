@@ -1,11 +1,12 @@
+using InGame.Items.ItemsData;
 using InGame.Items.ItemsProperties;
-using InGame.Items.ItemsProperties.Characters;
+using InGame.Monkeys;
 using UI.InGame.Merchimps;
 using UnityEngine;
 
 namespace InGame.Player.BananaGunActions {
     public class Trade : MonoBehaviour {
-        public InventoryScriptableObject merchantPropertiesScriptableObject;
+        public MonkeyMenData monkeyMenData;
 
         private UIMerchantSliderMenu buyUiMerchantSliderMenu;
         private UIMerchantSliderMenu sellUiMerchantSliderMenu;
@@ -27,9 +28,9 @@ namespace InGame.Player.BananaGunActions {
             var quantityToSell = (int)sellUiMerchantSliderMenu.quantitySlider.value;
             var bitkongValue = itemScriptableObject.bitKongValue * quantityToSell;
             
-            bananaMan.inventories.bitKongQuantity += bitkongValue;
-            merchantPropertiesScriptableObject.bitKongQuantity -= bitkongValue;
-            ObjectsReference.Instance.uInventoriesManager.SetBitKongQuantity(bananaMan.inventories.bitKongQuantity);
+            bananaMan.bananaManData.bitKongQuantity += bitkongValue;
+            monkeyMenData.bitKongQuantity -= bitkongValue;
+            ObjectsReference.Instance.uInventoriesManager.SetBitKongQuantity(bananaMan.bananaManData.bitKongQuantity);
             uiMerchant.RefreshBitkongQuantities();
 
             sellUiMerchantSliderMenu.quantitySlider.value = 0;
@@ -39,8 +40,8 @@ namespace InGame.Player.BananaGunActions {
                     var ingredientType = itemScriptableObject.ingredientsType;
                     ObjectsReference.Instance.ingredientsInventory.RemoveQuantity(ingredientType, quantityToSell);
 
-                    newItemQuantity = merchantPropertiesScriptableObject.ingredientsInventory[ingredientType] + quantityToSell;
-                    merchantPropertiesScriptableObject.ingredientsInventory[ingredientType] = newItemQuantity;
+                    newItemQuantity = monkeyMenData.ingredientsInventory[ingredientType] + quantityToSell;
+                    monkeyMenData.ingredientsInventory[ingredientType] = newItemQuantity;
 
                     uiMerchant.merchantSellUiIngredientsInventory.uInventorySlots[ingredientType].SetQuantity(newItemQuantity);
                     uiMerchant.merchantSellUiIngredientsInventory.RefreshUInventory();
@@ -50,8 +51,8 @@ namespace InGame.Player.BananaGunActions {
                     var manufacturedItemType = itemScriptableObject.manufacturedItemsType;
                     ObjectsReference.Instance.manufacturedItemsInventory.RemoveQuantity(manufacturedItemType, quantityToSell);
 
-                    newItemQuantity = merchantPropertiesScriptableObject.manufacturedItemsInventory[manufacturedItemType] + quantityToSell;
-                    merchantPropertiesScriptableObject.manufacturedItemsInventory[manufacturedItemType] = newItemQuantity;
+                    newItemQuantity = monkeyMenData.manufacturedItemsInventory[manufacturedItemType] + quantityToSell;
+                    monkeyMenData.manufacturedItemsInventory[manufacturedItemType] = newItemQuantity;
 
                     uiMerchant.merchantSellUiManufacturedItemsInventory.uInventorySlots[manufacturedItemType].SetQuantity(newItemQuantity);
                     uiMerchant.merchantSellUiManufacturedItemsInventory.RefreshUInventory();
@@ -64,11 +65,11 @@ namespace InGame.Player.BananaGunActions {
             var bitkongValue = itemScriptableObject.bitKongValue * quantityToBuy;
             
             // not enough monkey money (；′⌒`)
-            if (bananaMan.inventories.bitKongQuantity < bitkongValue) return;
+            if (bananaMan.bananaManData.bitKongQuantity < bitkongValue) return;
 
-            bananaMan.inventories.bitKongQuantity -= itemScriptableObject.bitKongValue;
-            merchantPropertiesScriptableObject.bitKongQuantity += bitkongValue;
-            ObjectsReference.Instance.uInventoriesManager.SetBitKongQuantity(bananaMan.inventories.bitKongQuantity);
+            bananaMan.bananaManData.bitKongQuantity -= itemScriptableObject.bitKongValue;
+            monkeyMenData.bitKongQuantity += bitkongValue;
+            ObjectsReference.Instance.uInventoriesManager.SetBitKongQuantity(bananaMan.bananaManData.bitKongQuantity);
             uiMerchant.RefreshBitkongQuantities();
 
             buyUiMerchantSliderMenu.quantitySlider.value = 0;
@@ -79,8 +80,8 @@ namespace InGame.Player.BananaGunActions {
                     var ingredientType = itemScriptableObject.ingredientsType;
                     ObjectsReference.Instance.ingredientsInventory.AddQuantity(ingredientType, quantityToBuy);
 
-                    newItemQuantity = merchantPropertiesScriptableObject.ingredientsInventory[ingredientType] - quantityToBuy;
-                    merchantPropertiesScriptableObject.ingredientsInventory[ingredientType] = newItemQuantity;
+                    newItemQuantity = monkeyMenData.ingredientsInventory[ingredientType] - quantityToBuy;
+                    monkeyMenData.ingredientsInventory[ingredientType] = newItemQuantity;
                     
                     uiMerchant.merchantBuyUiIngredientsInventory.uInventorySlots[ingredientType].SetQuantity(newItemQuantity);
                     uiMerchant.merchantBuyUiIngredientsInventory.RefreshUInventory();
@@ -91,23 +92,23 @@ namespace InGame.Player.BananaGunActions {
                     var manufacturedItemType = itemScriptableObject.manufacturedItemsType;
                     ObjectsReference.Instance.manufacturedItemsInventory.AddQuantity(manufacturedItemType, quantityToBuy);
 
-                    newItemQuantity = merchantPropertiesScriptableObject.manufacturedItemsInventory[manufacturedItemType] - quantityToBuy;
-                    merchantPropertiesScriptableObject.manufacturedItemsInventory[manufacturedItemType] = newItemQuantity;
+                    newItemQuantity = monkeyMenData.manufacturedItemsInventory[manufacturedItemType] - quantityToBuy;
+                    monkeyMenData.manufacturedItemsInventory[manufacturedItemType] = newItemQuantity;
                     
                     uiMerchant.merchantBuyUiManufacturedItemsInventory.uInventorySlots[manufacturedItemType].SetQuantity(newItemQuantity);
                     uiMerchant.merchantBuyUiManufacturedItemsInventory.RefreshUInventory();
                     uiMerchant.merchantSellUiManufacturedItemsInventory.RefreshUInventory();
                     break;
 
-                case ItemCategory.RAW_MATERIAL:
-                    var rawMaterialType = itemScriptableObject.rawMaterialType;
-                    ObjectsReference.Instance.rawMaterialsInventory.AddQuantity(rawMaterialType, quantityToBuy);
+                case ItemCategory.DROPPED:
+                    var droppedType = itemScriptableObject.droppedType;
+                    ObjectsReference.Instance.droppedInventory.AddQuantity(droppedType, quantityToBuy);
 
-                    newItemQuantity = merchantPropertiesScriptableObject.rawMaterialsInventory[rawMaterialType] - quantityToBuy;
-                    merchantPropertiesScriptableObject.rawMaterialsInventory[rawMaterialType] = newItemQuantity;
+                    newItemQuantity = monkeyMenData.droppedInventory[droppedType] - quantityToBuy;
+                    monkeyMenData.droppedInventory[droppedType] = newItemQuantity;
                     
-                    uiMerchant.merchantBuyUiRawMaterialsInventory.uInventorySlots[rawMaterialType].SetQuantity(newItemQuantity);
-                    uiMerchant.merchantBuyUiRawMaterialsInventory.RefreshUInventory();
+                    uiMerchant.merchantBuyUiDroppedInventory.uInventorySlots[droppedType].SetQuantity(newItemQuantity);
+                    uiMerchant.merchantBuyUiDroppedInventory.RefreshUInventory();
                     break;
             }
         }

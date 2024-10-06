@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 namespace UI.InGame.Inventory {
     public enum BananaGunUITabType {
-        INVENTORY_RAW_MATERIALS = 0,
+        INVENTORY_DROPPED = 0,
         INVENTORY_INGREDIENTS = 1,
         INVENTORY_MANUFACTURED_ITEMS = 2,
         INVENTORY_BUILDABLES = 3,
@@ -41,7 +41,7 @@ namespace UI.InGame.Inventory {
         [SerializeField] private UIHelper keyboardUIHelper;
         
         public void RefreshInventories() {
-            ObjectsReference.Instance.uiRawMaterialsInventory.RefreshUInventory();
+            ObjectsReference.Instance.uiDroppedInventory.RefreshUInventory();
             ObjectsReference.Instance.uiIngredientsInventory.RefreshUInventory();
             ObjectsReference.Instance.uiManufacturedItemsItemsInventory.RefreshUInventory();
             ObjectsReference.Instance.uiBlueprintsInventory.RefreshUInventory();
@@ -70,8 +70,8 @@ namespace UI.InGame.Inventory {
                 case ItemCategory.INGREDIENT:
                     ObjectsReference.Instance.uiIngredientsInventory.SelectFirstSlot();
                     break;
-                case ItemCategory.RAW_MATERIAL:
-                    ObjectsReference.Instance.uiRawMaterialsInventory.SelectFirstSlot();
+                case ItemCategory.DROPPED:
+                    ObjectsReference.Instance.uiDroppedInventory.SelectFirstSlot();
                     break;
                 case ItemCategory.MANUFACTURED_ITEM:
                     ObjectsReference.Instance.uiManufacturedItemsItemsInventory.SelectFirstSlot();
@@ -87,6 +87,7 @@ namespace UI.InGame.Inventory {
             }
 
             FocusInventory();
+            ObjectsReference.Instance.uInfobulle.Hide();
         }
         
         public UIHelper GetCurrentUIHelper() {

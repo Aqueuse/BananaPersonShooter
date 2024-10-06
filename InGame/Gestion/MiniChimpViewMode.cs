@@ -3,24 +3,26 @@ using InGame.Interactions;
 using InGame.Items.ItemsBehaviours;
 using InGame.Items.ItemsBehaviours.BuildablesBehaviours;
 using InGame.Items.ItemsProperties.Buildables;
-using InGame.Items.ItemsProperties.Wastes;
+using InGame.Items.ItemsProperties.Dropped;
 using Tags;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 namespace InGame.Gestion {
-    public class GestionMode : MonoBehaviour {
+    public class MiniChimpViewMode : MonoBehaviour {
         [SerializeField] private LayerMask buildingLayerMask;
         [SerializeField] private LayerMask GestionViewSelectableLayerMask;
 
         private Camera mainCamera;
+
+        public ViewModeContextType viewModeContextType;
         
         public GameObject targetedGameObject;
 
         public GameObject _activeGhost;
         private Ghost _activeGhostClass;
         
-        private GenericDictionary<RawMaterialType, int> rawMaterialsWithQuantity;
+        private GenericDictionary<DroppedType, int> rawMaterialsWithQuantity;
 
         private Ray ray;
         private RaycastHit raycastHit;
@@ -45,7 +47,7 @@ namespace InGame.Gestion {
         private Vector3 raycastHitPoint;
 
         private GameObject _buildable;
-
+        
         private void Start() {
             mainCamera = Camera.main;
         }
@@ -55,7 +57,6 @@ namespace InGame.Gestion {
             
             if (Physics.Raycast(ray, out raycastHit, Single.PositiveInfinity, layerMask: GestionViewSelectableLayerMask)) {
                 targetedGameObject = raycastHit.transform.gameObject;
-                ObjectsReference.Instance.uiDescriptionsManager.SetDescription(raycastHit.transform.GetComponent<Tag>().itemScriptableObject, raycastHit.transform.gameObject);
             }
             else {
                 targetedGameObject = null;
@@ -68,19 +69,39 @@ namespace InGame.Gestion {
             }
         }
 
+        public void StartHarvesting() {
+            if (_activeGhost != null) CancelGhost();
+
+            viewModeContextType = ViewModeContextType.HARVEST;
+        }
+
+        public void StartRepairing() {
+            if (_activeGhost != null) CancelGhost();
+
+            viewModeContextType = ViewModeContextType.REPAIR;
+        }
+
         public void ActivateGhostByScriptableObject(BuildablePropertiesScriptableObject buildablePropertiesScriptableObject) {
+            if (_activeGhost != null) CancelGhost();
+            
             _activeGhost = ObjectsReference.Instance.ghostsReference.GetGhostByBuildableType(buildablePropertiesScriptableObject.buildableType);
             _activeGhostClass = _activeGhost.GetComponent<Ghost>();
             
-            if (ObjectsReference.Instance.rawMaterialsInventory.HasCraftingIngredients(buildablePropertiesScriptableObject)) {
+            viewModeContextType = ViewModeContextType.BUILD;
+            
+            if (ObjectsReference.Instance.droppedInventory.HasCraftingIngredients(buildablePropertiesScriptableObject)) {
                 _activeGhostClass.SetGhostState(GhostState.VALID);
                 ObjectsReference.Instance.uInventoriesManager.GetCurrentUIHelper().ShowNormalPlaceHelper();
+            }
+
+            else {
+                _activeGhostClass.SetGhostState(GhostState.NOT_ENOUGH_MATERIALS);
             }
 
             ghostRotationEuler = _activeGhost.transform.rotation.eulerAngles;
         }
         
-        private void CancelGhost() {
+        public void CancelGhost() {
             if (_activeGhost != null) _activeGhost.transform.position = ObjectsReference.Instance.ghostsReference.transform.position;
             
             _activeGhost = null;
@@ -110,7 +131,7 @@ namespace InGame.Gestion {
                 var _craftingIngredients = _activeGhostClass.buildablePropertiesScriptableObject.rawMaterialsWithQuantity;
 
                 foreach (var craftingIngredient in _craftingIngredients) {
-                    ObjectsReference.Instance.rawMaterialsInventory.RemoveQuantity(craftingIngredient.Key,
+                    ObjectsReference.Instance.droppedInventory.RemoveQuantity(craftingIngredient.Key,
                         craftingIngredient.Value);
                 }
                 
@@ -118,22 +139,13 @@ namespace InGame.Gestion {
                 
                 _activeGhost.transform.position = ObjectsReference.Instance.ghostsReference.transform.position;
                 _activeGhost = null;
+                
+                viewModeContextType = ViewModeContextType.SCAN;
             }
         }
 
         public void CancelBuild() {
             CancelGhost();
-        }
-
-        public void setGhostColor() {
-            if (_activeGhost != null)
-                if (ObjectsReference.Instance.rawMaterialsInventory.HasCraftingIngredientsForPlateform()) {
-                    _activeGhostClass.SetGhostState(GhostState.VALID);
-                }
-                else {
-                    if (_activeGhostClass.GetGhostState() != GhostState.UNBUILDABLE)
-                        _activeGhostClass.SetGhostState(GhostState.NOT_ENOUGH_MATERIALS);
-                }
         }
         
         public void harvest() {
@@ -169,7 +181,7 @@ namespace InGame.Gestion {
                     var craftingMaterials = ObjectsReference.Instance.meshReferenceScriptableObject.buildablePropertiesScriptableObjects[buildableType].rawMaterialsWithQuantity;
 
                     foreach (var craftingMaterial in craftingMaterials) {
-                        ObjectsReference.Instance.rawMaterialsInventory.AddQuantity(craftingMaterial.Key, craftingMaterial.Value);
+                        ObjectsReference.Instance.droppedInventory.AddQuantity(craftingMaterial.Key, craftingMaterial.Value);
                     }
 
                     if (buildableType == BuildableType.BANANA_DRYER) targetedGameObject.GetComponent<BananasDryerBehaviour>().RetrieveRawMaterials();
@@ -185,13 +197,13 @@ namespace InGame.Gestion {
 
                     break;
 
-                case GAME_OBJECT_TAG.DEBRIS:
-                    var _wastePropertiesScriptableObject = (WastePropertiesScriptableObject)gameObjectTagClass.itemScriptableObject;
+                case GAME_OBJECT_TAG.DROPPED:
+                    var _wastePropertiesScriptableObject = (DroppedPropertiesScriptableObject)gameObjectTagClass.itemScriptableObject;
                     
-                    rawMaterialsWithQuantity = _wastePropertiesScriptableObject.GetRawMaterialsWithQuantity();
+                    rawMaterialsWithQuantity = _wastePropertiesScriptableObject.GetDroppedMaterialsWithQuantity();
 
-                    foreach (var debrisRawMaterialIngredient in rawMaterialsWithQuantity) {
-                        ObjectsReference.Instance.rawMaterialsInventory.AddQuantity(debrisRawMaterialIngredient.Key, debrisRawMaterialIngredient.Value);
+                    foreach (var droppedRawMaterialIngredient in rawMaterialsWithQuantity) {
+                        ObjectsReference.Instance.droppedInventory.AddQuantity(droppedRawMaterialIngredient.Key, droppedRawMaterialIngredient.Value);
                     }
                     
                     Destroy(targetedGameObject);
@@ -211,13 +223,13 @@ namespace InGame.Gestion {
             if (targetedGameObject == null) return;
 
             if (targetedGameObject.TryGetComponent(out BuildableBehaviour buildableBehaviour)) {
-                if (!ObjectsReference.Instance.rawMaterialsInventory.HasCraftingIngredients(buildableBehaviour.buildableType))
+                if (!ObjectsReference.Instance.droppedInventory.HasCraftingIngredients(buildableBehaviour.buildableType))
                     return;
                 
                 var _craftingIngredients = ObjectsReference.Instance.meshReferenceScriptableObject.buildablePropertiesScriptableObjects[buildableBehaviour.buildableType].rawMaterialsWithQuantity;
 
                 foreach (var craftingIngredient in _craftingIngredients) {
-                    ObjectsReference.Instance.rawMaterialsInventory.RemoveQuantity(craftingIngredient.Key, craftingIngredient.Value);
+                    ObjectsReference.Instance.droppedInventory.RemoveQuantity(craftingIngredient.Key, craftingIngredient.Value);
                 }
                 
                 ObjectsReference.Instance.audioManager.PlayEffect(SoundEffectType.TAKE_SOMETHING, 0);

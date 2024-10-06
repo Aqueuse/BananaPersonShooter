@@ -31,7 +31,7 @@ namespace InGame.Bananas {
 
         private void OnTriggerEnter(Collider other) {
             if (TagsManager.Instance.HasTag(other.gameObject, GAME_OBJECT_TAG.PLAYER)) {
-                ObjectsReference.Instance.rawMaterialsInventory.AddQuantity(RawMaterialType.BANANA_PEEL, 1);
+                ObjectsReference.Instance.droppedInventory.AddQuantity(DroppedType.BANANA_PEEL, 1);
                 DestroyMe();
             }
 

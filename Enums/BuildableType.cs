@@ -1,5 +1,5 @@
 public enum BuildableType {
-    PLATEFORM,
+    BUMPER,
     BANANA_DRYER,
     GUICHET,
     RETRIEVER,
@@ -16,5 +16,6 @@ public enum BuildableType {
     DISTRIBUTOR_LITTLE_01,
     DISTRIBUTOR_LITTLE_02,
     DISTRIBUTOR_LITTLE_03,
-    CHAIR_LITTLE_01
+    CHAIR_LITTLE_01,
+    BLUEPRINTS_WORKSTATION
 }

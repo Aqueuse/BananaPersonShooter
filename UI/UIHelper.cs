@@ -6,7 +6,6 @@ namespace UI {
         [SerializeField] private CanvasGroup placeHelper;
         [SerializeField] private CanvasGroup buildHelper;
 
-        [SerializeField] private CanvasGroup complete_buildHelper;
         [SerializeField] private CanvasGroup one_axe_buildHelper;
 
         [SerializeField] private CanvasGroup notEnoughMaterialHelper;
@@ -26,9 +25,7 @@ namespace UI {
 
         public void ShowBuildHelper() {
             buildHelper.alpha = 1;
-
-            complete_buildHelper.alpha = 1;
-            one_axe_buildHelper.alpha = 0;
+            one_axe_buildHelper.alpha = 1;
         }
 
         public void ShowRetrieveConfirmation() {
@@ -38,12 +35,7 @@ namespace UI {
         public void HideRetrieveConfirmation() {
             retrieveConfirmationHelper.alpha = 0;
         }
-
-        public void ShowNotEnoughMaterialsHelper() {
-            placeHelper.alpha = 0;
-            notEnoughMaterialHelper.alpha = 1;
-        }
-
+        
         public void ShowNormalPlaceHelper() {
             placeHelper.alpha = 1;
             notEnoughMaterialHelper.alpha = 0;

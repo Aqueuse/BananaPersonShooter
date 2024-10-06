@@ -48,8 +48,10 @@ MonoBehaviour:
       value: {fileID: 617907147682838640, guid: af271ba40ae07b8439d85e3144af13ee, type: 3}
     - key: 17
       value: {fileID: 8871149111809520450, guid: f85b9b15c06ad954ea75694550a097ae, type: 3}
+    - key: 18
+      value: {fileID: 546991606061005580, guid: 1266f1a6b74a4074ab65ab8271d57705, type: 3}
     keyCollision: 0
-  debrisPrefabsByCharacterType:
+  spaceshipDebrisPrefabsByCharacterType:
     list:
     - key: 2
       value:
@@ -99,6 +101,21 @@ MonoBehaviour:
       - {fileID: 828287830434580389, guid: e935ae57996b0e042a53fc4bd2c0a072, type: 3}
       - {fileID: 2845954426801856481, guid: 540f158e125a0724f9a3d9932cee78f4, type: 3}
     keyCollision: 0
+  droppedPrefabByDroppedType:
+    list:
+    - key: 0
+      value: {fileID: 5471364762102479163, guid: 8f3a4dd667df2454f809833a1cb266c1, type: 3}
+    - key: 1
+      value: {fileID: 865080828313005826, guid: 72d40651520d0b647809965b509d085f, type: 3}
+    - key: 2
+      value: {fileID: 2109412899835672179, guid: 6bb93e57cedaa2448a3bcd2a6507ac81, type: 3}
+    - key: 3
+      value: {fileID: 8008376278008712098, guid: 56dd7bfcf6f370947abf55e44adf8bfb, type: 3}
+    - key: 6
+      value: {fileID: 1103580827160311562, guid: bd60017071a86c04aa8202000fc02981, type: 3}
+    - key: 7
+      value: {fileID: 8400163770358360760, guid: ca6d579fa2b78d24591bc9ce5e889192, type: 3}
+    keyCollision: 0
   buildablePropertiesScriptableObjects:
     list:
     - key: 0
@@ -135,6 +152,8 @@ MonoBehaviour:
       value: {fileID: 11400000, guid: 14e8a9f66bf95ac44b7f16ffa71fcc8c, type: 2}
     - key: 17
       value: {fileID: 11400000, guid: c8531ad48c3b026449c217f3e61edded, type: 2}
+    - key: 18
+      value: {fileID: 11400000, guid: 12d023e99d504f54895a73a374a58e60, type: 2}
     keyCollision: 0
   bananasPropertiesScriptableObjects:
     list:
@@ -186,11 +205,10 @@ MonoBehaviour:
       value: {fileID: 2109412899835672179, guid: 6bb93e57cedaa2448a3bcd2a6507ac81, type: 3}
     - key: 3
       value: {fileID: 8008376278008712098, guid: 56dd7bfcf6f370947abf55e44adf8bfb, type: 3}
-    keyCollision: 0
-  merchantsScriptableObjectByMerchantType:
-    list:
-    - key: 0
-      value: {fileID: 11400000, guid: cc0664ae54ae5ef4fb51a17210529a96, type: 2}
+    - key: 6
+      value: {fileID: 1103580827160311562, guid: bd60017071a86c04aa8202000fc02981, type: 3}
+    - key: 7
+      value: {fileID: 8400163770358360760, guid: ca6d579fa2b78d24591bc9ce5e889192, type: 3}
     keyCollision: 0
   spaceshipByCharacterType:
     list:
@@ -201,3 +219,183 @@ MonoBehaviour:
     - key: 5
       value: {fileID: 7051990763695138649, guid: 67a9d09f698b0744eb29615dba6c922b, type: 3}
     keyCollision: 0
+  colorSetByCharacterType:
+    list:
+    - key: 3
+      value:
+      - {r: 0, g: 0, b: 0, a: 0}
+      - {r: 0.5294118, g: 0.5294118, b: 0.5294118, a: 0}
+      - {r: 0, g: 0, b: 0, a: 0}
+      - {r: 0.7176471, g: 0.54509807, b: 0.54509807, a: 0}
+      - {r: 0, g: 0, b: 0, a: 0}
+      - {r: 0, g: 0, b: 0, a: 0}
+      - {r: 0, g: 0, b: 0, a: 0}
+      - {r: 0, g: 0, b: 0, a: 0}
+      - {r: 0, g: 0, b: 0, a: 0}
+    - key: 1
+      value:
+      - {r: 0.03137255, g: 0.37647063, b: 0, a: 0}
+      - {r: 0.5294118, g: 0.5294118, b: 0.5294118, a: 0}
+      - {r: 0, g: 0, b: 0, a: 0}
+      - {r: 0.7176471, g: 0.54509807, b: 0.54509807, a: 0}
+      - {r: 1, g: 1, b: 1, a: 0}
+      - {r: 0, g: 0, b: 0, a: 0}
+      - {r: 0.03137255, g: 0.37647063, b: 0, a: 0}
+      - {r: 0.03137255, g: 0.37647063, b: 0, a: 0}
+      - {r: 0.03137255, g: 0.37647063, b: 0, a: 0}
+    - key: 7
+      value:
+      - {r: 0.24705884, g: 0.27450982, b: 0.33333334, a: 0}
+      - {r: 0.5294118, g: 0.5294118, b: 0.5294118, a: 0}
+      - {r: 0.2627451, g: 0.13725491, b: 0, a: 0}
+      - {r: 0.7176471, g: 0.54509807, b: 0.54509807, a: 0}
+      - {r: 1, g: 1, b: 1, a: 0}
+      - {r: 0, g: 0, b: 0, a: 0}
+      - {r: 0.14509805, g: 0.30588236, b: 0.48627454, a: 0}
+      - {r: 0.24705884, g: 0.27450982, b: 0.33333334, a: 0}
+      - {r: 0.06666667, g: 0.06666667, b: 0.06666667, a: 0}
+    keyCollision: 0
+  merchantsColorsSets:
+  - colorSet:
+    - {r: 0.07450981, g: 0.20784315, b: 0.06666667, a: 0}
+    - {r: 0.5294118, g: 0.5294118, b: 0.5294118, a: 0}
+    - {r: 0.06666667, g: 0.043137256, b: 0.007843138, a: 0}
+    - {r: 0.7176471, g: 0.54509807, b: 0.54509807, a: 0}
+    - {r: 1, g: 1, b: 1, a: 0}
+    - {r: 0, g: 0, b: 0, a: 0}
+    - {r: 0.12941177, g: 0.34117648, b: 0.1137255, a: 0}
+    - {r: 0.07450981, g: 0.20784315, b: 0.06666667, a: 0}
+    - {r: 0.12941177, g: 0.34117648, b: 0.1137255, a: 0}
+  visitorsColorsSets:
+  - colorSet:
+    - {r: 0.20000002, g: 0.21176472, b: 0.30980393, a: 0}
+    - {r: 0.5294118, g: 0.5294118, b: 0.5294118, a: 0}
+    - {r: 0.25490198, g: 0.14509805, b: 0, a: 0}
+    - {r: 0.7176471, g: 0.54509807, b: 0.54509807, a: 0}
+    - {r: 1, g: 1, b: 1, a: 0}
+    - {r: 0, g: 0, b: 0, a: 0}
+    - {r: 0.47058827, g: 0.18823531, b: 0.14901961, a: 0}
+    - {r: 0.20000002, g: 0.21176472, b: 0.30980393, a: 0}
+    - {r: 0.47058827, g: 0.18823531, b: 0.14901961, a: 0}
+  genericNameByCharacterType:
+    list:
+    - key: 1
+      value:
+        m_TableReference:
+          m_TableCollectionName: GUID:feaac8a96a44d904190f4f7b1a2228fe
+        m_TableEntryReference:
+          m_KeyId: 65833736464764928
+          m_Key: 
+        m_FallbackState: 0
+        m_WaitForCompletion: 0
+        m_LocalVariables: []
+    - key: 2
+      value:
+        m_TableReference:
+          m_TableCollectionName: GUID:feaac8a96a44d904190f4f7b1a2228fe
+        m_TableEntryReference:
+          m_KeyId: 172697667539308544
+          m_Key: 
+        m_FallbackState: 0
+        m_WaitForCompletion: 0
+        m_LocalVariables: []
+    - key: 3
+      value:
+        m_TableReference:
+          m_TableCollectionName: GUID:3784dd5a526735b4481fe89425012681
+        m_TableEntryReference:
+          m_KeyId: 176198448586428416
+          m_Key: 
+        m_FallbackState: 0
+        m_WaitForCompletion: 0
+        m_LocalVariables: []
+    - key: 5
+      value:
+        m_TableReference:
+          m_TableCollectionName: GUID:feaac8a96a44d904190f4f7b1a2228fe
+        m_TableEntryReference:
+          m_KeyId: 194486850549190656
+          m_Key: 
+        m_FallbackState: 0
+        m_WaitForCompletion: 0
+        m_LocalVariables: []
+    - key: 7
+      value:
+        m_TableReference:
+          m_TableCollectionName: GUID:3784dd5a526735b4481fe89425012681
+        m_TableEntryReference:
+          m_KeyId: 176198803630067712
+          m_Key: 
+        m_FallbackState: 0
+        m_WaitForCompletion: 0
+        m_LocalVariables: []
+    keyCollision: 0
+  genericDescriptionByCharacterType:
+    list:
+    - key: 1
+      value:
+        m_TableReference:
+          m_TableCollectionName: GUID:3784dd5a526735b4481fe89425012681
+        m_TableEntryReference:
+          m_KeyId: 176195606429569024
+          m_Key: 
+        m_FallbackState: 0
+        m_WaitForCompletion: 0
+        m_LocalVariables: []
+    - key: 2
+      value:
+        m_TableReference:
+          m_TableCollectionName: GUID:3784dd5a526735b4481fe89425012681
+        m_TableEntryReference:
+          m_KeyId: 176195273724792832
+          m_Key: 
+        m_FallbackState: 0
+        m_WaitForCompletion: 0
+        m_LocalVariables: []
+    - key: 3
+      value:
+        m_TableReference:
+          m_TableCollectionName: GUID:3784dd5a526735b4481fe89425012681
+        m_TableEntryReference:
+          m_KeyId: 176199134044753920
+          m_Key: 
+        m_FallbackState: 0
+        m_WaitForCompletion: 0
+        m_LocalVariables: []
+    - key: 5
+      value:
+        m_TableReference:
+          m_TableCollectionName: GUID:3784dd5a526735b4481fe89425012681
+        m_TableEntryReference:
+          m_KeyId: 176195189708689408
+          m_Key: 
+        m_FallbackState: 0
+        m_WaitForCompletion: 0
+        m_LocalVariables: []
+    - key: 7
+      value:
+        m_TableReference:
+          m_TableCollectionName: GUID:3784dd5a526735b4481fe89425012681
+        m_TableEntryReference:
+          m_KeyId: 176195749778296832
+          m_Key: 
+        m_FallbackState: 0
+        m_WaitForCompletion: 0
+        m_LocalVariables: []
+    keyCollision: 0
+  itemPreviewByCharacterType:
+    list:
+    - key: 1
+      value: {fileID: 21300000, guid: a81fdcb0e909633418fa75c03a290b4d, type: 3}
+    - key: 2
+      value: {fileID: 21300000, guid: 562832850f706204a9e77de1e89a9dc3, type: 3}
+    - key: 3
+      value: {fileID: 21300000, guid: 59e49b184a03c8b47b53bb5fc8f64b52, type: 3}
+    - key: 5
+      value: {fileID: 21300000, guid: 2924b75915460054e85a962a99916060, type: 3}
+    - key: 7
+      value: {fileID: 21300000, guid: f9561b45af7be5c488081861f8458307, type: 3}
+    keyCollision: 0
+  references:
+    version: 2
+    RefIds: []

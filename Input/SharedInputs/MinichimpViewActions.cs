@@ -1,34 +1,26 @@
-﻿using Cameras;
+﻿using InGame.Gestion;
 using InGame.Items.ItemsProperties;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 namespace SharedInputs {
     public class MinichimpViewActions : InputActions {
-        [SerializeField] private InputActionReference buildInputActionReference;
-        [SerializeField] private InputActionReference harvestOrRepairInputActionReference;
-        [SerializeField] private InputActionReference moveUpDownCameraInputActionReference;
-        
+        [SerializeField] private InputActionReference leftClickInputActionReference;
         [SerializeField] private InputActionReference rotateGhostInputActionReference;
         
-        [SerializeField] private InputActionReference cancelInputActionReference;
-        
-        [SerializeField] private float mouseMoveSensibility = 0.5f; 
+        [SerializeField] private InputActionReference switchToGameReference;
 
         private float _counter;
-
-        private CameraGestion _gestionCamera;
-
+        
         private ItemScriptableObject selectedBuildableScriptableObject;
+
+        private MiniChimpViewMode miniChimpViewMode;
         
         private void Start() {
-            _gestionCamera = ObjectsReference.Instance.gestionCamera;
+            miniChimpViewMode = ObjectsReference.Instance.miniChimpViewMode;
         }
-    
+
         private void OnEnable() {
-            Cursor.visible = true;
-            Cursor.lockState = CursorLockMode.None;
-                    
             ObjectsReference.Instance.cameraPlayer.Set0Sensibility();
 
             ObjectsReference.Instance.playerController.canMove = false;
@@ -40,72 +32,69 @@ namespace SharedInputs {
             ObjectsReference.Instance.playerController.canMove = false;
             ObjectsReference.Instance.bananaMan.GetComponent<Rigidbody>().isKinematic = true;
             
-            buildInputActionReference.action.Enable();
-            buildInputActionReference.action.performed += Build;
+            leftClickInputActionReference.action.Enable();
+            leftClickInputActionReference.action.performed += ContextualLeftClick;
 
-            harvestOrRepairInputActionReference.action.Enable();
-            harvestOrRepairInputActionReference.action.performed += HarvestOrRepair;
-            
             rotateGhostInputActionReference.action.Enable();
             rotateGhostInputActionReference.action.performed += RotateGhost;
             
-            moveUpDownCameraInputActionReference.action.Enable();
-            moveUpDownCameraInputActionReference.action.performed += MoveUpDownCamera;
-            moveUpDownCameraInputActionReference.action.canceled += CancelMoveUpDownCamera;
-            
-            cancelInputActionReference.action.Enable();
-            cancelInputActionReference.action.performed += Cancel;
+            switchToGameReference.action.performed += SwitchBackToGame;
+            switchToGameReference.action.Enable();
         }
 
         private void OnDisable() {
-            buildInputActionReference.action.Disable();
-            buildInputActionReference.action.performed -= Build;
-
-            harvestOrRepairInputActionReference.action.Disable();
-            harvestOrRepairInputActionReference.action.performed -= HarvestOrRepair;
+            leftClickInputActionReference.action.Disable();
+            leftClickInputActionReference.action.performed -= ContextualLeftClick;
 
             rotateGhostInputActionReference.action.Disable();
             rotateGhostInputActionReference.action.performed -= RotateGhost;
-
-            moveUpDownCameraInputActionReference.action.Disable();
-            moveUpDownCameraInputActionReference.action.performed -= MoveUpDownCamera;
-            moveUpDownCameraInputActionReference.action.canceled -= CancelMoveUpDownCamera;
-
-            cancelInputActionReference.action.Disable();
-            cancelInputActionReference.action.performed -= Cancel;
+            
+            switchToGameReference.action.performed -= SwitchBackToGame;
+            switchToGameReference.action.Disable();
         }
-
-        private void MoveUpDownCamera(InputAction.CallbackContext context) {
-            _gestionCamera.MoveUpDown(context.ReadValue<Vector2>().y);
-        }
-
+        
         private void RotateGhost(InputAction.CallbackContext context) {
             var contextValue = context.ReadValue<float>(); 
             
             if (contextValue < 0) {
-                ObjectsReference.Instance.gestionMode.RotateGhost(Vector3.up);
+                miniChimpViewMode.RotateGhost(Vector3.up);
             }
 
             if (contextValue > 0) {
-                ObjectsReference.Instance.gestionMode.RotateGhost(Vector3.down);
+                miniChimpViewMode.RotateGhost(Vector3.down);
             }
         }
         
-        private void Build(InputAction.CallbackContext context) {
-            ObjectsReference.Instance.gestionMode.ValidateBuildable();
+        private void ContextualLeftClick(InputAction.CallbackContext context) {
+            var viewContextType = miniChimpViewMode.viewModeContextType;
+
+            if (viewContextType == ViewModeContextType.SCAN) {
+                ObjectsReference.Instance.scanWithMouseForDescription.enabled = true;
+            }
+
+            if (viewContextType == ViewModeContextType.BUILD) {
+                miniChimpViewMode.ValidateBuildable();
+            }
+
+            if (viewContextType == ViewModeContextType.HARVEST) {
+                miniChimpViewMode.harvest();
+            }
+            
+            if (viewContextType == ViewModeContextType.REPAIR) {
+                miniChimpViewMode.RepairBuildable();
+            }
         }
         
-        private void HarvestOrRepair(InputAction.CallbackContext context) {
-            ObjectsReference.Instance.scan.RepairOrHarvest();
-        }
-        
-        private void CancelMoveUpDownCamera(InputAction.CallbackContext context) {
-            _gestionCamera.CancelMoveUpDown();
-        }
-        
-        private void Cancel(InputAction.CallbackContext context) {
-            // cancel build
-            // or switch back to game
+        private void SwitchBackToGame(InputAction.CallbackContext callbackContext) {
+            ObjectsReference.Instance.uiManager.HideBananaGunUI();
+            ObjectsReference.Instance.uiManager.SwitchToBananaManPerspective();
+            
+            ObjectsReference.Instance.inputManager.SwitchBackToGame();
+            
+            ObjectsReference.Instance.gameManager.gameContext = GameContext.IN_GAME;
+            ObjectsReference.Instance.inputManager.SwitchContext(InputContext.GAME);
+                
+            ObjectsReference.Instance.bananaGunActionsSwitch.gameObject.SetActive(true);
         }
     }
 }

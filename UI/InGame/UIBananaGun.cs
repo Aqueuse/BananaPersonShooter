@@ -14,29 +14,39 @@ namespace UI.InGame {
             uiMiniChimpBlock = ObjectsReference.Instance.uiMiniChimpBlock;
         }
 
-        public void SwitchToRawMaterialsInventory() {
-            uInventoriesManager.SwitchToInventoryTab(ItemCategory.RAW_MATERIAL);
-            lastFocusedBananaGunUITabType = BananaGunUITabType.INVENTORY_RAW_MATERIALS;
+        public void SwitchToDroppedInventory() {
+            uInventoriesManager.SwitchToInventoryTab(ItemCategory.DROPPED);
+            lastFocusedBananaGunUITabType = BananaGunUITabType.INVENTORY_DROPPED;
+            
+            ObjectsReference.Instance.uInfobulle.Hide();
         }
 
         public void SwitchToIngredientsInventory() {
             uInventoriesManager.SwitchToInventoryTab(ItemCategory.INGREDIENT);
             lastFocusedBananaGunUITabType = BananaGunUITabType.INVENTORY_INGREDIENTS;
+            
+            ObjectsReference.Instance.uInfobulle.Hide();
         }
 
         public void SwitchToManufacturedItemsInventory() {
             uInventoriesManager.SwitchToInventoryTab(ItemCategory.MANUFACTURED_ITEM);
             lastFocusedBananaGunUITabType = BananaGunUITabType.INVENTORY_MANUFACTURED_ITEMS;
+            
+            ObjectsReference.Instance.uInfobulle.Hide();
         }
 
         public void SwitchToBuildablesInventory() {
             uInventoriesManager.SwitchToInventoryTab(ItemCategory.BUILDABLE);
             lastFocusedBananaGunUITabType = BananaGunUITabType.INVENTORY_BUILDABLES;
+            
+            ObjectsReference.Instance.uInfobulle.Hide();
         }
 
         public void SwitchToMiniChimpDialogue() {
             uiMiniChimpBlock.SwitchToBlock(MiniChimpBlockTabType.MINICHIMPBLOCK_DIALOGUE);
             lastFocusedBananaGunUITabType = BananaGunUITabType.MINICHIMPBLOCK_DIALOGUE;
+            
+            ObjectsReference.Instance.uInfobulle.Hide();
         }
 
         public void SwitchToDescription() {
@@ -90,10 +100,10 @@ namespace UI.InGame {
                     lastFocusedBananaGunUITabType = BananaGunUITabType.INVENTORY_INGREDIENTS;
                     break;
                 case BananaGunUITabType.INVENTORY_INGREDIENTS:
-                    uInventoriesManager.SwitchToInventoryTab(ItemCategory.RAW_MATERIAL);
-                    lastFocusedBananaGunUITabType = BananaGunUITabType.INVENTORY_RAW_MATERIALS;
+                    uInventoriesManager.SwitchToInventoryTab(ItemCategory.DROPPED);
+                    lastFocusedBananaGunUITabType = BananaGunUITabType.INVENTORY_DROPPED;
                     break;
-                case BananaGunUITabType.INVENTORY_RAW_MATERIALS:
+                case BananaGunUITabType.INVENTORY_DROPPED:
                     uiMiniChimpBlock.SwitchToBlock(MiniChimpBlockTabType.MINICHIMPBLOCK_HELP);
                     break;
             }
@@ -101,7 +111,7 @@ namespace UI.InGame {
 
         public void SwitchToRightTab() {
             switch (lastFocusedBananaGunUITabType) {
-                case BananaGunUITabType.INVENTORY_RAW_MATERIALS:
+                case BananaGunUITabType.INVENTORY_DROPPED:
                     uInventoriesManager.SwitchToInventoryTab(ItemCategory.INGREDIENT);
                     lastFocusedBananaGunUITabType = BananaGunUITabType.INVENTORY_INGREDIENTS;
                     break;
@@ -134,8 +144,8 @@ namespace UI.InGame {
                     lastFocusedBananaGunUITabType = BananaGunUITabType.MINICHIMPBLOCK_HELP;
                     break;
                 case BananaGunUITabType.MINICHIMPBLOCK_HELP:
-                    uInventoriesManager.SwitchToInventoryTab(ItemCategory.RAW_MATERIAL);
-                    lastFocusedBananaGunUITabType = BananaGunUITabType.INVENTORY_RAW_MATERIALS;
+                    uInventoriesManager.SwitchToInventoryTab(ItemCategory.DROPPED);
+                    lastFocusedBananaGunUITabType = BananaGunUITabType.INVENTORY_DROPPED;
                     break;
             }
         }

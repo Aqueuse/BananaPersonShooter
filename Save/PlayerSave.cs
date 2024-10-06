@@ -1,6 +1,6 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using InGame.Player;
 using Newtonsoft.Json;
 using Save.Templates;
@@ -11,10 +11,10 @@ namespace Save {
         private BananaMan bananaMan;
         private Transform bananaManTransform;
         
-        private GenericDictionary<BananaType, int> bananasInventory;
-        private GenericDictionary<RawMaterialType, int> rawMaterialsInventory;
-        private GenericDictionary<ManufacturedItemsType, int> manufacturedItemsInventory;
-        private GenericDictionary<IngredientsType, int> ingredientsInventory;
+        private Dictionary<BananaType, int> bananasInventory;
+        private Dictionary<DroppedType, int> droppedInventory;
+        private Dictionary<ManufacturedItemsType, int> manufacturedItemsInventory;
+        private Dictionary<IngredientsType, int> ingredientsInventory;
 
         private BananaManSavedData bananaManSavedData;
         
@@ -27,7 +27,7 @@ namespace Save {
             bananaManSavedData = LoadPlayerByUuid(saveUuid);
             
             LoadBananasInventory();
-            LoadRawMaterialsInventory();
+            LoadDroppedInventory();
             LoadIngredientsInventory();
             LoadManufacturedItemsInventory();
             
@@ -44,7 +44,7 @@ namespace Save {
             ObjectsReference.Instance.uInventoriesManager.RefreshInventories();
         }
         
-        private BananaManSavedData LoadPlayerByUuid(string saveUuid) {
+        private static BananaManSavedData LoadPlayerByUuid(string saveUuid) {
             var savePath = Path.Combine(ObjectsReference.Instance.gameSave._savesPath, saveUuid);
             
             var savefilePath = Path.Combine(savePath, "player.json");
@@ -55,42 +55,37 @@ namespace Save {
         }
         
         private void LoadBananasInventory() {
-            bananasInventory = bananaMan.inventories.bananasInventory;
+            bananasInventory = bananaMan.bananaManData.bananasInventory;
 
-            foreach (var bananaSlot in bananasInventory.ToList()) {
-                if (bananaSlot.Key == BananaType.EMPTY) continue;
-
-                bananasInventory[bananaSlot.Key] = bananaManSavedData.bananaInventory[bananaSlot.Key.ToString()];
+            foreach (var banana in bananaManSavedData.bananaInventory) {
+                bananasInventory[(BananaType)Enum.Parse(typeof(BananaType), banana.Key)] = banana.Value;
             }
         }
 
-        private void LoadRawMaterialsInventory() {
-            rawMaterialsInventory = bananaMan.inventories.rawMaterialsInventory;
+        private void LoadDroppedInventory() {
+            droppedInventory = bananaMan.bananaManData.droppedInventory;
+            ObjectsReference.Instance.uiDroppedInventory.droppedInventory = droppedInventory;
 
-            foreach (var rawMaterialSlot in rawMaterialsInventory.ToList()) {
-                if (rawMaterialSlot.Key == RawMaterialType.EMPTY) continue;
-
-                rawMaterialsInventory[rawMaterialSlot.Key] = bananaManSavedData.rawMaterialsInventory[rawMaterialSlot.Key.ToString()];
+            foreach (var dropped in bananaManSavedData.droppedInventory) {
+                droppedInventory[(DroppedType)Enum.Parse(typeof(DroppedType), dropped.Key)] = dropped.Value;
             }
         }
 
         private void LoadIngredientsInventory() {
-            ingredientsInventory = bananaMan.inventories.ingredientsInventory;
+            ingredientsInventory = bananaMan.bananaManData.ingredientsInventory;
+            ObjectsReference.Instance.uiIngredientsInventory.ingredientsInventory = ingredientsInventory;
 
-            foreach (var ingredientsSlot in ingredientsInventory.ToList()) {
-                if (ingredientsSlot.Key == IngredientsType.EMPTY) continue;
-                
-                ingredientsInventory[ingredientsSlot.Key] = bananaManSavedData.ingredientsInventory[ingredientsSlot.Key.ToString()];
+            foreach (var ingredient in bananaManSavedData.ingredientsInventory) {
+                ingredientsInventory[(IngredientsType)Enum.Parse(typeof(IngredientsType), ingredient.Key)] = ingredient.Value;
             }
         }
 
         private void LoadManufacturedItemsInventory() {
-            manufacturedItemsInventory = bananaMan.inventories.manufacturedItemsInventory;
+            manufacturedItemsInventory = bananaMan.bananaManData.manufacturedItemsInventory;
+            ObjectsReference.Instance.uiManufacturedItemsItemsInventory.manufacturedItemsInventory = manufacturedItemsInventory;
 
-            foreach (var manufacturedItemSlot in manufacturedItemsInventory.ToList()) {
-                if (manufacturedItemSlot.Key == ManufacturedItemsType.EMPTY) continue;
-                
-                manufacturedItemsInventory[manufacturedItemSlot.Key] = bananaManSavedData.manufacturedInventory[manufacturedItemSlot.Key.ToString()];
+            foreach (var manufacturedItem in bananaManSavedData.manufacturedInventory) {
+                manufacturedItemsInventory[(ManufacturedItemsType)Enum.Parse(typeof(ManufacturedItemsType), manufacturedItem.Key)] = manufacturedItem.Value;
             }
         }
 
@@ -103,8 +98,8 @@ namespace Save {
         private void LoadSelectedBanana() {
             var bananaSlotType = Enum.Parse<BananaType>(bananaManSavedData.bananaSlot);
             var bananaScriptableObject = ObjectsReference.Instance.meshReferenceScriptableObject.bananasPropertiesScriptableObjects[bananaSlotType];
-            bananaMan.activeBanana = bananaScriptableObject;
-            ObjectsReference.Instance.uiFlippers.SetBananaQuantity(bananaMan.inventories.bananasInventory[bananaScriptableObject.bananaType]);
+            bananaMan.bananaManData.activeBanana = bananaScriptableObject;
+            ObjectsReference.Instance.uiFlippers.SetBananaQuantity(bananaMan.bananaManData.bananasInventory[bananaScriptableObject.bananaType]);
         }
 
         private void LoadBananaManVitals() {
@@ -123,20 +118,22 @@ namespace Save {
         
         private void LoadActiveBanana() {
             var activeBananaType = bananaManSavedData.activeBanana;
-            bananaMan.activeBanana = ObjectsReference.Instance.meshReferenceScriptableObject.bananasPropertiesScriptableObjects[activeBananaType];
+            bananaMan.bananaManData.activeBanana = ObjectsReference.Instance.meshReferenceScriptableObject.bananasPropertiesScriptableObjects[activeBananaType];
 
+            ObjectsReference.Instance.uiFlippers.SetBananaType(bananaMan.bananaManData.activeBanana);
             ObjectsReference.Instance.uiFlippers.SetBananaQuantity(ObjectsReference.Instance.bananasInventory.GetQuantity(activeBananaType));
         }
         
         private void LoadActiveBuildable() {
             var activeBuildableType = bananaManSavedData.activeBuildable;
             
-            bananaMan.activeBuildable = ObjectsReference.Instance.meshReferenceScriptableObject.buildablePropertiesScriptableObjects[activeBuildableType];
-            ObjectsReference.Instance.uiFlippers.SetBuildablePlacementAvailability(ObjectsReference.Instance.rawMaterialsInventory.HasCraftingIngredients(activeBuildableType));
+            bananaMan.bananaManData.activeBuildable = ObjectsReference.Instance.meshReferenceScriptableObject.buildablePropertiesScriptableObjects[activeBuildableType];
+            ObjectsReference.Instance.uiFlippers.SetBuildable(bananaMan.bananaManData.activeBuildable.blueprintSprite);
+            ObjectsReference.Instance.uiFlippers.SetBuildablePlacementAvailability(ObjectsReference.Instance.droppedInventory.HasCraftingIngredients(activeBuildableType));
         }
         
         private void LoadBitkongQuantity() {
-            bananaMan.inventories.bitKongQuantity = bananaManSavedData.bitKongQuantity;
+            bananaMan.bananaManData.bitKongQuantity = bananaManSavedData.bitKongQuantity;
         }
         
         private void CheckTutorialFinished() {
@@ -159,21 +156,21 @@ namespace Save {
             
             var savePath = Path.Combine(ObjectsReference.Instance.gameSave._savesPath, saveUuid);
             
-            foreach (var inventorySlot in bananaMan.inventories.bananasInventory) {
+            foreach (var inventorySlot in bananaMan.bananaManData.bananasInventory) {
                 bananaManSavedData.bananaInventory[inventorySlot.Key.ToString()] = inventorySlot.Value;
             }
-            foreach (var inventorySlot in bananaMan.inventories.rawMaterialsInventory) {
-                bananaManSavedData.rawMaterialsInventory[inventorySlot.Key.ToString()] = inventorySlot.Value;
+            foreach (var inventorySlot in bananaMan.bananaManData.droppedInventory) {
+                bananaManSavedData.droppedInventory[inventorySlot.Key.ToString()] = inventorySlot.Value;
             }
-            foreach (var inventorySlot in bananaMan.inventories.ingredientsInventory) {
+            foreach (var inventorySlot in bananaMan.bananaManData.ingredientsInventory) {
                 bananaManSavedData.ingredientsInventory[inventorySlot.Key.ToString()] = inventorySlot.Value;
             }
-            foreach (var inventorySlot in bananaMan.inventories.manufacturedItemsInventory) {
+            foreach (var inventorySlot in bananaMan.bananaManData.manufacturedItemsInventory) {
                 bananaManSavedData.manufacturedInventory[inventorySlot.Key.ToString()] = inventorySlot.Value;
             }
 
             bananaManSavedData.bananaGunMode = bananaMan.bananaGunMode.ToString();
-            bananaManSavedData.bananaSlot = bananaMan.activeBanana.bananaType.ToString();
+            bananaManSavedData.bananaSlot = bananaMan.bananaManData.activeBanana.bananaType.ToString();
             bananaManSavedData.health = bananaMan.health; 
             bananaManSavedData.resistance = bananaMan.resistance;
 
@@ -191,10 +188,13 @@ namespace Save {
 
             bananaManSavedData.hasFinishedTutorial = bananaMan.tutorialFinished;
 
-            bananaManSavedData.activeBanana = bananaMan.activeBanana.bananaType;
-            bananaManSavedData.activeBuildable = bananaMan.activeBuildable.buildableType;
+            if (bananaMan.bananaManData.activeBanana != null)
+                bananaManSavedData.activeBanana = bananaMan.bananaManData.activeBanana.bananaType;
+            
+            if (bananaMan.bananaManData.activeBuildable != null)
+                bananaManSavedData.activeBuildable = bananaMan.bananaManData.activeBuildable.buildableType;
 
-            bananaManSavedData.bitKongQuantity = bananaMan.inventories.bitKongQuantity;
+            bananaManSavedData.bitKongQuantity = bananaMan.bananaManData.bitKongQuantity;
         
             var jsonbananaManSaved = JsonConvert.SerializeObject(bananaManSavedData);
         

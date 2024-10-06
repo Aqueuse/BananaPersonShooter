@@ -8,7 +8,7 @@ namespace UI.InGame.Inventory {
 
         public void Activate() {
             if (ObjectsReference.Instance.gameManager.gameContext == GameContext.IN_MINICHIMP_VIEW) {
-                ObjectsReference.Instance.gestionMode.ActivateGhostByScriptableObject(buildableScriptableObject);
+                ObjectsReference.Instance.miniChimpViewMode.ActivateGhostByScriptableObject(buildableScriptableObject);
             }
 
             else {
@@ -19,7 +19,10 @@ namespace UI.InGame.Inventory {
         }
          
         public void SetDescriptionAndName() {
-            ObjectsReference.Instance.uiDescriptionsManager.SetDescription(buildableScriptableObject);
+            ObjectsReference.Instance.uInfobulle.SetDescriptionAndName(
+                buildableScriptableObject.GetName(),
+                buildableScriptableObject.GetDescription(),
+                GetComponent<RectTransform>());
         }
         
         public void SetColor(Color color) {

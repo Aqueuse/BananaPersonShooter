@@ -1,9 +1,12 @@
+using InGame.Items.ItemsBehaviours.BuildablesBehaviours;
+using Tags;
 using UnityEngine;
 
 namespace InGame.Player {
     public class DetectColliders : MonoBehaviour {
-        private PlayerController _playerController;
+        [SerializeField] private LayerMask gestionSelectableLayerMask;
 
+        private PlayerController _playerController;
         private int _waterLayer;
         
         private void Start() {

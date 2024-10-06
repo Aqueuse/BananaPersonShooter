@@ -1,3 +1,4 @@
+using Cameras;
 using Cinemachine;
 using InGame.Monkeys.Chimployees;
 using InGame.Monkeys.Minichimps;
@@ -31,26 +32,63 @@ namespace InGame.CommandRoomPanelControls {
         }
         
         public void FocusPanel(CommandRoomPanelType commandRoomPanelType) {
+            if (ObjectsReference.Instance.gameManager.gameContext == GameContext.IN_GAME) {
+                ObjectsReference.Instance.uiManager.SetActive(UICanvasGroupType.HUD_BANANAMAN, false);
+            }
+
+            if (ObjectsReference.Instance.gameManager.gameContext == GameContext.IN_MINICHIMP_VIEW) {
+                ObjectsReference.Instance.uiManager.SetActive(UICanvasGroupType.HUD_MINICHIMP, false);
+            }
+            
             commandRoomVirtualCamera.Follow = cameraTransformByPanelType[commandRoomPanelType].transform;
             commandRoomVirtualCamera.LookAt = cameraFocusByPanelType[commandRoomPanelType].transform;
             commandRoomVirtualCamera.Priority = 200;
-            
-            ObjectsReference.Instance.audioManager.PlayEffect(SoundEffectType.BUTTON_INTERACTION, 0);
+
+            ObjectsReference.Instance.cameraPlayer.Set0Sensibility();
+            ObjectsReference.Instance.playerController.canMove = false;
 
             ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.CROSSHAIRS].alpha = 0;
 
             ObjectsReference.Instance.gameManager.gameContext = GameContext.IN_COMMAND_ROOM_PANEL;
-            ObjectsReference.Instance.inputManager.SwitchContext(InputContext.UI);
             
-            ObjectsReference.Instance.cameraPlayer.Set0Sensibility();
-            ObjectsReference.Instance.playerController.canMove = false;
+            ObjectsReference.Instance.bananaGunActionsSwitch.gameObject.SetActive(false);
+            
+            ObjectsReference.Instance.audioManager.PlayEffect(SoundEffectType.BUTTON_INTERACTION, 0);
         }
 
         public void UnfocusPanel() {
             commandRoomVirtualCamera.Priority = 0;
-            
-            ObjectsReference.Instance.gameManager.gameContext = GameContext.IN_GAME;
-            ObjectsReference.Instance.inputManager.SwitchContext(InputContext.GAME);
+
+            if (ObjectsReference.Instance.mainCamera.cameraModeType == CameraModeType.PLAYER_VIEW) {
+                ObjectsReference.Instance.uiManager.SetActive(UICanvasGroupType.HUD_BANANAMAN, true);
+
+                ObjectsReference.Instance.gameManager.gameContext = GameContext.IN_GAME;
+                ObjectsReference.Instance.inputManager.SwitchContext(InputContext.GAME);
+            }
+
+            if (ObjectsReference.Instance.mainCamera.cameraModeType == CameraModeType.TOP_DOWN_VIEW) {
+                ObjectsReference.Instance.uiManager.SwitchToMinichimpPerspective();
+            }
+        }
+
+        public void FocusMarketingPanel() {
+            FocusPanel(CommandRoomPanelType.MARKETING);
+            ObjectsReference.Instance.inputManager.SwitchContext(InputContext.UI);
+        }
+
+        public void FocusSpaceTrafficControlPanel() {
+            FocusPanel(CommandRoomPanelType.SPACE_TRAFFIC_CONTROL);
+            ObjectsReference.Instance.inputManager.SwitchContext(InputContext.UI);
+        }
+
+        public void FocusGestionPanel() {
+            FocusPanel(CommandRoomPanelType.GESTION);
+            ObjectsReference.Instance.inputManager.SwitchContext(InputContext.GESTION_MAP);
+        }
+
+        public void FocusJournalPanel() {
+            FocusPanel(CommandRoomPanelType.JOURNAL);
+            ObjectsReference.Instance.inputManager.SwitchContext(InputContext.UI);
         }
     }
 }

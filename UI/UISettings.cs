@@ -27,7 +27,7 @@ namespace UI {
         [SerializeField] private Toggle horizontalCameraInversionToggle;
         [SerializeField] private Toggle verticalCameraInversionToggle;
 
-        [SerializeField] private Slider debrisFallSlider;
+        [SerializeField] private Slider droppedFallSlider;
         
         [SerializeField] private Slider saveDelaySlider;
         [SerializeField] private TextMeshProUGUI saveDelayText;
@@ -60,7 +60,7 @@ namespace UI {
     
             ReflectLanguageSettingsOnUI(gameSettings.languageIndexSelected);
 
-            debrisFallSlider.value = Convert.ToInt32(gameSettings.areDebrisFallingOnTheTrees);
+            droppedFallSlider.value = Convert.ToInt32(gameSettings.areDroppedInSpaceFallingOnTheTrees);
             
             ReflectSaveDelayOnUI(Mathf.Abs(gameSettings.saveDelayMinute/60));
             

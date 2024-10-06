@@ -3,15 +3,17 @@ using Save.Helpers;
 
 namespace InGame.Items.ItemsData {
     public class PirateData {
+        public string associatedSpaceshipGuid;
+
         public string piratePosition;
         public string pirateRotation;
         
-        public Dictionary<RawMaterialType, int> piratesInventory = new() {
-            {RawMaterialType.ELECTRONIC, 0},
-            {RawMaterialType.BANANA_PEEL, 0},
-            {RawMaterialType.METAL, 0},
-            {RawMaterialType.FABRIC, 0},
-            {RawMaterialType.BATTERY, 0}
+        public Dictionary<DroppedType, int> piratesInventory = new() {
+            {DroppedType.ELECTRONIC, 0},
+            {DroppedType.BANANA_PEEL, 0},
+            {DroppedType.METAL, 0},
+            {DroppedType.FABRIC, 0},
+            {DroppedType.BATTERY, 0}
         };
 
         public PirateState pirateState = PirateState.GO_TO_SAS;

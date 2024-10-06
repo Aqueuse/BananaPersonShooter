@@ -82,7 +82,7 @@ namespace Save {
             _savePath = Path.Combine(ObjectsReference.Instance.gameSave._savesPath, saveUuid);
             var mapDataSavesPath = Path.Combine(_savePath, "WORLD_DATA");
 
-            List<string> jsonSpaceshipsSaved = new List<string>();
+            List<SpaceshipSavedData> jsonSpaceshipsSaved = new List<SpaceshipSavedData>();
 
             foreach (var spaceshipsBehaviour in ObjectsReference.Instance.spaceTrafficControlManager.spaceshipBehavioursByGuid) {
                 spaceshipsBehaviour.Value.GenerateSaveData();

@@ -36,7 +36,7 @@ namespace InGame.Monkeys.Ancestors.Gorilla {
         }
 
         private void Update() {
-            if (ObjectsReference.Instance.gameManager.isGamePlaying) {
+            if (ObjectsReference.Instance.gameManager.gameContext == GameContext.IN_GAME) {
                 SynchronizeAnimatorAndAgent();
             }
         }

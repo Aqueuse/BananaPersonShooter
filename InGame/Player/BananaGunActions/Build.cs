@@ -20,25 +20,6 @@ namespace InGame.Player.BananaGunActions {
         private Ray ray;
         private RaycastHit raycastHit;
         
-        private Quaternion _normalRotation;
-        private Vector3 _ghostPosition;
-        private Vector3 customRotation;
-        private Vector3 ghostRotationEuler;
-        private Quaternion ghostRotation;
-
-        private Transform pivotTransform;
-        private Vector3 pivotTransformPosition;
-        private Quaternion pivotTransformRotation;
-        
-        private Vector3 pivotLocalePosition;
-        private Quaternion pivotLocaleRotation;
-        private Vector3 raycastHitPointLocalePosition;
-        private float deltaZ;
-        private float deltaY;
-
-        private Vector3 offsettedPosition;
-        private Vector3 raycastHitPoint;
-
         private GameObject _buildable;
         
         private void Update() {
@@ -63,7 +44,7 @@ namespace InGame.Player.BananaGunActions {
             _activeGhost = ghostsReference.GetGhostByBuildableType(buildableType);
             _activeGhostClass = _activeGhost.GetComponent<Ghost>();
             
-            if (ObjectsReference.Instance.rawMaterialsInventory.HasCraftingIngredients(buildableType)) {
+            if (ObjectsReference.Instance.droppedInventory.HasCraftingIngredients(buildableType)) {
                 _activeGhostClass.SetGhostState(GhostState.VALID);
                 ObjectsReference.Instance.uInventoriesManager.GetCurrentUIHelper().ShowNormalPlaceHelper();
                 ObjectsReference.Instance.uiFlippers.SetBuildablePlacementAvailability(true);
@@ -73,8 +54,6 @@ namespace InGame.Player.BananaGunActions {
                 _activeGhostClass.SetGhostState(GhostState.NOT_ENOUGH_MATERIALS);
                 ObjectsReference.Instance.uiFlippers.SetBuildablePlacementAvailability(false);
             }
-
-            ghostRotationEuler = _activeGhost.transform.rotation.eulerAngles;
         }
 
         public void CancelGhost() {
@@ -88,16 +67,8 @@ namespace InGame.Player.BananaGunActions {
 
         public void RotateGhost(Vector3 rotationVector) {
             if (_activeGhost == null) return;
-
-            ghostRotationEuler += rotationVector * 15f;
-
-            ghostRotationEuler.y %= 360;
-            ghostRotationEuler.z %= 360;
-
-            _activeGhost.transform.Rotate(rotationVector * 15f, Space.Self);
             
-            //ghostRotation = Quaternion.Euler(ghostRotationEuler);
-            //_activeGhost.transform.rotation = ghostRotation;
+            _activeGhost.transform.RotateAround(_activeGhost.transform.position, rotationVector, 30f);
         }
 
         public void ValidateBuildable() {
@@ -112,7 +83,7 @@ namespace InGame.Player.BananaGunActions {
                 var _craftingIngredients = _activeGhostClass.buildablePropertiesScriptableObject.rawMaterialsWithQuantity;
 
                 foreach (var craftingIngredient in _craftingIngredients) {
-                    ObjectsReference.Instance.rawMaterialsInventory.RemoveQuantity(craftingIngredient.Key,
+                    ObjectsReference.Instance.droppedInventory.RemoveQuantity(craftingIngredient.Key,
                         craftingIngredient.Value);
                 }
                 
@@ -130,7 +101,7 @@ namespace InGame.Player.BananaGunActions {
 
         public void setGhostColor() {
             if (_activeGhost != null)
-                if (ObjectsReference.Instance.rawMaterialsInventory.HasCraftingIngredientsForPlateform()) {
+                if (ObjectsReference.Instance.droppedInventory.HasCraftingIngredients(_activeGhostClass.buildablePropertiesScriptableObject.buildableType)) {
                     _activeGhostClass.SetGhostState(GhostState.VALID);
                 }
                 else {

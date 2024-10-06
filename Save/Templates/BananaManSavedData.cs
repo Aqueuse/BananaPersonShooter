@@ -14,12 +14,13 @@ namespace Save.Templates {
         public float zWorldRotation = 0;
         
         public BananaType activeBanana = BananaType.EMPTY;
-        public BuildableType activeBuildable = BuildableType.PLATEFORM;
+        public BuildableType activeBuildable = BuildableType.BUMPER;
         public int bitKongQuantity;
         
         public bool hasFinishedTutorial = false;
         
         public Dictionary<string, int> bananaInventory = new() {
+            {BananaType.EMPTY.ToString(), 0},
             {BananaType.BARANGAN.ToString(), 0},
             {BananaType.BLUE_JAVA.ToString(), 0},
             {BananaType.BURRO.ToString(), 0},
@@ -38,23 +39,22 @@ namespace Save.Templates {
             {BananaType.TINDOK.ToString(), 0}
         };
         
-        public Dictionary<string, int> rawMaterialsInventory = new() {
-            {RawMaterialType.ELECTRONIC.ToString(), 0},
-            {RawMaterialType.BANANA_PEEL.ToString(), 0},
-            {RawMaterialType.METAL.ToString(), 0},
-            {RawMaterialType.FABRIC.ToString(), 0},
-            {RawMaterialType.BATTERY.ToString(), 0}
+        public Dictionary<string, int> droppedInventory = new() {
+            {DroppedType.ELECTRONIC.ToString(), 0},
+            {DroppedType.BANANA_PEEL.ToString(), 0},
+            {DroppedType.METAL.ToString(), 0},
+            {DroppedType.FABRIC.ToString(), 0},
+            {DroppedType.BATTERY.ToString(), 0},
+            {DroppedType.SILICE.ToString(), 0}
         };  
 
         public Dictionary<string, int> ingredientsInventory = new() {
             {IngredientsType.BANANA_DOG_BREAD.ToString(), 0},   
-            {IngredientsType.BANANA_WITHOUT_SKIN.ToString(), 0},
-            {IngredientsType.EMPTY.ToString(), 0}
+            {IngredientsType.BANANA_WITHOUT_SKIN.ToString(), 0}
         };
 
         public Dictionary<string, int> manufacturedInventory = new() {
-            {ManufacturedItemsType.SPACESHIP_TOY.ToString(), 0},
-            {IngredientsType.EMPTY.ToString(), 0}
+            {ManufacturedItemsType.SPACESHIP_TOY.ToString(), 0}
         };
 
         public string bananaSlot = BananaType.EMPTY.ToString();

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: MusaVelutinaBananaProperties
   m_EditorClassIdentifier: 
   gameObjectTag: 3
-  itemCategory: 0
+  itemCategory: 1
   bananaType: 9
   rawMaterialType: 5
   ingredientsType: 2

@@ -22,7 +22,7 @@ namespace Settings {
         public bool isCameraVerticallyInverted;
         public bool isCameraHorizontallyInverted;
 
-        public bool areDebrisFallingOnTheTrees;
+        public bool areDroppedInSpaceFallingOnTheTrees;
         public int saveDelayMinute;
         public JsonPlayerPrefs prefs;
         private UISettings uiSettings;
@@ -101,7 +101,7 @@ namespace Settings {
             languageIndexSelected = languageIndexInt;
             LocalizationSettings.SelectedLocale = LocalizationSettings.AvailableLocales.Locales[languageIndexInt];
             
-            areDebrisFallingOnTheTrees = prefs.GetString("areDebrisFallingOnTheTrees", "True").Equals("True");
+            areDroppedInSpaceFallingOnTheTrees = prefs.GetString("areDroppedInSpaceFallingOnTheTrees", "True").Equals("True");
             
             onSettingsLoadedCompleted?.Invoke();
         }
@@ -299,11 +299,11 @@ namespace Settings {
             prefs.Save();
         }
         
-        public void SetDebrisFall(float level) {
+        public void SetDroppedFall(float level) {
             if (ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.OPTIONS].alpha < 1) return;
 
-            areDebrisFallingOnTheTrees = Convert.ToBoolean((int)level);
-            prefs.SetString("areDebrisFallingOnTheTrees", areDebrisFallingOnTheTrees ? "True" : "False");
+            areDroppedInSpaceFallingOnTheTrees = Convert.ToBoolean((int)level);
+            prefs.SetString("areDroppedInSpaceFallingOnTheTrees", areDroppedInSpaceFallingOnTheTrees ? "True" : "False");
             
             prefs.Save();
         }

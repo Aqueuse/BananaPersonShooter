@@ -2,6 +2,7 @@ using Audio;
 using Cameras;
 using InGame;
 using InGame.CommandRoomPanelControls;
+using InGame.Dialogues;
 using InGame.Gestion;
 using InGame.Interactions;
 using InGame.Inventory;
@@ -26,6 +27,7 @@ using UI.InGame.Inventory;
 using UI.InGame.Merchimps;
 using UI.InGame.MiniChimpBlock;
 using UI.InGame.MiniChimpBlock.Descriptions;
+using UI.InGame.MiniChimpView;
 using UI.InGame.VisitorReceptionMiniGameUI;
 using UI.Menus;
 using UI.Save;
@@ -56,18 +58,22 @@ public class ObjectsReference : MonoSingleton<ObjectsReference> {
     public Trade trade;
 
     public BananasInventory bananasInventory;
-    public RawMaterialsInventory rawMaterialsInventory;
+    public DroppedInventory droppedInventory;
     public IngredientsInventory ingredientsInventory;
     public ManufacturedItemsInventory manufacturedItemsInventory;
 
-    public MiniChimpBlockManager miniChimpBlockManager;
+    public ScanWithMouseForDescription scanWithMouseForDescription;
+    public MiniChimpDialoguesManager miniChimpDialoguesManager;
     public Map map;
+
+    public MiniChimpViewMode miniChimpViewMode;
 
     public GhostsReference ghostsReference;
 
     public MainCamera mainCamera;
     public CameraPlayer cameraPlayer;
-    public CameraGestion gestionCamera;
+    public CameraGestionDragRotate gestionDragCamera;
+    public CameraGestionRelativeMove gestionRelativeMoveCamera;
     public FootStepSurfaceDetector footStepSurfaceDetector;
 
     public Cinematiques cinematiques;
@@ -85,19 +91,19 @@ public class ObjectsReference : MonoSingleton<ObjectsReference> {
     public GameSettings gameSettings;
 
     public Teleportation teleportation;
-
-    public UIDescriptionsManager uiDescriptionsManager;
-    public GestionMode gestionMode;
-
+    
     public UIManager uiManager;
-    public UInventoriesManager uInventoriesManager;
+    
     public UIBananaGun uiBananaGun;
+    public UInventoriesManager uInventoriesManager;
     public UiMiniChimpBlock uiMiniChimpBlock;
+    public UIDescriptionsManager uiDescriptionsManager;
 
-    public UIRawMaterialsInventory uiRawMaterialsInventory;
+    public UIDroppedInventory uiDroppedInventory;
     public UIIngredientsInventory uiIngredientsInventory;
     public UIBlueprintsInventory uiBlueprintsInventory;
     public UIManufacturedItemsInventory uiManufacturedItemsItemsInventory;
+    public UInfobulle uInfobulle;
 
     public UIBananaSelector uiBananaSelector;
 
@@ -118,4 +124,6 @@ public class ObjectsReference : MonoSingleton<ObjectsReference> {
     public UIMerchant uiMerchant;
     
     public UIFlippers uiFlippers;
+
+    public UIStats uiStats;
 }

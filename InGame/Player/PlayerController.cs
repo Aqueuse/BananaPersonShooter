@@ -1,4 +1,5 @@
 ﻿using InGame.Items.ItemsBehaviours.BuildablesBehaviours;
+using Tags;
 using UnityEngine;
 
 namespace InGame.Player {
@@ -9,7 +10,6 @@ namespace InGame.Player {
         private Rigidbody _rigidbody;
         private Animator _animator;
         private CapsuleCollider _capsuleCollider;
-        private BananaMan bananaMan;
 
         private RaycastHit _slopeHit;
         private RaycastHit hitTest;
@@ -26,9 +26,7 @@ namespace InGame.Player {
         public bool canMove = true;
         public bool isGrounded;
         private bool _isHit;
-
-        public float _damageCount;
-
+        
         //Stored Values
         private static readonly int IsJumping = Animator.StringToHash("IsJumping");
         public Vector3 _rawInputMovement;
@@ -49,17 +47,14 @@ namespace InGame.Player {
             _animator = GetComponent<Animator>();
             _capsuleCollider = GetComponent<CapsuleCollider>();
             _tpsPlayerAnimatorScript = gameObject.GetComponent<TpsPlayerAnimator>();
-            bananaMan = GetComponent<BananaMan>();
 
             if (Camera.main != null) mainCameraTransform = Camera.main.transform;
 
             speed = BaseMovementSpeed;
-
-            _damageCount = 0;
         }
         
         private void FixedUpdate() {
-            if (!ObjectsReference.Instance.gameManager.isGamePlaying) return;
+            if (ObjectsReference.Instance.gameManager.gameContext != GameContext.IN_GAME) return;
 
             // ugly but opti
             _cameraRotation.x = 0;
@@ -114,14 +109,7 @@ namespace InGame.Player {
             else {
                 speed = 0;
             }
-
-            // fall damage
-            if (bananaMan.canTakeFallDamage) {
-                if (_rigidbody.velocity.y < -20) {
-                    _damageCount += 1;
-                }
-            }
-
+            
             // cap max velocity
             if (_rigidbody.velocity.magnitude > 21) {
                 _rigidbody.velocity = Vector3.ClampMagnitude(_rigidbody.velocity, 21);
@@ -175,14 +163,12 @@ namespace InGame.Player {
             speed = 0;
             _tpsPlayerAnimatorScript.UpdateMovementAnimation(0, 0);
             _rigidbody.velocity = Vector3.zero;
-            _damageCount = 0;
         }
 
         public void ResetPlayer() {
             speed = BaseMovementSpeed;
             _tpsPlayerAnimatorScript.UpdateMovementAnimation(0, 0);
             _rigidbody.velocity = Vector3.zero;
-            _damageCount = 0;
         }
 
         private bool IsOnSlope() {
@@ -198,20 +184,11 @@ namespace InGame.Player {
             return Vector3.ProjectOnPlane(movementDirection, _slopeHit.normal);
         }
 
-        private void OnCollisionEnter(Collision other) {
-            if (!ObjectsReference.Instance.gameManager.isGamePlaying) return;
+        private void OnCollisionStay(Collision other) {
+            if (other.gameObject.layer != 7) return;
             
-            if (other.gameObject.GetComponent<PlateformBehaviour>() != null) {
-                _damageCount = 0;
-            }
-
-            else {
-                if (isInWater) _damageCount = 0;
-
-                if (!isInWater && _damageCount > 0) {
-                    ObjectsReference.Instance.bananaMan.TakeDamage(_damageCount);
-                    _damageCount = 0;
-                }
+            if (other.gameObject.GetComponent<Tag>().itemScriptableObject.buildableType == BuildableType.BUMPER) {
+                other.gameObject.GetComponent<PlateformBehaviour>().Activate(GetComponentInParent<Rigidbody>(), 80000);
             }
         }
     }

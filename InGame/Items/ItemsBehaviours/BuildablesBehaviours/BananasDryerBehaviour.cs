@@ -19,8 +19,8 @@ namespace InGame.Items.ItemsBehaviours.BuildablesBehaviours {
         }
         
         public void RetrieveRawMaterials() {
-            ObjectsReference.Instance.rawMaterialsInventory.AddQuantity(RawMaterialType.FABRIC, fabricQuantity);
-            ObjectsReference.Instance.rawMaterialsInventory.AddQuantity(RawMaterialType.BANANA_PEEL, bananaPeelsQuantity);
+            ObjectsReference.Instance.droppedInventory.AddQuantity(DroppedType.FABRIC, fabricQuantity);
+            ObjectsReference.Instance.droppedInventory.AddQuantity(DroppedType.BANANA_PEEL, bananaPeelsQuantity);
         }
         
         public override void GenerateSaveData() {

@@ -1,11 +1,20 @@
+using InGame.Player.BananaGunActions;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 namespace KeyboardInputs {
-    public class BananaGunActionsKeyboard : InputActions {
+    public class GameActionsKeyboard : InputActions {
         [SerializeField] private InputActionReference switchToShootMode;
         [SerializeField] private InputActionReference switchToScanMode;
         [SerializeField] private InputActionReference switchToBuildMode;
+
+        [SerializeField] private InputActionReference scrollModes;
+
+        private BananaGunActionsSwitch bananaGunActionsSwitch;
+
+        private void Start() {
+            bananaGunActionsSwitch = ObjectsReference.Instance.bananaGunActionsSwitch;
+        }
 
         private void OnEnable() {
             switchToShootMode.action.Enable();
@@ -16,6 +25,9 @@ namespace KeyboardInputs {
 
             switchToBuildMode.action.Enable();
             switchToBuildMode.action.performed += SwitchToBuildMode;
+            
+            scrollModes.action.Enable();
+            scrollModes.action.performed += ScrollModes;
         }
 
         private void OnDisable() {
@@ -27,18 +39,30 @@ namespace KeyboardInputs {
 
             switchToBuildMode.action.Disable();
             switchToBuildMode.action.performed -= SwitchToBuildMode;
+            
+            scrollModes.action.Disable();
+            scrollModes.action.performed -= ScrollModes;
         }
 
         private void SwitchToShootMode(InputAction.CallbackContext callbackContext) {
-            ObjectsReference.Instance.bananaGunActionsSwitch.SwitchToBananaGunMode(BananaGunMode.SHOOT);
+            bananaGunActionsSwitch.SwitchToBananaGunMode(BananaGunMode.SHOOT);
         }
 
         private void SwitchToScanMode(InputAction.CallbackContext callbackContext) {
-            ObjectsReference.Instance.bananaGunActionsSwitch.SwitchToBananaGunMode(BananaGunMode.SCAN);
+            bananaGunActionsSwitch.SwitchToBananaGunMode(BananaGunMode.SCAN);
         }
 
         private void SwitchToBuildMode(InputAction.CallbackContext callbackContext) {
-            ObjectsReference.Instance.bananaGunActionsSwitch.SwitchToBananaGunMode(BananaGunMode.BUILD);
+            bananaGunActionsSwitch.SwitchToBananaGunMode(BananaGunMode.BUILD);
+        }
+
+        private void ScrollModes(InputAction.CallbackContext callbackContext) {
+            if (callbackContext.ReadValue<Vector2>().y > 1) {
+                bananaGunActionsSwitch.SwitchToLeftMode();
+            }
+            if (callbackContext.ReadValue<Vector2>().y < 1) {
+                bananaGunActionsSwitch.SwitchToRightMode();
+            }
         }
     }
 }

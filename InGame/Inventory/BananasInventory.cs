@@ -1,15 +1,18 @@
+using System.Collections.Generic;
 using InGame.Items.ItemsProperties.Bananas;
 using UnityEngine;
 
 namespace InGame.Inventory {
     public class BananasInventory : MonoBehaviour {
-        private GenericDictionary<BananaType, int> bananasInventory;
+        public Dictionary<BananaType, int> bananasInventory;
 
         private void Start() {
-            bananasInventory = ObjectsReference.Instance.bananaMan.inventories.bananasInventory;
+            bananasInventory = ObjectsReference.Instance.bananaMan.bananaManData.bananasInventory;
         }
 
         public void AddQuantity(BananasPropertiesScriptableObject bananasDataScriptableObject, int quantity) {
+            bananasInventory.TryAdd(bananasDataScriptableObject.bananaType, 0);
+            
             if (bananasInventory[bananasDataScriptableObject.bananaType] > 10000) return;
             
             bananasInventory[bananasDataScriptableObject.bananaType] += quantity;

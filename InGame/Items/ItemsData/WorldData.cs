@@ -12,7 +12,7 @@ namespace InGame.Items.ItemsData {
         public int chimployeesQuantity;
         
         public GameObject initialBuildablesOnWorld;
-        public GameObject initialDebrisOnWorld;
+        public GameObject initialSpaceshipDebrisOnWorld;
         
         public List<PortalDestination> portals;
 
@@ -20,8 +20,8 @@ namespace InGame.Items.ItemsData {
 
         public List<MonkeyPropertiesScriptableObject> monkeysData;
         
-        public int GetDebrisQuantityInWorld() {
-            return FindObjectsByType<DebrisBehaviour>(FindObjectsSortMode.None).Length;
+        public int GetDroppedQuantityInWorld() {
+            return FindObjectsByType<SpaceshipDebrisBehaviour>(FindObjectsSortMode.None).Length;
         }
     }
 }

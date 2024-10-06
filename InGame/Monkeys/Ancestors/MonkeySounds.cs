@@ -23,7 +23,7 @@ namespace InGame.Monkeys.Ancestors {
         }
 
         private void Update() {
-            if (!ObjectsReference.Instance.gameManager.isGamePlaying) return;
+            if (ObjectsReference.Instance.gameManager.gameContext == GameContext.IN_GAME) return;
             if (!Physics.Raycast(transform.position, -transform.up, out _raycastHit, 5, layerMask:surfacesLayerMask)) return;
 
             var terrainType = _raycastHit.transform.gameObject.GetComponent<TerrainType>(); 

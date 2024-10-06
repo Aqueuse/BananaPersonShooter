@@ -26,6 +26,7 @@ namespace SharedInputs {
         public InputActionReference interactActionReference;
     
         public InputActionReference openBananaGunUIActionReference;
+        public InputActionReference openInventoryActionReference;
 
         public InputActionReference pauseGameActionReference;
 
@@ -46,6 +47,8 @@ namespace SharedInputs {
             ObjectsReference.Instance.bananaMan.GetComponent<Rigidbody>().isKinematic = false;
 
             ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.CROSSHAIRS].alpha = 1;
+            
+            ObjectsReference.Instance.bananaGunActionsSwitch.gameObject.SetActive(true);
 
             moveActionReference.action.Enable();
             moveActionReference.action.performed += Move;
@@ -70,6 +73,9 @@ namespace SharedInputs {
         
             openBananaGunUIActionReference.action.Enable();
             openBananaGunUIActionReference.action.performed += OpenBananaGunUI;
+            
+            openInventoryActionReference.action.Enable();
+            openInventoryActionReference.action.performed += OpenInventories;
             
             pauseGameActionReference.action.Enable();
             pauseGameActionReference.action.performed += PauseGame;
@@ -99,6 +105,9 @@ namespace SharedInputs {
             openBananaGunUIActionReference.action.Disable();
             openBananaGunUIActionReference.action.performed -= OpenBananaGunUI;
 
+            openInventoryActionReference.action.Disable();
+            openInventoryActionReference.action.performed -= OpenInventories;
+            
             pauseGameActionReference.action.Disable();
             pauseGameActionReference.action.performed -= PauseGame;
         }
@@ -137,7 +146,7 @@ namespace SharedInputs {
         }
 
         private static void Grab(InputAction.CallbackContext context) {
-            if (ObjectsReference.Instance.inputManager.bananaGunActions != BananaGunMode.SCAN) {
+            if (ObjectsReference.Instance.bananaMan.bananaGunMode != BananaGunMode.SCAN) {
                 if (context.performed) ObjectsReference.Instance.grab.DoGrab(); 
                 if (context.canceled) ObjectsReference.Instance.grab.Release();
             }
@@ -145,6 +154,20 @@ namespace SharedInputs {
     
         private static void OpenBananaGunUI(InputAction.CallbackContext context) {
             ObjectsReference.Instance.uiManager.ShowBananaGunUI();
+            ObjectsReference.Instance.uiManager.SwitchToMinichimpPerspective();
+            
+            ObjectsReference.Instance.gameManager.gameContext = GameContext.IN_MINICHIMP_VIEW;
+
+            ObjectsReference.Instance.bananaGunActionsSwitch.gameObject.SetActive(false);
+        }
+
+        private static void OpenInventories(InputAction.CallbackContext context) {
+            ObjectsReference.Instance.uiManager.ShowInventory();
+            ObjectsReference.Instance.cameraPlayer.Set0Sensibility();
+            ObjectsReference.Instance.inputManager.SwitchContext(InputContext.INVENTORIES);
+            ObjectsReference.Instance.gameManager.gameContext = GameContext.IN_INVENTORIES;
+            
+            ObjectsReference.Instance.bananaGunActionsSwitch.gameObject.SetActive(false);
         }
         
         private void ZoomDezoomCamera(InputAction.CallbackContext context) {

@@ -20,6 +20,10 @@ namespace InGame.Items.ItemsBehaviours.SpaceshipsBehaviours {
             }
         }
 
+        public int GetTouristsNumber() {
+            return touristDatas.Count;
+        }
+
         public override void GenerateSaveData() {
             if(string.IsNullOrEmpty(spaceshipGuid)) {
                 spaceshipGuid = Guid.NewGuid().ToString();
@@ -39,7 +43,7 @@ namespace InGame.Items.ItemsBehaviours.SpaceshipsBehaviours {
                 hangarNumber = assignatedHangar
             };
 
-            savedData = JsonConvert.SerializeObject(touristSpaceshipData);
+            savedData = touristSpaceshipData;
         }
     }
 }

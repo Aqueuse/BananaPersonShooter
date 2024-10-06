@@ -1,7 +1,6 @@
 public enum PirateState {
     IDLE,
     GO_TO_SAS,
-    TRAVEL_IN_SAS,
     SEARCH_RANDOM_POINT,
     GO_TO_RANDOM_POINT,
     SEARCH_THING_TO_BREAK,

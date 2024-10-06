@@ -12,8 +12,6 @@ namespace InGame {
         [SerializeField] private GameObject startAnimations;
         [SerializeField] private List<GameObject> inGameGameObjects;
         
-        public bool isGamePlaying;
-
         public GameContext gameContext;
         
         public GenericDictionary<SpawnPoint, Transform> spawnPointsBySpawnType;
@@ -24,7 +22,6 @@ namespace InGame {
         private GameManager gameManager;
         
         private void Start() {
-            isGamePlaying = false;
             gameContext = GameContext.IN_HOME;
             RenderSettings.ambientLight = Color.white;
 
@@ -82,7 +79,6 @@ namespace InGame {
             }
 
             gameContext = GameContext.IN_GAME_MENU;
-            isGamePlaying = false;
         }
 
         public void UnpauseGame() {
@@ -98,7 +94,6 @@ namespace InGame {
             }
 
             gameContext = GameContext.IN_GAME;
-            isGamePlaying = true;
         }
 
         public void Quit() {
@@ -127,7 +122,6 @@ namespace InGame {
             Cursor.visible = true;
             Cursor.lockState = CursorLockMode.None;
 
-            gameManager.isGamePlaying = false;
             gameManager.gameContext = GameContext.IN_HOME;
 
             ObjectsReference.Instance.uiManager.HideGameMenu();
@@ -170,7 +164,7 @@ namespace InGame {
             _bananaManTransform.rotation = Quaternion.Euler(_bananaManRotation);
             
             ObjectsReference.Instance.gameSave.buildablesSave.SpawnInitialBuildables();
-            ObjectsReference.Instance.gameSave.debrisSave.SpawnInitialDebris();
+            ObjectsReference.Instance.gameSave.spaceshipDebrisSave.SpawnInitialSpaceshipDebris();
 
             loadingScreen.SetActive(false);
             Init();
@@ -192,7 +186,6 @@ namespace InGame {
 
             ObjectsReference.Instance.inputManager.SwitchContext(InputContext.GAME);
             gameManager.gameContext = GameContext.IN_GAME;
-            gameManager.isGamePlaying = true;
 
             ObjectsReference.Instance.uiManager.HideGameMenu();
             ObjectsReference.Instance.uiManager.HideHomeMenu();

@@ -13,10 +13,11 @@ MonoBehaviour:
   m_Name: SpaceshipToyProperties
   m_EditorClassIdentifier: 
   gameObjectTag: 26
-  itemCategory: 16
+  itemCategory: 12
   bananaType: 0
   rawMaterialType: 5
   ingredientsType: 2
+  manufacturedItemsType: 0
   buildableType: 5
   itemName:
   - spaceship

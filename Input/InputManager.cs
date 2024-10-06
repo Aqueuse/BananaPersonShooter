@@ -2,8 +2,6 @@ using UnityEngine;
 
 public class InputManager : MonoBehaviour {
     [SerializeField] private GenericDictionary<InputContext, InputActions[]> inputActionsByInputContext;
-    public BananaGunMode bananaGunActions;
-
     public void SwitchContext(InputContext newInputContext) {
         DisableAllInputs();
 
@@ -25,5 +23,12 @@ public class InputManager : MonoBehaviour {
                 inputAction.enabled = false;
             }
         }
+    }
+    
+    public void SwitchBackToGame() {
+        ObjectsReference.Instance.gameManager.gameContext = GameContext.IN_GAME;
+        ObjectsReference.Instance.inputManager.SwitchContext(InputContext.GAME);
+                
+        ObjectsReference.Instance.bananaGunActionsSwitch.gameObject.SetActive(true);
     }
 }

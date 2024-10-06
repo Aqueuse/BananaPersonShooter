@@ -1,7 +1,5 @@
-using KeyboardInputs;
 using SharedInputs;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 namespace InGame.Player.BananaGunActions {
     public class BananaGunActionsSwitch : MonoBehaviour {
@@ -9,51 +7,26 @@ namespace InGame.Player.BananaGunActions {
         [SerializeField] private BananaGunScanActions bananaGunScanActions;
         [SerializeField] private BananaGunBuildActions bananaGunBuildActions;
         
-        [SerializeField] private InputActionReference shootActionReference;
-        [SerializeField] private InputActionReference scanObjectActionReference;
-        [SerializeField] private InputActionReference buildActionReference;
-
         private Shoot shoot;
         private Scan scan;
         private Build build;
+
+        private BananaMan bananaMan;
 
         private void Start() {
             shoot = ObjectsReference.Instance.shoot;
             scan = ObjectsReference.Instance.scan;
             build = ObjectsReference.Instance.build;
+
+            bananaMan = ObjectsReference.Instance.bananaMan;
         }
-
-        private void OnEnable() {
-            shootActionReference.action.Enable();
-            shootActionReference.action.performed += SwitchToShootMode;
-            shootActionReference.action.canceled += SwitchToShootMode;
-
-            scanObjectActionReference.action.Enable();
-            scanObjectActionReference.action.performed += SwitchToScanMode;
-            scanObjectActionReference.action.canceled += SwitchToScanMode;
-
-            buildActionReference.action.Enable();
-            buildActionReference.action.performed += SwitchToBuildMode;
-            buildActionReference.action.canceled += SwitchToBuildMode;
-        }
-
-        private void OnDisable() {
-            shootActionReference.action.Disable();
-            shootActionReference.action.performed -= SwitchToShootMode;
-            shootActionReference.action.canceled -= SwitchToShootMode;
-
-            scanObjectActionReference.action.Disable();
-            scanObjectActionReference.action.performed -= SwitchToScanMode;
-            scanObjectActionReference.action.canceled -= SwitchToScanMode;
-
-            buildActionReference.action.Disable();
-            buildActionReference.action.performed -= SwitchToBuildMode;
-            buildActionReference.action.canceled -= SwitchToBuildMode;
-        }
-
+        
         public void SwitchToBananaGunMode(BananaGunMode bananaGunMode) {
             ObjectsReference.Instance.bananaMan.bananaGunMode = bananaGunMode;
 
+            ObjectsReference.Instance.bananaGun.UngrabBananaGun();
+            ObjectsReference.Instance.build.CancelGhost();
+            
             switch (bananaGunMode) {
                 case BananaGunMode.SHOOT:
                     bananaGunShootActions.enabled = true;
@@ -100,17 +73,39 @@ namespace InGame.Player.BananaGunActions {
             scan.enabled = false;
             build.enabled = false;
         }
+
+        public void SwitchToLeftMode() {
+            switch (bananaMan.bananaGunMode) {
+                case BananaGunMode.BUILD:
+                    SwitchToBananaGunMode(BananaGunMode.SCAN);
+                    break;
+                case BananaGunMode.SCAN:
+                    SwitchToBananaGunMode(BananaGunMode.SHOOT);
+                    break;
+                case BananaGunMode.SHOOT:
+                    SwitchToBananaGunMode(BananaGunMode.BUILD);
+                    break;
+                case BananaGunMode.IDLE:
+                    SwitchToBananaGunMode(BananaGunMode.SHOOT);
+                    break;
+            }
+        }
         
-        private void SwitchToShootMode(InputAction.CallbackContext context) {
-            SwitchToBananaGunMode(BananaGunMode.SHOOT);
-        }
-
-        private void SwitchToScanMode(InputAction.CallbackContext context) {
-            SwitchToBananaGunMode(BananaGunMode.SCAN);
-        }
-
-        private void SwitchToBuildMode(InputAction.CallbackContext context) {
-            SwitchToBananaGunMode(BananaGunMode.BUILD);
+        public void SwitchToRightMode() {
+            switch (bananaMan.bananaGunMode) {
+                case BananaGunMode.BUILD:
+                    SwitchToBananaGunMode(BananaGunMode.SHOOT);
+                    break;
+                case BananaGunMode.SHOOT:
+                    SwitchToBananaGunMode(BananaGunMode.SCAN);
+                    break;
+                case BananaGunMode.SCAN:
+                    SwitchToBananaGunMode(BananaGunMode.BUILD);
+                    break;
+                case BananaGunMode.IDLE:
+                    SwitchToBananaGunMode(BananaGunMode.SHOOT);
+                    break;
+            }
         }
     }
 }

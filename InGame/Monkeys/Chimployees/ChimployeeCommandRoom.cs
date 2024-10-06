@@ -3,15 +3,14 @@ using UI.InGame;
 using UnityEngine;
 
 namespace InGame.Monkeys.Chimployees {
-    public class ChimployeeCommandRoom : Chimployee {
+    public class ChimployeeCommandRoom : MonoBehaviour {
         [SerializeField] private Transform chimployeeTransform;
         [SerializeField] private Animator animator;
         [SerializeField] private UIFace uiFace;
         [SerializeField] private BubbleDialogue bubbleDialogue;
-
-        private readonly string beDeadAnimatorProperty = "isDead";
-        private readonly string isTypingAnimatorProperty = "isTyping";
-
+        private static readonly int isDead = Animator.StringToHash("isDead");
+        private static readonly int isTyping = Animator.StringToHash("isTyping");
+        
         private void Start() {
             if (ObjectsReference.Instance.bananaMan.tutorialFinished) {
                 SetNormalChimployeeConfiguration();
@@ -26,8 +25,8 @@ namespace InGame.Monkeys.Chimployees {
             chimployeeTransform.rotation = ObjectsReference.Instance.commandRoomControlPanelsManager.chairLifeSimulatorTransform.rotation;
 
             uiFace.Die(false);
-            animator.SetBool(beDeadAnimatorProperty, false);
-            animator.SetBool(isTypingAnimatorProperty, true);
+            animator.SetBool(isDead, false);
+            animator.SetBool(isTyping, true);
 
             enabled = false;
             bubbleDialogue.enabled = true;
@@ -36,8 +35,8 @@ namespace InGame.Monkeys.Chimployees {
 
         public void SetTutorialChimployeeConfiguration() {
             uiFace.Die(true);
-            animator.SetBool(beDeadAnimatorProperty, true);
-            animator.SetBool(isTypingAnimatorProperty, false);
+            animator.SetBool(isDead, true);
+            animator.SetBool(isTyping, false);
 
             bubbleDialogue.DisableBubble();
             bubbleDialogue.enabled = false;

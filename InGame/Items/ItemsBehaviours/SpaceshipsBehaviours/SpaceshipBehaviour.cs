@@ -1,6 +1,8 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using DG.Tweening;
+using InGame.Items.ItemsData;
 using InGame.MiniGames.SpaceTrafficControlMiniGame.projectiles;
 using InGame.SpaceTrafficControl;
 using Save.Templates;
@@ -10,6 +12,7 @@ using UnityEngine;
 namespace InGame.Items.ItemsBehaviours.SpaceshipsBehaviours {
     public class SpaceshipBehaviour : MonoBehaviour {
         [HideInInspector] public SpaceshipSavedData spaceshipSavedData;
+        public List<MonkeyMenData> monkeyMensData = new();
 
         public string spaceshipGuid;
         public string spaceshipName;
@@ -18,12 +21,13 @@ namespace InGame.Items.ItemsBehaviours.SpaceshipsBehaviours {
         public CharacterType characterType;
 
         public int assignatedHangar;
+        public Transform spawnPoint;
         
         private DOTweenPath pathBeetweenSpaceAndHangar;
         private Vector3[] assignatedPathToHangar;
         public float lookAtRotation = 0.01f;
         
-        public string savedData;
+        public SpaceshipSavedData savedData;
         
         [SerializeField] private Transform spaceshipDebris;
         
@@ -87,10 +91,6 @@ namespace InGame.Items.ItemsBehaviours.SpaceshipsBehaviours {
 
             if (characterType == CharacterType.MERCHIMP) {
                 GetComponent<MerchantSpaceshipBehaviour>().StartWaitingTimer();
-            }
-
-            if (characterType == CharacterType.PIRATE) {
-                GetComponent<PirateSpaceshipBehaviour>().SpawnPirates();
             }
         }
 
@@ -168,16 +168,16 @@ namespace InGame.Items.ItemsBehaviours.SpaceshipsBehaviours {
             
             GetComponent<BoxCollider>().enabled = false;
             
-            foreach (var debris in spaceshipDebris.GetComponentsInChildren<DebrisBehaviour>()) {
+            foreach (var debris in spaceshipDebris.GetComponentsInChildren<SpaceshipDebrisBehaviour>()) {
                 var debrisRigidbody = debris.gameObject.AddComponent<Rigidbody>();
                 debrisRigidbody.useGravity = false;
                 
                 debrisRigidbody.AddExplosionForce(10f, transform.position, 10f);
                 debrisRigidbody.AddTorque(debris.transform.position, ForceMode.Impulse);
-                debris.GetComponent<DebrisBehaviour>().isInSpace = true;
-                debris.GetComponent<DebrisBehaviour>().DestroyIfUnreachable();
+                debris.GetComponent<SpaceshipDebrisBehaviour>().isInSpace = true;
+                debris.GetComponent<SpaceshipDebrisBehaviour>().DestroyIfUnreachable();
 
-                debris.transform.parent = ObjectsReference.Instance.gameSave.debrisSave.debrisContainer.transform;
+                debris.transform.parent = ObjectsReference.Instance.gameSave.spaceshipDebrisSave.spaceshipDebrisContainer.transform;
             }
 
             ObjectsReference.Instance.spaceshipsSpawner.RemoveGuest();

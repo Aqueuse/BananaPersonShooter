@@ -1,28 +1,24 @@
 using System.Collections.Generic;
 using System.Linq;
 using InGame.Items.ItemsBehaviours.BuildablesBehaviours;
-using InGame.Items.ItemsProperties.Characters.Visitors;
+using Save.Helpers;
+using Save.Templates;
 using UnityEngine;
 using UnityEngine.AI;
 
 namespace InGame.Monkeys.Chimptouristes {
-    public class TouristBehaviour : MonoBehaviour {
+    public class TouristBehaviour : MonkeyMenBehaviour {
         [SerializeField] private NavMeshAgent _navMeshAgent;
         [SerializeField] private Transform _transform;
         [SerializeField] private Animator animator;
         [SerializeField] private SearchBuildableToUse searchBuildableToUse;
-
-        public TouristPropertiesScriptableObject touristPropertiesScriptableObject;
-        public string visitorPosition;
-        public string visitorRotation;
-
+        
         //////////// (👉ﾟヮﾟ)👉   IA  👈(ﾟヮﾟ👈) ///////////
 
         public IOrderedEnumerable<KeyValuePair<NeedType, int>> sortedNeeds;
         public NeedType actualNeed;
 
         public List<BuildableBehaviour> visitedBuildables;
-        public TouristState touristState;
 
         private Vector3 rotatingAxis;
         private RaycastHit raycastHit;
@@ -46,7 +42,6 @@ namespace InGame.Monkeys.Chimptouristes {
         public float searchTimer;
 
         public BuildableBehaviour buildableToReach;
-        public Vector3 destination;
 
         public int notoriety;
 
@@ -58,16 +53,16 @@ namespace InGame.Monkeys.Chimptouristes {
         }
 
         private void Update() {
-            if (touristState == TouristState.IN_WAITING_LINE) return;
+            if (monkeyMenData.touristState == TouristState.IN_WAITING_LINE) return;
             
             SynchronizeAnimatorAndAgent();
 
-            if (touristState == TouristState.SEARCH_NEED) {
+            if (monkeyMenData.touristState == TouristState.SEARCH_NEED) {
                 searchTimer -= 1;
                 if (searchTimer < 0) {
-                    destination = ObjectsReference.Instance.chimpManager.sasTransform.position;
-                    _navMeshAgent.SetDestination(destination);
-                    touristState = TouristState.GO_BACK_TO_SAS;
+                    monkeyMenData.destination = ObjectsReference.Instance.chimpManager.sasTransform.position;
+                    _navMeshAgent.SetDestination(monkeyMenData.destination);
+                    monkeyMenData.touristState = TouristState.GO_BACK_TO_SAS;
                 }
 
                 if (searchBuildableToUse.hasFoundBuildable) {
@@ -75,46 +70,46 @@ namespace InGame.Monkeys.Chimptouristes {
                     buildableToReach.isVisitorTargeted = true;
                     visitedBuildables.Add(buildableToReach);
                     
-                    destination = buildableToReach.ChimpTargetTransform.position;
-                    _navMeshAgent.SetDestination(destination);
-                    touristState = TouristState.GO_FILL_NEED;
+                    monkeyMenData.destination = buildableToReach.ChimpTargetTransform.position;
+                    _navMeshAgent.SetDestination(monkeyMenData.destination);
+                    monkeyMenData.touristState = TouristState.GO_FILL_NEED;
 
                     searchBuildableToUse.hasFoundBuildable = false;
                     searchBuildableToUse.enabled = false;
                 }
             }
             
-            if (touristState == TouristState.SEARCH_RANDOM_POINT) {
+            if (monkeyMenData.touristState == TouristState.SEARCH_RANDOM_POINT) {
                 var randomPosition = transform.position + Random.insideUnitSphere * 100;
 
                 if (NavMesh.SamplePosition(randomPosition, out var navMeshHit, 2, 1)) {
-                    if (Vector3.Distance(destination, transform.position) > 10) {
+                    if (Vector3.Distance(monkeyMenData.destination, transform.position) > 10) {
                         path = new NavMeshPath();
                         if (_navMeshAgent.CalculatePath(navMeshHit.position, path)) {
                             if (path.status == NavMeshPathStatus.PathComplete) {
-                                destination = navMeshHit.position;
-                                _navMeshAgent.SetDestination(destination);
-                                touristState = TouristState.GO_TO_RANDOM_POINT;
+                                monkeyMenData.destination = navMeshHit.position;
+                                _navMeshAgent.SetDestination(monkeyMenData.destination);
+                                monkeyMenData.touristState = TouristState.GO_TO_RANDOM_POINT;
                             }
                         }
                     }
                 }
             }
 
-            if (touristState == TouristState.GO_TO_RANDOM_POINT) {
-                distanceToDestination = Vector3.Distance(destination, transform.position);
+            if (monkeyMenData.touristState == TouristState.GO_TO_RANDOM_POINT) {
+                distanceToDestination = Vector3.Distance(monkeyMenData.destination, transform.position);
 
                 if (distanceToDestination < 0.5f) {
-                    touristState = TouristState.GO_BACK_TO_SAS;
-                    destination = ObjectsReference.Instance.chimpManager.sasTransform.position;
+                    monkeyMenData.touristState = TouristState.GO_BACK_TO_SAS;
+                    monkeyMenData.destination = ObjectsReference.Instance.chimpManager.sasTransform.position;
                 }
             }
             
-            if (touristState == TouristState.GO_FILL_NEED) {
-                distanceToDestination = Vector3.Distance(destination, transform.position);
+            if (monkeyMenData.touristState == TouristState.GO_FILL_NEED) {
+                distanceToDestination = Vector3.Distance(monkeyMenData.destination, transform.position);
 
                 if (distanceToDestination < 0.5f) {
-                    touristState = TouristState.FILLING_NEED;
+                    monkeyMenData.touristState = TouristState.FILLING_NEED;
                     if (buildableToReach.visitorsBuildablePropertiesScriptableObject.isAnimationLooping) {
                         Invoke(nameof(FillNeed), 10);
                     }
@@ -124,12 +119,12 @@ namespace InGame.Monkeys.Chimptouristes {
                 }
             }
 
-            if (touristState == TouristState.FILLING_NEED) {
+            if (monkeyMenData.touristState == TouristState.FILLING_NEED) {
                 transform.LookAt(buildableToReach.ChimpTargetLookAtTransform, worldUp:Vector3.up);
             }
             
-            if (touristState == TouristState.GO_BACK_TO_SAS) {
-                distanceToDestination = Vector3.Distance(destination, transform.position);
+            if (monkeyMenData.touristState == TouristState.GO_BACK_TO_SAS) {
+                distanceToDestination = Vector3.Distance(monkeyMenData.destination, transform.position);
 
                 if (distanceToDestination < 6f) {
                     ObjectsReference.Instance.spaceshipsSpawner.RemoveGuest();
@@ -143,13 +138,13 @@ namespace InGame.Monkeys.Chimptouristes {
 
         public void StartVisiting() {
             searchTimer = 1000;
-            touristState = TouristState.SEARCH_NEED;
+            monkeyMenData.touristState = TouristState.SEARCH_NEED;
             SortNeeds();
             searchBuildableToUse.enabled = true;
         }
 
         public void FillNeed() {
-            touristPropertiesScriptableObject.visitorNeeds[buildableToReach.visitorsBuildablePropertiesScriptableObject.needType] -= buildableToReach.visitorsBuildablePropertiesScriptableObject.needValue;
+            monkeyMenData.needs[buildableToReach.visitorsBuildablePropertiesScriptableObject.needType] -= buildableToReach.visitorsBuildablePropertiesScriptableObject.needValue;
             visitedBuildables.Add(buildableToReach);
             buildableToReach.isVisitorTargeted = false;
             
@@ -161,11 +156,11 @@ namespace InGame.Monkeys.Chimptouristes {
             searchTimer = 1000;
 
             _navMeshAgent.updateRotation = true;
-            touristState = TouristState.SEARCH_NEED;
+            monkeyMenData.touristState = TouristState.SEARCH_NEED;
         }
 
         private void SortNeeds() {
-            sortedNeeds = touristPropertiesScriptableObject.visitorNeeds.OrderByDescending(pair => pair.Value);
+            sortedNeeds = monkeyMenData.needs.OrderByDescending(pair => pair.Value);
         }
         
         private void SynchronizeAnimatorAndAgent() {
@@ -194,6 +189,38 @@ namespace InGame.Monkeys.Chimptouristes {
         private void OnAnimatorMove() {
             if (_navMeshAgent != null) {
                 transform.position = _navMeshAgent.nextPosition;
+            }
+        }
+
+        public override void LoadFromSavedData() {
+            if (!monkeyMenData.isInSpaceship) {
+                SetColors();
+                transform.position = monkeyMenData.position;
+                transform.rotation = monkeyMenData.rotation;
+            }
+        }
+
+        public override void GenerateSavedData() {
+            monkeyMenSavedData = new MonkeyMenSavedData {
+                uid = monkeyMenData.uid,
+                name = monkeyMenData.monkeyMenName,
+                characterType = monkeyMenData.characterType,
+                prefabNumber = monkeyMenData.prefabNumber,
+                clothColorsPreset = monkeyMenData.clothColorsPreset,
+                isInSpaceship = monkeyMenData.isInSpaceship,
+                touristState = monkeyMenData.touristState,
+                destination = JsonHelper.FromVector3ToString(monkeyMenData.destination),
+                bitKongQuantity = monkeyMenData.bitKongQuantity,
+                spaceshipGuid = monkeyMenData.spaceshipGuid,
+                position = JsonHelper.FromVector3ToString(transform.position),
+                rotation = JsonHelper.FromQuaternionToString(transform.rotation)
+            };
+            
+            var sortedNeedsArray = sortedNeeds.AsEnumerable().ToArray();
+            monkeyMenSavedData.needs = new Dictionary<NeedType, int>();
+
+            foreach (var need in sortedNeedsArray) {
+                monkeyMenSavedData.needs.Add(need.Key, need.Value);
             }
         }
     }

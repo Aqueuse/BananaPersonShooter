@@ -33,11 +33,14 @@ namespace UI.InGame.MiniChimpBlock.Descriptions {
         }
 
         public void SetDescription(ItemScriptableObject itemScriptableObject, GameObject targetedGameObject = null) {
-            ObjectsReference.Instance.miniChimpBlockManager.gameObject.SetActive(true);
-            ObjectsReference.Instance.uiManager.ShowBananaGunUI();
-            ObjectsReference.Instance.uiBananaGun.SwitchToDescription();
-
             switch (itemScriptableObject.itemCategory) {
+                case ItemCategory.MISC:
+                    _itemDescriptionBlock.gameObject.SetActive(true);
+                    _itemPreviewBlock.gameObject.SetActive(true);
+                    
+                    _itemDescriptionBlock.SetBlock(itemScriptableObject.GetName(), itemScriptableObject.GetDescription(), false);
+                    _itemPreviewBlock.SetBlock(itemScriptableObject.itemSprite);
+                    break;
                 case ItemCategory.BUILDABLE:
                     _itemDescriptionBlock.gameObject.SetActive(true);
                     _itemPreviewBlock.gameObject.SetActive(true);
@@ -78,7 +81,7 @@ namespace UI.InGame.MiniChimpBlock.Descriptions {
                         itemScriptableObject.GetName(),
                         itemScriptableObject.GetDescription(), false);
                     break;
-                case ItemCategory.DEBRIS:
+                case ItemCategory.DROPPED:
                     _itemDescriptionBlock.gameObject.SetActive(true);
                     _itemPreviewBlock.gameObject.SetActive(false);
                     _oneItemSliderBlock.gameObject.SetActive(false);
@@ -90,7 +93,7 @@ namespace UI.InGame.MiniChimpBlock.Descriptions {
                         itemScriptableObject.GetName(),
                         itemScriptableObject.GetDescription(), false);
                     break;
-                case ItemCategory.BANANA or ItemCategory.RAW_MATERIAL or ItemCategory.INGREDIENT or ItemCategory.MANUFACTURED_ITEM:
+                case ItemCategory.BANANA or ItemCategory.DROPPED or ItemCategory.INGREDIENT or ItemCategory.MANUFACTURED_ITEM:
                     _itemDescriptionBlock.gameObject.SetActive(true);
                     _itemPreviewBlock.gameObject.SetActive(true);
                     _oneItemSliderBlock.gameObject.SetActive(false);
@@ -105,7 +108,7 @@ namespace UI.InGame.MiniChimpBlock.Descriptions {
                     _itemPreviewBlock.SetBlock(itemScriptableObject.itemSprite);
                     break;
                 
-                case ItemCategory.CHIMPLOYEE or ItemCategory.MINI_CHIMP or ItemCategory.MERCHANT:
+                case ItemCategory.CHIMPLOYEE or ItemCategory.MERCHANT:
                     _itemDescriptionBlock.gameObject.SetActive(true);
                     _itemPreviewBlock.gameObject.SetActive(true);
                     _oneItemSliderBlock.gameObject.SetActive(false);

@@ -7,6 +7,8 @@ namespace UI.InGame.Merchimps {
         
         public void SetDescriptionAndName() {
             ObjectsReference.Instance.uiDescriptionsManager.SetDescription(itemScriptableObject);
+            ObjectsReference.Instance.uiManager.ShowMiniChimpBlock();
+            ObjectsReference.Instance.uiBananaGun.SwitchToDescription();
         }
     }
 }

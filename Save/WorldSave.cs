@@ -17,10 +17,6 @@ namespace Save {
 
             var worldSavedDataString = File.ReadAllText(savefilePath);
             var savedWorldData = JsonConvert.DeserializeObject<WorldSavedData>(worldSavedDataString);
-
-            worldData.chimployeesQuantity = savedWorldData.chimployeesQuantity;
-            worldData.piratesQuantity = savedWorldData.piratesQuantity;
-            worldData.visitorsQuantity = savedWorldData.visitorsQuantity;
             
             foreach (var monkeyPositionById in savedWorldData.monkeysPositionByMonkeyId) {
                 foreach (var monkey in worldData.monkeys) {
@@ -30,7 +26,7 @@ namespace Save {
                     }
                 }
             }
-            
+
             foreach (var monkeySasietyById in savedWorldData.monkeysSasietyTimerByMonkeyId) {
                 foreach (var monkey in worldData.monkeys) {
                     if (monkey.monkeyPropertiesScriptableObject.monkeyId == monkeySasietyById.Key) {
@@ -44,20 +40,16 @@ namespace Save {
         public void SaveWorld(string saveUuid) {
             _savePath = Path.Combine(ObjectsReference.Instance.gameSave._savesPath, saveUuid);
             var savefilePath = Path.Combine(_savePath, "world.json");
-            
+
             var worldSavedData = new WorldSavedData();
-        
+
             foreach (var monkey in ObjectsReference.Instance.worldData.monkeys) {
                 worldSavedData.monkeysPositionByMonkeyId.Add(monkey.monkeyId, JsonHelper.FromVector3ToString(monkey.transform.position));
                 worldSavedData.monkeysSasietyTimerByMonkeyId.Add(monkey.monkeyId, (int)monkey.sasietyTimer);
             }
 
-            worldSavedData.chimployeesQuantity = worldData.chimployeesQuantity;
-            worldSavedData.visitorsQuantity = worldData.visitorsQuantity;
-            worldSavedData.piratesQuantity = worldData.piratesQuantity;
-                
             var jsonMapSaved = JsonConvert.SerializeObject(worldSavedData);
-        
+
             File.WriteAllText(savefilePath, jsonMapSaved);
         }
     }

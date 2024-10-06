@@ -15,12 +15,12 @@ namespace Tags {
         CANNON_MINI_GAME_DOME,
         DOOR,
         BUILDABLE,
-        DEBRIS,
+        DROPPED,
         REGIME,
         MONKEY,
         MINI_CHIMP,
         CHIMPLOYEE,
-        VISITOR,
+        TOURIST,
         COMMAND_ROOM_PANEL,
         RAW_MATERIAL,
         INGREDIENT,
@@ -29,7 +29,8 @@ namespace Tags {
         PIRATE,
         MERCHANT,
         FOOD,
-        MANUFACTURED_ITEM
+        MANUFACTURED_ITEM,
+        CULTIVATOR
     }
 
     public class TagsManager : MonoSingleton<TagsManager> {

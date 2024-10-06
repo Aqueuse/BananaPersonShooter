@@ -3,19 +3,19 @@ using UnityEngine;
 
 namespace InGame.Monkeys.Merchimps {
     public class MerchimpsManager : MonoBehaviour {
-        public Merchimp activeMerchimp;
+        public MerchimpBehaviour activeMerchimpBehaviour;
         public ItemScriptableObject activeItemScriptableObject;
         
         public int GetMerchantItemQuantity(ItemScriptableObject itemScriptableObject) {
             switch (itemScriptableObject.itemCategory) {
                 case ItemCategory.INGREDIENT:
-                    return activeMerchimp.merchantPropertiesScriptableObject.ingredientsInventory[itemScriptableObject.ingredientsType];
+                    return activeMerchimpBehaviour.monkeyMenData.ingredientsInventory[itemScriptableObject.ingredientsType];
 
                 case ItemCategory.MANUFACTURED_ITEM:
-                    return activeMerchimp.merchantPropertiesScriptableObject.manufacturedItemsInventory[itemScriptableObject.manufacturedItemsType];
+                    return activeMerchimpBehaviour.monkeyMenData.manufacturedItemsInventory[itemScriptableObject.manufacturedItemsType];
 
-                case ItemCategory.RAW_MATERIAL:
-                    return activeMerchimp.merchantPropertiesScriptableObject.rawMaterialsInventory[itemScriptableObject.rawMaterialType];
+                case ItemCategory.DROPPED:
+                    return activeMerchimpBehaviour.monkeyMenData.droppedInventory[itemScriptableObject.droppedType];
             }
 
             return 0;
@@ -24,13 +24,13 @@ namespace InGame.Monkeys.Merchimps {
         public int GetBananaManItemQuantity(ItemScriptableObject itemScriptableObject) {
             switch (itemScriptableObject.itemCategory) {
                 case ItemCategory.BANANA:
-                    return ObjectsReference.Instance.bananaMan.inventories.bananasInventory[itemScriptableObject.bananaType];
+                    return ObjectsReference.Instance.bananaMan.bananaManData.bananasInventory[itemScriptableObject.bananaType];
 
                 case ItemCategory.MANUFACTURED_ITEM:
-                    return ObjectsReference.Instance.bananaMan.inventories.manufacturedItemsInventory[itemScriptableObject.manufacturedItemsType];
+                    return ObjectsReference.Instance.bananaMan.bananaManData.manufacturedItemsInventory[itemScriptableObject.manufacturedItemsType];
 
                 case ItemCategory.INGREDIENT:
-                    return ObjectsReference.Instance.bananaMan.inventories.ingredientsInventory[itemScriptableObject.ingredientsType];
+                    return ObjectsReference.Instance.bananaMan.bananaManData.ingredientsInventory[itemScriptableObject.ingredientsType];
             }
 
             return 0;

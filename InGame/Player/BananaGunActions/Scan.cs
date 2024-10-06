@@ -1,6 +1,6 @@
 using InGame.Interactions;
 using InGame.Items.ItemsBehaviours.BuildablesBehaviours;
-using InGame.Items.ItemsProperties.Wastes;
+using InGame.Items.ItemsProperties.Dropped;
 using Tags;
 using UnityEngine;
 
@@ -13,20 +13,18 @@ namespace InGame.Player.BananaGunActions {
         private Mesh _targetedGameObjectMesh;
         private BananaType _targetType;
 
-        private GenericDictionary<RawMaterialType, int> rawMaterialsWithQuantity;
+        private GenericDictionary<DroppedType, int> rawMaterialsWithQuantity;
         
         private Camera mainCamera;
         
         private Ray ray;
         private RaycastHit raycastHit;
 
-        private GenericDictionary<RawMaterialType, int> craftingMaterials;
+        private GenericDictionary<DroppedType, int> craftingMaterials;
         private Regime regimeClass;
         
         private Tag gameObjectTagClass;
         private GAME_OBJECT_TAG gameObjectTag;
-
-        public bool isScanning;
         
         private void Start() {
             mainCamera = Camera.main;
@@ -34,19 +32,18 @@ namespace InGame.Player.BananaGunActions {
         
         private void Update() {
             if (Physics.Raycast(mainCamera.transform.position, mainCamera.transform.forward, out raycastHit, 2000, layerMask: GestionViewSelectableLayerMask)) {
-
                 targetedGameObject = raycastHit.transform.gameObject;
                 ObjectsReference.Instance.uInventoriesManager.GetCurrentUIHelper().ShowRetrieveConfirmation();
 
-                if (isScanning) {
-                    isScanning = false;
-                    ObjectsReference.Instance.uiDescriptionsManager.SetDescription(raycastHit.transform.GetComponent<Tag>().itemScriptableObject, raycastHit.transform.gameObject);
-                }
+                ObjectsReference.Instance.uiDescriptionsManager.SetDescription(raycastHit.transform.GetComponent<Tag>().itemScriptableObject, raycastHit.transform.gameObject);
+                ObjectsReference.Instance.uiManager.ShowMiniChimpBlock();
+                ObjectsReference.Instance.uiBananaGun.SwitchToDescription();
             }
             else {
                 targetedGameObject = null;
                 ObjectsReference.Instance.uInventoriesManager.GetCurrentUIHelper().ShowDefaultHelper();
                 ObjectsReference.Instance.uiDescriptionsManager.HideAllPanels();
+                ObjectsReference.Instance.uiManager.SetActive(UICanvasGroupType.MINI_CHIMP_BLOCK, false);
             }
         }
 
@@ -68,7 +65,7 @@ namespace InGame.Player.BananaGunActions {
                 }
             }
 
-            if (gameObjectTag == GAME_OBJECT_TAG.DEBRIS || gameObjectTag == GAME_OBJECT_TAG.REGIME) {
+            if (gameObjectTag == GAME_OBJECT_TAG.DROPPED || gameObjectTag == GAME_OBJECT_TAG.REGIME) {
                 harvest();
             }
         }
@@ -101,7 +98,7 @@ namespace InGame.Player.BananaGunActions {
                     craftingMaterials = ObjectsReference.Instance.meshReferenceScriptableObject.buildablePropertiesScriptableObjects[buildableType].rawMaterialsWithQuantity;
 
                     foreach (var craftingMaterial in craftingMaterials) {
-                        ObjectsReference.Instance.rawMaterialsInventory.AddQuantity(craftingMaterial.Key, craftingMaterial.Value);
+                        ObjectsReference.Instance.droppedInventory.AddQuantity(craftingMaterial.Key, craftingMaterial.Value);
                     }
 
                     if (buildableType == BuildableType.BANANA_DRYER) targetedGameObject.GetComponent<BananasDryerBehaviour>().RetrieveRawMaterials();
@@ -117,13 +114,13 @@ namespace InGame.Player.BananaGunActions {
 
                     break;
 
-                case GAME_OBJECT_TAG.DEBRIS:
-                    var _wastePropertiesScriptableObject = (WastePropertiesScriptableObject)gameObjectTagClass.itemScriptableObject;
+                case GAME_OBJECT_TAG.DROPPED:
+                    var _wastePropertiesScriptableObject = (DroppedPropertiesScriptableObject)gameObjectTagClass.itemScriptableObject;
                     
-                    rawMaterialsWithQuantity = _wastePropertiesScriptableObject.GetRawMaterialsWithQuantity();
+                    rawMaterialsWithQuantity = _wastePropertiesScriptableObject.GetDroppedMaterialsWithQuantity();
 
-                    foreach (var debrisRawMaterialIngredient in rawMaterialsWithQuantity) {
-                        ObjectsReference.Instance.rawMaterialsInventory.AddQuantity(debrisRawMaterialIngredient.Key, debrisRawMaterialIngredient.Value);
+                    foreach (var droppedRawMaterialIngredient in rawMaterialsWithQuantity) {
+                        ObjectsReference.Instance.droppedInventory.AddQuantity(droppedRawMaterialIngredient.Key, droppedRawMaterialIngredient.Value);
                     }
                     
                     Destroy(targetedGameObject);
@@ -140,12 +137,12 @@ namespace InGame.Player.BananaGunActions {
         }
         
         private void TryToRepairBuildable(BuildableBehaviour buildableBehaviour) {
-            if (!ObjectsReference.Instance.rawMaterialsInventory.HasCraftingIngredients(buildableBehaviour.buildableType)) return;
+            if (!ObjectsReference.Instance.droppedInventory.HasCraftingIngredients(buildableBehaviour.buildableType)) return;
             
             var _craftingIngredients = ObjectsReference.Instance.meshReferenceScriptableObject.buildablePropertiesScriptableObjects[buildableBehaviour.buildableType].rawMaterialsWithQuantity;
 
             foreach (var craftingIngredient in _craftingIngredients) {
-                ObjectsReference.Instance.rawMaterialsInventory.RemoveQuantity(craftingIngredient.Key, craftingIngredient.Value);
+                ObjectsReference.Instance.droppedInventory.RemoveQuantity(craftingIngredient.Key, craftingIngredient.Value);
             }
             
             ObjectsReference.Instance.audioManager.PlayEffect(SoundEffectType.TAKE_SOMETHING, 0);

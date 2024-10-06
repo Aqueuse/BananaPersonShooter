@@ -1,4 +1,5 @@
-using InGame.Items.ItemsProperties.Characters;
+using InGame.Items.ItemsData;
+using InGame.Monkeys;
 using InGame.Monkeys.Merchimps;
 using TMPro;
 using UI.InGame.Inventory;
@@ -23,7 +24,7 @@ namespace UI.InGame.Merchimps {
     
         public UIIngredientsInventory merchantBuyUiIngredientsInventory;
         public UIManufacturedItemsInventory merchantBuyUiManufacturedItemsInventory;
-        public UIRawMaterialsInventory merchantBuyUiRawMaterialsInventory;
+        public UIDroppedInventory merchantBuyUiDroppedInventory;
         
         [SerializeField] private TextMeshProUGUI merchantBitKongQuantityTextMeshProUGUI;
         [SerializeField] private TextMeshProUGUI bananaManBitKongQuantityTextMeshProUGUI;
@@ -109,11 +110,12 @@ namespace UI.InGame.Merchimps {
             return buyUiMerchantSliderMenu.isActiveAndEnabled || sellUiMerchantSliderMenu.isActiveAndEnabled;
         }
 
-        public void InitializeInventories(InventoryScriptableObject inventoryScriptableObject) {
-            ObjectsReference.Instance.trade.merchantPropertiesScriptableObject = inventoryScriptableObject;
-            merchantBuyUiIngredientsInventory.inventoryScriptableObject = inventoryScriptableObject;
-            merchantBuyUiRawMaterialsInventory.inventoryScriptableObject = inventoryScriptableObject;
-            merchantBuyUiManufacturedItemsInventory.inventoryScriptableObject = inventoryScriptableObject;
+        public void InitializeInventories(MonkeyMenData monkeyMenData) {
+            ObjectsReference.Instance.trade.monkeyMenData = monkeyMenData;
+            
+            merchantBuyUiIngredientsInventory.ingredientsInventory = monkeyMenData.ingredientsInventory;
+            merchantBuyUiDroppedInventory.droppedInventory = monkeyMenData.droppedInventory;
+            merchantBuyUiManufacturedItemsInventory.manufacturedItemsInventory = monkeyMenData.manufacturedItemsInventory;
         }
         
         public void RefreshMerchantInventories() {
@@ -121,7 +123,7 @@ namespace UI.InGame.Merchimps {
             merchantSellUiManufacturedItemsInventory.RefreshUInventory();
             
             merchantBuyUiIngredientsInventory.RefreshUInventory();
-            merchantBuyUiRawMaterialsInventory.RefreshUInventory();
+            merchantBuyUiDroppedInventory.RefreshUInventory();
             merchantBuyUiManufacturedItemsInventory.RefreshUInventory();
 
         }
@@ -139,19 +141,19 @@ namespace UI.InGame.Merchimps {
         public void SwitchToBuyIngredientsInventory() {
             merchantBuyUiIngredientsInventory.Activate();
             merchantBuyUiManufacturedItemsInventory.Desactivate();
-            merchantBuyUiRawMaterialsInventory.Desactivate();
+            merchantBuyUiDroppedInventory.Desactivate();
         }
         
         public void SwitchToBuyManufacturedItemsInventory() {
             merchantBuyUiIngredientsInventory.Desactivate();
             merchantBuyUiManufacturedItemsInventory.Activate();
-            merchantBuyUiRawMaterialsInventory.Desactivate();
+            merchantBuyUiDroppedInventory.Desactivate();
         }
 
         public void SwitchToBuyRawMaterialsInventory() {
             merchantBuyUiIngredientsInventory.Desactivate();
             merchantBuyUiManufacturedItemsInventory.Desactivate();
-            merchantBuyUiRawMaterialsInventory.Activate();
+            merchantBuyUiDroppedInventory.Activate();
         }
         
         public void ValidateBuy() {
@@ -167,8 +169,8 @@ namespace UI.InGame.Merchimps {
         }
 
         public void RefreshBitkongQuantities() {
-            merchantBitKongQuantityTextMeshProUGUI.text = merchimpsManager.activeMerchimp.merchantPropertiesScriptableObject.bitKongQuantity + " BTK";
-            bananaManBitKongQuantityTextMeshProUGUI.text = ObjectsReference.Instance.bananaMan.inventories.bitKongQuantity + " BTK";
+            merchantBitKongQuantityTextMeshProUGUI.text = merchimpsManager.activeMerchimpBehaviour.monkeyMenData.bitKongQuantity + " BTK";
+            bananaManBitKongQuantityTextMeshProUGUI.text = ObjectsReference.Instance.bananaMan.bananaManData.bitKongQuantity + " BTK";
         }
     }
 }

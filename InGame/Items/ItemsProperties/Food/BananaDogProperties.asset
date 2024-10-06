@@ -13,10 +13,11 @@ MonoBehaviour:
   m_Name: BananaDogProperties
   m_EditorClassIdentifier: 
   gameObjectTag: 25
-  itemCategory: 14
+  itemCategory: 15
   bananaType: 0
   rawMaterialType: 5
   ingredientsType: 2
+  manufacturedItemsType: 1
   buildableType: 5
   itemName:
   - banana dog

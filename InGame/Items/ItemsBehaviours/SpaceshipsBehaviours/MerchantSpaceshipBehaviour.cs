@@ -1,7 +1,6 @@
 using System;
 using InGame.Items.ItemsData;
 using InGame.Monkeys.Merchimps;
-using Newtonsoft.Json;
 using Save.Helpers;
 using Save.Templates;
 using UI.InGame.Merchimps;
@@ -14,7 +13,7 @@ namespace InGame.Items.ItemsBehaviours.SpaceshipsBehaviours {
         [SerializeField] private UIMerchantWaitTimer uiMerchantWaitTimer;
 
         private MerchantData merchantData;
-        public Merchimp merchimp;
+        public MerchimpBehaviour merchimpBehaviour;
 
         private int waitTimer;
 
@@ -22,17 +21,17 @@ namespace InGame.Items.ItemsBehaviours.SpaceshipsBehaviours {
             merchantData = spaceshipSavedData.merchantData;
 
             if (spaceshipSavedData.travelState == TravelState.WAIT_IN_STATION) {
-                merchimp.merchantCharacterPropertiesScriptableObject = ObjectsReference.Instance.meshReferenceScriptableObject.merchantsScriptableObjectByMerchantType[merchimp.merchantType];
+                //merchimp.merchantMerchantPropertiesScriptableObject = ObjectsReference.Instance.meshReferenceScriptableObject.merchantsScriptableObjectByMerchantType[merchimp.merchantType];
 
                 ObjectsReference.Instance.spaceTrafficControlManager.AssignSpaceshipToHangar(assignatedHangar);
                 StartWaitingTimer();
                 
-                merchimp.Init();
+                merchimpBehaviour.StartToSell();
             }
         }
 
         public void StartWaitingTimer() {
-            merchimp.transform.position = merchantOutTransform.position;
+            merchimpBehaviour.transform.position = merchantOutTransform.position;
             
             uiMerchantWaitTimer.SetTimer(120);
             waitTimer = 120;
@@ -40,7 +39,7 @@ namespace InGame.Items.ItemsBehaviours.SpaceshipsBehaviours {
         }
 
         private void StopWaiting() {
-            merchimp.transform.position = merchantInTransform.position;
+            merchimpBehaviour.transform.position = merchantInTransform.position;
             CancelInvoke(nameof(DecrementeTimer));
             
             ObjectsReference.Instance.spaceTrafficControlManager.FreeHangar(assignatedHangar);
@@ -74,7 +73,7 @@ namespace InGame.Items.ItemsBehaviours.SpaceshipsBehaviours {
                 hangarNumber = assignatedHangar
             };
             
-            savedData = JsonConvert.SerializeObject(merchantSpaceshipSavedData); 
+            savedData = merchantSpaceshipSavedData; 
         }
     }
 }

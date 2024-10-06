@@ -32,7 +32,7 @@ namespace UI.InGame.Merchimps {
             
             if (tradeContext == TradeContext.BUY) {
                 var bitkongValue = ObjectsReference.Instance.chimpManager.merchimpsManager.activeItemScriptableObject.bitKongValue;
-                var bananaManMonneyQuantity = ObjectsReference.Instance.bananaMan.inventories.bitKongQuantity; 
+                var bananaManMonneyQuantity = ObjectsReference.Instance.bananaMan.bananaManData.bitKongQuantity; 
                 
                 if (bananaManMonneyQuantity < bitkongValue * (int)sliderValue) {
                     buyButtonText.text = "can't buy";
@@ -53,7 +53,7 @@ namespace UI.InGame.Merchimps {
 
             if (tradeContext == TradeContext.SELL) {
                 var bitkongValue = ObjectsReference.Instance.chimpManager.merchimpsManager.activeItemScriptableObject.bitKongValue;
-                var merchantMonneyQuantity = ObjectsReference.Instance.trade.merchantPropertiesScriptableObject.bitKongQuantity; 
+                var merchantMonneyQuantity = ObjectsReference.Instance.trade.monkeyMenData.bitKongQuantity; 
 
                 if (merchantMonneyQuantity < bitkongValue * (int)sliderValue) {
                     buyButtonText.text = "can't sell";

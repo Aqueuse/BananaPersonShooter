@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: bananaDogBreadProperties
   m_EditorClassIdentifier: 
   gameObjectTag: 20
-  itemCategory: 7
+  itemCategory: 6
   bananaType: 0
   rawMaterialType: 5
   ingredientsType: 0

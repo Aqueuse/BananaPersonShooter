@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: EmptyBananaProperties
   m_EditorClassIdentifier: 
   gameObjectTag: 0
-  itemCategory: 0
+  itemCategory: 1
   bananaType: 0
   rawMaterialType: 5
   ingredientsType: 2

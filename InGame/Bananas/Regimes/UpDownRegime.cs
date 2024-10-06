@@ -23,7 +23,7 @@ namespace InGame.Bananas.Regimes {
         }
         
         private void FixedUpdate() {
-            if (!ObjectsReference.Instance.gameManager.isGamePlaying) return;
+            if (ObjectsReference.Instance.gameManager.gameContext != GameContext.IN_GAME) return;
             
             _step =  Speed * Time.deltaTime; // calculate distance to move
 

@@ -69,11 +69,10 @@ namespace InGame {
             Cursor.visible = false;
             Cursor.lockState = CursorLockMode.Locked;
             ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.CROSSHAIRS].alpha = 1f;
-            ObjectsReference.Instance.uiCrosshairs.SetCrosshair(ObjectsReference.Instance.bananaMan.activeBanana.bananaType);
+            ObjectsReference.Instance.uiCrosshairs.SetCrosshair(ObjectsReference.Instance.bananaMan.bananaManData.activeBanana.bananaType);
 
             ObjectsReference.Instance.inputManager.SwitchContext(InputContext.GAME);
             ObjectsReference.Instance.gameManager.gameContext = GameContext.IN_GAME;
-            ObjectsReference.Instance.gameManager.isGamePlaying = true;
 
             ObjectsReference.Instance.cameraPlayer.Return_back_To_Player();
             ObjectsReference.Instance.cameraPlayer.SetNormalSensibility();

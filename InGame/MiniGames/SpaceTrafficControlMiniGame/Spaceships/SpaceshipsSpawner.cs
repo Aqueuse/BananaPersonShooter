@@ -34,7 +34,7 @@ namespace InGame.MiniGames.SpaceTrafficControlMiniGame.Spaceships {
 
         }
         
-        public void spawnSpaceshipsWithAdCampaign() {
+        public void SpawnSpaceshipsWithAdCampaign() {
             ObjectsReference.Instance.uiMarketingPanel.SwitchToCurrentCampaign();
             ObjectsReference.Instance.commandRoomControlPanelsManager.UnfocusPanel();
             

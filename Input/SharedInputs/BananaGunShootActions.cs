@@ -31,10 +31,10 @@ namespace SharedInputs {
 
         private void ShootBanana(InputAction.CallbackContext callbackContext) {
             ObjectsReference.Instance.bananaGun.GrabBananaGun();
-            if (ObjectsReference.Instance.bananasInventory.GetQuantity(ObjectsReference.Instance.bananaMan.activeBanana.bananaType) <= 0) return;
-
+            if (ObjectsReference.Instance.bananasInventory.GetQuantity(ObjectsReference.Instance.bananaMan.bananaManData.activeBanana.bananaType) <= 0) return;
+    
             shoot.LoadingGun();
-            ObjectsReference.Instance.uiCrosshairs.SetCrosshair(ObjectsReference.Instance.bananaMan.activeBanana.bananaType);
+            ObjectsReference.Instance.uiCrosshairs.SetCrosshair(ObjectsReference.Instance.bananaMan.bananaManData.activeBanana.bananaType);
         }
 
         private void CancelShoot(InputAction.CallbackContext callbackContext) {

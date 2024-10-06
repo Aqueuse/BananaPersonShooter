@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: CavendishRegimeProperties
   m_EditorClassIdentifier: 
   gameObjectTag: 13
-  itemCategory: 3
+  itemCategory: 4
   bananaType: 4
   rawMaterialType: 5
   ingredientsType: 2

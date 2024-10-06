@@ -134,7 +134,7 @@ namespace Audio {
         }
 
         public void PlayFootstep() {
-            if (ObjectsReference.Instance.gameManager.isGamePlaying) {
+            if (ObjectsReference.Instance.gameManager.gameContext == GameContext.IN_GAME) {
                 var audioData = audioFootStepsDictionnary[ObjectsReference.Instance.footStepSurfaceDetector.footStepType];
                 audioFootstepsSource.volume = effectsLevel-0.2f;
                 audioFootstepsSource.clip = audioData.clip[Random.Range(0, audioData.clip.Length)]; 

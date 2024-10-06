@@ -18,7 +18,7 @@ namespace UI.InGame.Inventory {
         }
 
         public void SetDescriptionAndName() {
-            ObjectsReference.Instance.uiDescriptionsManager.SetDescription(itemScriptableObject);
+            ObjectsReference.Instance.uInfobulle.SetDescriptionAndName(itemScriptableObject.GetName(), itemScriptableObject.GetDescription(), GetComponent<RectTransform>());
         }
         
         public void SelectInventorySlot() {

@@ -1,19 +1,18 @@
 public enum ItemCategory {
+    EMPTY,
     BANANA,
     BUILDABLE,
-    RAW_MATERIAL,
+    FOOD,
     REGIME,
-    DEBRIS,
-    EMPTY,
-    RUINE,
+    DROPPED,
     INGREDIENT,
-    DOOR,
     COMMAND_ROOM_PANEL,
     MONKEY,
-    MINI_CHIMP,
     CHIMPLOYEE,
     VISITOR,
-    FOOD,
     MERCHANT,
-    MANUFACTURED_ITEM
+    MANUFACTURED_ITEM,
+    TOURIST,
+    PIRATE,
+    MISC
 }

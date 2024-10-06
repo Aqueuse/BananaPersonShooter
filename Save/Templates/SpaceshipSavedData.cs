@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using InGame.Items.ItemsData;
-using UnityEngine;
 
 namespace Save.Templates {
     public class SpaceshipSavedData {
@@ -18,7 +17,6 @@ namespace Save.Templates {
         
         public MerchantData merchantData;
         public List<TouristData> touristDatas;
-        public List<PirateData> pirateDatas;
 
         public string spaceshipPosition;
         public string spaceshipRotation;

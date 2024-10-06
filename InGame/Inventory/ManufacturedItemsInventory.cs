@@ -1,11 +1,12 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 namespace InGame.Inventory {
     public class ManufacturedItemsInventory : MonoBehaviour {
-        private GenericDictionary<ManufacturedItemsType, int> manufacturedItemsInventory;
+        private Dictionary<ManufacturedItemsType, int> manufacturedItemsInventory;
         
         private void Start() {
-            manufacturedItemsInventory = ObjectsReference.Instance.bananaMan.inventories.manufacturedItemsInventory;
+            manufacturedItemsInventory = ObjectsReference.Instance.bananaMan.bananaManData.manufacturedItemsInventory;
         }
         
         public void AddQuantity(ManufacturedItemsType manufacturedItemsType, int quantity) {

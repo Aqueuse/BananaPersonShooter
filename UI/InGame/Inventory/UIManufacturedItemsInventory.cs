@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using InGame.Items.ItemsProperties.Characters;
 using TMPro;
 using UnityEngine;
@@ -5,7 +6,7 @@ using UnityEngine.UI;
 
 namespace UI.InGame.Inventory {
     public class UIManufacturedItemsInventory : MonoBehaviour {
-        public InventoryScriptableObject inventoryScriptableObject;
+        public Dictionary<ManufacturedItemsType, int> manufacturedItemsInventory;
         public GenericDictionary<ManufacturedItemsType, UInventorySlot> uInventorySlots;
         
         [SerializeField] private Transform inventoryContentTransform; 
@@ -19,7 +20,7 @@ namespace UI.InGame.Inventory {
         public void RefreshUInventory() {
             foreach (var inventoryItem in uInventorySlots) {
                 inventoryItem.Value.GetComponent<UInventorySlot>()
-                    .SetQuantity(inventoryScriptableObject.manufacturedItemsInventory[inventoryItem.Key]);
+                    .SetQuantity(manufacturedItemsInventory[inventoryItem.Key]);
             }
         }
 

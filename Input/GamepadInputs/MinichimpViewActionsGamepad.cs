@@ -7,12 +7,15 @@ namespace GamepadInputs {
         [SerializeField] private InputActionReference moveCameraInputActionReference;
         [SerializeField] private InputActionReference rotateCameraInputActionReference;
         
+        [SerializeField] private InputActionReference switchToTabLeftInputActionReference;
+        [SerializeField] private InputActionReference switchToTabRightInputActionReference;
+
         [SerializeField] private float mouseMoveSensibility = 0.5f; 
         
-        private CameraGestion _gestionCamera;
+        private CameraGestionDragRotate _gestionDragCamera;
         
         private void Start() {
-            _gestionCamera = ObjectsReference.Instance.gestionCamera;
+            _gestionDragCamera = ObjectsReference.Instance.gestionDragCamera;
         }
     
         private void OnEnable() {
@@ -22,6 +25,12 @@ namespace GamepadInputs {
 
             rotateCameraInputActionReference.action.Enable();
             rotateCameraInputActionReference.action.performed += RotateCamera;
+            
+            switchToTabLeftInputActionReference.action.performed += SwitchToTabLeft;
+            switchToTabLeftInputActionReference.action.Enable();
+
+            switchToTabRightInputActionReference.action.performed += SwitchToTabRight;
+            switchToTabRightInputActionReference.action.Enable();
         }
 
         private void OnDisable() {
@@ -31,20 +40,32 @@ namespace GamepadInputs {
 
             rotateCameraInputActionReference.action.Disable();
             rotateCameraInputActionReference.action.performed -= RotateCamera;
-            
+
+            switchToTabLeftInputActionReference.action.performed -= SwitchToTabLeft;
+            switchToTabLeftInputActionReference.action.Disable();
+
+            switchToTabRightInputActionReference.action.performed -= SwitchToTabRight;
+            switchToTabRightInputActionReference.action.Disable();
         }
 
         private void MoveCamera(InputAction.CallbackContext context) {
-            _gestionCamera.Move(context.ReadValue<Vector2>().y * mouseMoveSensibility, -context.ReadValue<Vector2>().x * mouseMoveSensibility);
+            _gestionDragCamera.Move(context.ReadValue<Vector2>().y * mouseMoveSensibility, -context.ReadValue<Vector2>().x * mouseMoveSensibility);
         }
         
         private void CancelMoveCamera(InputAction.CallbackContext context) {
-            _gestionCamera.CancelMove();
+            _gestionDragCamera.CancelMove();
         }
 
         private void RotateCamera(InputAction.CallbackContext callbackContext) {
-            _gestionCamera.Rotate(callbackContext.ReadValue<Vector2>());
+            _gestionDragCamera.Rotate(callbackContext.ReadValue<Vector2>());
         }
-
+        
+        private void SwitchToTabLeft(InputAction.CallbackContext callbackContext) {
+            ObjectsReference.Instance.uiBananaGun.SwitchToLeftTab();
+        }
+        
+        private void SwitchToTabRight(InputAction.CallbackContext callbackContext) {
+            ObjectsReference.Instance.uiBananaGun.SwitchToRightTab();
+        }
     }
 }

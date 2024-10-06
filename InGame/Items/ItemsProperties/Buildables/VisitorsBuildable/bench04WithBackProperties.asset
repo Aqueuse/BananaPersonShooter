@@ -13,11 +13,11 @@ MonoBehaviour:
   m_Name: bench04WithBackProperties
   m_EditorClassIdentifier: 
   gameObjectTag: 11
-  itemCategory: 1
+  itemCategory: 2
   bananaType: 0
   rawMaterialType: 5
-  ingredientsType: 1
-  manufacturedItemsType: 0
+  ingredientsType: 2
+  manufacturedItemsType: 1
   buildableType: 10
   itemName:
   - bench

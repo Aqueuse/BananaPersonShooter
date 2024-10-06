@@ -3,6 +3,6 @@ using UnityEngine;
 
 namespace InGame.Monkeys.Chimployees {
     public class Chimployee : MonoBehaviour {
-        public CharacterPropertiesScriptableObject chimployeePropertiesScriptableObject;
+        public MonkeyMenPropertiesScriptableObject chimployeePropertiesScriptableObject;
     }
 }

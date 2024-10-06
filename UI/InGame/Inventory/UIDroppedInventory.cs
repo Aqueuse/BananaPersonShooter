@@ -1,12 +1,12 @@
-using InGame.Items.ItemsProperties.Characters;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace UI.InGame.Inventory {
-    public class UIRawMaterialsInventory : MonoBehaviour {
-        public InventoryScriptableObject inventoryScriptableObject;
-        public GenericDictionary<RawMaterialType, UInventorySlot> uInventorySlots;
+    public class UIDroppedInventory : MonoBehaviour {
+        public Dictionary<DroppedType, int> droppedInventory;
+        public GenericDictionary<DroppedType, UInventorySlot> uInventorySlots;
         
         [SerializeField] private Transform inventoryContentTransform; 
     
@@ -19,7 +19,7 @@ namespace UI.InGame.Inventory {
         public void RefreshUInventory() {
             foreach (var inventoryItem in uInventorySlots) {
                 inventoryItem.Value.GetComponent<UInventorySlot>()
-                    .SetQuantity(inventoryScriptableObject.rawMaterialsInventory[inventoryItem.Key]);
+                    .SetQuantity(droppedInventory[inventoryItem.Key]);
             }
         }
         
@@ -43,7 +43,7 @@ namespace UI.InGame.Inventory {
             buttonText.color = activatedColor;
         }
     
-        public void UnselectAllSlots() {
+        private void UnselectAllSlots() {
             foreach (var inventoryItem in uInventorySlots) {
                 inventoryItem.Value.UnselectInventorySlot();
             }

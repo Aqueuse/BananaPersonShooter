@@ -21,9 +21,11 @@ namespace Save {
         public DataSave dataSave;
         public PlayerSave playerSave;
         public BuildablesSave buildablesSave;
-        public DebrisSave debrisSave;
+        public SpaceshipDebrisSave spaceshipDebrisSave;
+        public DroppedSave droppedSave;
         public WorldSave worldSave;
         public SpaceshipsSave spaceshipsSave;
+        public monkeyMensSave monkeyMensSave;
 
         public string currentSaveUuid;
         
@@ -65,11 +67,11 @@ namespace Save {
             
             playerSave.SavePlayerByUuid(saveUuid);
             worldSave.SaveWorld(saveUuid);
-            
-            debrisSave.SaveDebrisData(saveUuid);
+            spaceshipDebrisSave.SaveSpaceshipDebrisData(saveUuid);
+            droppedSave.SaveDroppedData(saveUuid);
             buildablesSave.SaveBuildablesData(saveUuid);
-            
             spaceshipsSave.SaveSpaceships(saveUuid);
+            monkeyMensSave.SaveMonkeyMens(saveUuid);
             
             SaveCameraView(saveUuid);
             
@@ -116,7 +118,7 @@ namespace Save {
             else {
                 ObjectsReference.Instance.gameManager.Play(currentSaveUuid, false);
             }
-        }
+        }   
 
         public void LoadSave(string saveUuid) {
             currentSaveUuid = saveUuid;
@@ -129,8 +131,10 @@ namespace Save {
             playerSave.LoadPlayer(saveUuid);
             worldSave.LoadWorld(saveUuid);
             buildablesSave.LoadBuildablesDataByUuid(saveUuid);
-            debrisSave.LoadDebrisDataByUuid(saveUuid);
+            spaceshipDebrisSave.LoadSpaceshipDebrisDataByUuid(saveUuid);
+            droppedSave.LoadDroppedDataByUuid(saveUuid);
             spaceshipsSave.LoadpaceshipsData(saveUuid);
+            monkeyMensSave.LoadMonkeyMens(saveUuid);
             
             ObjectsReference.Instance.gameSave.StartAutoSave();
         }
