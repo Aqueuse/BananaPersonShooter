@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using InGame.Items.ItemsBehaviours.SpaceshipsBehaviours;
+using InGame.Items.ItemsBehaviours;
 using InGame.MiniGames.MarketingCampaignMiniGame;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -83,8 +83,6 @@ namespace InGame.MiniGames.SpaceTrafficControlMiniGame.Spaceships {
             spaceshipBehaviourInstance.GenerateSpaceshipData();
             spaceshipBehaviourInstance.arrivalPosition = arrivalPoint;
             
-            spaceshipBehaviourInstance.Init();
-
             ObjectsReference.Instance.spaceTrafficControlManager.spaceshipBehavioursByGuid.Add(spaceshipBehaviourInstance.spaceshipGuid, spaceship.GetComponent<SpaceshipBehaviour>());
 
             spaceshipBehaviourInstance.OpenCommunications();

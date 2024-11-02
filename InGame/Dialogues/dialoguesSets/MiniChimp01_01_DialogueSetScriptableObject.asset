@@ -1,0 +1,54 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc756ac36e9ff0f45a37ce65aaa8b826, type: 3}
+  m_Name: MiniChimp01_01_DialogueSetScriptableObject
+  m_EditorClassIdentifier: 
+  isOpeningMiniChimpPerspective: 0
+  sentencesSequences:
+  - stringList:
+    - "Mission 1 : les anc\xE8tres <font=linja-pona-4>\\uE662</font> doivent \xEAtre
+      heureux"
+    - "Mission 1 : les anc\xE8tres <font=linja-pona-4>\\uE662</font> doivent \xEAtre
+      heureux"
+    - "Mission 1 : les anc\xE8tres singes<font=linja-pona-4>\\uE662</font> doivent
+      \xEAtre heureux"
+  - stringList:
+    - "Mission 2 : le peuple singe doit <font=\"linja-pona-4\">\\uE661</font> ses
+      anc\xE8tres et les visiter r\xE9guli\xE8rement."
+    - "Mission 2 : le peuple singe doit <font=\"linja-pona-4\">\\uE661</font> ses
+      anc\xE8tres et les visiter r\xE9guli\xE8rement."
+    - "Mission 2 : le peuple singe doit <font=\"linja-pona-4\">\\uE661</font> ses
+      anc\xE8tres et les visiter r\xE9guli\xE8rement."
+  dialogueSetScriptableObjectsByResponsesChoices:
+    list:
+    - key:
+        stringList:
+        - "C'est qui ces anc\xEAtres ?  O\xF9 sont ils ?"
+        - "C'est qui ces anc\xEAtres ?  O\xF9 sont ils ?"
+        - "C'est qui ces anc\xEAtres ?  O\xF9 sont ils ?"
+      value: {fileID: 11400000, guid: cbd26b6f8436b1d4e9d7e80de5e28b5a, type: 2}
+    - key:
+        stringList:
+        - "Le peuple singe ? Tu veux parler des pirates qui ont  essay\xE9s de m'abattre
+          ?"
+        - "Le peuple singe ? Tu veux parler des pirates qui ont  essay\xE9s de m'abattre
+          ?"
+        - "Le peuple singe ? Tu veux parler des pirates qui ont  essay\xE9s de m'abattre
+          ?"
+      value: {fileID: 11400000, guid: d881e7667494fec4b8d9d3d4b51161e2, type: 2}
+    - key:
+        stringList:
+        - Parlons d'autre chose.
+        - Parlons d'autre chose.
+        - Parlons d'autre chose.
+      value: {fileID: 11400000, guid: 680b6a95908bdec42aa0e5d174de14b6, type: 2}
+    keyCollision: 0

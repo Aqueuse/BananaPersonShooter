@@ -64,7 +64,6 @@ namespace Save {
 
         private void LoadDroppedInventory() {
             droppedInventory = bananaMan.bananaManData.droppedInventory;
-            ObjectsReference.Instance.uiDroppedInventory.droppedInventory = droppedInventory;
 
             foreach (var dropped in bananaManSavedData.droppedInventory) {
                 droppedInventory[(DroppedType)Enum.Parse(typeof(DroppedType), dropped.Key)] = dropped.Value;

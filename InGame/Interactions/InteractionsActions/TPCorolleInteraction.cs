@@ -5,7 +5,7 @@ namespace InGame.Interactions.InteractionsActions {
         private Transform TPCorolleTransform;
 
         private void Start() {
-            TPCorolleTransform = ObjectsReference.Instance.gameManager.spawnPointsBySpawnType[SpawnPoint.COROLLE_TOP_OF_HANGARS];
+            TPCorolleTransform = ObjectsReference.Instance.gameManager.spawnPointsBySpawnType[SpawnPoint.TP_COROLLE];
         }
 
         public override void Activate(GameObject interactedGameObject) {

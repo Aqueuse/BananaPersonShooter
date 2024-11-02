@@ -1,0 +1,52 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc756ac36e9ff0f45a37ce65aaa8b826, type: 3}
+  m_Name: MiniChimp03_01_DialogueSetScriptableObject
+  m_EditorClassIdentifier: 
+  sentencesSequences:
+  - stringList:
+    - "\xC9coutez, aidez moi \xE0 me d\xE9barrasser des pirates ..."
+    - "\xC9coutez, aidez moi \xE0 me d\xE9barrasser des pirates ..."
+    - "\xC9coutez, aidez moi \xE0 me d\xE9barrasser des pirates ..."
+  - stringList:
+    - "... et \xE0 relancer l'activit\xE9 de la station"
+    - "... et \xE0 relancer l'activit\xE9 de la station"
+    - "... et \xE0 relancer l'activit\xE9 de la station"
+  - stringList:
+    - "et d'ici l\xE0 j'essayerai de trouver les pi\xE8ces d\xE9tach\xE9es pour le
+      r\xE9parer."
+    - "et d'ici l\xE0 j'essayerai de trouver les pi\xE8ces d\xE9tach\xE9es pour le
+      r\xE9parer."
+    - "et d'ici l\xE0 j'essayerai de trouver les pi\xE8ces d\xE9tach\xE9es pour le
+      r\xE9parer."
+  dialogueSetScriptableObjectsByResponsesChoices:
+    list:
+    - key:
+        stringList:
+        - Ok, mais ne compte pas sur moi pour tuer des gens.
+        - Ok, mais ne compte pas sur moi pour tuer des gens.
+        - Ok, mais ne compte pas sur moi pour tuer des gens.
+      value: {fileID: 11400000, guid: 0796883e340497a4184dc11ac2fdc38c, type: 2}
+    - key:
+        stringList:
+        - Ces pirates vont payer !
+        - Ces pirates vont payer !
+        - Ces pirates vont payer !
+      value: {fileID: 11400000, guid: 2a134c08eb089de499e2ae7fafcaba87, type: 2}
+    - key:
+        stringList:
+        - Je ferai de mon mieux.
+        - Je ferai de mon mieux.
+        - Je ferai de mon mieux.
+      value: {fileID: 11400000, guid: 680b6a95908bdec42aa0e5d174de14b6, type: 2}
+    keyCollision: 0
+  responsesChoices: []

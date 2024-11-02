@@ -15,7 +15,7 @@ MonoBehaviour:
   gameObjectTag: 3
   itemCategory: 1
   bananaType: 3
-  rawMaterialType: 5
+  droppedType: 5
   ingredientsType: 2
   manufacturedItemsType: 1
   buildableType: 5
@@ -25,9 +25,9 @@ MonoBehaviour:
   - burro
   itemSprite: {fileID: 21300000, guid: aff3af1531537b24f84fccc8699f010d, type: 3}
   itemDescription:
-  - Heavy banana
-  - "Banane blind\xE9e"
-  - Banana blindada
+  - repulsion
+  - "r\xE9pulsion"
+  - "repulsi\xF3n"
   bitKongValue: 50
   effects:
   - More nourishing, more resistance
@@ -37,5 +37,5 @@ MonoBehaviour:
   damageTime: 0
   healthBonus: 1
   resistanceBonus: 2
-  bananaEffect: 0
-  bananaColor: {r: 1, g: 0.72156864, b: 0.03137255, a: 1}
+  bananaEffects: 01000000
+  bananaColor: {r: 0.63529414, g: 0.74509805, b: 0.25490198, a: 1}

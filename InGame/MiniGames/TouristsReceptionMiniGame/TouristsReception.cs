@@ -14,7 +14,7 @@ namespace InGame.MiniGames.TouristsReceptionMiniGame {
             newTouristPosition.z += 1f * touristsInWaitingLine.Count;
             
             var newVisitor = Instantiate(
-                original: ObjectsReference.Instance.meshReferenceScriptableObject.touristsPrefab[0],
+                original: ObjectsReference.Instance.meshReferenceScriptableObject.chimpmensPrefab[0],
                 position: newTouristPosition,
                 rotation:Quaternion.identity);
             

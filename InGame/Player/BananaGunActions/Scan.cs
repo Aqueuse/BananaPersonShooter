@@ -34,10 +34,6 @@ namespace InGame.Player.BananaGunActions {
             if (Physics.Raycast(mainCamera.transform.position, mainCamera.transform.forward, out raycastHit, 2000, layerMask: GestionViewSelectableLayerMask)) {
                 targetedGameObject = raycastHit.transform.gameObject;
                 ObjectsReference.Instance.uInventoriesManager.GetCurrentUIHelper().ShowRetrieveConfirmation();
-
-                ObjectsReference.Instance.uiDescriptionsManager.SetDescription(raycastHit.transform.GetComponent<Tag>().itemScriptableObject, raycastHit.transform.gameObject);
-                ObjectsReference.Instance.uiManager.ShowMiniChimpBlock();
-                ObjectsReference.Instance.uiBananaGun.SwitchToDescription();
             }
             else {
                 targetedGameObject = null;
@@ -116,7 +112,7 @@ namespace InGame.Player.BananaGunActions {
 
                 case GAME_OBJECT_TAG.DROPPED:
                     var _wastePropertiesScriptableObject = (DroppedPropertiesScriptableObject)gameObjectTagClass.itemScriptableObject;
-                    
+
                     rawMaterialsWithQuantity = _wastePropertiesScriptableObject.GetDroppedMaterialsWithQuantity();
 
                     foreach (var droppedRawMaterialIngredient in rawMaterialsWithQuantity) {

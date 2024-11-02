@@ -14,6 +14,7 @@ using InGame.MiniGames.SpaceTrafficControlMiniGame.Spaceships;
 using InGame.Monkeys;
 using InGame.Player;
 using InGame.Player.BananaGunActions;
+using InGame.Pools.Debris;
 using InGame.SpaceTrafficControl;
 using Save;
 using Settings;
@@ -46,7 +47,9 @@ public class ObjectsReference : MonoSingleton<ObjectsReference> {
     public AdMarketingCampaignManager adMarketingCampaignManager;
     public SpaceTrafficControlManager spaceTrafficControlManager;
     public SpaceshipsSpawner spaceshipsSpawner;
-    public CannonsManagement cannonsManagement;
+    public CannonsManager cannonsManager;
+
+    public GenericDictionary<CharacterType, DebrisPool> debrisPoolByCharacterType;
 
     public BananaMan bananaMan;
     public PlayerController playerController;
@@ -120,6 +123,7 @@ public class ObjectsReference : MonoSingleton<ObjectsReference> {
 
     public UIMarketingPanel uiMarketingPanel;
     public UISpaceTrafficControlPanel uiSpaceTrafficControlPanel;
+    public UICannons uiCannons;
     public UIVisitorReception uiTouristReception;
     public UIMerchant uiMerchant;
     

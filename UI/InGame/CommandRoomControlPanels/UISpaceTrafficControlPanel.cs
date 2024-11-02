@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using InGame.Items.ItemsBehaviours.SpaceshipsBehaviours;
+using InGame.Items.ItemsBehaviours;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -22,12 +22,17 @@ namespace UI.InGame.CommandRoomControlPanels {
 
         [SerializeField] private Color hangarAvailableColor;
         [SerializeField] private Color hangarUnavailableColor;
+
+        [SerializeField] private Image communicationButtonImage;
+        [SerializeField] private TextMeshProUGUI communicationButtonQuantity;
         
         private GameObject spaceshipMessage;
         
         public GenericDictionary<CharacterType, List<GameObject>> spaceshipMessagesByCharacterType;
         
         public void SwitchToCommunicationsTab() {
+            ObjectsReference.Instance.inputManager.SwitchContext(InputContext.UI);
+
             communicationsPanel.SetActive(true);
             cannonsPanel.SetActive(false);
             cameraPanel.SetActive(false);
@@ -37,9 +42,14 @@ namespace UI.InGame.CommandRoomControlPanels {
             communicationsPanel.SetActive(false);
             cannonsPanel.SetActive(true);
             cameraPanel.SetActive(false);
+            
+            ObjectsReference.Instance.inputManager.SwitchContext(InputContext.CANNONS);
+            ObjectsReference.Instance.cannonsManager.SwitchToLastCannon();
         }
         
         public void SwitchToHangarCameraTab() {
+            ObjectsReference.Instance.inputManager.SwitchContext(InputContext.UI);
+
             communicationsPanel.SetActive(false);
             cannonsPanel.SetActive(false);
             cameraPanel.SetActive(true);
@@ -70,13 +80,14 @@ namespace UI.InGame.CommandRoomControlPanels {
         public void CloseCommunicationsFromUI() {
             CloseCommunications(ObjectsReference.Instance.spaceTrafficControlManager.selectedSpaceship);
         }
-        
+
         public void CloseCommunications(SpaceshipBehaviour spaceshipBehaviour) {
             foreach (var uIcommunication in spaceshipsListContainer.GetComponentsInChildren<UIcommunication>()) {
-                if (uIcommunication.associatedSpaceshipBehaviour == spaceshipBehaviour)
-                    DestroyImmediate(uIcommunication.gameObject);
+                if (uIcommunication.associatedSpaceshipBehaviour == spaceshipBehaviour) {
+                    Destroy(uIcommunication.gameObject); 
+                }
             }
-            
+
             answersListCanvasGroup.alpha = 0;
             answersListCanvasGroup.interactable = false;
             answersListCanvasGroup.blocksRaycasts = false;
@@ -99,6 +110,13 @@ namespace UI.InGame.CommandRoomControlPanels {
             }
 
         }
+
+        public void RefreshCommunicationButton() {
+            var communicationsQuantity = spaceshipsListContainer.GetComponentsInChildren<UIcommunication>().Length;
+
+            communicationButtonImage.color = communicationsQuantity > 0 ? hangarUnavailableColor : hangarAvailableColor;
+
+            communicationButtonQuantity.text = "(" + communicationsQuantity + ")";
+        }
     }
-    
 }

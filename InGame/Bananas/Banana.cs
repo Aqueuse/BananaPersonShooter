@@ -5,43 +5,35 @@ using UnityEngine;
 
 namespace InGame.Bananas {
     public class Banana : MonoBehaviour {
-        [SerializeField] private GameObject bananaSkin;
         [SerializeField] private MeshRenderer bananaMeshRenderer;
-        
-        [SerializeField] private LayerMask bananaSplashLayerMask;
-        
+        [SerializeField] private GameObject bananaSkin;
+
         public BananasPropertiesScriptableObject bananasDataScriptableObject;
 
-        private void Start() {
-            Invoke(nameof(DestroyMe), 10);
-        }
-
-        private void OnCollisionEnter(Collision collision) {
-            if (bananaSplashLayerMask == (bananaSplashLayerMask | 1 << collision.gameObject.layer)) {
-                // trasnformation en peau de banane
-                bananaMeshRenderer.enabled = false;
-                bananaSkin.SetActive(true);
-
-                Invoke(nameof(DestroyMe), 10);
-                return;
+        private void OnCollisionEnter (Collision collision) {
+            if (TagsManager.Instance.HasTag(collision.gameObject, GAME_OBJECT_TAG.PIRATE)) {
+                collision.transform.GetComponent<PirateBehaviour>().Flee();
             }
-            
-            Invoke(nameof(DestroyMe), 10);
-        }
 
-        private void OnTriggerEnter(Collider other) {
-            if (TagsManager.Instance.HasTag(other.gameObject, GAME_OBJECT_TAG.PLAYER)) {
+            if (TagsManager.Instance.HasTag(collision.gameObject, GAME_OBJECT_TAG.PLAYER)) {
                 ObjectsReference.Instance.droppedInventory.AddQuantity(DroppedType.BANANA_PEEL, 1);
                 DestroyMe();
             }
 
-            if (TagsManager.Instance.HasTag(other.gameObject, GAME_OBJECT_TAG.PIRATE)) {
-                other.transform.GetComponent<PirateBehaviour>().Flee();
+            else {
+                if (!bananaSkin.activeInHierarchy) ConvertToBananaSkin();
             }
         }
+        
+        private void ConvertToBananaSkin() {
+            bananaMeshRenderer.enabled = false;
+            bananaSkin.SetActive(true);
+            
+            Invoke(nameof(DestroyMe), 10);
+        }
 
-        private void DestroyMe() {
-            Destroy(transform.gameObject);
+        public void DestroyMe() {
+            Destroy(gameObject);
         }
     }
 }

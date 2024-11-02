@@ -50,6 +50,9 @@ namespace InGame.Player {
 
             if (Camera.main != null) mainCameraTransform = Camera.main.transform;
 
+            _capsuleCollider.material.dynamicFriction = 1;
+            _capsuleCollider.material.staticFriction = 1;
+
             speed = BaseMovementSpeed;
         }
         

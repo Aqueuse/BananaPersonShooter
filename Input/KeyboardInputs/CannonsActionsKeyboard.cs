@@ -30,6 +30,7 @@ namespace KeyboardInputs {
             switchToCannon8ActionReference.action.Enable();
             switchToCannon8ActionReference.action.performed += SwitchToCannon8;
 
+            ObjectsReference.Instance.cannonsManager.SwitchToLastCannon();
         }
 
         private void OnDisable() {
@@ -51,13 +52,13 @@ namespace KeyboardInputs {
             switchToCannon8ActionReference.action.performed -= SwitchToCannon8;
         }
 
-        private void SwitchToCannon1(InputAction.CallbackContext context) { ObjectsReference.Instance.cannonsManagement.SwitchToCannon(RegionType.MAP01); }
-        private void SwitchToCannon2(InputAction.CallbackContext context) { ObjectsReference.Instance.cannonsManagement.SwitchToCannon(RegionType.MAP02); }
-        private void SwitchToCannon3(InputAction.CallbackContext context) { ObjectsReference.Instance.cannonsManagement.SwitchToCannon(RegionType.MAP03); }
-        private void SwitchToCannon4(InputAction.CallbackContext context) { ObjectsReference.Instance.cannonsManagement.SwitchToCannon(RegionType.MAP04); }
-        private void SwitchToCannon5(InputAction.CallbackContext context) { ObjectsReference.Instance.cannonsManagement.SwitchToCannon(RegionType.MAP05); }
-        private void SwitchToCannon6(InputAction.CallbackContext context) { ObjectsReference.Instance.cannonsManagement.SwitchToCannon(RegionType.MAP06); }
-        private void SwitchToCannon7(InputAction.CallbackContext context) { ObjectsReference.Instance.cannonsManagement.SwitchToCannon(RegionType.MAP07); }
-        private void SwitchToCannon8(InputAction.CallbackContext context) { ObjectsReference.Instance.cannonsManagement.SwitchToCannon(RegionType.MAP08); }
+        private void SwitchToCannon1(InputAction.CallbackContext context) { ObjectsReference.Instance.cannonsManager.SwitchToCannon(RegionType.MAP01); }
+        private void SwitchToCannon2(InputAction.CallbackContext context) { ObjectsReference.Instance.cannonsManager.SwitchToCannon(RegionType.MAP02); }
+        private void SwitchToCannon3(InputAction.CallbackContext context) { ObjectsReference.Instance.cannonsManager.SwitchToCannon(RegionType.MAP03); }
+        private void SwitchToCannon4(InputAction.CallbackContext context) { ObjectsReference.Instance.cannonsManager.SwitchToCannon(RegionType.MAP04); }
+        private void SwitchToCannon5(InputAction.CallbackContext context) { ObjectsReference.Instance.cannonsManager.SwitchToCannon(RegionType.MAP05); }
+        private void SwitchToCannon6(InputAction.CallbackContext context) { ObjectsReference.Instance.cannonsManager.SwitchToCannon(RegionType.MAP06); }
+        private void SwitchToCannon7(InputAction.CallbackContext context) { ObjectsReference.Instance.cannonsManager.SwitchToCannon(RegionType.MAP07); }
+        private void SwitchToCannon8(InputAction.CallbackContext context) { ObjectsReference.Instance.cannonsManager.SwitchToCannon(RegionType.MAP08); }
     }
 }

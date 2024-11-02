@@ -1,11 +1,13 @@
 using System.Collections.Generic;
+using InGame.Inventory;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace UI.InGame.Inventory {
     public class UIDroppedInventory : MonoBehaviour {
-        public Dictionary<DroppedType, int> droppedInventory;
+        public DroppedInventory droppedInventory;
+        
         public GenericDictionary<DroppedType, UInventorySlot> uInventorySlots;
         
         [SerializeField] private Transform inventoryContentTransform; 
@@ -18,8 +20,7 @@ namespace UI.InGame.Inventory {
 
         public void RefreshUInventory() {
             foreach (var inventoryItem in uInventorySlots) {
-                inventoryItem.Value.GetComponent<UInventorySlot>()
-                    .SetQuantity(droppedInventory[inventoryItem.Key]);
+                inventoryItem.Value.SetQuantity(droppedInventory.GetQuantity(inventoryItem.Key));
             }
         }
         

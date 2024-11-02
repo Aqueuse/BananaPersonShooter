@@ -82,18 +82,17 @@ namespace Save {
         private void RespawnSpaceshipDebrisOnWorld() {
             DestroyImmediate(spaceshipDebrisContainer);
 
-
             spaceshipDebrisContainer = new GameObject("Spaceship Debris container") {
                 transform = {
                     parent = transform.parent
-                }   
+                }
             };
 
             foreach (var spaceshipDebrisToInstantiate in spaceshipDebrisDataDictionnaryByCharacterType) {
                 foreach (var spaceshipDebrisString in spaceshipDebrisToInstantiate.Value) {
                     var spaceshipDebrisData = JsonConvert.DeserializeObject<SpaceshipDebrisData>(spaceshipDebrisString);
 
-                    spaceshipDebrisToSpawn = ObjectsReference.Instance.meshReferenceScriptableObject.spaceshipDebrisPrefabsByCharacterType[spaceshipDebrisToInstantiate.Key][spaceshipDebrisData.prefabIndex];
+                    spaceshipDebrisToSpawn = ObjectsReference.Instance.debrisPoolByCharacterType[spaceshipDebrisToInstantiate.Key].GetPooledDebris(spaceshipDebrisData.prefabIndex);
 
                     spaceshipDebrisInstance = Instantiate(spaceshipDebrisToSpawn, spaceshipDebrisContainer.transform, true);
 

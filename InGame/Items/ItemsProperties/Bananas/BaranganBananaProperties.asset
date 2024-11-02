@@ -15,7 +15,7 @@ MonoBehaviour:
   gameObjectTag: 3
   itemCategory: 1
   bananaType: 1
-  rawMaterialType: 5
+  droppedType: 5
   ingredientsType: 2
   manufacturedItemsType: 1
   buildableType: 5
@@ -25,9 +25,9 @@ MonoBehaviour:
   - barangan
   itemSprite: {fileID: 21300000, guid: 25083ab756e238a4b92f2ff93e10b504, type: 3}
   itemDescription:
-  - Sexy banana
-  - Banane sexy
-  - "pl\xE1tano sexy"
+  - attraction + repulsion
+  - "attraction + r\xE9pulsion"
+  - "atracci\xF3n + repulsi\xF3n"
   bitKongValue: 50
   effects:
   - aphrodisiac grenade, attracts monkeys during a few seconds
@@ -37,5 +37,5 @@ MonoBehaviour:
   damageTime: 0
   healthBonus: 0.5
   resistanceBonus: 1
-  bananaEffect: 1
-  bananaColor: {r: 1, g: 0.72156864, b: 0.03137255, a: 1}
+  bananaEffects: 0000000003000000
+  bananaColor: {r: 0.5686275, g: 0.24313727, b: 0.19215688, a: 1}

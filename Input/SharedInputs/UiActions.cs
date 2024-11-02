@@ -48,12 +48,18 @@ namespace SharedInputs {
                 else {
                     ObjectsReference.Instance.uiManager.HideGameMenu();
                     ObjectsReference.Instance.inputManager.SwitchBackToGame();
-                }
+                }   
             }
 
             if (ObjectsReference.Instance.gameManager.gameContext == GameContext.IN_COMMAND_ROOM_PANEL) {
-                ObjectsReference.Instance.commandRoomControlPanelsManager.UnfocusPanel();
-                ObjectsReference.Instance.gameManager.gameContext = GameContext.IN_MINICHIMP_VIEW;
+                if (ObjectsReference.Instance.inputManager.inputContext == InputContext.CANNONS) {
+                    ObjectsReference.Instance.cannonsManager.UnfocusCannons();
+                    ObjectsReference.Instance.inputManager.SwitchContext(InputContext.UI);
+                }
+
+                else {
+                    ObjectsReference.Instance.commandRoomControlPanelsManager.UnfocusPanel();
+                }
             }
         }
     }

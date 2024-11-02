@@ -7,18 +7,21 @@ namespace InGame.Monkeys.Chimptouristes {
         [SerializeField] private LayerMask selectableLayerMask;
         [SerializeField] private NavMeshAgent _navMeshAgent;
         [SerializeField] private Transform _transform;
-        [SerializeField] private TouristBehaviour touristBehaviour;
+        [SerializeField] private MonkeyMenBehaviour monkeyMenBehaviour;
 
         private Vector3 rotatingAxis;
         private RaycastHit raycastHit;
 
+        private TouristBehaviour touristBehaviour;
+        
         public bool hasFoundBuildable;
         public BuildableBehaviour buildableFounded;
 
         private NavMeshPath path;
 
-        private void Start() {
+        private void OnEnable() {
             rotatingAxis = transform.TransformDirection(Vector3.up);
+            touristBehaviour = GetComponent<TouristBehaviour>();
         }
 
         private void Update() {
@@ -36,7 +39,7 @@ namespace InGame.Monkeys.Chimptouristes {
                     
                     if (!CanReachBuildable(_navMeshAgent, buildable.ChimpTargetTransform.position)) return;
                     
-                    foreach (var visitorNeed in touristBehaviour.sortedNeeds) {
+                    foreach (var visitorNeed in monkeyMenBehaviour.sortedNeeds) {
                         if (buildable.visitorsBuildablePropertiesScriptableObject.needType == visitorNeed.Key) {
                             touristBehaviour.actualNeed = visitorNeed.Key;
                             buildableFounded = buildable;

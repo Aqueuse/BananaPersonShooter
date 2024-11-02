@@ -8,16 +8,20 @@ namespace InGame {
     [CreateAssetMenu (fileName = "Properties", menuName = "ScriptableObjects/MeshReferenceScriptableObject", order = 4)]
     public class MeshReferenceScriptableObject : ScriptableObject {
         public GenericDictionary<BuildableType, GameObject> buildablePrefabByBuildableType;
-
-        public GenericDictionary<CharacterType, GameObject[]> spaceshipDebrisPrefabsByCharacterType;
-
+        
         public GenericDictionary<DroppedType, GameObject> droppedPrefabByDroppedType;
         
         public GenericDictionary<BuildableType, BuildablePropertiesScriptableObject> buildablePropertiesScriptableObjects;
         public GenericDictionary<BananaType, BananasPropertiesScriptableObject> bananasPropertiesScriptableObjects;
         
-        public GameObject[] touristsPrefab;
-        public GameObject piratePrefab;
+        public GameObject[] chimpmensPrefab;
+        public GameObject merchantPrefab;
+
+        public GameObject GetRandomTourist() {
+            return chimpmensPrefab[Random.Range(0, chimpmensPrefab.Length - 1)];
+        }
+        
+        public GenericDictionary<BananaEffect, Color> bananaGoopColorByEffectType;
         
         public GenericDictionary<DroppedType, GameObject> prefabByRawMaterialType;
         
@@ -27,6 +31,7 @@ namespace InGame {
         
         public ColorSet[] merchantsColorsSets;
         public ColorSet[] visitorsColorsSets;
+        public ColorSet cultivatorColorsSet;
 
         // since pirate are now mutable in visitor, merchant, or cultivator, they need to switch their item description
         public GenericDictionary<CharacterType, LocalizedString> genericNameByCharacterType;

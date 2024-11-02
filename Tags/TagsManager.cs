@@ -10,9 +10,9 @@ namespace Tags {
         PLAYER,
         TELEPORTATION,
         BUILD_UNVALID,
-        CANNON_MINI_GAME_PROJECTILE,
-        CANNON_MINI_GAME_LIMITS,
-        CANNON_MINI_GAME_DOME,
+        LASER,
+        DOME,
+        SPACESHIP,
         DOOR,
         BUILDABLE,
         DROPPED,
@@ -30,7 +30,8 @@ namespace Tags {
         MERCHANT,
         FOOD,
         MANUFACTURED_ITEM,
-        CULTIVATOR
+        CULTIVATOR,
+        CHIMPMEN
     }
 
     public class TagsManager : MonoSingleton<TagsManager> {

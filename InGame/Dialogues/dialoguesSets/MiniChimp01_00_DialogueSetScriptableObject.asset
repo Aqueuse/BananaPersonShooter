@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc756ac36e9ff0f45a37ce65aaa8b826, type: 3}
+  m_Name: MiniChimp01_00_DialogueSetScriptableObject
+  m_EditorClassIdentifier: 
+  sentencesSequences:
+  - stringList:
+    - "Je suis l'ordinateur de bord de la station.  Je suis \xE0 votre service commandant. "
+    - "Je suis l'ordinateur de bord de la station.  Je suis \xE0 votre service commandant. "
+    - "Je suis l'ordinateur de bord de la station.  Je suis \xE0 votre service commandant. "
+  dialogueSetScriptableObjectsByResponsesChoices:
+    list:
+    - key:
+        stringList:
+        - Quelle est ma mission en  tant que commandant ?
+        - Quelle est ma mission en  tant que commandant ?
+        - Quelle est ma mission en  tant que commandant ?
+      value: {fileID: 11400000, guid: e5bbe88128b4f9642b02baa5aea13d44, type: 2}
+    - key:
+        stringList:
+        - Parlons d'autre chose.
+        - Parlons d'autre chose.
+        - Parlons d'autre chose.
+      value: {fileID: 11400000, guid: 680b6a95908bdec42aa0e5d174de14b6, type: 2}
+    keyCollision: 0

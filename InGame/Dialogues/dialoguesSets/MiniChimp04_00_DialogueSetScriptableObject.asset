@@ -1,0 +1,42 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc756ac36e9ff0f45a37ce65aaa8b826, type: 3}
+  m_Name: MiniChimp04_00_DialogueSetScriptableObject
+  m_EditorClassIdentifier: 
+  sentencesSequences:
+  - stringList:
+    - Attirez les avec une bonne campagne publicitaire.
+    - Attirez les avec une bonne campagne publicitaire.
+    - Attirez les avec une bonne campagne publicitaire.
+  - stringList:
+    - "Ils reviendront s'ils d\xE9couvrent que la station contient ce pourquoi ils
+      \xE9taient venus."
+    - "Ils reviendront s'ils d\xE9couvrent que la station contient ce pourquoi ils
+      \xE9taient venus."
+    - "Ils reviendront s'ils d\xE9couvrent que la station contient ce pourquoi ils
+      \xE9taient venus."
+  dialogueSetScriptableObjectsByResponsesChoices:
+    list:
+    - key:
+        stringList:
+        - "Ok, je vais essayer de reconstruire les \xE9quipements n\xE9cessaires"
+        - "Ok, je vais essayer de reconstruire les \xE9quipements n\xE9cessaires"
+        - "Ok, je vais essayer de reconstruire les \xE9quipements n\xE9cessaires"
+      value: {fileID: 11400000, guid: 680b6a95908bdec42aa0e5d174de14b6, type: 2}
+    - key:
+        stringList:
+        - Parlons d'autre chose.
+        - Parlons d'autre chose.
+        - Parlons d'autre chose.
+      value: {fileID: 11400000, guid: 680b6a95908bdec42aa0e5d174de14b6, type: 2}
+    keyCollision: 0
+  responsesChoices: []

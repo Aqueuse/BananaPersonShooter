@@ -10,7 +10,7 @@ namespace InGame.Monkeys {
             }
             
             if (stateInfo.IsTag("break")) {
-                animator.GetComponent<PirateBehaviour>().GoBackToSas();
+                animator.GetComponent<PirateBehaviour>().GoBackToTeleporter();
             }
         }
     }

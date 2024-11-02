@@ -131,6 +131,8 @@ namespace UI {
         public void ShowInventory() {
             if (!ObjectsReference.Instance.bananaMan.tutorialFinished) return;
             
+            ObjectsReference.Instance.uInventoriesManager.OpenInventories();
+
             SetActive(UICanvasGroupType.INVENTORIES, true);
         }
 

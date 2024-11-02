@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.IO;
-using InGame.Items.ItemsBehaviours.SpaceshipsBehaviours;
+using InGame.Items.ItemsBehaviours;
 using Newtonsoft.Json;
 using Save.Helpers;
 using Save.Templates;
@@ -20,62 +20,62 @@ namespace Save {
             if (!File.Exists(loadfilePath)) return;
 
             var spaceshipsDataString = File.ReadAllText(loadfilePath);
-            var spaceshipsList = JsonConvert.DeserializeObject<List<string>>(spaceshipsDataString);
+            
+            var spaceshipsList = JsonConvert.DeserializeObject<List<SpaceshipSavedData>>(spaceshipsDataString);
 
             foreach (var spaceship in spaceshipsList) {
-                SpaceshipSavedData spaceshipSavedData = JsonConvert.DeserializeObject<SpaceshipSavedData>(spaceship);
-
-                var spaceshipInstance = Instantiate(ObjectsReference.Instance.meshReferenceScriptableObject.spaceshipByCharacterType[spaceshipSavedData.characterType]);
-
+                var spaceshipInstance = Instantiate(ObjectsReference.Instance.meshReferenceScriptableObject.spaceshipByCharacterType[spaceship.characterType]);
+            
                 spaceshipBehaviourInstance = spaceshipInstance.GetComponent<SpaceshipBehaviour>();
-                spaceshipBehaviourInstance.spaceshipSavedData = spaceshipSavedData;
-
-                spaceshipBehaviourInstance.transform.position = JsonHelper.FromStringToVector3(spaceshipSavedData.spaceshipPosition);
-                spaceshipBehaviourInstance.transform.rotation = JsonHelper.FromStringToQuaternion(spaceshipSavedData.spaceshipRotation);
-
-                spaceshipBehaviourInstance.spaceshipName = spaceshipSavedData.spaceshipName;
-                spaceshipBehaviourInstance.spaceshipGuid = spaceshipSavedData.spaceshipGuid;
-
-                spaceshipBehaviourInstance.communicationMessagePrefabIndex = spaceshipSavedData.communicationMessagePrefabIndex;
-                spaceshipBehaviourInstance.spaceshipUIcolor = JsonHelper.FromStringToColor(spaceshipSavedData.uiColor);
+                spaceshipBehaviourInstance.spaceshipSavedData = spaceship;
+            
+                spaceshipBehaviourInstance.transform.position = JsonHelper.FromStringToVector3(spaceship.spaceshipPosition);
+                spaceshipBehaviourInstance.transform.rotation = JsonHelper.FromStringToQuaternion(spaceship.spaceshipRotation);
+            
+                spaceshipBehaviourInstance.spaceshipName = spaceship.spaceshipName;
+                spaceshipBehaviourInstance.spaceshipGuid = spaceship.spaceshipGuid;
+            
+                spaceshipBehaviourInstance.communicationMessagePrefabIndex = spaceship.communicationMessagePrefabIndex;
+                spaceshipBehaviourInstance.spaceshipUIcolor = JsonHelper.FromStringToColor(spaceship.uiColor);
                 
-                spaceshipBehaviourInstance.travelState = spaceshipSavedData.travelState;
-
-                spaceshipBehaviourInstance.arrivalPosition = JsonHelper.FromStringToVector3(spaceshipSavedData.arrivalPoint);
-                spaceshipBehaviourInstance.assignatedHangar = spaceshipSavedData.hangarNumber;
+                spaceshipBehaviourInstance.travelState = spaceship.travelState;
+            
+                spaceshipBehaviourInstance.arrivalPosition = JsonHelper.FromStringToVector3(spaceship.arrivalPoint);
+                spaceshipBehaviourInstance.assignatedHangar = spaceship.hangarNumber;
                 
-                if (spaceshipSavedData.travelState == TravelState.GO_TO_PATH) {
-                    spaceshipBehaviourInstance.GoToPath(spaceshipSavedData.hangarNumber);
+                ObjectsReference.Instance.spaceTrafficControlManager.spaceshipBehavioursByGuid.Add(
+                    spaceshipInstance.GetComponent<SpaceshipBehaviour>().spaceshipGuid, 
+                    spaceshipInstance.GetComponent<SpaceshipBehaviour>());
+                
+                if (spaceship.travelState == TravelState.GO_TO_PATH) {
+                    spaceshipBehaviourInstance.GoToPath(spaceship.hangarNumber);
                 }
-
-                if (spaceshipSavedData.travelState == TravelState.TRAVEL_ON_PATH) {
+            
+                if (spaceship.travelState == TravelState.TRAVEL_ON_PATH) {
                     spaceshipBehaviourInstance.MoveToElevator();
                 }
-
-                if (spaceshipSavedData.travelState == TravelState.TRAVEL_ON_ELEVATOR) {
+            
+                if (spaceship.travelState == TravelState.TRAVEL_ON_ELEVATOR) {
                     spaceshipBehaviourInstance.MoveOnElevatorToHangar();
                 }
-
-                if (spaceshipSavedData.travelState == TravelState.TRAVEL_BACK_ON_ELEVATOR) {
+            
+                if (spaceship.travelState == TravelState.TRAVEL_BACK_ON_ELEVATOR) {
                     spaceshipBehaviourInstance.travelState = TravelState.LEAVES_THE_REGION;
                     transform.position = new Vector3(transform.position.x, -10f, transform.position.z);
                     spaceshipBehaviourInstance.arrivalPosition.y = -10f;
                 }
-
-                if (spaceshipSavedData.travelState == TravelState.LEAVES_THE_REGION) {
+            
+                if (spaceship.travelState == TravelState.LEAVES_THE_REGION) {
                     spaceshipBehaviourInstance.arrivalPosition.y = -10f;
                 }
-
-                if (spaceshipSavedData.travelState == TravelState.FREE_FLIGHT || spaceshipSavedData.travelState == TravelState.LEAVES_THE_REGION) {
+            
+                if (spaceship.travelState == TravelState.FREE_FLIGHT || spaceship.travelState == TravelState.LEAVES_THE_REGION) {
                     ObjectsReference.Instance.uiSpaceTrafficControlPanel.AddNewCommunication(spaceshipBehaviourInstance);
                 }
-
-                spaceshipInstance.GetComponent<SpaceshipBehaviour>().Init();
-
-                ObjectsReference.Instance.spaceTrafficControlManager.spaceshipBehavioursByGuid.Add(
-                    spaceshipInstance.GetComponent<SpaceshipBehaviour>().spaceshipGuid, 
-                    spaceshipInstance.GetComponent<SpaceshipBehaviour>());
             }
+            
+            ObjectsReference.Instance.uiSpaceTrafficControlPanel.RefreshCommunicationButton();
+            ObjectsReference.Instance.uiSpaceTrafficControlPanel.RefreshHangarAvailability();
         }
 
         public void SaveSpaceships(string saveUuid) {
@@ -85,8 +85,10 @@ namespace Save {
             List<SpaceshipSavedData> jsonSpaceshipsSaved = new List<SpaceshipSavedData>();
 
             foreach (var spaceshipsBehaviour in ObjectsReference.Instance.spaceTrafficControlManager.spaceshipBehavioursByGuid) {
+                if (spaceshipsBehaviour.Value == null) continue;
+                
                 spaceshipsBehaviour.Value.GenerateSaveData();
-                jsonSpaceshipsSaved.Add(spaceshipsBehaviour.Value.savedData);
+                jsonSpaceshipsSaved.Add(spaceshipsBehaviour.Value.spaceshipSavedData);
             }
 
             var json = JsonConvert.SerializeObject(jsonSpaceshipsSaved);

@@ -3,19 +3,19 @@ using UnityEngine;
 
 namespace InGame.Monkeys.Merchimps {
     public class MerchimpsManager : MonoBehaviour {
-        public MerchimpBehaviour activeMerchimpBehaviour;
-        public ItemScriptableObject activeItemScriptableObject;
+        [HideInInspector] public MerchimpBehaviour activeMerchimpBehaviour;
+        [HideInInspector] public ItemScriptableObject activeItemScriptableObject;
         
         public int GetMerchantItemQuantity(ItemScriptableObject itemScriptableObject) {
             switch (itemScriptableObject.itemCategory) {
                 case ItemCategory.INGREDIENT:
-                    return activeMerchimpBehaviour.monkeyMenData.ingredientsInventory[itemScriptableObject.ingredientsType];
+                    return activeMerchimpBehaviour.monkeyMenBehaviour.monkeyMenData.ingredientsInventory[itemScriptableObject.ingredientsType];
 
                 case ItemCategory.MANUFACTURED_ITEM:
-                    return activeMerchimpBehaviour.monkeyMenData.manufacturedItemsInventory[itemScriptableObject.manufacturedItemsType];
+                    return activeMerchimpBehaviour.monkeyMenBehaviour.monkeyMenData.manufacturedItemsInventory[itemScriptableObject.manufacturedItemsType];
 
                 case ItemCategory.DROPPED:
-                    return activeMerchimpBehaviour.monkeyMenData.droppedInventory[itemScriptableObject.droppedType];
+                    return activeMerchimpBehaviour.monkeyMenBehaviour.monkeyMenData.droppedInventory[itemScriptableObject.droppedType];
             }
 
             return 0;

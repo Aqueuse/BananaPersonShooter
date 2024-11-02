@@ -1,7 +1,8 @@
 public enum SpawnPoint {
     HOME,
     NEW_GAME,
-    COROLLE_TOP_OF_HANGARS,
-    HANGARS,
-    COMMAND_ROOM
+    TP_COROLLE,
+    TP_HANGARS,
+    TP_COMMAND_ROOM,
+    SPACESHIP_HANGARS
 }

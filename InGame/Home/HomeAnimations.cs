@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using Random = UnityEngine.Random;
 
-namespace InGame {
+namespace InGame.Home {
     public class HomeAnimations : MonoSingleton<HomeAnimations> {
         public NavMeshAgent gorillaNavMeshAgent;
 

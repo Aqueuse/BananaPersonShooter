@@ -5,8 +5,8 @@ using UnityEngine;
 namespace InGame.Player.BananaGunActions {
     public class Shoot : MonoBehaviour {
         [SerializeField] private Transform launchingBananaPoint;
-        [SerializeField] private GenericDictionary<BananaType, GameObject> weaponsGameObjects;
-
+        [SerializeField] private GameObject bananaPrefab;
+        
         private GameObject banana;
         private BananasPropertiesScriptableObject activeWeaponData;
 
@@ -26,30 +26,22 @@ namespace InGame.Player.BananaGunActions {
         }
 
         public void throwBanana() {
-            banana = Instantiate(weaponsGameObjects[ObjectsReference.Instance.bananaMan.bananaManData.activeBanana.bananaType],
-                launchingBananaPoint.transform.position, Quaternion.identity, null);
+            banana = Instantiate(bananaPrefab, launchingBananaPoint.transform.position, Quaternion.identity);
 
-            banana.GetComponent<Rigidbody>().AddForce(launchingBananaPoint.transform.forward * 200, ForceMode.Impulse);
-            //banana.GetComponent<Rigidbody>().AddForce(transform.forward * 100, ForceMode.Impulse);
+            banana.transform.position = launchingBananaPoint.transform.position;
+            banana.SetActive(true);
+
+            Debug.Log(banana.GetComponent<Rigidbody>());
             
+            banana.GetComponent<Rigidbody>().isKinematic = false;
+            banana.GetComponent<Rigidbody>().AddForce(launchingBananaPoint.transform.forward * 10000, ForceMode.Force);
+
             ObjectsReference.Instance.audioManager.PlayEffect(SoundEffectType.THROW_BANANA, 0);
 
             // ammo reduce
             activeWeaponData = ObjectsReference.Instance.bananaMan.bananaManData.activeBanana;
 
-            switch (activeWeaponData.bananaEffect) {
-                case BananaEffect.TWO_SPLIT:
-                    bananasInventory.RemoveQuantity(activeWeaponData.bananaType, 2);
-                    break;
-                case BananaEffect.FIVE_SPLIT:
-                    bananasInventory.RemoveQuantity(activeWeaponData.bananaType, 5);
-                    break;
-                default:
-                    bananasInventory.RemoveQuantity(activeWeaponData.bananaType, 1);
-                    break;
-            }
-            
-            Invoke(nameof(throwBanana), 1f);
+            bananasInventory.RemoveQuantity(activeWeaponData.bananaType, 1);
         }
     }
 }

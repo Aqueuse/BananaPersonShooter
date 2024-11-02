@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using InGame.Items.ItemsBehaviours.SpaceshipsBehaviours;
+using InGame.Items.ItemsBehaviours;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -29,9 +29,6 @@ namespace InGame.SpaceTrafficControl {
             new Vector3[] {new(-1696.243f,-1196.047f,-2921.79f), new(-1696.243f,147.19f,-2921.79f)},
             new Vector3[] {new(-1600.332f,-1196.047f,-2826.458f), new(-1600.332f,147.19f,-2826.458f)}
         };
-
-        public Transform teleportUpTransform;
-        public Transform teleportDownTransform;
         
         private int nextRandomIndex;
         private System.Random systemRandom;
@@ -50,6 +47,7 @@ namespace InGame.SpaceTrafficControl {
         public void AssignSpaceshipToHangar(int hangarNumber) {
             hangarAvailabilityByHangarNumber[hangarNumber] = false;
             ObjectsReference.Instance.uiSpaceTrafficControlPanel.RefreshHangarAvailability();
+            ObjectsReference.Instance.uiSpaceTrafficControlPanel.RefreshCommunicationButton();
         }
 
         public void AssignToHangarFromCommunications(int hangarNumber) {
@@ -62,6 +60,7 @@ namespace InGame.SpaceTrafficControl {
         public void FreeHangar(int hangarNumber) {
             hangarAvailabilityByHangarNumber[hangarNumber] = false;
             ObjectsReference.Instance.uiSpaceTrafficControlPanel.RefreshHangarAvailability();
+            ObjectsReference.Instance.uiSpaceTrafficControlPanel.RefreshCommunicationButton();
         }
         
         public string GetUniqueSpaceshipName() {

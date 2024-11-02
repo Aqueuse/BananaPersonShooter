@@ -5,11 +5,12 @@ namespace SharedInputs {
     public class CannonsPanelActions : InputActions {
         [SerializeField] private InputActionReference switchToLeftCannonActionReference;
         [SerializeField] private InputActionReference switchToRightCannonActionReference;
-        
+
         [SerializeField] private InputActionReference shootActionReference;
         [SerializeField] private InputActionReference rotateCannonActionReference;
-        [SerializeField] private InputActionReference quitActionReference;
 
+        [SerializeField] private InputActionReference zoomActionReference;
+        
         private void OnEnable() {
             switchToLeftCannonActionReference.action.Enable();
             switchToLeftCannonActionReference.action.performed += SwitchToCannonLeft;
@@ -18,13 +19,13 @@ namespace SharedInputs {
             switchToRightCannonActionReference.action.performed += SwitchToCannonRight;
             
             shootActionReference.action.Enable();
-            shootActionReference.action.performed += Shoot;
+            shootActionReference.action.performed += ShowLaser;
+            shootActionReference.action.canceled += HideLaser; 
 
             rotateCannonActionReference.action.Enable();
-            rotateCannonActionReference.action.performed += RotateCannon;
-
-            quitActionReference.action.Enable();
-            quitActionReference.action.performed += Quit;
+            
+            zoomActionReference.action.Enable();
+            zoomActionReference.action.performed += Zoom;
         }
 
         private void OnDisable() {
@@ -35,33 +36,39 @@ namespace SharedInputs {
             switchToRightCannonActionReference.action.performed -= SwitchToCannonRight;
             
             shootActionReference.action.Disable();
-            shootActionReference.action.performed -= Shoot;
+            shootActionReference.action.performed -= ShowLaser;
 
-            rotateCannonActionReference.action.Enable();
-            rotateCannonActionReference.action.performed -= RotateCannon;
+            rotateCannonActionReference.action.Disable();
+            
+            zoomActionReference.action.Disable();
+            zoomActionReference.action.performed -= Zoom;
+        }
 
-            quitActionReference.action.Disable();
-            quitActionReference.action.performed -= Quit;
+        private void Update() {
+            ObjectsReference.Instance.cannonsManager.activeCannon.Rotate(
+                rotateCannonActionReference.action.ReadValue<Vector2>().x,
+                rotateCannonActionReference.action.ReadValue<Vector2>().y
+            );
         }
 
         private void SwitchToCannonLeft(InputAction.CallbackContext context) {
-            ObjectsReference.Instance.cannonsManagement.SwitchToLeftCannon();   
+            ObjectsReference.Instance.cannonsManager.SwitchToLeftCannon();   
         }
 
         private void SwitchToCannonRight(InputAction.CallbackContext context) {
-            ObjectsReference.Instance.cannonsManagement.SwitchToRightCannon();
+            ObjectsReference.Instance.cannonsManager.SwitchToRightCannon();
         }
         
-        private void RotateCannon(InputAction.CallbackContext context) {
-            ObjectsReference.Instance.cannonsManagement.RotateCannon(context.ReadValue<Vector2>().x, context.ReadValue<Vector2>().y);
+        private void ShowLaser(InputAction.CallbackContext context) {
+            ObjectsReference.Instance.cannonsManager.ShowLaserOnActivatedRegion();
         }
 
-        private void Shoot(InputAction.CallbackContext context) {
-            ObjectsReference.Instance.cannonsManagement.ShootOnActivatedRegion();
+        private void HideLaser(InputAction.CallbackContext context) {
+            ObjectsReference.Instance.cannonsManager.HideLaserOnActivatedRegion();
         }
-        
-        private void Quit(InputAction.CallbackContext callbackContext) {
-            ObjectsReference.Instance.cannonsManagement.StopCannonControl();
+
+        private void Zoom(InputAction.CallbackContext context) {
+            ObjectsReference.Instance.cannonsManager.ZoomCamera(context.ReadValue<float>());
         }
     }
 }

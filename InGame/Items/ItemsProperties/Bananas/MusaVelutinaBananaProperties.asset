@@ -15,7 +15,7 @@ MonoBehaviour:
   gameObjectTag: 3
   itemCategory: 1
   bananaType: 9
-  rawMaterialType: 5
+  droppedType: 5
   ingredientsType: 2
   manufacturedItemsType: 1
   buildableType: 5
@@ -38,5 +38,5 @@ MonoBehaviour:
   damageTime: 0
   healthBonus: 1
   resistanceBonus: 1
-  bananaEffect: 1
-  bananaColor: {r: 1, g: 0.72156864, b: 0.03137255, a: 1}
+  bananaEffects: 00000000
+  bananaColor: {r: 1, g: 0.24705884, b: 0.5372549, a: 1}

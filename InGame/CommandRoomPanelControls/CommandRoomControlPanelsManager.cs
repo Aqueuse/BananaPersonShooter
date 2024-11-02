@@ -31,7 +31,7 @@ namespace InGame.CommandRoomPanelControls {
             }
         }
         
-        public void FocusPanel(CommandRoomPanelType commandRoomPanelType) {
+        private void FocusPanel(CommandRoomPanelType commandRoomPanelType) {
             if (ObjectsReference.Instance.gameManager.gameContext == GameContext.IN_GAME) {
                 ObjectsReference.Instance.uiManager.SetActive(UICanvasGroupType.HUD_BANANAMAN, false);
             }

@@ -1,0 +1,38 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa23d2d3beaaadf47a677ba4423808b1, type: 3}
+  m_Name: bumperProperties
+  m_EditorClassIdentifier: 
+  gameObjectTag: 11
+  itemCategory: 2
+  bananaType: 0
+  droppedType: 0
+  ingredientsType: 2
+  manufacturedItemsType: 1
+  buildableType: 0
+  itemName:
+  - bumper
+  - bumper
+  - bumper
+  itemSprite: {fileID: 21300000, guid: 55556fa4c044ae64f95755b363a0bbf8, type: 3}
+  itemDescription:
+  - the technological evolution of the spring
+  - "l'\xE9volution technologique du ressort"
+  - "la evoluci\xF3n tecnol\xF3gica de la primavera"
+  bitKongValue: 0
+  rawMaterialsWithQuantity:
+    list:
+    - key: 0
+      value: 6
+    keyCollision: 0
+  buildablePrefab: {fileID: 3266887563888322151, guid: ed6506629ba94dc48b84997bb6e1c79a, type: 3}
+  blueprintSprite: {fileID: 21300000, guid: 54cbf7ccde7557f4688620b3f6e4071a, type: 3}

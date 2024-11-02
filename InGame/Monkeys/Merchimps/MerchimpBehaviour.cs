@@ -1,37 +1,44 @@
 using UI.InGame.Merchimps;
+using UnityEngine;
 
 namespace InGame.Monkeys.Merchimps {
-    public class MerchimpBehaviour : MonkeyMenBehaviour {
+    public class MerchimpBehaviour : MonoBehaviour {
+        public MonkeyMenBehaviour monkeyMenBehaviour;
         public UIMerchantWaitTimer uiMerchantWaitTimer;
-        
         private UIMerchant uiMerchant;
-        
-        public void StartToSell() {
+
+        public void Start() {
+            monkeyMenBehaviour = GetComponent<MonkeyMenBehaviour>();
             uiMerchant = ObjectsReference.Instance.uiMerchant;
             ObjectsReference.Instance.chimpManager.merchimpsManager.activeMerchimpBehaviour = this;
             
-            uiMerchant.InitializeInventories(monkeyMenData);
+            uiMerchant.InitializeInventories(monkeyMenBehaviour.monkeyMenData);
             uiMerchant.RefreshMerchantInventories();
             uiMerchant.RefreshBitkongQuantities();
             uiMerchant.Switch_to_Sell_inventory();
-        }
-
-        public override void LoadFromSavedData() {
-            if (!monkeyMenData.isInSpaceship) SetColors();
-        }
-
-        public override void GenerateSavedData() {
-            monkeyMenSavedData.characterType = CharacterType.MERCHIMP;
             
-            monkeyMenSavedData.ingredientsInventory = monkeyMenData.ingredientsInventory;
-            monkeyMenSavedData.bananasInventory = monkeyMenData.bananasInventory;
-            monkeyMenSavedData.manufacturedItemsInventory = monkeyMenData.manufacturedItemsInventory;
-            monkeyMenSavedData.droppedInventory = monkeyMenData.droppedInventory;
-
-            monkeyMenSavedData.bitKongQuantity = monkeyMenData.bitKongQuantity;
+            StartWaitingTimer();
+        }
+        
+        private int waitTimer;
+        
+        private void StartWaitingTimer() {
+            transform.position = monkeyMenBehaviour.associatedSpaceship.transform.position;
             
-            monkeyMenSavedData.uid = monkeyMenData.uid;
-            monkeyMenSavedData.name = monkeyMenData.monkeyMenName;
+            uiMerchantWaitTimer.SetTimer(120);
+            waitTimer = 120;
+            InvokeRepeating(nameof(DecrementeTimer), 0, 1);
+        }
+        
+        public void DecrementeTimer() {
+            waitTimer--;
+            if (waitTimer <= 0) {
+                transform.position = monkeyMenBehaviour.associatedSpaceship.transform.position;
+                CancelInvoke(nameof(DecrementeTimer));
+                monkeyMenBehaviour.associatedSpaceship.StopWaiting();
+            }
+            
+            uiMerchantWaitTimer.SetTimer(waitTimer);
         }
     }
 }

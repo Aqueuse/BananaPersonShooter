@@ -1,8 +1,12 @@
 using UnityEngine;
 
 public class InputManager : MonoBehaviour {
+    public InputContext inputContext;
+    
     [SerializeField] private GenericDictionary<InputContext, InputActions[]> inputActionsByInputContext;
     public void SwitchContext(InputContext newInputContext) {
+        inputContext = newInputContext;
+        
         DisableAllInputs();
 
         foreach (var inputAction in inputActionsByInputContext[newInputContext]) {
@@ -27,7 +31,7 @@ public class InputManager : MonoBehaviour {
     
     public void SwitchBackToGame() {
         ObjectsReference.Instance.gameManager.gameContext = GameContext.IN_GAME;
-        ObjectsReference.Instance.inputManager.SwitchContext(InputContext.GAME);
+        SwitchContext(InputContext.GAME);
                 
         ObjectsReference.Instance.bananaGunActionsSwitch.gameObject.SetActive(true);
     }

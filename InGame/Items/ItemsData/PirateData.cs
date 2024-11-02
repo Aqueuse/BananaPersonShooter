@@ -16,7 +16,7 @@ namespace InGame.Items.ItemsData {
             {DroppedType.BATTERY, 0}
         };
 
-        public PirateState pirateState = PirateState.GO_TO_SAS;
-        public string destination = JsonHelper.FromVector3ToString(ObjectsReference.Instance.spaceTrafficControlManager.teleportUpTransform.position);
+        public PirateState pirateState = PirateState.GO_TO_TELEPORTER;
+        public string destination = JsonHelper.FromVector3ToString(ObjectsReference.Instance.gameManager.spawnPointsBySpawnType[SpawnPoint.TP_HANGARS].position);
     }
 }

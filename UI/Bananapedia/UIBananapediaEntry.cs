@@ -12,7 +12,7 @@ namespace UI.Bananapedia {
 
         public void OnClick() {
             descriptionText.text = bananasDataScriptableObject.itemDescription[ObjectsReference.Instance.gameSettings.languageIndexSelected];
-            effectsText.text = bananasDataScriptableObject.effects[ObjectsReference.Instance.gameSettings.languageIndexSelected];
+            // effectsText.text = bananasDataScriptableObject.effects[ObjectsReference.Instance.gameSettings.languageIndexSelected];
             image.sprite = bananasDataScriptableObject.itemSprite;
         }
     }

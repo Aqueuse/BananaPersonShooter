@@ -7,12 +7,14 @@ using Random = UnityEngine.Random;
 
 namespace InGame.Monkeys {
     public class ChimpManager : MonoBehaviour {
-        [SerializeField] private GameObject piratePrefab;
         public MerchimpsManager merchimpsManager;
 
-        public Transform sasTransform;
+        public Transform chimpmensContainer;
+        
         public Transform[] spawnTransforms;
         private Transform spawnPointTransform;
+
+        public Transform waitingSpot;
 
         private List<BuildableBehaviour> buildablesToBreak;
 
@@ -21,12 +23,6 @@ namespace InGame.Monkeys {
         
         private void Start() {
             spawnedPirates = new List<PirateBehaviour>();
-        }
-
-        public void SpawnPirate() {
-            spawnPointTransform = GetRandomSasSpawnPoint();
-            pirate = Instantiate(piratePrefab, spawnPointTransform.position, spawnPointTransform.rotation);
-            spawnedPirates.Add(pirate.GetComponent<PirateBehaviour>());
         }
         
         public Transform GetRandomSasSpawnPoint() {

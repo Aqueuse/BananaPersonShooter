@@ -5,6 +5,7 @@ namespace UI.InGame {
     public class UIBlinkText : MonoBehaviour {
         private TextMeshProUGUI _textMeshProUGUI;
         private bool _isVisible = true;
+        
         private void Start() {
             _textMeshProUGUI = GetComponent<TextMeshProUGUI>();
         }

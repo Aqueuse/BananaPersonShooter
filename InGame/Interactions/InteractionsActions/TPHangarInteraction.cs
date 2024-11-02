@@ -5,7 +5,7 @@ namespace InGame.Interactions.InteractionsActions {
         private Transform TPHangarTransform;
 
         private void Start() {
-            TPHangarTransform = ObjectsReference.Instance.gameManager.spawnPointsBySpawnType[SpawnPoint.HANGARS];
+            TPHangarTransform = ObjectsReference.Instance.gameManager.spawnPointsBySpawnType[SpawnPoint.TP_HANGARS];
         }
 
         public override void Activate(GameObject interactedGameObject) {

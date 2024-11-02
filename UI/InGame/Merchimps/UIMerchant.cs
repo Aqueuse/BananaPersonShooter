@@ -1,5 +1,4 @@
 using InGame.Items.ItemsData;
-using InGame.Monkeys;
 using InGame.Monkeys.Merchimps;
 using TMPro;
 using UI.InGame.Inventory;
@@ -14,21 +13,21 @@ namespace UI.InGame.Merchimps {
         [SerializeField] private CanvasGroup sellInventoryCanvasGroup;
         [SerializeField] private Image sellButtonImage;
         [SerializeField] private TextMeshProUGUI sellText;
-        
+
         [SerializeField] private CanvasGroup buyInventoryCanvasGroup;
         [SerializeField] private Image buyButtonImage;
         [SerializeField] private TextMeshProUGUI buyText;
 
         public UIIngredientsInventory merchantSellUiIngredientsInventory;
         public UIManufacturedItemsInventory merchantSellUiManufacturedItemsInventory;
-    
+
         public UIIngredientsInventory merchantBuyUiIngredientsInventory;
         public UIManufacturedItemsInventory merchantBuyUiManufacturedItemsInventory;
         public UIDroppedInventory merchantBuyUiDroppedInventory;
-        
+
         [SerializeField] private TextMeshProUGUI merchantBitKongQuantityTextMeshProUGUI;
         [SerializeField] private TextMeshProUGUI bananaManBitKongQuantityTextMeshProUGUI;
-        
+
         [SerializeField] private Color activatedColor;
 
         private MerchimpsManager merchimpsManager;
@@ -41,20 +40,20 @@ namespace UI.InGame.Merchimps {
             sellInventoryCanvasGroup.alpha = 1;
             sellInventoryCanvasGroup.interactable = true;
             sellInventoryCanvasGroup.blocksRaycasts = true;
-            
+
             buyInventoryCanvasGroup.alpha = 0;
             buyInventoryCanvasGroup.interactable = false;
             buyInventoryCanvasGroup.blocksRaycasts = false;
-            
+
             sellButtonImage.color = activatedColor;
             buyButtonImage.color = Color.black;
-            
+
             sellText.color = Color.black;
             buyText.color = activatedColor;
-            
+
             SwitchToSellIngredientsInventory();
         }
-        
+
         public void Switch_to_Buy_inventory() {
             sellInventoryCanvasGroup.alpha = 0;
             sellInventoryCanvasGroup.interactable = false;
@@ -69,7 +68,7 @@ namespace UI.InGame.Merchimps {
 
             sellText.color = activatedColor;
             buyText.color = Color.black;
-            
+
             SwitchToBuyIngredientsInventory();
         }
 
@@ -114,7 +113,6 @@ namespace UI.InGame.Merchimps {
             ObjectsReference.Instance.trade.monkeyMenData = monkeyMenData;
             
             merchantBuyUiIngredientsInventory.ingredientsInventory = monkeyMenData.ingredientsInventory;
-            merchantBuyUiDroppedInventory.droppedInventory = monkeyMenData.droppedInventory;
             merchantBuyUiManufacturedItemsInventory.manufacturedItemsInventory = monkeyMenData.manufacturedItemsInventory;
         }
         
@@ -169,7 +167,7 @@ namespace UI.InGame.Merchimps {
         }
 
         public void RefreshBitkongQuantities() {
-            merchantBitKongQuantityTextMeshProUGUI.text = merchimpsManager.activeMerchimpBehaviour.monkeyMenData.bitKongQuantity + " BTK";
+            merchantBitKongQuantityTextMeshProUGUI.text = merchimpsManager.activeMerchimpBehaviour.monkeyMenBehaviour.monkeyMenData.bitKongQuantity + " BTK";
             bananaManBitKongQuantityTextMeshProUGUI.text = ObjectsReference.Instance.bananaMan.bananaManData.bitKongQuantity + " BTK";
         }
     }
