@@ -136,6 +136,14 @@ namespace UI {
             SetActive(UICanvasGroupType.INVENTORIES, true);
         }
 
+        public void ShowHideMap() {
+            if (canvasGroupsByUICanvasType[UICanvasGroupType.MAP].alpha == 0)
+                canvasGroupsByUICanvasType[UICanvasGroupType.MAP].alpha = 0.6f;
+            else {
+                canvasGroupsByUICanvasType[UICanvasGroupType.MAP].alpha = 0f;
+            }
+        }
+
         public void ShowBananaGunUI() {
             if (!ObjectsReference.Instance.bananaMan.tutorialFinished) return;
             
@@ -178,7 +186,7 @@ namespace UI {
             SetActive(UICanvasGroupType.INVENTORIES, false);
             ObjectsReference.Instance.uInfobulle.Hide();
         }
-
+        
         public void SetActive(UICanvasGroupType uiCanvasGroupType, bool visible) {
             var canvasGroup = canvasGroupsByUICanvasType[uiCanvasGroupType];
 

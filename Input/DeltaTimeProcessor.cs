@@ -14,7 +14,7 @@ public class DeltaTimeProcessor : InputProcessor<Vector2> {
 #endif
 
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
-    static void Initialize()
+    private static void Initialize()
     {
         InputSystem.RegisterProcessor<DeltaTimeProcessor>();
     }

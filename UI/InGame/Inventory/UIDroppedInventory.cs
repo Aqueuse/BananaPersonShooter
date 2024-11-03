@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using InGame.Inventory;
 using TMPro;
 using UnityEngine;

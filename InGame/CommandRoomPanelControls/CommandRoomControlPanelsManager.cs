@@ -58,7 +58,7 @@ namespace InGame.CommandRoomPanelControls {
 
         public void UnfocusPanel() {
             commandRoomVirtualCamera.Priority = 0;
-
+    
             if (ObjectsReference.Instance.mainCamera.cameraModeType == CameraModeType.PLAYER_VIEW) {
                 ObjectsReference.Instance.uiManager.SetActive(UICanvasGroupType.HUD_BANANAMAN, true);
 
@@ -83,7 +83,7 @@ namespace InGame.CommandRoomPanelControls {
 
         public void FocusGestionPanel() {
             FocusPanel(CommandRoomPanelType.GESTION);
-            ObjectsReference.Instance.inputManager.SwitchContext(InputContext.GESTION_MAP);
+            ObjectsReference.Instance.inputManager.SwitchContext(InputContext.UI);
         }
 
         public void FocusJournalPanel() {

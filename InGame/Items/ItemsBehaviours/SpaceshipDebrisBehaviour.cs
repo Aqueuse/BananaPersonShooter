@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using InGame.Items.ItemsData;
 using InGame.MiniGames.SpaceTrafficControlMiniGame.projectiles;
 using Newtonsoft.Json;
@@ -9,53 +8,62 @@ using UnityEngine;
 namespace InGame.Items.ItemsBehaviours {
     public class SpaceshipDebrisBehaviour : MonoBehaviour {
         public string spaceshipDebrisGuid;
-        public int spaceshipDebrisPrefabIndex;
-        public CharacterType characterType;
+
+        public SpaceshipType spaceshipType;
+        public int prefabIndex;
+
         public bool isInSpace;
-        
-        public Transform attractionPoint;
-        public bool isAttracted;
-        
+
+        public Vector3 effectSource;
+        public BananaEffect bananaEffect;
+
         private Rigidbody _rigidbody;
         private Material _material;
 
-        [SerializeField] private float attractionForce = 10;
-        
         private static readonly int emissionProperty = Shader.PropertyToID("_emission");
         private static readonly int emissionColorProperty = Shader.PropertyToID("_emission_color");
 
         private void Awake() {
             _rigidbody = GetComponent<Rigidbody>();
-            
+
             if(string.IsNullOrEmpty(spaceshipDebrisGuid)) {
                 spaceshipDebrisGuid = Guid.NewGuid().ToString();
             }
         }
-    
-        private void FixedUpdate() {
-            if (!isAttracted) return;
-            
-            transform.position = Vector3.MoveTowards(transform.position, attractionPoint.position, 200 * Time.deltaTime);
 
-            if (Vector3.Distance(transform.position, attractionPoint.position) < 10) {
+        private void Update() {
+            if (bananaEffect != BananaEffect.ATTRACTION) return;
+
+            transform.position = Vector3.MoveTowards(transform.position, effectSource, 200 * Time.deltaTime);
+
+            if (Vector3.Distance(transform.position, effectSource) < 10) {
                 _rigidbody.useGravity = true;
                 _rigidbody.isKinematic = false;
                 
                 GetComponent<MeshCollider>().isTrigger = false;
 
                 isInSpace = false;
-                isAttracted = false;
+                bananaEffect = BananaEffect.NONE;
                 DeactivateEmission();
             }
         }
-        
-        private void OnCollisionEnter(Collision other) {
-            if (other.gameObject.layer == 0 & !isInSpace) {
-                _rigidbody.useGravity = false;
-                _rigidbody.isKinematic = true;
-            }
-        }
 
+        public void Init(Laser laser) {
+            Debug.Log("laser shoot");
+            
+            isInSpace = true;
+            DestroyIfUnreachable();
+
+            if (laser.bananaEffect == BananaEffect.ATTRACTION) {
+                bananaEffect = BananaEffect.ATTRACTION;
+                effectSource = laser.attractionPoint.position;
+            }
+            
+            ActiveEmission(laser.goopColor);
+
+            transform.parent = ObjectsReference.Instance.gameSave.debrisContainer.transform;
+        }
+        
         public void DestroyIfUnreachable() {
             Invoke(nameof(DestroyMe), 60);
         }
@@ -63,21 +71,7 @@ namespace InGame.Items.ItemsBehaviours {
         private void DestroyMe() {
             if (isInSpace) Destroy(gameObject);
         }
-
-        public void Init(Laser laser) {
-            isInSpace = true;
-            DestroyIfUnreachable();
-
-            if (laser.bananaEffects.Contains(BananaEffect.ATTRACTION)) {
-                attractionPoint = laser.attractionPoint;
-                isAttracted = true;
-            }
-
-            ActiveEmission(laser.goopColor);
-
-            transform.parent = ObjectsReference.Instance.gameSave.spaceshipDebrisSave.spaceshipDebrisContainer.transform;
-        }
-
+        
         private void ActiveEmission(Color emissionColor) {
             _material = GetComponent<MeshRenderer>().materials[0];
 
@@ -94,12 +88,23 @@ namespace InGame.Items.ItemsBehaviours {
                 droppedGuid = spaceshipDebrisGuid,
                 spaceshipDebrisPosition = JsonHelper.FromVector3ToString(transform.position),
                 spaceshipDebrisRotation = JsonHelper.FromQuaternionToString(transform.rotation),
-                prefabIndex = spaceshipDebrisPrefabIndex,
-                characterType = characterType,
-                isInSpace = isInSpace
+                prefabIndex = prefabIndex,
+                spaceshipType = spaceshipType,
+                isInSpace = isInSpace,
+                bananaEffect = bananaEffect,
+                effectSourcePosition = JsonHelper.FromVector3ToString(effectSource)
             };
 
-            ObjectsReference.Instance.gameSave.spaceshipDebrisSave.AddSpaceshipDebrisToSpaceshipDebrisDictionnary(characterType, JsonConvert.SerializeObject(spaceshipDebrisData));
+            ObjectsReference.Instance.gameSave.spaceshipDebrisSave.AddSpaceshipDebrisToSpaceshipDebrisDictionnary(
+                spaceshipType, JsonConvert.SerializeObject(spaceshipDebrisData)
+            );
+        }
+        
+        private void OnCollisionEnter(Collision other) {
+            if (other.gameObject.layer == 0 & !isInSpace) {
+                _rigidbody.useGravity = false;
+                _rigidbody.isKinematic = true;
+            }
         }
     }
 }

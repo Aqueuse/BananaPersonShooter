@@ -28,8 +28,8 @@ namespace Settings {
         private UISettings uiSettings;
         private FullScreenMode _fullScreenMode;
         public Resolution[] resolutions;
-        
-        delegate void OnSettingsLoadedCompleted();
+
+        private delegate void OnSettingsLoadedCompleted();
         private event OnSettingsLoadedCompleted onSettingsLoadedCompleted;
         
         private IEnumerator Start() {
@@ -118,9 +118,9 @@ namespace Settings {
         public void ResetKeyboardBinding() {
             if (ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.OPTIONS].alpha < 1) return;
             
-            foreach (InputActionMap actionMap in inputActionAsset.actionMaps) {
+            foreach (var actionMap in inputActionAsset.actionMaps) {
                 foreach (var action in actionMap.actions) {
-                    for (int idBinding = 0;
+                    for (var idBinding = 0;
                          idBinding < action.bindings.Count; idBinding++)
                     {
                         Debug.Log($" groups: {action.bindings[idBinding].groups}");
@@ -138,11 +138,6 @@ namespace Settings {
                         }
                     }
                     
-                    var inputMatches = new InputBinding {
-                        groups = ""
-                    };
-                    
-                    //action.RemoveBindingOverride(inputMatches);
                     action.RemoveBindingOverride(new InputBinding());
                 }
             }
@@ -158,7 +153,7 @@ namespace Settings {
             
             if (ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.OPTIONS].alpha < 1) return;
             
-            foreach (InputActionMap actionMap in inputActionAsset.actionMaps) {
+            foreach (var actionMap in inputActionAsset.actionMaps) {
                 foreach (var action in actionMap.actions) {
                     var index = action.GetBindingIndex(group: "Gamepad");
                     if (index >= 0) action.RemoveBindingOverride(index);

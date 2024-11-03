@@ -29,13 +29,8 @@ MonoBehaviour:
   - attraction
   - "atracci\xF3n"
   bitKongValue: 50
-  effects:
-  - slow down time for 5 seconds
-  - ralenti le temps pendant 5 secondes
-  - ralentiza el tiempo durante 5 segundos
   sasiety: 5
-  damageTime: 0
   healthBonus: 1
   resistanceBonus: 1
-  bananaEffects: 00000000
+  bananaEffect: 2
   bananaColor: {r: 0.6901961, g: 0.7176471, b: 0.3921569, a: 1}

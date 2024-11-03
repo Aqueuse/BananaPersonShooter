@@ -2,14 +2,12 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace InGame.Items.ItemsData {
-    // use to manage monkeyMens in spaceships
     public class MonkeyMenData {
         public string uid;
         public string monkeyMenName;
         public CharacterType characterType;
 
-        public int prefabNumber;
-        public int clothColorsPreset;
+        public int appearanceScriptableObjectIndex;
         
         public bool isInSpaceship;
 

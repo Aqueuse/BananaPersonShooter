@@ -5,7 +5,7 @@ namespace InGame.MiniGames.SpaceTrafficControlMiniGame.projectiles {
         [SerializeField] private MeshRenderer projectileRenderer;
         public Transform attractionPoint;
 
-        public BananaEffect[] bananaEffects;
+        public BananaEffect bananaEffect;
         public Color goopColor;
         
         public void SetColor(Color color) {

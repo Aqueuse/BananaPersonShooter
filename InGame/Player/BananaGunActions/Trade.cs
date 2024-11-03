@@ -1,6 +1,5 @@
 using InGame.Items.ItemsData;
 using InGame.Items.ItemsProperties;
-using InGame.Monkeys;
 using UI.InGame.Merchimps;
 using UnityEngine;
 

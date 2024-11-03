@@ -18,9 +18,9 @@ namespace UI.InGame.MiniChimpBlock.Descriptions {
         [SerializeField] private OneItemSliderBlock _oneItemSliderBlock;
         [SerializeField] private ItemMultiSlidersBlock _multiSlidersBlock;
         [SerializeField] private ItemListBlock _itemListBlock;
-        
-        string GrowthStageLocalizedName;
-        string nextBananaRequestLocalizedName;
+
+        private string GrowthStageLocalizedName;
+        private string nextBananaRequestLocalizedName;
         private string marketValue;
         [CanBeNull] private string compositionName;
         

@@ -6,6 +6,8 @@ namespace InGame.Interactions.InteractionsActions {
             ObjectsReference.Instance.commandRoomControlPanelsManager.assembler.HideBananaGunInteractableGameObject();
             ObjectsReference.Instance.tutorial.FinishTutorial();
             
+            ObjectsReference.Instance.bananaGunActionsSwitch.SwitchToBananaGunMode(BananaGunMode.SCAN);
+            
             ObjectsReference.Instance.commandRoomControlPanelsManager.miniChimp.bubbleDialogue.SetBubbleDialogue(dialogueSet.PRO_TIP);
             ObjectsReference.Instance.commandRoomControlPanelsManager.miniChimp.bubbleDialogue.PlayDialogue();
         }

@@ -17,8 +17,6 @@ namespace InGame.MiniGames.SpaceTrafficControlMiniGame.Spaceships {
         public Laser _laser;
 
         private BananasPropertiesScriptableObject activeBanana;
-
-        public Transform attractionPointTransform;
         
         public void Rotate(float x, float y) {
             socleRotation.y = x;
@@ -38,13 +36,11 @@ namespace InGame.MiniGames.SpaceTrafficControlMiniGame.Spaceships {
         public void ShowLaser() {
             activeBanana = ObjectsReference.Instance.meshReferenceScriptableObject
                 .bananasPropertiesScriptableObjects[_laserType];
-
-            var bananaEffects = activeBanana.bananaEffects;
-
+            
             _laser.gameObject.SetActive(true);
-
+    
             _laser.SetColor(_laserColor);
-            _laser.bananaEffects = bananaEffects; 
+            _laser.bananaEffect = activeBanana.bananaEffect; 
             
             InvokeRepeating(nameof(ConsumeBanana), 0, 2);
         }
@@ -67,7 +63,7 @@ namespace InGame.MiniGames.SpaceTrafficControlMiniGame.Spaceships {
         public void SetProjectileType(BananasPropertiesScriptableObject bananaData) {
             activeBanana = bananaData;
             _laserType = bananaData.bananaType;
-            _laserColor = ObjectsReference.Instance.cannonsManager.GetColorByBananaEffects(bananaData.bananaEffects);
+            _laserColor = ObjectsReference.Instance.meshReferenceScriptableObject.bananaGoopColorByEffectType[bananaData.bananaEffect];
         }
 
         public void PositionneCamera(Transform cameraTransform) {

@@ -7,6 +7,8 @@ using UnityEngine.UI;
 
 namespace UI.InGame.Merchimps {
     public class UIMerchant : MonoBehaviour {
+        public MerchimpBehaviour merchimpBehaviour;
+        
         public UIMerchantSliderMenu buyUiMerchantSliderMenu;
         public UIMerchantSliderMenu sellUiMerchantSliderMenu;
 
@@ -30,10 +32,14 @@ namespace UI.InGame.Merchimps {
 
         [SerializeField] private Color activatedColor;
 
-        private MerchimpsManager merchimpsManager;
-
-        private void Start() {
-            merchimpsManager = ObjectsReference.Instance.chimpManager.merchimpsManager;
+        public void InitializeInventories(MonkeyMenData monkeyMenData) {
+            ObjectsReference.Instance.trade.monkeyMenData = monkeyMenData;
+            
+            merchantBuyUiIngredientsInventory.ingredientsInventory = monkeyMenData.ingredientsInventory;
+            merchantBuyUiManufacturedItemsInventory.manufacturedItemsInventory = monkeyMenData.manufacturedItemsInventory;
+            
+            RefreshMerchantInventories();
+            RefreshBitkongQuantities();
         }
 
         public void Switch_to_Sell_inventory() {
@@ -77,13 +83,13 @@ namespace UI.InGame.Merchimps {
             var slotItemScriptableObject = UnityEngine.EventSystems.EventSystem.current.currentSelectedGameObject.GetComponent<UInventorySlot>()
                 .itemScriptableObject;
 
-            merchimpsManager.activeItemScriptableObject = slotItemScriptableObject;
+            merchimpBehaviour.activeItemScriptableObject = slotItemScriptableObject;
 
             buyUiMerchantSliderMenu.gameObject.SetActive(true);
             sellUiMerchantSliderMenu.gameObject.SetActive(false);
 
             buyUiMerchantSliderMenu.SetCostValue(1);
-            buyUiMerchantSliderMenu.SetQuantitySliderMaxValue(merchimpsManager.GetMerchantItemQuantity(slotItemScriptableObject));
+            buyUiMerchantSliderMenu.SetQuantitySliderMaxValue(merchimpBehaviour.GetMerchantItemQuantity(slotItemScriptableObject));
         }
         
         // onclick show ui with options to sell (slider 1 to max)
@@ -91,13 +97,13 @@ namespace UI.InGame.Merchimps {
             var slotItemScriptableObject = UnityEngine.EventSystems.EventSystem.current.currentSelectedGameObject.GetComponent<UInventorySlot>()
                 .itemScriptableObject;
             
-            merchimpsManager.activeItemScriptableObject = slotItemScriptableObject;
+            merchimpBehaviour.activeItemScriptableObject = slotItemScriptableObject;
 
             sellUiMerchantSliderMenu.gameObject.SetActive(true);
             buyUiMerchantSliderMenu.gameObject.SetActive(false);
             
             sellUiMerchantSliderMenu.SetCostValue(1);
-            sellUiMerchantSliderMenu.SetQuantitySliderMaxValue(merchimpsManager.GetBananaManItemQuantity(slotItemScriptableObject));
+            sellUiMerchantSliderMenu.SetQuantitySliderMaxValue(merchimpBehaviour.GetBananaManItemQuantity(slotItemScriptableObject));
         }
 
         public void HideOptions() {
@@ -107,13 +113,6 @@ namespace UI.InGame.Merchimps {
 
         public bool IsInOptionsMenu() {
             return buyUiMerchantSliderMenu.isActiveAndEnabled || sellUiMerchantSliderMenu.isActiveAndEnabled;
-        }
-
-        public void InitializeInventories(MonkeyMenData monkeyMenData) {
-            ObjectsReference.Instance.trade.monkeyMenData = monkeyMenData;
-            
-            merchantBuyUiIngredientsInventory.ingredientsInventory = monkeyMenData.ingredientsInventory;
-            merchantBuyUiManufacturedItemsInventory.manufacturedItemsInventory = monkeyMenData.manufacturedItemsInventory;
         }
         
         public void RefreshMerchantInventories() {
@@ -155,19 +154,19 @@ namespace UI.InGame.Merchimps {
         }
         
         public void ValidateBuy() {
-            ObjectsReference.Instance.trade.Buy(merchimpsManager.activeItemScriptableObject);
+            ObjectsReference.Instance.trade.Buy(merchimpBehaviour.activeItemScriptableObject);
             buyUiMerchantSliderMenu.gameObject.SetActive(false);
             sellUiMerchantSliderMenu.gameObject.SetActive(false);
         }
 
         public void ValidateSell() {
-            ObjectsReference.Instance.trade.Sell(merchimpsManager.activeItemScriptableObject);
+            ObjectsReference.Instance.trade.Sell(merchimpBehaviour.activeItemScriptableObject);
             buyUiMerchantSliderMenu.gameObject.SetActive(false);
             sellUiMerchantSliderMenu.gameObject.SetActive(false);
         }
 
         public void RefreshBitkongQuantities() {
-            merchantBitKongQuantityTextMeshProUGUI.text = merchimpsManager.activeMerchimpBehaviour.monkeyMenBehaviour.monkeyMenData.bitKongQuantity + " BTK";
+            merchantBitKongQuantityTextMeshProUGUI.text = merchimpBehaviour.monkeyMenBehaviour.monkeyMenData.bitKongQuantity + " BTK";
             bananaManBitKongQuantityTextMeshProUGUI.text = ObjectsReference.Instance.bananaMan.bananaManData.bitKongQuantity + " BTK";
         }
     }

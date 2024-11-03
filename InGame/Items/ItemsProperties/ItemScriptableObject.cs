@@ -20,13 +20,13 @@ namespace InGame.Items.ItemsProperties {
         public int bitKongValue;
 
         public string GetName() {
-            int langageIndex = ObjectsReference.Instance.gameSettings.languageIndexSelected;
+            var langageIndex = ObjectsReference.Instance.gameSettings.languageIndexSelected;
 
             return itemName[langageIndex];
         }
 
         public string GetDescription() {
-            int langageIndex = ObjectsReference.Instance.gameSettings.languageIndexSelected;
+            var langageIndex = ObjectsReference.Instance.gameSettings.languageIndexSelected;
 
             return itemDescription[langageIndex];
         }

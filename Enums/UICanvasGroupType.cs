@@ -26,5 +26,6 @@ public enum UICanvasGroupType {
     MINI_CHIMP_BLOCK,
     BANANAPEDIA,
     HUD_MINICHIMP,
-    QUICK_ACCESS_BUTTONS
+    QUICK_ACCESS_BUTTONS,
+    MAP
 }

@@ -41,6 +41,7 @@ namespace InGame.Interactions {
 
             grabbableRigidbody = grabbedObject.GetComponent<Rigidbody>();
             grabbableRigidbody.useGravity = false;
+            grabbableRigidbody.isKinematic = false;
 
             grabbedObject.GetComponentInChildren<UInteraction>().Desactivate();
 

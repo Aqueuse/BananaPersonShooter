@@ -1,9 +1,12 @@
+using InGame.Monkeys.Merchimps;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace UI.InGame.Merchimps {
     public class UIMerchantSliderMenu : MonoBehaviour {
+        [SerializeField] private MerchimpBehaviour merchimpBehaviour;
+
         public Slider quantitySlider;
         [SerializeField] private TextMeshProUGUI maximumQuantityText;
         [SerializeField] private TextMeshProUGUI actualQuantityText;
@@ -26,12 +29,14 @@ namespace UI.InGame.Merchimps {
         }
         
         public void SetCostValue(float sliderValue) {
-            if (ObjectsReference.Instance.chimpManager.merchimpsManager.activeItemScriptableObject == null) return;
+            if (ObjectsReference.Instance.gameManager.gameContext == GameContext.IN_HOME) return;
+
+            if (merchimpBehaviour.activeItemScriptableObject == null) return;
             
             if (quantitySlider.maxValue > 1) actualQuantityText.text = ""+ (int)sliderValue;
             
             if (tradeContext == TradeContext.BUY) {
-                var bitkongValue = ObjectsReference.Instance.chimpManager.merchimpsManager.activeItemScriptableObject.bitKongValue;
+                var bitkongValue = merchimpBehaviour.activeItemScriptableObject.bitKongValue;
                 var bananaManMonneyQuantity = ObjectsReference.Instance.bananaMan.bananaManData.bitKongQuantity; 
                 
                 if (bananaManMonneyQuantity < bitkongValue * (int)sliderValue) {
@@ -52,7 +57,7 @@ namespace UI.InGame.Merchimps {
             }
 
             if (tradeContext == TradeContext.SELL) {
-                var bitkongValue = ObjectsReference.Instance.chimpManager.merchimpsManager.activeItemScriptableObject.bitKongValue;
+                var bitkongValue = merchimpBehaviour.activeItemScriptableObject.bitKongValue;
                 var merchantMonneyQuantity = ObjectsReference.Instance.trade.monkeyMenData.bitKongQuantity; 
 
                 if (merchantMonneyQuantity < bitkongValue * (int)sliderValue) {

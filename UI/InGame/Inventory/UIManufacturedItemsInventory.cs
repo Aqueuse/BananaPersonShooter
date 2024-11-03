@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using InGame.Items.ItemsProperties.Characters;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;

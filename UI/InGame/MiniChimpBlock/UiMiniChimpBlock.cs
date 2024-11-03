@@ -12,11 +12,7 @@ namespace UI.InGame.MiniChimpBlock {
 
             SetActive(minichimpCanvasGroupsByBlockTabType[miniChimpBlockTabType], true);
             
-            if (miniChimpBlockTabType == MiniChimpBlockTabType.MINICHIMPBLOCK_MAP) {
-                ObjectsReference.Instance.inputManager.SwitchContext(InputContext.MAP);
-            }
-
-            else {
+            if (miniChimpBlockTabType == MiniChimpBlockTabType.MINICHIMPBLOCK_DIALOGUE) {
                 ObjectsReference.Instance.inputManager.SwitchContext(InputContext.MINICHIMP_VIEW);
             }
         }

@@ -18,6 +18,8 @@ namespace UI.InGame.Inventory {
 
         public void RefreshUInventory() {
             foreach (var inventoryItem in uInventorySlots) {
+                Debug.Log(ingredientsInventory[inventoryItem.Key]);
+                
                 inventoryItem.Value.GetComponent<UInventorySlot>()
                     .SetQuantity(ingredientsInventory[inventoryItem.Key]);
             }

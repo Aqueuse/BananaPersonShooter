@@ -32,7 +32,7 @@ namespace Save {
             buildablesDataDictionaryByBuildableType.Clear();
         
             foreach (var buildableList in buildablesDictionnary) {
-                BuildableType buildableType = Enum.Parse<BuildableType>(buildableList.Key);
+                var buildableType = Enum.Parse<BuildableType>(buildableList.Key);
 
                 foreach (var buildable in buildableList.Value) {
                     if (buildablesDataDictionaryByBuildableType.ContainsKey(buildableType)) {

@@ -6,8 +6,6 @@ using Random = UnityEngine.Random;
 
 namespace InGame.MiniGames.SpaceTrafficControlMiniGame.Spaceships {
     public class SpaceshipsSpawner : MonoBehaviour {
-        [SerializeField] private Transform spaceshipsContainer;
-
         private AdCampaign adCampaign;
 
         private Vector3 spaceshipPosition;
@@ -31,7 +29,6 @@ namespace InGame.MiniGames.SpaceTrafficControlMiniGame.Spaceships {
             spacechipsQueue = new Queue<CharacterType>();
             
             adCampaign = ObjectsReference.Instance.adMarketingCampaignManager.adCampaign;
-
         }
         
         public void SpawnSpaceshipsWithAdCampaign() {
@@ -69,9 +66,10 @@ namespace InGame.MiniGames.SpaceTrafficControlMiniGame.Spaceships {
             arrivalPoint = (spaceshipSpawnerPosition - entryPoint).normalized * 4000;
             arrivalPoint.y = 2631f;
 
-            var spaceshipType = spacechipsQueue.Dequeue();
+            var characterType = spacechipsQueue.Dequeue();
+            
             var spaceship = Instantiate(
-                ObjectsReference.Instance.meshReferenceScriptableObject.spaceshipByCharacterType[spaceshipType],
+                ObjectsReference.Instance.meshReferenceScriptableObject.GetRandomSpaceship(),
                 entryPoint,
                 Quaternion.identity,
                 null);
@@ -79,6 +77,8 @@ namespace InGame.MiniGames.SpaceTrafficControlMiniGame.Spaceships {
             spaceship.transform.rotation = Quaternion.Euler((transform.position - entryPoint).normalized); 
 
             spaceshipBehaviourInstance = spaceship.GetComponent<SpaceshipBehaviour>();
+
+            spaceshipBehaviourInstance.characterType = characterType;
             
             spaceshipBehaviourInstance.GenerateSpaceshipData();
             spaceshipBehaviourInstance.arrivalPosition = arrivalPoint;
@@ -87,27 +87,27 @@ namespace InGame.MiniGames.SpaceTrafficControlMiniGame.Spaceships {
 
             spaceshipBehaviourInstance.OpenCommunications();
         }
-        
+
         private List<CharacterType> ShuffleSpaceships(int pirateSpaceshipsQuantity, int visitorsSpaceshipsQuantity, int merchantsSpaceshipsQuantity) {
             spaceships.Clear();
 
-            for (int i = 0; i < pirateSpaceshipsQuantity; i++) {
+            for (var i = 0; i < pirateSpaceshipsQuantity; i++) {
                 spaceships.Add(CharacterType.PIRATE);
             }
 
-            for (int i = 0; i < visitorsSpaceshipsQuantity; i++) {
+            for (var i = 0; i < visitorsSpaceshipsQuantity; i++) {
                 spaceships.Add(CharacterType.TOURIST);
             }
 
-            for (int i = 0; i < merchantsSpaceshipsQuantity; i++) {
+            for (var i = 0; i < merchantsSpaceshipsQuantity; i++) {
                 spaceships.Add(CharacterType.MERCHIMP);
             }
 
-            int listCount = spaceships.Count;
+            var listCount = spaceships.Count;
 
             while (listCount > 1) {
                 listCount--;
-                int nextRandomIndex = systemRandom.Next(listCount + 1);
+                var nextRandomIndex = systemRandom.Next(listCount + 1);
                 (spaceships[nextRandomIndex], spaceships[listCount]) = (spaceships[listCount], spaceships[nextRandomIndex]);
             }
 

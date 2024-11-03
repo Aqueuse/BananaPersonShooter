@@ -6,9 +6,9 @@ namespace Save.Templates {
         public string uid;
         public string name;
         public CharacterType characterType;
-
-        public int prefabNumber;
-        public int clothColorsPreset;
+        
+        public MonkeyMenType monkeyMenType;
+        public int appearanceScriptableObjectIndex;
 
         public bool isInSpaceship;
         

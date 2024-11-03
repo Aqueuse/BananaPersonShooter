@@ -29,13 +29,8 @@ MonoBehaviour:
   - "r\xE9pulsion"
   - "repulsi\xF3n"
   bitKongValue: 50
-  effects:
-  - More nourishing, more resistance
-  - "Plus nourrissante, plus de r\xE9sistance"
-  - "M\xE1s nutritiva, m\xE1s resistencia"
   sasiety: 5
-  damageTime: 0
   healthBonus: 1
   resistanceBonus: 2
-  bananaEffects: 01000000
+  bananaEffect: 2
   bananaColor: {r: 0.63529414, g: 0.74509805, b: 0.25490198, a: 1}

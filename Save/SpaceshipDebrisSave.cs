@@ -9,17 +9,21 @@ using UnityEngine;
 
 namespace Save {
     public class SpaceshipDebrisSave : MonoBehaviour {
-        public GameObject spaceshipDebrisContainer;
-    
         private string _savePath;
+        private Transform debrisContainer;
 
         private GameObject spaceshipDebrisToSpawn;
         private GameObject spaceshipDebrisInstance;
+        private SpaceshipDebrisBehaviour spaceshipDebrisBehaviourInstance;
 
-        public GenericDictionary<CharacterType, List<string>> spaceshipDebrisDataDictionnaryByCharacterType;
+        public GenericDictionary<SpaceshipType, List<string>> spaceshipDebrisDataDictionnaryBySpaceshipType;
 
         private string[] _buildablesDatas;
-        
+
+        private void Start() {
+            debrisContainer = ObjectsReference.Instance.gameSave.debrisContainer;
+        }
+
         public void LoadSpaceshipDebrisDataByUuid(string saveUuid) {
             _savePath = Path.Combine(ObjectsReference.Instance.gameSave._savesPath, saveUuid);
             var saveMapDatasPath = Path.Combine(_savePath, "WORLD_DATA");
@@ -28,21 +32,21 @@ namespace Save {
 
             if (!File.Exists(loadfilePath)) return;
             
-            spaceshipDebrisDataDictionnaryByCharacterType.Clear();
+            spaceshipDebrisDataDictionnaryBySpaceshipType.Clear();
             
             var json = File.ReadAllText(loadfilePath);
 
             var spaceshipDebrisDictionnary = JsonConvert.DeserializeObject<Dictionary<string, List<string>>>(json);
 
             foreach (var spaceshipDebrisList in spaceshipDebrisDictionnary) {
-                CharacterType characterType = Enum.Parse<CharacterType>(spaceshipDebrisList.Key);
+                var spaceshipType = Enum.Parse<SpaceshipType>(spaceshipDebrisList.Key);
 
                 foreach (var spaceshipDebris in spaceshipDebrisList.Value) {
-                    if (spaceshipDebrisDataDictionnaryByCharacterType.ContainsKey(characterType)) {
-                        spaceshipDebrisDataDictionnaryByCharacterType[characterType].Add(spaceshipDebris);
+                    if (spaceshipDebrisDataDictionnaryBySpaceshipType.ContainsKey(spaceshipType)) {
+                        spaceshipDebrisDataDictionnaryBySpaceshipType[spaceshipType].Add(spaceshipDebris);
                     }
                     else {
-                        spaceshipDebrisDataDictionnaryByCharacterType.Add(characterType, new List<string>{ spaceshipDebris });
+                        spaceshipDebrisDataDictionnaryBySpaceshipType.Add(spaceshipType, new List<string>{ spaceshipDebris });
                     }
                 }
             }
@@ -58,71 +62,73 @@ namespace Save {
         
             var spaceshipDebrisBehaviours = FindObjectsByType<SpaceshipDebrisBehaviour>(FindObjectsSortMode.None);
 
-            spaceshipDebrisDataDictionnaryByCharacterType.Clear();
+            spaceshipDebrisDataDictionnaryBySpaceshipType.Clear();
             
             foreach (var spaceshipDebrisBehaviour in spaceshipDebrisBehaviours) {
                 spaceshipDebrisBehaviour.GenerateSpaceshipDebrisData();
             }
 
-            var spaceshipDebrisToSave = spaceshipDebrisDataDictionnaryByCharacterType;
+            var spaceshipDebrisToSave = spaceshipDebrisDataDictionnaryBySpaceshipType;
 
             var json = JsonConvert.SerializeObject(spaceshipDebrisToSave);
             File.WriteAllText(savefilePath, json);
         }
     
-        public void AddSpaceshipDebrisToSpaceshipDebrisDictionnary(CharacterType characterType, string spaceshipDebrisData) {
-            if (spaceshipDebrisDataDictionnaryByCharacterType.ContainsKey(characterType)) {
-                spaceshipDebrisDataDictionnaryByCharacterType[characterType].Add(spaceshipDebrisData);
+        public void AddSpaceshipDebrisToSpaceshipDebrisDictionnary(SpaceshipType spaceshipType, string spaceshipDebrisData) {
+            if (spaceshipDebrisDataDictionnaryBySpaceshipType.ContainsKey(spaceshipType)) {
+                spaceshipDebrisDataDictionnaryBySpaceshipType[spaceshipType].Add(spaceshipDebrisData);
             }
             else {
-                spaceshipDebrisDataDictionnaryByCharacterType.Add(characterType, new List<string>{ spaceshipDebrisData });
+                spaceshipDebrisDataDictionnaryBySpaceshipType.Add(spaceshipType, new List<string>{ spaceshipDebrisData });
             }
         }
     
         private void RespawnSpaceshipDebrisOnWorld() {
-            DestroyImmediate(spaceshipDebrisContainer);
-
-            spaceshipDebrisContainer = new GameObject("Spaceship Debris container") {
-                transform = {
-                    parent = transform.parent
-                }
-            };
-
-            foreach (var spaceshipDebrisToInstantiate in spaceshipDebrisDataDictionnaryByCharacterType) {
+            
+            foreach (var spaceshipDebrisToInstantiate in spaceshipDebrisDataDictionnaryBySpaceshipType) {
                 foreach (var spaceshipDebrisString in spaceshipDebrisToInstantiate.Value) {
                     var spaceshipDebrisData = JsonConvert.DeserializeObject<SpaceshipDebrisData>(spaceshipDebrisString);
 
-                    spaceshipDebrisToSpawn = ObjectsReference.Instance.debrisPoolByCharacterType[spaceshipDebrisToInstantiate.Key].GetPooledDebris(spaceshipDebrisData.prefabIndex);
+                    spaceshipDebrisToSpawn = 
+                        ObjectsReference.Instance.meshReferenceScriptableObject.spaceshipDebrisBySpaceshipType
+                            [spaceshipDebrisData.spaceshipType]
+                            [spaceshipDebrisData.prefabIndex];
 
-                    spaceshipDebrisInstance = Instantiate(spaceshipDebrisToSpawn, spaceshipDebrisContainer.transform, true);
-
-                    spaceshipDebrisInstance.transform.position = JsonHelper.FromStringToVector3(spaceshipDebrisData.spaceshipDebrisPosition);
-                    spaceshipDebrisInstance.transform.rotation = JsonHelper.FromStringToQuaternion(spaceshipDebrisData.spaceshipDebrisRotation);
-
-                    var spaceshipDebrisBehaviour = spaceshipDebrisInstance.GetComponent<SpaceshipDebrisBehaviour>();
+                    spaceshipDebrisInstance = Instantiate(
+                        spaceshipDebrisToSpawn, 
+                        JsonHelper.FromStringToVector3(spaceshipDebrisData.spaceshipDebrisPosition),
+                        JsonHelper.FromStringToQuaternion(spaceshipDebrisData.spaceshipDebrisRotation),
+                        debrisContainer
+                    );
+                    
+                    spaceshipDebrisBehaviourInstance = spaceshipDebrisInstance.GetComponent<SpaceshipDebrisBehaviour>();
                 
-                    spaceshipDebrisBehaviour.spaceshipDebrisPrefabIndex = spaceshipDebrisData.prefabIndex;
-                    spaceshipDebrisBehaviour.characterType = spaceshipDebrisToInstantiate.Key;
-                    spaceshipDebrisBehaviour.isInSpace = spaceshipDebrisData.isInSpace;
+                    spaceshipDebrisBehaviourInstance.prefabIndex = spaceshipDebrisData.prefabIndex;
+                    spaceshipDebrisBehaviourInstance.spaceshipType = spaceshipDebrisData.spaceshipType;
+                    spaceshipDebrisBehaviourInstance.isInSpace = spaceshipDebrisData.isInSpace;
+                    spaceshipDebrisBehaviourInstance.bananaEffect = spaceshipDebrisData.bananaEffect;
+                    spaceshipDebrisBehaviourInstance.effectSource =
+                        JsonHelper.FromStringToVector3(spaceshipDebrisData.effectSourcePosition);
 
-                    if (spaceshipDebrisBehaviour.isInSpace) {
+                    if (spaceshipDebrisBehaviourInstance.isInSpace) {
                         var spaceshipDebrisRigidbody = spaceshipDebrisInstance.AddComponent<Rigidbody>();
                         spaceshipDebrisRigidbody.useGravity = false;
-                
                         spaceshipDebrisRigidbody.AddExplosionForce(10f, transform.position, 10f);
                         spaceshipDebrisRigidbody.AddTorque(spaceshipDebrisInstance.transform.position, ForceMode.Impulse);
-                        spaceshipDebrisBehaviour.isInSpace = true;
-                        spaceshipDebrisBehaviour.DestroyIfUnreachable();
+                        
+                        spaceshipDebrisBehaviourInstance.DestroyIfUnreachable();
                     }
                 }
             }
         }
 
         public void SpawnInitialSpaceshipDebris() {
-            spaceshipDebrisInstance = Instantiate(ObjectsReference.Instance.worldData.initialSpaceshipDebrisOnWorld, spaceshipDebrisContainer.transform, true);
-            
-            spaceshipDebrisInstance.transform.position = spaceshipDebrisContainer.transform.position;
-            spaceshipDebrisInstance.transform.rotation = spaceshipDebrisContainer.transform.rotation;
+            Instantiate(
+                ObjectsReference.Instance.worldData.initialSpaceshipDebrisOnWorld,
+                debrisContainer.transform.position,
+                debrisContainer.transform.rotation,
+                debrisContainer
+            );
         }
     }
 }

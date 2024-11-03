@@ -29,13 +29,8 @@ MonoBehaviour:
   - attraction
   - "atracci\xF3n"
   bitKongValue: 50
-  effects:
-  - Throw two bananas in a horizontal line
-  - Lance deux bananes sur une ligne horizontale
-  - "Lanza dos pl\xE1tanos en una l\xEDnea horizontal"
   sasiety: 5
-  damageTime: 0
   healthBonus: 1
   resistanceBonus: 1
-  bananaEffects: 00000000
+  bananaEffect: 1
   bananaColor: {r: 0.9056604, g: 0.6144464, b: 0.19138479, a: 1}

@@ -25,17 +25,12 @@ MonoBehaviour:
   - barangan
   itemSprite: {fileID: 21300000, guid: 25083ab756e238a4b92f2ff93e10b504, type: 3}
   itemDescription:
-  - attraction + repulsion
-  - "attraction + r\xE9pulsion"
-  - "atracci\xF3n + repulsi\xF3n"
+  - attraction
+  - attraction
+  - "atracci\xF3n"
   bitKongValue: 50
-  effects:
-  - aphrodisiac grenade, attracts monkeys during a few seconds
-  - Grenade aphrodisiaque, attire les singes pendant quelques secondes
-  - "Granada afrodis\xEDaca, atrae a los monos durante unos segundos"
   sasiety: 5
-  damageTime: 0
   healthBonus: 0.5
   resistanceBonus: 1
-  bananaEffects: 0000000003000000
+  bananaEffect: 1
   bananaColor: {r: 0.5686275, g: 0.24313727, b: 0.19215688, a: 1}

@@ -2,8 +2,8 @@ using UnityEngine;
 
 namespace InGame.MiniGames.SpaceTrafficControlMiniGame.Spaceships {
     public class Bezier {
-        private Vector3[] points;
-        private int count;
+        private readonly Vector3[] points;
+        private readonly int count;
 
         public Bezier(Vector3[] points, int count = 50) {
             this.points = points;
@@ -11,12 +11,12 @@ namespace InGame.MiniGames.SpaceTrafficControlMiniGame.Spaceships {
         }
 
         public Vector3[] Generate() {
-            Vector3[] newPoints = new Vector3[count];
+            var newPoints = new Vector3[count];
 
-            float step = 1f / (count - 1);
+            var step = 1f / (count - 1);
 
-            for (int i = 0; i < count; i++) {
-                float t = step * i;
+            for (var i = 0; i < count; i++) {
+                var t = step * i;
                 newPoints[i] = CalculateBezierPoint(t, points);
             }
 
@@ -27,9 +27,9 @@ namespace InGame.MiniGames.SpaceTrafficControlMiniGame.Spaceships {
             if (points.Length == 2)
                 return Vector3.Lerp(points[0], points[1], t);
             
-            Vector3[] newPoints = new Vector3[points.Length - 1];
+            var newPoints = new Vector3[points.Length - 1];
 
-            for (int i = 0; i < points.Length - 1; i++) {
+            for (var i = 0; i < points.Length - 1; i++) {
                 newPoints[i] = Vector3.Lerp(points[i], points[i + 1], t);
             }
 

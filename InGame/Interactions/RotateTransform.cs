@@ -13,7 +13,7 @@ namespace InGame.Interactions {
             Invoke(nameof(DestroyMe), 1.5f);
         }
 
-        void Update() {
+        private void Update() {
             rotationEuler.z -= Time.deltaTime * _speed;
             if (rotationEuler.z < -360) rotationEuler.z = 0;
             

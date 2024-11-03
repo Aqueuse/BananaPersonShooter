@@ -1,7 +1,7 @@
 using UnityEngine;
 
 namespace InGame {
-    public class Map : MonoBehaviour {
+    public class MiniMap : MonoBehaviour {
         [SerializeField] private Camera miniMapCamera;
         [SerializeField] private Transform miniMapCameraTransform;
         

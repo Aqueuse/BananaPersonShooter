@@ -29,13 +29,8 @@ MonoBehaviour:
   - "r\xE9pulsion"
   - "repulsi\xF3n"
   bitKongValue: 50
-  effects:
-  - explodes then splits into 10 bananas which in turn explode
-  - "explose puis se divise en 10 bananes qui explosent \xE0 leur tour"
-  - "explota y luego se divide en 10 pl\xE1tanos que a su vez explotan"
   sasiety: 5
-  damageTime: 0
   healthBonus: 1
   resistanceBonus: 1
-  bananaEffects: 01000000
+  bananaEffect: 2
   bananaColor: {r: 0.4039216, g: 0.627451, b: 0.29803923, a: 1}

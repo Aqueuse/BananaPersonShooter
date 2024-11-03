@@ -24,7 +24,7 @@ namespace InGame.Items.ItemsBehaviours.BuildablesBehaviours {
         }
 
         public override void GenerateSaveData() {
-            PortalData basicData = new PortalData {
+            var basicData = new PortalData {
                 buildableGuid = buildableGuid,
                 buildableType = buildableType,
                 isBreaked = isBreaked,
@@ -36,7 +36,7 @@ namespace InGame.Items.ItemsBehaviours.BuildablesBehaviours {
         }
 
         public override void LoadSavedData(string stringifiedJson) {
-            PortalData portalData = JsonConvert.DeserializeObject<PortalData>(stringifiedJson);
+            var portalData = JsonConvert.DeserializeObject<PortalData>(stringifiedJson);
 
             buildableGuid = portalData.buildableGuid;
             buildableType = portalData.buildableType;

@@ -84,19 +84,7 @@ namespace InGame.Monkeys {
         private void SetColors() {
             var monkeyMenMaterial = meshRenderer.material;
 
-            if (monkeyMenSavedData.characterType == CharacterType.TOURIST) {
-                colorPreset = ObjectsReference.Instance.meshReferenceScriptableObject.visitorsColorsSets[monkeyMenSavedData.clothColorsPreset].colorSet;
-            }
-
-            // ReSharper disable once ConvertIfStatementToConditionalTernaryExpression
-            // because more readable than a ternary here
-            if (monkeyMenSavedData.characterType == CharacterType.MERCHIMP) {
-                colorPreset = ObjectsReference.Instance.meshReferenceScriptableObject.merchantsColorsSets[monkeyMenSavedData.clothColorsPreset].colorSet;
-            }
-
-            else {
-                colorPreset = ObjectsReference.Instance.meshReferenceScriptableObject.colorSetByCharacterType[monkeyMenSavedData.characterType];
-            }
+            colorPreset = ObjectsReference.Instance.meshReferenceScriptableObject.chimpMensAppearanceScriptableObjects[monkeyMenData.appearanceScriptableObjectIndex].colorSets;
             
             monkeyMenMaterial.SetColor(color00, colorPreset[0]);
             monkeyMenMaterial.SetColor(color01, colorPreset[1]);
@@ -114,7 +102,7 @@ namespace InGame.Monkeys {
         public void GenerateSavedData() {
             var sortedNeedsArray = monkeyMenData.needs.AsEnumerable().ToArray();
 
-            Dictionary<NeedType, int> sortedNeedsDictionnary = new Dictionary<NeedType, int>(); 
+            var sortedNeedsDictionnary = new Dictionary<NeedType, int>(); 
 
             foreach (var need in sortedNeedsArray) {
                 sortedNeedsDictionnary.Add(need.Key, need.Value);
@@ -130,8 +118,7 @@ namespace InGame.Monkeys {
                 bitKongQuantity = monkeyMenData.bitKongQuantity,
                 uid = monkeyMenData.uid,
                 name = monkeyMenData.monkeyMenName,
-                prefabNumber = monkeyMenData.prefabNumber,
-                clothColorsPreset = monkeyMenData.clothColorsPreset,
+                appearanceScriptableObjectIndex = monkeyMenData.appearanceScriptableObjectIndex,
                 isInSpaceship = monkeyMenData.isInSpaceship,
                 touristState = monkeyMenData.touristState,
                 destination = JsonHelper.FromVector3ToString(monkeyMenData.destination),

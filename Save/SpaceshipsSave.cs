@@ -24,14 +24,16 @@ namespace Save {
             var spaceshipsList = JsonConvert.DeserializeObject<List<SpaceshipSavedData>>(spaceshipsDataString);
 
             foreach (var spaceship in spaceshipsList) {
-                var spaceshipInstance = Instantiate(ObjectsReference.Instance.meshReferenceScriptableObject.spaceshipByCharacterType[spaceship.characterType]);
+                var spaceshipInstance = Instantiate(
+                    ObjectsReference.Instance.meshReferenceScriptableObject.spaceshipPrefabBySpaceshipType[spaceship.spaceshipType],
+                    JsonHelper.FromStringToVector3(spaceship.spaceshipPosition),
+                    JsonHelper.FromStringToQuaternion(spaceship.spaceshipRotation),
+                    ObjectsReference.Instance.gameSave.spaceshipsContainer
+                );
             
                 spaceshipBehaviourInstance = spaceshipInstance.GetComponent<SpaceshipBehaviour>();
                 spaceshipBehaviourInstance.spaceshipSavedData = spaceship;
-            
-                spaceshipBehaviourInstance.transform.position = JsonHelper.FromStringToVector3(spaceship.spaceshipPosition);
-                spaceshipBehaviourInstance.transform.rotation = JsonHelper.FromStringToQuaternion(spaceship.spaceshipRotation);
-            
+                
                 spaceshipBehaviourInstance.spaceshipName = spaceship.spaceshipName;
                 spaceshipBehaviourInstance.spaceshipGuid = spaceship.spaceshipGuid;
             
@@ -39,6 +41,7 @@ namespace Save {
                 spaceshipBehaviourInstance.spaceshipUIcolor = JsonHelper.FromStringToColor(spaceship.uiColor);
                 
                 spaceshipBehaviourInstance.travelState = spaceship.travelState;
+                spaceshipBehaviourInstance.characterType = spaceship.characterType;
             
                 spaceshipBehaviourInstance.arrivalPosition = JsonHelper.FromStringToVector3(spaceship.arrivalPoint);
                 spaceshipBehaviourInstance.assignatedHangar = spaceship.hangarNumber;
@@ -82,7 +85,7 @@ namespace Save {
             _savePath = Path.Combine(ObjectsReference.Instance.gameSave._savesPath, saveUuid);
             var mapDataSavesPath = Path.Combine(_savePath, "WORLD_DATA");
 
-            List<SpaceshipSavedData> jsonSpaceshipsSaved = new List<SpaceshipSavedData>();
+            var jsonSpaceshipsSaved = new List<SpaceshipSavedData>();
 
             foreach (var spaceshipsBehaviour in ObjectsReference.Instance.spaceTrafficControlManager.spaceshipBehavioursByGuid) {
                 if (spaceshipsBehaviour.Value == null) continue;

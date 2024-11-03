@@ -1,6 +1,7 @@
 using Cinemachine;
 using UnityEngine;
 using UnityEngine.Video;
+using VFX;
 
 namespace InGame {
     public class Cinematiques : MonoBehaviour {
@@ -81,7 +82,12 @@ namespace InGame {
             ObjectsReference.Instance.bananaMan.GetComponent<Rigidbody>().isKinematic = false;
 
             if (cinematiqueType == CinematiqueType.NEW_GAME) {
-                ObjectsReference.Instance.teleportation.TeleportDown();
+                Instantiate(
+                    ObjectsReference.Instance.meshReferenceScriptableObject.teleportDownVFXPrefab,
+                    ObjectsReference.Instance.bananaMan.transform,
+                    false
+                );
+                
                 ObjectsReference.Instance.audioManager.StopAudioSource(AudioSourcesType.MUSIC);
                 ObjectsReference.Instance.audioManager.PlayAmbiance(AmbianceType.DRONE_COMMANDROOM);
             }
@@ -90,7 +96,7 @@ namespace InGame {
             }
         }
 
-        void EndReached(VideoPlayer videoPlayer) {
+        private void EndReached(VideoPlayer videoPlayer) {
             Skip();
         }
 

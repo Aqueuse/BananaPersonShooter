@@ -7,12 +7,12 @@ namespace KeyboardInputs {
         [SerializeField] private InputActionReference dragMoveActionReference;
         [SerializeField] private InputActionReference deltaMouseActionReference;
 
-        private Map map;
+        private MiniMap _miniMap;
 
         private bool isDragging;
 
         private void Start() {
-            map = ObjectsReference.Instance.map;
+            _miniMap = ObjectsReference.Instance.miniMap;
         }
 
         private void OnEnable() {
@@ -47,7 +47,7 @@ namespace KeyboardInputs {
             var movement2D = callbackContext.ReadValue<Vector2>();
             var movement = new Vector3(-movement2D.x, 0, -movement2D.y); 
         
-            map.Move(movement);
+            _miniMap.Move(movement);
         }
     }
 }

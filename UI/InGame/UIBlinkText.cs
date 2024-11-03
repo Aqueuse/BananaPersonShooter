@@ -14,7 +14,7 @@ namespace UI.InGame {
             InvokeRepeating(nameof(Blink), 0, 0.4f);
         }
 
-        void Blink() {
+        private void Blink() {
             if (_isVisible) {
                 _textMeshProUGUI.alpha = 0;
                 _isVisible = false;

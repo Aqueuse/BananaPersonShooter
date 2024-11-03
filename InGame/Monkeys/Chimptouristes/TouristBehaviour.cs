@@ -39,7 +39,7 @@ namespace InGame.Monkeys.Chimptouristes {
 
             _navMeshAgent.velocity = new Vector3(1, 1, 1);
             
-            monkeyMenBehaviour.monkeyMenData.destination = ObjectsReference.Instance.chimpManager.waitingSpot.position;
+            monkeyMenBehaviour.monkeyMenData.destination = ObjectsReference.Instance.gameManager.spawnPointsBySpawnType[SpawnPoint.TP_HANGARS].position;
             _navMeshAgent.SetDestination(monkeyMenBehaviour.monkeyMenData.destination);
         }
 

@@ -8,9 +8,5 @@ namespace UI.InGame.CommandRoomControlPanels {
         public void ShowCommunication() {
             ObjectsReference.Instance.uiSpaceTrafficControlPanel.ShowCommunicationMessage(associatedSpaceshipBehaviour);
         }
-
-        private void OnDestroy() {
-            ObjectsReference.Instance.uiSpaceTrafficControlPanel.RefreshCommunicationButton();
-        }
     }
 }

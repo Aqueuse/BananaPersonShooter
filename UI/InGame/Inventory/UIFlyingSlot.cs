@@ -32,7 +32,7 @@ namespace UI.InGame.Inventory {
 
             RectTransformUtility.ScreenPointToWorldPointInRectangle(
                 GetComponent<RectTransform>(),
-                UnityEngine.Input.mousePosition,
+                Input.mousePosition,
                 null,
                 out position);
 

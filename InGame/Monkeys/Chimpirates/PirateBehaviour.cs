@@ -37,6 +37,9 @@ namespace InGame.Monkeys.Chimpirates {
             _navMeshAgent = GetComponent<NavMeshAgent>();
             _animator = GetComponent<Animator>();
             monkeyMenBehaviour = GetComponent<MonkeyMenBehaviour>();
+            
+            monkeyMenBehaviour.destination = ObjectsReference.Instance.gameManager
+                .spawnPointsBySpawnType[SpawnPoint.TP_HANGARS].position;
         }
 
         private void Update() {
@@ -50,10 +53,7 @@ namespace InGame.Monkeys.Chimpirates {
                 _navMeshAgent.SetDestination(monkeyMenBehaviour.destination);
 
                 if (distanceToDestination < 0.1f) {
-                    _navMeshAgent.Warp(ObjectsReference.Instance.gameManager.spawnPointsBySpawnType[SpawnPoint.TP_HANGARS].position);
-                    searchTimer = 1000;
-                    pirateState = PirateState.SEARCH_THING_TO_BREAK;
-                    monkeyMenBehaviour.searchBuildableToBreak.enabled = true;
+                    _navMeshAgent.Warp(ObjectsReference.Instance.gameManager.spawnPointsBySpawnType[SpawnPoint.TP_COROLLE].position);
                 }
             }
 
@@ -138,6 +138,12 @@ namespace InGame.Monkeys.Chimpirates {
                 }
             }
         }
+
+        public void StartPiracy() {
+            searchTimer = 1000;
+            pirateState = PirateState.SEARCH_THING_TO_BREAK;
+            monkeyMenBehaviour.searchBuildableToBreak.enabled = true;
+        }
         
         // Banana ! Σ(っ °Д °;)っ
         public void Flee() {
@@ -159,7 +165,7 @@ namespace InGame.Monkeys.Chimpirates {
             
             // lâche quelques trucs dans l'inventaire s'il y en a encore
             foreach (var itemInInventory in monkeyMenBehaviour.monkeyMenData.droppedInventory) {
-                for (int i = 0; i < itemInInventory.Value; i++) {
+                for (var i = 0; i < itemInInventory.Value; i++) {
                     distanceToDropFromCenter += Random.Range(0.1f, 0.5f);
                     var spawnPosition = explositionCenterPosition + Random.insideUnitSphere * distanceToDropFromCenter;
                     if (spawnPosition.y < 1) spawnPosition.y = 1;

@@ -29,13 +29,8 @@ MonoBehaviour:
   - attraction
   - "atracci\xF3n"
   bitKongValue: 50
-  effects:
-  - come back to the thrower if it doesn't hit
-  - reviens vers le lanceur si elle ne touche pas
-  - vuelve al lanzador si no acierta
   sasiety: 5
-  damageTime: 0
   healthBonus: 1
   resistanceBonus: 1
-  bananaEffects: 00000000
+  bananaEffect: 1
   bananaColor: {r: 0.764151, g: 0.51445174, b: 0.19752577, a: 1}

@@ -66,6 +66,9 @@ MonoBehaviour:
     - key: 7
       value: {fileID: 8400163770358360760, guid: ca6d579fa2b78d24591bc9ce5e889192, type: 3}
     keyCollision: 0
+  meteoritePrefabByMeteoriteType:
+    list: []
+    keyCollision: 0
   buildablePropertiesScriptableObjects:
     list:
     - key: 0
@@ -142,18 +145,79 @@ MonoBehaviour:
     - key: 16
       value: {fileID: 11400000, guid: 61e0d2a93b2f9a241a901e776267942d, type: 2}
     keyCollision: 0
-  chimpmensPrefab:
-  - {fileID: 3712416262764098679, guid: 3c9fe1e6c7d8e104ea042cf69c432d8e, type: 3}
-  merchantPrefab: {fileID: 282714179863224523, guid: 941112cb9e37a7940bddda55e7fb855b, type: 3}
-  bananaGoopColorByEffectType:
+  chimpmenPrefabByChimpmenType:
     list:
     - key: 0
-      value: {r: 0.9803922, g: 0.96470594, b: 0.25882354, a: 1}
+      value: {fileID: 3712416262764098679, guid: 3c9fe1e6c7d8e104ea042cf69c432d8e, type: 3}
+    keyCollision: 0
+  spaceshipPrefabBySpaceshipType:
+    list:
+    - key: 0
+      value: {fileID: 3130493684847243953, guid: 8034d6588465f16419ae3bff0df27b56, type: 3}
     - key: 1
-      value: {r: 0, g: 1, b: 0.41192412, a: 1}
+      value: {fileID: 5412144042267844009, guid: 3450b953875c9b443a1171ec3c9cddda, type: 3}
     - key: 2
-      value: {r: 0, g: 0.8379564, b: 1, a: 1}
+      value: {fileID: 1194056045921623992, guid: bda34a3582fc0e24682811d6da24c7ea, type: 3}
+    keyCollision: 0
+  spaceshipDebrisBySpaceshipType:
+    list:
+    - key: 0
+      value:
+      - {fileID: 5772698595931832124, guid: 72367536ffbfc814b9002483cd299158, type: 3}
+      - {fileID: 3115205736247022014, guid: 380bd437caccdb445b040edc5ef5aca2, type: 3}
+      - {fileID: 8750063661880732849, guid: de02ed059fd6f9d4192c807e7cabe842, type: 3}
+      - {fileID: 3510738176020124954, guid: 985f414bb0d190948ad51b9a058a27b4, type: 3}
+      - {fileID: 2181577705149302989, guid: b227e30b176b52a459121953158c082e, type: 3}
+      - {fileID: 1550763566108827153, guid: 7e747886134edf74fbfaf98b3be0a427, type: 3}
+      - {fileID: 9176929247960214491, guid: 55d19bdc5a80aa940909486f3375f365, type: 3}
+      - {fileID: 3888117485789868253, guid: 8e82abe11aea226439b1212f4193861d, type: 3}
+      - {fileID: 7980686109747496883, guid: 4c5ba40fb4b24114883abc432765007d, type: 3}
+      - {fileID: 7131783534174690356, guid: d093a297cbc9750499dfc6ab283820e7, type: 3}
+      - {fileID: 5838993551723526526, guid: 67e248383ada4e8428879e81560f5ff8, type: 3}
+      - {fileID: 3370847709389709081, guid: cea71c22d3a34644a9028d01b23e622c, type: 3}
+    - key: 1
+      value:
+      - {fileID: 98519476351661896, guid: a85f390dcf722444397b3c4b4b47c4d7, type: 3}
+      - {fileID: 8468067431568494072, guid: 9c1dd6a7ce860414e8f02c2f62bb68bd, type: 3}
+      - {fileID: 2781710279242878458, guid: 0e0443052edc9dc4bbfde9e44162962e, type: 3}
+      - {fileID: 1044386192469973324, guid: eda3da0c52437114d9969ad36c812612, type: 3}
+      - {fileID: 8941011131449911363, guid: fcf933f42c90740419e1597e934aebfb, type: 3}
+      - {fileID: 3296507053982804274, guid: 55167dcec57108e4385ba18c6a32b17f, type: 3}
+      - {fileID: 338343730046141370, guid: 95f19e771fef7e94b9afd0b664d36890, type: 3}
+      - {fileID: 4845734655356182833, guid: f25ea626a0ae3e64089e8bbf874b27f8, type: 3}
+      - {fileID: 3758669201808632127, guid: eca268252212ef041a472234ce790191, type: 3}
+      - {fileID: 569591275700434380, guid: 5725fea157370f64baa825e1192a10f0, type: 3}
+      - {fileID: 3692158329385761896, guid: b47c709f697b0f64da0e135a22998cfe, type: 3}
+      - {fileID: 6009972481598887879, guid: 481aa4d237ce061409037ce2d729d61e, type: 3}
+      - {fileID: 5616509687030005006, guid: cc8644967a76d8f4a9e6fe682a546fd4, type: 3}
+      - {fileID: 875735376944142813, guid: e6b5a23353c9805498d706b66d8e3038, type: 3}
+      - {fileID: 2007075835369777451, guid: ef71894c682b8804495d4d0b4977400c, type: 3}
+      - {fileID: 5758661818746951331, guid: 6e84312d47560864ea7c376759dda6d1, type: 3}
+      - {fileID: 34806080273473611, guid: 6164f6e9a832ddd48b9fdf41e4105f6e, type: 3}
+      - {fileID: 3852138136797089358, guid: 8d2d2de49dd1adc409dee611bea0e343, type: 3}
+    - key: 2
+      value:
+      - {fileID: 5090382650388034037, guid: a98299d486637914098a4a4708e4af7e, type: 3}
+      - {fileID: 1983200135586410812, guid: e75380cf0a29b8d4e98502b9f6d30758, type: 3}
+      - {fileID: 5130106117544538976, guid: 8f4cd2caeb8446d43a112fe9cf66ddab, type: 3}
+      - {fileID: 3842780505876870544, guid: 0286adc1d72207748bb78c05bd5b377b, type: 3}
+      - {fileID: 2681970633618145288, guid: 43b172792aada11469879ec771e41459, type: 3}
+      - {fileID: 3035088914442130802, guid: ae326597f11f212498c04f21593e0514, type: 3}
+      - {fileID: 167832574518833799, guid: b12035096ebbb434dbb41e8459a6b76e, type: 3}
+      - {fileID: 8939510327678708220, guid: 45baae3f5fb4d4b46b5bb51c8554b9a4, type: 3}
+      - {fileID: 5202601460983494590, guid: 7d1e291a19d807e418f2d80934d7507e, type: 3}
+      - {fileID: 828287830434580389, guid: e935ae57996b0e042a53fc4bd2c0a072, type: 3}
+      - {fileID: 2845954426801856481, guid: 540f158e125a0724f9a3d9932cee78f4, type: 3}
+    keyCollision: 0
+  bananaGoopColorByEffectType:
+    list:
+    - key: 1
+      value: {r: 0.9803922, g: 0.96470594, b: 0.25882354, a: 1}
+    - key: 2
+      value: {r: 0, g: 1, b: 0.41192412, a: 1}
     - key: 3
+      value: {r: 0, g: 0.8379564, b: 1, a: 1}
+    - key: 4
       value: {r: 1, g: 0.42762616, b: 0.390566, a: 1}
     keyCollision: 0
   prefabByRawMaterialType:
@@ -171,84 +235,10 @@ MonoBehaviour:
     - key: 7
       value: {fileID: 8400163770358360760, guid: ca6d579fa2b78d24591bc9ce5e889192, type: 3}
     keyCollision: 0
-  spaceshipByCharacterType:
-    list:
-    - key: 2
-      value: {fileID: 3346166750500611510, guid: bc6bdbd4edfdd4946ac77174b20c849c, type: 3}
-    - key: 3
-      value: {fileID: 6324812817887638579, guid: 68506b1fd72e1594da2b6e5e58fe0e55, type: 3}
-    - key: 5
-      value: {fileID: 7051990763695138649, guid: 67a9d09f698b0744eb29615dba6c922b, type: 3}
-    keyCollision: 0
-  colorSetByCharacterType:
-    list:
-    - key: 3
-      value:
-      - {r: 0, g: 0, b: 0, a: 0}
-      - {r: 0.5294118, g: 0.5294118, b: 0.5294118, a: 0}
-      - {r: 0, g: 0, b: 0, a: 0}
-      - {r: 0.7176471, g: 0.54509807, b: 0.54509807, a: 0}
-      - {r: 0, g: 0, b: 0, a: 0}
-      - {r: 0, g: 0, b: 0, a: 0}
-      - {r: 0, g: 0, b: 0, a: 0}
-      - {r: 0, g: 0, b: 0, a: 0}
-      - {r: 0, g: 0, b: 0, a: 0}
-    - key: 1
-      value:
-      - {r: 0.03137255, g: 0.37647063, b: 0, a: 0}
-      - {r: 0.5294118, g: 0.5294118, b: 0.5294118, a: 0}
-      - {r: 0, g: 0, b: 0, a: 0}
-      - {r: 0.7176471, g: 0.54509807, b: 0.54509807, a: 0}
-      - {r: 1, g: 1, b: 1, a: 0}
-      - {r: 0, g: 0, b: 0, a: 0}
-      - {r: 0.03137255, g: 0.37647063, b: 0, a: 0}
-      - {r: 0.03137255, g: 0.37647063, b: 0, a: 0}
-      - {r: 0.03137255, g: 0.37647063, b: 0, a: 0}
-    - key: 7
-      value:
-      - {r: 0.24705884, g: 0.27450982, b: 0.33333334, a: 0}
-      - {r: 0.5294118, g: 0.5294118, b: 0.5294118, a: 0}
-      - {r: 0.2627451, g: 0.13725491, b: 0, a: 0}
-      - {r: 0.7176471, g: 0.54509807, b: 0.54509807, a: 0}
-      - {r: 1, g: 1, b: 1, a: 0}
-      - {r: 0, g: 0, b: 0, a: 0}
-      - {r: 0.14509805, g: 0.30588236, b: 0.48627454, a: 0}
-      - {r: 0.24705884, g: 0.27450982, b: 0.33333334, a: 0}
-      - {r: 0.06666667, g: 0.06666667, b: 0.06666667, a: 0}
-    keyCollision: 0
-  merchantsColorsSets:
-  - colorSet:
-    - {r: 0.07450981, g: 0.20784315, b: 0.06666667, a: 0}
-    - {r: 0.5294118, g: 0.5294118, b: 0.5294118, a: 0}
-    - {r: 0.06666667, g: 0.043137256, b: 0.007843138, a: 0}
-    - {r: 0.7176471, g: 0.54509807, b: 0.54509807, a: 0}
-    - {r: 1, g: 1, b: 1, a: 0}
-    - {r: 0, g: 0, b: 0, a: 0}
-    - {r: 0.12941177, g: 0.34117648, b: 0.1137255, a: 0}
-    - {r: 0.07450981, g: 0.20784315, b: 0.06666667, a: 0}
-    - {r: 0.12941177, g: 0.34117648, b: 0.1137255, a: 0}
-  visitorsColorsSets:
-  - colorSet:
-    - {r: 0.20000002, g: 0.21176472, b: 0.30980393, a: 0}
-    - {r: 0.5294118, g: 0.5294118, b: 0.5294118, a: 0}
-    - {r: 0.25490198, g: 0.14509805, b: 0, a: 0}
-    - {r: 0.7176471, g: 0.54509807, b: 0.54509807, a: 0}
-    - {r: 1, g: 1, b: 1, a: 0}
-    - {r: 0, g: 0, b: 0, a: 0}
-    - {r: 0.47058827, g: 0.18823531, b: 0.14901961, a: 0}
-    - {r: 0.20000002, g: 0.21176472, b: 0.30980393, a: 0}
-    - {r: 0.47058827, g: 0.18823531, b: 0.14901961, a: 0}
-  cultivatorColorsSet:
-    colorSet:
-    - {r: 0.20000002, g: 0.21176472, b: 0.30980393, a: 0}
-    - {r: 0.5294118, g: 0.5294118, b: 0.5294118, a: 0}
-    - {r: 0.25490198, g: 0.14509805, b: 0, a: 0}
-    - {r: 0.7176471, g: 0.54509807, b: 0.54509807, a: 0}
-    - {r: 1, g: 1, b: 1, a: 0}
-    - {r: 0, g: 0, b: 0, a: 0}
-    - {r: 0.47058827, g: 0.18823531, b: 0.14901961, a: 0}
-    - {r: 0.20000002, g: 0.21176472, b: 0.30980393, a: 0}
-    - {r: 0.47058827, g: 0.18823531, b: 0.14901961, a: 0}
+  chimpMensAppearanceScriptableObjects:
+  - {fileID: 11400000, guid: 44ad37bdc9abad848a97b3e460db3c74, type: 2}
+  - {fileID: 11400000, guid: 1bb85762dbf90d64aadb800b083365b1, type: 2}
+  - {fileID: 11400000, guid: ed9214feab23c4047a62048a4ffe3454, type: 2}
   genericNameByCharacterType:
     list:
     - key: 1
@@ -368,6 +358,7 @@ MonoBehaviour:
     - key: 7
       value: {fileID: 21300000, guid: f9561b45af7be5c488081861f8458307, type: 3}
     keyCollision: 0
+  teleportDownVFXPrefab: {fileID: 769205495170742538, guid: f0372db31013f424f91d374d6897ccd5, type: 3}
   references:
     version: 2
     RefIds: []

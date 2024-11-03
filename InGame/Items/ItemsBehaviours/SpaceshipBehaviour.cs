@@ -60,18 +60,7 @@ namespace InGame.Items.ItemsBehaviours {
             merchantData = spaceshipSavedData.merchantData;
 
             if (spaceshipSavedData.travelState == TravelState.WAIT_IN_STATION) {
-                //merchimp.merchantMerchantPropertiesScriptableObject = ObjectsReference.Instance.meshReferenceScriptableObject.merchantsScriptableObjectByMerchantType[merchimp.merchantType];
-
                 ObjectsReference.Instance.spaceTrafficControlManager.AssignSpaceshipToHangar(assignatedHangar);
-
-                if (characterType == CharacterType.MERCHIMP) {
-                    Instantiate(
-                        ObjectsReference.Instance.meshReferenceScriptableObject.merchantPrefab,
-                        spawnPoint.position,
-                        spawnPoint.rotation,
-                        ObjectsReference.Instance.chimpManager.chimpmensContainer
-                    );
-                }
             }
         }
         
@@ -103,21 +92,16 @@ namespace InGame.Items.ItemsBehaviours {
         
         private void OnTriggerEnter(Collider other) {
             if (!TagsManager.Instance.HasTag(other.gameObject, GAME_OBJECT_TAG.LASER)) return;
-
+            
             GetComponent<CapsuleCollider>().enabled = false;
 
-            for (int i = 0; i < debrisIndexQuantity-1; i++) {
-                var debris = ObjectsReference.Instance.debrisPoolByCharacterType[characterType].GetPooledDebris(i);
-                debris.transform.position = transform.position;
-                debris.gameObject.SetActive(true);
-                debris.GetComponent<SpaceshipDebrisBehaviour>().Init(other.GetComponent<Laser>());
+            foreach (var debrisBehaviour in gameObject.GetComponentsInChildren<SpaceshipDebrisBehaviour>()) {
+                debrisBehaviour.Init(other.GetComponent<Laser>());
             }
             
             ObjectsReference.Instance.spaceshipsSpawner.RemoveGuest();
 
             ObjectsReference.Instance.uiSpaceTrafficControlPanel.CloseCommunications(this);
-
-            Destroy(gameObject);
         }
         
         public void GenerateSpaceshipData() {
@@ -133,44 +117,25 @@ namespace InGame.Items.ItemsBehaviours {
 
         private void WaitInStation() {
             travelState = TravelState.WAIT_IN_STATION;
-            
+
+            var chimpmen = Instantiate(
+                ObjectsReference.Instance.meshReferenceScriptableObject.GetRandomChimpmen(), 
+                spawnPoint.position, Quaternion.identity,
+                ObjectsReference.Instance.gameSave.chimpmensContainer
+            );
+
+            chimpmen.GetComponent<MonkeyMenBehaviour>().associatedSpaceship = this;
+
             if (characterType == CharacterType.PIRATE) {
-                var pirate = Instantiate(
-                    ObjectsReference.Instance.meshReferenceScriptableObject.GetRandomTourist(), 
-                    spawnPoint.position, Quaternion.identity,
-                    ObjectsReference.Instance.chimpManager.chimpmensContainer
-                );
-
-                pirate.AddComponent<PirateBehaviour>();
-                pirateBehaviour = pirate.GetComponent<PirateBehaviour>();
-                pirateBehaviour.monkeyMenBehaviour.associatedSpaceship = this;
-
-                pirateBehaviour.monkeyMenBehaviour.destination = ObjectsReference.Instance.gameManager
-                    .spawnPointsBySpawnType[SpawnPoint.TP_HANGARS].position;
-
-                ObjectsReference.Instance.chimpManager.spawnedPirates.Add(pirateBehaviour);
+                chimpmen.AddComponent<PirateBehaviour>();
             }
 
             if (characterType == CharacterType.TOURIST) {
-                chimpmenInstance = Instantiate(
-                    ObjectsReference.Instance.meshReferenceScriptableObject.GetRandomTourist(),
-                    spawnPoint.position, Quaternion.identity,
-                    ObjectsReference.Instance.chimpManager.chimpmensContainer
-                );
-                
                 chimpmenInstance.AddComponent<TouristBehaviour>();
-                chimpmenInstance.GetComponent<MonkeyMenBehaviour>().associatedSpaceship = this;
             }
 
             if (characterType == CharacterType.MERCHIMP) {
-                chimpmenInstance = Instantiate(
-                    ObjectsReference.Instance.meshReferenceScriptableObject.merchantPrefab,
-                    spawnPoint.position, Quaternion.identity,
-                    ObjectsReference.Instance.chimpManager.chimpmensContainer
-                );
-
                 chimpmenInstance.AddComponent<MerchimpBehaviour>();
-                chimpmenInstance.GetComponent<MonkeyMenBehaviour>().associatedSpaceship = this;
             }
         }
         

@@ -18,7 +18,7 @@ namespace Settings {
 
 
         [Serializable]
-        class PlayerPref {
+        private class PlayerPref {
             public string key;
             public string value;
 
@@ -29,8 +29,8 @@ namespace Settings {
         }
 
 
-        [SerializeField] List<PlayerPref> playerPrefs = new();
-        string _savePath;
+        [SerializeField] private List<PlayerPref> playerPrefs = new();
+        private string _savePath;
 
 
         // Constructor
@@ -165,7 +165,7 @@ namespace Settings {
         }
 
 
-        bool TryGetPlayerPref(string key, out PlayerPref playerPref) {
+        private bool TryGetPlayerPref(string key, out PlayerPref playerPref) {
             playerPref = null;
             foreach (var pref in playerPrefs) {
                 if (pref.key == key) {

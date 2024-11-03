@@ -45,18 +45,26 @@ namespace KeyboardInputs {
         }
 
         private void SwitchToShootMode(InputAction.CallbackContext callbackContext) {
+            if (!ObjectsReference.Instance.bananaMan.tutorialFinished) return;
+
             bananaGunActionsSwitch.SwitchToBananaGunMode(BananaGunMode.SHOOT);
         }
 
         private void SwitchToScanMode(InputAction.CallbackContext callbackContext) {
+            if (!ObjectsReference.Instance.bananaMan.tutorialFinished) return;
+            
             bananaGunActionsSwitch.SwitchToBananaGunMode(BananaGunMode.SCAN);
         }
 
         private void SwitchToBuildMode(InputAction.CallbackContext callbackContext) {
+            if (!ObjectsReference.Instance.bananaMan.tutorialFinished) return;
+
             bananaGunActionsSwitch.SwitchToBananaGunMode(BananaGunMode.BUILD);
         }
 
         private void ScrollModes(InputAction.CallbackContext callbackContext) {
+            if (!ObjectsReference.Instance.bananaMan.tutorialFinished) return;
+            
             if (callbackContext.ReadValue<Vector2>().y > 1) {
                 bananaGunActionsSwitch.SwitchToLeftMode();
             }

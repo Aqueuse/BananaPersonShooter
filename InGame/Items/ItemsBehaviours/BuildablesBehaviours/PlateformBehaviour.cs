@@ -27,7 +27,7 @@ namespace InGame.Items.ItemsBehaviours.BuildablesBehaviours {
         }
         
         public override void GenerateSaveData() {
-            BuildableData plateformData = new BuildableData {
+            var plateformData = new BuildableData {
                 buildableGuid = buildableGuid,
                 buildableType = BuildableType.BUMPER,
                 isBreaked = isBreaked,
@@ -39,7 +39,7 @@ namespace InGame.Items.ItemsBehaviours.BuildablesBehaviours {
         }
 
         public override void LoadSavedData(string stringifiedJson) {
-            BuildableData buildableData = JsonConvert.DeserializeObject<BuildableData>(stringifiedJson);
+            var buildableData = JsonConvert.DeserializeObject<BuildableData>(stringifiedJson);
 
             buildableGuid = buildableData.buildableGuid;
             buildableType = BuildableType.BUMPER;

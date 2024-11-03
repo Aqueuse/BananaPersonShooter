@@ -29,14 +29,8 @@ MonoBehaviour:
   - "C\xE2lins gratuits"
   - Abrazos gratis
   bitKongValue: 50
-  effects:
-  - Creates an area where the monkeys stop fighting for a few seconds
-  - "Cr\xE9e une zone o\xF9 les singes arr\xEAtent de se battre pendant quelques\r
-    secondes"
-  - Crear una zona donde los monos dejan de pelear durante unos segundos
   sasiety: 5
-  damageTime: 0
   healthBonus: 1
   resistanceBonus: 1
-  bananaEffects: 00000000
+  bananaEffect: 4
   bananaColor: {r: 1, g: 0.24705884, b: 0.5372549, a: 1}

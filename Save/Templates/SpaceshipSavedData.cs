@@ -12,6 +12,7 @@ namespace Save.Templates {
         public TravelState travelState;
         
         public CharacterType characterType;
+        public SpaceshipType spaceshipType;
 
         public int hangarNumber;
         

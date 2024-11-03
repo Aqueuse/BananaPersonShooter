@@ -35,7 +35,7 @@ namespace Save {
             LoadBananaManVitals();
             LoadPositionAndRotation();
 
-            LoadBananaGunMode();
+            LoadBananaGun();
             LoadActiveBanana();
             LoadActiveBuildable();
             LoadBitkongQuantity();
@@ -88,7 +88,7 @@ namespace Save {
             }
         }
 
-        private void LoadBananaGunMode() {
+        private void LoadBananaGun() {
             var bananagunMode = Enum.Parse<BananaGunMode>(bananaManSavedData.bananaGunMode);
             bananaMan.bananaGunMode = bananagunMode;
             ObjectsReference.Instance.bananaGunActionsSwitch.SwitchToBananaGunMode(bananaMan.bananaGunMode);
@@ -138,7 +138,9 @@ namespace Save {
         private void CheckTutorialFinished() {
             bananaMan.tutorialFinished = bananaManSavedData.hasFinishedTutorial;
 
-            if (bananaMan.tutorialFinished) {
+            Debug.Log("check finish tutorial");
+            
+            if (bananaManSavedData.hasFinishedTutorial) {
                 ObjectsReference.Instance.bananaGun.bananaGunInBack.SetActive(true);
                 ObjectsReference.Instance.uiManager.SetActive(UICanvasGroupType.HUD_BANANAMAN, true);
             }

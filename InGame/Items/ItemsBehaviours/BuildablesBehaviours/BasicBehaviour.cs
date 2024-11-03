@@ -5,7 +5,7 @@ using Save.Helpers;
 namespace InGame.Items.ItemsBehaviours.BuildablesBehaviours {
     public class BasicBehaviour : BuildableBehaviour {
         public override void GenerateSaveData() {
-            BasicData basicData = new BasicData {
+            var basicData = new BasicData {
                 buildableGuid = buildableGuid,
                 buildableType = buildableType,
                 isBreaked = isBreaked,
@@ -17,7 +17,7 @@ namespace InGame.Items.ItemsBehaviours.BuildablesBehaviours {
         }
 
         public override void LoadSavedData(string stringifiedJson) {
-            BasicData basicData = JsonConvert.DeserializeObject<BasicData>(stringifiedJson);
+            var basicData = JsonConvert.DeserializeObject<BasicData>(stringifiedJson);
 
             buildableGuid = basicData.buildableGuid;
             buildableType = basicData.buildableType;

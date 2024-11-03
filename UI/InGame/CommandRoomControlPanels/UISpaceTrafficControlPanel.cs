@@ -61,6 +61,8 @@ namespace UI.InGame.CommandRoomControlPanels {
             spaceshipButton.GetComponent<UIcommunication>().associatedSpaceshipBehaviour = spaceshipBehaviour;
             spaceshipButton.GetComponentInChildren<TextMeshProUGUI>().text = spaceshipBehaviour.spaceshipName;
             spaceshipButton.GetComponent<Image>().color = spaceshipBehaviour.spaceshipUIcolor;
+            
+            RefreshCommunicationButton();
         }
         
         public void ShowCommunicationMessage(SpaceshipBehaviour spaceshipBehaviour) {
@@ -94,6 +96,8 @@ namespace UI.InGame.CommandRoomControlPanels {
             
             if (spaceshipMessage != null) spaceshipMessage.SetActive(false);
             messagePlaceholder.SetActive(true);
+            
+            RefreshCommunicationButton();
         }
         
         public void RefreshHangarAvailability() {

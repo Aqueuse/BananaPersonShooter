@@ -10,7 +10,7 @@ namespace UI.InGame.MiniChimpBlock.Descriptions.blocks {
             this.itemName.text = itemName;
             itemList.text = "";
 
-            for (int i = 0; i < listItemsQuantities.Length; i++) {
+            for (var i = 0; i < listItemsQuantities.Length; i++) {
                 itemList.text +=
                     "x " +
                     listItemsQuantities[i] +

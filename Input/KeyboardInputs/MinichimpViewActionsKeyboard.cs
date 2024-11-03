@@ -119,7 +119,7 @@ namespace KeyboardInputs {
         }
         
         private void MoveCameraWithKeyboard(InputAction.CallbackContext context) {
-            Vector2 movementInput = context.action.ReadValue<Vector2>(); // Read the input value
+            var movementInput = context.action.ReadValue<Vector2>(); // Read the input value
             
             _gestionRelativeMove.MoveWithKeyboard(movementInput);
         }

@@ -21,14 +21,14 @@ namespace Save {
             var monkeymensList = JsonConvert.DeserializeObject<List<string>>(monkeymensDataString);
 
             foreach (var monkeymen in monkeymensList) {
-                MonkeyMenSavedData monkeyMenSavedData = JsonConvert.DeserializeObject<MonkeyMenSavedData>(monkeymen);
+                var monkeyMenSavedData = JsonConvert.DeserializeObject<MonkeyMenSavedData>(monkeymen);
                 
-                MonkeyMenData monkeyMenData = new MonkeyMenData {
+                var monkeyMenData = new MonkeyMenData {
                     uid = monkeyMenSavedData.uid,
                     monkeyMenName = monkeyMenSavedData.name,
                     characterType = monkeyMenSavedData.characterType,
-                    prefabNumber = monkeyMenSavedData.prefabNumber,
-                    clothColorsPreset = monkeyMenSavedData.clothColorsPreset,
+                    appearanceScriptableObjectIndex = monkeyMenSavedData.appearanceScriptableObjectIndex,
+                    
                     isInSpaceship = monkeyMenSavedData.isInSpaceship,
                     pirateState = monkeyMenSavedData.pirateState,
                     touristState = monkeyMenSavedData.touristState
@@ -55,8 +55,8 @@ namespace Save {
 
                 else {
                     var monkeymenInstance = Instantiate(
-                        ObjectsReference.Instance.meshReferenceScriptableObject.spaceshipByCharacterType[monkeyMenSavedData.characterType],
-                        ObjectsReference.Instance.chimpManager.chimpmensContainer
+                        ObjectsReference.Instance.meshReferenceScriptableObject.chimpmenPrefabByChimpmenType[monkeyMenSavedData.monkeyMenType],
+                        ObjectsReference.Instance.gameSave.chimpmensContainer
                     );
                     
                     monkeymenInstance.GetComponent<MonkeyMenBehaviour>().monkeyMenData = monkeyMenData;
@@ -68,7 +68,7 @@ namespace Save {
             var _savePath = Path.Combine(ObjectsReference.Instance.gameSave._savesPath, saveUuid);
             var worldDataSavesPath = Path.Combine(_savePath, "WORLD_DATA");
 
-            List<MonkeyMenSavedData> monkeyMenSavedDatas = new List<MonkeyMenSavedData>();
+            var monkeyMenSavedDatas = new List<MonkeyMenSavedData>();
 
             var monkeyMensBehaviours = FindObjectsOfType<MonkeyMenBehaviour>();
             

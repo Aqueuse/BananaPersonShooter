@@ -155,9 +155,7 @@ namespace InGame {
             }
 
             ObjectsReference.Instance.gameSave.CancelAutoSave();
-
-            ObjectsReference.Instance.teleportation.TeleportDown();
-
+            
             _bananaManTransform.position = spawnPointsBySpawnType[SpawnPoint.NEW_GAME].position;
             _bananaManRotation = spawnPointsBySpawnType[SpawnPoint.NEW_GAME].rotation.eulerAngles;
 

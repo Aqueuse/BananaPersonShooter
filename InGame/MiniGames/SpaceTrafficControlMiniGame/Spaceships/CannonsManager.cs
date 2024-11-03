@@ -88,7 +88,7 @@ namespace InGame.MiniGames.SpaceTrafficControlMiniGame.Spaceships {
             
             ObjectsReference.Instance.uiCannons.SetBananaType(
                 activeBanana.itemSprite, 
-                GetColorByBananaEffects(activeBanana.bananaEffects)
+                ObjectsReference.Instance.meshReferenceScriptableObject.bananaGoopColorByEffectType[activeBanana.bananaEffect]
             );
             
             ObjectsReference.Instance.uiCannons.SetBananaQuantity(
@@ -126,15 +126,8 @@ namespace InGame.MiniGames.SpaceTrafficControlMiniGame.Spaceships {
             return cameraCannon.fieldOfView;
         }
 
-        public Color GetColorByBananaEffects(BananaEffect[] bananaEffects) {
-            if (bananaEffects.Length == 1) {
-                return ObjectsReference.Instance.meshReferenceScriptableObject.bananaGoopColorByEffectType[bananaEffects[0]];
-            }
-
-            var firstColor = ObjectsReference.Instance.meshReferenceScriptableObject.bananaGoopColorByEffectType[bananaEffects[0]];
-            var secondColor = ObjectsReference.Instance.meshReferenceScriptableObject.bananaGoopColorByEffectType[bananaEffects[1]];
-                
-            return Color.Lerp(firstColor, secondColor, 0.5f);
+        public Color GetColorByBananaEffect(BananaEffect bananaEffect) {
+            return ObjectsReference.Instance.meshReferenceScriptableObject.bananaGoopColorByEffectType[bananaEffect];
         }
     }
 }

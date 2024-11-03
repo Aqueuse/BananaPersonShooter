@@ -29,13 +29,8 @@ MonoBehaviour:
   - "r\xE9pulsion"
   - "repulsi\xF3n"
   bitKongValue: 50
-  effects:
-  - Much much more nourishing, much more resistance
-  - "Beaucoup beaucoup plus nourrissante, beaucoup plus de r\xE9sistance"
-  - "Pl\xE1tano mucho, mucho m\xE1s nutritivo, con mucha, mucha m\xE1s resistencia"
   sasiety: 5
-  damageTime: 0
   healthBonus: 1
   resistanceBonus: 2
-  bananaEffects: 01000000
+  bananaEffect: 2
   bananaColor: {r: 0.40000004, g: 0.7411765, b: 0.25882354, a: 1}

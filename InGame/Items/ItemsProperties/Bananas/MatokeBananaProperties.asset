@@ -29,13 +29,8 @@ MonoBehaviour:
   - "r\xE9pulsion"
   - "repulsi\xF3n"
   bitKongValue: 50
-  effects:
-  - banana platform, add a platform on some surfaces (inorganic)
-  - banane plateforme, ajoute une plateforme sur certaines surfaces (non organiques)
-  - "banana plataforma, a\xF1ade una plataforma en ciertas superficies (no org\xE1nicas)"
   sasiety: 5
-  damageTime: 0
   healthBonus: 0.5
   resistanceBonus: 1
-  bananaEffects: 01000000
+  bananaEffect: 2
   bananaColor: {r: 0.26666668, g: 0.7490196, b: 0.29803923, a: 1}

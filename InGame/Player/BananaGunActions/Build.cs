@@ -29,7 +29,7 @@ namespace InGame.Player.BananaGunActions {
 
             _activeGhost.transform.position = ObjectsReference.Instance.build.buildablePlacementTransform.position;
 
-            float distance = Vector3.Distance(mainCamera.transform.position, _activeGhost.transform.position);
+            var distance = Vector3.Distance(mainCamera.transform.position, _activeGhost.transform.position);
                 
             if (Physics.Raycast(ray, out raycastHit, distance, layerMask:buildingLayerMask)) {
                 _activeGhost.transform.position = raycastHit.point;

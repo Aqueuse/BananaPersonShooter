@@ -8,7 +8,7 @@ namespace InGame.Items.ItemsProperties.Bananas {
         public float healthBonus;
         public float resistanceBonus;
 
-        public BananaEffect[] bananaEffects;
+        public BananaEffect bananaEffect;
 
         public Color bananaColor;
     }

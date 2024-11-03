@@ -29,13 +29,8 @@ MonoBehaviour:
   - "acc\xE9l\xE8re"
   - "aceleraci\xF3n"
   bitKongValue: 50
-  effects:
-  - creates a zone of fire for 15 seconds that repels monkeys
-  - "cr\xE9e une zone de feu pendant 15 secondes qui repousse les singes"
-  - crea una zona de fuego durante 15 segundos que repele a los monos
   sasiety: 5
-  damageTime: 0
   healthBonus: 0.5
   resistanceBonus: 1
-  bananaEffects: 03000000
+  bananaEffect: 4
   bananaColor: {r: 0.6792453, g: 0.25247416, b: 0.30195487, a: 1}

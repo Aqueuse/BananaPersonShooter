@@ -17,6 +17,10 @@ namespace Save {
         private SavedData _savedData;
         
         private SpaceTrafficControlManager spaceTrafficControlManager;
+        
+        public Transform chimpmensContainer;
+        public Transform spaceshipsContainer;
+        public Transform debrisContainer;
 
         public DataSave dataSave;
         public PlayerSave playerSave;

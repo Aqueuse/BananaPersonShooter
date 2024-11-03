@@ -27,6 +27,7 @@ namespace SharedInputs {
     
         public InputActionReference openBananaGunUIActionReference;
         public InputActionReference openInventoryActionReference;
+        public InputActionReference ShowHideMapActionReference;
 
         public InputActionReference pauseGameActionReference;
 
@@ -77,6 +78,9 @@ namespace SharedInputs {
             openInventoryActionReference.action.Enable();
             openInventoryActionReference.action.performed += OpenInventories;
             
+            ShowHideMapActionReference.action.Enable();
+            ShowHideMapActionReference.action.performed += ShowHideMap;
+            
             pauseGameActionReference.action.Enable();
             pauseGameActionReference.action.performed += PauseGame;
         }
@@ -107,6 +111,9 @@ namespace SharedInputs {
 
             openInventoryActionReference.action.Disable();
             openInventoryActionReference.action.performed -= OpenInventories;
+            
+            ShowHideMapActionReference.action.Disable();
+            ShowHideMapActionReference.action.performed -= ShowHideMap;
             
             pauseGameActionReference.action.Disable();
             pauseGameActionReference.action.performed -= PauseGame;
@@ -153,6 +160,8 @@ namespace SharedInputs {
         }
     
         private static void OpenBananaGunUI(InputAction.CallbackContext context) {
+            if (!ObjectsReference.Instance.bananaMan.tutorialFinished) return;
+
             ObjectsReference.Instance.uiManager.ShowBananaGunUI();
             ObjectsReference.Instance.uiManager.SwitchToMinichimpPerspective();
             
@@ -162,6 +171,8 @@ namespace SharedInputs {
         }
 
         private static void OpenInventories(InputAction.CallbackContext context) {
+            if (!ObjectsReference.Instance.bananaMan.tutorialFinished) return;
+            
             ObjectsReference.Instance.uiManager.ShowInventory();
             ObjectsReference.Instance.cameraPlayer.Set0Sensibility();
             ObjectsReference.Instance.inputManager.SwitchContext(InputContext.INVENTORIES);
@@ -169,10 +180,14 @@ namespace SharedInputs {
             
             ObjectsReference.Instance.bananaGunActionsSwitch.gameObject.SetActive(false);
         }
+
+        private static void ShowHideMap(InputAction.CallbackContext context) {
+            ObjectsReference.Instance.uiManager.ShowHideMap();
+        }
         
         private void ZoomDezoomCamera(InputAction.CallbackContext context) {
-            bool isPressedleftAlt = Keyboard.current.leftAltKey.isPressed;
-            bool isLeftStickPressed = Gamepad.current.leftStickButton.isPressed; 
+            var isPressedleftAlt = Keyboard.current.leftAltKey.isPressed;
+            var isLeftStickPressed = Gamepad.current.leftStickButton.isPressed; 
 
             if (!isPressedleftAlt || !isLeftStickPressed) return;
 

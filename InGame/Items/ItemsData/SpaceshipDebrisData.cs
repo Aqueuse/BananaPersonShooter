@@ -6,9 +6,11 @@ namespace InGame.Items.ItemsData {
         public string droppedGuid;
         public string spaceshipDebrisPosition;
         public string spaceshipDebrisRotation;
+        public SpaceshipType spaceshipType;
         public int prefabIndex;
-        public CharacterType characterType;
 
         public bool isInSpace;
+        public BananaEffect bananaEffect;
+        public string effectSourcePosition;
     }
 }

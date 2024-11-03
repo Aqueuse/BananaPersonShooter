@@ -151,8 +151,8 @@ namespace InGame.Gestion {
         public void harvest() {
             if (targetedGameObject == null) return;
             
-            Tag gameObjectTagClass = targetedGameObject.GetComponent<Tag>();
-            GAME_OBJECT_TAG gameObjectTag = gameObjectTagClass.gameObjectTag;
+            var gameObjectTagClass = targetedGameObject.GetComponent<Tag>();
+            var gameObjectTag = gameObjectTagClass.gameObjectTag;
             
             switch (gameObjectTag) {
                 case GAME_OBJECT_TAG.REGIME:

@@ -28,7 +28,7 @@ namespace InGame.Items.ItemsBehaviours.BuildablesBehaviours {
                 buildableGuid = Guid.NewGuid().ToString();
             }
             
-            BananasDryerData bananasDryerData = new BananasDryerData {
+            var bananasDryerData = new BananasDryerData {
                 buildableGuid = buildableGuid,
                 buildableType = buildableType,
                 isBreaked = isBreaked,
@@ -40,7 +40,7 @@ namespace InGame.Items.ItemsBehaviours.BuildablesBehaviours {
         }
 
         public override void LoadSavedData(string stringifiedJson) {
-            BananasDryerData bananasDryerData = JsonConvert.DeserializeObject<BananasDryerData>(stringifiedJson);
+            var bananasDryerData = JsonConvert.DeserializeObject<BananasDryerData>(stringifiedJson);
 
             buildableGuid = bananasDryerData.buildableGuid;
             buildableType = bananasDryerData.buildableType;

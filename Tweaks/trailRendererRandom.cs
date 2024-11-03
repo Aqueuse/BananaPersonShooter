@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace Tweaks {
     [RequireComponent(typeof(TrailRenderer))]
@@ -7,7 +8,7 @@ namespace Tweaks {
         [SerializeField] private float widthMultiplier = 0.2f;
         [SerializeField, Range(1, 8)] private int keyNb = 8;
         [SerializeField] private List<Color> colorList = new();
-
+        
         private float _alpha;
         private float _keyUpdate;
         private float _time;
@@ -18,6 +19,10 @@ namespace Tweaks {
         private GradientColorKey[] _colorKey;
         private GradientAlphaKey[] _alphaKey;
 
+        private bool isActive;
+        private bool disableRandom;
+        private bool userColor;
+        
         private void Start() {
             _time = 0f;
             _alpha = 1.0f;
@@ -42,7 +47,7 @@ namespace Tweaks {
 
             _trailRenderer.emitting = false;
         }
-
+        
         private void NewCurve() {
             _curve.AddKey(0.0f, 0.0f);
             _curve.AddKey(0.040f, 0.5f);
@@ -50,25 +55,25 @@ namespace Tweaks {
             _curve.AddKey(1.0f, 1.0f);
             _trailRenderer.widthCurve = _curve;
         }
-
+        
         private void Update() {
-            // if (UnityEngine.Input.GetKeyUp(KeyCode.T) && !userColor) {
-            //     _trailRenderer.emitting = !_trailRenderer.emitting;
-            //
-            //     if (disableRandom) {
-            //         _alpha = 1.0f;
-            //         _time = 0.0f;
-            //         _keyUpdate = 1f;
-            //
-            //         colorList.Clear();
-            //         _keyUpdate = 1f / keyNb;
-            //         _trailRenderer.colorGradient = NewGrad(keyNb);
-            //
-            //         for (var i = 0; i < _trailRenderer.colorGradient.colorKeys.Length; i++) {
-            //             colorList.Add(_trailRenderer.colorGradient.colorKeys[i].color);
-            //         }
-            //     }
-            // }
+            if (!userColor) {
+                _trailRenderer.emitting = !_trailRenderer.emitting;
+            
+                if (disableRandom) {
+                    _alpha = 1.0f;
+                    _time = 0.0f;
+                    _keyUpdate = 1f;
+            
+                    colorList.Clear();
+                    _keyUpdate = 1f / keyNb;
+                    _trailRenderer.colorGradient = NewGrad(keyNb);
+            
+                    for (var i = 0; i < _trailRenderer.colorGradient.colorKeys.Length; i++) {
+                        colorList.Add(_trailRenderer.colorGradient.colorKeys[i].color);
+                    }
+                }
+            }
         }
 
         private void FixedUpdate() {

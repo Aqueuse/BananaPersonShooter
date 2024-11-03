@@ -101,7 +101,10 @@ namespace InGame.Interactions {
             
             nextCharacter = nextWord.ToLower().Length > 0 ? nextWord.ToLower()[0] : 'f';
             
-            if (gibberishAudioClipsScriptableObject.characterToClip.TryGetValue(nextCharacter, out var clip)) {
+            if (gibberishAudioClipsScriptableObject.characterToClip.TryGetValue(
+                    nextCharacter, 
+                    out var clip)
+            ) {
                 bubbleAudioSource.clip = clip;
             }
             else {

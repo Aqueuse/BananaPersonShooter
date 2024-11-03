@@ -67,14 +67,6 @@ namespace Tags {
             return gameObjectsWithTag;
         }
         
-        public GAME_OBJECT_TAG GetTag(GameObject myGameObject) {
-            return myGameObject.GetComponent<Tag>() != null ? myGameObject.GetComponent<Tag>().gameObjectTag : GAME_OBJECT_TAG.UNTAGGED;
-        }
-
-        public void SetTag(GameObject myGameObject, GAME_OBJECT_TAG myTag) {
-            if (myGameObject.GetComponent<Tag>() != null) myGameObject.GetComponent<Tag>().gameObjectTag = myTag;
-        }
-
         public bool HasTag(GameObject myGameObject, GAME_OBJECT_TAG myTag) {
             if (myGameObject.GetComponent<Tag>() == null) {
                 return false;

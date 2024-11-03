@@ -29,13 +29,8 @@ MonoBehaviour:
   - attraction
   - "atracci\xF3n"
   bitKongValue: 50
-  effects:
-  - No particular effect, just tasty
-  - Aucun effet particulier, juste savoureuse
-  - "No tiene ning\xFAn efecto especial, simplemente deliciosa"
   sasiety: 1
-  damageTime: 0
   healthBonus: 10
   resistanceBonus: 10
-  bananaEffects: 00000000
+  bananaEffect: 1
   bananaColor: {r: 1, g: 0.71255064, b: 0, a: 1}

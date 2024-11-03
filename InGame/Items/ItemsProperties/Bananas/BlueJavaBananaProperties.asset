@@ -29,13 +29,8 @@ MonoBehaviour:
   - ralenti
   - desacelerar
   bitKongValue: 50
-  effects:
-  - Creates an area of ice that slows down monkeys for 10 seconds
-  - "Cr\xE9e une zone de glace qui ralenti les singes pendant 10 secondes"
-  - Crea una zona de hielo que ralentiza a los monos durante 10 segundos
   sasiety: 5
-  damageTime: 0
   healthBonus: 0.5
   resistanceBonus: 1
-  bananaEffects: 02000000
+  bananaEffect: 3
   bananaColor: {r: 0.20392159, g: 0.4431373, b: 0.65882355, a: 1}

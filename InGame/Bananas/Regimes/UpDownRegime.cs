@@ -2,7 +2,7 @@ using Tags;
 using UnityEngine;
 
 namespace InGame.Bananas.Regimes {
-    enum VerticalState {
+    internal enum VerticalState {
         UP = 0,
         DOWN = 1
     }

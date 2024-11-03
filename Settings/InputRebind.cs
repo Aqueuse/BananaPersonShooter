@@ -4,7 +4,7 @@ using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 namespace Settings {
-    enum ControlScheme {
+    internal enum ControlScheme {
         KEYBOARD = 0,
         GAMEPAD = 1
     }
