@@ -103,7 +103,7 @@ public class NavMeshFromCollidersWindow : EditorWindow
         for (int i = 0; i < colliders.Length; i++)
         {
             int theTrueMaskSupose = layerMask.value | 1 << colliders[i].gameObject.layer;
-            if (layerMask.value == theTrueMaskSupose && !colliders[i].isTrigger)
+            if (layerMask.value == theTrueMaskSupose & !colliders[i].isTrigger)
             {
                 // generate and store the fake object
                 GameObject fakeObject = GenerateRendererObject(colliders[i]);
@@ -152,7 +152,7 @@ public class NavMeshFromCollidersWindow : EditorWindow
     {
         bakeMode = false;
         // enable objects
-        while (disableds != null && disableds.Count > 0)
+        while (disableds != null & disableds.Count > 0)
         {
             disableds.Pop().enabled = true;
         }

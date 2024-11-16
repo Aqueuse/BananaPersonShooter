@@ -7,17 +7,17 @@ using UnityEngine;
 namespace InGame.CommandRoomPanelControls {
     public class CommandRoomControlPanelsManager : MonoBehaviour {
         [SerializeField] private GenericDictionary<CommandRoomPanelType, ManageAccess> manageAccessesByPanelType;
-        
+
         public Assembler assembler;
 
         public CinemachineVirtualCamera commandRoomVirtualCamera;
         [SerializeField] private GenericDictionary<CommandRoomPanelType, Transform> cameraTransformByPanelType;
         [SerializeField] private GenericDictionary<CommandRoomPanelType, Transform> cameraFocusByPanelType;
-        
+
         public MiniChimp miniChimp;
         public ChimployeeCommandRoom chimployeeCommandRoom;
         public Transform chairLifeSimulatorTransform;
-        
+
         public void Init() {
             if (ObjectsReference.Instance.bananaMan.tutorialFinished) {
                 foreach (var manageAccess in manageAccessesByPanelType) {
@@ -30,16 +30,16 @@ namespace InGame.CommandRoomPanelControls {
                 }
             }
         }
-        
+
         private void FocusPanel(CommandRoomPanelType commandRoomPanelType) {
             if (ObjectsReference.Instance.gameManager.gameContext == GameContext.IN_GAME) {
                 ObjectsReference.Instance.uiManager.SetActive(UICanvasGroupType.HUD_BANANAMAN, false);
             }
 
-            if (ObjectsReference.Instance.gameManager.gameContext == GameContext.IN_MINICHIMP_VIEW) {
-                ObjectsReference.Instance.uiManager.SetActive(UICanvasGroupType.HUD_MINICHIMP, false);
+            if (ObjectsReference.Instance.gameManager.gameContext == GameContext.IN_GESTION_VIEW) {
+                ObjectsReference.Instance.uiManager.SetActive(UICanvasGroupType.HUD_GESTION, false);
             }
-            
+
             commandRoomVirtualCamera.Follow = cameraTransformByPanelType[commandRoomPanelType].transform;
             commandRoomVirtualCamera.LookAt = cameraFocusByPanelType[commandRoomPanelType].transform;
             commandRoomVirtualCamera.Priority = 200;
@@ -59,16 +59,10 @@ namespace InGame.CommandRoomPanelControls {
         public void UnfocusPanel() {
             commandRoomVirtualCamera.Priority = 0;
     
-            if (ObjectsReference.Instance.mainCamera.cameraModeType == CameraModeType.PLAYER_VIEW) {
-                ObjectsReference.Instance.uiManager.SetActive(UICanvasGroupType.HUD_BANANAMAN, true);
+            ObjectsReference.Instance.uiManager.SetActive(UICanvasGroupType.HUD_BANANAMAN, true);
 
-                ObjectsReference.Instance.gameManager.gameContext = GameContext.IN_GAME;
-                ObjectsReference.Instance.inputManager.SwitchContext(InputContext.GAME);
-            }
-
-            if (ObjectsReference.Instance.mainCamera.cameraModeType == CameraModeType.TOP_DOWN_VIEW) {
-                ObjectsReference.Instance.uiManager.SwitchToMinichimpPerspective();
-            }
+            ObjectsReference.Instance.gameManager.gameContext = GameContext.IN_GAME;
+            ObjectsReference.Instance.inputManager.SwitchContext(InputContext.GAME);
         }
 
         public void FocusMarketingPanel() {

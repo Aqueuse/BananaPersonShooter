@@ -13,7 +13,7 @@ namespace InGame.Interactions {
         private GameObject grabbedObject;
 
         private void Update() {
-            if (ObjectsReference.Instance.gameManager.gameContext != GameContext.IN_GAME || isGrabbing) return;
+            if (ObjectsReference.Instance.gameManager.gameContext != GameContext.IN_GAME | isGrabbing) return;
 
             if (Physics.Raycast(transform.position, transform.forward, out var raycastHit, 10, itemsLayerMask)) {
                 if (raycastHit.transform.gameObject.TryGetComponent(out Grabbable grabbable)) {

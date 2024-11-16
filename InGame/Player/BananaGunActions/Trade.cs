@@ -6,9 +6,6 @@ using UnityEngine;
 namespace InGame.Player.BananaGunActions {
     public class Trade : MonoBehaviour {
         public MonkeyMenData monkeyMenData;
-
-        private UIMerchantSliderMenu buyUiMerchantSliderMenu;
-        private UIMerchantSliderMenu sellUiMerchantSliderMenu;
         
         private BananaMan bananaMan;
         private UIMerchant uiMerchant;
@@ -18,13 +15,10 @@ namespace InGame.Player.BananaGunActions {
         private void Start() {
             uiMerchant = ObjectsReference.Instance.uiMerchant;
             bananaMan = ObjectsReference.Instance.bananaMan;
-
-            buyUiMerchantSliderMenu = uiMerchant.buyUiMerchantSliderMenu;
-            sellUiMerchantSliderMenu = uiMerchant.sellUiMerchantSliderMenu;
         }
 
         public void Sell(ItemScriptableObject itemScriptableObject) {
-            var quantityToSell = (int)sellUiMerchantSliderMenu.quantitySlider.value;
+            var quantityToSell = (int)uiMerchant.sellUiMerchantSliderMenu.quantitySlider.value;
             var bitkongValue = itemScriptableObject.bitKongValue * quantityToSell;
             
             bananaMan.bananaManData.bitKongQuantity += bitkongValue;
@@ -32,7 +26,7 @@ namespace InGame.Player.BananaGunActions {
             ObjectsReference.Instance.uInventoriesManager.SetBitKongQuantity(bananaMan.bananaManData.bitKongQuantity);
             uiMerchant.RefreshBitkongQuantities();
 
-            sellUiMerchantSliderMenu.quantitySlider.value = 0;
+            uiMerchant.sellUiMerchantSliderMenu.quantitySlider.value = 0;
 
             switch (itemScriptableObject.itemCategory) {
                 case ItemCategory.INGREDIENT:
@@ -60,7 +54,7 @@ namespace InGame.Player.BananaGunActions {
         }
 
         public void Buy(ItemScriptableObject itemScriptableObject) {
-            var quantityToBuy = (int)buyUiMerchantSliderMenu.quantitySlider.value;
+            var quantityToBuy = (int)uiMerchant.buyUiMerchantSliderMenu.quantitySlider.value;
             var bitkongValue = itemScriptableObject.bitKongValue * quantityToBuy;
             
             // not enough monkey money (；′⌒`)
@@ -71,7 +65,7 @@ namespace InGame.Player.BananaGunActions {
             ObjectsReference.Instance.uInventoriesManager.SetBitKongQuantity(bananaMan.bananaManData.bitKongQuantity);
             uiMerchant.RefreshBitkongQuantities();
 
-            buyUiMerchantSliderMenu.quantitySlider.value = 0;
+            uiMerchant.buyUiMerchantSliderMenu.quantitySlider.value = 0;
 
             // buy
             switch (itemScriptableObject.itemCategory) {

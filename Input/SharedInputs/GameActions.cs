@@ -25,7 +25,7 @@ namespace SharedInputs {
         public InputActionReference grabActionReference;
         public InputActionReference interactActionReference;
     
-        public InputActionReference openBananaGunUIActionReference;
+        public InputActionReference openGestionPanelActionReference;
         public InputActionReference openInventoryActionReference;
         public InputActionReference ShowHideMapActionReference;
 
@@ -72,8 +72,8 @@ namespace SharedInputs {
             grabActionReference.action.performed += Grab;
             grabActionReference.action.canceled += Grab;
         
-            openBananaGunUIActionReference.action.Enable();
-            openBananaGunUIActionReference.action.performed += OpenBananaGunUI;
+            openGestionPanelActionReference.action.Enable();
+            openGestionPanelActionReference.action.performed += OpenGestionPanel;
             
             openInventoryActionReference.action.Enable();
             openInventoryActionReference.action.performed += OpenInventories;
@@ -106,8 +106,8 @@ namespace SharedInputs {
             grabActionReference.action.performed -= Grab;
             grabActionReference.action.canceled -= Grab;
         
-            openBananaGunUIActionReference.action.Disable();
-            openBananaGunUIActionReference.action.performed -= OpenBananaGunUI;
+            openGestionPanelActionReference.action.Disable();
+            openGestionPanelActionReference.action.performed -= OpenGestionPanel;
 
             openInventoryActionReference.action.Disable();
             openInventoryActionReference.action.performed -= OpenInventories;
@@ -159,13 +159,12 @@ namespace SharedInputs {
             }
         }
     
-        private static void OpenBananaGunUI(InputAction.CallbackContext context) {
+        private static void OpenGestionPanel(InputAction.CallbackContext context) {
             if (!ObjectsReference.Instance.bananaMan.tutorialFinished) return;
 
-            ObjectsReference.Instance.uiManager.ShowBananaGunUI();
-            ObjectsReference.Instance.uiManager.SwitchToMinichimpPerspective();
-            
-            ObjectsReference.Instance.gameManager.gameContext = GameContext.IN_MINICHIMP_VIEW;
+            ObjectsReference.Instance.uiManager.ShowGestionPanel();
+            ObjectsReference.Instance.cameraPlayer.Set0Sensibility();
+            ObjectsReference.Instance.inputManager.SwitchContext(InputContext.GESTION_PANEL);
 
             ObjectsReference.Instance.bananaGunActionsSwitch.gameObject.SetActive(false);
         }
@@ -173,10 +172,11 @@ namespace SharedInputs {
         private static void OpenInventories(InputAction.CallbackContext context) {
             if (!ObjectsReference.Instance.bananaMan.tutorialFinished) return;
             
+            ObjectsReference.Instance.uiManager.ShowGestionPanel();
             ObjectsReference.Instance.uiManager.ShowInventory();
             ObjectsReference.Instance.cameraPlayer.Set0Sensibility();
-            ObjectsReference.Instance.inputManager.SwitchContext(InputContext.INVENTORIES);
-            ObjectsReference.Instance.gameManager.gameContext = GameContext.IN_INVENTORIES;
+            ObjectsReference.Instance.inputManager.SwitchContext(InputContext.GESTION_PANEL);
+            ObjectsReference.Instance.gameManager.gameContext = GameContext.IN_GESTION_PANEL;
             
             ObjectsReference.Instance.bananaGunActionsSwitch.gameObject.SetActive(false);
         }
@@ -189,7 +189,7 @@ namespace SharedInputs {
             var isPressedleftAlt = Keyboard.current.leftAltKey.isPressed;
             var isLeftStickPressed = Gamepad.current.leftStickButton.isPressed; 
 
-            if (!isPressedleftAlt || !isLeftStickPressed) return;
+            if (!isPressedleftAlt | !isLeftStickPressed) return;
 
             scrollSlotsValue = context.ReadValue<Vector2>();
             var scrollValue = scrollSlotsValue.y;

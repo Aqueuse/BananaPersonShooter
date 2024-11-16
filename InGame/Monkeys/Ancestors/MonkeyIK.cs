@@ -43,7 +43,7 @@ namespace InGame.Monkeys.Ancestors {
             _rightHandDistanceToMonkeyRoot = Vector3.Distance(_animator.GetIKPosition(AvatarIKGoal.RightHand), _animator.rootPosition);
             
             //// FOOT
-            if (_leftFootDistanceToMonkeyRoot < _footExtended && !isLeftFootGrounded) {
+            if (_leftFootDistanceToMonkeyRoot < _footExtended & !isLeftFootGrounded) {
                 _monkeySounds.PlayFootstep();
                 isLeftFootGrounded = true;
             }
@@ -52,7 +52,7 @@ namespace InGame.Monkeys.Ancestors {
                 isLeftFootGrounded = false;
             }
         
-            if (_rightFootDistanceToMonkeyRoot < _footExtended && !isRightFootGrounded) {
+            if (_rightFootDistanceToMonkeyRoot < _footExtended & !isRightFootGrounded) {
                 _monkeySounds.PlayFootstep();
                 isRightFootGrounded = true;
             }
@@ -62,7 +62,7 @@ namespace InGame.Monkeys.Ancestors {
             }
             
             ///// HAND
-            if (_leftHandDistanceToMonkeyRoot < _handExtended && !isLeftHandGrounded) {
+            if (_leftHandDistanceToMonkeyRoot < _handExtended & !isLeftHandGrounded) {
                 _monkeySounds.PlayFootstep();
                 isLeftHandGrounded = true;
             }
@@ -71,7 +71,7 @@ namespace InGame.Monkeys.Ancestors {
                 isLeftHandGrounded = false;
             }
         
-            if (_rightHandDistanceToMonkeyRoot < _handExtended && !isRightHandGrounded) {
+            if (_rightHandDistanceToMonkeyRoot < _handExtended & !isRightHandGrounded) {
                 _monkeySounds.PlayFootstep();
                 isRightHandGrounded = true;
             }

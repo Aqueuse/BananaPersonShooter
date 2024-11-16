@@ -23,62 +23,16 @@ namespace Save {
             
             var spaceshipsList = JsonConvert.DeserializeObject<List<SpaceshipSavedData>>(spaceshipsDataString);
 
-            foreach (var spaceship in spaceshipsList) {
+            foreach (var spaceshipSavedData in spaceshipsList) {
                 var spaceshipInstance = Instantiate(
-                    ObjectsReference.Instance.meshReferenceScriptableObject.spaceshipPrefabBySpaceshipType[spaceship.spaceshipType],
-                    JsonHelper.FromStringToVector3(spaceship.spaceshipPosition),
-                    JsonHelper.FromStringToQuaternion(spaceship.spaceshipRotation),
+                    ObjectsReference.Instance.meshReferenceScriptableObject.spaceshipPrefabBySpaceshipType[spaceshipSavedData.spaceshipType],
+                    JsonHelper.FromStringToVector3(spaceshipSavedData.spaceshipPosition),
+                    JsonHelper.FromStringToQuaternion(spaceshipSavedData.spaceshipRotation),
                     ObjectsReference.Instance.gameSave.spaceshipsContainer
                 );
-            
-                spaceshipBehaviourInstance = spaceshipInstance.GetComponent<SpaceshipBehaviour>();
-                spaceshipBehaviourInstance.spaceshipSavedData = spaceship;
-                
-                spaceshipBehaviourInstance.spaceshipName = spaceship.spaceshipName;
-                spaceshipBehaviourInstance.spaceshipGuid = spaceship.spaceshipGuid;
-            
-                spaceshipBehaviourInstance.communicationMessagePrefabIndex = spaceship.communicationMessagePrefabIndex;
-                spaceshipBehaviourInstance.spaceshipUIcolor = JsonHelper.FromStringToColor(spaceship.uiColor);
-                
-                spaceshipBehaviourInstance.travelState = spaceship.travelState;
-                spaceshipBehaviourInstance.characterType = spaceship.characterType;
-            
-                spaceshipBehaviourInstance.arrivalPosition = JsonHelper.FromStringToVector3(spaceship.arrivalPoint);
-                spaceshipBehaviourInstance.assignatedHangar = spaceship.hangarNumber;
-                
-                ObjectsReference.Instance.spaceTrafficControlManager.spaceshipBehavioursByGuid.Add(
-                    spaceshipInstance.GetComponent<SpaceshipBehaviour>().spaceshipGuid, 
-                    spaceshipInstance.GetComponent<SpaceshipBehaviour>());
-                
-                if (spaceship.travelState == TravelState.GO_TO_PATH) {
-                    spaceshipBehaviourInstance.GoToPath(spaceship.hangarNumber);
-                }
-            
-                if (spaceship.travelState == TravelState.TRAVEL_ON_PATH) {
-                    spaceshipBehaviourInstance.MoveToElevator();
-                }
-            
-                if (spaceship.travelState == TravelState.TRAVEL_ON_ELEVATOR) {
-                    spaceshipBehaviourInstance.MoveOnElevatorToHangar();
-                }
-            
-                if (spaceship.travelState == TravelState.TRAVEL_BACK_ON_ELEVATOR) {
-                    spaceshipBehaviourInstance.travelState = TravelState.LEAVES_THE_REGION;
-                    transform.position = new Vector3(transform.position.x, -10f, transform.position.z);
-                    spaceshipBehaviourInstance.arrivalPosition.y = -10f;
-                }
-            
-                if (spaceship.travelState == TravelState.LEAVES_THE_REGION) {
-                    spaceshipBehaviourInstance.arrivalPosition.y = -10f;
-                }
-            
-                if (spaceship.travelState == TravelState.FREE_FLIGHT || spaceship.travelState == TravelState.LEAVES_THE_REGION) {
-                    ObjectsReference.Instance.uiSpaceTrafficControlPanel.AddNewCommunication(spaceshipBehaviourInstance);
-                }
+
+                spaceshipInstance.GetComponent<SpaceshipBehaviour>().LoadSavedData(spaceshipSavedData);
             }
-            
-            ObjectsReference.Instance.uiSpaceTrafficControlPanel.RefreshCommunicationButton();
-            ObjectsReference.Instance.uiSpaceTrafficControlPanel.RefreshHangarAvailability();
         }
 
         public void SaveSpaceships(string saveUuid) {

@@ -39,6 +39,8 @@ namespace InGame.Items.ItemsBehaviours {
             if (Vector3.Distance(transform.position, effectSource) < 10) {
                 _rigidbody.useGravity = true;
                 _rigidbody.isKinematic = false;
+
+                gameObject.layer = 7; // Gestion mode Selectable
                 
                 GetComponent<MeshCollider>().isTrigger = false;
 
@@ -101,7 +103,7 @@ namespace InGame.Items.ItemsBehaviours {
         }
         
         private void OnCollisionEnter(Collision other) {
-            if (other.gameObject.layer == 0 & !isInSpace) {
+            if (other.gameObject.layer == 0 && !isInSpace) {
                 _rigidbody.useGravity = false;
                 _rigidbody.isKinematic = true;
             }

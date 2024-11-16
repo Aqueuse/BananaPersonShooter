@@ -15,7 +15,7 @@ namespace InGame.Inventory {
 
             droppedInventory[droppedType] += quantity;
 
-            var droppedItem = ObjectsReference.Instance.uiDroppedInventory.uInventorySlots[droppedType];
+            var droppedItem = ObjectsReference.Instance.bananaManUiDroppedInventory.uInventorySlots[droppedType];
             
             droppedItem.gameObject.SetActive(true);
             droppedItem.SetQuantity(droppedInventory[droppedType]);
@@ -23,13 +23,10 @@ namespace InGame.Inventory {
             ObjectsReference.Instance.uiQueuedMessages.AddToInventory(droppedItem.itemScriptableObject, quantity);
 
             ObjectsReference.Instance.uiFlippers.RefreshActiveBuildableAvailability();
-            if (ObjectsReference.Instance.gameManager.gameContext == GameContext.IN_MINICHIMP_VIEW) {
-                ObjectsReference.Instance.uiStats.RefreshStats();
-            }
         }
         
         public void RemoveQuantity(DroppedType droppedType, int quantity) {
-            var droppedItem = ObjectsReference.Instance.uiDroppedInventory.uInventorySlots[droppedType];
+            var droppedItem = ObjectsReference.Instance.bananaManUiDroppedInventory.uInventorySlots[droppedType];
 
             if (droppedInventory[droppedType] > quantity) {
                 droppedInventory[droppedType] -= quantity;
@@ -45,9 +42,6 @@ namespace InGame.Inventory {
             ObjectsReference.Instance.uiQueuedMessages.RemoveFromInventory(droppedItem.itemScriptableObject, quantity);
             
             ObjectsReference.Instance.uiFlippers.RefreshActiveBuildableAvailability();
-            if (ObjectsReference.Instance.gameManager.gameContext == GameContext.IN_MINICHIMP_VIEW) {
-                ObjectsReference.Instance.uiStats.RefreshStats();
-            }
         }
             
         public bool HasCraftingIngredients(BuildablePropertiesScriptableObject buildablePropertiesScriptableObject) {

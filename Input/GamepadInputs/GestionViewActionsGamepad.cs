@@ -3,13 +3,10 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 namespace GamepadInputs {
-    public class MinichimpViewActionsGamepad : InputActions {
+    public class GestionViewActionsGamepad : InputActions {
         [SerializeField] private InputActionReference moveCameraInputActionReference;
         [SerializeField] private InputActionReference rotateCameraInputActionReference;
         
-        [SerializeField] private InputActionReference switchToTabLeftInputActionReference;
-        [SerializeField] private InputActionReference switchToTabRightInputActionReference;
-
         [SerializeField] private float mouseMoveSensibility = 0.5f; 
         
         private CameraGestionDragRotate _gestionDragCamera;
@@ -25,12 +22,6 @@ namespace GamepadInputs {
 
             rotateCameraInputActionReference.action.Enable();
             rotateCameraInputActionReference.action.performed += RotateCamera;
-            
-            switchToTabLeftInputActionReference.action.performed += SwitchToTabLeft;
-            switchToTabLeftInputActionReference.action.Enable();
-
-            switchToTabRightInputActionReference.action.performed += SwitchToTabRight;
-            switchToTabRightInputActionReference.action.Enable();
         }
 
         private void OnDisable() {
@@ -40,12 +31,6 @@ namespace GamepadInputs {
 
             rotateCameraInputActionReference.action.Disable();
             rotateCameraInputActionReference.action.performed -= RotateCamera;
-
-            switchToTabLeftInputActionReference.action.performed -= SwitchToTabLeft;
-            switchToTabLeftInputActionReference.action.Disable();
-
-            switchToTabRightInputActionReference.action.performed -= SwitchToTabRight;
-            switchToTabRightInputActionReference.action.Disable();
         }
 
         private void MoveCamera(InputAction.CallbackContext context) {
@@ -58,14 +43,6 @@ namespace GamepadInputs {
 
         private void RotateCamera(InputAction.CallbackContext callbackContext) {
             _gestionDragCamera.Rotate(callbackContext.ReadValue<Vector2>());
-        }
-        
-        private void SwitchToTabLeft(InputAction.CallbackContext callbackContext) {
-            ObjectsReference.Instance.uiBananaGun.SwitchToLeftTab();
-        }
-        
-        private void SwitchToTabRight(InputAction.CallbackContext callbackContext) {
-            ObjectsReference.Instance.uiBananaGun.SwitchToRightTab();
         }
     }
 }

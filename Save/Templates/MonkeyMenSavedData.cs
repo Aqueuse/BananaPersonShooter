@@ -9,8 +9,6 @@ namespace Save.Templates {
         
         public MonkeyMenType monkeyMenType;
         public int appearanceScriptableObjectIndex;
-
-        public bool isInSpaceship;
         
         public PirateState pirateState;
         public TouristState touristState;

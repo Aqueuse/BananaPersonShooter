@@ -40,7 +40,7 @@ namespace InGame.Player {
         }
 
         public void GainHealth() {
-            if (bananaManData.bananasInventory[bananaManData.activeBanana.bananaType] > 0 && health < _maxHealth) {
+            if (bananaManData.bananasInventory[bananaManData.activeBanana.bananaType] > 0 & health < _maxHealth) {
                 health += bananaManData.activeBanana.healthBonus;
                 resistance += bananaManData.activeBanana.resistanceBonus;
 

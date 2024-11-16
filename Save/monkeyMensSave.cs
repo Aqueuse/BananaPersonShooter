@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using InGame.Items.ItemsData;
 using InGame.Monkeys;
 using Newtonsoft.Json;
@@ -18,50 +19,58 @@ namespace Save {
             if (!File.Exists(loadfilePath)) return;
 
             var monkeymensDataString = File.ReadAllText(loadfilePath);
-            var monkeymensList = JsonConvert.DeserializeObject<List<string>>(monkeymensDataString);
+            var monkeymensList = JsonConvert.DeserializeObject<List<MonkeyMenSavedData>>(monkeymensDataString);
 
             foreach (var monkeymen in monkeymensList) {
-                var monkeyMenSavedData = JsonConvert.DeserializeObject<MonkeyMenSavedData>(monkeymen);
+                // si le vaisseau du touriste ou du pirate n'existe plus, on ne le respawn pas
+                if (!ObjectsReference.Instance.spaceTrafficControlManager.spaceshipBehavioursByGuid.ContainsKey(monkeymen.spaceshipGuid)
+                    & monkeymen.characterType != CharacterType.CHIMPLOYEE)
+                    continue;
                 
                 var monkeyMenData = new MonkeyMenData {
-                    uid = monkeyMenSavedData.uid,
-                    monkeyMenName = monkeyMenSavedData.name,
-                    characterType = monkeyMenSavedData.characterType,
-                    appearanceScriptableObjectIndex = monkeyMenSavedData.appearanceScriptableObjectIndex,
-                    
-                    isInSpaceship = monkeyMenSavedData.isInSpaceship,
-                    pirateState = monkeyMenSavedData.pirateState,
-                    touristState = monkeyMenSavedData.touristState
+                    uid = monkeymen.uid,
+                    monkeyMenName = monkeymen.name,
+                    characterType = monkeymen.characterType,
+                    appearanceScriptableObjectIndex = monkeymen.appearanceScriptableObjectIndex,
+                    pirateState = monkeymen.pirateState,
+                    touristState = monkeymen.touristState,
+                    destination = JsonHelper.FromStringToVector3(monkeymen.destination),
+                    droppedInventory = monkeymen.droppedInventory,
+                    manufacturedItemsInventory = monkeymen.manufacturedItemsInventory,
+                    ingredientsInventory = monkeymen.ingredientsInventory,
+                    bananasInventory = monkeymen.bananasInventory,
+                    bitKongQuantity = monkeymen.bitKongQuantity,
+                    spaceshipGuid = monkeymen.spaceshipGuid,
+                    position = JsonHelper.FromStringToVector3(monkeymen.position),
+                    rotation = JsonHelper.FromStringToQuaternion(monkeymen.rotation),
                 };
 
-                foreach (var need in monkeyMenSavedData.needs) {
+                foreach (var need in monkeymen.needs) {
                     monkeyMenData.needs.Add(need);
                 }
+                
+                var monkeymenInstance = Instantiate(
+                    ObjectsReference.Instance.meshReferenceScriptableObject.monkeyMenPrefabByMonkeyMenType[monkeymen.monkeyMenType],
+                    position: monkeyMenData.position,
+                    rotation: monkeyMenData.rotation,
+                    parent: ObjectsReference.Instance.gameSave.chimpmensContainer
+                );
 
-                monkeyMenData.destination = JsonHelper.FromStringToVector3(monkeyMenSavedData.destination);
-                monkeyMenData.droppedInventory = monkeyMenSavedData.droppedInventory;
-                monkeyMenData.manufacturedItemsInventory = monkeyMenSavedData.manufacturedItemsInventory;
-                monkeyMenData.ingredientsInventory = monkeyMenSavedData.ingredientsInventory;
-                monkeyMenData.bananasInventory = monkeyMenSavedData.bananasInventory;
-                monkeyMenData.bitKongQuantity = monkeyMenSavedData.bitKongQuantity;
-                monkeyMenData.spaceshipGuid = monkeyMenSavedData.spaceshipGuid;
-                monkeyMenData.position = JsonHelper.FromStringToVector3(monkeyMenSavedData.position);
-                monkeyMenData.rotation = JsonHelper.FromStringToQuaternion(monkeyMenSavedData.rotation);
-
-                if (monkeyMenSavedData.isInSpaceship) {
-                    // just add the monkeyData to the spaceship
-                    ObjectsReference.Instance.spaceTrafficControlManager.spaceshipBehavioursByGuid[monkeyMenData.spaceshipGuid].monkeyMensData.Add(monkeyMenData);
-                }
-
-                else {
-                    var monkeymenInstance = Instantiate(
-                        ObjectsReference.Instance.meshReferenceScriptableObject.chimpmenPrefabByChimpmenType[monkeyMenSavedData.monkeyMenType],
-                        ObjectsReference.Instance.gameSave.chimpmensContainer
-                    );
-                    
-                    monkeymenInstance.GetComponent<MonkeyMenBehaviour>().monkeyMenData = monkeyMenData;
+                monkeymenInstance.GetComponent<MonkeyMenBehaviour>().monkeyMenData = monkeyMenData;
+                monkeymenInstance.GetComponent<MonkeyMenBehaviour>().Init();
+            }
+            
+            var spaceshipBehavioursCopy = ObjectsReference.Instance.spaceTrafficControlManager.spaceshipBehavioursByGuid.ToList();
+            
+            foreach (var spaceshipBehaviour in spaceshipBehavioursCopy) {
+                if (spaceshipBehaviour.Value.travelers.Count == 0) {
+                    spaceshipBehaviour.Value.LeaveRegion();
                 }
             }
+            
+            // refresh after eventually removing unpopulated spaceships
+            ObjectsReference.Instance.uiSpaceTrafficControlPanel.RefreshCommunicationButton();
+            ObjectsReference.Instance.uiSpaceTrafficControlPanel.RefreshHangarAvailability();
         }
         
         public void SaveMonkeyMens(string saveUuid) {

@@ -1,4 +1,6 @@
 public enum TouristState {
+    GO_TO_TELEPORTER,
+    SEARCH_WAITING_LINE,
     GO_TO_WAITING_LINE,
     IN_WAITING_LINE,
     SEARCH_NEED,

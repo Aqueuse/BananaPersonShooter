@@ -59,8 +59,8 @@ namespace Save {
             var mapDataSavesPath = Path.Combine(_savePath, "WORLD_DATA");
             
             var savefilePath = Path.Combine(mapDataSavesPath, "spaceshipDebris.json");
-        
-            var spaceshipDebrisBehaviours = FindObjectsByType<SpaceshipDebrisBehaviour>(FindObjectsSortMode.None);
+            
+            var spaceshipDebrisBehaviours = debrisContainer.GetComponentsInChildren<SpaceshipDebrisBehaviour>();
 
             spaceshipDebrisDataDictionnaryBySpaceshipType.Clear();
             

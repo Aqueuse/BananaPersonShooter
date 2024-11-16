@@ -1,15 +1,7 @@
+using Enums;
 using UnityEngine;
 
 namespace UI.InGame.MiniChimpView {
-    public enum BuildableCategory {
-        FUN,
-        HUNGER,
-        REST,
-        KNOWLEDGE,
-        SOUVENIR,
-        OTHER
-    }
-    
     public class UIBuildables : MonoBehaviour {
         [SerializeField] private GenericDictionary<BuildableCategory, GameObject> buildablesSubMenuByBuildablesType;
 
@@ -34,11 +26,11 @@ namespace UI.InGame.MiniChimpView {
         public void ShowOtherSubMenu() { ShowSubMenu(BuildableCategory.OTHER); }
 
         public void Repair() {
-            ObjectsReference.Instance.miniChimpViewMode.StartRepairing();
+            ObjectsReference.Instance.gestionViewMode.StartRepairing();
         }
         
         public void Destroy() {
-            ObjectsReference.Instance.miniChimpViewMode.StartHarvesting();
+            ObjectsReference.Instance.gestionViewMode.StartHarvesting();
         }
     }
 }

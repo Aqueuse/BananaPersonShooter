@@ -39,7 +39,6 @@ namespace SharedInputs {
 
         private void UngrabBananaGun(InputAction.CallbackContext callbackContext) {
             ObjectsReference.Instance.bananaGun.UngrabBananaGun();
-            ObjectsReference.Instance.uiManager.HideBananaGunUI();
             scan.enabled = false;
         }
     }

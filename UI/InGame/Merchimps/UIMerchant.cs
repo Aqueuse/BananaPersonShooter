@@ -112,7 +112,7 @@ namespace UI.InGame.Merchimps {
         }
 
         public bool IsInOptionsMenu() {
-            return buyUiMerchantSliderMenu.isActiveAndEnabled || sellUiMerchantSliderMenu.isActiveAndEnabled;
+            return buyUiMerchantSliderMenu.isActiveAndEnabled | sellUiMerchantSliderMenu.isActiveAndEnabled;
         }
         
         public void RefreshMerchantInventories() {

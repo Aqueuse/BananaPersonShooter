@@ -44,7 +44,7 @@ namespace InGame.MiniGames.SpaceTrafficControlMiniGame.Spaceships {
             InvokeRepeating(nameof(SpawnSpaceshipInSpace), 2, 2);
         }
         
-        public void RemoveGuest() {
+        public void RemoveGuestInCampaignCreator() {
             if (spaceships.Count == 0) {
                 ObjectsReference.Instance.uiMarketingPanel.SwitchToCampaignCreator();
             }
@@ -67,25 +67,21 @@ namespace InGame.MiniGames.SpaceTrafficControlMiniGame.Spaceships {
             arrivalPoint.y = 2631f;
 
             var characterType = spacechipsQueue.Dequeue();
+
+            var spaceshipType = MeshReferenceScriptableObject.GetRandomSpaceshipType();
             
             var spaceship = Instantiate(
-                ObjectsReference.Instance.meshReferenceScriptableObject.GetRandomSpaceship(),
+                ObjectsReference.Instance.meshReferenceScriptableObject.spaceshipPrefabBySpaceshipType[spaceshipType],
                 entryPoint,
                 Quaternion.identity,
-                null);
+                ObjectsReference.Instance.gameSave.spaceshipsContainer);
             
             spaceship.transform.rotation = Quaternion.Euler((transform.position - entryPoint).normalized); 
 
             spaceshipBehaviourInstance = spaceship.GetComponent<SpaceshipBehaviour>();
-
-            spaceshipBehaviourInstance.characterType = characterType;
+            spaceshipBehaviourInstance.Init(arrivalPoint, characterType, spaceshipType);
             
-            spaceshipBehaviourInstance.GenerateSpaceshipData();
-            spaceshipBehaviourInstance.arrivalPosition = arrivalPoint;
-            
-            ObjectsReference.Instance.spaceTrafficControlManager.spaceshipBehavioursByGuid.Add(spaceshipBehaviourInstance.spaceshipGuid, spaceship.GetComponent<SpaceshipBehaviour>());
-
-            spaceshipBehaviourInstance.OpenCommunications();
+            ObjectsReference.Instance.spaceTrafficControlManager.spaceshipBehavioursByGuid.Add(spaceshipBehaviourInstance.spaceshipData.spaceshipGuid, spaceship.GetComponent<SpaceshipBehaviour>());
         }
 
         private List<CharacterType> ShuffleSpaceships(int pirateSpaceshipsQuantity, int visitorsSpaceshipsQuantity, int merchantsSpaceshipsQuantity) {

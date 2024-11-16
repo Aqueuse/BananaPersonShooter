@@ -14,7 +14,7 @@ namespace InGame.Inventory {
             
             ingredientsInventory[ingredientsType] += quantity;
 
-            var ingredientItem = ObjectsReference.Instance.uiIngredientsInventory.uInventorySlots[ingredientsType];
+            var ingredientItem = ObjectsReference.Instance.bananaManUiIngredientsInventory.uInventorySlots[ingredientsType];
             ingredientItem.gameObject.SetActive(true);
             ingredientItem.SetQuantity(ingredientsInventory[ingredientsType]);
             
@@ -22,7 +22,7 @@ namespace InGame.Inventory {
         }
 
         public void RemoveQuantity(IngredientsType ingredientsType, int quantity) {
-            var ingredientItem = ObjectsReference.Instance.uiIngredientsInventory.uInventorySlots[ingredientsType];
+            var ingredientItem = ObjectsReference.Instance.bananaManUiIngredientsInventory.uInventorySlots[ingredientsType];
             
             if (ingredientsInventory[ingredientsType] > quantity) {
                 ingredientsInventory[ingredientsType] -= quantity;

@@ -32,7 +32,9 @@ public class InputManager : MonoBehaviour {
     public void SwitchBackToGame() {
         ObjectsReference.Instance.gameManager.gameContext = GameContext.IN_GAME;
         SwitchContext(InputContext.GAME);
-                
+
+        ObjectsReference.Instance.cameraPlayer.SetNormalSensibility();
+
         ObjectsReference.Instance.bananaGunActionsSwitch.gameObject.SetActive(true);
     }
 }

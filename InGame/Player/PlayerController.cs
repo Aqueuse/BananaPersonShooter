@@ -137,15 +137,15 @@ namespace InGame.Player {
         }
 
         public void PlayerJump() {
-            if (isGrounded && !isRolling) {
+            if (isGrounded & !isRolling) {
                _rigidbody.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
                _tpsPlayerAnimatorScript.Jump();
             }
         }
 
         public void PlayerRoll() {
-            if (isGrounded && !ObjectsReference.Instance.bananaMan.isGrabingBananaGun && isRolling == false) {
-                if (_rawInputMovement.z != 0 || _rawInputMovement.x != 0) {
+            if (isGrounded & !ObjectsReference.Instance.bananaMan.isGrabingBananaGun & isRolling == false) {
+                if (_rawInputMovement.z != 0 | _rawInputMovement.x != 0) {
                      _tpsPlayerAnimatorScript.Roll();
                     _capsuleCollider.height = 0.90f;
                     _capsuleCollider.center = new Vector3(-0.01361084f, 0.44f, 1.027142e-11f);
@@ -154,7 +154,7 @@ namespace InGame.Player {
         }
 
         public void PlayerSprint() {
-            if (isGrounded && !isRolling && !isInWater) speed = SprintMovementSpeed;
+            if (isGrounded & !isRolling & !isInWater) speed = SprintMovementSpeed;
         }
 
         public void PlayerStopSprint() {

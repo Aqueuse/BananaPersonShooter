@@ -14,7 +14,7 @@ namespace UI.InGame.CommandRoomControlPanels {
         }
         
         public void SetBananaQuantity(int bananaQuantity, BananaType bananaType) {
-            if (bananaType == BananaType.EMPTY || ObjectsReference.Instance.bananasInventory.bananasInventory[bananaType] == 0) {
+            if (bananaType == BananaType.EMPTY | ObjectsReference.Instance.bananasInventory.bananasInventory[bananaType] == 0) {
                 ObjectsReference.Instance.uiCannons.noBananaText.alpha = 100;
                 this.bananaQuantity.text = "0";
                 return;

@@ -5,24 +5,18 @@ using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 namespace UI.InGame.Inventory {
-    public enum BananaGunUITabType {
+    public enum InventoryUITabType {
         INVENTORY_DROPPED = 0,
         INVENTORY_INGREDIENTS = 1,
         INVENTORY_MANUFACTURED_ITEMS = 2,
-        INVENTORY_BUILDABLES = 3,
-        MINICHIMPBLOCK_DIALOGUE = 4,
-        MINICHIMPBLOCK_DESCRIPTION = 5,
-        MINICHIMPBLOCK_MAP = 6,
-        MINICHIMPBLOCK_BANANAPEDIA = 7,
-        MINICHIMPBLOCK_HELP = 8
+        INVENTORY_BUILDABLES = 3
     }
     
-    public enum MiniChimpBlockTabType {
-        MINICHIMPBLOCK_DIALOGUE,
-        MINICHIMPBLOCK_DESCRIPTION,
-        MINICHIMPBLOCK_MAP,
-        MINICHIMPBLOCK_BANANAPEDIA,
-        MINICHIMPBLOCK_HELP
+    public enum MainBlockType {
+        DIALOGUE,
+        INVENTORIES,
+        COMMAND_ROOM,
+        HELP
     }
 
     public class UInventoriesManager : MonoBehaviour {
@@ -41,10 +35,10 @@ namespace UI.InGame.Inventory {
         [SerializeField] private UIHelper keyboardUIHelper;
         
         public void RefreshInventories() {
-            ObjectsReference.Instance.uiDroppedInventory.RefreshUInventory();
-            ObjectsReference.Instance.uiIngredientsInventory.RefreshUInventory();
-            ObjectsReference.Instance.uiManufacturedItemsItemsInventory.RefreshUInventory();
-            ObjectsReference.Instance.uiBlueprintsInventory.RefreshUInventory();
+            ObjectsReference.Instance.bananaManUiDroppedInventory.RefreshUInventory();
+            ObjectsReference.Instance.bananaManUiIngredientsInventory.RefreshUInventory();
+            ObjectsReference.Instance.bananaManUiManufacturedItemsInventory.RefreshUInventory();
+            ObjectsReference.Instance.bananaManUiBlueprintsInventory.RefreshUInventory();
         }
         
         public void SetLastSelectedItem(ItemCategory itemCategory, GameObject lastSelectedItem) {
@@ -68,13 +62,13 @@ namespace UI.InGame.Inventory {
         private void FocusFirstSlotInInventory(ItemCategory inventoryCategory) {
             switch (inventoryCategory) {
                 case ItemCategory.INGREDIENT:
-                    ObjectsReference.Instance.uiIngredientsInventory.SelectFirstSlot();
+                    ObjectsReference.Instance.bananaManUiIngredientsInventory.SelectFirstSlot();
                     break;
                 case ItemCategory.DROPPED:
-                    ObjectsReference.Instance.uiDroppedInventory.SelectFirstSlot();
+                    ObjectsReference.Instance.bananaManUiDroppedInventory.SelectFirstSlot();
                     break;
                 case ItemCategory.MANUFACTURED_ITEM:
-                    ObjectsReference.Instance.uiManufacturedItemsItemsInventory.SelectFirstSlot();
+                    ObjectsReference.Instance.bananaManUiManufacturedItemsInventory.SelectFirstSlot();
                     break;
             }
         }

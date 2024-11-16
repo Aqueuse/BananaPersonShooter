@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 namespace KeyboardInputs {
-    public class MinichimpViewActionsKeyboard : InputActions {
+    public class GestionViewActionsKeyboard : InputActions {
         [SerializeField] private InputActionReference dragMouseRotateInputActionReference;
         [SerializeField] private InputActionReference dragMouseMoveInputActionReference;
 
@@ -150,11 +150,11 @@ namespace KeyboardInputs {
             var contextValue = context.ReadValue<float>(); 
             
             if (contextValue < 0) {
-                ObjectsReference.Instance.miniChimpViewMode.RotateGhost(Vector3.up); 
+                ObjectsReference.Instance.gestionViewMode.RotateGhost(Vector3.up); 
             }
 
             if (contextValue > 0) {
-                ObjectsReference.Instance.miniChimpViewMode.RotateGhost(Vector3.down);
+                ObjectsReference.Instance.gestionViewMode.RotateGhost(Vector3.down);
             }
         }
         

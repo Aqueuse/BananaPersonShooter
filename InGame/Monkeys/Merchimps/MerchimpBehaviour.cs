@@ -25,7 +25,7 @@ namespace InGame.Monkeys.Merchimps {
         private int waitTimer;
         
         private void StartWaitingTimer() {
-            transform.position = monkeyMenBehaviour.associatedSpaceship.transform.position;
+            transform.position = monkeyMenBehaviour.associatedSpaceshipBehaviour.transform.position;
             
             uiMerchantWaitTimer.SetTimer(120);
             waitTimer = 120;
@@ -35,9 +35,9 @@ namespace InGame.Monkeys.Merchimps {
         public void DecrementeTimer() {
             waitTimer--;
             if (waitTimer <= 0) {
-                transform.position = monkeyMenBehaviour.associatedSpaceship.transform.position;
+                transform.position = monkeyMenBehaviour.associatedSpaceshipBehaviour.transform.position;
                 CancelInvoke(nameof(DecrementeTimer));
-                monkeyMenBehaviour.associatedSpaceship.StopWaiting();
+                monkeyMenBehaviour.associatedSpaceshipBehaviour.StopWaiting();
             }
             
             uiMerchantWaitTimer.SetTimer(waitTimer);

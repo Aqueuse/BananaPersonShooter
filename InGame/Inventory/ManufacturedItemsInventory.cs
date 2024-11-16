@@ -14,7 +14,7 @@ namespace InGame.Inventory {
 
             manufacturedItemsInventory[manufacturedItemsType] += quantity;
 
-            var manufacturedItem = ObjectsReference.Instance.uiManufacturedItemsItemsInventory.uInventorySlots[manufacturedItemsType];
+            var manufacturedItem = ObjectsReference.Instance.bananaManUiManufacturedItemsInventory.uInventorySlots[manufacturedItemsType];
             
             manufacturedItem.gameObject.SetActive(true);
             manufacturedItem.SetQuantity(manufacturedItemsInventory[manufacturedItemsType]);
@@ -23,7 +23,7 @@ namespace InGame.Inventory {
         }
         
         public void RemoveQuantity(ManufacturedItemsType manufacturedItemsType, int quantity) {
-            var manufacturedItem = ObjectsReference.Instance.uiManufacturedItemsItemsInventory.uInventorySlots[manufacturedItemsType];
+            var manufacturedItem = ObjectsReference.Instance.bananaManUiManufacturedItemsInventory.uInventorySlots[manufacturedItemsType];
 
             if (manufacturedItemsInventory[manufacturedItemsType] > quantity) {
                 manufacturedItemsInventory[manufacturedItemsType] -= quantity;

@@ -4,20 +4,18 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 namespace SharedInputs {
-    public class MinichimpViewActions : InputActions {
+    public class GestionViewActions : InputActions {
         [SerializeField] private InputActionReference leftClickInputActionReference;
         [SerializeField] private InputActionReference rotateGhostInputActionReference;
         
-        [SerializeField] private InputActionReference switchToGameReference;
-
         private float _counter;
         
         private ItemScriptableObject selectedBuildableScriptableObject;
 
-        private MiniChimpViewMode miniChimpViewMode;
+        private GestionViewMode _gestionViewMode;
         
         private void Start() {
-            miniChimpViewMode = ObjectsReference.Instance.miniChimpViewMode;
+            _gestionViewMode = ObjectsReference.Instance.gestionViewMode;
         }
 
         private void OnEnable() {
@@ -37,9 +35,6 @@ namespace SharedInputs {
 
             rotateGhostInputActionReference.action.Enable();
             rotateGhostInputActionReference.action.performed += RotateGhost;
-            
-            switchToGameReference.action.performed += SwitchBackToGame;
-            switchToGameReference.action.Enable();
         }
 
         private void OnDisable() {
@@ -48,53 +43,38 @@ namespace SharedInputs {
 
             rotateGhostInputActionReference.action.Disable();
             rotateGhostInputActionReference.action.performed -= RotateGhost;
-            
-            switchToGameReference.action.performed -= SwitchBackToGame;
-            switchToGameReference.action.Disable();
         }
         
         private void RotateGhost(InputAction.CallbackContext context) {
             var contextValue = context.ReadValue<float>(); 
             
             if (contextValue < 0) {
-                miniChimpViewMode.RotateGhost(Vector3.up);
+                _gestionViewMode.RotateGhost(Vector3.up);
             }
 
             if (contextValue > 0) {
-                miniChimpViewMode.RotateGhost(Vector3.down);
+                _gestionViewMode.RotateGhost(Vector3.down);
             }
         }
         
         private void ContextualLeftClick(InputAction.CallbackContext context) {
-            var viewContextType = miniChimpViewMode.viewModeContextType;
+            var viewContextType = _gestionViewMode.viewModeContextType;
 
             if (viewContextType == ViewModeContextType.SCAN) {
                 ObjectsReference.Instance.scanWithMouseForDescription.enabled = true;
             }
 
             if (viewContextType == ViewModeContextType.BUILD) {
-                miniChimpViewMode.ValidateBuildable();
+                _gestionViewMode.ValidateBuildable();
             }
 
             if (viewContextType == ViewModeContextType.HARVEST) {
-                miniChimpViewMode.harvest();
+                _gestionViewMode.harvest();
             }
             
             if (viewContextType == ViewModeContextType.REPAIR) {
-                miniChimpViewMode.RepairBuildable();
+                _gestionViewMode.RepairBuildable();
             }
-        }
-        
-        private void SwitchBackToGame(InputAction.CallbackContext callbackContext) {
-            ObjectsReference.Instance.uiManager.HideBananaGunUI();
-            ObjectsReference.Instance.uiManager.SwitchToBananaManPerspective();
-            
-            ObjectsReference.Instance.inputManager.SwitchBackToGame();
-            
-            ObjectsReference.Instance.gameManager.gameContext = GameContext.IN_GAME;
-            ObjectsReference.Instance.inputManager.SwitchContext(InputContext.GAME);
-                
-            ObjectsReference.Instance.bananaGunActionsSwitch.gameObject.SetActive(true);
         }
     }
 }

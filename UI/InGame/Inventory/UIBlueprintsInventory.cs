@@ -38,14 +38,5 @@ namespace UI.InGame.Inventory {
             buttonImage.color = activatedColor;
             buttonText.color = Color.black;
         }
-
-        public void Desactivate() {
-            buildablePanelCanvasGroup.alpha = 0;
-            buildablePanelCanvasGroup.interactable = false;
-            buildablePanelCanvasGroup.blocksRaycasts = false;
-                
-            buttonImage.color = Color.black;
-            buttonText.color = activatedColor;
-        }
     }
 }

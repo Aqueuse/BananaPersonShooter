@@ -9,7 +9,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 namespace InGame.Gestion {
-    public class MiniChimpViewMode : MonoBehaviour {
+    public class GestionViewMode : MonoBehaviour {
         [SerializeField] private LayerMask buildingLayerMask;
         [SerializeField] private LayerMask GestionViewSelectableLayerMask;
 

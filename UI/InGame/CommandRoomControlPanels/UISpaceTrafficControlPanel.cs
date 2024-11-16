@@ -59,8 +59,8 @@ namespace UI.InGame.CommandRoomControlPanels {
             var spaceshipButton = Instantiate(spaceshipButtonPrefab, spaceshipsListContainer, false);
             
             spaceshipButton.GetComponent<UIcommunication>().associatedSpaceshipBehaviour = spaceshipBehaviour;
-            spaceshipButton.GetComponentInChildren<TextMeshProUGUI>().text = spaceshipBehaviour.spaceshipName;
-            spaceshipButton.GetComponent<Image>().color = spaceshipBehaviour.spaceshipUIcolor;
+            spaceshipButton.GetComponentInChildren<TextMeshProUGUI>().text = spaceshipBehaviour.spaceshipData.spaceshipName;
+            spaceshipButton.GetComponent<Image>().color = spaceshipBehaviour.spaceshipData.spaceshipUIcolor;
             
             RefreshCommunicationButton();
         }
@@ -73,7 +73,9 @@ namespace UI.InGame.CommandRoomControlPanels {
             answersListCanvasGroup.blocksRaycasts = true;
 
             if (spaceshipMessage != null) spaceshipMessage.SetActive(false);
-            spaceshipMessage = spaceshipMessagesByCharacterType[spaceshipBehaviour.characterType][spaceshipBehaviour.communicationMessagePrefabIndex]; 
+            spaceshipMessage = spaceshipMessagesByCharacterType
+                [spaceshipBehaviour.spaceshipData.characterType]
+                [spaceshipBehaviour.spaceshipData.communicationMessagePrefabIndex]; 
             
             spaceshipMessage.SetActive(true);
             messagePlaceholder.SetActive(false);
@@ -112,7 +114,6 @@ namespace UI.InGame.CommandRoomControlPanels {
                     hangarButtonsByHangarNumber[hangar.Key].GetComponent<Image>().color = hangarUnavailableColor;
                 }
             }
-
         }
 
         public void RefreshCommunicationButton() {

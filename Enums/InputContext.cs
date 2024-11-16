@@ -3,6 +3,6 @@ public enum InputContext {
     UI,
     CANNONS,
     HOME,
-    MINICHIMP_VIEW,
-    INVENTORIES
+    GESTION_VIEW,
+    GESTION_PANEL
 }

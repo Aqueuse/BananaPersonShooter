@@ -25,7 +25,7 @@ namespace InGame.Interactions.InteractionsActions {
                     GAME_OBJECT_TAG.RETRIEVER_ROTATING_LOGO
                 );
 
-                if (logo != null && logo.GetComponent<RotateTransform>() == null)
+                if (logo != null & logo.GetComponent<RotateTransform>() == null)
                     logo.AddComponent<RotateTransform>();
             }
 

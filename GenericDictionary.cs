@@ -120,6 +120,13 @@ public class GenericDictionary<TKey, TValue> : IDictionary<TKey, TValue>, ISeria
         return false;
     }
 
+    /// <summary>
+    ///  Copy to Array
+    /// </summary>
+    /// <param name="the created array"></param>
+    /// <param name="starting at"></param>
+    /// <exception cref="ArgumentException"></exception>
+    /// <exception cref="ArgumentOutOfRangeException"></exception>
     public void CopyTo(KeyValuePair<TKey, TValue>[] array, int arrayIndex) {
         if (array == null)
             throw new ArgumentException("The array cannot be null.");

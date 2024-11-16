@@ -3,7 +3,7 @@ using Tags;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-namespace InGame.MiniChimpBlock {
+namespace InGame.MainBlock {
     public class ScanWithMouseForDescription : MonoBehaviour {
         [SerializeField] private LayerMask GestionViewSelectableLayerMask;
         
@@ -20,9 +20,14 @@ namespace InGame.MiniChimpBlock {
             ray = mainCamera.ScreenPointToRay(Mouse.current.position.value);
 
             if (Physics.Raycast(ray, out raycastHit, Single.PositiveInfinity, layerMask: GestionViewSelectableLayerMask)) {
-                ObjectsReference.Instance.uiDescriptionsManager.SetDescription(raycastHit.transform.GetComponent<Tag>().itemScriptableObject, raycastHit.transform.gameObject);
-                ObjectsReference.Instance.uiManager.ShowMiniChimpBlock();
-                ObjectsReference.Instance.uiBananaGun.SwitchToDescription();
+                var itemData = raycastHit.transform.GetComponent<Tag>().itemScriptableObject;
+                
+                ObjectsReference.Instance.uInfobulle.SetDescriptionAndNameInWorldPosition(
+                    itemData.GetName(),
+                    itemData.GetDescription(),
+                    Mouse.current.position.value
+                    );
+                
                 enabled = false;
             }
         }

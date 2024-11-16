@@ -7,8 +7,8 @@ namespace UI.InGame.Inventory {
         public BuildablePropertiesScriptableObject buildableScriptableObject;
 
         public void Activate() {
-            if (ObjectsReference.Instance.gameManager.gameContext == GameContext.IN_MINICHIMP_VIEW) {
-                ObjectsReference.Instance.miniChimpViewMode.ActivateGhostByScriptableObject(buildableScriptableObject);
+            if (ObjectsReference.Instance.gameManager.gameContext == GameContext.IN_GESTION_VIEW) {
+                ObjectsReference.Instance.gestionViewMode.ActivateGhostByScriptableObject(buildableScriptableObject);
             }
 
             else {

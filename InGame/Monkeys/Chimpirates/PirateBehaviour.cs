@@ -10,97 +10,126 @@ namespace InGame.Monkeys.Chimpirates {
         public MonkeyMenBehaviour monkeyMenBehaviour;
         private NavMeshAgent _navMeshAgent;
         private Animator _animator;
-        
+        private SearchWaitingLine searchWaitingLine;
+        private SearchBuildableToBreak searchBuildableToBreak;
+
         [SerializeField] private float explosionForce;
-        
+
         // synchronize navmeshagent with animator
         private static readonly int startBreakingAnimatorProperty = Animator.StringToHash("break");
         private static readonly int isInAirAnimatorProperty = Animator.StringToHash("isInAir");
-        
+
         private Vector3 randomDirection;
         private Vector3 finalPosition;
-        
+
         private BuildableBehaviour buildableToBreak;
-        
+
         //////////// (👉ﾟヮﾟ)👉   IA  👈(ﾟヮﾟ👈) ///////////
-        public PirateState pirateState = PirateState.GO_TO_TELEPORTER;
         public float distanceToDestination;
         private NavMeshPath path;
 
-        public float searchTimer;
+        public float searchTimer = 100;
         private RaycastHit raycastHit;
         private Vector3 rotatingAxis;
 
         private GameObject itemToDrop;
 
         private void Start() {
-            _navMeshAgent = GetComponent<NavMeshAgent>();
             _animator = GetComponent<Animator>();
+            _navMeshAgent = GetComponent<NavMeshAgent>();
             monkeyMenBehaviour = GetComponent<MonkeyMenBehaviour>();
-            
-            monkeyMenBehaviour.destination = ObjectsReference.Instance.gameManager
-                .spawnPointsBySpawnType[SpawnPoint.TP_HANGARS].position;
+            searchWaitingLine = monkeyMenBehaviour.searchWaitingLine;
+            searchBuildableToBreak = monkeyMenBehaviour.searchBuildableToBreak;
         }
 
         private void Update() {
-            if (pirateState == PirateState.PLATEFORM_INTERACTION) return;
+            if (monkeyMenBehaviour.monkeyMenData.pirateState == PirateState.PLATEFORM_INTERACTION) return;
 
-            if (ObjectsReference.Instance.gameManager.gameContext == GameContext.IN_GAME && pirateState != PirateState.BREAK_THING) {
+            if (ObjectsReference.Instance.gameManager.gameContext == GameContext.IN_GAME & monkeyMenBehaviour.monkeyMenData.pirateState != PirateState.BREAK_THING) {
                 monkeyMenBehaviour.SynchronizeAnimatorAndAgent();
             }
+            
+            if (monkeyMenBehaviour.monkeyMenData.pirateState == PirateState.GO_TO_TELEPORTER) {
+                // we must recalcutate distanceToDestination for each case 🎃 🍌
+                // to prevent the Slipping Of The State Machine Of Death 👻 😱
+                distanceToDestination = Vector3.Distance(monkeyMenBehaviour.monkeyMenData.destination, transform.position);
 
-            if (pirateState == PirateState.GO_TO_TELEPORTER) {
-                _navMeshAgent.SetDestination(monkeyMenBehaviour.destination);
-
-                if (distanceToDestination < 0.1f) {
+                _navMeshAgent.SetDestination(monkeyMenBehaviour.monkeyMenData.destination);
+                
+                if (distanceToDestination < 1f) {
                     _navMeshAgent.Warp(ObjectsReference.Instance.gameManager.spawnPointsBySpawnType[SpawnPoint.TP_COROLLE].position);
+                    searchWaitingLine.enabled = true;
+                    monkeyMenBehaviour.monkeyMenData.pirateState = PirateState.SEARCH_WAITING_LINE;
                 }
             }
-
-            if (pirateState == PirateState.SEARCH_THING_TO_BREAK) {
+            
+            if (monkeyMenBehaviour.monkeyMenData.pirateState == PirateState.SEARCH_WAITING_LINE) {
                 searchTimer -= 1;
                 
                 if (searchTimer < 0) {
-                    GoBackToTeleporter();
-                }
-
-                if (monkeyMenBehaviour.searchBuildableToBreak.hasFoundBuildable) {
-                    buildableToBreak = monkeyMenBehaviour.searchBuildableToBreak.buildableFounded;
-                    buildableToBreak.isPirateTargeted = true;
-                    monkeyMenBehaviour.destination = buildableToBreak.ChimpTargetTransform.position;
-                    pirateState = PirateState.GO_BREAK_THING;
-
-                    monkeyMenBehaviour.searchBuildableToBreak.hasFoundBuildable = false;
-                    monkeyMenBehaviour.searchBuildableToBreak.enabled = false;
+                    _navMeshAgent.Warp(ObjectsReference.Instance.gameManager.spawnPointsBySpawnType[SpawnPoint.TP_HANGARS].position);
+                    
+                    monkeyMenBehaviour.monkeyMenData.destination = ObjectsReference.Instance.spaceTrafficControlManager.spaceshipBehavioursByGuid[monkeyMenBehaviour.monkeyMenData.spaceshipGuid].chimpMensSpawnPoint.position;
+                    monkeyMenBehaviour.monkeyMenData.pirateState = PirateState.GO_BACK_TO_SPACESHIP;
                 }
             }
-
-            if (pirateState == PirateState.SEARCH_RANDOM_POINT) {
+            
+            if (monkeyMenBehaviour.monkeyMenData.pirateState == PirateState.SEARCH_RANDOM_POINT) {
                 var randomPosition = transform.position + Random.insideUnitSphere * 100;
 
                 if (NavMesh.SamplePosition(randomPosition, out var navMeshHit, 2, 1)) {
-                    if (Vector3.Distance(monkeyMenBehaviour.destination, transform.position) > 10) {
+                    if (Vector3.Distance(monkeyMenBehaviour.monkeyMenData.destination, transform.position) > 10) {
                         path = new NavMeshPath();
                         if (_navMeshAgent.CalculatePath(navMeshHit.position, path)) {
                             if (path.status == NavMeshPathStatus.PathComplete) {
-                                monkeyMenBehaviour.destination = navMeshHit.position;
-                                pirateState = PirateState.GO_TO_RANDOM_POINT;
+                                monkeyMenBehaviour.monkeyMenData.destination = navMeshHit.position;
+                                monkeyMenBehaviour.monkeyMenData.pirateState = PirateState.GO_TO_RANDOM_POINT;
                             }
                         }
                     }
                 }
             }
+            
+            if (monkeyMenBehaviour.monkeyMenData.pirateState == PirateState.GO_TO_RANDOM_POINT) {
+                distanceToDestination = Vector3.Distance(monkeyMenBehaviour.monkeyMenData.destination, transform.position);
+                
+                _navMeshAgent.SetDestination(monkeyMenBehaviour.monkeyMenData.destination);
+                
+                if (distanceToDestination < 2f) {
+                    searchTimer = 100;
+                    monkeyMenBehaviour.monkeyMenData.pirateState = PirateState.SEARCH_THING_TO_BREAK; 
+                }
+            }
+            
+            if (monkeyMenBehaviour.monkeyMenData.pirateState == PirateState.SEARCH_THING_TO_BREAK) {
+                searchTimer -= 1;
+                
+                if (searchBuildableToBreak.hasFoundBuildable) {
+                    buildableToBreak = searchBuildableToBreak.buildableFounded;
+                    buildableToBreak.isPirateTargeted = true;
+                    monkeyMenBehaviour.monkeyMenData.destination = buildableToBreak.ChimpTargetTransform.position;
+                    monkeyMenBehaviour.monkeyMenData.pirateState = PirateState.GO_BREAK_THING;
 
-            distanceToDestination = Vector3.Distance(monkeyMenBehaviour.destination, transform.position);
+                    searchBuildableToBreak.hasFoundBuildable = false;
+                    searchBuildableToBreak.enabled = false;
+                }
 
-            if (pirateState == PirateState.GO_BREAK_THING) {
-                _navMeshAgent.SetDestination(monkeyMenBehaviour.destination);
+                else if (searchTimer < 0) {
+                    monkeyMenBehaviour.monkeyMenData.destination = ObjectsReference.Instance.gameManager.spawnPointsBySpawnType[SpawnPoint.TP_COROLLE].position;
+                    monkeyMenBehaviour.monkeyMenData.pirateState = PirateState.GO_BACK_TO_TELEPORTER;
+                }
+            }
+            
+            if (monkeyMenBehaviour.monkeyMenData.pirateState == PirateState.GO_BREAK_THING) {
+                distanceToDestination = Vector3.Distance(monkeyMenBehaviour.monkeyMenData.destination, transform.position);
+
+                _navMeshAgent.SetDestination(monkeyMenBehaviour.monkeyMenData.destination);
 
                 if (distanceToDestination < 1f) {
                     _animator.SetTrigger(startBreakingAnimatorProperty);
                     buildableToBreak.BreakBuildable();
 
-                    pirateState = PirateState.BREAK_THING;
+                    monkeyMenBehaviour.monkeyMenData.pirateState = PirateState.BREAK_THING;
 
                     var rawMaterialsWithQuantity = ObjectsReference.Instance.meshReferenceScriptableObject.buildablePropertiesScriptableObjects[buildableToBreak.buildableType].rawMaterialsWithQuantity; 
 
@@ -110,30 +139,34 @@ namespace InGame.Monkeys.Chimpirates {
                     }
                 }
             }
+            
+            if (monkeyMenBehaviour.monkeyMenData.pirateState == PirateState.GO_BACK_TO_TELEPORTER | monkeyMenBehaviour.monkeyMenData.pirateState == PirateState.FLEE) {
+                distanceToDestination = Vector3.Distance(monkeyMenBehaviour.monkeyMenData.destination, transform.position);
 
-            if (pirateState == PirateState.GO_TO_RANDOM_POINT) {
-                _navMeshAgent.SetDestination(monkeyMenBehaviour.destination);
-                
-                if (distanceToDestination < 2f) {
-                    pirateState = PirateState.GO_TO_TELEPORTER; 
-                    Invoke(nameof(GoBackToTeleporter), 5);
-                }
-            }
-
-            if (pirateState == PirateState.GO_BACK_TO_TELEPORTER || pirateState == PirateState.FLEE) {
-                _navMeshAgent.SetDestination(monkeyMenBehaviour.destination);
+                _navMeshAgent.SetDestination(monkeyMenBehaviour.monkeyMenData.destination);
                 
                 if (distanceToDestination < 1f) {
                     _navMeshAgent.Warp(ObjectsReference.Instance.gameManager.spawnPointsBySpawnType[SpawnPoint.TP_HANGARS].position);
-                    monkeyMenBehaviour.destination = ObjectsReference.Instance.spaceTrafficControlManager.spaceshipBehavioursByGuid[monkeyMenBehaviour.monkeyMenData.spaceshipGuid].spawnPoint.position;
-                    pirateState = PirateState.GO_BACK_TO_SPACESHIP;
+                    
+                    monkeyMenBehaviour.monkeyMenData.destination = ObjectsReference.Instance.spaceTrafficControlManager.spaceshipBehavioursByGuid[monkeyMenBehaviour.monkeyMenData.spaceshipGuid].chimpMensSpawnPoint.position;
+                    monkeyMenBehaviour.monkeyMenData.pirateState = PirateState.GO_BACK_TO_SPACESHIP;
                 }
             }
 
-            if (pirateState == PirateState.GO_BACK_TO_SPACESHIP) {
+            if (monkeyMenBehaviour.monkeyMenData.pirateState == PirateState.GO_BACK_TO_SPACESHIP) {
+                distanceToDestination = Vector3.Distance(monkeyMenBehaviour.monkeyMenData.destination, transform.position);
+
+                _navMeshAgent.SetDestination(monkeyMenBehaviour.monkeyMenData.destination);
+
                 if (distanceToDestination < 1f) {
-                    ObjectsReference.Instance.spaceshipsSpawner.RemoveGuest();
-                    monkeyMenBehaviour.associatedSpaceship.StopWaiting();
+                    ObjectsReference.Instance.spaceshipsSpawner.RemoveGuestInCampaignCreator();
+
+                    monkeyMenBehaviour.associatedSpaceshipBehaviour.travelers.Remove(monkeyMenBehaviour);
+
+                    if (monkeyMenBehaviour.associatedSpaceshipBehaviour.travelers.Count == 0) {
+                        monkeyMenBehaviour.associatedSpaceshipBehaviour.StopWaiting();
+                    }
+                    
                     Destroy(gameObject);
                 }
             }
@@ -141,13 +174,13 @@ namespace InGame.Monkeys.Chimpirates {
 
         public void StartPiracy() {
             searchTimer = 1000;
-            pirateState = PirateState.SEARCH_THING_TO_BREAK;
-            monkeyMenBehaviour.searchBuildableToBreak.enabled = true;
+            monkeyMenBehaviour.monkeyMenData.pirateState = PirateState.SEARCH_THING_TO_BREAK;
+            searchBuildableToBreak.enabled = true;
         }
         
         // Banana ! Σ(っ °Д °;)っ
         public void Flee() {
-            if (pirateState == PirateState.FLEE) return;
+            if (monkeyMenBehaviour.monkeyMenData.pirateState == PirateState.FLEE) return;
 
             _animator.SetBool(isInAirAnimatorProperty, false);
             
@@ -155,8 +188,8 @@ namespace InGame.Monkeys.Chimpirates {
 
             _animator.SetLayerWeight(1, 1);
 
-            monkeyMenBehaviour.destination = ObjectsReference.Instance.gameManager.spawnPointsBySpawnType[SpawnPoint.TP_HANGARS].position;
-            pirateState = PirateState.FLEE;
+            monkeyMenBehaviour.monkeyMenData.destination = ObjectsReference.Instance.gameManager.spawnPointsBySpawnType[SpawnPoint.TP_HANGARS].position;
+            monkeyMenBehaviour.monkeyMenData.pirateState = PirateState.FLEE;
         }
 
         private void DropPartOfInventory() {
@@ -183,12 +216,15 @@ namespace InGame.Monkeys.Chimpirates {
         }
 
         public void GoBackToTeleporter() {
-            pirateState = PirateState.GO_BACK_TO_TELEPORTER;
-            monkeyMenBehaviour.destination = ObjectsReference.Instance.gameManager.spawnPointsBySpawnType[SpawnPoint.TP_COROLLE].position;
+            monkeyMenBehaviour.monkeyMenData.destination = ObjectsReference.Instance.gameManager.spawnPointsBySpawnType[SpawnPoint.TP_COROLLE].position;
+            monkeyMenBehaviour.monkeyMenData.pirateState = PirateState.GO_BACK_TO_TELEPORTER;
         }
         
         private void OnTriggerEnter(Collider other) {
             if (other.gameObject.layer != 7) return;
+            
+            if (other.GetComponent<Tag>() == null) return;
+            if (other.GetComponent<Tag>().itemScriptableObject == null) return;
 
             if (other.GetComponent<Tag>().itemScriptableObject.buildableType == BuildableType.BUMPER) {
                 other.GetComponent<PlateformBehaviour>().isPirateTargeted = false;
@@ -199,7 +235,7 @@ namespace InGame.Monkeys.Chimpirates {
         private void OnCollisionEnter(Collision other) {
             if (other.gameObject.layer != 11) return;
 
-            if (pirateState == PirateState.PLATEFORM_INTERACTION) {
+            if (monkeyMenBehaviour.monkeyMenData.pirateState == PirateState.PLATEFORM_INTERACTION) {
                 GetComponent<ChimpMenPhysicNavMeshCoordination>().SwitchToNavMeshAgent();
                 GoBackToTeleporter();
             }

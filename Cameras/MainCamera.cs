@@ -68,8 +68,6 @@ namespace Cameras {
             cameraGestionRelativeMove.enabled = false;
 
             ObjectsReference.Instance.mainCamera.Switch_To_Camera_View(CameraModeType.PLAYER_VIEW);
-
-            ObjectsReference.Instance.cameraPlayer.SetNormalSensibility();
         }
     }
 }

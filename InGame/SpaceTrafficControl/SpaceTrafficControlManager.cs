@@ -58,7 +58,8 @@ namespace InGame.SpaceTrafficControl {
         }
 
         public void FreeHangar(int hangarNumber) {
-            hangarAvailabilityByHangarNumber[hangarNumber] = false;
+            hangarAvailabilityByHangarNumber[hangarNumber] = true;
+            
             ObjectsReference.Instance.uiSpaceTrafficControlPanel.RefreshHangarAvailability();
             ObjectsReference.Instance.uiSpaceTrafficControlPanel.RefreshCommunicationButton();
         }

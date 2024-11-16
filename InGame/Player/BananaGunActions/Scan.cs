@@ -38,8 +38,7 @@ namespace InGame.Player.BananaGunActions {
             else {
                 targetedGameObject = null;
                 ObjectsReference.Instance.uInventoriesManager.GetCurrentUIHelper().ShowDefaultHelper();
-                ObjectsReference.Instance.uiDescriptionsManager.HideAllPanels();
-                ObjectsReference.Instance.uiManager.SetActive(UICanvasGroupType.MINI_CHIMP_BLOCK, false);
+                ObjectsReference.Instance.uiManager.SetActive(UICanvasGroupType.GESTION_PANEL, false);
             }
         }
 
@@ -61,7 +60,7 @@ namespace InGame.Player.BananaGunActions {
                 }
             }
 
-            if (gameObjectTag == GAME_OBJECT_TAG.DROPPED || gameObjectTag == GAME_OBJECT_TAG.REGIME) {
+            if (gameObjectTag == GAME_OBJECT_TAG.DROPPED | gameObjectTag == GAME_OBJECT_TAG.REGIME) {
                 harvest();
             }
         }

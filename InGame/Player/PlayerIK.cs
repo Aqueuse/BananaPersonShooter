@@ -53,7 +53,7 @@ namespace InGame.Player {
                 isLeftFootGrounded = false;
             }
 
-            if (_rightFootDistanceToPlayerRoot < _footExtended && !isRightFootGrounded) {
+            if (_rightFootDistanceToPlayerRoot < _footExtended & !isRightFootGrounded) {
                 ObjectsReference.Instance.audioManager.PlayFootstep();
                 isRightFootGrounded = true;
             }

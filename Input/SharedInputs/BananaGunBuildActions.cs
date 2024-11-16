@@ -50,7 +50,7 @@ namespace SharedInputs {
 
             build.enabled = false;
             
-            ObjectsReference.Instance.uiManager.SetActive(UICanvasGroupType.MINI_CHIMP_BLOCK, false);
+            ObjectsReference.Instance.uiManager.SetActive(UICanvasGroupType.GESTION_PANEL, false);
 
             rotateGhostActionReference.action.Disable();
             rotateGhostActionReference.action.performed -= RotateGhost;

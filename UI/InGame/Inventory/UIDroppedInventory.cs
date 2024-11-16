@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 namespace UI.InGame.Inventory {
     public class UIDroppedInventory : MonoBehaviour {
-        public DroppedInventory droppedInventory;
+        public DroppedInventory bananaManDroppedInventory;
         
         public GenericDictionary<DroppedType, UInventorySlot> uInventorySlots;
         
@@ -19,7 +19,7 @@ namespace UI.InGame.Inventory {
 
         public void RefreshUInventory() {
             foreach (var inventoryItem in uInventorySlots) {
-                inventoryItem.Value.SetQuantity(droppedInventory.GetQuantity(inventoryItem.Key));
+                inventoryItem.Value.SetQuantity(bananaManDroppedInventory.GetQuantity(inventoryItem.Key));
             }
         }
         
@@ -55,7 +55,7 @@ namespace UI.InGame.Inventory {
             if (inventoryContentTransform.childCount == 0) return;
 
             foreach (var slot in inventoryContentTransform.GetComponentsInChildren<UInventorySlot>()) {
-                if (slot.gameObject.activeInHierarchy && slot.itemScriptableObject != null) {
+                if (slot.gameObject.activeInHierarchy & slot.itemScriptableObject != null) {
                     slot.GetComponent<UInventorySlot>().SelectInventorySlot();
                     break;
                 }

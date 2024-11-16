@@ -26,7 +26,7 @@ namespace KeyboardInputs {
         }
 
         private void StartToDrag(InputAction.CallbackContext callbackContext) {
-            if (callbackContext.performed && !isDragging) {
+            if (callbackContext.performed & !isDragging) {
                 deltaMouseActionReference.action.Enable();
                 deltaMouseActionReference.action.performed += Move;
 
@@ -35,7 +35,7 @@ namespace KeyboardInputs {
                 return;
             }
 
-            if (callbackContext.performed && isDragging) {
+            if (callbackContext.performed & isDragging) {
                 deltaMouseActionReference.action.Disable();
                 deltaMouseActionReference.action.performed -= Move;
 

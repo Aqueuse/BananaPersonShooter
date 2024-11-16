@@ -30,8 +30,6 @@ namespace InGame.Player.BananaGunActions {
 
             banana.transform.position = launchingBananaPoint.transform.position;
             banana.SetActive(true);
-
-            Debug.Log(banana.GetComponent<Rigidbody>());
             
             banana.GetComponent<Rigidbody>().isKinematic = false;
             banana.GetComponent<Rigidbody>().AddForce(launchingBananaPoint.transform.forward * 10000, ForceMode.Force);

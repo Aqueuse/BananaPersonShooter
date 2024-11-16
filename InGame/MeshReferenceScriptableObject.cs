@@ -17,7 +17,7 @@ namespace InGame {
         public GenericDictionary<BuildableType, BuildablePropertiesScriptableObject> buildablePropertiesScriptableObjects;
         public GenericDictionary<BananaType, BananasPropertiesScriptableObject> bananasPropertiesScriptableObjects;
         
-        public GenericDictionary<MonkeyMenType, GameObject> chimpmenPrefabByChimpmenType;
+        public GenericDictionary<MonkeyMenType, GameObject> monkeyMenPrefabByMonkeyMenType;
         public GenericDictionary<SpaceshipType, GameObject> spaceshipPrefabBySpaceshipType;
 
         public GenericDictionary<SpaceshipType, List<GameObject>> spaceshipDebrisBySpaceshipType;
@@ -27,15 +27,13 @@ namespace InGame {
 
             var randomChimpmenType = chimpmenTypes.GetValue(Random.Range(0, chimpmenTypes.Length - 1));
             
-            return chimpmenPrefabByChimpmenType[(MonkeyMenType)randomChimpmenType];
+            return monkeyMenPrefabByMonkeyMenType[(MonkeyMenType)randomChimpmenType];
         }
 
-        public GameObject GetRandomSpaceship() {
+        public static SpaceshipType GetRandomSpaceshipType() {
             var spaceshipTypes = Enum.GetValues(typeof(SpaceshipType));
 
-            var randomSpaceshipType = spaceshipTypes.GetValue(Random.Range(0, spaceshipTypes.Length - 1));
-            
-            return spaceshipPrefabBySpaceshipType[(SpaceshipType)randomSpaceshipType];
+            return (SpaceshipType)spaceshipTypes.GetValue(Random.Range(0, spaceshipTypes.Length - 1));
         }
         
         public GenericDictionary<BananaEffect, Color> bananaGoopColorByEffectType;

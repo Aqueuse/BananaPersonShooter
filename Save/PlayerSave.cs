@@ -72,7 +72,7 @@ namespace Save {
 
         private void LoadIngredientsInventory() {
             ingredientsInventory = bananaMan.bananaManData.ingredientsInventory;
-            ObjectsReference.Instance.uiIngredientsInventory.ingredientsInventory = ingredientsInventory;
+            ObjectsReference.Instance.bananaManUiIngredientsInventory.ingredientsInventory = ingredientsInventory;
 
             foreach (var ingredient in bananaManSavedData.ingredientsInventory) {
                 ingredientsInventory[(IngredientsType)Enum.Parse(typeof(IngredientsType), ingredient.Key)] = ingredient.Value;
@@ -81,7 +81,7 @@ namespace Save {
 
         private void LoadManufacturedItemsInventory() {
             manufacturedItemsInventory = bananaMan.bananaManData.manufacturedItemsInventory;
-            ObjectsReference.Instance.uiManufacturedItemsItemsInventory.manufacturedItemsInventory = manufacturedItemsInventory;
+            ObjectsReference.Instance.bananaManUiManufacturedItemsInventory.manufacturedItemsInventory = manufacturedItemsInventory;
 
             foreach (var manufacturedItem in bananaManSavedData.manufacturedInventory) {
                 manufacturedItemsInventory[(ManufacturedItemsType)Enum.Parse(typeof(ManufacturedItemsType), manufacturedItem.Key)] = manufacturedItem.Value;
@@ -137,8 +137,6 @@ namespace Save {
         
         private void CheckTutorialFinished() {
             bananaMan.tutorialFinished = bananaManSavedData.hasFinishedTutorial;
-
-            Debug.Log("check finish tutorial");
             
             if (bananaManSavedData.hasFinishedTutorial) {
                 ObjectsReference.Instance.bananaGun.bananaGunInBack.SetActive(true);

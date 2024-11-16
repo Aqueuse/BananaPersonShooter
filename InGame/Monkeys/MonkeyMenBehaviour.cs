@@ -3,6 +3,8 @@ using System.Linq;
 using InGame.Items.ItemsBehaviours;
 using InGame.Items.ItemsData;
 using InGame.Monkeys.Chimpirates;
+using InGame.Monkeys.Chimptouristes;
+using InGame.Monkeys.Merchimps;
 using Save.Helpers;
 using Save.Templates;
 using UnityEngine;
@@ -11,7 +13,9 @@ using UnityEngine.AI;
 namespace InGame.Monkeys {
     public class MonkeyMenBehaviour : MonoBehaviour {
         [SerializeField] private SkinnedMeshRenderer meshRenderer;
+        public SearchWaitingLine searchWaitingLine;
         public SearchBuildableToBreak searchBuildableToBreak;
+        public SearchBuildableToUse searchBuildableToUse;
 
         public MonkeyMenSavedData monkeyMenSavedData;
         public MonkeyMenData monkeyMenData;
@@ -34,10 +38,8 @@ namespace InGame.Monkeys {
         private float _smooth;
         private Vector2 _velocity;
         private Vector2 _smoothDeltaPosition;
-
-        public Vector3 destination;
-
-        public SpaceshipBehaviour associatedSpaceship;
+        
+        public SpaceshipBehaviour associatedSpaceshipBehaviour;
         private Vector3 spaceshipPosition;
 
         private static readonly int color00 = Shader.PropertyToID("_Color00");
@@ -51,6 +53,32 @@ namespace InGame.Monkeys {
         private static readonly int color22 = Shader.PropertyToID("_Color22");
 
         private Color[] colorPreset;
+
+        public void Init() {
+            SetColors();
+
+            associatedSpaceshipBehaviour =
+                ObjectsReference.Instance.spaceTrafficControlManager.spaceshipBehavioursByGuid[monkeyMenData.spaceshipGuid];
+            
+            associatedSpaceshipBehaviour.travelers.Add(this);
+            
+            _navMeshAgent.updatePosition = false;
+            _navMeshAgent.updateRotation = true;
+
+            _navMeshAgent.velocity = new Vector3(1, 1, 1);
+            
+            if (monkeyMenData.characterType == CharacterType.PIRATE) {
+                gameObject.AddComponent<PirateBehaviour>();
+            }
+
+            if (monkeyMenData.characterType == CharacterType.TOURIST) {
+                gameObject.AddComponent<TouristBehaviour>();
+            }
+
+            if (monkeyMenData.characterType == CharacterType.MERCHIMP) {
+                gameObject.AddComponent<MerchimpBehaviour>();
+            }
+        }
 
         private void OnAnimatorMove() {
             if (_navMeshAgent != null) {
@@ -100,16 +128,8 @@ namespace InGame.Monkeys {
         }
         
         public void GenerateSavedData() {
-            var sortedNeedsArray = monkeyMenData.needs.AsEnumerable().ToArray();
-
-            var sortedNeedsDictionnary = new Dictionary<NeedType, int>(); 
-
-            foreach (var need in sortedNeedsArray) {
-                sortedNeedsDictionnary.Add(need.Key, need.Value);
-            }
-
             monkeyMenSavedData = new MonkeyMenSavedData {
-                characterType = CharacterType.MERCHIMP,
+                characterType = monkeyMenData.characterType,
                 pirateState = monkeyMenData.pirateState,
                 ingredientsInventory = monkeyMenData.ingredientsInventory,
                 bananasInventory = monkeyMenData.bananasInventory,
@@ -119,33 +139,17 @@ namespace InGame.Monkeys {
                 uid = monkeyMenData.uid,
                 name = monkeyMenData.monkeyMenName,
                 appearanceScriptableObjectIndex = monkeyMenData.appearanceScriptableObjectIndex,
-                isInSpaceship = monkeyMenData.isInSpaceship,
                 touristState = monkeyMenData.touristState,
                 destination = JsonHelper.FromVector3ToString(monkeyMenData.destination),
                 spaceshipGuid = monkeyMenData.spaceshipGuid,
                 position = JsonHelper.FromVector3ToString(transform.position),
-                rotation = JsonHelper.FromQuaternionToString(transform.rotation),
-                needs = sortedNeedsDictionnary
+                rotation = JsonHelper.FromQuaternionToString(transform.rotation)
             };
-        }
-
-        public void LoadFromSavedData() {
-            if (monkeyMenData.characterType != CharacterType.MERCHIMP) SetColors();
             
-            if (monkeyMenData.isInSpaceship) return;
-            
-            transform.position = monkeyMenData.position;
-            transform.rotation = monkeyMenData.rotation;
-            
-            _navMeshAgent.updatePosition = false;
-            _navMeshAgent.updateRotation = true;
-
-            _navMeshAgent.velocity = new Vector3(1, 1, 1);
-
-            destination = monkeyMenData.destination;
-
-            if (monkeyMenData.characterType == CharacterType.PIRATE) {
-                gameObject.AddComponent<PirateBehaviour>();
+            if (monkeyMenData.needs != null) {
+                var sortedNeedsArray = monkeyMenData.needs.AsEnumerable().ToArray();
+                var sortedNeedsDictionnary = sortedNeedsArray.ToDictionary(need => need.Key, need => need.Value);
+                monkeyMenSavedData.needs = sortedNeedsDictionnary;
             }
         }
     }

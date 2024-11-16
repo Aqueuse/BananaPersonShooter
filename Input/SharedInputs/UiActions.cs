@@ -27,19 +27,6 @@ namespace SharedInputs {
             if (ObjectsReference.Instance.gameManager.gameContext == GameContext.IN_HOME) {
                 ObjectsReference.Instance.uiManager.ShowHomeMenu();
             }
-
-            if (ObjectsReference.Instance.gameManager.gameContext == GameContext.IN_MINICHIMP_VIEW) {
-                if (ObjectsReference.Instance.miniChimpViewMode.viewModeContextType == ViewModeContextType.BUILD) {
-                    ObjectsReference.Instance.miniChimpViewMode.CancelBuild();
-                    ObjectsReference.Instance.miniChimpViewMode.viewModeContextType = ViewModeContextType.SCAN;
-                }
-
-                else {
-                    ObjectsReference.Instance.uiManager.HideBananaGunUI();
-                    ObjectsReference.Instance.uiManager.SwitchToBananaManPerspective();
-                    ObjectsReference.Instance.inputManager.SwitchBackToGame();
-                }
-            }
             
             if (ObjectsReference.Instance.gameManager.gameContext == GameContext.IN_GAME_MENU) {
                 if (ObjectsReference.Instance.uiManager.isOnSubMenus) {

@@ -145,7 +145,7 @@ MonoBehaviour:
     - key: 16
       value: {fileID: 11400000, guid: 61e0d2a93b2f9a241a901e776267942d, type: 2}
     keyCollision: 0
-  chimpmenPrefabByChimpmenType:
+  monkeyMenPrefabByMonkeyMenType:
     list:
     - key: 0
       value: {fileID: 3712416262764098679, guid: 3c9fe1e6c7d8e104ea042cf69c432d8e, type: 3}

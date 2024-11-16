@@ -54,7 +54,7 @@ namespace Save {
                 var saveDataFile = Path.Combine(folder, "data.json");
                 var playerDataFile = Path.Combine(folder, "player.json");
 
-                if (File.Exists(saveDataFile) && File.Exists(playerDataFile)) {
+                if (File.Exists(saveDataFile) & File.Exists(playerDataFile)) {
                     var savedData = JsonConvert.DeserializeObject<SavedData>(File.ReadAllText(saveDataFile));
 
                     if (savedData.uuid != null) {
