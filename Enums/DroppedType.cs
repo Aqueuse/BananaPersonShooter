@@ -1,11 +1,8 @@
 public enum DroppedType {
-    METAL,
-    BATTERY,
-    ELECTRONIC,
-    FABRIC,
-    BANANA_PEEL,
     EMPTY,
-    SILICE,
-    BLUEPRINT,
-    SPACESHIP_DEBRIS
+    BANANA,
+    RAW_MATERIAL,
+    INGREDIENTS,
+    MANUFACTURED_ITEMS,
+    BLUEPRINT
 }

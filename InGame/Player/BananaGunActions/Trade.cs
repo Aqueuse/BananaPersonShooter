@@ -1,4 +1,5 @@
 using InGame.Items.ItemsData;
+using InGame.Items.ItemsData.Characters;
 using InGame.Items.ItemsProperties;
 using UI.InGame.Merchimps;
 using UnityEngine;
@@ -28,8 +29,8 @@ namespace InGame.Player.BananaGunActions {
 
             uiMerchant.sellUiMerchantSliderMenu.quantitySlider.value = 0;
 
-            switch (itemScriptableObject.itemCategory) {
-                case ItemCategory.INGREDIENT:
+            switch (itemScriptableObject.droppedType) {
+                case DroppedType.INGREDIENTS:
                     var ingredientType = itemScriptableObject.ingredientsType;
                     ObjectsReference.Instance.ingredientsInventory.RemoveQuantity(ingredientType, quantityToSell);
 
@@ -40,7 +41,7 @@ namespace InGame.Player.BananaGunActions {
                     uiMerchant.merchantSellUiIngredientsInventory.RefreshUInventory();
                     break;
                 
-                case ItemCategory.MANUFACTURED_ITEM:
+                case DroppedType.MANUFACTURED_ITEMS:
                     var manufacturedItemType = itemScriptableObject.manufacturedItemsType;
                     ObjectsReference.Instance.manufacturedItemsInventory.RemoveQuantity(manufacturedItemType, quantityToSell);
 
@@ -68,8 +69,8 @@ namespace InGame.Player.BananaGunActions {
             uiMerchant.buyUiMerchantSliderMenu.quantitySlider.value = 0;
 
             // buy
-            switch (itemScriptableObject.itemCategory) {
-                case ItemCategory.INGREDIENT:
+            switch (itemScriptableObject.droppedType) {
+                case DroppedType.INGREDIENTS:
                     var ingredientType = itemScriptableObject.ingredientsType;
                     ObjectsReference.Instance.ingredientsInventory.AddQuantity(ingredientType, quantityToBuy);
 
@@ -81,7 +82,7 @@ namespace InGame.Player.BananaGunActions {
                     uiMerchant.merchantSellUiIngredientsInventory.RefreshUInventory();
                     break;
 
-                case ItemCategory.MANUFACTURED_ITEM:
+                case DroppedType.MANUFACTURED_ITEMS:
                     var manufacturedItemType = itemScriptableObject.manufacturedItemsType;
                     ObjectsReference.Instance.manufacturedItemsInventory.AddQuantity(manufacturedItemType, quantityToBuy);
 
@@ -93,15 +94,15 @@ namespace InGame.Player.BananaGunActions {
                     uiMerchant.merchantSellUiManufacturedItemsInventory.RefreshUInventory();
                     break;
 
-                case ItemCategory.DROPPED:
-                    var droppedType = itemScriptableObject.droppedType;
-                    ObjectsReference.Instance.droppedInventory.AddQuantity(droppedType, quantityToBuy);
+                case DroppedType.RAW_MATERIAL:
+                    var rawMaterialType = itemScriptableObject.rawMaterialType;
+                    ObjectsReference.Instance.rawMaterialInventory.AddQuantity(rawMaterialType, quantityToBuy);
 
-                    newItemQuantity = monkeyMenData.droppedInventory[droppedType] - quantityToBuy;
-                    monkeyMenData.droppedInventory[droppedType] = newItemQuantity;
+                    newItemQuantity = monkeyMenData.rawMaterialsInventory[rawMaterialType] - quantityToBuy;
+                    monkeyMenData.rawMaterialsInventory[rawMaterialType] = newItemQuantity;
                     
-                    uiMerchant.merchantBuyUiDroppedInventory.uInventorySlots[droppedType].SetQuantity(newItemQuantity);
-                    uiMerchant.merchantBuyUiDroppedInventory.RefreshUInventory();
+                    uiMerchant.merchantBuyUIRawMaterialsInventory.uInventorySlots[rawMaterialType].SetQuantity(newItemQuantity);
+                    uiMerchant.merchantBuyUIRawMaterialsInventory.RefreshUInventory();
                     break;
             }
         }

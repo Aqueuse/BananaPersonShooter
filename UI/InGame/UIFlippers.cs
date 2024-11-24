@@ -1,4 +1,5 @@
-using InGame.Items.ItemsProperties.Bananas;
+using InGame.Items.ItemsProperties.Dropped;
+using InGame.Items.ItemsProperties.Dropped.Raw_Materials;
 using TMPro;
 using UnityEngine;
 
@@ -16,8 +17,8 @@ namespace UI.InGame {
         private Vector3 middleFlipperUpPosition;
         private Vector3 rightFlipperUpPosition;
         
-        [SerializeField] private SpriteRenderer bananaSpriteRenderer;
-        [SerializeField] private TextMeshPro bananaQuantityText;
+        [SerializeField] private SpriteRenderer droppedSpriteRenderer;
+        [SerializeField] private TextMeshPro droppedQuantityText;
         [SerializeField] private SpriteRenderer buildableSpriteRenderer;
 
         [SerializeField] private Color availableBuildableColor;
@@ -56,13 +57,13 @@ namespace UI.InGame {
             rightFlipperTransform.localPosition = rightFlipperUpPosition;
         }
         
-        public void SetBananaType(BananasPropertiesScriptableObject bananasPropertiesScriptableObject) {
-            bananaSpriteRenderer.sprite = bananasPropertiesScriptableObject.GetSprite();
-            bananaQuantityText.alpha = bananasPropertiesScriptableObject.bananaType == BananaType.EMPTY ? 0 : 1;
+        public void SetDroppedData(DroppedPropertiesScriptableObject droppedPropertiesScriptableObject) {
+            droppedSpriteRenderer.sprite = droppedPropertiesScriptableObject.GetSprite();
+            droppedQuantityText.alpha = droppedPropertiesScriptableObject.droppedType == DroppedType.EMPTY ? 0 : 1;
         }
 
-        public void SetBananaQuantity(int bananaQuantity) {
-            bananaQuantityText.text = bananaQuantity.ToString();
+        public void SetDroppableQuantity(int quantity) {
+            droppedQuantityText.text = quantity.ToString();
         }
 
         public void SetBuildable(Sprite sprite) {
@@ -80,7 +81,7 @@ namespace UI.InGame {
         public void RefreshActiveBuildableAvailability() {
             var activeBuildable = ObjectsReference.Instance.bananaMan.bananaManData.activeBuildable;
             
-            SetBuildablePlacementAvailability(ObjectsReference.Instance.droppedInventory.HasCraftingIngredients(activeBuildable));
+            SetBuildablePlacementAvailability(ObjectsReference.Instance.rawMaterialInventory.HasCraftingIngredients(activeBuildable));
         }
     }
 }

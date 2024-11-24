@@ -6,10 +6,12 @@ namespace InGame.Items.ItemsProperties {
         public GAME_OBJECT_TAG gameObjectTag;
 
         public ItemCategory itemCategory;
+        
         public BananaType bananaType;
         public DroppedType droppedType;
         public IngredientsType ingredientsType;
         public ManufacturedItemsType manufacturedItemsType;
+        public RawMaterialType rawMaterialType;
         public BuildableType buildableType;
 
         public string[] itemName;

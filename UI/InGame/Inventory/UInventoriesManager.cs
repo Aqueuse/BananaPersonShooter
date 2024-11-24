@@ -35,7 +35,7 @@ namespace UI.InGame.Inventory {
         [SerializeField] private UIHelper keyboardUIHelper;
         
         public void RefreshInventories() {
-            ObjectsReference.Instance.bananaManUiDroppedInventory.RefreshUInventory();
+            ObjectsReference.Instance.bananaManUIRawMaterialsInventory.RefreshUInventory();
             ObjectsReference.Instance.bananaManUiIngredientsInventory.RefreshUInventory();
             ObjectsReference.Instance.bananaManUiManufacturedItemsInventory.RefreshUInventory();
             ObjectsReference.Instance.bananaManUiBlueprintsInventory.RefreshUInventory();
@@ -65,13 +65,18 @@ namespace UI.InGame.Inventory {
                     ObjectsReference.Instance.bananaManUiIngredientsInventory.SelectFirstSlot();
                     break;
                 case ItemCategory.DROPPED:
-                    ObjectsReference.Instance.bananaManUiDroppedInventory.SelectFirstSlot();
+                    ObjectsReference.Instance.bananaManUIRawMaterialsInventory.SelectFirstSlot();
                     break;
                 case ItemCategory.MANUFACTURED_ITEM:
                     ObjectsReference.Instance.bananaManUiManufacturedItemsInventory.SelectFirstSlot();
                     break;
             }
         }
+        
+        public void SwitchToDroppedInventory() { SwitchToInventoryTab(ItemCategory.DROPPED); }
+        public void SwitchToIngredientsInventory() { SwitchToInventoryTab(ItemCategory.INGREDIENT); }
+        public void SwitchToManufacturedItemsInventory() { SwitchToInventoryTab(ItemCategory.MANUFACTURED_ITEM); }
+        public void SwitchToBuildablesInventory() { SwitchToInventoryTab(ItemCategory.BUILDABLE); }
 
         public void SwitchToInventoryTab(ItemCategory itemCategory) {
             lastFocusedInventory = itemCategory;

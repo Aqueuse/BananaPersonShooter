@@ -19,9 +19,7 @@ namespace Cameras {
         private CinemachineCameraOffset _bananaManCameraOffset;
 
         private static readonly int Alpha = Shader.PropertyToID("_Alpha");
-
-        public CameraModeType cameraModeType;
-
+        
         private void Start() {
             cameraGestionDrag = ObjectsReference.Instance.gestionDragCamera;
             cameraGestionRelativeMove = ObjectsReference.Instance.gestionRelativeMoveCamera;
@@ -32,8 +30,6 @@ namespace Cameras {
         }
 
         private void Switch_To_Camera_View(CameraModeType cameraModeType) {
-            this.cameraModeType = cameraModeType;
-
             switch (cameraModeType) {
                 case CameraModeType.PLAYER_VIEW:
                     bananaManCamera.m_Priority = 20;

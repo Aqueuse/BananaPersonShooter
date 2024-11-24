@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using InGame.Items.ItemsProperties.Bananas;
 using UnityEngine;
 
 namespace InGame.Inventory {
@@ -10,21 +9,18 @@ namespace InGame.Inventory {
             bananasInventory = ObjectsReference.Instance.bananaMan.bananaManData.bananasInventory;
         }
 
-        public void AddQuantity(BananasPropertiesScriptableObject bananasDataScriptableObject, int quantity) {
-            bananasInventory.TryAdd(bananasDataScriptableObject.bananaType, 0);
+        public void AddQuantity(BananaType bananaType, int quantity) {
+            bananasInventory.TryAdd(bananaType, 0);
             
-            if (bananasInventory[bananasDataScriptableObject.bananaType] > 10000) return;
+            if (bananasInventory[bananaType] > 10000) return;
             
-            bananasInventory[bananasDataScriptableObject.bananaType] += quantity;
-            
-            var bananaItem = ObjectsReference.Instance.uiBananaSelector.uiBananaSelectorSlots[bananasDataScriptableObject.bananaType];
-            bananaItem.gameObject.SetActive(true);
-            bananaItem.SetQuantity(bananasInventory[bananasDataScriptableObject.bananaType]);
-            ObjectsReference.Instance.uiFlippers.SetBananaQuantity(bananasInventory[bananasDataScriptableObject.bananaType]);
+            bananasInventory[bananaType] += quantity;
 
-            ObjectsReference.Instance.bananaMan.SetActiveItem(bananasDataScriptableObject);
+            var bananaData =
+                ObjectsReference.Instance.meshReferenceScriptableObject.bananasPropertiesScriptableObjects[bananaType];
             
-            ObjectsReference.Instance.uiQueuedMessages.AddToInventory(bananasDataScriptableObject, quantity);
+            ObjectsReference.Instance.uiFlippers.SetDroppableQuantity(ObjectsReference.Instance.inventoriesHelper.GetQuantity(bananaData));
+            ObjectsReference.Instance.uiQueuedMessages.AddToInventory(bananaData, quantity);
 
             foreach (var monkey in ObjectsReference.Instance.worldData.monkeys) {
                 monkey.SearchForBananaManBananas();
@@ -36,20 +32,15 @@ namespace InGame.Inventory {
         }
 
         public void RemoveQuantity(BananaType bananaType, int quantity) {
-            var bananaItem = ObjectsReference.Instance.uiBananaSelector.uiBananaSelectorSlots[bananaType];
-
             if (bananasInventory[bananaType] > quantity) {
                 bananasInventory[bananaType] -= quantity;
-                bananaItem.SetQuantity(bananasInventory[bananaType]);
             }
 
             else {
                 bananasInventory[bananaType] = 0;
-                bananaItem.SetQuantity(0);
-                bananaItem.gameObject.SetActive(false);
             }
             
-            ObjectsReference.Instance.uiFlippers.SetBananaQuantity(bananasInventory[bananaType]);
+            ObjectsReference.Instance.uiFlippers.SetDroppableQuantity(bananasInventory[bananaType]);
         }
     }
 }

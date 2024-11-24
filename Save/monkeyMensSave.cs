@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using InGame.Items.ItemsData;
+using InGame.Items.ItemsData.Characters;
 using InGame.Monkeys;
 using Newtonsoft.Json;
 using Save.Helpers;
@@ -35,7 +36,7 @@ namespace Save {
                     pirateState = monkeymen.pirateState,
                     touristState = monkeymen.touristState,
                     destination = JsonHelper.FromStringToVector3(monkeymen.destination),
-                    droppedInventory = monkeymen.droppedInventory,
+                    rawMaterialsInventory = monkeymen.rawMaterialsInventory,
                     manufacturedItemsInventory = monkeymen.manufacturedItemsInventory,
                     ingredientsInventory = monkeymen.ingredientsInventory,
                     bananasInventory = monkeymen.bananasInventory,

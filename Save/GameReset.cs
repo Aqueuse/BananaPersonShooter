@@ -36,8 +36,8 @@ namespace Save {
                 ObjectsReference.Instance.bananaMan.bananaManData.ingredientsInventory[ingredientSlot.Key] = 0;
             }
 
-            foreach (var rawMaterialsSlot in ObjectsReference.Instance.bananaMan.bananaManData.droppedInventory.ToList()) {
-                ObjectsReference.Instance.bananaMan.bananaManData.droppedInventory[rawMaterialsSlot.Key] = 0;
+            foreach (var rawMaterialsSlot in ObjectsReference.Instance.bananaMan.bananaManData.rawMaterialInventory.ToList()) {
+                ObjectsReference.Instance.bananaMan.bananaManData.rawMaterialInventory[rawMaterialsSlot.Key] = 0;
             }
 
             foreach (var manufacturedItemSlot in ObjectsReference.Instance.bananaMan.bananaManData.manufacturedItemsInventory.ToList()) {
@@ -61,7 +61,7 @@ namespace Save {
         }
 
         private static void ResetActiveItem() {
-            ObjectsReference.Instance.bananaMan.bananaManData.activeBanana = ObjectsReference.Instance.meshReferenceScriptableObject.bananasPropertiesScriptableObjects[BananaType.EMPTY];
+            ObjectsReference.Instance.bananaMan.bananaManData.activeDropped = ObjectsReference.Instance.meshReferenceScriptableObject.droppedPropertiesScriptableObjects[DroppedType.EMPTY];
         }
 
         private static void ResetMonkeysSasiety() {

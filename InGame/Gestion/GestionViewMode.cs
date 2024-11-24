@@ -4,6 +4,7 @@ using InGame.Items.ItemsBehaviours;
 using InGame.Items.ItemsBehaviours.BuildablesBehaviours;
 using InGame.Items.ItemsProperties.Buildables;
 using InGame.Items.ItemsProperties.Dropped;
+using InGame.Items.ItemsProperties.Dropped.Raw_Materials;
 using Tags;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -22,7 +23,7 @@ namespace InGame.Gestion {
         public GameObject _activeGhost;
         private Ghost _activeGhostClass;
         
-        private GenericDictionary<DroppedType, int> rawMaterialsWithQuantity;
+        private GenericDictionary<RawMaterialType, int> rawMaterialsWithQuantity;
 
         private Ray ray;
         private RaycastHit raycastHit;
@@ -89,7 +90,7 @@ namespace InGame.Gestion {
             
             viewModeContextType = ViewModeContextType.BUILD;
             
-            if (ObjectsReference.Instance.droppedInventory.HasCraftingIngredients(buildablePropertiesScriptableObject)) {
+            if (ObjectsReference.Instance.rawMaterialInventory.HasCraftingIngredients(buildablePropertiesScriptableObject)) {
                 _activeGhostClass.SetGhostState(GhostState.VALID);
                 ObjectsReference.Instance.uInventoriesManager.GetCurrentUIHelper().ShowNormalPlaceHelper();
             }
@@ -131,7 +132,7 @@ namespace InGame.Gestion {
                 var _craftingIngredients = _activeGhostClass.buildablePropertiesScriptableObject.rawMaterialsWithQuantity;
 
                 foreach (var craftingIngredient in _craftingIngredients) {
-                    ObjectsReference.Instance.droppedInventory.RemoveQuantity(craftingIngredient.Key,
+                    ObjectsReference.Instance.rawMaterialInventory.RemoveQuantity(craftingIngredient.Key,
                         craftingIngredient.Value);
                 }
                 
@@ -161,7 +162,7 @@ namespace InGame.Gestion {
 
                     var quantity = regimeClass.regimeDataScriptableObject.regimeQuantity;
 
-                    ObjectsReference.Instance.bananasInventory.AddQuantity(regimeClass.regimeDataScriptableObject.associatedBananasPropertiesScriptableObject, quantity);
+                    ObjectsReference.Instance.BananaManBananasInventory.AddQuantity(regimeClass.regimeDataScriptableObject.associatedBananasPropertiesScriptableObject.bananaType, quantity);
 
                     regimeClass.GrabBananas();
 
@@ -181,7 +182,7 @@ namespace InGame.Gestion {
                     var craftingMaterials = ObjectsReference.Instance.meshReferenceScriptableObject.buildablePropertiesScriptableObjects[buildableType].rawMaterialsWithQuantity;
 
                     foreach (var craftingMaterial in craftingMaterials) {
-                        ObjectsReference.Instance.droppedInventory.AddQuantity(craftingMaterial.Key, craftingMaterial.Value);
+                        ObjectsReference.Instance.rawMaterialInventory.AddQuantity(craftingMaterial.Key, craftingMaterial.Value);
                     }
 
                     if (buildableType == BuildableType.BANANA_DRYER) targetedGameObject.GetComponent<BananasDryerBehaviour>().RetrieveRawMaterials();
@@ -200,10 +201,10 @@ namespace InGame.Gestion {
                 case GAME_OBJECT_TAG.DROPPED:
                     var _wastePropertiesScriptableObject = (DroppedPropertiesScriptableObject)gameObjectTagClass.itemScriptableObject;
                     
-                    rawMaterialsWithQuantity = _wastePropertiesScriptableObject.GetDroppedMaterialsWithQuantity();
+                    rawMaterialsWithQuantity = _wastePropertiesScriptableObject.GetRawMaterialsWithQuantity();
 
                     foreach (var droppedRawMaterialIngredient in rawMaterialsWithQuantity) {
-                        ObjectsReference.Instance.droppedInventory.AddQuantity(droppedRawMaterialIngredient.Key, droppedRawMaterialIngredient.Value);
+                        ObjectsReference.Instance.rawMaterialInventory.AddQuantity(droppedRawMaterialIngredient.Key, droppedRawMaterialIngredient.Value);
                     }
                     
                     Destroy(targetedGameObject);
@@ -223,13 +224,13 @@ namespace InGame.Gestion {
             if (targetedGameObject == null) return;
 
             if (targetedGameObject.TryGetComponent(out BuildableBehaviour buildableBehaviour)) {
-                if (!ObjectsReference.Instance.droppedInventory.HasCraftingIngredients(buildableBehaviour.buildableType))
+                if (!ObjectsReference.Instance.rawMaterialInventory.HasCraftingIngredients(buildableBehaviour.buildableType))
                     return;
                 
                 var _craftingIngredients = ObjectsReference.Instance.meshReferenceScriptableObject.buildablePropertiesScriptableObjects[buildableBehaviour.buildableType].rawMaterialsWithQuantity;
 
                 foreach (var craftingIngredient in _craftingIngredients) {
-                    ObjectsReference.Instance.droppedInventory.RemoveQuantity(craftingIngredient.Key, craftingIngredient.Value);
+                    ObjectsReference.Instance.rawMaterialInventory.RemoveQuantity(craftingIngredient.Key, craftingIngredient.Value);
                 }
                 
                 ObjectsReference.Instance.audioManager.PlayEffect(SoundEffectType.TAKE_SOMETHING, 0);

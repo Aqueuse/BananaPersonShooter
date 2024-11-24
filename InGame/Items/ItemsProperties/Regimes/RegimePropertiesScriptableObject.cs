@@ -1,4 +1,4 @@
-using InGame.Items.ItemsProperties.Bananas;
+using InGame.Items.ItemsProperties.Dropped.Bananas;
 using UnityEngine;
 
 namespace InGame.Items.ItemsProperties.Regimes {

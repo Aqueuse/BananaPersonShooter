@@ -1,4 +1,5 @@
 using InGame.Items.ItemsData;
+using InGame.Items.ItemsData.Characters;
 using InGame.Monkeys.Merchimps;
 using TMPro;
 using UI.InGame.Inventory;
@@ -25,7 +26,7 @@ namespace UI.InGame.Merchimps {
 
         public UIIngredientsInventory merchantBuyUiIngredientsInventory;
         public UIManufacturedItemsInventory merchantBuyUiManufacturedItemsInventory;
-        public UIDroppedInventory merchantBuyUiDroppedInventory;
+        public UIRawMaterialsInventory merchantBuyUIRawMaterialsInventory;
 
         [SerializeField] private TextMeshProUGUI merchantBitKongQuantityTextMeshProUGUI;
         [SerializeField] private TextMeshProUGUI bananaManBitKongQuantityTextMeshProUGUI;
@@ -120,7 +121,7 @@ namespace UI.InGame.Merchimps {
             merchantSellUiManufacturedItemsInventory.RefreshUInventory();
             
             merchantBuyUiIngredientsInventory.RefreshUInventory();
-            merchantBuyUiDroppedInventory.RefreshUInventory();
+            merchantBuyUIRawMaterialsInventory.RefreshUInventory();
             merchantBuyUiManufacturedItemsInventory.RefreshUInventory();
 
         }
@@ -138,19 +139,19 @@ namespace UI.InGame.Merchimps {
         public void SwitchToBuyIngredientsInventory() {
             merchantBuyUiIngredientsInventory.Activate();
             merchantBuyUiManufacturedItemsInventory.Desactivate();
-            merchantBuyUiDroppedInventory.Desactivate();
+            merchantBuyUIRawMaterialsInventory.Desactivate();
         }
         
         public void SwitchToBuyManufacturedItemsInventory() {
             merchantBuyUiIngredientsInventory.Desactivate();
             merchantBuyUiManufacturedItemsInventory.Activate();
-            merchantBuyUiDroppedInventory.Desactivate();
+            merchantBuyUIRawMaterialsInventory.Desactivate();
         }
 
         public void SwitchToBuyRawMaterialsInventory() {
             merchantBuyUiIngredientsInventory.Desactivate();
             merchantBuyUiManufacturedItemsInventory.Desactivate();
-            merchantBuyUiDroppedInventory.Activate();
+            merchantBuyUIRawMaterialsInventory.Activate();
         }
         
         public void ValidateBuy() {

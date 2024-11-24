@@ -15,9 +15,10 @@ MonoBehaviour:
   gameObjectTag: 11
   itemCategory: 2
   bananaType: 0
-  rawMaterialType: 5
-  ingredientsType: 2
-  manufacturedItemsType: 1
+  droppedType: 0
+  ingredientsType: 0
+  manufacturedItemsType: 0
+  rawMaterialType: 0
   buildableType: 12
   itemName:
   - square information board

@@ -135,7 +135,7 @@ namespace InGame.Monkeys.Chimpirates {
 
                     // can't copy directly from itemScriptableObject - Sadge ╯︿╰
                     foreach (var rawMaterial in rawMaterialsWithQuantity) {
-                        monkeyMenBehaviour.monkeyMenData.droppedInventory[rawMaterial.Key] = rawMaterial.Value;
+                        monkeyMenBehaviour.monkeyMenData.rawMaterialsInventory[rawMaterial.Key] = rawMaterial.Value;
                     }
                 }
             }
@@ -197,7 +197,7 @@ namespace InGame.Monkeys.Chimpirates {
             var explositionCenterPosition = transform.position;
             
             // lâche quelques trucs dans l'inventaire s'il y en a encore
-            foreach (var itemInInventory in monkeyMenBehaviour.monkeyMenData.droppedInventory) {
+            foreach (var itemInInventory in monkeyMenBehaviour.monkeyMenData.rawMaterialsInventory) {
                 for (var i = 0; i < itemInInventory.Value; i++) {
                     distanceToDropFromCenter += Random.Range(0.1f, 0.5f);
                     var spawnPosition = explositionCenterPosition + Random.insideUnitSphere * distanceToDropFromCenter;
@@ -212,7 +212,7 @@ namespace InGame.Monkeys.Chimpirates {
                 }
             }
 
-            monkeyMenBehaviour.monkeyMenData.droppedInventory.Clear();
+            monkeyMenBehaviour.monkeyMenData.rawMaterialsInventory.Clear();
         }
 
         public void GoBackToTeleporter() {

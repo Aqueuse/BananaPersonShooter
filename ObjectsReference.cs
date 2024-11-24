@@ -20,7 +20,6 @@ using Settings;
 using SharedInputs;
 using UI;
 using UI.InGame;
-using UI.InGame.BananaSelector;
 using UI.InGame.CommandRoomControlPanels;
 using UI.InGame.Inventory;
 using UI.InGame.MainBlock;
@@ -65,9 +64,10 @@ public class ObjectsReference : MonoSingleton<ObjectsReference> {
     [Space]
     public GhostsReference ghostsReference;
 
-    [Header("inventories")]
-    public BananasInventory bananasInventory;
-    public DroppedInventory droppedInventory;
+    [Header("inventories")] 
+    public InventoriesHelper inventoriesHelper;
+    public BananasInventory BananaManBananasInventory;
+    public RawMaterialInventory rawMaterialInventory;
     public IngredientsInventory ingredientsInventory;
     public ManufacturedItemsInventory manufacturedItemsInventory;
 
@@ -99,14 +99,13 @@ public class ObjectsReference : MonoSingleton<ObjectsReference> {
     [Space]
     public UInventoriesManager uInventoriesManager;
     public UiMainBlock uiMainBlock;
-    [Space]
-    public UIDroppedInventory bananaManUiDroppedInventory;
+    [Space] 
+    public UIBananasInventory uiBananasInventory;
+    public UIRawMaterialsInventory bananaManUIRawMaterialsInventory;
     public UIIngredientsInventory bananaManUiIngredientsInventory;
     public UIBlueprintsInventory bananaManUiBlueprintsInventory;
     public UIManufacturedItemsInventory bananaManUiManufacturedItemsInventory;
     public UInfobulle uInfobulle;
-    [Space]
-    public UIBananaSelector uiBananaSelector;
     [Space]
     public UICrosshairs uiCrosshairs;
     public UIFace uiFace;

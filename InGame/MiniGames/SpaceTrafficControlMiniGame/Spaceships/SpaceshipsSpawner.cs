@@ -30,20 +30,20 @@ namespace InGame.MiniGames.SpaceTrafficControlMiniGame.Spaceships {
             
             adCampaign = ObjectsReference.Instance.adMarketingCampaignManager.adCampaign;
         }
-        
+
         public void SpawnSpaceshipsWithAdCampaign() {
             ObjectsReference.Instance.uiMarketingPanel.SwitchToCurrentCampaign();
-            ObjectsReference.Instance.commandRoomControlPanelsManager.UnfocusPanel();
-            
+            ObjectsReference.Instance.commandRoomControlPanelsManager.UnfocusPanel(false);
+
             spaceships = ShuffleSpaceships(adCampaign.piratesNumber, adCampaign.touristsNumber, adCampaign.merchimpsNumber);
-            
+
             foreach (var spaceship in spaceships) {
                 spacechipsQueue.Enqueue(spaceship);
             }
-            
+
             InvokeRepeating(nameof(SpawnSpaceshipInSpace), 2, 2);
         }
-        
+
         public void RemoveGuestInCampaignCreator() {
             if (spaceships.Count == 0) {
                 ObjectsReference.Instance.uiMarketingPanel.SwitchToCampaignCreator();
@@ -59,7 +59,7 @@ namespace InGame.MiniGames.SpaceTrafficControlMiniGame.Spaceships {
                 CancelInvoke(nameof(SpawnSpaceshipInSpace));
                 return;
             }
-            
+
             var randomPositionInCircle = Random.insideUnitCircle.normalized * 6000;
 
             entryPoint = new Vector3(spaceshipPosition.x + randomPositionInCircle.x, 2631f, spaceshipPosition.z +randomPositionInCircle.y);
@@ -69,7 +69,7 @@ namespace InGame.MiniGames.SpaceTrafficControlMiniGame.Spaceships {
             var characterType = spacechipsQueue.Dequeue();
 
             var spaceshipType = MeshReferenceScriptableObject.GetRandomSpaceshipType();
-            
+
             var spaceship = Instantiate(
                 ObjectsReference.Instance.meshReferenceScriptableObject.spaceshipPrefabBySpaceshipType[spaceshipType],
                 entryPoint,

@@ -15,9 +15,10 @@ MonoBehaviour:
   gameObjectTag: 12
   itemCategory: 5
   bananaType: 0
-  droppedType: 7
+  droppedType: 5
   ingredientsType: 2
   manufacturedItemsType: 1
+  rawMaterialType: 0
   buildableType: 5
   itemName:
   - blueprint
@@ -29,8 +30,6 @@ MonoBehaviour:
   - "le r\xE9sultat de votre \xE9tude de construction"
   - "el resultado de su estudio de construcci\xF3n"
   bitKongValue: 0
-  droppedMaterialsWithQuantity:
-    list:
-    - key: 7
-      value: 1
+  rawMaterialsWithQuantity:
+    list: []
     keyCollision: 0

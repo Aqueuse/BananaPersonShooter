@@ -32,7 +32,7 @@ namespace InGame.Items.ItemsBehaviours.BuildablesBehaviours {
                 buildableType = BuildableType.BUMPER,
                 isBreaked = isBreaked,
                 buildablePosition = JsonHelper.FromVector3ToString(transform.position),
-                buildableRotation = JsonHelper.FromQuaternionToString(transform.rotation),
+                buildableRotation = JsonHelper.FromQuaternionToString(transform.rotation)
             };
 
             ObjectsReference.Instance.gameSave.buildablesSave.AddBuildableToBuildableDictionnary(BuildableType.BUMPER, JsonConvert.SerializeObject(plateformData));

@@ -1,6 +1,6 @@
 public enum CommandRoomPanelType {
-    JOURNAL,
-    SPACE_TRAFFIC_CONTROL,
-    GESTION,
-    MARKETING
+    JOURNAL = 0,
+    SPACE_TRAFFIC_CONTROL = 1,
+    GESTION = 2,
+    MARKETING = 3
 }

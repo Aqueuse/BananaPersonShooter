@@ -1,4 +1,7 @@
 public enum ManufacturedItemsType {
+    EMPTY,
     SPACESHIP_TOY,
-    EMPTY
+    BANANARAIGNEE,
+    LAPINOU,
+    BANANAVIAIRE
 }

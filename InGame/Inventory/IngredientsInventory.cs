@@ -20,7 +20,11 @@ namespace InGame.Inventory {
             
             ObjectsReference.Instance.uiQueuedMessages.AddToInventory(ingredientItem.itemScriptableObject, quantity);
         }
-
+        
+        public int GetQuantity(IngredientsType ingredientsType) {
+            return ingredientsInventory[ingredientsType];
+        }
+        
         public void RemoveQuantity(IngredientsType ingredientsType, int quantity) {
             var ingredientItem = ObjectsReference.Instance.bananaManUiIngredientsInventory.uInventorySlots[ingredientsType];
             

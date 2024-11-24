@@ -15,10 +15,11 @@ MonoBehaviour:
   gameObjectTag: 14
   itemCategory: 8
   bananaType: 0
-  rawMaterialType: 5
-  ingredientsType: 2
-  manufacturedItemsType: 1
-  buildableType: 5
+  droppedType: 0
+  ingredientsType: 0
+  manufacturedItemsType: 0
+  rawMaterialType: 0
+  buildableType: 0
   itemName:
   - gorilla
   - gorille

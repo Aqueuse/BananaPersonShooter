@@ -11,7 +11,7 @@ namespace SharedInputs {
 
         private void OnEnable() {
             shootBananaActionReference.action.Enable();
-            shootBananaActionReference.action.performed += ShootBanana;
+            shootBananaActionReference.action.performed += Shoot;
             shootBananaActionReference.action.canceled += CancelShoot;
 
             openBananaSelectorActionReference.action.Enable();
@@ -21,7 +21,7 @@ namespace SharedInputs {
 
         private void OnDisable() {
             shootBananaActionReference.action.Disable();
-            shootBananaActionReference.action.performed -= ShootBanana;
+            shootBananaActionReference.action.performed -= Shoot;
             shootBananaActionReference.action.canceled -= CancelShoot;
 
             openBananaSelectorActionReference.action.Disable();
@@ -29,20 +29,23 @@ namespace SharedInputs {
             openBananaSelectorActionReference.action.canceled -= CloseBananaSelector;
         }
 
-        private void ShootBanana(InputAction.CallbackContext callbackContext) {
+        private void Shoot(InputAction.CallbackContext callbackContext) {
             ObjectsReference.Instance.bananaGun.GrabBananaGun();
-            if (ObjectsReference.Instance.bananaMan.bananaManData.activeBanana.bananaType == BananaType.EMPTY) return;
+
+            var activeDroppable = ObjectsReference.Instance.bananaMan.bananaManData.activeDropped;
             
-            if (ObjectsReference.Instance.bananasInventory.GetQuantity(ObjectsReference.Instance.bananaMan.bananaManData.activeBanana.bananaType) <= 0) return;
+            if (ObjectsReference.Instance.bananaMan.bananaManData.activeDropped.droppedType == DroppedType.EMPTY) return;
+
+            if (ObjectsReference.Instance.inventoriesHelper.GetQuantity(activeDroppable) <= 0) return;
             
             shoot.LoadingGun();
-            ObjectsReference.Instance.uiCrosshairs.SetCrosshair(ObjectsReference.Instance.bananaMan.bananaManData.activeBanana.bananaType);
+            ObjectsReference.Instance.uiCrosshairs.SetCrosshair(DroppedType.EMPTY);
         }
 
         private void CancelShoot(InputAction.CallbackContext callbackContext) {
             ObjectsReference.Instance.bananaGun.UngrabBananaGun();
             shoot.CancelThrow();
-            ObjectsReference.Instance.uiCrosshairs.SetCrosshair(BananaType.EMPTY);
+            ObjectsReference.Instance.uiCrosshairs.SetCrosshair(DroppedType.EMPTY);
         }
     
         private static void OpenBananaSelector(InputAction.CallbackContext callbackContext) {

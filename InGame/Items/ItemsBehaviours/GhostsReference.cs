@@ -20,13 +20,13 @@ namespace InGame.Items.ItemsBehaviours {
         public GenericDictionary<UIState, Color> colorByUIState;
 
         public Color GetGhostColorByAvailability(BuildablePropertiesScriptableObject buildablePropertiesScriptableObject) {
-            return !ObjectsReference.Instance.droppedInventory.HasCraftingIngredients(buildablePropertiesScriptableObject)
+            return !ObjectsReference.Instance.rawMaterialInventory.HasCraftingIngredients(buildablePropertiesScriptableObject)
                 ? GetColorByGhostState(GhostState.NOT_ENOUGH_MATERIALS)
                 : GetColorByGhostState(GhostState.VALID);
         }
 
         public Color GetUIColorByAvailability(BuildablePropertiesScriptableObject buildablePropertiesScriptableObject) {
-            return !ObjectsReference.Instance.droppedInventory.HasCraftingIngredients(buildablePropertiesScriptableObject)
+            return !ObjectsReference.Instance.rawMaterialInventory.HasCraftingIngredients(buildablePropertiesScriptableObject)
                 ? colorByUIState[UIState.NOT_ENOUGH_MATERIALS]
                 : colorByUIState[UIState.VALID];
         }

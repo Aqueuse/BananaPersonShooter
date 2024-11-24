@@ -14,5 +14,6 @@ public enum ItemCategory {
     MANUFACTURED_ITEM,
     TOURIST,
     PIRATE,
-    MISC
+    MISC,
+    DEBRIS
 }

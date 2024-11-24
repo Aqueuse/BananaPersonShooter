@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using InGame.Items.ItemsBehaviours;
 using InGame.Items.ItemsData;
+using InGame.Items.ItemsData.Characters;
 using InGame.Monkeys.Chimpirates;
 using InGame.Monkeys.Chimptouristes;
 using InGame.Monkeys.Merchimps;
@@ -134,7 +135,7 @@ namespace InGame.Monkeys {
                 ingredientsInventory = monkeyMenData.ingredientsInventory,
                 bananasInventory = monkeyMenData.bananasInventory,
                 manufacturedItemsInventory = monkeyMenData.manufacturedItemsInventory,
-                droppedInventory = monkeyMenData.droppedInventory,
+                rawMaterialsInventory = monkeyMenData.rawMaterialsInventory,
                 bitKongQuantity = monkeyMenData.bitKongQuantity,
                 uid = monkeyMenData.uid,
                 name = monkeyMenData.monkeyMenName,

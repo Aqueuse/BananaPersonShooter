@@ -1,4 +1,4 @@
-using InGame.Items.ItemsProperties.Bananas;
+using InGame.Items.ItemsProperties.Dropped.Bananas;
 using InGame.MiniGames.SpaceTrafficControlMiniGame.projectiles;
 using UnityEngine;
 
@@ -46,10 +46,10 @@ namespace InGame.MiniGames.SpaceTrafficControlMiniGame.Spaceships {
         }
 
         private void ConsumeBanana() {
-            ObjectsReference.Instance.bananasInventory.RemoveQuantity(_laserType, 1);
+            ObjectsReference.Instance.BananaManBananasInventory.RemoveQuantity(_laserType, 1);
 
             ObjectsReference.Instance.uiCannons.SetBananaQuantity(
-                ObjectsReference.Instance.bananasInventory.GetQuantity(_laserType),
+                ObjectsReference.Instance.BananaManBananasInventory.GetQuantity(_laserType),
                 _laserType
             );
         }

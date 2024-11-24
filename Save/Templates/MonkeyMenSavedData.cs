@@ -16,7 +16,7 @@ namespace Save.Templates {
         public Dictionary<NeedType, int> needs;
         public string destination;
 
-        public Dictionary<DroppedType, int> droppedInventory;
+        public Dictionary<RawMaterialType, int> rawMaterialsInventory;
         public Dictionary<ManufacturedItemsType, int> manufacturedItemsInventory;
         public Dictionary<IngredientsType, int> ingredientsInventory;
         public Dictionary<BananaType, int> bananasInventory;

@@ -1,5 +1,5 @@
 using InGame.Inventory;
-using InGame.Items.ItemsProperties.Bananas;
+using InGame.Items.ItemsProperties.Dropped.Bananas;
 using UnityEngine;
 
 namespace InGame.Player.BananaGunActions {
@@ -13,7 +13,7 @@ namespace InGame.Player.BananaGunActions {
         private BananasInventory bananasInventory;
 
         private void Start() {
-            bananasInventory = ObjectsReference.Instance.bananasInventory;
+            bananasInventory = ObjectsReference.Instance.BananaManBananasInventory;
         }
 
         public void LoadingGun() {
@@ -37,7 +37,7 @@ namespace InGame.Player.BananaGunActions {
             ObjectsReference.Instance.audioManager.PlayEffect(SoundEffectType.THROW_BANANA, 0);
 
             // ammo reduce
-            activeWeaponData = ObjectsReference.Instance.bananaMan.bananaManData.activeBanana;
+            activeWeaponData = ObjectsReference.Instance.meshReferenceScriptableObject.bananasPropertiesScriptableObjects[ObjectsReference.Instance.bananaMan.bananaManData.activeBanana];
 
             bananasInventory.RemoveQuantity(activeWeaponData.bananaType, 1);
         }

@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c83b47aafab534644924b05e840108d4, type: 3}
+  m_Name: bananaviaireProperties
+  m_EditorClassIdentifier: 
+  gameObjectTag: 26
+  itemCategory: 12
+  bananaType: 0
+  droppedType: 4
+  ingredientsType: 0
+  manufacturedItemsType: 4
+  rawMaterialType: 0
+  buildableType: 0
+  itemName:
+  - chickanana
+  - bananaviaire
+  - gallinana
+  itemSprite: {fileID: 21300000, guid: 12677c66628bc96458cb834542297c22, type: 3}
+  itemDescription:
+  - does it lay eggs or bananas?
+  - elle pond des oeufs ou des bananes ?
+  - pone huevos o bananas?
+  bitKongValue: 20
+  prefab: {fileID: 8283342476129932777, guid: bfea9fcbb9e807f4aa66d9f17f73dfeb, type: 3}

@@ -45,7 +45,7 @@ namespace SharedInputs {
                 }
 
                 else {
-                    ObjectsReference.Instance.commandRoomControlPanelsManager.UnfocusPanel();
+                    ObjectsReference.Instance.commandRoomControlPanelsManager.UnfocusPanel(false);
                 }
             }
         }

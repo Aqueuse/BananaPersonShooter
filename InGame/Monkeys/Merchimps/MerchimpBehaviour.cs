@@ -52,7 +52,7 @@ namespace InGame.Monkeys.Merchimps {
                     return monkeyMenBehaviour.monkeyMenData.manufacturedItemsInventory[itemScriptableObject.manufacturedItemsType];
 
                 case ItemCategory.DROPPED:
-                    return monkeyMenBehaviour.monkeyMenData.droppedInventory[itemScriptableObject.droppedType];
+                    return monkeyMenBehaviour.monkeyMenData.rawMaterialsInventory[itemScriptableObject.rawMaterialType];
             }
 
             return 0;

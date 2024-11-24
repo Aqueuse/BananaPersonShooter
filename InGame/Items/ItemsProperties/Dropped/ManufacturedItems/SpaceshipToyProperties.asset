@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c83b47aafab534644924b05e840108d4, type: 3}
+  m_Name: SpaceshipToyProperties
+  m_EditorClassIdentifier: 
+  gameObjectTag: 26
+  itemCategory: 12
+  bananaType: 0
+  droppedType: 4
+  ingredientsType: 0
+  manufacturedItemsType: 1
+  rawMaterialType: 0
+  buildableType: 0
+  itemName:
+  - spaceship
+  - vaisseau spatial
+  - astronave
+  itemSprite: {fileID: 21300000, guid: 314671d5a9cfff1438df1ba4e38d1a06, type: 3}
+  itemDescription:
+  - Too small to let you get away, unfortunately
+  - "Trop petit h\xE9las pour vous permettre de vous \xE9chapper"
+  - "Demasiado peque\xF1o para permitirte escapar"
+  bitKongValue: 15
+  prefab: {fileID: 6249355738671945922, guid: 502c613b0a645ca4288363fed557c6ac, type: 3}

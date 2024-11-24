@@ -1,0 +1,38 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9aa579ee7e77bb468bc13896355d2a8, type: 3}
+  m_Name: BlueJavaBananaProperties
+  m_EditorClassIdentifier: 
+  gameObjectTag: 3
+  itemCategory: 1
+  bananaType: 2
+  droppedType: 0
+  ingredientsType: 0
+  manufacturedItemsType: 0
+  rawMaterialType: 0
+  buildableType: 0
+  itemName:
+  - blue java
+  - blue java
+  - blue java
+  itemSprite: {fileID: 21300000, guid: 45711768726f01d4390c97b88d867934, type: 3}
+  itemDescription:
+  - slow
+  - ralenti
+  - desacelerar
+  bitKongValue: 50
+  sasiety: 5
+  healthBonus: 0.5
+  resistanceBonus: 1
+  bananaEffect: 3
+  bananaColor: {r: 0.20392159, g: 0.4431373, b: 0.65882355, a: 1}
+  prefab: {fileID: 0}

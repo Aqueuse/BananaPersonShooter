@@ -44,7 +44,7 @@ namespace InGame.Player.BananaGunActions {
             _activeGhost = ghostsReference.GetGhostByBuildableType(buildableType);
             _activeGhostClass = _activeGhost.GetComponent<Ghost>();
             
-            if (ObjectsReference.Instance.droppedInventory.HasCraftingIngredients(buildableType)) {
+            if (ObjectsReference.Instance.rawMaterialInventory.HasCraftingIngredients(buildableType)) {
                 _activeGhostClass.SetGhostState(GhostState.VALID);
                 ObjectsReference.Instance.uInventoriesManager.GetCurrentUIHelper().ShowNormalPlaceHelper();
                 ObjectsReference.Instance.uiFlippers.SetBuildablePlacementAvailability(true);
@@ -83,7 +83,7 @@ namespace InGame.Player.BananaGunActions {
                 var _craftingIngredients = _activeGhostClass.buildablePropertiesScriptableObject.rawMaterialsWithQuantity;
 
                 foreach (var craftingIngredient in _craftingIngredients) {
-                    ObjectsReference.Instance.droppedInventory.RemoveQuantity(craftingIngredient.Key,
+                    ObjectsReference.Instance.rawMaterialInventory.RemoveQuantity(craftingIngredient.Key,
                         craftingIngredient.Value);
                 }
                 
@@ -101,7 +101,7 @@ namespace InGame.Player.BananaGunActions {
 
         public void setGhostColor() {
             if (_activeGhost != null)
-                if (ObjectsReference.Instance.droppedInventory.HasCraftingIngredients(_activeGhostClass.buildablePropertiesScriptableObject.buildableType)) {
+                if (ObjectsReference.Instance.rawMaterialInventory.HasCraftingIngredients(_activeGhostClass.buildablePropertiesScriptableObject.buildableType)) {
                     _activeGhostClass.SetGhostState(GhostState.VALID);
                 }
                 else {

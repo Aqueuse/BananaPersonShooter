@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
-using InGame.Items.ItemsProperties.Bananas;
 using InGame.Items.ItemsProperties.Buildables;
 using InGame.Items.ItemsProperties.Characters;
+using InGame.Items.ItemsProperties.Dropped;
+using InGame.Items.ItemsProperties.Dropped.Bananas;
+using InGame.Items.ItemsProperties.Dropped.Raw_Materials;
 using UnityEngine;
 using UnityEngine.Localization;
 using Random = UnityEngine.Random;
@@ -11,10 +13,14 @@ namespace InGame {
     [CreateAssetMenu (fileName = "Properties", menuName = "ScriptableObjects/MeshReferenceScriptableObject", order = 4)]
     public class MeshReferenceScriptableObject : ScriptableObject {
         public GenericDictionary<BuildableType, GameObject> buildablePrefabByBuildableType;
-        public GenericDictionary<DroppedType, GameObject> droppedPrefabByDroppedType;
+        public GenericDictionary<BananaType, GameObject> bananaPrefabByBananaType;
+        public GenericDictionary<RawMaterialType, GameObject> rawMaterialPrefabByRawMaterialType;
+        public GenericDictionary<IngredientsType, GameObject> ingredientPrefabByIngredientType;
+        public GenericDictionary<ManufacturedItemsType, GameObject> manufacturedItemPrefabByManufacturedItemType;
         public GenericDictionary<MeteoriteType, GameObject> meteoritePrefabByMeteoriteType;
         
         public GenericDictionary<BuildableType, BuildablePropertiesScriptableObject> buildablePropertiesScriptableObjects;
+        public GenericDictionary<DroppedType, DroppedPropertiesScriptableObject> droppedPropertiesScriptableObjects;
         public GenericDictionary<BananaType, BananasPropertiesScriptableObject> bananasPropertiesScriptableObjects;
         
         public GenericDictionary<MonkeyMenType, GameObject> monkeyMenPrefabByMonkeyMenType;
@@ -38,7 +44,7 @@ namespace InGame {
         
         public GenericDictionary<BananaEffect, Color> bananaGoopColorByEffectType;
         
-        public GenericDictionary<DroppedType, GameObject> prefabByRawMaterialType;
+        public GenericDictionary<RawMaterialType, GameObject> prefabByRawMaterialType;
 
         public List<MonkeyMenPropertiesScriptableObject> chimpMensAppearanceScriptableObjects;
         

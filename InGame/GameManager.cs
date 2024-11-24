@@ -178,7 +178,7 @@ namespace InGame {
             
             ObjectsReference.Instance.uiManager.SetActive(UICanvasGroupType.HUD_BANANAMAN, true);
             ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.CROSSHAIRS].alpha = 1f;
-            ObjectsReference.Instance.uiCrosshairs.SetCrosshair(BananaType.EMPTY);
+            ObjectsReference.Instance.uiCrosshairs.SetCrosshair(DroppedType.EMPTY);
 
             ObjectsReference.Instance.uInventoriesManager.ShowCurrentUIHelper();
 

@@ -13,7 +13,7 @@ namespace InGame.Interactions.InteractionsActions {
                 var craftingMaterials = ObjectsReference.Instance.meshReferenceScriptableObject.buildablePropertiesScriptableObjects[BuildableType.BUMPER].rawMaterialsWithQuantity;
 
                  foreach (var craftingMaterial in craftingMaterials) {
-                     ObjectsReference.Instance.droppedInventory.AddQuantity(craftingMaterial.Key, craftingMaterial.Value*plateformsCount);
+                     ObjectsReference.Instance.rawMaterialInventory.AddQuantity(craftingMaterial.Key, craftingMaterial.Value*plateformsCount);
                  }
                  
                 foreach (var plateform in plateforms) {

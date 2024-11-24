@@ -15,7 +15,6 @@ namespace Save {
         private GameObject buildableInstance;
         
         public GenericDictionary<BuildableType, List<string>> buildablesDataDictionaryByBuildableType;
-        private string[] _buildablesDatas;
         
         public void LoadBuildablesDataByUuid(string saveUuid) {
             _savePath = Path.Combine(ObjectsReference.Instance.gameSave._savesPath, saveUuid);
@@ -46,23 +45,6 @@ namespace Save {
             
             RespawnBuildablesOnWorld();
         }
-    
-        public void SaveBuildablesData(string saveUuid) {
-            var savePath = Path.Combine(ObjectsReference.Instance.gameSave._savesPath, saveUuid);
-            var worldDataSavesPath = Path.Combine(savePath, "WORLD_DATA");
-
-            var savefilePath = Path.Combine(worldDataSavesPath, "buildables.json");
-        
-            var buildablesBehaviours = FindObjectsByType<BuildableBehaviour>(FindObjectsSortMode.None);
-
-            buildablesDataDictionaryByBuildableType.Clear();
-            foreach (var buildableBehaviour in buildablesBehaviours) {
-                buildableBehaviour.GenerateSaveData();
-            }
-
-            var json = JsonConvert.SerializeObject(buildablesDataDictionaryByBuildableType);
-            File.WriteAllText(savefilePath, json);
-        }
         
         private void RespawnBuildablesOnWorld() {
             DestroyImmediate(buildablesContainer);
@@ -72,17 +54,34 @@ namespace Save {
                     parent = transform.parent
                 }
             };
-
+            
+            // TODO : really necessary to create buildablesDictionnary ?
             var buildablesDictionnary = buildablesDataDictionaryByBuildableType;
 
-            foreach (var buildableToInstantiate in buildablesDictionnary) {
-                foreach (var buildableString in buildableToInstantiate.Value) {
-                    buildableToSpawn = ObjectsReference.Instance.meshReferenceScriptableObject.buildablePrefabByBuildableType[buildableToInstantiate.Key];
+            foreach (var buildableList in buildablesDictionnary) {
+                foreach (var buildableString in buildableList.Value) {
+                    buildableToSpawn = ObjectsReference.Instance.meshReferenceScriptableObject.buildablePrefabByBuildableType[buildableList.Key];
 
                     buildableInstance = Instantiate(buildableToSpawn, buildablesContainer.transform, true);
                     buildableInstance.GetComponent<BuildableBehaviour>().LoadSavedData(buildableString);
                 }
             }
+        }
+        
+        public void SaveBuildablesData(string saveUuid) {
+            var savePath = Path.Combine(ObjectsReference.Instance.gameSave._savesPath, saveUuid);
+            var worldDataSavesPath = Path.Combine(savePath, "WORLD_DATA");
+
+            var savefilePath = Path.Combine(worldDataSavesPath, "buildables.json");
+        
+            var buildablesBehaviours = FindObjectsByType<BuildableBehaviour>(FindObjectsSortMode.None);
+
+            buildablesDataDictionaryByBuildableType.Clear();
+            
+            foreach (var buildableBehaviour in buildablesBehaviours) buildableBehaviour.GenerateSaveData();
+            
+            var json = JsonConvert.SerializeObject(buildablesDataDictionaryByBuildableType);
+            File.WriteAllText(savefilePath, json);
         }
         
         public void AddBuildableToBuildableDictionnary(BuildableType buildableType, string buildableData) {

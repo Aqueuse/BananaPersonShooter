@@ -38,5 +38,9 @@ namespace InGame.Inventory {
             
             ObjectsReference.Instance.uiQueuedMessages.RemoveFromInventory(manufacturedItem.itemScriptableObject, quantity);
         }
+        
+        public int GetQuantity(ManufacturedItemsType manufacturedItemsType) {
+            return manufacturedItemsInventory[manufacturedItemsType];
+        }
     }
 }

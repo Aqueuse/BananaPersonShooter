@@ -7,7 +7,7 @@ namespace InGame {
         
         public void StartTutorial() {
             ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.CROSSHAIRS].alpha = 1f;
-            ObjectsReference.Instance.uiCrosshairs.SetCrosshair(BananaType.EMPTY);
+            ObjectsReference.Instance.uiCrosshairs.SetCrosshair(DroppedType.EMPTY);
 
             ObjectsReference.Instance.uInventoriesManager.HideUIHelpers();
             ObjectsReference.Instance.uiManager.SetActive(UICanvasGroupType.HUD_BANANAMAN, false);

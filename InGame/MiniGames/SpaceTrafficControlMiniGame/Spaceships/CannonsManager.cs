@@ -55,7 +55,10 @@ namespace InGame.MiniGames.SpaceTrafficControlMiniGame.Spaceships {
             
             miniGameVirtualCamera.Priority = 100;
             
-            activeCannon.SetProjectileType(ObjectsReference.Instance.bananaMan.bananaManData.activeBanana);
+            var activeBanana = ObjectsReference.Instance.bananaMan.bananaManData.activeBanana;
+            var bananaData = ObjectsReference.Instance.meshReferenceScriptableObject.bananasPropertiesScriptableObjects[activeBanana];
+            
+            activeCannon.SetProjectileType(bananaData);
             
             Cursor.visible = false;
             Cursor.lockState = CursorLockMode.Locked;
@@ -84,15 +87,17 @@ namespace InGame.MiniGames.SpaceTrafficControlMiniGame.Spaceships {
 
         public void SwitchToLastCannon() {
             var activeBanana = ObjectsReference.Instance.bananaMan.bananaManData.activeBanana;
-            activeBananaType = activeBanana.bananaType;
+            activeBananaType = activeBanana;
+
+            var bananaData = ObjectsReference.Instance.meshReferenceScriptableObject.bananasPropertiesScriptableObjects[activeBanana];
             
-            ObjectsReference.Instance.uiCannons.SetBananaType(
-                activeBanana.itemSprite, 
-                ObjectsReference.Instance.meshReferenceScriptableObject.bananaGoopColorByEffectType[activeBanana.bananaEffect]
+            ObjectsReference.Instance.uiCannons.SetBananaData(
+                bananaData.itemSprite, 
+                ObjectsReference.Instance.meshReferenceScriptableObject.bananaGoopColorByEffectType[bananaData.bananaEffect]
             );
             
             ObjectsReference.Instance.uiCannons.SetBananaQuantity(
-                ObjectsReference.Instance.bananasInventory.GetQuantity(activeBananaType),
+                ObjectsReference.Instance.BananaManBananasInventory.GetQuantity(activeBananaType),
                 activeBananaType
             );
             

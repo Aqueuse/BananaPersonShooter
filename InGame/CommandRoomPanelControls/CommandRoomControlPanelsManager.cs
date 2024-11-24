@@ -1,4 +1,3 @@
-using Cameras;
 using Cinemachine;
 using InGame.Monkeys.Chimployees;
 using InGame.Monkeys.Minichimps;
@@ -17,7 +16,7 @@ namespace InGame.CommandRoomPanelControls {
         public MiniChimp miniChimp;
         public ChimployeeCommandRoom chimployeeCommandRoom;
         public Transform chairLifeSimulatorTransform;
-
+        
         public void Init() {
             if (ObjectsReference.Instance.bananaMan.tutorialFinished) {
                 foreach (var manageAccess in manageAccessesByPanelType) {
@@ -47,6 +46,9 @@ namespace InGame.CommandRoomPanelControls {
             ObjectsReference.Instance.cameraPlayer.Set0Sensibility();
             ObjectsReference.Instance.playerController.canMove = false;
 
+            Cursor.visible = false;
+            Cursor.lockState = CursorLockMode.None;
+
             ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.CROSSHAIRS].alpha = 0;
 
             ObjectsReference.Instance.gameManager.gameContext = GameContext.IN_COMMAND_ROOM_PANEL;
@@ -55,34 +57,21 @@ namespace InGame.CommandRoomPanelControls {
             
             ObjectsReference.Instance.audioManager.PlayEffect(SoundEffectType.BUTTON_INTERACTION, 0);
         }
-
-        public void UnfocusPanel() {
+        
+        public void FocusPanel(int panelTypeEnum) {
+            FocusPanel((CommandRoomPanelType)panelTypeEnum);
+            ObjectsReference.Instance.inputManager.SwitchContext(InputContext.UI);
+        }
+        
+        public void UnfocusPanel(bool isOnUI) {
             commandRoomVirtualCamera.Priority = 0;
-    
+
             ObjectsReference.Instance.uiManager.SetActive(UICanvasGroupType.HUD_BANANAMAN, true);
 
-            ObjectsReference.Instance.gameManager.gameContext = GameContext.IN_GAME;
-            ObjectsReference.Instance.inputManager.SwitchContext(InputContext.GAME);
-        }
-
-        public void FocusMarketingPanel() {
-            FocusPanel(CommandRoomPanelType.MARKETING);
-            ObjectsReference.Instance.inputManager.SwitchContext(InputContext.UI);
-        }
-
-        public void FocusSpaceTrafficControlPanel() {
-            FocusPanel(CommandRoomPanelType.SPACE_TRAFFIC_CONTROL);
-            ObjectsReference.Instance.inputManager.SwitchContext(InputContext.UI);
-        }
-
-        public void FocusGestionPanel() {
-            FocusPanel(CommandRoomPanelType.GESTION);
-            ObjectsReference.Instance.inputManager.SwitchContext(InputContext.UI);
-        }
-
-        public void FocusJournalPanel() {
-            FocusPanel(CommandRoomPanelType.JOURNAL);
-            ObjectsReference.Instance.inputManager.SwitchContext(InputContext.UI);
+            if (!isOnUI) {
+                ObjectsReference.Instance.gameManager.gameContext = GameContext.IN_GAME;
+                ObjectsReference.Instance.inputManager.SwitchContext(InputContext.GAME);
+            }
         }
     }
 }

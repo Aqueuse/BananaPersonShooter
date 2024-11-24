@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 namespace UI.InGame {
     public class UICrosshairs : MonoBehaviour {
-        [SerializeField] private GenericDictionary<BananaType, Image> bananaCrosshairsByItemType;
+        [SerializeField] private GenericDictionary<DroppedType, Image> crosshairsByDroppedType;
         
         private List<Image> _crosshairsImage;
 
@@ -13,10 +13,10 @@ namespace UI.InGame {
             _crosshairsImage = GetComponentsInChildren<Image>().ToList();
         }
     
-        public void SetCrosshair(BananaType bananaType) {
+        public void SetCrosshair(DroppedType droppedType) {
             HideCrosshairs();
 
-            bananaCrosshairsByItemType[bananaType].enabled = true;
+            crosshairsByDroppedType[droppedType].enabled = true;
         }
 
         private void HideCrosshairs() {

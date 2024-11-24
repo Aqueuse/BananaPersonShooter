@@ -1,6 +1,7 @@
 using InGame.Interactions;
 using InGame.Items.ItemsBehaviours.BuildablesBehaviours;
 using InGame.Items.ItemsProperties.Dropped;
+using InGame.Items.ItemsProperties.Dropped.Raw_Materials;
 using Tags;
 using UnityEngine;
 
@@ -13,14 +14,14 @@ namespace InGame.Player.BananaGunActions {
         private Mesh _targetedGameObjectMesh;
         private BananaType _targetType;
 
-        private GenericDictionary<DroppedType, int> rawMaterialsWithQuantity;
+        private GenericDictionary<RawMaterialType, int> rawMaterialsWithQuantity;
         
         private Camera mainCamera;
         
         private Ray ray;
         private RaycastHit raycastHit;
 
-        private GenericDictionary<DroppedType, int> craftingMaterials;
+        private GenericDictionary<RawMaterialType, int> craftingMaterials;
         private Regime regimeClass;
         
         private Tag gameObjectTagClass;
@@ -73,7 +74,7 @@ namespace InGame.Player.BananaGunActions {
 
                     var quantity = regimeClass.regimeDataScriptableObject.regimeQuantity;
 
-                    ObjectsReference.Instance.bananasInventory.AddQuantity(regimeClass.regimeDataScriptableObject.associatedBananasPropertiesScriptableObject, quantity);
+                    ObjectsReference.Instance.BananaManBananasInventory.AddQuantity(regimeClass.regimeDataScriptableObject.associatedBananasPropertiesScriptableObject.bananaType, quantity);
 
                     regimeClass.GrabBananas();
 
@@ -93,7 +94,7 @@ namespace InGame.Player.BananaGunActions {
                     craftingMaterials = ObjectsReference.Instance.meshReferenceScriptableObject.buildablePropertiesScriptableObjects[buildableType].rawMaterialsWithQuantity;
 
                     foreach (var craftingMaterial in craftingMaterials) {
-                        ObjectsReference.Instance.droppedInventory.AddQuantity(craftingMaterial.Key, craftingMaterial.Value);
+                        ObjectsReference.Instance.rawMaterialInventory.AddQuantity(craftingMaterial.Key, craftingMaterial.Value);
                     }
 
                     if (buildableType == BuildableType.BANANA_DRYER) targetedGameObject.GetComponent<BananasDryerBehaviour>().RetrieveRawMaterials();
@@ -112,10 +113,10 @@ namespace InGame.Player.BananaGunActions {
                 case GAME_OBJECT_TAG.DROPPED:
                     var _wastePropertiesScriptableObject = (DroppedPropertiesScriptableObject)gameObjectTagClass.itemScriptableObject;
 
-                    rawMaterialsWithQuantity = _wastePropertiesScriptableObject.GetDroppedMaterialsWithQuantity();
+                    rawMaterialsWithQuantity = _wastePropertiesScriptableObject.GetRawMaterialsWithQuantity();
 
                     foreach (var droppedRawMaterialIngredient in rawMaterialsWithQuantity) {
-                        ObjectsReference.Instance.droppedInventory.AddQuantity(droppedRawMaterialIngredient.Key, droppedRawMaterialIngredient.Value);
+                        ObjectsReference.Instance.rawMaterialInventory.AddQuantity(droppedRawMaterialIngredient.Key, droppedRawMaterialIngredient.Value);
                     }
                     
                     Destroy(targetedGameObject);
@@ -132,12 +133,12 @@ namespace InGame.Player.BananaGunActions {
         }
         
         private void TryToRepairBuildable(BuildableBehaviour buildableBehaviour) {
-            if (!ObjectsReference.Instance.droppedInventory.HasCraftingIngredients(buildableBehaviour.buildableType)) return;
+            if (!ObjectsReference.Instance.rawMaterialInventory.HasCraftingIngredients(buildableBehaviour.buildableType)) return;
             
             var _craftingIngredients = ObjectsReference.Instance.meshReferenceScriptableObject.buildablePropertiesScriptableObjects[buildableBehaviour.buildableType].rawMaterialsWithQuantity;
 
             foreach (var craftingIngredient in _craftingIngredients) {
-                ObjectsReference.Instance.droppedInventory.RemoveQuantity(craftingIngredient.Key, craftingIngredient.Value);
+                ObjectsReference.Instance.rawMaterialInventory.RemoveQuantity(craftingIngredient.Key, craftingIngredient.Value);
             }
             
             ObjectsReference.Instance.audioManager.PlayEffect(SoundEffectType.TAKE_SOMETHING, 0);

@@ -3,6 +3,7 @@ using System.Globalization;
 using System.IO;
 using InGame.SpaceTrafficControl;
 using Newtonsoft.Json;
+using Save.Dropped;
 using Save.Templates;
 using UnityEngine;
 
@@ -26,7 +27,11 @@ namespace Save {
         public PlayerSave playerSave;
         public BuildablesSave buildablesSave;
         public SpaceshipDebrisSave spaceshipDebrisSave;
-        public DroppedSave droppedSave;
+        public BananaSave bananaSave;
+        public IngredientsSave ingredientsSave;
+        public ManufacturedItemsSave manufacturedItemSave;
+        public RawMaterialsSave rawMaterialSave;
+        
         public WorldSave worldSave;
         public SpaceshipsSave spaceshipsSave;
         public monkeyMensSave monkeyMensSave;
@@ -68,11 +73,16 @@ namespace Save {
             var date = DateTime.ParseExact(DateTime.Now.ToString("U"), "U", CultureInfo.CurrentCulture).ToString(CultureInfo.CurrentCulture);
 
             CreateSave(saveUuid, date);
-            
+
             playerSave.SavePlayerByUuid(saveUuid);
             worldSave.SaveWorld(saveUuid);
             spaceshipDebrisSave.SaveSpaceshipDebrisData(saveUuid);
-            droppedSave.SaveDroppedData(saveUuid);
+
+            bananaSave.SaveBananaData(saveUuid);
+            rawMaterialSave.SaveRawMaterialData(saveUuid);
+            ingredientsSave.SaveIngredientsData(saveUuid);
+            manufacturedItemSave.SaveManufacturedItemData(saveUuid);
+
             buildablesSave.SaveBuildablesData(saveUuid);
             spaceshipsSave.SaveSpaceships(saveUuid);
             monkeyMensSave.SaveMonkeyMens(saveUuid);
@@ -136,7 +146,12 @@ namespace Save {
             worldSave.LoadWorld(saveUuid);
             buildablesSave.LoadBuildablesDataByUuid(saveUuid);
             spaceshipDebrisSave.LoadSpaceshipDebrisDataByUuid(saveUuid);
-            droppedSave.LoadDroppedDataByUuid(saveUuid);
+            
+            bananaSave.LoadBananasDataByUuid(saveUuid);
+            rawMaterialSave.LoadRawMaterialDataByUuid(saveUuid);
+            ingredientsSave.LoadIngredientsDataByUuid(saveUuid);
+            manufacturedItemSave.LoadManufacturedItemDataByUuid(saveUuid);
+            
             spaceshipsSave.LoadpaceshipsData(saveUuid);
             monkeyMensSave.LoadMonkeyMens(saveUuid);
             
