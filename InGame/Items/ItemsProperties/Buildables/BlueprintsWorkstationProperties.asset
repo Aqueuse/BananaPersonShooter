@@ -24,7 +24,6 @@ MonoBehaviour:
   - study desk
   - "bureau d'\xE9tudes"
   - escritorio de estudio
-  itemSprite: {fileID: 21300000, guid: f57e935e14c4361418ac0537735fb87f, type: 3}
   itemDescription:
   - "Installez vous ici pour \xE9tudier la science des bananes et d\xE9bloquer des
     plans de construction"
@@ -34,7 +33,7 @@ MonoBehaviour:
   bitKongValue: 0
   rawMaterialsWithQuantity:
     list:
-    - key: 0
+    - key: 1
       value: 10
     - key: 6
       value: 2

@@ -14,7 +14,7 @@ namespace InGame.Items.ItemsBehaviours.DroppedBehaviours {
                 manufacturedItemsType = droppedPropertiesScriptableObject.manufacturedItemsType
             };
 
-            ObjectsReference.Instance.gameSave.manufacturedItemSave.AddManufacturedItemToDictionnary(
+            ObjectsReference.Instance.gameSave.droppedManufacturedItemSave.AddManufacturedItemToDictionnary(
                 manufacturedItemsType,
                 JsonConvert.SerializeObject(manufacturedItemData));
         }

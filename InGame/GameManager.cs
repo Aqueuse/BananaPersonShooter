@@ -11,9 +11,9 @@ namespace InGame {
         
         [SerializeField] private GameObject startAnimations;
         [SerializeField] private List<GameObject> inGameGameObjects;
-        
+
         public GameContext gameContext;
-        
+
         public GenericDictionary<SpawnPoint, Transform> spawnPointsBySpawnType;
         
         private Vector3 _bananaManRotation;
@@ -178,7 +178,7 @@ namespace InGame {
             
             ObjectsReference.Instance.uiManager.SetActive(UICanvasGroupType.HUD_BANANAMAN, true);
             ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.CROSSHAIRS].alpha = 1f;
-            ObjectsReference.Instance.uiCrosshairs.SetCrosshair(DroppedType.EMPTY);
+            ObjectsReference.Instance.uiCrosshairs.SetCrosshair(false);
 
             ObjectsReference.Instance.uInventoriesManager.ShowCurrentUIHelper();
 

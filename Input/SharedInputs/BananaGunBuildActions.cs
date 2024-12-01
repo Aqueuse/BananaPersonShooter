@@ -29,7 +29,7 @@ namespace SharedInputs {
             ObjectsReference.Instance.uInventoriesManager.GetCurrentUIHelper().ShowBuildHelper();
 
             ObjectsReference.Instance.bananaGun.GrabBananaGun();
-            build.SetActiveBuildable(ObjectsReference.Instance.bananaMan.bananaManData.activeBuildable.buildableType);
+            build.SetActiveBuildable(ObjectsReference.Instance.bananaMan.bananaManData.activeBuildable);
             build.ActivateGhost();
             
             rotateGhostActionReference.action.Enable();
@@ -75,7 +75,7 @@ namespace SharedInputs {
                 build.RotateGhost(Vector3.down);
             }
             
-            if (ObjectsReference.Instance.bananaMan.bananaManData.activeBuildable.buildableType != BuildableType.BUMPER) return;
+            if (ObjectsReference.Instance.bananaMan.bananaManData.activeBuildable != BuildableType.BUMPER) return;
 
             if (contextValue.y < 0) {
                 build.RotateGhost(Vector3.left);

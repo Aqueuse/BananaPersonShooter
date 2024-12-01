@@ -12,18 +12,19 @@ namespace Save.Templates {
         public float xWorldRotation = 0;
         public float yWorldRotation = 0;
         public float zWorldRotation = 0;
-        
+
+        public DroppedType activeDroppable = DroppedType.EMPTY;
         public BananaType activeBanana = BananaType.EMPTY;
         public RawMaterialType activeRawMaterial = RawMaterialType.EMPTY;
         public IngredientsType activeIngredient = IngredientsType.EMPTY;
         public ManufacturedItemsType activeManufacturedItem = ManufacturedItemsType.EMPTY;
         public BuildableType activeBuildable = BuildableType.BUMPER;
+        
         public int bitKongQuantity;
         
         public bool hasFinishedTutorial = false;
         
         public Dictionary<string, int> bananaInventory = new() {
-            {BananaType.EMPTY.ToString(), 0},
             {BananaType.BARANGAN.ToString(), 0},
             {BananaType.BLUE_JAVA.ToString(), 0},
             {BananaType.BURRO.ToString(), 0},
@@ -57,7 +58,10 @@ namespace Save.Templates {
         };
 
         public Dictionary<string, int> manufacturedInventory = new() {
-            {ManufacturedItemsType.SPACESHIP_TOY.ToString(), 0}
+            {ManufacturedItemsType.SPACESHIP_TOY.ToString(), 0},
+            {ManufacturedItemsType.LAPINOU.ToString(), 0},
+            {ManufacturedItemsType.BANANARAIGNEE.ToString(), 0},
+            {ManufacturedItemsType.BANANAVIAIRE.ToString(), 0}
         };
         
         public string bananaGunMode = BananaGunMode.SHOOT.ToString();

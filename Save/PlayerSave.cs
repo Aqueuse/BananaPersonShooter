@@ -11,10 +11,10 @@ namespace Save {
         private BananaMan bananaMan;
         private Transform bananaManTransform;
         
-        private Dictionary<BananaType, int> bananasInventory;
-        private Dictionary<RawMaterialType, int> rawMaterialsInventory;
-        private Dictionary<ManufacturedItemsType, int> manufacturedItemsInventory;
-        private Dictionary<IngredientsType, int> ingredientsInventory;
+        private readonly Dictionary<BananaType, int> bananasInventory = new();
+        private readonly Dictionary<RawMaterialType, int> rawMaterialsInventory = new();
+        private readonly Dictionary<ManufacturedItemsType, int> manufacturedItemsInventory = new();
+        private readonly Dictionary<IngredientsType, int> ingredientsInventory = new();
 
         private BananaManSavedData bananaManSavedData;
         
@@ -38,8 +38,6 @@ namespace Save {
             LoadActiveBuildable();
             LoadBitkongQuantity();
             CheckTutorialFinished();
-            
-            ObjectsReference.Instance.uInventoriesManager.RefreshInventories();
         }
         
         private static BananaManSavedData LoadPlayerByUuid(string saveUuid) {
@@ -53,43 +51,43 @@ namespace Save {
         }
         
         private void LoadBananasInventory() {
-            bananasInventory = bananaMan.bananaManData.bananasInventory;
             bananaMan.bananaManData.activeBanana = bananaManSavedData.activeBanana;
 
             foreach (var banana in bananaManSavedData.bananaInventory) {
-                bananasInventory[(BananaType)Enum.Parse(typeof(BananaType), banana.Key)] = banana.Value;
+                bananasInventory.Add((BananaType)Enum.Parse(typeof(BananaType), banana.Key), banana.Value);
             }
+
+            ObjectsReference.Instance.BananaManBananasInventory.bananasInventory = bananasInventory;
         }
 
         private void LoadRawMaterialsInventory() {
-            rawMaterialsInventory = bananaMan.bananaManData.rawMaterialInventory;
             bananaMan.bananaManData.activeRawMaterial = bananaManSavedData.activeRawMaterial;
             
             foreach (var rawMaterial in bananaManSavedData.rawMaterialsInventory) {
                 rawMaterialsInventory[(RawMaterialType)Enum.Parse(typeof(RawMaterialType), rawMaterial.Key)] = rawMaterial.Value;
             }
+            
+            ObjectsReference.Instance.bananaManRawMaterialInventory.rawMaterialsInventory = rawMaterialsInventory;
         }
 
         private void LoadIngredientsInventory() {
-            ingredientsInventory = bananaMan.bananaManData.ingredientsInventory;
-            ObjectsReference.Instance.bananaManUiIngredientsInventory.ingredientsInventory = ingredientsInventory;
-            
             bananaMan.bananaManData.activeIngredient = bananaManSavedData.activeIngredient;
 
             foreach (var ingredient in bananaManSavedData.ingredientsInventory) {
                 ingredientsInventory[(IngredientsType)Enum.Parse(typeof(IngredientsType), ingredient.Key)] = ingredient.Value;
             }
+
+            ObjectsReference.Instance.bananaManIngredientsInventory.ingredientsInventory = ingredientsInventory;
         }
 
         private void LoadManufacturedItemsInventory() {
-            manufacturedItemsInventory = bananaMan.bananaManData.manufacturedItemsInventory;
-            ObjectsReference.Instance.bananaManUiManufacturedItemsInventory.manufacturedItemsInventory = manufacturedItemsInventory;
-
             bananaMan.bananaManData.activeManufacturedItem = bananaManSavedData.activeManufacturedItem;
             
             foreach (var manufacturedItem in bananaManSavedData.manufacturedInventory) {
                 manufacturedItemsInventory[(ManufacturedItemsType)Enum.Parse(typeof(ManufacturedItemsType), manufacturedItem.Key)] = manufacturedItem.Value;
             }
+
+            ObjectsReference.Instance.bananaManManufacturedItemsInventory.manufacturedItemsInventory = manufacturedItemsInventory;
         }
 
         private void LoadBananaGun() {
@@ -101,7 +99,7 @@ namespace Save {
         private void LoadBananaManVitals() {
             bananaMan.health = bananaManSavedData.health;
             bananaMan.resistance = bananaManSavedData.resistance;
-            
+
             bananaMan.SetBananaSkinHealth();
         }
 
@@ -113,11 +111,15 @@ namespace Save {
         }
         
         private void LoadActiveBuildable() {
-            var activeBuildableType = bananaManSavedData.activeBuildable;
+            if (bananaManSavedData.activeBuildable == BuildableType.EMPTY) return;
             
-            bananaMan.bananaManData.activeBuildable = ObjectsReference.Instance.meshReferenceScriptableObject.buildablePropertiesScriptableObjects[activeBuildableType];
-            ObjectsReference.Instance.uiFlippers.SetBuildable(bananaMan.bananaManData.activeBuildable.blueprintSprite);
-            ObjectsReference.Instance.uiFlippers.SetBuildablePlacementAvailability(ObjectsReference.Instance.rawMaterialInventory.HasCraftingIngredients(activeBuildableType));
+            var buildableData = ObjectsReference.Instance.meshReferenceScriptableObject.buildablePropertiesScriptableObjects[
+                    bananaManSavedData.activeBuildable]; 
+
+            bananaMan.bananaManData.activeBuildable = bananaManSavedData.activeBuildable;
+            ObjectsReference.Instance.uiFlippers.SetBuildableImage(buildableData.blueprintSprite);
+            
+            ObjectsReference.Instance.uiFlippers.SetBuildablePlacementAvailability(ObjectsReference.Instance.bananaManRawMaterialInventory.HasCraftingIngredients(buildableData));
         }
         
         private void LoadBitkongQuantity() {
@@ -135,7 +137,7 @@ namespace Save {
             else {
                 ObjectsReference.Instance.bananaGun.bananaGunInBack.SetActive(false);
                 ObjectsReference.Instance.uiManager.SetActive(UICanvasGroupType.HUD_BANANAMAN, false);
-                ObjectsReference.Instance.uiCrosshairs.SetCrosshair(DroppedType.EMPTY);
+                ObjectsReference.Instance.uiCrosshairs.SetCrosshair(false);
             }
         }
 
@@ -144,16 +146,16 @@ namespace Save {
             
             var savePath = Path.Combine(ObjectsReference.Instance.gameSave._savesPath, saveUuid);
             
-            foreach (var inventorySlot in bananaMan.bananaManData.bananasInventory) {
+            foreach (var inventorySlot in ObjectsReference.Instance.BananaManBananasInventory.bananasInventory) {
                 bananaManSavedData.bananaInventory[inventorySlot.Key.ToString()] = inventorySlot.Value;
             }
-            foreach (var inventorySlot in bananaMan.bananaManData.rawMaterialInventory) {
+            foreach (var inventorySlot in ObjectsReference.Instance.bananaManRawMaterialInventory.rawMaterialsInventory) {
                 bananaManSavedData.rawMaterialsInventory[inventorySlot.Key.ToString()] = inventorySlot.Value;
             }
-            foreach (var inventorySlot in bananaMan.bananaManData.ingredientsInventory) {
+            foreach (var inventorySlot in ObjectsReference.Instance.bananaManIngredientsInventory.ingredientsInventory) {
                 bananaManSavedData.ingredientsInventory[inventorySlot.Key.ToString()] = inventorySlot.Value;
             }
-            foreach (var inventorySlot in bananaMan.bananaManData.manufacturedItemsInventory) {
+            foreach (var inventorySlot in ObjectsReference.Instance.bananaManManufacturedItemsInventory.manufacturedItemsInventory) {
                 bananaManSavedData.manufacturedInventory[inventorySlot.Key.ToString()] = inventorySlot.Value;
             }
 
@@ -174,12 +176,15 @@ namespace Save {
             bananaManSavedData.zWorldRotation = bananaManRotation.z;
 
             bananaManSavedData.hasFinishedTutorial = bananaMan.tutorialFinished;
-            
-            if (bananaMan.bananaManData.activeBuildable != null)
-                bananaManSavedData.activeBuildable = bananaMan.bananaManData.activeBuildable.buildableType;
+
+            bananaManSavedData.activeDroppable = bananaMan.bananaManData.activeDropped;
+            bananaManSavedData.activeBanana = bananaMan.bananaManData.activeBanana;
+            bananaManSavedData.activeBuildable = bananaMan.bananaManData.activeBuildable;
+            bananaManSavedData.activeIngredient = bananaMan.bananaManData.activeIngredient;
+            bananaManSavedData.activeManufacturedItem = bananaMan.bananaManData.activeManufacturedItem;
 
             bananaManSavedData.bitKongQuantity = bananaMan.bananaManData.bitKongQuantity;
-        
+
             var jsonbananaManSaved = JsonConvert.SerializeObject(bananaManSavedData);
         
             var savefilePath = Path.Combine(savePath, "player.json");

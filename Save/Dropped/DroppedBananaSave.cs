@@ -6,7 +6,7 @@ using Newtonsoft.Json;
 using UnityEngine;
 
 namespace Save.Dropped {
-    public class BananaSave : MonoBehaviour {
+    public class DroppedBananaSave : MonoBehaviour {
         public GameObject bananasContainer;
     
         private string _savePath;
@@ -31,17 +31,17 @@ namespace Save.Dropped {
             bananasDictionnary.Clear();
             
             foreach (var bananaList in bananasDictionnary) {
-                var buildableType = Enum.Parse<BananaType>(bananaList.Key);
-
+                var bananaType = Enum.Parse<BananaType>(bananaList.Key);
+                
                 foreach (var banana in bananaList.Value) {
-                    if (bananasDataDictionaryByBananaType.ContainsKey(buildableType)) {
-                        bananasDataDictionaryByBananaType[buildableType].Add(banana);
+                    if (bananasDataDictionaryByBananaType.ContainsKey(bananaType)) {
+                        bananasDataDictionaryByBananaType[bananaType].Add(banana);
                     }
                     else {
-                        bananasDataDictionaryByBananaType.Add(buildableType, new List<string>{ banana });
+                        bananasDataDictionaryByBananaType.Add(bananaType, new List<string>{ banana });
                     }
                 }
-
+                
                 RespawnBananasOnWorld();
             }
         }

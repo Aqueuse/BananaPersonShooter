@@ -14,7 +14,7 @@ namespace InGame.Items.ItemsBehaviours.DroppedBehaviours {
                 IngredientsType = droppedPropertiesScriptableObject.ingredientsType
             };
             
-            ObjectsReference.Instance.gameSave.ingredientsSave.AddIngredientsToIngredientsDictionnary(
+            ObjectsReference.Instance.gameSave.droppedIngredientsSave.AddIngredientsToIngredientsDictionnary(
                 ingredientsType, JsonConvert.SerializeObject(ingredientData));
         }
 

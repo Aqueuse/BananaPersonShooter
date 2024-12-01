@@ -3,41 +3,28 @@ using UnityEngine;
 
 namespace InGame.Inventory {
     public class IngredientsInventory : MonoBehaviour {
-        private Dictionary<IngredientsType, int> ingredientsInventory;
+        public Dictionary<IngredientsType, int> ingredientsInventory;
         
-        private void Start() {
-            ingredientsInventory = ObjectsReference.Instance.bananaMan.bananaManData.ingredientsInventory;
-        }
-        
-        public void AddQuantity(IngredientsType ingredientsType, int quantity) {
-            if (ingredientsInventory[ingredientsType] > 10000) return;
+        public int AddQuantity(IngredientsType ingredientsType, int quantity) {
+            if (ingredientsInventory[ingredientsType] > 10000) return ingredientsInventory[ingredientsType];
             
             ingredientsInventory[ingredientsType] += quantity;
 
-            var ingredientItem = ObjectsReference.Instance.bananaManUiIngredientsInventory.uInventorySlots[ingredientsType];
-            ingredientItem.gameObject.SetActive(true);
-            ingredientItem.SetQuantity(ingredientsInventory[ingredientsType]);
-            
-            ObjectsReference.Instance.uiQueuedMessages.AddToInventory(ingredientItem.itemScriptableObject, quantity);
+            return ingredientsInventory[ingredientsType];
         }
         
         public int GetQuantity(IngredientsType ingredientsType) {
             return ingredientsInventory[ingredientsType];
         }
         
-        public void RemoveQuantity(IngredientsType ingredientsType, int quantity) {
-            var ingredientItem = ObjectsReference.Instance.bananaManUiIngredientsInventory.uInventorySlots[ingredientsType];
-            
+        public int RemoveQuantity(IngredientsType ingredientsType, int quantity) {
             if (ingredientsInventory[ingredientsType] > quantity) {
                 ingredientsInventory[ingredientsType] -= quantity;
-                ingredientItem.SetQuantity(ingredientsInventory[ingredientsType]);
+                return ingredientsInventory[ingredientsType];
             }
-            
-            else {
-                ingredientsInventory[ingredientsType] = 0;
-                ingredientItem.SetQuantity(0);
-                ingredientItem.gameObject.SetActive(false);
-            }
+
+            ingredientsInventory[ingredientsType] = 0;
+            return 0;
         }
     }
 }

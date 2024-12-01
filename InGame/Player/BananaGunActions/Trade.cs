@@ -1,4 +1,3 @@
-using InGame.Items.ItemsData;
 using InGame.Items.ItemsData.Characters;
 using InGame.Items.ItemsProperties;
 using UI.InGame.Merchimps;
@@ -32,18 +31,20 @@ namespace InGame.Player.BananaGunActions {
             switch (itemScriptableObject.droppedType) {
                 case DroppedType.INGREDIENTS:
                     var ingredientType = itemScriptableObject.ingredientsType;
-                    ObjectsReference.Instance.ingredientsInventory.RemoveQuantity(ingredientType, quantityToSell);
+                    ObjectsReference.Instance.bananaManIngredientsInventory.RemoveQuantity(ingredientType, quantityToSell);
 
                     newItemQuantity = monkeyMenData.ingredientsInventory[ingredientType] + quantityToSell;
                     monkeyMenData.ingredientsInventory[ingredientType] = newItemQuantity;
 
                     uiMerchant.merchantSellUiIngredientsInventory.uInventorySlots[ingredientType].SetQuantity(newItemQuantity);
                     uiMerchant.merchantSellUiIngredientsInventory.RefreshUInventory();
+                    
+                    ObjectsReference.Instance.bananaManUiIngredientsInventory.RefreshUInventory();
                     break;
                 
                 case DroppedType.MANUFACTURED_ITEMS:
                     var manufacturedItemType = itemScriptableObject.manufacturedItemsType;
-                    ObjectsReference.Instance.manufacturedItemsInventory.RemoveQuantity(manufacturedItemType, quantityToSell);
+                    ObjectsReference.Instance.bananaManManufacturedItemsInventory.RemoveQuantity(manufacturedItemType, quantityToSell);
 
                     newItemQuantity = monkeyMenData.manufacturedItemsInventory[manufacturedItemType] + quantityToSell;
                     monkeyMenData.manufacturedItemsInventory[manufacturedItemType] = newItemQuantity;
@@ -72,10 +73,16 @@ namespace InGame.Player.BananaGunActions {
             switch (itemScriptableObject.droppedType) {
                 case DroppedType.INGREDIENTS:
                     var ingredientType = itemScriptableObject.ingredientsType;
-                    ObjectsReference.Instance.ingredientsInventory.AddQuantity(ingredientType, quantityToBuy);
+                    var bananaQuantity = ObjectsReference.Instance.bananaManIngredientsInventory.AddQuantity(ingredientType, quantityToBuy);
 
                     newItemQuantity = monkeyMenData.ingredientsInventory[ingredientType] - quantityToBuy;
                     monkeyMenData.ingredientsInventory[ingredientType] = newItemQuantity;
+
+                    var ingredientItem = ObjectsReference.Instance.bananaManUiIngredientsInventory.uInventorySlots[ingredientType];
+                    ingredientItem.gameObject.SetActive(true);
+                    ingredientItem.SetQuantity(bananaQuantity);
+            
+                    ObjectsReference.Instance.uiQueuedMessages.AddToInventory(ingredientItem.itemScriptableObject, bananaQuantity);
                     
                     uiMerchant.merchantBuyUiIngredientsInventory.uInventorySlots[ingredientType].SetQuantity(newItemQuantity);
                     uiMerchant.merchantBuyUiIngredientsInventory.RefreshUInventory();
@@ -84,7 +91,7 @@ namespace InGame.Player.BananaGunActions {
 
                 case DroppedType.MANUFACTURED_ITEMS:
                     var manufacturedItemType = itemScriptableObject.manufacturedItemsType;
-                    ObjectsReference.Instance.manufacturedItemsInventory.AddQuantity(manufacturedItemType, quantityToBuy);
+                    ObjectsReference.Instance.bananaManManufacturedItemsInventory.AddQuantity(manufacturedItemType, quantityToBuy);
 
                     newItemQuantity = monkeyMenData.manufacturedItemsInventory[manufacturedItemType] - quantityToBuy;
                     monkeyMenData.manufacturedItemsInventory[manufacturedItemType] = newItemQuantity;
@@ -96,7 +103,7 @@ namespace InGame.Player.BananaGunActions {
 
                 case DroppedType.RAW_MATERIAL:
                     var rawMaterialType = itemScriptableObject.rawMaterialType;
-                    ObjectsReference.Instance.rawMaterialInventory.AddQuantity(rawMaterialType, quantityToBuy);
+                    ObjectsReference.Instance.bananaManRawMaterialInventory.AddQuantity(rawMaterialType, quantityToBuy);
 
                     newItemQuantity = monkeyMenData.rawMaterialsInventory[rawMaterialType] - quantityToBuy;
                     monkeyMenData.rawMaterialsInventory[rawMaterialType] = newItemQuantity;

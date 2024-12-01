@@ -3,11 +3,7 @@ using UnityEngine;
 
 namespace InGame.Inventory {
     public class ManufacturedItemsInventory : MonoBehaviour {
-        private Dictionary<ManufacturedItemsType, int> manufacturedItemsInventory;
-        
-        private void Start() {
-            manufacturedItemsInventory = ObjectsReference.Instance.bananaMan.bananaManData.manufacturedItemsInventory;
-        }
+        public Dictionary<ManufacturedItemsType, int> manufacturedItemsInventory;
         
         public void AddQuantity(ManufacturedItemsType manufacturedItemsType, int quantity) {
             if (manufacturedItemsInventory[manufacturedItemsType] > 10000) return;
@@ -22,23 +18,18 @@ namespace InGame.Inventory {
             ObjectsReference.Instance.uiQueuedMessages.AddToInventory(manufacturedItem.itemScriptableObject, quantity);
         }
         
-        public void RemoveQuantity(ManufacturedItemsType manufacturedItemsType, int quantity) {
-            var manufacturedItem = ObjectsReference.Instance.bananaManUiManufacturedItemsInventory.uInventorySlots[manufacturedItemsType];
-
+        public int RemoveQuantity(ManufacturedItemsType manufacturedItemsType, int quantity) {
             if (manufacturedItemsInventory[manufacturedItemsType] > quantity) {
                 manufacturedItemsInventory[manufacturedItemsType] -= quantity;
-                manufacturedItem.SetQuantity(manufacturedItemsInventory[manufacturedItemsType]);
             }
 
             else {
                 manufacturedItemsInventory[manufacturedItemsType] = 0;
-                manufacturedItem.SetQuantity(0);
-                manufacturedItem.gameObject.SetActive(false);
             }
-            
-            ObjectsReference.Instance.uiQueuedMessages.RemoveFromInventory(manufacturedItem.itemScriptableObject, quantity);
+
+            return manufacturedItemsInventory[manufacturedItemsType];
         }
-        
+
         public int GetQuantity(ManufacturedItemsType manufacturedItemsType) {
             return manufacturedItemsInventory[manufacturedItemsType];
         }

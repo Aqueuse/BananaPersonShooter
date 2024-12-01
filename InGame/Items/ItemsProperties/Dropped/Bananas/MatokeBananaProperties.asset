@@ -15,7 +15,7 @@ MonoBehaviour:
   gameObjectTag: 3
   itemCategory: 1
   bananaType: 8
-  droppedType: 0
+  droppedType: 1
   ingredientsType: 0
   manufacturedItemsType: 0
   rawMaterialType: 0

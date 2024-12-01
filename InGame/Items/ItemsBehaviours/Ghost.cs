@@ -40,7 +40,7 @@ namespace InGame.Items.ItemsBehaviours {
         }
 
         private void OnTriggerExit(Collider other) {
-            if (!ObjectsReference.Instance.rawMaterialInventory.HasCraftingIngredients(buildablePropertiesScriptableObject)) {
+            if (!ObjectsReference.Instance.bananaManRawMaterialInventory.HasCraftingIngredients(buildablePropertiesScriptableObject)) {
                 SetGhostState(GhostState.NOT_ENOUGH_MATERIALS);
                 return;
             }

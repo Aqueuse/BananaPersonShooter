@@ -24,7 +24,6 @@ MonoBehaviour:
   - modern information panel
   - panneau d'informations moderne
   - panel informativo moderno
-  itemSprite: {fileID: 21300000, guid: 89264f61e9d35ec4e97d8c8d49636e49, type: 3}
   itemDescription:
   - a modern touchscreen information panel
   - "un panneau d'information moderne \xE0 \xE9cran tactile"
@@ -32,7 +31,7 @@ MonoBehaviour:
   bitKongValue: 0
   rawMaterialsWithQuantity:
     list:
-    - key: 0
+    - key: 1
       value: 4
     keyCollision: 0
   buildablePrefab: {fileID: 3376277238409772002, guid: f2a91b7ede231154c99d15222202cd73, type: 3}

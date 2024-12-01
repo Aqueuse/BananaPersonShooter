@@ -44,7 +44,7 @@ namespace InGame.Player.BananaGunActions {
             _activeGhost = ghostsReference.GetGhostByBuildableType(buildableType);
             _activeGhostClass = _activeGhost.GetComponent<Ghost>();
             
-            if (ObjectsReference.Instance.rawMaterialInventory.HasCraftingIngredients(buildableType)) {
+            if (ObjectsReference.Instance.bananaManRawMaterialInventory.HasCraftingIngredients(buildableType)) {
                 _activeGhostClass.SetGhostState(GhostState.VALID);
                 ObjectsReference.Instance.uInventoriesManager.GetCurrentUIHelper().ShowNormalPlaceHelper();
                 ObjectsReference.Instance.uiFlippers.SetBuildablePlacementAvailability(true);
@@ -83,10 +83,16 @@ namespace InGame.Player.BananaGunActions {
                 var _craftingIngredients = _activeGhostClass.buildablePropertiesScriptableObject.rawMaterialsWithQuantity;
 
                 foreach (var craftingIngredient in _craftingIngredients) {
-                    ObjectsReference.Instance.rawMaterialInventory.RemoveQuantity(craftingIngredient.Key,
+                    ObjectsReference.Instance.bananaManRawMaterialInventory.RemoveQuantity(craftingIngredient.Key,
                         craftingIngredient.Value);
+                    
+                    ObjectsReference.Instance.uiQueuedMessages.RemoveFromInventory(
+                        ObjectsReference.Instance.meshReferenceScriptableObject.rawMaterialPropertiesScriptableObjects[craftingIngredient.Key], 
+                        craftingIngredient.Value
+                    );
+                    ObjectsReference.Instance.uiFlippers.RefreshActiveBuildableAvailability();
                 }
-                
+
                 _buildable.GetComponent<BuildableBehaviour>().buildableGuid = Guid.NewGuid().ToString();
                 
                 _activeGhost.transform.position = ghostsReference.transform.position;
@@ -101,7 +107,7 @@ namespace InGame.Player.BananaGunActions {
 
         public void setGhostColor() {
             if (_activeGhost != null)
-                if (ObjectsReference.Instance.rawMaterialInventory.HasCraftingIngredients(_activeGhostClass.buildablePropertiesScriptableObject.buildableType)) {
+                if (ObjectsReference.Instance.bananaManRawMaterialInventory.HasCraftingIngredients(_activeGhostClass.buildablePropertiesScriptableObject.buildableType)) {
                     _activeGhostClass.SetGhostState(GhostState.VALID);
                 }
                 else {

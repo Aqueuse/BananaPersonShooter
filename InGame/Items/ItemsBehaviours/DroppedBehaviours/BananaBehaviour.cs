@@ -14,7 +14,7 @@ namespace InGame.Items.ItemsBehaviours.DroppedBehaviours {
                 bananaType = droppedPropertiesScriptableObject.bananaType
             };
             
-            ObjectsReference.Instance.gameSave.bananaSave.AddBananaToBananaDictionnary(
+            ObjectsReference.Instance.gameSave.droppedBananaSave.AddBananaToBananaDictionnary(
                 bananaType, 
                 JsonConvert.SerializeObject(bananaData)
             );

@@ -1,11 +1,11 @@
-using System.Collections.Generic;
+using InGame.Inventory;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace UI.InGame.Inventory {
     public class UIBananasInventory : MonoBehaviour {
-        public Dictionary<BananaType, int> bananasInventory;
+        public BananasInventory associatedBananasInventory;
         public GenericDictionary<BananaType, UInventorySlot> uInventorySlots;
         
         [SerializeField] private Transform inventoryContentTransform; 
@@ -19,12 +19,12 @@ namespace UI.InGame.Inventory {
         public void RefreshUInventory() {
             foreach (var inventoryItem in uInventorySlots) {
                 inventoryItem.Value.GetComponent<UInventorySlot>()
-                    .SetQuantity(bananasInventory[inventoryItem.Key]);
+                    .SetQuantity(associatedBananasInventory.bananasInventory[inventoryItem.Key]);
             }
         }
-        
+
         public void Activate() {
-            ObjectsReference.Instance.uInventoriesManager.lastFocusedInventory = ItemCategory.BANANA;
+            ObjectsReference.Instance.uInventoriesManager.lastFocusedInventory = DroppedType.BANANA;
         
             inventoryPanelCanvasGroup.alpha = 1;
             inventoryPanelCanvasGroup.interactable = true;

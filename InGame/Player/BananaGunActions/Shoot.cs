@@ -1,45 +1,35 @@
-using InGame.Inventory;
-using InGame.Items.ItemsProperties.Dropped.Bananas;
+using InGame.Items.ItemsProperties.Dropped.Raw_Materials;
 using UnityEngine;
 
 namespace InGame.Player.BananaGunActions {
     public class Shoot : MonoBehaviour {
-        [SerializeField] private Transform launchingBananaPoint;
-        [SerializeField] private GameObject bananaPrefab;
+        [SerializeField] private Transform launchingPoint;
         
-        private GameObject banana;
-        private BananasPropertiesScriptableObject activeWeaponData;
-
-        private BananasInventory bananasInventory;
-
-        private void Start() {
-            bananasInventory = ObjectsReference.Instance.BananaManBananasInventory;
-        }
-
+        private GameObject droppable;
+        private DroppedPropertiesScriptableObject activeWeaponData;
+        
         public void LoadingGun() {
-            Invoke(nameof(throwBanana), 0.3f);
+            Invoke(nameof(Throw), 0.3f);
         }
 
         public void CancelThrow() {
             ObjectsReference.Instance.audioManager.StopAudioSource(AudioSourcesType.EFFECT);
-            CancelInvoke(nameof(throwBanana));
+            CancelInvoke(nameof(Throw));
         }
 
-        public void throwBanana() {
-            banana = Instantiate(bananaPrefab, launchingBananaPoint.transform.position, Quaternion.identity);
+        public void Throw() {
+            droppable = Instantiate(ObjectsReference.Instance.meshReferenceScriptableObject.GetActiveDroppablePrefab(), launchingPoint.transform.position, Quaternion.identity);
 
-            banana.transform.position = launchingBananaPoint.transform.position;
-            banana.SetActive(true);
-            
-            banana.GetComponent<Rigidbody>().isKinematic = false;
-            banana.GetComponent<Rigidbody>().AddForce(launchingBananaPoint.transform.forward * 10000, ForceMode.Force);
+            droppable.transform.position = launchingPoint.transform.position;
+            droppable.SetActive(true);
+
+            droppable.GetComponent<Rigidbody>().isKinematic = false;
+            droppable.GetComponent<Rigidbody>().AddForce(launchingPoint.transform.forward * 10000, ForceMode.Force);
 
             ObjectsReference.Instance.audioManager.PlayEffect(SoundEffectType.THROW_BANANA, 0);
 
             // ammo reduce
-            activeWeaponData = ObjectsReference.Instance.meshReferenceScriptableObject.bananasPropertiesScriptableObjects[ObjectsReference.Instance.bananaMan.bananaManData.activeBanana];
-
-            bananasInventory.RemoveQuantity(activeWeaponData.bananaType, 1);
+            ObjectsReference.Instance.uiFlippers.SetDroppableQuantity(ObjectsReference.Instance.inventoriesHelper.RemoveActiveDroppedQuantity().ToString());
         }
     }
 }

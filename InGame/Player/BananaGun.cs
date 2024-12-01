@@ -40,7 +40,7 @@ namespace InGame.Player {
             ObjectsReference.Instance.bananaMan.GetComponent<PlayerIK>().SetAimConstraint(true);
             wasFocus = _playerController.isFocusCamera;
             
-            ObjectsReference.Instance.uiCrosshairs.SetCrosshair(DroppedType.BANANA);
+            ObjectsReference.Instance.uiCrosshairs.SetCrosshair(true);
         }
         
         public void UngrabBananaGun() {
@@ -55,7 +55,7 @@ namespace InGame.Player {
             
             ObjectsReference.Instance.uInventoriesManager.GetCurrentUIHelper().ShowDefaultHelper();
             
-            ObjectsReference.Instance.uiCrosshairs.SetCrosshair(DroppedType.EMPTY);
+            ObjectsReference.Instance.uiCrosshairs.SetCrosshair(false);
         }
     }
 }

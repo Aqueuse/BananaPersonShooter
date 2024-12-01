@@ -47,7 +47,7 @@ namespace UI.InGame.MainBlock {
                     break;
                 case MainBlockType.COMMAND_ROOM:
                     _uiMainBlock.SwitchToBlock(MainBlockType.INVENTORIES);
-                    uInventoriesManager.SwitchToInventoryTab(ItemCategory.BUILDABLE);
+                    uInventoriesManager.SwitchToInventoryTab(DroppedType.BANANA);
                     break;
                 case MainBlockType.INVENTORIES:
                     _uiMainBlock.SwitchToBlock(MainBlockType.DIALOGUE);
@@ -59,7 +59,7 @@ namespace UI.InGame.MainBlock {
             switch (lastFocusedInventoryUITabType) {
                 case MainBlockType.DIALOGUE:
                     _uiMainBlock.SwitchToBlock(MainBlockType.INVENTORIES);
-                    uInventoriesManager.SwitchToInventoryTab(ItemCategory.BUILDABLE);
+                    uInventoriesManager.SwitchToInventoryTab(DroppedType.BANANA);
                     break;
                 case MainBlockType.INVENTORIES:
                     _uiMainBlock.SwitchToBlock(MainBlockType.COMMAND_ROOM);

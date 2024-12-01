@@ -24,7 +24,6 @@ MonoBehaviour:
   - bench
   - banc
   - banco
-  itemSprite: {fileID: 21300000, guid: 3c7352425fcd68c46aca38e0499b11c0, type: 3}
   itemDescription:
   - a garden bench in a particularly metallic wood
   - "un banc de jardin dans un bois particuli\xE8rement m\xE9tallique"
@@ -32,7 +31,7 @@ MonoBehaviour:
   bitKongValue: 0
   rawMaterialsWithQuantity:
     list:
-    - key: 0
+    - key: 1
       value: 10
     keyCollision: 0
   buildablePrefab: {fileID: 1991512836727731211, guid: 46a6d640e26506447bc262e143bd448b, type: 3}

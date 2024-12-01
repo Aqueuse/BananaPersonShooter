@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 namespace UI.InGame.Inventory {
     public class UIRawMaterialsInventory : MonoBehaviour {
-        public RawMaterialInventory bananaManRawMaterialInventory;
+        public RawMaterialInventory associatedRawMaterialInventory;
         
         public GenericDictionary<RawMaterialType, UInventorySlot> uInventorySlots;
         
@@ -19,12 +19,12 @@ namespace UI.InGame.Inventory {
 
         public void RefreshUInventory() {
             foreach (var inventoryItem in uInventorySlots) {
-                inventoryItem.Value.SetQuantity(bananaManRawMaterialInventory.GetQuantity(inventoryItem.Key));
+                inventoryItem.Value.SetQuantity(associatedRawMaterialInventory.GetQuantity(inventoryItem.Key));
             }
         }
         
         public void Activate() {
-            ObjectsReference.Instance.uInventoriesManager.lastFocusedInventory = ItemCategory.BANANA;
+            ObjectsReference.Instance.uInventoriesManager.lastFocusedInventory = DroppedType.RAW_MATERIAL;
         
             inventoryPanelCanvasGroup.alpha = 1;
             inventoryPanelCanvasGroup.interactable = true;
@@ -38,7 +38,7 @@ namespace UI.InGame.Inventory {
             inventoryPanelCanvasGroup.alpha = 0;
             inventoryPanelCanvasGroup.interactable = false;
             inventoryPanelCanvasGroup.blocksRaycasts = false;
-                
+
             buttonImage.color = Color.black;
             buttonText.color = activatedColor;
         }

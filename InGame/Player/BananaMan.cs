@@ -1,4 +1,5 @@
-﻿using InGame.Items.ItemsProperties.Buildables;
+﻿using InGame.Items.ItemsProperties;
+using InGame.Items.ItemsProperties.Buildables;
 using UnityEngine;
 
 namespace InGame.Player {
@@ -26,21 +27,32 @@ namespace InGame.Player {
         }
         
         public void SetActiveBuildable(BuildablePropertiesScriptableObject buildablePropertiesScriptableObject) {
-            bananaManData.activeBuildable = buildablePropertiesScriptableObject;
+            bananaManData.activeBuildable = buildablePropertiesScriptableObject.buildableType;
             
             ObjectsReference.Instance.build.SetActiveBuildable(buildablePropertiesScriptableObject.buildableType);
-            ObjectsReference.Instance.uiFlippers.SetBuildable(buildablePropertiesScriptableObject.blueprintSprite);
+            ObjectsReference.Instance.uiFlippers.SetBuildableImage(buildablePropertiesScriptableObject.blueprintSprite);
+        }
+
+        public void SetActiveDropped(ItemScriptableObject itemScriptableObject) {
+            bananaManData.activeDropped = itemScriptableObject.droppedType;
+            bananaManData.activeBanana = itemScriptableObject.bananaType;
+            bananaManData.activeIngredient = itemScriptableObject.ingredientsType;
+            bananaManData.activeRawMaterial = itemScriptableObject.rawMaterialType;
+            bananaManData.activeManufacturedItem = itemScriptableObject.manufacturedItemsType;
+            
+            ObjectsReference.Instance.uiFlippers.SetDroppableSprite(itemScriptableObject.GetSprite());
+            ObjectsReference.Instance.inventoriesHelper.GetQuantity(itemScriptableObject);
         }
 
         public void GainHealth(BananaType bananaType) {
-            if (bananaManData.bananasInventory[bananaType] > 0 & health < _maxHealth) {
+            if (ObjectsReference.Instance.BananaManBananasInventory.bananasInventory[bananaType] > 0 & health < _maxHealth) {
                 var bananaData =
                     ObjectsReference.Instance.meshReferenceScriptableObject.bananasPropertiesScriptableObjects[bananaType];
                 
                 health += bananaData.healthBonus;
 
                 ObjectsReference.Instance.BananaManBananasInventory.RemoveQuantity(bananaType, 1);
-                ObjectsReference.Instance.rawMaterialInventory.AddQuantity(RawMaterialType.BANANA_PEEL, 1);
+                ObjectsReference.Instance.bananaManRawMaterialInventory.AddQuantity(RawMaterialType.BANANA_PEEL, 1);
                 SetBananaSkinHealth();
                 ObjectsReference.Instance.audioManager.PlayEffect(SoundEffectType.EAT_BANANA, 0);
             }

@@ -36,7 +36,7 @@ namespace InGame.Player.BananaGunActions {
                     shoot.enabled = true;
                     scan.enabled = false;
                     build.enabled = false;
-
+                    
                     ObjectsReference.Instance.uiFlippers.UpLeftFlipper();
                     break;
                 case BananaGunMode.SCAN:

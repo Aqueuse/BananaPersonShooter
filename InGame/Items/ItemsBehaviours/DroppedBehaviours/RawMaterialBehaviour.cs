@@ -14,7 +14,7 @@ namespace InGame.Items.ItemsBehaviours.DroppedBehaviours {
                 RawMaterialType = droppedPropertiesScriptableObject.rawMaterialType
             };
             
-            ObjectsReference.Instance.gameSave.rawMaterialSave.AddRawMaterialToRawMaterialDictionnary(
+            ObjectsReference.Instance.gameSave.droppedRawMaterialSave.AddRawMaterialToRawMaterialDictionnary(
                 rawMaterialType,
                 JsonConvert.SerializeObject(rawMaterialData));
         }

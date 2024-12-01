@@ -14,10 +14,12 @@ namespace UI.InGame.Inventory {
             else {
                 ObjectsReference.Instance.bananaMan.SetActiveBuildable(buildableScriptableObject);
             }
-            
-            SetDescriptionAndName();
         }
-         
+        
+        public void SelectInventorySlot() {
+            ObjectsReference.Instance.uInventoriesManager.SetLastSelectedItem(buildableScriptableObject.droppedType, gameObject);
+        }
+        
         public void SetDescriptionAndName() {
             ObjectsReference.Instance.uInfobulle.SetDescriptionAndName(
                 buildableScriptableObject.GetName(),

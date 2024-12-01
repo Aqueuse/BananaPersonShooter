@@ -1,14 +1,20 @@
-using InGame.Items.ItemsProperties.Dropped;
-using InGame.Items.ItemsProperties.Dropped.Raw_Materials;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace UI.InGame {
     public class UIFlippers : MonoBehaviour {
-        [SerializeField] private Transform leftFlipperTransform;
-        [SerializeField] private Transform middleFlipperTransform;
-        [SerializeField] private Transform rightFlipperTransform;
+        [SerializeField] private Image droppedImage;
+        [SerializeField] private TextMeshProUGUI droppedQuantityText;
+        [SerializeField] private Image buildableImage;
+
+        [SerializeField] private Color availableBuildableColor;
+        [SerializeField] private Color notEnoughMaterialBuildableColor;
         
+        [SerializeField] private RectTransform leftFlipperTransform;
+        [SerializeField] private RectTransform middleFlipperTransform;
+        [SerializeField] private RectTransform rightFlipperTransform;
+
         private Vector3 leftFlipperNormalPosition;
         private Vector3 middleFlipperNormalPosition;
         private Vector3 rightFlipperNormalPosition;
@@ -16,29 +22,29 @@ namespace UI.InGame {
         private Vector3 leftFlipperUpPosition;
         private Vector3 middleFlipperUpPosition;
         private Vector3 rightFlipperUpPosition;
-        
-        [SerializeField] private SpriteRenderer droppedSpriteRenderer;
-        [SerializeField] private TextMeshPro droppedQuantityText;
-        [SerializeField] private SpriteRenderer buildableSpriteRenderer;
 
-        [SerializeField] private Color availableBuildableColor;
-        [SerializeField] private Color notEnoughMaterialBuildableColor;
-        
         private void Start() {
             leftFlipperNormalPosition = leftFlipperTransform.localPosition;
             leftFlipperUpPosition = leftFlipperNormalPosition;
-            leftFlipperUpPosition.z += 0.11f;
+            leftFlipperUpPosition.y += 55f;
 
             middleFlipperNormalPosition = middleFlipperTransform.localPosition;
             middleFlipperUpPosition = middleFlipperNormalPosition;
-            middleFlipperUpPosition.z += 0.11f;
+            middleFlipperUpPosition.y += 55f;
 
             rightFlipperNormalPosition = rightFlipperTransform.localPosition;
             rightFlipperUpPosition = rightFlipperNormalPosition;
-            rightFlipperUpPosition.z += 0.11f;
-
+            rightFlipperUpPosition.y += 55f;
         }
 
+        public void SetDroppableSprite(Sprite droppedSprite) {
+            droppedImage.sprite = droppedSprite;
+        }
+
+        public void SetDroppableQuantity(string quantity) {
+            droppedQuantityText.text = quantity;
+        }
+        
         public void UpLeftFlipper() {
             leftFlipperTransform.localPosition = leftFlipperUpPosition;
             middleFlipperTransform.localPosition = middleFlipperNormalPosition;
@@ -57,31 +63,32 @@ namespace UI.InGame {
             rightFlipperTransform.localPosition = rightFlipperUpPosition;
         }
         
-        public void SetDroppedData(DroppedPropertiesScriptableObject droppedPropertiesScriptableObject) {
-            droppedSpriteRenderer.sprite = droppedPropertiesScriptableObject.GetSprite();
-            droppedQuantityText.alpha = droppedPropertiesScriptableObject.droppedType == DroppedType.EMPTY ? 0 : 1;
-        }
+        public void SetBuildableImage(Sprite sprite) {
+            buildableImage.sprite = sprite;
 
-        public void SetDroppableQuantity(int quantity) {
-            droppedQuantityText.text = quantity.ToString();
-        }
-
-        public void SetBuildable(Sprite sprite) {
-            buildableSpriteRenderer.sprite = sprite;
-
-            buildableSpriteRenderer.color =
-                ObjectsReference.Instance.ghostsReference.GetGhostColorByAvailability(ObjectsReference.Instance.bananaMan
-                    .bananaManData.activeBuildable);
+            buildableImage.color =
+                ObjectsReference.Instance.ghostsReference
+                    .GetGhostColorByAvailability(
+                        ObjectsReference.Instance.meshReferenceScriptableObject
+                            .buildablePropertiesScriptableObjects[
+                                ObjectsReference.Instance.bananaMan
+                                    .bananaManData.activeBuildable]
+                    );
         }
 
         public void SetBuildablePlacementAvailability(bool canBeBuild) {
-            buildableSpriteRenderer.color = canBeBuild ? availableBuildableColor : notEnoughMaterialBuildableColor;
+            buildableImage.color = canBeBuild
+                ? availableBuildableColor
+                : notEnoughMaterialBuildableColor;
         }
 
         public void RefreshActiveBuildableAvailability() {
-            var activeBuildable = ObjectsReference.Instance.bananaMan.bananaManData.activeBuildable;
-            
-            SetBuildablePlacementAvailability(ObjectsReference.Instance.rawMaterialInventory.HasCraftingIngredients(activeBuildable));
+            var activeBuildable = ObjectsReference.Instance.bananaMan
+                .bananaManData.activeBuildable;
+
+            SetBuildablePlacementAvailability(
+                ObjectsReference.Instance.bananaManRawMaterialInventory
+                    .HasCraftingIngredients(activeBuildable));
         }
     }
 }

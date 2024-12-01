@@ -24,7 +24,6 @@ MonoBehaviour:
   - drinks dispenser
   - distributeur de boissons
   - distribuidor de bebidas
-  itemSprite: {fileID: 21300000, guid: 97f4d8d6dadbb564ea4275bd160fb9ab, type: 3}
   itemDescription:
   - sells banana juice, but not only that!
   - vend du jus de banane, mais pas que !
@@ -32,7 +31,7 @@ MonoBehaviour:
   bitKongValue: 0
   rawMaterialsWithQuantity:
     list:
-    - key: 0
+    - key: 1
       value: 10
     - key: 2
       value: 2

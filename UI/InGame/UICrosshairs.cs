@@ -1,28 +1,25 @@
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace UI.InGame {
     public class UICrosshairs : MonoBehaviour {
-        [SerializeField] private GenericDictionary<DroppedType, Image> crosshairsByDroppedType;
+        [SerializeField] private Image emptyHandCrosshairImage;
+        [SerializeField] private Image bananaGunCrosshairImage;
         
-        private List<Image> _crosshairsImage;
-
-        private void Start() {
-            _crosshairsImage = GetComponentsInChildren<Image>().ToList();
-        }
-    
-        public void SetCrosshair(DroppedType droppedType) {
-            HideCrosshairs();
-
-            crosshairsByDroppedType[droppedType].enabled = true;
+        public void SetCrosshair(bool hasBananaGun) {
+            if (hasBananaGun) {
+                bananaGunCrosshairImage.enabled = true;
+                emptyHandCrosshairImage.enabled = false;
+            }
+            else {
+                bananaGunCrosshairImage.enabled = false;
+                emptyHandCrosshairImage.enabled = true;
+            }
         }
 
         private void HideCrosshairs() {
-            foreach (var image in _crosshairsImage) {
-                image.enabled = false;
-            }
+            bananaGunCrosshairImage.enabled = false;
+            emptyHandCrosshairImage.enabled = false;
         }
     }
 }

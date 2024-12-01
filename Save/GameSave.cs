@@ -27,10 +27,10 @@ namespace Save {
         public PlayerSave playerSave;
         public BuildablesSave buildablesSave;
         public SpaceshipDebrisSave spaceshipDebrisSave;
-        public BananaSave bananaSave;
-        public IngredientsSave ingredientsSave;
-        public ManufacturedItemsSave manufacturedItemSave;
-        public RawMaterialsSave rawMaterialSave;
+        public DroppedBananaSave droppedBananaSave;
+        public DroppedIngredientsSave droppedIngredientsSave;
+        public DroppedManufacturedItemsSave droppedManufacturedItemSave;
+        public DroppedRawMaterialsSave droppedRawMaterialSave;
         
         public WorldSave worldSave;
         public SpaceshipsSave spaceshipsSave;
@@ -78,10 +78,10 @@ namespace Save {
             worldSave.SaveWorld(saveUuid);
             spaceshipDebrisSave.SaveSpaceshipDebrisData(saveUuid);
 
-            bananaSave.SaveBananaData(saveUuid);
-            rawMaterialSave.SaveRawMaterialData(saveUuid);
-            ingredientsSave.SaveIngredientsData(saveUuid);
-            manufacturedItemSave.SaveManufacturedItemData(saveUuid);
+            droppedBananaSave.SaveBananaData(saveUuid);
+            droppedRawMaterialSave.SaveRawMaterialData(saveUuid);
+            droppedIngredientsSave.SaveIngredientsData(saveUuid);
+            droppedManufacturedItemSave.SaveManufacturedItemData(saveUuid);
 
             buildablesSave.SaveBuildablesData(saveUuid);
             spaceshipsSave.SaveSpaceships(saveUuid);
@@ -147,10 +147,10 @@ namespace Save {
             buildablesSave.LoadBuildablesDataByUuid(saveUuid);
             spaceshipDebrisSave.LoadSpaceshipDebrisDataByUuid(saveUuid);
             
-            bananaSave.LoadBananasDataByUuid(saveUuid);
-            rawMaterialSave.LoadRawMaterialDataByUuid(saveUuid);
-            ingredientsSave.LoadIngredientsDataByUuid(saveUuid);
-            manufacturedItemSave.LoadManufacturedItemDataByUuid(saveUuid);
+            droppedBananaSave.LoadBananasDataByUuid(saveUuid);
+            droppedRawMaterialSave.LoadRawMaterialDataByUuid(saveUuid);
+            droppedIngredientsSave.LoadIngredientsDataByUuid(saveUuid);
+            droppedManufacturedItemSave.LoadManufacturedItemDataByUuid(saveUuid);
             
             spaceshipsSave.LoadpaceshipsData(saveUuid);
             monkeyMensSave.LoadMonkeyMens(saveUuid);

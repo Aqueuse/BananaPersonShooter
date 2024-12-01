@@ -94,7 +94,7 @@ namespace InGame.Player.BananaGunActions {
                     craftingMaterials = ObjectsReference.Instance.meshReferenceScriptableObject.buildablePropertiesScriptableObjects[buildableType].rawMaterialsWithQuantity;
 
                     foreach (var craftingMaterial in craftingMaterials) {
-                        ObjectsReference.Instance.rawMaterialInventory.AddQuantity(craftingMaterial.Key, craftingMaterial.Value);
+                        ObjectsReference.Instance.bananaManRawMaterialInventory.AddQuantity(craftingMaterial.Key, craftingMaterial.Value);
                     }
 
                     if (buildableType == BuildableType.BANANA_DRYER) targetedGameObject.GetComponent<BananasDryerBehaviour>().RetrieveRawMaterials();
@@ -116,7 +116,7 @@ namespace InGame.Player.BananaGunActions {
                     rawMaterialsWithQuantity = _wastePropertiesScriptableObject.GetRawMaterialsWithQuantity();
 
                     foreach (var droppedRawMaterialIngredient in rawMaterialsWithQuantity) {
-                        ObjectsReference.Instance.rawMaterialInventory.AddQuantity(droppedRawMaterialIngredient.Key, droppedRawMaterialIngredient.Value);
+                        ObjectsReference.Instance.bananaManRawMaterialInventory.AddQuantity(droppedRawMaterialIngredient.Key, droppedRawMaterialIngredient.Value);
                     }
                     
                     Destroy(targetedGameObject);
@@ -133,12 +133,18 @@ namespace InGame.Player.BananaGunActions {
         }
         
         private void TryToRepairBuildable(BuildableBehaviour buildableBehaviour) {
-            if (!ObjectsReference.Instance.rawMaterialInventory.HasCraftingIngredients(buildableBehaviour.buildableType)) return;
+            if (!ObjectsReference.Instance.bananaManRawMaterialInventory.HasCraftingIngredients(buildableBehaviour.buildableType)) return;
             
             var _craftingIngredients = ObjectsReference.Instance.meshReferenceScriptableObject.buildablePropertiesScriptableObjects[buildableBehaviour.buildableType].rawMaterialsWithQuantity;
 
             foreach (var craftingIngredient in _craftingIngredients) {
-                ObjectsReference.Instance.rawMaterialInventory.RemoveQuantity(craftingIngredient.Key, craftingIngredient.Value);
+                ObjectsReference.Instance.bananaManRawMaterialInventory.RemoveQuantity(craftingIngredient.Key, craftingIngredient.Value);
+                
+                ObjectsReference.Instance.uiQueuedMessages.RemoveFromInventory(
+                    ObjectsReference.Instance.meshReferenceScriptableObject.rawMaterialPropertiesScriptableObjects[craftingIngredient.Key], 
+                    craftingIngredient.Value
+                );
+                ObjectsReference.Instance.uiFlippers.RefreshActiveBuildableAvailability();
             }
             
             ObjectsReference.Instance.audioManager.PlayEffect(SoundEffectType.TAKE_SOMETHING, 0);

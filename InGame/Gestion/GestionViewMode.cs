@@ -3,7 +3,6 @@ using InGame.Interactions;
 using InGame.Items.ItemsBehaviours;
 using InGame.Items.ItemsBehaviours.BuildablesBehaviours;
 using InGame.Items.ItemsProperties.Buildables;
-using InGame.Items.ItemsProperties.Dropped;
 using InGame.Items.ItemsProperties.Dropped.Raw_Materials;
 using Tags;
 using UnityEngine;
@@ -56,13 +55,11 @@ namespace InGame.Gestion {
         private void Update() {
             ray = mainCamera.ScreenPointToRay(Mouse.current.position.value);
             
-            if (Physics.Raycast(ray, out raycastHit, Single.PositiveInfinity, layerMask: GestionViewSelectableLayerMask)) {
-                targetedGameObject = raycastHit.transform.gameObject;
-            }
-            else {
-                targetedGameObject = null;
-            }
-            
+            targetedGameObject = 
+                Physics.Raycast(ray, out raycastHit, Single.PositiveInfinity, layerMask: GestionViewSelectableLayerMask) ? 
+                    raycastHit.transform.gameObject : 
+                    null;
+
             if (_activeGhost == null) return;
             
             if(Physics.Raycast(ray, out raycastHit, 2000, layerMask:buildingLayerMask)) {
@@ -90,7 +87,7 @@ namespace InGame.Gestion {
             
             viewModeContextType = ViewModeContextType.BUILD;
             
-            if (ObjectsReference.Instance.rawMaterialInventory.HasCraftingIngredients(buildablePropertiesScriptableObject)) {
+            if (ObjectsReference.Instance.bananaManRawMaterialInventory.HasCraftingIngredients(buildablePropertiesScriptableObject)) {
                 _activeGhostClass.SetGhostState(GhostState.VALID);
                 ObjectsReference.Instance.uInventoriesManager.GetCurrentUIHelper().ShowNormalPlaceHelper();
             }
@@ -132,8 +129,15 @@ namespace InGame.Gestion {
                 var _craftingIngredients = _activeGhostClass.buildablePropertiesScriptableObject.rawMaterialsWithQuantity;
 
                 foreach (var craftingIngredient in _craftingIngredients) {
-                    ObjectsReference.Instance.rawMaterialInventory.RemoveQuantity(craftingIngredient.Key,
+                    ObjectsReference.Instance.bananaManRawMaterialInventory.RemoveQuantity(craftingIngredient.Key,
                         craftingIngredient.Value);
+                    
+                    ObjectsReference.Instance.uiQueuedMessages.RemoveFromInventory(
+                        ObjectsReference.Instance.meshReferenceScriptableObject.rawMaterialPropertiesScriptableObjects[craftingIngredient.Key], 
+                        craftingIngredient.Value
+                    );
+                    ObjectsReference.Instance.uiFlippers.RefreshActiveBuildableAvailability();
+
                 }
                 
                 _buildable.GetComponent<BuildableBehaviour>().buildableGuid = Guid.NewGuid().ToString();
@@ -160,10 +164,21 @@ namespace InGame.Gestion {
                     var regimeClass = targetedGameObject.GetComponent<Regime>();
                     if (regimeClass.regimeStade != RegimeStade.MATURE) return;
 
-                    var quantity = regimeClass.regimeDataScriptableObject.regimeQuantity;
+                    var regimeQuantity = regimeClass.regimeDataScriptableObject.regimeQuantity;
+                    var bananaType = regimeClass.regimeDataScriptableObject.bananaType;
 
-                    ObjectsReference.Instance.BananaManBananasInventory.AddQuantity(regimeClass.regimeDataScriptableObject.associatedBananasPropertiesScriptableObject.bananaType, quantity);
+                    var newBananaQuantity = ObjectsReference.Instance.BananaManBananasInventory.AddQuantity(regimeClass.regimeDataScriptableObject.associatedBananasPropertiesScriptableObject.bananaType, regimeQuantity);
+                    ObjectsReference.Instance.uiFlippers.SetDroppableQuantity(newBananaQuantity.ToString());
 
+                    var bananaData =
+                        ObjectsReference.Instance.meshReferenceScriptableObject.bananasPropertiesScriptableObjects[bananaType];
+            
+                    ObjectsReference.Instance.uiQueuedMessages.AddToInventory(bananaData, regimeQuantity);
+
+                    foreach (var monkey in ObjectsReference.Instance.worldData.monkeys) {
+                        monkey.SearchForBananaManBananas();
+                    }
+                    
                     regimeClass.GrabBananas();
 
                     foreach (var monkey in ObjectsReference.Instance.worldData.monkeys) {
@@ -182,7 +197,7 @@ namespace InGame.Gestion {
                     var craftingMaterials = ObjectsReference.Instance.meshReferenceScriptableObject.buildablePropertiesScriptableObjects[buildableType].rawMaterialsWithQuantity;
 
                     foreach (var craftingMaterial in craftingMaterials) {
-                        ObjectsReference.Instance.rawMaterialInventory.AddQuantity(craftingMaterial.Key, craftingMaterial.Value);
+                        ObjectsReference.Instance.bananaManRawMaterialInventory.AddQuantity(craftingMaterial.Key, craftingMaterial.Value);
                     }
 
                     if (buildableType == BuildableType.BANANA_DRYER) targetedGameObject.GetComponent<BananasDryerBehaviour>().RetrieveRawMaterials();
@@ -204,7 +219,7 @@ namespace InGame.Gestion {
                     rawMaterialsWithQuantity = _wastePropertiesScriptableObject.GetRawMaterialsWithQuantity();
 
                     foreach (var droppedRawMaterialIngredient in rawMaterialsWithQuantity) {
-                        ObjectsReference.Instance.rawMaterialInventory.AddQuantity(droppedRawMaterialIngredient.Key, droppedRawMaterialIngredient.Value);
+                        ObjectsReference.Instance.bananaManRawMaterialInventory.AddQuantity(droppedRawMaterialIngredient.Key, droppedRawMaterialIngredient.Value);
                     }
                     
                     Destroy(targetedGameObject);
@@ -224,13 +239,19 @@ namespace InGame.Gestion {
             if (targetedGameObject == null) return;
 
             if (targetedGameObject.TryGetComponent(out BuildableBehaviour buildableBehaviour)) {
-                if (!ObjectsReference.Instance.rawMaterialInventory.HasCraftingIngredients(buildableBehaviour.buildableType))
+                if (!ObjectsReference.Instance.bananaManRawMaterialInventory.HasCraftingIngredients(buildableBehaviour.buildableType))
                     return;
                 
                 var _craftingIngredients = ObjectsReference.Instance.meshReferenceScriptableObject.buildablePropertiesScriptableObjects[buildableBehaviour.buildableType].rawMaterialsWithQuantity;
 
                 foreach (var craftingIngredient in _craftingIngredients) {
-                    ObjectsReference.Instance.rawMaterialInventory.RemoveQuantity(craftingIngredient.Key, craftingIngredient.Value);
+                    ObjectsReference.Instance.bananaManRawMaterialInventory.RemoveQuantity(craftingIngredient.Key, craftingIngredient.Value);
+                    
+                    ObjectsReference.Instance.uiQueuedMessages.RemoveFromInventory(
+                        ObjectsReference.Instance.meshReferenceScriptableObject.rawMaterialPropertiesScriptableObjects[craftingIngredient.Key], 
+                        craftingIngredient.Value
+                    );
+                    ObjectsReference.Instance.uiFlippers.RefreshActiveBuildableAvailability();
                 }
                 
                 ObjectsReference.Instance.audioManager.PlayEffect(SoundEffectType.TAKE_SOMETHING, 0);

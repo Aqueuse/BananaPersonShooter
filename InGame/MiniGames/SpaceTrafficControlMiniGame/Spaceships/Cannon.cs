@@ -46,12 +46,10 @@ namespace InGame.MiniGames.SpaceTrafficControlMiniGame.Spaceships {
         }
 
         private void ConsumeBanana() {
-            ObjectsReference.Instance.BananaManBananasInventory.RemoveQuantity(_laserType, 1);
-
-            ObjectsReference.Instance.uiCannons.SetBananaQuantity(
-                ObjectsReference.Instance.BananaManBananasInventory.GetQuantity(_laserType),
-                _laserType
-            );
+            var newBananaQuantity = ObjectsReference.Instance.BananaManBananasInventory.RemoveQuantity(_laserType, 1);
+            
+            ObjectsReference.Instance.uiCannons.SetBananaQuantity(newBananaQuantity, _laserType);
+            ObjectsReference.Instance.uiFlippers.SetDroppableQuantity(newBananaQuantity.ToString());
         }
 
         public void HideLaser() {

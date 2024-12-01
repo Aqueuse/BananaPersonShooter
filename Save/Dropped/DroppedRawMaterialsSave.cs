@@ -6,7 +6,7 @@ using Newtonsoft.Json;
 using UnityEngine;
 
 namespace Save.Dropped {
-    public class RawMaterialsSave : MonoBehaviour {
+    public class DroppedRawMaterialsSave : MonoBehaviour {
         public GameObject rawMaterialsContainer;
     
         private string _savePath;

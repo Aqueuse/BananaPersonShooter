@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using InGame.Items.ItemsProperties.Buildables;
 using InGame.Items.ItemsProperties.Characters;
-using InGame.Items.ItemsProperties.Dropped;
 using InGame.Items.ItemsProperties.Dropped.Bananas;
 using InGame.Items.ItemsProperties.Dropped.Raw_Materials;
 using UnityEngine;
@@ -20,8 +19,9 @@ namespace InGame {
         public GenericDictionary<MeteoriteType, GameObject> meteoritePrefabByMeteoriteType;
         
         public GenericDictionary<BuildableType, BuildablePropertiesScriptableObject> buildablePropertiesScriptableObjects;
-        public GenericDictionary<DroppedType, DroppedPropertiesScriptableObject> droppedPropertiesScriptableObjects;
         public GenericDictionary<BananaType, BananasPropertiesScriptableObject> bananasPropertiesScriptableObjects;
+        public GenericDictionary<RawMaterialType, DroppedPropertiesScriptableObject> rawMaterialPropertiesScriptableObjects;
+        public GenericDictionary<IngredientsType, DroppedPropertiesScriptableObject> ingredientsPropertiesScriptableObjects;
         
         public GenericDictionary<MonkeyMenType, GameObject> monkeyMenPrefabByMonkeyMenType;
         public GenericDictionary<SpaceshipType, GameObject> spaceshipPrefabBySpaceshipType;
@@ -55,5 +55,20 @@ namespace InGame {
         public GenericDictionary<CharacterType, Sprite> itemPreviewByCharacterType;
 
         public GameObject teleportDownVFXPrefab;
+
+        public GameObject GetActiveDroppablePrefab() {
+            switch (ObjectsReference.Instance.bananaMan.bananaManData.activeDropped) {
+                case DroppedType.BANANA:
+                    return bananaPrefabByBananaType[ObjectsReference.Instance.bananaMan.bananaManData.activeBanana];
+                case DroppedType.INGREDIENTS:
+                    return ingredientPrefabByIngredientType[ObjectsReference.Instance.bananaMan.bananaManData.activeIngredient];
+                case DroppedType.RAW_MATERIAL:
+                    return rawMaterialPrefabByRawMaterialType[ObjectsReference.Instance.bananaMan.bananaManData.activeRawMaterial];
+                case DroppedType.MANUFACTURED_ITEMS:
+                    return manufacturedItemPrefabByManufacturedItemType[ObjectsReference.Instance.bananaMan.bananaManData.activeManufacturedItem];
+            }
+
+            return bananaPrefabByBananaType[BananaType.CAVENDISH];
+        }
     }
 }

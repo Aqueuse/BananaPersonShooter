@@ -64,12 +64,12 @@ public class ObjectsReference : MonoSingleton<ObjectsReference> {
     [Space]
     public GhostsReference ghostsReference;
 
-    [Header("inventories")] 
+    [Header("banana man inventories")] 
     public InventoriesHelper inventoriesHelper;
     public BananasInventory BananaManBananasInventory;
-    public RawMaterialInventory rawMaterialInventory;
-    public IngredientsInventory ingredientsInventory;
-    public ManufacturedItemsInventory manufacturedItemsInventory;
+    public RawMaterialInventory bananaManRawMaterialInventory;
+    public IngredientsInventory bananaManIngredientsInventory;
+    public ManufacturedItemsInventory bananaManManufacturedItemsInventory;
 
     [Header("Gestion Mode")]
     public ScanWithMouseForDescription scanWithMouseForDescription;
@@ -100,7 +100,7 @@ public class ObjectsReference : MonoSingleton<ObjectsReference> {
     public UInventoriesManager uInventoriesManager;
     public UiMainBlock uiMainBlock;
     [Space] 
-    public UIBananasInventory uiBananasInventory;
+    public UIBananasInventory bananaManUiBananasInventory;
     public UIRawMaterialsInventory bananaManUIRawMaterialsInventory;
     public UIIngredientsInventory bananaManUiIngredientsInventory;
     public UIBlueprintsInventory bananaManUiBlueprintsInventory;

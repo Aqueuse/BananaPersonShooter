@@ -24,7 +24,6 @@ MonoBehaviour:
   - retriever
   - recycleuse
   - recicladora
-  itemSprite: {fileID: 21300000, guid: b727c8dbf22824c4ea685718a0494885, type: 3}
   itemDescription:
   - Allows you to retrieve all platforms from an area of the station
   - "Permet de r\xE9cup\xE9rer toutes les plateformes d'une zone de la station"
@@ -32,7 +31,7 @@ MonoBehaviour:
   bitKongValue: 0
   rawMaterialsWithQuantity:
     list:
-    - key: 0
+    - key: 1
       value: 4
     - key: 2
       value: 1

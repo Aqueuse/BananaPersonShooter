@@ -1,4 +1,3 @@
-using InGame.Items.ItemsData;
 using InGame.Items.ItemsData.Characters;
 using InGame.Monkeys.Merchimps;
 using TMPro;
@@ -36,8 +35,8 @@ namespace UI.InGame.Merchimps {
         public void InitializeInventories(MonkeyMenData monkeyMenData) {
             ObjectsReference.Instance.trade.monkeyMenData = monkeyMenData;
             
-            merchantBuyUiIngredientsInventory.ingredientsInventory = monkeyMenData.ingredientsInventory;
-            merchantBuyUiManufacturedItemsInventory.manufacturedItemsInventory = monkeyMenData.manufacturedItemsInventory;
+            merchantBuyUiIngredientsInventory.associatedIngredientsInventory.ingredientsInventory = monkeyMenData.ingredientsInventory;
+            merchantBuyUiManufacturedItemsInventory.associatedManufacturedItemsInventory.manufacturedItemsInventory = monkeyMenData.manufacturedItemsInventory;
             
             RefreshMerchantInventories();
             RefreshBitkongQuantities();

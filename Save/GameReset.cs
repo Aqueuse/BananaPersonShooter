@@ -1,4 +1,3 @@
-using System.Linq;
 using Save.Templates;
 using UnityEngine;
 using UnityEngine.AI;
@@ -28,20 +27,20 @@ namespace Save {
         }
 
         private static void ResetInventories() {
-            foreach (var bananaSlot in ObjectsReference.Instance.bananaMan.bananaManData.bananasInventory.ToList()) {
-                ObjectsReference.Instance.bananaMan.bananaManData.bananasInventory[bananaSlot.Key] = 0;
+            foreach (var bananaSlot in ObjectsReference.Instance.BananaManBananasInventory.bananasInventory) {
+                ObjectsReference.Instance.BananaManBananasInventory.bananasInventory[bananaSlot.Key] = 0;
             }
             
-            foreach (var ingredientSlot in ObjectsReference.Instance.bananaMan.bananaManData.ingredientsInventory.ToList()) {
-                ObjectsReference.Instance.bananaMan.bananaManData.ingredientsInventory[ingredientSlot.Key] = 0;
+            foreach (var ingredientSlot in ObjectsReference.Instance.bananaManIngredientsInventory.ingredientsInventory) {
+                ObjectsReference.Instance.bananaManIngredientsInventory.ingredientsInventory[ingredientSlot.Key] = 0;
             }
 
-            foreach (var rawMaterialsSlot in ObjectsReference.Instance.bananaMan.bananaManData.rawMaterialInventory.ToList()) {
-                ObjectsReference.Instance.bananaMan.bananaManData.rawMaterialInventory[rawMaterialsSlot.Key] = 0;
+            foreach (var rawMaterialsSlot in ObjectsReference.Instance.bananaManRawMaterialInventory.rawMaterialsInventory) {
+                ObjectsReference.Instance.bananaManRawMaterialInventory.rawMaterialsInventory[rawMaterialsSlot.Key] = 0;
             }
 
-            foreach (var manufacturedItemSlot in ObjectsReference.Instance.bananaMan.bananaManData.manufacturedItemsInventory.ToList()) {
-                ObjectsReference.Instance.bananaMan.bananaManData.manufacturedItemsInventory[manufacturedItemSlot.Key] = 0;
+            foreach (var manufacturedItemSlot in ObjectsReference.Instance.bananaManManufacturedItemsInventory.manufacturedItemsInventory) {
+                ObjectsReference.Instance.bananaManManufacturedItemsInventory.manufacturedItemsInventory[manufacturedItemSlot.Key] = 0;
             }
         }
         
@@ -61,7 +60,12 @@ namespace Save {
         }
 
         private static void ResetActiveItem() {
-            ObjectsReference.Instance.bananaMan.bananaManData.activeDropped = ObjectsReference.Instance.meshReferenceScriptableObject.droppedPropertiesScriptableObjects[DroppedType.EMPTY];
+            ObjectsReference.Instance.bananaMan.bananaManData.activeBanana = BananaType.EMPTY;
+            ObjectsReference.Instance.bananaMan.bananaManData.activeBuildable = BuildableType.EMPTY;
+            ObjectsReference.Instance.bananaMan.bananaManData.activeIngredient = IngredientsType.EMPTY;
+            ObjectsReference.Instance.bananaMan.bananaManData.activeRawMaterial = RawMaterialType.EMPTY;
+            ObjectsReference.Instance.bananaMan.bananaManData.activeManufacturedItem = ManufacturedItemsType.EMPTY;
+
         }
 
         private static void ResetMonkeysSasiety() {

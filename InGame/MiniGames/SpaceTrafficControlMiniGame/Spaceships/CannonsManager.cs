@@ -92,7 +92,7 @@ namespace InGame.MiniGames.SpaceTrafficControlMiniGame.Spaceships {
             var bananaData = ObjectsReference.Instance.meshReferenceScriptableObject.bananasPropertiesScriptableObjects[activeBanana];
             
             ObjectsReference.Instance.uiCannons.SetBananaData(
-                bananaData.itemSprite, 
+                bananaData.GetSprite(), 
                 ObjectsReference.Instance.meshReferenceScriptableObject.bananaGoopColorByEffectType[bananaData.bananaEffect]
             );
             

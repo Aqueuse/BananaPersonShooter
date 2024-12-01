@@ -24,7 +24,6 @@ MonoBehaviour:
   - bench
   - banc
   - banco
-  itemSprite: {fileID: 21300000, guid: 80787bab489e5c04d91d3529b1097b7b, type: 3}
   itemDescription:
   - a simple imitation wood bench with back
   - un simple banc imitation bois avec un dossier
@@ -32,7 +31,7 @@ MonoBehaviour:
   bitKongValue: 0
   rawMaterialsWithQuantity:
     list:
-    - key: 0
+    - key: 1
       value: 10
     keyCollision: 0
   buildablePrefab: {fileID: 8975577443026611095, guid: 066d0f08d2184ad409aebbd605d3c47a, type: 3}

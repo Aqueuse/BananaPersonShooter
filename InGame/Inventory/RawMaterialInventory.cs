@@ -4,12 +4,8 @@ using UnityEngine;
 
 namespace InGame.Inventory {
     public class RawMaterialInventory : MonoBehaviour {
-        private Dictionary<RawMaterialType, int> rawMaterialsInventory;
-
-        private void Start() {
-            rawMaterialsInventory = ObjectsReference.Instance.bananaMan.bananaManData.rawMaterialInventory;
-        }
-
+        public Dictionary<RawMaterialType, int> rawMaterialsInventory;
+        
         public void AddQuantity(RawMaterialType rawMaterialType, int quantity) {
             if (rawMaterialsInventory[rawMaterialType] > 10000) return;
 
@@ -25,26 +21,21 @@ namespace InGame.Inventory {
             ObjectsReference.Instance.uiFlippers.RefreshActiveBuildableAvailability();
         }
         
-        public void RemoveQuantity(RawMaterialType rawMaterialType, int quantity) {
-            var droppedItem = ObjectsReference.Instance.bananaManUIRawMaterialsInventory.uInventorySlots[rawMaterialType];
-
+        public int RemoveQuantity(RawMaterialType rawMaterialType, int quantity) {
             if (rawMaterialsInventory[rawMaterialType] > quantity) {
                 rawMaterialsInventory[rawMaterialType] -= quantity;
-                droppedItem.SetQuantity(rawMaterialsInventory[rawMaterialType]);
             }
 
             else {
                 rawMaterialsInventory[rawMaterialType] = 0;
-                droppedItem.SetQuantity(0);
-                droppedItem.gameObject.SetActive(false);
             }
-            
-            ObjectsReference.Instance.uiQueuedMessages.RemoveFromInventory(droppedItem.itemScriptableObject, quantity);
-            
-            ObjectsReference.Instance.uiFlippers.RefreshActiveBuildableAvailability();
+
+            return rawMaterialsInventory[rawMaterialType];
         }
             
         public bool HasCraftingIngredients(BuildablePropertiesScriptableObject buildablePropertiesScriptableObject) {
+            if (buildablePropertiesScriptableObject.buildableType == BuildableType.EMPTY) return false;
+            
             var _craftingIngredients = buildablePropertiesScriptableObject.rawMaterialsWithQuantity;
 
             foreach (var craftingIngredient in _craftingIngredients) {

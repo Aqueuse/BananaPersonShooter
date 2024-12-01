@@ -1,3 +1,4 @@
+using InGame.Inventory;
 using InGame.Items.ItemsProperties;
 using UI.InGame.Merchimps;
 using UnityEngine;
@@ -10,9 +11,17 @@ namespace InGame.Monkeys.Merchimps {
 
         [HideInInspector] public ItemScriptableObject activeItemScriptableObject;
 
+        private BananasInventory bananaManBananasInventory;
+        private ManufacturedItemsInventory bananaManManufacturedItemsInventory;
+        private IngredientsInventory bananaManIngredientsInventory;
+
         public void Start() {
             monkeyMenBehaviour = GetComponent<MonkeyMenBehaviour>();
             uiMerchant = ObjectsReference.Instance.uiMerchant;
+
+            bananaManBananasInventory = ObjectsReference.Instance.BananaManBananasInventory;
+            bananaManManufacturedItemsInventory = ObjectsReference.Instance.bananaManManufacturedItemsInventory;
+            bananaManIngredientsInventory = ObjectsReference.Instance.bananaManIngredientsInventory;
             
             uiMerchant.InitializeInventories(monkeyMenBehaviour.monkeyMenData);
             uiMerchant.RefreshMerchantInventories();
@@ -61,13 +70,13 @@ namespace InGame.Monkeys.Merchimps {
         public int GetBananaManItemQuantity(ItemScriptableObject itemScriptableObject) {
             switch (itemScriptableObject.itemCategory) {
                 case ItemCategory.BANANA:
-                    return ObjectsReference.Instance.bananaMan.bananaManData.bananasInventory[itemScriptableObject.bananaType];
+                    return bananaManBananasInventory.bananasInventory[itemScriptableObject.bananaType];
 
                 case ItemCategory.MANUFACTURED_ITEM:
-                    return ObjectsReference.Instance.bananaMan.bananaManData.manufacturedItemsInventory[itemScriptableObject.manufacturedItemsType];
+                    return bananaManManufacturedItemsInventory.manufacturedItemsInventory[itemScriptableObject.manufacturedItemsType];
 
                 case ItemCategory.INGREDIENT:
-                    return ObjectsReference.Instance.bananaMan.bananaManData.ingredientsInventory[itemScriptableObject.ingredientsType];
+                    return bananaManIngredientsInventory.ingredientsInventory[itemScriptableObject.ingredientsType];
             }
 
             return 0;

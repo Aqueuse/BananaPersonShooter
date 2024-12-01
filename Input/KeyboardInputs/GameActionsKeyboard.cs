@@ -64,7 +64,7 @@ namespace KeyboardInputs {
 
         private void ScrollModes(InputAction.CallbackContext callbackContext) {
             if (!ObjectsReference.Instance.bananaMan.tutorialFinished) return;
-            
+
             if (callbackContext.ReadValue<Vector2>().y > 1) {
                 bananaGunActionsSwitch.SwitchToLeftMode();
             }
