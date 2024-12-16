@@ -13,17 +13,19 @@ MonoBehaviour:
   m_Name: retrieverProperties
   m_EditorClassIdentifier: 
   gameObjectTag: 11
-  itemCategory: 2
+  itemCategory: 1
   bananaType: 0
   droppedType: 0
   ingredientsType: 0
   manufacturedItemsType: 0
   rawMaterialType: 0
-  buildableType: 4
+  buildableType: 3
+  foodType: 0
   itemName:
   - retriever
   - recycleuse
   - recicladora
+  itemSprite: {fileID: 21300000, guid: b727c8dbf22824c4ea685718a0494885, type: 3}
   itemDescription:
   - Allows you to retrieve all platforms from an area of the station
   - "Permet de r\xE9cup\xE9rer toutes les plateformes d'une zone de la station"
@@ -31,7 +33,7 @@ MonoBehaviour:
   bitKongValue: 0
   rawMaterialsWithQuantity:
     list:
-    - key: 1
+    - key: 0
       value: 4
     - key: 2
       value: 1

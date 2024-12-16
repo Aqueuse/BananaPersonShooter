@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: PlantainBananaProperties
   m_EditorClassIdentifier: 
   gameObjectTag: 3
-  itemCategory: 1
-  bananaType: 12
-  droppedType: 1
+  itemCategory: 0
+  bananaType: 11
+  droppedType: 0
   ingredientsType: 0
   manufacturedItemsType: 0
   rawMaterialType: 0
@@ -35,4 +35,3 @@ MonoBehaviour:
   resistanceBonus: 1
   bananaEffect: 1
   bananaColor: {r: 0.9056604, g: 0.6144464, b: 0.19138479, a: 1}
-  prefab: {fileID: 0}

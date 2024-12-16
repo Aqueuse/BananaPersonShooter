@@ -11,7 +11,7 @@ namespace InGame.Items.ItemsBehaviours.DroppedBehaviours {
                 droppedGuid = droppedGuid,
                 droppedPosition = JsonHelper.FromVector3ToString(transform.position),
                 droppedRotation = JsonHelper.FromQuaternionToString(transform.rotation),
-                manufacturedItemsType = droppedPropertiesScriptableObject.manufacturedItemsType
+                manufacturedItemsType = itemScriptableObject.manufacturedItemsType
             };
 
             ObjectsReference.Instance.gameSave.droppedManufacturedItemSave.AddManufacturedItemToDictionnary(

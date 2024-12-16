@@ -3,7 +3,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace UI.InGame.Inventory {
+namespace UI.InGame.MainPanel.Inventories {
     public class UInventorySlot : MonoBehaviour {
         public ItemScriptableObject itemScriptableObject;
 
@@ -13,9 +13,7 @@ namespace UI.InGame.Inventory {
             if (ObjectsReference.Instance.gameManager.gameContext == GameContext.IN_GESTION_VIEW) return;
 
             ObjectsReference.Instance.bananaMan.SetActiveDropped(itemScriptableObject);
-            
-            ObjectsReference.Instance.uiFlippers.SetDroppableSprite(itemScriptableObject.GetSprite());
-            ObjectsReference.Instance.uiFlippers.SetDroppableQuantity(quantityText.text);
+            ObjectsReference.Instance.uiFlippers.SetDroppableItem(itemScriptableObject);
         }
         
         public void SetDescriptionAndName() {

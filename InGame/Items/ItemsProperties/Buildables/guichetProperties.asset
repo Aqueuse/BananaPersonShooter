@@ -13,17 +13,19 @@ MonoBehaviour:
   m_Name: guichetProperties
   m_EditorClassIdentifier: 
   gameObjectTag: 11
-  itemCategory: 2
+  itemCategory: 1
   bananaType: 0
   droppedType: 0
   ingredientsType: 0
   manufacturedItemsType: 0
   rawMaterialType: 0
-  buildableType: 3
+  buildableType: 2
+  foodType: 0
   itemName:
   - ticket booth
   - guichet
   - taquilla
+  itemSprite: {fileID: 21300000, guid: a87b3dd50974bc1488e284f4f473ea3a, type: 3}
   itemDescription:
   - A ticket booth to welcome visitors to the reserve
   - "un guichet pour accueillir les visiteurs de la r\xE9serve"
@@ -31,7 +33,7 @@ MonoBehaviour:
   bitKongValue: 0
   rawMaterialsWithQuantity:
     list:
-    - key: 1
+    - key: 0
       value: 15
     keyCollision: 0
   buildablePrefab: {fileID: 5196617759513621631, guid: fdc0a3f945f15074a968af548517735b, type: 3}

@@ -1,9 +1,7 @@
 using System;
-using InGame.Interactions;
 using InGame.Items.ItemsBehaviours;
 using InGame.Items.ItemsBehaviours.BuildablesBehaviours;
 using InGame.Items.ItemsProperties.Buildables;
-using InGame.Items.ItemsProperties.Dropped.Raw_Materials;
 using Tags;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -153,88 +151,6 @@ namespace InGame.Gestion {
             CancelGhost();
         }
         
-        public void harvest() {
-            if (targetedGameObject == null) return;
-            
-            var gameObjectTagClass = targetedGameObject.GetComponent<Tag>();
-            var gameObjectTag = gameObjectTagClass.gameObjectTag;
-            
-            switch (gameObjectTag) {
-                case GAME_OBJECT_TAG.REGIME:
-                    var regimeClass = targetedGameObject.GetComponent<Regime>();
-                    if (regimeClass.regimeStade != RegimeStade.MATURE) return;
-
-                    var regimeQuantity = regimeClass.regimeDataScriptableObject.regimeQuantity;
-                    var bananaType = regimeClass.regimeDataScriptableObject.bananaType;
-
-                    var newBananaQuantity = ObjectsReference.Instance.BananaManBananasInventory.AddQuantity(regimeClass.regimeDataScriptableObject.associatedBananasPropertiesScriptableObject.bananaType, regimeQuantity);
-                    ObjectsReference.Instance.uiFlippers.SetDroppableQuantity(newBananaQuantity.ToString());
-
-                    var bananaData =
-                        ObjectsReference.Instance.meshReferenceScriptableObject.bananasPropertiesScriptableObjects[bananaType];
-            
-                    ObjectsReference.Instance.uiQueuedMessages.AddToInventory(bananaData, regimeQuantity);
-
-                    foreach (var monkey in ObjectsReference.Instance.worldData.monkeys) {
-                        monkey.SearchForBananaManBananas();
-                    }
-                    
-                    regimeClass.GrabBananas();
-
-                    foreach (var monkey in ObjectsReference.Instance.worldData.monkeys) {
-                        monkey.SearchForBananaManBananas();
-                    }
-                    
-                    ObjectsReference.Instance.uInventoriesManager.GetCurrentUIHelper().HideRetrieveConfirmation();
-                    ObjectsReference.Instance.audioManager.PlayEffect(SoundEffectType.TAKE_SOMETHING, 0);
-
-                    targetedGameObject = null;
-                    break;
-
-                case GAME_OBJECT_TAG.BUILDABLE:
-                    var buildableType = gameObjectTagClass.itemScriptableObject.buildableType;
-
-                    var craftingMaterials = ObjectsReference.Instance.meshReferenceScriptableObject.buildablePropertiesScriptableObjects[buildableType].rawMaterialsWithQuantity;
-
-                    foreach (var craftingMaterial in craftingMaterials) {
-                        ObjectsReference.Instance.bananaManRawMaterialInventory.AddQuantity(craftingMaterial.Key, craftingMaterial.Value);
-                    }
-
-                    if (buildableType == BuildableType.BANANA_DRYER) targetedGameObject.GetComponent<BananasDryerBehaviour>().RetrieveRawMaterials();
-                    
-                    DestroyImmediate(targetedGameObject);
-                    
-                    ObjectsReference.Instance.uInventoriesManager.GetCurrentUIHelper().HideRetrieveConfirmation();
-                    ObjectsReference.Instance.audioManager.PlayEffect(SoundEffectType.TAKE_SOMETHING, 0);
-
-                    targetedGameObject = null;
-
-                    ObjectsReference.Instance.build.setGhostColor();
-
-                    break;
-
-                case GAME_OBJECT_TAG.DROPPED:
-                    var _wastePropertiesScriptableObject = (DroppedPropertiesScriptableObject)gameObjectTagClass.itemScriptableObject;
-                    
-                    rawMaterialsWithQuantity = _wastePropertiesScriptableObject.GetRawMaterialsWithQuantity();
-
-                    foreach (var droppedRawMaterialIngredient in rawMaterialsWithQuantity) {
-                        ObjectsReference.Instance.bananaManRawMaterialInventory.AddQuantity(droppedRawMaterialIngredient.Key, droppedRawMaterialIngredient.Value);
-                    }
-                    
-                    Destroy(targetedGameObject);
-                    
-                    ObjectsReference.Instance.uInventoriesManager.GetCurrentUIHelper().HideRetrieveConfirmation();
-                    ObjectsReference.Instance.audioManager.PlayEffect(SoundEffectType.TAKE_SOMETHING, 0);
-
-                    targetedGameObject = null;
-
-                    ObjectsReference.Instance.build.setGhostColor();
-
-                    break;
-            }
-        }
-        
         public void RepairBuildable() {
             if (targetedGameObject == null) return;
 
@@ -258,6 +174,12 @@ namespace InGame.Gestion {
                 
                 buildableBehaviour.RepairBuildable();
             }
+        }
+
+        public void harvest() {
+            if (targetedGameObject == null) return;
+
+            ObjectsReference.Instance.scan.harvest(targetedGameObject.GetComponent<Tag>().itemScriptableObject);
         }
     }
 }

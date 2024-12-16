@@ -4,21 +4,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
-namespace UI.InGame.Inventory {
-    public enum InventoryUITabType {
-        INVENTORY_DROPPED = 0,
-        INVENTORY_INGREDIENTS = 1,
-        INVENTORY_MANUFACTURED_ITEMS = 2,
-        INVENTORY_BUILDABLES = 3
-    }
-    
-    public enum MainBlockType {
-        DIALOGUE,
-        INVENTORIES,
-        COMMAND_ROOM,
-        HELP
-    }
-
+namespace UI.InGame.MainPanel.Inventories {
     public class UInventoriesManager : MonoBehaviour {
         [SerializeField] private GenericDictionary<DroppedType, Image> buttonImageByInventoryCategory;
         
@@ -29,7 +15,7 @@ namespace UI.InGame.Inventory {
         [SerializeField] private TextMeshProUGUI bitkongQuantityText;
         
         public DroppedType lastFocusedInventory = DroppedType.BANANA;
-        public NeedType lastFocusedBlueprintInventory = NeedType.FUN;
+        public BuildableTabType lastFocusedBlueprintInventory = BuildableTabType.FUN;
 
         [SerializeField] private UIHelper gamepadUIHelper;
         [SerializeField] private UIHelper keyboardUIHelper;
@@ -104,7 +90,11 @@ namespace UI.InGame.Inventory {
                     break;
             }
         }
-        
+
+        public void SwitchToLastFocusedInventory() {
+            SwitchToInventoryTab(lastFocusedInventory);
+        }
+
         public UIHelper GetCurrentUIHelper() {
             if (Gamepad.current == null) return gamepadUIHelper;
             return keyboardUIHelper;

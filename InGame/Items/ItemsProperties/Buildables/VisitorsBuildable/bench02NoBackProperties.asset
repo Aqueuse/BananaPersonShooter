@@ -13,17 +13,19 @@ MonoBehaviour:
   m_Name: bench02NoBackProperties
   m_EditorClassIdentifier: 
   gameObjectTag: 11
-  itemCategory: 2
+  itemCategory: 1
   bananaType: 0
   droppedType: 0
   ingredientsType: 0
   manufacturedItemsType: 0
   rawMaterialType: 0
-  buildableType: 8
+  buildableType: 7
+  foodType: 0
   itemName:
   - bench
   - banc
   - banco
+  itemSprite: {fileID: 21300000, guid: a566cf5282d53e649adaf9ab68605ed7, type: 3}
   itemDescription:
   - a simple imitation banana bench without back
   - un simple banc imitation banane sans dossier
@@ -31,7 +33,7 @@ MonoBehaviour:
   bitKongValue: 0
   rawMaterialsWithQuantity:
     list:
-    - key: 1
+    - key: 0
       value: 10
     keyCollision: 0
   buildablePrefab: {fileID: 6910336428813764717, guid: 1ce4fc0f5cb3ab94f9b6bff44b68706d, type: 3}

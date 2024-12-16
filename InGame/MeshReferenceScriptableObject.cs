@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
+using InGame.Items.ItemsProperties;
 using InGame.Items.ItemsProperties.Buildables;
 using InGame.Items.ItemsProperties.Characters;
 using InGame.Items.ItemsProperties.Dropped.Bananas;
-using InGame.Items.ItemsProperties.Dropped.Raw_Materials;
 using UnityEngine;
 using UnityEngine.Localization;
 using Random = UnityEngine.Random;
@@ -20,8 +20,10 @@ namespace InGame {
         
         public GenericDictionary<BuildableType, BuildablePropertiesScriptableObject> buildablePropertiesScriptableObjects;
         public GenericDictionary<BananaType, BananasPropertiesScriptableObject> bananasPropertiesScriptableObjects;
-        public GenericDictionary<RawMaterialType, DroppedPropertiesScriptableObject> rawMaterialPropertiesScriptableObjects;
-        public GenericDictionary<IngredientsType, DroppedPropertiesScriptableObject> ingredientsPropertiesScriptableObjects;
+        public GenericDictionary<RawMaterialType, ItemScriptableObject> rawMaterialPropertiesScriptableObjects;
+        public GenericDictionary<ManufacturedItemsType, ItemScriptableObject> manufacturedItemsPropertiesScriptableObjects;
+        public GenericDictionary<IngredientsType, ItemScriptableObject> ingredientsPropertiesScriptableObjects;
+        public GenericDictionary<FoodType, ItemScriptableObject> foodPropertiesScriptableObjects;
         
         public GenericDictionary<MonkeyMenType, GameObject> monkeyMenPrefabByMonkeyMenType;
         public GenericDictionary<SpaceshipType, GameObject> spaceshipPrefabBySpaceshipType;

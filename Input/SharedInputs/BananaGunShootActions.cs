@@ -22,8 +22,6 @@ namespace SharedInputs {
         private void Shoot(InputAction.CallbackContext callbackContext) {
             ObjectsReference.Instance.bananaGun.GrabBananaGun();
             
-            if (ObjectsReference.Instance.bananaMan.bananaManData.activeDropped == DroppedType.EMPTY) return;
-            
             if (ObjectsReference.Instance.inventoriesHelper.GetActiveDroppedQuantity() <= 0) return;
             
             shoot.LoadingGun();

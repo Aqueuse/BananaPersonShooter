@@ -11,7 +11,7 @@ namespace InGame.Items.ItemsBehaviours.DroppedBehaviours {
                 droppedGuid = droppedGuid,
                 droppedPosition = JsonHelper.FromVector3ToString(transform.position),
                 droppedRotation = JsonHelper.FromQuaternionToString(transform.rotation),
-                IngredientsType = droppedPropertiesScriptableObject.ingredientsType
+                IngredientsType = itemScriptableObject.ingredientsType
             };
             
             ObjectsReference.Instance.gameSave.droppedIngredientsSave.AddIngredientsToIngredientsDictionnary(

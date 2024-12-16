@@ -3,7 +3,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace UI.InGame.Inventory {
+namespace UI.InGame.MainPanel.Inventories {
     public class UIManufacturedItemsInventory : MonoBehaviour {
         public ManufacturedItemsInventory associatedManufacturedItemsInventory;
         public GenericDictionary<ManufacturedItemsType, UInventorySlot> uInventorySlots;

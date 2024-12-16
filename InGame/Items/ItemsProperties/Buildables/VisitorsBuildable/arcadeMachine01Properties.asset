@@ -13,17 +13,19 @@ MonoBehaviour:
   m_Name: arcadeMachine01Properties
   m_EditorClassIdentifier: 
   gameObjectTag: 11
-  itemCategory: 2
+  itemCategory: 1
   bananaType: 0
   droppedType: 0
   ingredientsType: 0
   manufacturedItemsType: 0
   rawMaterialType: 0
-  buildableType: 6
+  buildableType: 5
+  foodType: 0
   itemName:
   - arcade machine "Poney Kong"
   - borne d'arcade "Poney Kong"
   - "M\xE1quina arcade \"Poney Kong\""
+  itemSprite: {fileID: 21300000, guid: 3306f46904d3661499db46783a2d2137, type: 3}
   itemDescription:
   - ' A brave pony sets off to rescue his beloved, kidnapped by a furious gorilla.
     Jump, gallop and avoid obstacles in this crazy arcade game.'
@@ -35,7 +37,7 @@ MonoBehaviour:
   bitKongValue: 0
   rawMaterialsWithQuantity:
     list:
-    - key: 1
+    - key: 0
       value: 10
     - key: 2
       value: 5

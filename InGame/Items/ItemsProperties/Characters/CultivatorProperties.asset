@@ -12,15 +12,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a634d13752d8e747a8df59dc3be8b04, type: 3}
   m_Name: CultivatorProperties
   m_EditorClassIdentifier: 
-  gameObjectTag: 0
-  itemCategory: 0
+  gameObjectTag: 27
+  itemCategory: 16
   bananaType: 0
   droppedType: 0
   ingredientsType: 0
   manufacturedItemsType: 0
+  rawMaterialType: 0
   buildableType: 0
   itemName: []
-  itemSprite: {fileID: 0}
+  itemSprite: {fileID: 21300000, guid: f9561b45af7be5c488081861f8458307, type: 3}
   itemDescription: []
   bitKongValue: 0
   colorSets:

@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using InGame.Items.ItemsBehaviours;
-using InGame.Items.ItemsData;
 using InGame.Items.ItemsData.Characters;
 using InGame.Monkeys.Chimpirates;
 using InGame.Monkeys.Chimptouristes;

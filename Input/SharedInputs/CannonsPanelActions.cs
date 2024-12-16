@@ -10,7 +10,7 @@ namespace SharedInputs {
         [SerializeField] private InputActionReference rotateCannonActionReference;
 
         [SerializeField] private InputActionReference zoomActionReference;
-        
+
         private void OnEnable() {
             switchToLeftCannonActionReference.action.Enable();
             switchToLeftCannonActionReference.action.performed += SwitchToCannonLeft;

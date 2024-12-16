@@ -1,4 +1,3 @@
-using InGame.Items.ItemsProperties.Dropped.Bananas;
 using InGame.MiniGames.SpaceTrafficControlMiniGame.projectiles;
 using UnityEngine;
 
@@ -12,11 +11,9 @@ namespace InGame.MiniGames.SpaceTrafficControlMiniGame.Spaceships {
         private Vector3 socleRotation;
         private Vector3 cannonRotation;
     
-        private BananaType _laserType;
+        private BananaEffect activeBananaGoop;
         private Color _laserColor;
         public Laser _laser;
-
-        private BananasPropertiesScriptableObject activeBanana;
         
         public void Rotate(float x, float y) {
             socleRotation.y = x;
@@ -34,22 +31,17 @@ namespace InGame.MiniGames.SpaceTrafficControlMiniGame.Spaceships {
         }
         
         public void ShowLaser() {
-            activeBanana = ObjectsReference.Instance.meshReferenceScriptableObject
-                .bananasPropertiesScriptableObjects[_laserType];
-            
             _laser.gameObject.SetActive(true);
     
             _laser.SetColor(_laserColor);
-            _laser.bananaEffect = activeBanana.bananaEffect; 
+            _laser.bananaEffect = activeBananaGoop; 
             
             InvokeRepeating(nameof(ConsumeBanana), 0, 2);
         }
 
         private void ConsumeBanana() {
-            var newBananaQuantity = ObjectsReference.Instance.BananaManBananasInventory.RemoveQuantity(_laserType, 1);
-            
-            ObjectsReference.Instance.uiCannons.SetBananaQuantity(newBananaQuantity, _laserType);
-            ObjectsReference.Instance.uiFlippers.SetDroppableQuantity(newBananaQuantity.ToString());
+            ObjectsReference.Instance.cannonsManager.bananaGoopInventory.RemoveQuantity(activeBananaGoop, 1);
+            ObjectsReference.Instance.uiCannons.RefreshBananaGoopsQuantity();
         }
 
         public void HideLaser() {
@@ -58,10 +50,9 @@ namespace InGame.MiniGames.SpaceTrafficControlMiniGame.Spaceships {
             CancelInvoke(nameof(ConsumeBanana));
         }
 
-        public void SetProjectileType(BananasPropertiesScriptableObject bananaData) {
-            activeBanana = bananaData;
-            _laserType = bananaData.bananaType;
-            _laserColor = ObjectsReference.Instance.meshReferenceScriptableObject.bananaGoopColorByEffectType[bananaData.bananaEffect];
+        public void SetCannon(BananaEffect bananaEffect) {
+            activeBananaGoop = bananaEffect;
+            _laserColor = ObjectsReference.Instance.meshReferenceScriptableObject.bananaGoopColorByEffectType[activeBananaGoop];
         }
 
         public void PositionneCamera(Transform cameraTransform) {

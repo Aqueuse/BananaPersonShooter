@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: BlueJavaBananaProperties
   m_EditorClassIdentifier: 
   gameObjectTag: 3
-  itemCategory: 1
-  bananaType: 2
-  droppedType: 1
+  itemCategory: 0
+  bananaType: 1
+  droppedType: 0
   ingredientsType: 0
   manufacturedItemsType: 0
   rawMaterialType: 0
@@ -35,4 +35,3 @@ MonoBehaviour:
   resistanceBonus: 1
   bananaEffect: 3
   bananaColor: {r: 0.20392159, g: 0.4431373, b: 0.65882355, a: 1}
-  prefab: {fileID: 0}

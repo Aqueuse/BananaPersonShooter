@@ -14,6 +14,8 @@ namespace UI.InGame.CommandRoomControlPanels {
         [SerializeField] private Transform currentCampaignContainer;
         [SerializeField] private Transform adWorldsListContainer;
 
+        [SerializeField] private GameObject communicationsPanel;
+
         private readonly Vector3 currentCampaignContainerBoxSize = new (0.576944f, 0.576944f, 0.576944f);
         private readonly Vector3 AdWorldsListContainerBoxSize = Vector3.one;
         
@@ -27,7 +29,7 @@ namespace UI.InGame.CommandRoomControlPanels {
             adWordBox.GetComponent<RectTransform>().localScale = AdWorldsListContainerBoxSize;
         }
         
-        public void SwitchToCampaignCreator() {
+        public void ShowCampaignCreatorTools() {
             worldsBoxScrollList.SetActive(true);
             launchCampaignDownButton.SetActive(true);
             
@@ -36,13 +38,21 @@ namespace UI.InGame.CommandRoomControlPanels {
                 new Vector2(campaignWorldsBoxShrinkedWidth, currentCampaignRectTransform.sizeDelta.y);
         }
         
-        public void SwitchToCurrentCampaign() {
+        public void HideCampaignCreationTools() {
             worldsBoxScrollList.SetActive(false);
             launchCampaignDownButton.SetActive(false);
             
             currentCampaignRectTransform.localPosition = new Vector3(-0f, 0.238f);
             currentCampaignRectTransform.sizeDelta =
                 new Vector2(campaignWorldsBoxExpandedWidth, currentCampaignRectTransform.sizeDelta.y);
+        }
+
+        public void SwitchToAdCampaignTab() {
+            communicationsPanel.SetActive(false);
+        }
+            
+        public void SwitchToCommunicationsTab() {
+            communicationsPanel.SetActive(true);
         }
     }
 }

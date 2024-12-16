@@ -30,7 +30,7 @@ namespace InGame.Player {
             bananaManData.activeBuildable = buildablePropertiesScriptableObject.buildableType;
             
             ObjectsReference.Instance.build.SetActiveBuildable(buildablePropertiesScriptableObject.buildableType);
-            ObjectsReference.Instance.uiFlippers.SetBuildableImage(buildablePropertiesScriptableObject.blueprintSprite);
+            ObjectsReference.Instance.uiFlippers.RefreshActiveBuildableAvailability();
         }
 
         public void SetActiveDropped(ItemScriptableObject itemScriptableObject) {

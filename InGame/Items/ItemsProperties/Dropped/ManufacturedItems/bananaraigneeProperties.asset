@@ -9,15 +9,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c83b47aafab534644924b05e840108d4, type: 3}
+  m_Script: {fileID: 11500000, guid: b2e529ee924f2b6439b07656d252d9d6, type: 3}
   m_Name: bananaraigneeProperties
   m_EditorClassIdentifier: 
   gameObjectTag: 26
-  itemCategory: 12
+  itemCategory: 11
   bananaType: 0
-  droppedType: 4
+  droppedType: 3
   ingredientsType: 0
-  manufacturedItemsType: 2
+  manufacturedItemsType: 1
   rawMaterialType: 0
   buildableType: 0
   itemName:
@@ -30,4 +30,3 @@ MonoBehaviour:
   - "Attention \xE0 ne pas marcher dessus"
   - Tenga cuidado de no pisarlo
   bitKongValue: 20
-  prefab: {fileID: 6485456399240143627, guid: 6c9e688f097f2f04abbf33140384b6dc, type: 3}

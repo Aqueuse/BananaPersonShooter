@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace UI.InGame.MainBlock {
+namespace UI.InGame.MainPanel {
     public class CommandRoomPanelButton : MonoBehaviour {
         [SerializeField] private CommandRoomPanelType commandRoomPanelType;
 

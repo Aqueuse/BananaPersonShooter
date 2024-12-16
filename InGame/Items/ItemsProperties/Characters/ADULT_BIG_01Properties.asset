@@ -12,12 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a634d13752d8e747a8df59dc3be8b04, type: 3}
   m_Name: ADULT_BIG_01Properties
   m_EditorClassIdentifier: 
-  gameObjectTag: 0
-  itemCategory: 0
+  gameObjectTag: 17
+  itemCategory: 12
   bananaType: 0
   droppedType: 0
   ingredientsType: 0
   manufacturedItemsType: 0
+  rawMaterialType: 0
   buildableType: 0
   itemName: []
   itemSprite: {fileID: 0}

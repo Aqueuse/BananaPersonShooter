@@ -8,16 +8,13 @@ namespace InGame.Items.ItemsBehaviours {
         VALID
     }
     
-    public enum UIState {
-        NOT_ENOUGH_MATERIALS,
-        VALID
-    }
-    
     public class GhostsReference : MonoBehaviour {
         [SerializeField] private GenericDictionary<BuildableType, GameObject> ghostsByBuildablesTypes;
 
         public GenericDictionary<GhostState, Color> colorByGhostState;
-        public GenericDictionary<UIState, Color> colorByUIState;
+        
+        public Color availableUIColor;
+        public Color unavailableUIColor;
 
         public Color GetGhostColorByAvailability(BuildablePropertiesScriptableObject buildablePropertiesScriptableObject) {
             return !ObjectsReference.Instance.bananaManRawMaterialInventory.HasCraftingIngredients(buildablePropertiesScriptableObject)
@@ -25,10 +22,8 @@ namespace InGame.Items.ItemsBehaviours {
                 : GetColorByGhostState(GhostState.VALID);
         }
 
-        public Color GetUIColorByAvailability(BuildablePropertiesScriptableObject buildablePropertiesScriptableObject) {
-            return !ObjectsReference.Instance.bananaManRawMaterialInventory.HasCraftingIngredients(buildablePropertiesScriptableObject)
-                ? colorByUIState[UIState.NOT_ENOUGH_MATERIALS]
-                : colorByUIState[UIState.VALID];
+        public Color GetUIColorByAvailability(bool isAvailable) {
+            return isAvailable ? availableUIColor : unavailableUIColor;
         }
         
         public GameObject GetGhostByBuildableType(BuildableType buildableType) {

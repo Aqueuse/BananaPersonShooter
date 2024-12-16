@@ -108,7 +108,10 @@ namespace Save {
 
         public void DeleteSave(string saveUuid) {
             var worldDataSavesPath = Path.Combine(_savesPath, saveUuid);
-            Directory.Delete(worldDataSavesPath, true);
+
+            if (Directory.Exists(worldDataSavesPath)) {
+                Directory.Delete(worldDataSavesPath, true);
+            }
         }
 
         private void HideAutoSaveBanana() {

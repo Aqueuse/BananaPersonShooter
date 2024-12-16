@@ -9,11 +9,7 @@ namespace InGame.Inventory {
         private void Start() {
             bananaManData = ObjectsReference.Instance.bananaMan.bananaManData;
         }
-
-        public void AddQuantity(DroppedType droppedType) {
-
-        }
-
+        
         public int GetQuantity(ItemScriptableObject itemScriptableObject) {
             switch (itemScriptableObject.droppedType) {
                 case DroppedType.BANANA:

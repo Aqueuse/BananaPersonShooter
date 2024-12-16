@@ -13,22 +13,23 @@ MonoBehaviour:
   m_Name: BananaDogProperties
   m_EditorClassIdentifier: 
   gameObjectTag: 25
-  itemCategory: 3
+  itemCategory: 2
   bananaType: 0
   droppedType: 0
   ingredientsType: 0
   manufacturedItemsType: 0
   rawMaterialType: 0
   buildableType: 0
+  foodType: 0
   itemName:
   - banana dog
   - banana dog
   - perro banana
   itemSprite: {fileID: 21300000, guid: db6bf1326e8ebdd42a3df555c41adaaf, type: 3}
   itemDescription:
-  - The favorite dish of monkeys who are too lazy to do the dishes
-  - "Le plat pr\xE9f\xE9r\xE9 des singes qui ont la flemme de faire la vaisselle"
-  - El plato favorito de los monos que son demasiado perezosos para lavar los platos
+  - No banana dogs were cooked to make this
+  - "Aucun chien-banane n'a \xE9t\xE9 cuisin\xE9 pour pr\xE9parer ce banana dog"
+  - No se cocinaron perros de banana para preparar esto.
   bitKongValue: 70
   ingredientsWithQuantity:
     list:

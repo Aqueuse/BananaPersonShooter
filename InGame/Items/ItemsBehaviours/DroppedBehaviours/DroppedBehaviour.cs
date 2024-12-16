@@ -1,6 +1,5 @@
 using System;
-using InGame.Items.ItemsProperties.Dropped;
-using InGame.Items.ItemsProperties.Dropped.Raw_Materials;
+using InGame.Items.ItemsProperties;
 using InGame.Monkeys.Chimpirates;
 using Tags;
 using UnityEngine;
@@ -8,7 +7,7 @@ using UnityEngine;
 namespace InGame.Items.ItemsBehaviours.DroppedBehaviours {
     public class DroppedBehaviour : MonoBehaviour {
         public string droppedGuid;
-        public DroppedPropertiesScriptableObject droppedPropertiesScriptableObject;
+        public ItemScriptableObject itemScriptableObject;
 
         private void Start() {
             if(string.IsNullOrEmpty(droppedGuid)) {

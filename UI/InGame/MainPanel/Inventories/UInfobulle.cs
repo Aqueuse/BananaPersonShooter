@@ -1,7 +1,7 @@
 using TMPro;
 using UnityEngine;
 
-namespace UI.InGame.Inventory {
+namespace UI.InGame.MainPanel.Inventories {
     public class UInfobulle : MonoBehaviour {
         [SerializeField] private TextMeshProUGUI nameText;
         [SerializeField] private TextMeshProUGUI descriptionText;

@@ -1,27 +1,15 @@
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace UI.InGame.CommandRoomControlPanels {
     public class UICannons : MonoBehaviour {
         [SerializeField] private TextMeshProUGUI noBananaText;
-        [SerializeField] private TextMeshProUGUI bananaQuantity;
-        [SerializeField] private Image bananaImage;
-
-        public void SetBananaData(Sprite bananaImage, Color projectileColor) {
-            this.bananaImage.sprite = bananaImage;
-            bananaQuantity.color = projectileColor;
-        }
+        [SerializeField] private GenericDictionary<BananaEffect, TextMeshProUGUI> slidersByBananaGoopType;
         
-        public void SetBananaQuantity(int bananaQuantity, BananaType bananaType) {
-            if (bananaType == BananaType.EMPTY | ObjectsReference.Instance.BananaManBananasInventory.bananasInventory[bananaType] == 0) {
-                ObjectsReference.Instance.uiCannons.noBananaText.alpha = 100;
-                this.bananaQuantity.text = "0";
-                return;
+        public void RefreshBananaGoopsQuantity() {
+            foreach (var bananaGoop in ObjectsReference.Instance.cannonsManager.bananaGoopInventory.bananaGoopInventory) {
+                slidersByBananaGoopType[bananaGoop.Key].text = bananaGoop.Value.ToString();
             }
-
-            ObjectsReference.Instance.uiCannons.noBananaText.alpha = 0;
-            this.bananaQuantity.text = bananaQuantity.ToString();
         }
     }
 }

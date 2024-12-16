@@ -11,8 +11,5 @@ namespace InGame.Items.ItemsProperties.Dropped.Bananas {
         public BananaEffect bananaEffect;
 
         public Color bananaColor;
-        
-        [Header("craft")]
-        public GameObject prefab;
     }
 }

@@ -100,36 +100,26 @@ namespace UI {
         public void HideGameMenu() {
             SetActive(UICanvasGroupType.GAME_MENU, false);
         }
-
-        public void ShowGestionPanel() {
-            if (!ObjectsReference.Instance.bananaMan.tutorialFinished) return;
-            
-            SetActive(UICanvasGroupType.GESTION_PANEL, true);
-            ObjectsReference.Instance.miniChimpDialoguesManager.ResetDialogue();
-        }
-
-        public void ShowInventory() {
-            if (!ObjectsReference.Instance.bananaMan.tutorialFinished) return;
-
-            SetActive(UICanvasGroupType.GESTION_PANEL, true);
-            ObjectsReference.Instance.uInventoriesManager.OpenInventories();
-        }
-
+        
         public void ShowHideMap() {
-            if (canvasGroupsByUICanvasType[UICanvasGroupType.MAP].alpha == 0)
-                canvasGroupsByUICanvasType[UICanvasGroupType.MAP].alpha = 0.6f;
-            else {
-                canvasGroupsByUICanvasType[UICanvasGroupType.MAP].alpha = 0f;
-            }
+            canvasGroupsByUICanvasType[UICanvasGroupType.MAP].alpha = 
+                canvasGroupsByUICanvasType[UICanvasGroupType.MAP].alpha == 0 ? 0.6f : 0f;
+        }
+        
+        public void ShowMainPanel() {
+            SetActive(UICanvasGroupType.MAIN_PANEL, true);
+            ObjectsReference.Instance.uiMainPanel.SwitchToLastFocusedBlock();
+            
+            ObjectsReference.Instance.miniChimpDialoguesManager.ResetDialogue();
         }
 
         public void HideMainPanel() {
             if (ObjectsReference.Instance.gameManager.gameContext == GameContext.IN_GESTION_VIEW) {
-                SetActive(UICanvasGroupType.GESTION_PANEL, false);
+                SetActive(UICanvasGroupType.MAIN_PANEL, false);
             }
 
             else {
-                SetActive(UICanvasGroupType.GESTION_PANEL, false);
+                SetActive(UICanvasGroupType.MAIN_PANEL, false);
                 
                 ObjectsReference.Instance.inputManager.SwitchContext(InputContext.GAME);
                 ObjectsReference.Instance.gameManager.gameContext = GameContext.IN_GAME;
@@ -142,6 +132,11 @@ namespace UI {
             }
         }
         
+        public void ShowInventory() {
+            SetActive(UICanvasGroupType.MAIN_PANEL, true);
+            ObjectsReference.Instance.uInventoriesManager.OpenInventories();
+        }
+
         public void SwitchCameraGestionBananaMan() {
             if (ObjectsReference.Instance.gestionViewMode.isActiveAndEnabled) {
                 SwitchToBananaManView();

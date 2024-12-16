@@ -4,21 +4,23 @@ using UnityEngine;
 
 namespace InGame.Inventory {
     public class RawMaterialInventory : MonoBehaviour {
-        public Dictionary<RawMaterialType, int> rawMaterialsInventory;
+        public Dictionary<RawMaterialType, int> rawMaterialsInventory = new () {
+            {RawMaterialType.ELECTRONIC, 0},
+            {RawMaterialType.BANANA_PEEL, 0},
+            {RawMaterialType.METAL, 0},
+            {RawMaterialType.FABRIC, 0},
+            {RawMaterialType.BATTERY, 0},
+            {RawMaterialType.SILICE, 0},
+            {RawMaterialType.YELLOW_DYE, 0},
+            {RawMaterialType.RED_DYE, 0},
+            {RawMaterialType.GREEN_DYE, 0},
+            {RawMaterialType.BLUE_DYE, 0}
+        };
         
         public void AddQuantity(RawMaterialType rawMaterialType, int quantity) {
             if (rawMaterialsInventory[rawMaterialType] > 10000) return;
 
             rawMaterialsInventory[rawMaterialType] += quantity;
-
-            var droppedItem = ObjectsReference.Instance.bananaManUIRawMaterialsInventory.uInventorySlots[rawMaterialType];
-            
-            droppedItem.gameObject.SetActive(true);
-            droppedItem.SetQuantity(rawMaterialsInventory[rawMaterialType]);
-
-            ObjectsReference.Instance.uiQueuedMessages.AddToInventory(droppedItem.itemScriptableObject, quantity);
-
-            ObjectsReference.Instance.uiFlippers.RefreshActiveBuildableAvailability();
         }
         
         public int RemoveQuantity(RawMaterialType rawMaterialType, int quantity) {
@@ -34,8 +36,6 @@ namespace InGame.Inventory {
         }
             
         public bool HasCraftingIngredients(BuildablePropertiesScriptableObject buildablePropertiesScriptableObject) {
-            if (buildablePropertiesScriptableObject.buildableType == BuildableType.EMPTY) return false;
-            
             var _craftingIngredients = buildablePropertiesScriptableObject.rawMaterialsWithQuantity;
 
             foreach (var craftingIngredient in _craftingIngredients) {
@@ -57,6 +57,21 @@ namespace InGame.Inventory {
         
         public int GetQuantity(RawMaterialType rawMaterialType) {
             return rawMaterialsInventory[rawMaterialType];
+        }
+
+        public void ResetInventory() {
+            rawMaterialsInventory = new () {
+                {RawMaterialType.ELECTRONIC, 0},
+                {RawMaterialType.BANANA_PEEL, 0},
+                {RawMaterialType.METAL, 0},
+                {RawMaterialType.FABRIC, 0},
+                {RawMaterialType.BATTERY, 0},
+                {RawMaterialType.SILICE, 0},
+                {RawMaterialType.YELLOW_DYE, 0},
+                {RawMaterialType.RED_DYE, 0},
+                {RawMaterialType.GREEN_DYE, 0},
+                {RawMaterialType.BLUE_DYE, 0}
+            };
         }
     }
 }

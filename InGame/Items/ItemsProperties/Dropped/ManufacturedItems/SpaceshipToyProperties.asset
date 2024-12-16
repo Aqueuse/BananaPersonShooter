@@ -9,15 +9,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c83b47aafab534644924b05e840108d4, type: 3}
+  m_Script: {fileID: 11500000, guid: b2e529ee924f2b6439b07656d252d9d6, type: 3}
   m_Name: SpaceshipToyProperties
   m_EditorClassIdentifier: 
   gameObjectTag: 26
-  itemCategory: 12
+  itemCategory: 11
   bananaType: 0
-  droppedType: 4
+  droppedType: 3
   ingredientsType: 0
-  manufacturedItemsType: 1
+  manufacturedItemsType: 0
   rawMaterialType: 0
   buildableType: 0
   itemName:
@@ -30,4 +30,3 @@ MonoBehaviour:
   - "Trop petit h\xE9las pour vous permettre de vous \xE9chapper"
   - "Demasiado peque\xF1o para permitirte escapar"
   bitKongValue: 15
-  prefab: {fileID: 6249355738671945922, guid: 502c613b0a645ca4288363fed557c6ac, type: 3}

@@ -13,17 +13,19 @@ MonoBehaviour:
   m_Name: bumperProperties
   m_EditorClassIdentifier: 
   gameObjectTag: 11
-  itemCategory: 2
+  itemCategory: 1
   bananaType: 0
   droppedType: 0
   ingredientsType: 0
   manufacturedItemsType: 0
   rawMaterialType: 0
-  buildableType: 1
+  buildableType: 0
+  foodType: 0
   itemName:
   - bumper
   - bumper
   - bumper
+  itemSprite: {fileID: 21300000, guid: 55556fa4c044ae64f95755b363a0bbf8, type: 3}
   itemDescription:
   - the technological evolution of the spring
   - "l'\xE9volution technologique du ressort"
@@ -31,7 +33,7 @@ MonoBehaviour:
   bitKongValue: 0
   rawMaterialsWithQuantity:
     list:
-    - key: 1
+    - key: 0
       value: 6
     keyCollision: 0
   buildablePrefab: {fileID: 3266887563888322151, guid: ed6506629ba94dc48b84997bb6e1c79a, type: 3}

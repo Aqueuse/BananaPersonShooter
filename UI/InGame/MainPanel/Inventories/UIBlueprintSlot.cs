@@ -2,7 +2,7 @@ using InGame.Items.ItemsProperties.Buildables;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace UI.InGame.Inventory {
+namespace UI.InGame.MainPanel.Inventories {
     public class UIBlueprintSlot : MonoBehaviour {
         public BuildablePropertiesScriptableObject buildableScriptableObject;
 
@@ -26,9 +26,16 @@ namespace UI.InGame.Inventory {
                 buildableScriptableObject.GetDescription(),
                 GetComponent<RectTransform>());
         }
-        
-        public void SetColor(Color color) {
-            GetComponent<Image>().color = color;
+
+        public void SetAvailability() {
+            var isAvailable =
+                ObjectsReference.Instance.bananaManRawMaterialInventory.HasCraftingIngredients(buildableScriptableObject);
+            
+            GetComponentsInChildren<Image>()[1].sprite = isAvailable ? 
+                buildableScriptableObject.itemSprite : 
+                buildableScriptableObject.blueprintSprite;
+            
+            GetComponent<Image>().color = ObjectsReference.Instance.ghostsReference.GetUIColorByAvailability(isAvailable);
         }
     }
 }

@@ -3,7 +3,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace UI.InGame.Inventory {
+namespace UI.InGame.MainPanel.Inventories {
     public class UIRawMaterialsInventory : MonoBehaviour {
         public RawMaterialInventory associatedRawMaterialInventory;
         

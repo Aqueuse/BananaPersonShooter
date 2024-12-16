@@ -1,3 +1,5 @@
+using InGame.Items.ItemsProperties;
+using InGame.Items.ItemsProperties.Buildables;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -6,10 +8,9 @@ namespace UI.InGame {
     public class UIFlippers : MonoBehaviour {
         [SerializeField] private Image droppedImage;
         [SerializeField] private TextMeshProUGUI droppedQuantityText;
+        
         [SerializeField] private Image buildableImage;
-
-        [SerializeField] private Color availableBuildableColor;
-        [SerializeField] private Color notEnoughMaterialBuildableColor;
+        [SerializeField] private Image buildableBackgroundImage;
         
         [SerializeField] private RectTransform leftFlipperTransform;
         [SerializeField] private RectTransform middleFlipperTransform;
@@ -22,7 +23,7 @@ namespace UI.InGame {
         private Vector3 leftFlipperUpPosition;
         private Vector3 middleFlipperUpPosition;
         private Vector3 rightFlipperUpPosition;
-
+        
         private void Start() {
             leftFlipperNormalPosition = leftFlipperTransform.localPosition;
             leftFlipperUpPosition = leftFlipperNormalPosition;
@@ -35,14 +36,6 @@ namespace UI.InGame {
             rightFlipperNormalPosition = rightFlipperTransform.localPosition;
             rightFlipperUpPosition = rightFlipperNormalPosition;
             rightFlipperUpPosition.y += 55f;
-        }
-
-        public void SetDroppableSprite(Sprite droppedSprite) {
-            droppedImage.sprite = droppedSprite;
-        }
-
-        public void SetDroppableQuantity(string quantity) {
-            droppedQuantityText.text = quantity;
         }
         
         public void UpLeftFlipper() {
@@ -62,33 +55,46 @@ namespace UI.InGame {
             middleFlipperTransform.localPosition = middleFlipperNormalPosition;
             rightFlipperTransform.localPosition = rightFlipperUpPosition;
         }
-        
-        public void SetBuildableImage(Sprite sprite) {
-            buildableImage.sprite = sprite;
 
-            buildableImage.color =
-                ObjectsReference.Instance.ghostsReference
-                    .GetGhostColorByAvailability(
-                        ObjectsReference.Instance.meshReferenceScriptableObject
-                            .buildablePropertiesScriptableObjects[
-                                ObjectsReference.Instance.bananaMan
-                                    .bananaManData.activeBuildable]
-                    );
+        public void SetDroppableItem(ItemScriptableObject itemScriptableObject) {
+            ObjectsReference.Instance.bananaMan.bananaManData.activeDroppableItem = itemScriptableObject;
+            
+            ObjectsReference.Instance.uiFlippers.SetDroppableSprite(itemScriptableObject.GetSprite());
+            droppedQuantityText.text =
+                ObjectsReference.Instance.inventoriesHelper.GetQuantity(itemScriptableObject).ToString();
         }
+        
+        public void SetDroppableSprite(Sprite droppedSprite) {
+            droppedImage.sprite = droppedSprite;
+        }
+        
+        public void RefreshDroppableQuantity() {
+            droppedQuantityText.text = ObjectsReference.Instance.inventoriesHelper.GetQuantity(
+                ObjectsReference.Instance.bananaMan.bananaManData.activeDroppableItem
+            ).ToString();
+        }
+        
+        public void SetBuildablePlacementAvailability(bool canBeBuild, BuildablePropertiesScriptableObject buildablePropertieScriptableObject) {
+            buildableImage.sprite = canBeBuild
+                ? buildablePropertieScriptableObject.GetSprite()
+                : buildablePropertieScriptableObject.blueprintSprite;
 
-        public void SetBuildablePlacementAvailability(bool canBeBuild) {
-            buildableImage.color = canBeBuild
-                ? availableBuildableColor
-                : notEnoughMaterialBuildableColor;
+            buildableBackgroundImage.color = canBeBuild
+                ? ObjectsReference.Instance.ghostsReference.availableUIColor
+                : ObjectsReference.Instance.ghostsReference.unavailableUIColor;
         }
 
         public void RefreshActiveBuildableAvailability() {
             var activeBuildable = ObjectsReference.Instance.bananaMan
                 .bananaManData.activeBuildable;
 
+            var buildablePropertieScriptableObject =
+                ObjectsReference.Instance.meshReferenceScriptableObject.buildablePropertiesScriptableObjects[
+                    activeBuildable];
+            
             SetBuildablePlacementAvailability(
                 ObjectsReference.Instance.bananaManRawMaterialInventory
-                    .HasCraftingIngredients(activeBuildable));
+                    .HasCraftingIngredients(activeBuildable), buildablePropertieScriptableObject);
         }
     }
 }

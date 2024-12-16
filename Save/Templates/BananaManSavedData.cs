@@ -13,12 +13,13 @@ namespace Save.Templates {
         public float yWorldRotation = 0;
         public float zWorldRotation = 0;
 
-        public DroppedType activeDroppable = DroppedType.EMPTY;
-        public BananaType activeBanana = BananaType.EMPTY;
-        public RawMaterialType activeRawMaterial = RawMaterialType.EMPTY;
-        public IngredientsType activeIngredient = IngredientsType.EMPTY;
-        public ManufacturedItemsType activeManufacturedItem = ManufacturedItemsType.EMPTY;
+        public DroppedType activeDroppable = DroppedType.BANANA;
+        public BananaType activeBanana = BananaType.CAVENDISH;
+        public RawMaterialType activeRawMaterial = RawMaterialType.METAL;
+        public IngredientsType activeIngredient = IngredientsType.BANANA_DOG_BREAD;
+        public ManufacturedItemsType activeManufacturedItem = ManufacturedItemsType.SPACESHIP_TOY;
         public BuildableType activeBuildable = BuildableType.BUMPER;
+        public FoodType activeFood = FoodType.BANANA_DOG;
         
         public int bitKongQuantity;
         
@@ -49,7 +50,11 @@ namespace Save.Templates {
             {RawMaterialType.METAL.ToString(), 0},
             {RawMaterialType.FABRIC.ToString(), 0},
             {RawMaterialType.BATTERY.ToString(), 0},
-            {RawMaterialType.SILICE.ToString(), 0}
+            {RawMaterialType.SILICE.ToString(), 0},
+            {RawMaterialType.YELLOW_DYE.ToString(), 0},
+            {RawMaterialType.RED_DYE.ToString(), 0},
+            {RawMaterialType.GREEN_DYE.ToString(), 0},
+            {RawMaterialType.BLUE_DYE.ToString(), 0}
         };  
 
         public Dictionary<string, int> ingredientsInventory = new() {

@@ -1,4 +1,4 @@
-using InGame.Items.ItemsProperties.Dropped.Raw_Materials;
+using InGame.Items.ItemsProperties;
 using UnityEngine;
 
 namespace InGame.Player.BananaGunActions {
@@ -6,7 +6,6 @@ namespace InGame.Player.BananaGunActions {
         [SerializeField] private Transform launchingPoint;
         
         private GameObject droppable;
-        private DroppedPropertiesScriptableObject activeWeaponData;
         
         public void LoadingGun() {
             Invoke(nameof(Throw), 0.3f);
@@ -28,8 +27,10 @@ namespace InGame.Player.BananaGunActions {
 
             ObjectsReference.Instance.audioManager.PlayEffect(SoundEffectType.THROW_BANANA, 0);
 
+            ObjectsReference.Instance.inventoriesHelper.RemoveActiveDroppedQuantity();
+            
             // ammo reduce
-            ObjectsReference.Instance.uiFlippers.SetDroppableQuantity(ObjectsReference.Instance.inventoriesHelper.RemoveActiveDroppedQuantity().ToString());
+            ObjectsReference.Instance.uiFlippers.RefreshDroppableQuantity();
         }
     }
 }

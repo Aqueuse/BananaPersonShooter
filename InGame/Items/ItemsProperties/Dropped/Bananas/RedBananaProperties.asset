@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: RedBananaProperties
   m_EditorClassIdentifier: 
   gameObjectTag: 3
-  itemCategory: 1
-  bananaType: 14
-  droppedType: 1
+  itemCategory: 0
+  bananaType: 13
+  droppedType: 0
   ingredientsType: 0
   manufacturedItemsType: 0
   rawMaterialType: 0
@@ -35,4 +35,3 @@ MonoBehaviour:
   resistanceBonus: 1
   bananaEffect: 4
   bananaColor: {r: 0.6792453, g: 0.25247416, b: 0.30195487, a: 1}
-  prefab: {fileID: 0}

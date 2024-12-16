@@ -21,8 +21,8 @@ using SharedInputs;
 using UI;
 using UI.InGame;
 using UI.InGame.CommandRoomControlPanels;
-using UI.InGame.Inventory;
-using UI.InGame.MainBlock;
+using UI.InGame.MainPanel;
+using UI.InGame.MainPanel.Inventories;
 using UI.InGame.Merchimps;
 using UI.InGame.VisitorReceptionMiniGameUI;
 using UI.Menus;
@@ -98,7 +98,7 @@ public class ObjectsReference : MonoSingleton<ObjectsReference> {
     public UIManager uiManager;
     [Space]
     public UInventoriesManager uInventoriesManager;
-    public UiMainBlock uiMainBlock;
+    public UiMainPanel uiMainPanel;
     [Space] 
     public UIBananasInventory bananaManUiBananasInventory;
     public UIRawMaterialsInventory bananaManUIRawMaterialsInventory;
@@ -118,7 +118,7 @@ public class ObjectsReference : MonoSingleton<ObjectsReference> {
     public UISettings uiSettings;
     [Space]
     public UIMarketingPanel uiMarketingPanel;
-    public UISpaceTrafficControlPanel uiSpaceTrafficControlPanel;
+    public UIcommunication uIcommunication;
     public UICannons uiCannons;
     public UIMonkeyMensReception uiTouristReception;
     public UIMerchant uiMerchant;

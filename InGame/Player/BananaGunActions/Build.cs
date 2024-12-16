@@ -47,12 +47,12 @@ namespace InGame.Player.BananaGunActions {
             if (ObjectsReference.Instance.bananaManRawMaterialInventory.HasCraftingIngredients(buildableType)) {
                 _activeGhostClass.SetGhostState(GhostState.VALID);
                 ObjectsReference.Instance.uInventoriesManager.GetCurrentUIHelper().ShowNormalPlaceHelper();
-                ObjectsReference.Instance.uiFlippers.SetBuildablePlacementAvailability(true);
+                ObjectsReference.Instance.uiFlippers.SetBuildablePlacementAvailability(true, _activeGhostClass.buildablePropertiesScriptableObject);
             }
 
             else {
                 _activeGhostClass.SetGhostState(GhostState.NOT_ENOUGH_MATERIALS);
-                ObjectsReference.Instance.uiFlippers.SetBuildablePlacementAvailability(false);
+                ObjectsReference.Instance.uiFlippers.SetBuildablePlacementAvailability(false, _activeGhostClass.buildablePropertiesScriptableObject);
             }
         }
 

@@ -11,7 +11,7 @@ namespace InGame.Items.ItemsBehaviours.DroppedBehaviours {
                 droppedGuid = droppedGuid,
                 droppedPosition = JsonHelper.FromVector3ToString(transform.position),
                 droppedRotation = JsonHelper.FromQuaternionToString(transform.rotation),
-                RawMaterialType = droppedPropertiesScriptableObject.rawMaterialType
+                RawMaterialType = itemScriptableObject.rawMaterialType
             };
             
             ObjectsReference.Instance.gameSave.droppedRawMaterialSave.AddRawMaterialToRawMaterialDictionnary(

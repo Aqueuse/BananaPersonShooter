@@ -31,7 +31,9 @@ namespace Tags {
         FOOD,
         MANUFACTURED_ITEM,
         CULTIVATOR,
-        CHIMPMEN
+        CHIMPMEN,
+        WASTE,
+        BLUEPRINT
     }
 
     public class TagsManager : MonoSingleton<TagsManager> {

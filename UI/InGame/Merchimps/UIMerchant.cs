@@ -1,7 +1,7 @@
 using InGame.Items.ItemsData.Characters;
 using InGame.Monkeys.Merchimps;
 using TMPro;
-using UI.InGame.Inventory;
+using UI.InGame.MainPanel.Inventories;
 using UnityEngine;
 using UnityEngine.UI;
 

@@ -9,7 +9,6 @@ using UnityEngine;
 namespace Save {
     public class PlayerSave : MonoBehaviour {
         private BananaMan bananaMan;
-        private Transform bananaManTransform;
         
         private readonly Dictionary<BananaType, int> bananasInventory = new();
         private readonly Dictionary<RawMaterialType, int> rawMaterialsInventory = new();
@@ -20,7 +19,6 @@ namespace Save {
         
         private void Start() {
             bananaMan = ObjectsReference.Instance.bananaMan;
-            bananaManTransform = bananaMan.transform;
         }
 
         public void LoadPlayer(string saveUuid) {
@@ -35,6 +33,7 @@ namespace Save {
             LoadPositionAndRotation();
 
             LoadBananaGun();
+            LoadActiveDroppable();
             LoadActiveBuildable();
             LoadBitkongQuantity();
             CheckTutorialFinished();
@@ -109,17 +108,43 @@ namespace Save {
             var bananaManRotation = new Vector3(bananaManSavedData.xWorldRotation, bananaManSavedData.yWorldRotation, bananaManSavedData.zWorldRotation);
             bananaMan.transform.rotation = Quaternion.Euler(bananaManRotation);
         }
+
+        private void LoadActiveDroppable() {
+            switch (bananaManSavedData.activeDroppable) {
+                case DroppedType.BANANA:
+                    ObjectsReference.Instance.bananaMan.bananaManData.activeDroppableItem =
+                        ObjectsReference.Instance.meshReferenceScriptableObject.bananasPropertiesScriptableObjects[
+                            bananaManSavedData.activeBanana];
+                    break;
+                case DroppedType.RAW_MATERIAL:
+                    ObjectsReference.Instance.bananaMan.bananaManData.activeDroppableItem =
+                        ObjectsReference.Instance.meshReferenceScriptableObject.rawMaterialPropertiesScriptableObjects[
+                            bananaManSavedData.activeRawMaterial];
+                    break;
+                case DroppedType.INGREDIENTS:
+                    ObjectsReference.Instance.bananaMan.bananaManData.activeDroppableItem =
+                        ObjectsReference.Instance.meshReferenceScriptableObject.ingredientsPropertiesScriptableObjects[
+                            bananaManSavedData.activeIngredient];
+                    break;
+                case DroppedType.MANUFACTURED_ITEMS:
+                    ObjectsReference.Instance.bananaMan.bananaManData.activeDroppableItem =
+                        ObjectsReference.Instance.meshReferenceScriptableObject.manufacturedItemsPropertiesScriptableObjects[
+                            bananaManSavedData.activeManufacturedItem];
+                    break;
+                case DroppedType.FOOD:
+                    ObjectsReference.Instance.bananaMan.bananaManData.activeDroppableItem =
+                        ObjectsReference.Instance.meshReferenceScriptableObject.foodPropertiesScriptableObjects[
+                            bananaManSavedData.activeFood];
+                    break;
+            }
+        }
         
         private void LoadActiveBuildable() {
-            if (bananaManSavedData.activeBuildable == BuildableType.EMPTY) return;
-            
             var buildableData = ObjectsReference.Instance.meshReferenceScriptableObject.buildablePropertiesScriptableObjects[
                     bananaManSavedData.activeBuildable]; 
 
             bananaMan.bananaManData.activeBuildable = bananaManSavedData.activeBuildable;
-            ObjectsReference.Instance.uiFlippers.SetBuildableImage(buildableData.blueprintSprite);
-            
-            ObjectsReference.Instance.uiFlippers.SetBuildablePlacementAvailability(ObjectsReference.Instance.bananaManRawMaterialInventory.HasCraftingIngredients(buildableData));
+            ObjectsReference.Instance.uiFlippers.RefreshActiveBuildableAvailability();
         }
         
         private void LoadBitkongQuantity() {
@@ -163,7 +188,7 @@ namespace Save {
             bananaManSavedData.health = bananaMan.health; 
             bananaManSavedData.resistance = bananaMan.resistance;
 
-            var bananaManPosition = bananaManTransform.position;
+            var bananaManPosition = bananaMan.transform.position;
             
             bananaManSavedData.xWorldPosition = bananaManPosition.x;
             bananaManSavedData.yWorldPosition = bananaManPosition.y;

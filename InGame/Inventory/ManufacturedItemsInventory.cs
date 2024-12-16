@@ -3,7 +3,12 @@ using UnityEngine;
 
 namespace InGame.Inventory {
     public class ManufacturedItemsInventory : MonoBehaviour {
-        public Dictionary<ManufacturedItemsType, int> manufacturedItemsInventory;
+        public Dictionary<ManufacturedItemsType, int> manufacturedItemsInventory = new () {
+            {ManufacturedItemsType.SPACESHIP_TOY, 0},
+            {ManufacturedItemsType.LAPINOU, 0},
+            {ManufacturedItemsType.BANANARAIGNEE, 0},
+            {ManufacturedItemsType.BANANAVIAIRE, 0}
+        };
         
         public void AddQuantity(ManufacturedItemsType manufacturedItemsType, int quantity) {
             if (manufacturedItemsInventory[manufacturedItemsType] > 10000) return;
@@ -32,6 +37,15 @@ namespace InGame.Inventory {
 
         public int GetQuantity(ManufacturedItemsType manufacturedItemsType) {
             return manufacturedItemsInventory[manufacturedItemsType];
+        }
+
+        public void ResetInventory() {
+            manufacturedItemsInventory = new () {
+                {ManufacturedItemsType.SPACESHIP_TOY, 0},
+                {ManufacturedItemsType.LAPINOU, 0},
+                {ManufacturedItemsType.BANANARAIGNEE, 0},
+                {ManufacturedItemsType.BANANAVIAIRE, 0}
+            };
         }
     }
 }

@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using InGame.Items.ItemsData;
 using InGame.Items.ItemsData.Characters;
 using InGame.Monkeys;
 using Newtonsoft.Json;
@@ -70,8 +69,8 @@ namespace Save {
             }
             
             // refresh after eventually removing unpopulated spaceships
-            ObjectsReference.Instance.uiSpaceTrafficControlPanel.RefreshCommunicationButton();
-            ObjectsReference.Instance.uiSpaceTrafficControlPanel.RefreshHangarAvailability();
+            ObjectsReference.Instance.uIcommunication.RefreshCommunicationButton();
+            ObjectsReference.Instance.uIcommunication.RefreshHangarAvailability();
         }
         
         public void SaveMonkeyMens(string saveUuid) {

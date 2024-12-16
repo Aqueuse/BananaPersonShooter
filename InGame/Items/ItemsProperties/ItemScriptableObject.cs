@@ -2,6 +2,7 @@ using Tags;
 using UnityEngine;
 
 namespace InGame.Items.ItemsProperties {
+    [CreateAssetMenu (fileName = "Properties", menuName = "ScriptableObjects/itemPropertiesScriptableObject", order = 1)]
     public class ItemScriptableObject : ScriptableObject {
         public GAME_OBJECT_TAG gameObjectTag;
 
@@ -13,6 +14,7 @@ namespace InGame.Items.ItemsProperties {
         public ManufacturedItemsType manufacturedItemsType;
         public RawMaterialType rawMaterialType;
         public BuildableType buildableType;
+        public FoodType foodType;
 
         public string[] itemName;
 

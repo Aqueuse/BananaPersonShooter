@@ -42,7 +42,7 @@ namespace InGame.Items.ItemsBehaviours {
             spaceshipData.spaceshipUIcolor = SpaceTrafficControlManager.GetRandomColor();
 
             spaceshipData.communicationMessagePrefabIndex = 
-                systemRandom.Next(ObjectsReference.Instance.uiSpaceTrafficControlPanel
+                systemRandom.Next(ObjectsReference.Instance.uIcommunication
                 .spaceshipMessagesByCharacterType[spaceshipData.characterType].Count);
             
             spaceshipData.monkeyMenToSpawn = Random.Range(3, 9);
@@ -88,11 +88,11 @@ namespace InGame.Items.ItemsBehaviours {
             
             ObjectsReference.Instance.spaceshipsSpawner.RemoveGuestInCampaignCreator();
 
-            ObjectsReference.Instance.uiSpaceTrafficControlPanel.CloseCommunications(this);
+            ObjectsReference.Instance.uIcommunication.CloseCommunications(this);
         }
         
         private void OpenCommunications() {
-            ObjectsReference.Instance.uiSpaceTrafficControlPanel.AddNewCommunication(this);
+            ObjectsReference.Instance.uIcommunication.AddNewCommunication(this);
         }
 
         private void WaitInStation() {
@@ -103,7 +103,7 @@ namespace InGame.Items.ItemsBehaviours {
         
         public void StopWaiting() {
             ObjectsReference.Instance.spaceTrafficControlManager.FreeHangar(spaceshipData.assignatedHangar);
-            ObjectsReference.Instance.uiSpaceTrafficControlPanel.RefreshHangarAvailability();
+            ObjectsReference.Instance.uIcommunication.RefreshHangarAvailability();
             
             spaceshipData.travelState = TravelState.TRAVEL_BACK_ON_ELEVATOR;
             TravelBackOnElevator();
@@ -148,13 +148,13 @@ namespace InGame.Items.ItemsBehaviours {
         }
 
         public void LeaveRegion() {
-            ObjectsReference.Instance.uiSpaceTrafficControlPanel.CloseCommunications(this);
+            ObjectsReference.Instance.uIcommunication.CloseCommunications(this);
             ObjectsReference.Instance.spaceTrafficControlManager.FreeHangar(spaceshipData.assignatedHangar);
             
             ObjectsReference.Instance.spaceTrafficControlManager.spaceshipBehavioursByGuid.Remove(spaceshipData.spaceshipGuid);
 
-            ObjectsReference.Instance.uiSpaceTrafficControlPanel.RefreshHangarAvailability();
-            ObjectsReference.Instance.uiSpaceTrafficControlPanel.RefreshCommunicationButton();
+            ObjectsReference.Instance.uIcommunication.RefreshHangarAvailability();
+            ObjectsReference.Instance.uIcommunication.RefreshCommunicationButton();
             ObjectsReference.Instance.spaceshipsSpawner.RemoveGuestInCampaignCreator();
             Destroy(gameObject);
         }
@@ -215,7 +215,7 @@ namespace InGame.Items.ItemsBehaviours {
             ObjectsReference.Instance.spaceTrafficControlManager.spaceshipBehavioursByGuid.Add(
                 spaceshipData.spaceshipGuid, 
                 this);
-            
+
             if (spaceshipData.travelState == TravelState.WAIT_IN_STATION) {
                 ObjectsReference.Instance.spaceTrafficControlManager.AssignSpaceshipToHangar(spaceshipData.assignatedHangar);
 
@@ -223,7 +223,7 @@ namespace InGame.Items.ItemsBehaviours {
                     SpawnChimpmen();
                 }
             }
-            
+
             if (spaceshipData.travelState == TravelState.GO_TO_PATH) {
                 GoToPath(spaceshipData.assignatedHangar);
             }
@@ -241,16 +241,16 @@ namespace InGame.Items.ItemsBehaviours {
                 transform.position = new Vector3(transform.position.x, -10f, transform.position.z);
                 spaceshipData.arrivalPosition.y = -10f;
             }
-        
+
             if (spaceshipData.travelState == TravelState.LEAVES_THE_REGION) {
                 spaceshipData.arrivalPosition.y = -10f;
             }
-        
+
             if (spaceshipData.travelState == TravelState.FREE_FLIGHT | spaceshipData.travelState == TravelState.LEAVES_THE_REGION) {
-                ObjectsReference.Instance.uiSpaceTrafficControlPanel.AddNewCommunication(this);
+                ObjectsReference.Instance.uIcommunication.AddNewCommunication(this);
             }
         }
-        
+
         public void GenerateSaveData() {
             if (string.IsNullOrEmpty(spaceshipData.spaceshipGuid)) {
                 spaceshipData.spaceshipGuid = Guid.NewGuid().ToString();

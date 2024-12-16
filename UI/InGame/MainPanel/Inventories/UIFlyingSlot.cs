@@ -3,7 +3,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace UI.InGame.Inventory {
+namespace UI.InGame.MainPanel.Inventories {
     public class UIFlyingSlot : MonoBehaviour {
         [SerializeField] private Image slotImage;
         [SerializeField] private TextMeshProUGUI slotQuantityText;

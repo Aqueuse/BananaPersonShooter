@@ -1,5 +1,4 @@
 public enum ItemCategory {
-    EMPTY,
     BANANA,
     BUILDABLE,
     FOOD,
@@ -15,5 +14,7 @@ public enum ItemCategory {
     TOURIST,
     PIRATE,
     MISC,
-    DEBRIS
+    DEBRIS,
+    CULTIVATOR,
+    RAW_MATERIAL
 }

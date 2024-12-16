@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: CavendishBananaProperties
   m_EditorClassIdentifier: 
   gameObjectTag: 3
-  itemCategory: 1
-  bananaType: 4
-  droppedType: 1
+  itemCategory: 0
+  bananaType: 3
+  droppedType: 0
   ingredientsType: 0
   manufacturedItemsType: 0
   rawMaterialType: 0
@@ -35,4 +35,3 @@ MonoBehaviour:
   resistanceBonus: 10
   bananaEffect: 1
   bananaColor: {r: 1, g: 0.71255064, b: 0, a: 1}
-  prefab: {fileID: 0}

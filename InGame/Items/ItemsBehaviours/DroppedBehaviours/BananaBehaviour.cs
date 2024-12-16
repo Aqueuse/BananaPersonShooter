@@ -1,21 +1,22 @@
 using InGame.Items.ItemsData.Dropped;
+using InGame.Items.ItemsProperties.Dropped.Bananas;
 using Newtonsoft.Json;
 using Save.Helpers;
 
 namespace InGame.Items.ItemsBehaviours.DroppedBehaviours {
     public class BananaBehaviour : DroppedBehaviour {
-        private BananaType bananaType;
+        public BananasPropertiesScriptableObject bananasPropertiesScriptableObject;
         
         public override void GenerateDroppedData() {
             var bananaData = new BananaData {
                 droppedGuid = droppedGuid,
                 droppedPosition = JsonHelper.FromVector3ToString(transform.position),
                 droppedRotation = JsonHelper.FromQuaternionToString(transform.rotation),
-                bananaType = droppedPropertiesScriptableObject.bananaType
+                bananaType = itemScriptableObject.bananaType
             };
             
             ObjectsReference.Instance.gameSave.droppedBananaSave.AddBananaToBananaDictionnary(
-                bananaType, 
+                bananasPropertiesScriptableObject.bananaType, 
                 JsonConvert.SerializeObject(bananaData)
             );
         }
@@ -24,7 +25,6 @@ namespace InGame.Items.ItemsBehaviours.DroppedBehaviours {
             var bananaData = JsonConvert.DeserializeObject<BananaData>(stringifiedJson);
 
             droppedGuid = bananaData.droppedGuid;
-            bananaType = bananaData.bananaType;
             transform.position = JsonHelper.FromStringToVector3( bananaData.droppedPosition);
             transform.rotation = JsonHelper.FromStringToQuaternion(bananaData.droppedRotation);
         }

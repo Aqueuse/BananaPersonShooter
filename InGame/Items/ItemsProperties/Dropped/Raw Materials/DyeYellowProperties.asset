@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b2e529ee924f2b6439b07656d252d9d6, type: 3}
+  m_Name: DyeYellowProperties
+  m_EditorClassIdentifier: 
+  gameObjectTag: 19
+  itemCategory: 17
+  bananaType: 0
+  droppedType: 1
+  ingredientsType: 0
+  manufacturedItemsType: 0
+  rawMaterialType: 6
+  buildableType: 0
+  itemName:
+  - yellow dye
+  - colorant jaune
+  - tinte amarillo
+  itemSprite: {fileID: 21300000, guid: 627c9abbdb0592d4980acd6c50a36d2c, type: 3}
+  itemDescription:
+  - enough dye to color a good amount of yellow fabric
+  - "de quoi colorer une bonne quantit\xE9 de tissu en jaune"
+  - "suficiente para te\xF1ir una buena cantidad de tela de amarillo"
+  bitKongValue: 90

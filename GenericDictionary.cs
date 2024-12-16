@@ -123,8 +123,8 @@ public class GenericDictionary<TKey, TValue> : IDictionary<TKey, TValue>, ISeria
     /// <summary>
     ///  Copy to Array
     /// </summary>
-    /// <param name="the created array"></param>
-    /// <param name="starting at"></param>
+    /// <param name="array">the created array</param>
+    /// <param name="arrayIndex">starting at</param>
     /// <exception cref="ArgumentException"></exception>
     /// <exception cref="ArgumentOutOfRangeException"></exception>
     public void CopyTo(KeyValuePair<TKey, TValue>[] array, int arrayIndex) {

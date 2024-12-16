@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: PisangRajaBananaProperties
   m_EditorClassIdentifier: 
   gameObjectTag: 3
-  itemCategory: 1
-  bananaType: 11
-  droppedType: 1
+  itemCategory: 0
+  bananaType: 10
+  droppedType: 0
   ingredientsType: 0
   manufacturedItemsType: 0
   rawMaterialType: 0
@@ -35,4 +35,3 @@ MonoBehaviour:
   resistanceBonus: 1
   bananaEffect: 1
   bananaColor: {r: 0.8352942, g: 0.6666667, b: 0.22352943, a: 1}
-  prefab: {fileID: 0}

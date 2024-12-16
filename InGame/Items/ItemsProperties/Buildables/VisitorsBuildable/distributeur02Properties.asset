@@ -13,17 +13,19 @@ MonoBehaviour:
   m_Name: distributeur02Properties
   m_EditorClassIdentifier: 
   gameObjectTag: 11
-  itemCategory: 2
+  itemCategory: 1
   bananaType: 0
   droppedType: 0
   ingredientsType: 0
   manufacturedItemsType: 0
   rawMaterialType: 0
-  buildableType: 15
+  buildableType: 14
+  foodType: 0
   itemName:
   - souvenir dispenser
   - distributeur de souvenirs
   - dispensador de souvenirs
+  itemSprite: {fileID: 21300000, guid: 358169b67c292274485124bee2a0fb0a, type: 3}
   itemDescription:
   - 'Please note: banana key rings cannot be eaten'
   - "attention : les portes-cl\xE9s bananes ne se mangent pas"
@@ -31,7 +33,7 @@ MonoBehaviour:
   bitKongValue: 0
   rawMaterialsWithQuantity:
     list:
-    - key: 1
+    - key: 0
       value: 10
     - key: 2
       value: 2

@@ -1,10 +1,9 @@
 public enum BuildableType {
-    EMPTY,
     BUMPER,
     BANANA_DRYER,
     GUICHET,
     RETRIEVER,
-    PORTAL,
+    PORTAL, // TO RECYCLE
     ARCADE_MACHINE_LITTLE_01,
     BENCH_LITTLE_01,
     BENCH_LITTLE_02,

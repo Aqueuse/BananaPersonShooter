@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2efe82fac9935d94292c9bd5f7555208, type: 3}
   m_Name: DebrisBatteryIncludedPropertiesScriptableObject
   m_EditorClassIdentifier: 
-  gameObjectTag: 12
-  itemCategory: 16
+  gameObjectTag: 29
+  itemCategory: 15
   bananaType: 0
   droppedType: 0
   ingredientsType: 0
@@ -33,5 +33,9 @@ MonoBehaviour:
   - "Elemento ajeno a la estaci\xF3n.\n<i>Recomendada su destrucci\xF3n.</i>"
   bitKongValue: 0
   rawMaterialsWithQuantity:
-    list: []
+    list:
+    - key: 0
+      value: 20
+    - key: 1
+      value: 1
     keyCollision: 0

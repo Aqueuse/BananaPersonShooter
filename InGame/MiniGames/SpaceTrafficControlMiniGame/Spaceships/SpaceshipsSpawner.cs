@@ -32,7 +32,7 @@ namespace InGame.MiniGames.SpaceTrafficControlMiniGame.Spaceships {
         }
 
         public void SpawnSpaceshipsWithAdCampaign() {
-            ObjectsReference.Instance.uiMarketingPanel.SwitchToCurrentCampaign();
+            ObjectsReference.Instance.uiMarketingPanel.HideCampaignCreationTools();
             ObjectsReference.Instance.commandRoomControlPanelsManager.UnfocusPanel(false);
 
             spaceships = ShuffleSpaceships(adCampaign.piratesNumber, adCampaign.touristsNumber, adCampaign.merchimpsNumber);
@@ -46,7 +46,7 @@ namespace InGame.MiniGames.SpaceTrafficControlMiniGame.Spaceships {
 
         public void RemoveGuestInCampaignCreator() {
             if (spaceships.Count == 0) {
-                ObjectsReference.Instance.uiMarketingPanel.SwitchToCampaignCreator();
+                ObjectsReference.Instance.uiMarketingPanel.ShowCampaignCreatorTools();
             }
 
             else {

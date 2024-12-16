@@ -1,4 +1,5 @@
 using Cinemachine;
+using InGame.Inventory;
 using UnityEngine;
 
 namespace InGame.MiniGames.SpaceTrafficControlMiniGame.Spaceships {
@@ -13,11 +14,13 @@ namespace InGame.MiniGames.SpaceTrafficControlMiniGame.Spaceships {
 
         private RegionType _activeRegion = RegionType.MAP01;
         [HideInInspector] public Cannon activeCannon;
-        public BananaType activeBananaType;
+
+        public BananaEffect activeBananaGoop = BananaEffect.ATTRACTION;
+        public BananaGoopInventory bananaGoopInventory;
         
         public float minRotationY;
         public float maxRotationY;
-
+        
         ///////////////////
 
         private readonly RegionType[] scenesToRotateBeetween = {
@@ -52,16 +55,14 @@ namespace InGame.MiniGames.SpaceTrafficControlMiniGame.Spaceships {
             activeCannon = cannonsByRegionType[_activeRegion];
             
             activeCannon.PositionneCamera(cameraCannonTransform);
+            activeCannon.SetCannon(activeBananaGoop);
             
             miniGameVirtualCamera.Priority = 100;
             
-            var activeBanana = ObjectsReference.Instance.bananaMan.bananaManData.activeBanana;
-            var bananaData = ObjectsReference.Instance.meshReferenceScriptableObject.bananasPropertiesScriptableObjects[activeBanana];
-            
-            activeCannon.SetProjectileType(bananaData);
-            
             Cursor.visible = false;
             Cursor.lockState = CursorLockMode.Locked;
+            
+            ObjectsReference.Instance.uiCannons.RefreshBananaGoopsQuantity();
         }
 
         public void SwitchToLeftCannon() {
@@ -86,21 +87,6 @@ namespace InGame.MiniGames.SpaceTrafficControlMiniGame.Spaceships {
         }
 
         public void SwitchToLastCannon() {
-            var activeBanana = ObjectsReference.Instance.bananaMan.bananaManData.activeBanana;
-            activeBananaType = activeBanana;
-
-            var bananaData = ObjectsReference.Instance.meshReferenceScriptableObject.bananasPropertiesScriptableObjects[activeBanana];
-            
-            ObjectsReference.Instance.uiCannons.SetBananaData(
-                bananaData.GetSprite(), 
-                ObjectsReference.Instance.meshReferenceScriptableObject.bananaGoopColorByEffectType[bananaData.bananaEffect]
-            );
-            
-            ObjectsReference.Instance.uiCannons.SetBananaQuantity(
-                ObjectsReference.Instance.BananaManBananasInventory.GetQuantity(activeBananaType),
-                activeBananaType
-            );
-            
             SwitchToCannon(_activeRegion);
         }
 
@@ -129,10 +115,6 @@ namespace InGame.MiniGames.SpaceTrafficControlMiniGame.Spaceships {
 
         public float GetCameraCannonFieldOfView() {
             return cameraCannon.fieldOfView;
-        }
-
-        public Color GetColorByBananaEffect(BananaEffect bananaEffect) {
-            return ObjectsReference.Instance.meshReferenceScriptableObject.bananaGoopColorByEffectType[bananaEffect];
         }
     }
 }

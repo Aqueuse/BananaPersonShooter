@@ -29,8 +29,10 @@ namespace InGame.CommandRoomPanelControls {
                 }
             }
         }
-
-        private void FocusPanel(CommandRoomPanelType commandRoomPanelType) {
+        
+        public void FocusPanel(int panelTypeEnum) {
+            CommandRoomPanelType commandRoomPanelType = (CommandRoomPanelType)panelTypeEnum;
+            
             if (ObjectsReference.Instance.gameManager.gameContext == GameContext.IN_GAME) {
                 ObjectsReference.Instance.uiManager.SetActive(UICanvasGroupType.HUD_BANANAMAN, false);
             }
@@ -45,22 +47,28 @@ namespace InGame.CommandRoomPanelControls {
 
             ObjectsReference.Instance.cameraPlayer.Set0Sensibility();
             ObjectsReference.Instance.playerController.canMove = false;
-
-            Cursor.visible = false;
-            Cursor.lockState = CursorLockMode.None;
-
-            ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.CROSSHAIRS].alpha = 0;
-
-            ObjectsReference.Instance.gameManager.gameContext = GameContext.IN_COMMAND_ROOM_PANEL;
             
             ObjectsReference.Instance.bananaGunActionsSwitch.gameObject.SetActive(false);
             
-            ObjectsReference.Instance.audioManager.PlayEffect(SoundEffectType.BUTTON_INTERACTION, 0);
-        }
-        
-        public void FocusPanel(int panelTypeEnum) {
-            FocusPanel((CommandRoomPanelType)panelTypeEnum);
             ObjectsReference.Instance.inputManager.SwitchContext(InputContext.UI);
+            ObjectsReference.Instance.gameManager.gameContext = GameContext.IN_COMMAND_ROOM_PANEL;
+
+            ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.CROSSHAIRS].alpha = 0;
+
+            if (commandRoomPanelType == CommandRoomPanelType.SPACE_TRAFFIC_CONTROL) {
+                Cursor.visible = false;
+                Cursor.lockState = CursorLockMode.Locked;
+                
+                ObjectsReference.Instance.inputManager.SwitchContext(InputContext.CANNONS);
+                ObjectsReference.Instance.cannonsManager.SwitchToLastCannon();
+            }
+
+            else {
+                Cursor.visible = true;
+                Cursor.lockState = CursorLockMode.None;
+            }
+            
+            ObjectsReference.Instance.audioManager.PlayEffect(SoundEffectType.BUTTON_INTERACTION, 0);
         }
         
         public void UnfocusPanel(bool isOnUI) {

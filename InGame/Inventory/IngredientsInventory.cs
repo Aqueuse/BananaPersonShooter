@@ -3,7 +3,10 @@ using UnityEngine;
 
 namespace InGame.Inventory {
     public class IngredientsInventory : MonoBehaviour {
-        public Dictionary<IngredientsType, int> ingredientsInventory;
+        public Dictionary<IngredientsType, int> ingredientsInventory= new () {
+            {IngredientsType.BANANA_DOG_BREAD, 0},   
+            {IngredientsType.BANANA_WITHOUT_SKIN, 0}
+        };
         
         public int AddQuantity(IngredientsType ingredientsType, int quantity) {
             if (ingredientsInventory[ingredientsType] > 10000) return ingredientsInventory[ingredientsType];
@@ -25,6 +28,13 @@ namespace InGame.Inventory {
 
             ingredientsInventory[ingredientsType] = 0;
             return 0;
+        }
+
+        public void ResetInventory() {
+            ingredientsInventory= new () {
+                {IngredientsType.BANANA_DOG_BREAD, 0},   
+                {IngredientsType.BANANA_WITHOUT_SKIN, 0}
+            };
         }
     }
 }

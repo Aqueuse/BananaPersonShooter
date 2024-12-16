@@ -1,5 +1,4 @@
 ﻿public enum BananaType {
-    EMPTY,
     BARANGAN,
     BLUE_JAVA,
     BURRO,

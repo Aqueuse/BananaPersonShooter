@@ -73,10 +73,10 @@ namespace SharedInputs {
             grabActionReference.action.canceled += Grab;
         
             openGestionPanelActionReference.action.Enable();
-            openGestionPanelActionReference.action.performed += OpenGestionPanel;
+            openGestionPanelActionReference.action.performed += ShowMainPanel;
             
             openInventoryActionReference.action.Enable();
-            openInventoryActionReference.action.performed += OpenInventories;
+            openInventoryActionReference.action.performed += ShowInventories;
             
             ShowHideMapActionReference.action.Enable();
             ShowHideMapActionReference.action.performed += ShowHideMap;
@@ -107,10 +107,10 @@ namespace SharedInputs {
             grabActionReference.action.canceled -= Grab;
         
             openGestionPanelActionReference.action.Disable();
-            openGestionPanelActionReference.action.performed -= OpenGestionPanel;
+            openGestionPanelActionReference.action.performed -= ShowMainPanel;
 
             openInventoryActionReference.action.Disable();
-            openInventoryActionReference.action.performed -= OpenInventories;
+            openInventoryActionReference.action.performed -= ShowInventories;
             
             ShowHideMapActionReference.action.Disable();
             ShowHideMapActionReference.action.performed -= ShowHideMap;
@@ -159,26 +159,28 @@ namespace SharedInputs {
             }
         }
     
-        private static void OpenGestionPanel(InputAction.CallbackContext context) {
+        private static void ShowMainPanel(InputAction.CallbackContext context) {
             if (!ObjectsReference.Instance.bananaMan.tutorialFinished) return;
-
-            ObjectsReference.Instance.uiManager.ShowGestionPanel();
+            
             ObjectsReference.Instance.cameraPlayer.Set0Sensibility();
             ObjectsReference.Instance.inputManager.SwitchContext(InputContext.GESTION_PANEL);
+            ObjectsReference.Instance.gameManager.gameContext = GameContext.IN_MAIN_PANEL;
 
             ObjectsReference.Instance.bananaGunActionsSwitch.gameObject.SetActive(false);
+
+            ObjectsReference.Instance.uiManager.ShowMainPanel();
         }
 
-        private static void OpenInventories(InputAction.CallbackContext context) {
+        private static void ShowInventories(InputAction.CallbackContext context) {
             if (!ObjectsReference.Instance.bananaMan.tutorialFinished) return;
             
-            ObjectsReference.Instance.uiManager.ShowGestionPanel();
-            ObjectsReference.Instance.uiManager.ShowInventory();
             ObjectsReference.Instance.cameraPlayer.Set0Sensibility();
             ObjectsReference.Instance.inputManager.SwitchContext(InputContext.GESTION_PANEL);
-            ObjectsReference.Instance.gameManager.gameContext = GameContext.IN_GESTION_PANEL;
+            ObjectsReference.Instance.gameManager.gameContext = GameContext.IN_MAIN_PANEL;
             
             ObjectsReference.Instance.bananaGunActionsSwitch.gameObject.SetActive(false);
+
+            ObjectsReference.Instance.uiManager.ShowInventory();
         }
 
         private static void ShowHideMap(InputAction.CallbackContext context) {

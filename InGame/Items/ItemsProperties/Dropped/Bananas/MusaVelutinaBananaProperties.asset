@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: MusaVelutinaBananaProperties
   m_EditorClassIdentifier: 
   gameObjectTag: 3
-  itemCategory: 1
-  bananaType: 9
-  droppedType: 1
+  itemCategory: 0
+  bananaType: 8
+  droppedType: 0
   ingredientsType: 0
   manufacturedItemsType: 0
   rawMaterialType: 0
@@ -35,4 +35,3 @@ MonoBehaviour:
   resistanceBonus: 1
   bananaEffect: 4
   bananaColor: {r: 1, g: 0.24705884, b: 0.5372549, a: 1}
-  prefab: {fileID: 0}

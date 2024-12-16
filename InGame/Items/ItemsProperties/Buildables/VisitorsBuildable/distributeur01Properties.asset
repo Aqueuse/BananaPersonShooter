@@ -13,17 +13,19 @@ MonoBehaviour:
   m_Name: distributeur01Properties
   m_EditorClassIdentifier: 
   gameObjectTag: 11
-  itemCategory: 2
+  itemCategory: 1
   bananaType: 0
   droppedType: 0
   ingredientsType: 0
   manufacturedItemsType: 0
   rawMaterialType: 0
-  buildableType: 14
+  buildableType: 13
+  foodType: 0
   itemName:
   - drinks dispenser
   - distributeur de boissons
   - distribuidor de bebidas
+  itemSprite: {fileID: 21300000, guid: 97f4d8d6dadbb564ea4275bd160fb9ab, type: 3}
   itemDescription:
   - sells banana juice, but not only that!
   - vend du jus de banane, mais pas que !
@@ -31,7 +33,7 @@ MonoBehaviour:
   bitKongValue: 0
   rawMaterialsWithQuantity:
     list:
-    - key: 1
+    - key: 0
       value: 10
     - key: 2
       value: 2

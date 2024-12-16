@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using InGame.Items.ItemsBehaviours.DroppedBehaviours;
 using InGame.Items.ItemsData.BuildablesData;
 using Newtonsoft.Json;
 using Save.Helpers;
@@ -7,20 +8,139 @@ using UnityEngine;
 
 namespace InGame.Items.ItemsBehaviours.BuildablesBehaviours {
     public class BananasDryerBehaviour : BuildableBehaviour {
-        [SerializeField] private List<BananaDryerSlot> bananasDryerSlots;
+        [SerializeField] private GameObject fabricPrefab;
+        [SerializeField] private int conversionDuration;
 
-        [Range(0, 20)] public int bananaPeelsQuantity;
-        [Range(0, 20)] public int fabricQuantity;
+        public List<BananaDryerSlot> slots;
+        
+        [SerializeField] private GameObject[] bananaPeel;
+        [SerializeField] private GameObject[] fabric;
+        
+        private readonly BananaEffect[] colorants = new BananaEffect[20];
 
+        private int bananaPeelsQuantity;
+        
         private void Init() {
-            foreach (var bananasDryerSlot in bananasDryerSlots) {
-                bananasDryerSlot.Init();
+            for (var i = 0; i < 20; i++) {
+                if (slots[i].hasBananaPeel) {
+                    PutBanana(i, slots[i].bananaEffect);
+                    colorants[i] = slots[i].bananaEffect;
+                    
+                    bananaPeelsQuantity += 1;
+                }
+                
+                else if (slots[i].hasFabric) {
+                    SetFabric(i);
+                    colorants[i] = slots[i].bananaEffect;
+                }
+            }
+        }
+        
+        private void Update() {
+            if (bananaPeelsQuantity <= 0) return;
+            
+            for (var i = 0; i < 20; i++) {
+                if (slots[i].hasBananaPeel) {
+                    slots[i].timer -= 1;
+                
+                    if (slots[i].timer <= 0) {
+                        slots[i].hasFabric = true;
+                        
+                        SetFabric(i);
+                        
+                        slots[i].timer = conversionDuration;
+                    }
+                }
+            }
+        }
+
+        private bool TryToPutBananaPeel(BananaEffect bananaEffect) {
+            for (var i = 0; i < 20; i++) {
+                if (!slots[i].hasFabric && !slots[i].hasBananaPeel) {
+                    PutBanana(i, bananaEffect);
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private void PutBanana(int slotIndex, BananaEffect bananaColor) {
+            slots[slotIndex].hasBananaPeel = true;
+            
+            bananaPeel[slotIndex].SetActive(true);
+            
+            slots[slotIndex].bananaEffect = bananaColor;
+            slots[slotIndex].timer = conversionDuration;
+            colorants[slotIndex] = slots[slotIndex].bananaEffect;
+            
+            bananaPeelsQuantity += 1;
+        }
+
+        private void SetFabric(int slotIndex) {
+            slots[slotIndex].hasBananaPeel = false;
+            slots[slotIndex].hasFabric = true;
+            
+            bananaPeel[slotIndex].SetActive(false);
+            fabric[slotIndex].SetActive(true);
+            
+            bananaPeelsQuantity -= 1;
+        }
+
+        public void TakeFabric() {
+            for (var i = 0; i < 20; i++) {
+                if (slots[i].hasFabric) {
+                    slots[i].hasFabric = false;
+                    
+                    fabric[i].SetActive(false);
+                    bananaPeel[i].SetActive(false);
+
+                    ObjectsReference.Instance.bananaManRawMaterialInventory.AddQuantity(RawMaterialType.FABRIC, 1);
+
+                    switch (slots[i].bananaEffect) {
+                        case BananaEffect.ATTRACTION:
+                            ObjectsReference.Instance.bananaManRawMaterialInventory.AddQuantity(RawMaterialType.YELLOW_DYE, 1);
+                            break;
+                        case BananaEffect.REPULSION:
+                            ObjectsReference.Instance.bananaManRawMaterialInventory.AddQuantity(RawMaterialType.GREEN_DYE, 1);
+                            break;
+                        case BananaEffect.SLOW:
+                            ObjectsReference.Instance.bananaManRawMaterialInventory.AddQuantity(RawMaterialType.BLUE_DYE, 1);
+                            break;
+                        case BananaEffect.FAST:
+                            ObjectsReference.Instance.bananaManRawMaterialInventory.AddQuantity(RawMaterialType.RED_DYE, 1);
+                            break;
+                    }
+                    
+                    break;
+                }
             }
         }
         
         public void RetrieveRawMaterials() {
-            ObjectsReference.Instance.bananaManRawMaterialInventory.AddQuantity(RawMaterialType.FABRIC, fabricQuantity);
-            ObjectsReference.Instance.bananaManRawMaterialInventory.AddQuantity(RawMaterialType.BANANA_PEEL, bananaPeelsQuantity);
+            for (var i = 0; i < 20; i++) {
+                if (slots[i].hasFabric) {
+                    ObjectsReference.Instance.bananaManRawMaterialInventory.AddQuantity(RawMaterialType.FABRIC, 1);
+                }
+
+                else {
+                    if (slots[i].hasBananaPeel) {
+                        ObjectsReference.Instance.bananaManRawMaterialInventory.AddQuantity(RawMaterialType.BANANA_PEEL, 1);
+                    }
+                }
+            }
+
+            bananaPeelsQuantity = 0;
+        }
+        
+        private void OnCollisionEnter(Collision other) {
+            if (other.gameObject.layer != 7) return;
+
+            if (other.gameObject.TryGetComponent<BananaBehaviour>(out var bananaBehaviour)) {
+                var bananaPeelPlaced = TryToPutBananaPeel(bananaBehaviour.bananasPropertiesScriptableObject.bananaEffect);
+                
+                if (bananaPeelPlaced) Destroy(other.gameObject);
+            }
         }
         
         public override void GenerateSaveData() {
@@ -33,7 +153,8 @@ namespace InGame.Items.ItemsBehaviours.BuildablesBehaviours {
                 buildableType = buildableType,
                 isBreaked = isBreaked,
                 buildablePosition = JsonHelper.FromVector3ToString(transform.position),
-                buildableRotation = JsonHelper.FromQuaternionToString(transform.rotation)
+                buildableRotation = JsonHelper.FromQuaternionToString(transform.rotation),
+                bananaDryerSlots = slots
             };
 
             ObjectsReference.Instance.gameSave.buildablesSave.AddBuildableToBuildableDictionnary(BuildableType.BANANA_DRYER, JsonConvert.SerializeObject(bananasDryerData));
@@ -47,6 +168,8 @@ namespace InGame.Items.ItemsBehaviours.BuildablesBehaviours {
             isBreaked = bananasDryerData.isBreaked;
             transform.position = JsonHelper.FromStringToVector3( bananasDryerData.buildablePosition);
             transform.rotation = JsonHelper.FromStringToQuaternion(bananasDryerData.buildableRotation);
+
+            slots = bananasDryerData.bananaDryerSlots;
             
             Init();
         }

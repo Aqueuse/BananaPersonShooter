@@ -27,21 +27,10 @@ namespace Save {
         }
 
         private static void ResetInventories() {
-            foreach (var bananaSlot in ObjectsReference.Instance.BananaManBananasInventory.bananasInventory) {
-                ObjectsReference.Instance.BananaManBananasInventory.bananasInventory[bananaSlot.Key] = 0;
-            }
-            
-            foreach (var ingredientSlot in ObjectsReference.Instance.bananaManIngredientsInventory.ingredientsInventory) {
-                ObjectsReference.Instance.bananaManIngredientsInventory.ingredientsInventory[ingredientSlot.Key] = 0;
-            }
-
-            foreach (var rawMaterialsSlot in ObjectsReference.Instance.bananaManRawMaterialInventory.rawMaterialsInventory) {
-                ObjectsReference.Instance.bananaManRawMaterialInventory.rawMaterialsInventory[rawMaterialsSlot.Key] = 0;
-            }
-
-            foreach (var manufacturedItemSlot in ObjectsReference.Instance.bananaManManufacturedItemsInventory.manufacturedItemsInventory) {
-                ObjectsReference.Instance.bananaManManufacturedItemsInventory.manufacturedItemsInventory[manufacturedItemSlot.Key] = 0;
-            }
+            ObjectsReference.Instance.BananaManBananasInventory.ResetInventory();
+            ObjectsReference.Instance.bananaManIngredientsInventory.ResetInventory();
+            ObjectsReference.Instance.bananaManRawMaterialInventory.ResetInventory();
+            ObjectsReference.Instance.bananaManManufacturedItemsInventory.ResetInventory();
         }
         
         private static void ResetBananaManVitals() {
@@ -60,11 +49,11 @@ namespace Save {
         }
 
         private static void ResetActiveItem() {
-            ObjectsReference.Instance.bananaMan.bananaManData.activeBanana = BananaType.EMPTY;
-            ObjectsReference.Instance.bananaMan.bananaManData.activeBuildable = BuildableType.EMPTY;
-            ObjectsReference.Instance.bananaMan.bananaManData.activeIngredient = IngredientsType.EMPTY;
-            ObjectsReference.Instance.bananaMan.bananaManData.activeRawMaterial = RawMaterialType.EMPTY;
-            ObjectsReference.Instance.bananaMan.bananaManData.activeManufacturedItem = ManufacturedItemsType.EMPTY;
+            ObjectsReference.Instance.bananaMan.bananaManData.activeBanana = BananaType.CAVENDISH;
+            ObjectsReference.Instance.bananaMan.bananaManData.activeBuildable = BuildableType.BUMPER;
+            ObjectsReference.Instance.bananaMan.bananaManData.activeIngredient = IngredientsType.BANANA_DOG_BREAD;
+            ObjectsReference.Instance.bananaMan.bananaManData.activeRawMaterial = RawMaterialType.METAL;
+            ObjectsReference.Instance.bananaMan.bananaManData.activeManufacturedItem = ManufacturedItemsType.SPACESHIP_TOY;
 
         }
 

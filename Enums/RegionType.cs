@@ -8,6 +8,5 @@ public enum RegionType {
     MAP05,
     MAP06,
     MAP07,
-    MAP08,
-    INITIAL_HOME
+    MAP08
 }

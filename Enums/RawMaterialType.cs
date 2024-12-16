@@ -1,9 +1,12 @@
 ﻿public enum RawMaterialType {
-    EMPTY,
     METAL,
     BATTERY,
     ELECTRONIC,
     FABRIC,
     BANANA_PEEL,
-    SILICE
+    SILICE,
+    YELLOW_DYE,
+    RED_DYE,
+    GREEN_DYE,
+    BLUE_DYE
 }

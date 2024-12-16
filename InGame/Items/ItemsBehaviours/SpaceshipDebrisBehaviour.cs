@@ -51,8 +51,6 @@ namespace InGame.Items.ItemsBehaviours {
         }
 
         public void Init(Laser laser) {
-            Debug.Log("laser shoot");
-            
             isInSpace = true;
             DestroyIfUnreachable();
 
