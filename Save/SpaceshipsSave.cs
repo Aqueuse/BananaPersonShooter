@@ -28,7 +28,7 @@ namespace Save {
                     ObjectsReference.Instance.meshReferenceScriptableObject.spaceshipPrefabBySpaceshipType[spaceshipSavedData.spaceshipType],
                     JsonHelper.FromStringToVector3(spaceshipSavedData.spaceshipPosition),
                     JsonHelper.FromStringToQuaternion(spaceshipSavedData.spaceshipRotation),
-                    ObjectsReference.Instance.gameSave.spaceshipsContainer
+                    ObjectsReference.Instance.gameSave.savablesItemsContainer
                 );
 
                 spaceshipInstance.GetComponent<SpaceshipBehaviour>().LoadSavedData(spaceshipSavedData);

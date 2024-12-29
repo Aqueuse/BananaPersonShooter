@@ -7,8 +7,6 @@ using UnityEngine;
 
 namespace Save.Dropped {
     public class DroppedBananaSave : MonoBehaviour {
-        public GameObject bananasContainer;
-    
         private string _savePath;
 
         private GameObject bananaToSpawn;
@@ -47,19 +45,11 @@ namespace Save.Dropped {
         }
 
         private void RespawnBananasOnWorld() {
-            DestroyImmediate(bananasContainer);
-
-            bananasContainer = new GameObject("Bananas container") {
-                transform = {
-                    parent = transform.parent
-                }
-            };
-
             foreach (var bananaList in bananasDataDictionaryByBananaType) {
                 foreach (var bananaString in bananaList.Value) {
                     bananaToSpawn = ObjectsReference.Instance.meshReferenceScriptableObject.bananaPrefabByBananaType[bananaList.Key];
                     
-                    bananaInstance = Instantiate(bananaToSpawn, bananasContainer.transform, true);
+                    bananaInstance = Instantiate(bananaToSpawn, ObjectsReference.Instance.gameSave.savablesItemsContainer, true);
                     bananaInstance.GetComponent<BananaBehaviour>().LoadSavedData(bananaString);
                 }
             }
@@ -71,7 +61,7 @@ namespace Save.Dropped {
             
             var savefilePath = Path.Combine(mapDataSavesPath, "bananas.json");
             
-            var bananaBehaviours = FindObjectsByType<BananaBehaviour>(FindObjectsSortMode.None);
+            var bananaBehaviours = ObjectsReference.Instance.gameSave.savablesItemsContainer.GetComponentsInChildren<BananaBehaviour>();
             
             bananasDataDictionaryByBananaType.Clear();
 

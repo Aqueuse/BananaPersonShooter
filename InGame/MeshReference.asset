@@ -23,32 +23,28 @@ MonoBehaviour:
     - key: 3
       value: {fileID: 1245519440109076037, guid: 63783d9373ac3de41987b5eaedf948b1, type: 3}
     - key: 4
-      value: {fileID: 4483800605340694416, guid: ac2cf78f5c670804bae340e29edca3bb, type: 3}
-    - key: 5
       value: {fileID: 2994629068037613359, guid: 117919c6ff3ffc949999e3532ee9bf43, type: 3}
-    - key: 6
+    - key: 5
       value: {fileID: 1425542741666815747, guid: 51ece0572885e6c4e9fa2acb26714c5b, type: 3}
-    - key: 7
+    - key: 6
       value: {fileID: 6910336428813764717, guid: 1ce4fc0f5cb3ab94f9b6bff44b68706d, type: 3}
-    - key: 8
+    - key: 7
       value: {fileID: 8975577443026611095, guid: 066d0f08d2184ad409aebbd605d3c47a, type: 3}
-    - key: 9
+    - key: 8
       value: {fileID: 1991512836727731211, guid: 46a6d640e26506447bc262e143bd448b, type: 3}
-    - key: 10
+    - key: 9
       value: {fileID: 1244767601830939261, guid: 614c25b005a50944b8a9391764273355, type: 3}
-    - key: 11
+    - key: 10
       value: {fileID: 831826108930951630, guid: 765ba6a4bec0c0b498e259570f1655eb, type: 3}
-    - key: 12
+    - key: 11
       value: {fileID: 3376277238409772002, guid: f2a91b7ede231154c99d15222202cd73, type: 3}
-    - key: 13
-      value: {fileID: 2610906788032314510, guid: 2ccb37636ac069340af094d1d703cacb, type: 3}
-    - key: 14
+    - key: 12
       value: {fileID: 6077705234436966705, guid: bb8463b61fab7be45a521da6655a294c, type: 3}
-    - key: 15
+    - key: 13
       value: {fileID: 617907147682838640, guid: af271ba40ae07b8439d85e3144af13ee, type: 3}
-    - key: 16
+    - key: 14
       value: {fileID: 8871149111809520450, guid: f85b9b15c06ad954ea75694550a097ae, type: 3}
-    - key: 17
+    - key: 15
       value: {fileID: 546991606061005580, guid: 1266f1a6b74a4074ab65ab8271d57705, type: 3}
     keyCollision: 0
   bananaPrefabByBananaType:
@@ -79,6 +75,17 @@ MonoBehaviour:
     - key: 9
       value: {fileID: 763401615645243554, guid: 93435de0459ed8c4b81df0726cf864e4, type: 3}
     keyCollision: 0
+  DyePrefabByBananaEffect:
+    list:
+    - key: 1
+      value: {fileID: 1201240593057137609, guid: c7f4f11e52269c249b5798fcdd8cf036, type: 3}
+    - key: 2
+      value: {fileID: 618658101756397973, guid: 1ae4b40184880204da5c26912af2f6af, type: 3}
+    - key: 4
+      value: {fileID: 4128786402390675246, guid: 720d1ff3e4de44547804fa91de7bafc6, type: 3}
+    - key: 3
+      value: {fileID: 763401615645243554, guid: 93435de0459ed8c4b81df0726cf864e4, type: 3}
+    keyCollision: 0
   ingredientPrefabByIngredientType:
     list:
     - key: 0
@@ -99,6 +106,11 @@ MonoBehaviour:
     - key: 3
       value: {fileID: 8283342476129932777, guid: bfea9fcbb9e807f4aa66d9f17f73dfeb, type: 3}
     keyCollision: 1
+  foodPrefabByFoodType:
+    list:
+    - key: 0
+      value: {fileID: 4155948541956591707, guid: f6a681db52ce03d4ebccb38b6c12305b, type: 3}
+    keyCollision: 0
   meteoritePrefabByMeteoriteType:
     list: []
     keyCollision: 0
@@ -113,32 +125,28 @@ MonoBehaviour:
     - key: 3
       value: {fileID: 11400000, guid: 57367e24cc5ceef4791d3bedb804fa24, type: 2}
     - key: 4
-      value: {fileID: 11400000, guid: 5c454d0f166f3e940a00bedd4c4afc8b, type: 2}
-    - key: 5
       value: {fileID: 11400000, guid: b2787f7b4d5032e4f951e2a13c8eec7a, type: 2}
-    - key: 6
+    - key: 5
       value: {fileID: 11400000, guid: f7f0cb4bf966d9840b6e20810e6163c7, type: 2}
-    - key: 7
+    - key: 6
       value: {fileID: 11400000, guid: 596a0e830bf88b146b5865bc62ce282a, type: 2}
-    - key: 8
+    - key: 7
       value: {fileID: 11400000, guid: d58f569346c29ac4cb10a7280331a435, type: 2}
-    - key: 9
+    - key: 8
       value: {fileID: 11400000, guid: f00ca2b9fe726274f976545cf5964ccc, type: 2}
-    - key: 10
+    - key: 9
       value: {fileID: 11400000, guid: 7c273d4a1e13c7a4891e9ba7ec33c719, type: 2}
-    - key: 11
+    - key: 10
       value: {fileID: 11400000, guid: 4a064d8175fa0e941abbafd6e30a0b74, type: 2}
-    - key: 12
+    - key: 11
       value: {fileID: 11400000, guid: 5c613a4d53c8bc645aaac0c268f3d8a5, type: 2}
-    - key: 13
-      value: {fileID: 11400000, guid: 5c20d8abed0e2214997ed6d456ef9cce, type: 2}
-    - key: 14
+    - key: 12
       value: {fileID: 11400000, guid: 1d28365f16224544e95391cb920c681b, type: 2}
-    - key: 15
+    - key: 13
       value: {fileID: 11400000, guid: 14e8a9f66bf95ac44b7f16ffa71fcc8c, type: 2}
-    - key: 16
+    - key: 14
       value: {fileID: 11400000, guid: c8531ad48c3b026449c217f3e61edded, type: 2}
-    - key: 17
+    - key: 15
       value: {fileID: 11400000, guid: 12d023e99d504f54895a73a374a58e60, type: 2}
     keyCollision: 0
   bananasPropertiesScriptableObjects:
@@ -221,6 +229,17 @@ MonoBehaviour:
     list:
     - key: 0
       value: {fileID: 11400000, guid: fe96623b98ec95f43bcf8a7d82b18e8e, type: 2}
+    keyCollision: 0
+  rawMaterialPropertiesByBananaEffect:
+    list:
+    - key: 1
+      value: {fileID: 11400000, guid: 13619bdcff7032042a13bade491c546b, type: 2}
+    - key: 2
+      value: {fileID: 11400000, guid: 56d2e904193878e4cbda2c29bba63997, type: 2}
+    - key: 3
+      value: {fileID: 11400000, guid: ce213dc94fa53f746ab8e203fc42d870, type: 2}
+    - key: 4
+      value: {fileID: 11400000, guid: 6e11ba27491ce1846967ea1c2a08063b, type: 2}
     keyCollision: 0
   monkeyMenPrefabByMonkeyMenType:
     list:

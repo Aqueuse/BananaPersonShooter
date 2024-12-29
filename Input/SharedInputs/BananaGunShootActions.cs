@@ -1,37 +1,66 @@
+using System;
+using InGame.Player;
 using InGame.Player.BananaGunActions;
+using Tags;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 namespace SharedInputs {
     public class BananaGunShootActions : InputActions {
         [SerializeField] private Shoot shoot;
-        [SerializeField] private InputActionReference shootBananaActionReference;
+        
+        [SerializeField] private InputActionReference shootActionReference;
+        [SerializeField] private InputActionReference aspireActionReference;
+
+        private Tag gameObjectTagClass;
+        private GAME_OBJECT_TAG gameObjectTag;
+
+        private BananaManData bananaManData;
+
+        private void Start() {
+            bananaManData = ObjectsReference.Instance.bananaMan.bananaManData;
+        }
 
         private void OnEnable() {
-            shootBananaActionReference.action.Enable();
-            shootBananaActionReference.action.performed += Shoot;
-            shootBananaActionReference.action.canceled += CancelShoot;
+            shootActionReference.action.Enable();
+            shootActionReference.action.performed += Shoot;
+            shootActionReference.action.canceled += CancelShoot;
+            
+            aspireActionReference.action.Enable();
+            aspireActionReference.action.performed += StartToAspire;
+            aspireActionReference.action.canceled += StopToAspire;
         }
 
         private void OnDisable() {
-            shootBananaActionReference.action.Disable();
-            shootBananaActionReference.action.performed -= Shoot;
-            shootBananaActionReference.action.canceled -= CancelShoot;
+            shootActionReference.action.Disable();
+            shootActionReference.action.performed -= Shoot;
+            shootActionReference.action.canceled -= CancelShoot;
+            
+            aspireActionReference.action.Disable();
+            aspireActionReference.action.performed -= StartToAspire;
+            aspireActionReference.action.canceled -= StopToAspire;
         }
 
         private void Shoot(InputAction.CallbackContext callbackContext) {
-            ObjectsReference.Instance.bananaGun.GrabBananaGun();
-            
-            if (ObjectsReference.Instance.inventoriesHelper.GetActiveDroppedQuantity() <= 0) return;
+            if (bananaManData.inventoriesByDroppedType[bananaManData.activeDropped].GetQuantity(
+                    bananaManData.activeDroppableItem) <= 0) 
+                return;
             
             shoot.LoadingGun();
             ObjectsReference.Instance.uiCrosshairs.SetCrosshair(false);
         }
 
         private void CancelShoot(InputAction.CallbackContext callbackContext) {
-            ObjectsReference.Instance.bananaGun.UngrabBananaGun();
             shoot.CancelThrow();
             ObjectsReference.Instance.uiCrosshairs.SetCrosshair(false);
+        }
+
+        private void StartToAspire(InputAction.CallbackContext callbackContext) {
+            shoot.LoadAspire();
+        }
+
+        private void StopToAspire(InputAction.CallbackContext callbackContext) {
+            shoot.CancelAspire();
         }
     }
 }

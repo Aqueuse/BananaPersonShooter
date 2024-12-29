@@ -59,19 +59,26 @@ namespace UI.InGame {
         public void SetDroppableItem(ItemScriptableObject itemScriptableObject) {
             ObjectsReference.Instance.bananaMan.bananaManData.activeDroppableItem = itemScriptableObject;
             
-            ObjectsReference.Instance.uiFlippers.SetDroppableSprite(itemScriptableObject.GetSprite());
-            droppedQuantityText.text =
-                ObjectsReference.Instance.inventoriesHelper.GetQuantity(itemScriptableObject).ToString();
+            SetDroppableSprite(itemScriptableObject.GetSprite());
+            SetDroppableQuantity(itemScriptableObject);
+            
         }
         
         public void SetDroppableSprite(Sprite droppedSprite) {
             droppedImage.sprite = droppedSprite;
         }
+
+        public void SetDroppableQuantity(ItemScriptableObject itemScriptableObject) {
+            var quantity = ObjectsReference.Instance.bananaMan.bananaManData.inventoriesByDroppedType
+                [itemScriptableObject.droppedType].GetQuantity(itemScriptableObject);
+            
+            droppedQuantityText.text = quantity.ToString();
+        }
         
-        public void RefreshDroppableQuantity() {
-            droppedQuantityText.text = ObjectsReference.Instance.inventoriesHelper.GetQuantity(
-                ObjectsReference.Instance.bananaMan.bananaManData.activeDroppableItem
-            ).ToString();
+        public void RefreshActiveDroppableQuantity() {
+            var quantity = ObjectsReference.Instance.bananaMan.bananaManData.GetActiveDroppableItemQuantity();
+
+            droppedQuantityText.text = quantity.ToString();
         }
         
         public void SetBuildablePlacementAvailability(bool canBeBuild, BuildablePropertiesScriptableObject buildablePropertieScriptableObject) {
@@ -94,7 +101,7 @@ namespace UI.InGame {
             
             SetBuildablePlacementAvailability(
                 ObjectsReference.Instance.bananaManRawMaterialInventory
-                    .HasCraftingIngredients(activeBuildable), buildablePropertieScriptableObject);
+                    .HasCraftingIngredients(buildablePropertieScriptableObject), buildablePropertieScriptableObject);
         }
     }
 }

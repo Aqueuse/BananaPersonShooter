@@ -5,7 +5,7 @@ using InGame.CommandRoomPanelControls;
 using InGame.Dialogues;
 using InGame.Gestion;
 using InGame.Interactions;
-using InGame.Inventory;
+using InGame.Inventories;
 using InGame.Items.ItemsBehaviours;
 using InGame.Items.ItemsData;
 using InGame.MainBlock;
@@ -13,7 +13,6 @@ using InGame.MiniGames.MarketingCampaignMiniGame;
 using InGame.MiniGames.SpaceTrafficControlMiniGame.Spaceships;
 using InGame.Player;
 using InGame.Player.BananaGunActions;
-using InGame.Pools;
 using InGame.SpaceTrafficControl;
 using Save;
 using Settings;
@@ -44,8 +43,6 @@ public class ObjectsReference : MonoSingleton<ObjectsReference> {
     public SpaceTrafficControlManager spaceTrafficControlManager;
     public SpaceshipsSpawner spaceshipsSpawner;
     public CannonsManager cannonsManager;
-    [Space]
-    public GenericDictionary<CharacterType, MeteoritePool> debrisPoolByCharacterType;
 
     [Header("Banana Man")]
     public BananaMan bananaMan;
@@ -64,12 +61,12 @@ public class ObjectsReference : MonoSingleton<ObjectsReference> {
     [Space]
     public GhostsReference ghostsReference;
 
-    [Header("banana man inventories")] 
-    public InventoriesHelper inventoriesHelper;
+    [Header("banana man inventories")]
     public BananasInventory BananaManBananasInventory;
     public RawMaterialInventory bananaManRawMaterialInventory;
     public IngredientsInventory bananaManIngredientsInventory;
     public ManufacturedItemsInventory bananaManManufacturedItemsInventory;
+    public FoodInventory bananaManFoodInventory;
 
     [Header("Gestion Mode")]
     public ScanWithMouseForDescription scanWithMouseForDescription;
@@ -103,8 +100,9 @@ public class ObjectsReference : MonoSingleton<ObjectsReference> {
     public UIBananasInventory bananaManUiBananasInventory;
     public UIRawMaterialsInventory bananaManUIRawMaterialsInventory;
     public UIIngredientsInventory bananaManUiIngredientsInventory;
-    public UIBlueprintsInventory bananaManUiBlueprintsInventory;
     public UIManufacturedItemsInventory bananaManUiManufacturedItemsInventory;
+    public UIFoodInventory bananaManUiFoodInventory;
+    public UIBlueprintsInventory bananaManUiBlueprintsInventory;
     public UInfobulle uInfobulle;
     [Space]
     public UICrosshairs uiCrosshairs;
@@ -117,8 +115,7 @@ public class ObjectsReference : MonoSingleton<ObjectsReference> {
     public UISave uiSave;
     public UISettings uiSettings;
     [Space]
-    public UIMarketingPanel uiMarketingPanel;
-    public UIcommunication uIcommunication;
+    public UICommunicationPanel uiCommunicationPanel;
     public UICannons uiCannons;
     public UIMonkeyMensReception uiTouristReception;
     public UIMerchant uiMerchant;

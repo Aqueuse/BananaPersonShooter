@@ -42,7 +42,7 @@ namespace InGame.Items.ItemsBehaviours {
             spaceshipData.spaceshipUIcolor = SpaceTrafficControlManager.GetRandomColor();
 
             spaceshipData.communicationMessagePrefabIndex = 
-                systemRandom.Next(ObjectsReference.Instance.uIcommunication
+                systemRandom.Next(ObjectsReference.Instance.uiCommunicationPanel
                 .spaceshipMessagesByCharacterType[spaceshipData.characterType].Count);
             
             spaceshipData.monkeyMenToSpawn = Random.Range(3, 9);
@@ -88,11 +88,11 @@ namespace InGame.Items.ItemsBehaviours {
             
             ObjectsReference.Instance.spaceshipsSpawner.RemoveGuestInCampaignCreator();
 
-            ObjectsReference.Instance.uIcommunication.CloseCommunications(this);
+            ObjectsReference.Instance.uiCommunicationPanel.CloseCommunications(this);
         }
         
         private void OpenCommunications() {
-            ObjectsReference.Instance.uIcommunication.AddNewCommunication(this);
+            ObjectsReference.Instance.uiCommunicationPanel.AddNewCommunication(this);
         }
 
         private void WaitInStation() {
@@ -103,7 +103,7 @@ namespace InGame.Items.ItemsBehaviours {
         
         public void StopWaiting() {
             ObjectsReference.Instance.spaceTrafficControlManager.FreeHangar(spaceshipData.assignatedHangar);
-            ObjectsReference.Instance.uIcommunication.RefreshHangarAvailability();
+            ObjectsReference.Instance.uiCommunicationPanel.RefreshHangarAvailability();
             
             spaceshipData.travelState = TravelState.TRAVEL_BACK_ON_ELEVATOR;
             TravelBackOnElevator();
@@ -148,13 +148,13 @@ namespace InGame.Items.ItemsBehaviours {
         }
 
         public void LeaveRegion() {
-            ObjectsReference.Instance.uIcommunication.CloseCommunications(this);
+            ObjectsReference.Instance.uiCommunicationPanel.CloseCommunications(this);
             ObjectsReference.Instance.spaceTrafficControlManager.FreeHangar(spaceshipData.assignatedHangar);
             
             ObjectsReference.Instance.spaceTrafficControlManager.spaceshipBehavioursByGuid.Remove(spaceshipData.spaceshipGuid);
 
-            ObjectsReference.Instance.uIcommunication.RefreshHangarAvailability();
-            ObjectsReference.Instance.uIcommunication.RefreshCommunicationButton();
+            ObjectsReference.Instance.uiCommunicationPanel.RefreshHangarAvailability();
+            ObjectsReference.Instance.uiCommunicationPanel.RefreshCommunicationButton();
             ObjectsReference.Instance.spaceshipsSpawner.RemoveGuestInCampaignCreator();
             Destroy(gameObject);
         }
@@ -187,7 +187,7 @@ namespace InGame.Items.ItemsBehaviours {
             var monkeyMen = Instantiate(
                 ObjectsReference.Instance.meshReferenceScriptableObject.monkeyMenPrefabByMonkeyMenType[monkeyMenData.monkeyMenType], 
                 chimpMensSpawnPoint.position, Quaternion.identity,
-                ObjectsReference.Instance.gameSave.chimpmensContainer
+                ObjectsReference.Instance.gameSave.savablesItemsContainer
             );
 
             var monkeyMenBehaviour = monkeyMen.GetComponent<MonkeyMenBehaviour>();
@@ -247,7 +247,7 @@ namespace InGame.Items.ItemsBehaviours {
             }
 
             if (spaceshipData.travelState == TravelState.FREE_FLIGHT | spaceshipData.travelState == TravelState.LEAVES_THE_REGION) {
-                ObjectsReference.Instance.uIcommunication.AddNewCommunication(this);
+                ObjectsReference.Instance.uiCommunicationPanel.AddNewCommunication(this);
             }
         }
 

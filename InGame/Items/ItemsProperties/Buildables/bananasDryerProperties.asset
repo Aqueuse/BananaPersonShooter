@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa23d2d3beaaadf47a677ba4423808b1, type: 3}
   m_Name: bananasDryerProperties
   m_EditorClassIdentifier: 
-  gameObjectTag: 11
+  gameObjectTag: 6
   itemCategory: 1
   bananaType: 0
   droppedType: 0
@@ -21,6 +21,7 @@ MonoBehaviour:
   rawMaterialType: 0
   buildableType: 1
   foodType: 0
+  isAspirable: 0
   itemName:
   - banana dryer
   - "s\xE9choir \xE0 bananes"
@@ -33,9 +34,9 @@ MonoBehaviour:
   bitKongValue: 0
   rawMaterialsWithQuantity:
     list:
-    - key: 0
+    - key: {fileID: 11400000, guid: 9b2d672be4f975f49b3bd109607666ae, type: 2}
       value: 4
-    - key: 1
+    - key: {fileID: 11400000, guid: f9da61064e92c7f4ea20d4fc2fcbc22a, type: 2}
       value: 1
     keyCollision: 0
   buildablePrefab: {fileID: 637136286764793117, guid: fe03facf4bdab3f4e8e3d03d49cef23d, type: 3}

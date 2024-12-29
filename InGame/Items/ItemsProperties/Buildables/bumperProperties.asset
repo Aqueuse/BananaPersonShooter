@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa23d2d3beaaadf47a677ba4423808b1, type: 3}
   m_Name: bumperProperties
   m_EditorClassIdentifier: 
-  gameObjectTag: 11
+  gameObjectTag: 6
   itemCategory: 1
   bananaType: 0
   droppedType: 0
@@ -21,6 +21,7 @@ MonoBehaviour:
   rawMaterialType: 0
   buildableType: 0
   foodType: 0
+  isAspirable: 0
   itemName:
   - bumper
   - bumper
@@ -33,7 +34,7 @@ MonoBehaviour:
   bitKongValue: 0
   rawMaterialsWithQuantity:
     list:
-    - key: 0
+    - key: {fileID: 11400000, guid: 9b2d672be4f975f49b3bd109607666ae, type: 2}
       value: 6
     keyCollision: 0
   buildablePrefab: {fileID: 3266887563888322151, guid: ed6506629ba94dc48b84997bb6e1c79a, type: 3}

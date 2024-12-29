@@ -1,4 +1,3 @@
-using UI.InGame;
 using UnityEngine;
 
 namespace InGame.Interactions {
@@ -7,43 +6,48 @@ namespace InGame.Interactions {
         [SerializeField] private LayerMask itemsLayerMask;
 
         public bool isGrabbing;
-        private Vector3 grabbablePosition;
-        private Rigidbody grabbableRigidbody;
+        
+        private GameObject grabbableObject;
+        private Rigidbody grabbedRigidbody;
+        private Grabbable grabbableClass;
 
-        private GameObject grabbedObject;
-
+        private RaycastHit raycastHit;
+        
         private void Update() {
-            if (ObjectsReference.Instance.gameManager.gameContext != GameContext.IN_GAME | isGrabbing) return;
+            if (isGrabbing) return;
 
-            if (Physics.Raycast(transform.position, transform.forward, out var raycastHit, 10, itemsLayerMask)) {
+            if (Physics.Raycast(transform.position, transform.forward, out raycastHit, 10, itemsLayerMask)) {
                 if (raycastHit.transform.gameObject.TryGetComponent(out Grabbable grabbable)) {
-                    if (grabbedObject != null) grabbable.GetComponentInChildren<UInteraction>().Desactivate(); // magic ( ͡• ͜ʖ ͡• )
-                     grabbedObject = grabbable.transform.gameObject;
-                     grabbedObject.GetComponentInChildren<UInteraction>().Activate();
+                    if (grabbableObject != null) grabbable.uInteraction.Desactivate(); // magic ( ͡• ͜ʖ ͡• )
+                     grabbableObject = grabbable.transform.gameObject;
+                     grabbableClass = grabbable;
+                     
+                     grabbableClass.uInteraction.Activate();
                 }
             }
             else {
-                if (grabbedObject == null) return;
-                grabbedObject.GetComponentInChildren<UInteraction>().Desactivate();
-                grabbedObject = null;
+                if (grabbableObject == null) return;
+                
+                grabbableClass.uInteraction.Desactivate();
+                grabbableObject = null;
 
             }
         }
 
         private void FixedUpdate() {
             if (isGrabbing) {
-                grabbableRigidbody.velocity = (grabbableTarget.position - grabbedObject.transform.position) * 10;
+                grabbedRigidbody.velocity = (grabbableTarget.position - grabbableObject.transform.position) * 10;
             }
         }
 
         public void DoGrab() {
-            if (grabbedObject == null) return;
+            if (grabbableObject == null) return;
 
-            grabbableRigidbody = grabbedObject.GetComponent<Rigidbody>();
-            grabbableRigidbody.useGravity = false;
-            grabbableRigidbody.isKinematic = false;
+            grabbedRigidbody = grabbableObject.GetComponent<Rigidbody>();
+            grabbedRigidbody.useGravity = false;
+            grabbedRigidbody.isKinematic = false;
 
-            grabbedObject.GetComponentInChildren<UInteraction>().Desactivate();
+            grabbableClass.uInteraction.Desactivate();
 
             isGrabbing = true;
             ObjectsReference.Instance.audioManager.PlayEffect(SoundEffectType.GRAB_SOMETHING, 0);
@@ -51,14 +55,14 @@ namespace InGame.Interactions {
 
         public void Release() {
             // let the object fall
-            if (grabbedObject == null) return;
+            if (grabbableObject == null) return;
 
-            grabbableRigidbody = grabbedObject.GetComponent<Rigidbody>();
-            grabbableRigidbody.useGravity = true;
-            grabbableRigidbody.velocity = Vector3.zero;
+            grabbedRigidbody = grabbableObject.GetComponent<Rigidbody>();
+            grabbedRigidbody.useGravity = true;
+            grabbedRigidbody.velocity = Vector3.zero;
 
-            grabbedObject.GetComponentInChildren<UInteraction>().Desactivate();
-            grabbedObject = null;
+            grabbableClass.uInteraction.Desactivate();
+            grabbableObject = null;
             isGrabbing = false;
         }
     }

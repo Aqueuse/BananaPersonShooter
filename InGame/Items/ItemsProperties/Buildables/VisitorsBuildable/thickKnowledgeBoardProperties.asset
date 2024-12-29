@@ -12,15 +12,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6e11e44741351774ca1f8261e4d989f1, type: 3}
   m_Name: thickKnowledgeBoardProperties
   m_EditorClassIdentifier: 
-  gameObjectTag: 11
+  gameObjectTag: 6
   itemCategory: 1
   bananaType: 0
   droppedType: 0
   ingredientsType: 0
   manufacturedItemsType: 0
   rawMaterialType: 0
-  buildableType: 12
+  buildableType: 11
   foodType: 0
+  isAspirable: 0
   itemName:
   - modern information panel
   - panneau d'informations moderne
@@ -33,7 +34,7 @@ MonoBehaviour:
   bitKongValue: 0
   rawMaterialsWithQuantity:
     list:
-    - key: 0
+    - key: {fileID: 11400000, guid: 9b2d672be4f975f49b3bd109607666ae, type: 2}
       value: 4
     keyCollision: 0
   buildablePrefab: {fileID: 3376277238409772002, guid: f2a91b7ede231154c99d15222202cd73, type: 3}

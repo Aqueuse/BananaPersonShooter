@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using InGame.Items.ItemsProperties.Buildables.VisitorsBuildable;
+using InGame.Items.ItemsProperties.Buildables;
 using UnityEngine;
 
 namespace InGame.Items.ItemsBehaviours.BuildablesBehaviours {
@@ -13,7 +13,7 @@ namespace InGame.Items.ItemsBehaviours.BuildablesBehaviours {
         public Transform ChimpTargetLookAtTransform;
 
         public bool isVisitorTargetable;
-        public VisitorsBuildablePropertiesScriptableObject visitorsBuildablePropertiesScriptableObject;
+        public BuildablePropertiesScriptableObject buildablePropertiesScriptableObject; 
         
         public bool isPirateTargeted;
         public bool isVisitorTargeted;
@@ -42,8 +42,28 @@ namespace InGame.Items.ItemsBehaviours.BuildablesBehaviours {
             isBreaked = false;
             isPirateTargeted = false;
 
+            foreach (var craftingIngredient in buildablePropertiesScriptableObject.rawMaterialsWithQuantity) {
+                ObjectsReference.Instance.bananaManRawMaterialInventory.RemoveQuantity(
+                    craftingIngredient.Key, 
+                    craftingIngredient.Value);
+                
+                ObjectsReference.Instance.uiQueuedMessages.RemoveFromInventory(
+                    craftingIngredient.Key, 
+                    craftingIngredient.Value
+                );
+                ObjectsReference.Instance.uiFlippers.RefreshActiveBuildableAvailability();
+            }
+            
             foreach (var meshRenderer in meshRenderersToBreak) {
                 meshRenderer.material.SetFloat(crackOpacity, 0);
+            }
+        }
+
+        public virtual void RetrieveRawMaterials() {
+            foreach (var craftingMaterial in buildablePropertiesScriptableObject.rawMaterialsWithQuantity) {
+                for (int i = 0; i < craftingMaterial.Value; i++) {
+                    Instantiate(craftingMaterial.Key.prefab);
+                }
             }
         }
         

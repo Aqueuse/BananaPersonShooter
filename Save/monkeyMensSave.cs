@@ -53,7 +53,7 @@ namespace Save {
                     ObjectsReference.Instance.meshReferenceScriptableObject.monkeyMenPrefabByMonkeyMenType[monkeymen.monkeyMenType],
                     position: monkeyMenData.position,
                     rotation: monkeyMenData.rotation,
-                    parent: ObjectsReference.Instance.gameSave.chimpmensContainer
+                    parent: ObjectsReference.Instance.gameSave.savablesItemsContainer
                 );
 
                 monkeymenInstance.GetComponent<MonkeyMenBehaviour>().monkeyMenData = monkeyMenData;
@@ -69,8 +69,8 @@ namespace Save {
             }
             
             // refresh after eventually removing unpopulated spaceships
-            ObjectsReference.Instance.uIcommunication.RefreshCommunicationButton();
-            ObjectsReference.Instance.uIcommunication.RefreshHangarAvailability();
+            ObjectsReference.Instance.uiCommunicationPanel.RefreshCommunicationButton();
+            ObjectsReference.Instance.uiCommunicationPanel.RefreshHangarAvailability();
         }
         
         public void SaveMonkeyMens(string saveUuid) {
@@ -79,7 +79,7 @@ namespace Save {
 
             var monkeyMenSavedDatas = new List<MonkeyMenSavedData>();
 
-            var monkeyMensBehaviours = FindObjectsOfType<MonkeyMenBehaviour>();
+            var monkeyMensBehaviours = ObjectsReference.Instance.gameSave.savablesItemsContainer.GetComponentsInChildren<MonkeyMenBehaviour>();
             
             foreach (var monkeyMenBehaviour in monkeyMensBehaviours) {
                 monkeyMenBehaviour.GenerateSavedData();

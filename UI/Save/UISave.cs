@@ -5,7 +5,6 @@ namespace UI.Save {
     public class UISave : MonoBehaviour {
         [SerializeField] private GameObject savePrefab;
         public GameObject newSaveButton;
-        public UISaveSlot selectedSaveSlot;
         
         public void UnselectAll() {
             foreach (var saveSlot in GetComponentsInChildren<UISaveSlot>()) {

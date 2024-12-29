@@ -45,7 +45,7 @@ namespace InGame.Bananas.Regimes {
         }
 
         private void OnTriggerEnter(Collider other) {
-            if (!TagsManager.Instance.HasTag(other.gameObject, GAME_OBJECT_TAG.BUILD_UNVALID)) {
+            if (other.gameObject.layer == 0) {
                 _verticalState = _verticalState == VerticalState.UP ? VerticalState.DOWN : VerticalState.UP;
             }
         }

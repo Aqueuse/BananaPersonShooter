@@ -27,7 +27,7 @@ namespace InGame.Monkeys {
                     if (buildable.isBreaked) return;
                     if (!CanReachBuildable(_navMeshAgent, buildable.ChimpTargetTransform.position)) return;
                     
-                    if (buildable.visitorsBuildablePropertiesScriptableObject.buildableType == BuildableType.GUICHET) {
+                    if (buildable.buildablePropertiesScriptableObject.buildableType == BuildableType.GUICHET) {
                         monkeyMenBehaviour.monkeyMenData.destination = buildable.ChimpTargetTransform.position;
                         monkeyMenBehaviour.monkeyMenData.touristState = TouristState.GO_TO_WAITING_LINE;
                         monkeyMenBehaviour.monkeyMenData.pirateState = PirateState.GO_TO_WAITING_LINE;

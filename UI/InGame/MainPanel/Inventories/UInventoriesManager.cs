@@ -53,6 +53,9 @@ namespace UI.InGame.MainPanel.Inventories {
                 case DroppedType.BLUEPRINT:
                     ObjectsReference.Instance.bananaManUiBlueprintsInventory.SelectFirstSlot(lastFocusedBlueprintInventory);
                     break;
+                case DroppedType.FOOD:
+                    ObjectsReference.Instance.bananaManUiFoodInventory.SelectFirstSlot();
+                    break;
             }
         }
         
@@ -60,6 +63,7 @@ namespace UI.InGame.MainPanel.Inventories {
         public void SwitchToRawMaterialsInventory() { SwitchToInventoryTab(DroppedType.RAW_MATERIAL); }
         public void SwitchToIngredientsInventory() { SwitchToInventoryTab(DroppedType.INGREDIENTS); }
         public void SwitchToManufacturedItemsInventory() { SwitchToInventoryTab(DroppedType.MANUFACTURED_ITEMS); }
+        public void SwitchToFoodInventory() { SwitchToInventoryTab(DroppedType.FOOD); }
         public void SwitchToBuildablesInventory() { SwitchToInventoryTab(DroppedType.BLUEPRINT); }
 
         public void SwitchToInventoryTab(DroppedType droppedType) {
@@ -84,6 +88,9 @@ namespace UI.InGame.MainPanel.Inventories {
                     break;
                 case DroppedType.MANUFACTURED_ITEMS:
                     ObjectsReference.Instance.bananaManUiManufacturedItemsInventory.RefreshUInventory();
+                    break;
+                case DroppedType.FOOD:
+                    ObjectsReference.Instance.bananaManUiFoodInventory.RefreshUInventory();
                     break;
                 case DroppedType.BLUEPRINT:
                     ObjectsReference.Instance.bananaManUiBlueprintsInventory.RefreshUInventory(lastFocusedBlueprintInventory);

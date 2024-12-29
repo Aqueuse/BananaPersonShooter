@@ -1,4 +1,5 @@
 ﻿using InGame.Bananas;
+using InGame.Items.ItemsBehaviours.DroppedBehaviours;
 using InGame.Items.ItemsProperties.Monkeys;
 using Tags;
 using UnityEngine;
@@ -81,10 +82,10 @@ namespace InGame.Monkeys.Ancestors {
         }
 
         private void OnTriggerEnter(Collider other) {
-            if (!TagsManager.Instance.HasTag(other.gameObject, GAME_OBJECT_TAG.BANANA)) return;
-
-            Feed(other.GetComponent<Banana>().bananasDataScriptableObject.sasiety);
-            Destroy(other.gameObject);
+            if (other.TryGetComponent(out BananaBehaviour bananaBehaviour)) {
+                Feed(bananaBehaviour.bananasPropertiesScriptableObject.sasiety);
+                Destroy(bananaBehaviour.gameObject);
+            }
         }
     }
 }

@@ -1,16 +1,33 @@
 using System;
 using InGame.Items.ItemsBehaviours;
 using InGame.Items.ItemsBehaviours.BuildablesBehaviours;
+using InGame.Items.ItemsProperties;
+using Tags;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 namespace InGame.Player.BananaGunActions {
     public class Build : MonoBehaviour {
+        public GameObject targetedGameObject;
+
+        [SerializeField] private LayerMask GestionViewSelectableLayerMask;
+
+        private Mesh _targetedGameObjectMesh;
+        private BananaType _targetType;
+
+        private GenericDictionary<ItemScriptableObject, int> rawMaterialsWithQuantity;
+        private GenericDictionary<ItemScriptableObject, int> craftingMaterials;
+        
+        private Regime regimeClass;
+        private Tag gameObjectTagClass;
+        private GAME_OBJECT_TAG gameObjectTag;
+
         [SerializeField] private LayerMask buildingLayerMask;
         [SerializeField] private Camera mainCamera;
         
         [SerializeField] private GhostsReference ghostsReference;
-        
+
+        public bool isBuilding;
         public GameObject _activeGhost;
         private Ghost _activeGhostClass;
         public BuildableType buildableType;
@@ -22,9 +39,18 @@ namespace InGame.Player.BananaGunActions {
         
         private GameObject _buildable;
         
-        private void Update() {
-            if (_activeGhost == null) return;
+        private void OnEnable() {
+            ObjectsReference.Instance.uInventoriesManager.GetCurrentUIHelper().ShowBuildHelper();
 
+            SetActiveBuildable(ObjectsReference.Instance.bananaMan.bananaManData.activeBuildable);
+            ActivateGhost();
+        }
+
+        private void OnDisable() {
+            HideGhost();
+        }
+
+        private void Update() {
             ray = mainCamera.ScreenPointToRay(Mouse.current.position.value);
 
             _activeGhost.transform.position = ObjectsReference.Instance.build.buildablePlacementTransform.position;
@@ -34,17 +60,26 @@ namespace InGame.Player.BananaGunActions {
             if (Physics.Raycast(ray, out raycastHit, distance, layerMask:buildingLayerMask)) {
                 _activeGhost.transform.position = raycastHit.point;
             }
+
+            if (Physics.Raycast(mainCamera.transform.position, mainCamera.transform.forward, out raycastHit, 2000, layerMask: GestionViewSelectableLayerMask)) {
+                targetedGameObject = raycastHit.transform.gameObject;
+                ObjectsReference.Instance.uInventoriesManager.GetCurrentUIHelper().ShowRetrieveConfirmation();
+            }
+            else {
+                targetedGameObject = null;
+                ObjectsReference.Instance.uInventoriesManager.GetCurrentUIHelper().ShowDefaultHelper();
+            }
         }
 
         public void SetActiveBuildable(BuildableType buildableType) {
             this.buildableType = buildableType;
         }
 
-        public void ActivateGhost() {
+        private void ActivateGhost() {
             _activeGhost = ghostsReference.GetGhostByBuildableType(buildableType);
             _activeGhostClass = _activeGhost.GetComponent<Ghost>();
             
-            if (ObjectsReference.Instance.bananaManRawMaterialInventory.HasCraftingIngredients(buildableType)) {
+            if (ObjectsReference.Instance.bananaManRawMaterialInventory.HasCraftingIngredients(_activeGhostClass.buildablePropertiesScriptableObject)) {
                 _activeGhostClass.SetGhostState(GhostState.VALID);
                 ObjectsReference.Instance.uInventoriesManager.GetCurrentUIHelper().ShowNormalPlaceHelper();
                 ObjectsReference.Instance.uiFlippers.SetBuildablePlacementAvailability(true, _activeGhostClass.buildablePropertiesScriptableObject);
@@ -56,64 +91,99 @@ namespace InGame.Player.BananaGunActions {
             }
         }
 
-        public void CancelGhost() {
-            if (_activeGhost != null) {
-                _activeGhost.transform.position = ghostsReference.transform.position;
-                _activeGhost.transform.rotation = Quaternion.identity;
-            }
+        public void HideGhost() {
+            if (_activeGhost == null) return;
             
-            _activeGhost = null;
+            _activeGhost.transform.position = ghostsReference.transform.position;
+            _activeGhost.transform.rotation = Quaternion.identity;
         }
 
         public void RotateGhost(Vector3 rotationVector) {
-            if (_activeGhost == null) return;
-            
             _activeGhost.transform.RotateAround(_activeGhost.transform.position, rotationVector, 30f);
         }
 
         public void ValidateBuildable() {
-            if (_activeGhost == null) return;
-
             if (_activeGhostClass.GetGhostState() == GhostState.VALID) {
-                _buildable = Instantiate(original: _activeGhostClass.buildablePropertiesScriptableObject.buildablePrefab,
-                    position: _activeGhost.transform.position, rotation: _activeGhost.transform.rotation);
-
-                _buildable.transform.parent = ObjectsReference.Instance.gameSave.buildablesSave.buildablesContainer.transform;
+                _buildable = Instantiate(
+                    _activeGhostClass.buildablePropertiesScriptableObject.buildablePrefab,
+                    _activeGhost.transform.position, 
+                    _activeGhost.transform.rotation,
+                    ObjectsReference.Instance.gameSave.savablesItemsContainer
+                );
 
                 var _craftingIngredients = _activeGhostClass.buildablePropertiesScriptableObject.rawMaterialsWithQuantity;
 
                 foreach (var craftingIngredient in _craftingIngredients) {
-                    ObjectsReference.Instance.bananaManRawMaterialInventory.RemoveQuantity(craftingIngredient.Key,
-                        craftingIngredient.Value);
+                    ObjectsReference.Instance.bananaManRawMaterialInventory.RemoveQuantity(
+                        craftingIngredient.Key,
+                        craftingIngredient.Value
+                    );
                     
                     ObjectsReference.Instance.uiQueuedMessages.RemoveFromInventory(
-                        ObjectsReference.Instance.meshReferenceScriptableObject.rawMaterialPropertiesScriptableObjects[craftingIngredient.Key], 
+                        craftingIngredient.Key, 
                         craftingIngredient.Value
                     );
                     ObjectsReference.Instance.uiFlippers.RefreshActiveBuildableAvailability();
                 }
 
                 _buildable.GetComponent<BuildableBehaviour>().buildableGuid = Guid.NewGuid().ToString();
-                
-                _activeGhost.transform.position = ghostsReference.transform.position;
-                _activeGhost = null;
+            }
+        }
+        
+        public void RepairOrHarvest() {
+            if (targetedGameObject == null) return;
+
+            gameObjectTagClass = targetedGameObject.GetComponent<Tag>();
+            gameObjectTag = gameObjectTagClass.gameObjectTag;
+            
+            if (gameObjectTag == GAME_OBJECT_TAG.BUILDABLE) {
+                if (targetedGameObject.TryGetComponent(out BuildableBehaviour buildableBehaviour)) {
+                    if (buildableBehaviour.isBreaked) {
+                        TryToRepairBuildable(buildableBehaviour);
+                    }
+                    
+                    else {
+                        harvest(gameObjectTagClass.itemScriptableObject);
+                    }
+                }
+            }
+
+            else {
+                harvest(gameObjectTagClass.itemScriptableObject);
             }
         }
 
-        public void CancelBuild() {
-            CancelGhost();
-            ObjectsReference.Instance.bananaGun.UngrabBananaGun();
-        }
+        public void harvest(ItemScriptableObject itemScriptableObject) {
+            if (itemScriptableObject.itemCategory == ItemCategory.BUILDABLE) {
+                targetedGameObject.GetComponent<BuildableBehaviour>().RetrieveRawMaterials();
+                
+                DestroyImmediate(targetedGameObject);
+                targetedGameObject = null;
+                
+                ObjectsReference.Instance.uInventoriesManager.GetCurrentUIHelper().HideRetrieveConfirmation();
+                ObjectsReference.Instance.audioManager.PlayEffect(SoundEffectType.TAKE_SOMETHING, 0);
 
-        public void setGhostColor() {
+                ObjectsReference.Instance.uiFlippers.RefreshActiveDroppableQuantity();
+
+                ObjectsReference.Instance.build.setGhostColor();
+            }
+        }
+        
+        private void TryToRepairBuildable(BuildableBehaviour buildableBehaviour) {
+            if (!ObjectsReference.Instance.bananaManRawMaterialInventory.HasCraftingIngredients(buildableBehaviour.buildablePropertiesScriptableObject)) return;
+            
+            ObjectsReference.Instance.audioManager.PlayEffect(SoundEffectType.TAKE_SOMETHING, 0);
+            
+            buildableBehaviour.RepairBuildable();
+        }
+        
+        private void setGhostColor() {
             if (_activeGhost != null)
-                if (ObjectsReference.Instance.bananaManRawMaterialInventory.HasCraftingIngredients(_activeGhostClass.buildablePropertiesScriptableObject.buildableType)) {
-                    _activeGhostClass.SetGhostState(GhostState.VALID);
-                }
-                else {
-                    if (_activeGhostClass.GetGhostState() != GhostState.UNBUILDABLE)
-                        _activeGhostClass.SetGhostState(GhostState.NOT_ENOUGH_MATERIALS);
-                }
+                _activeGhostClass.SetGhostState(
+                    ObjectsReference.Instance.bananaManRawMaterialInventory.HasCraftingIngredients(_activeGhostClass
+                        .buildablePropertiesScriptableObject)
+                        ? GhostState.VALID
+                        : GhostState.NOT_ENOUGH_MATERIALS);
         }
     }
 }

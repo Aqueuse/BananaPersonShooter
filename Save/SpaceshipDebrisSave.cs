@@ -10,7 +10,6 @@ using UnityEngine;
 namespace Save {
     public class SpaceshipDebrisSave : MonoBehaviour {
         private string _savePath;
-        private Transform debrisContainer;
 
         private GameObject spaceshipDebrisToSpawn;
         private GameObject spaceshipDebrisInstance;
@@ -19,11 +18,7 @@ namespace Save {
         public GenericDictionary<SpaceshipType, List<string>> spaceshipDebrisDataDictionnaryBySpaceshipType;
 
         private string[] _buildablesDatas;
-
-        private void Start() {
-            debrisContainer = ObjectsReference.Instance.gameSave.debrisContainer;
-        }
-
+        
         public void LoadSpaceshipDebrisDataByUuid(string saveUuid) {
             _savePath = Path.Combine(ObjectsReference.Instance.gameSave._savesPath, saveUuid);
             var saveMapDatasPath = Path.Combine(_savePath, "WORLD_DATA");
@@ -60,7 +55,7 @@ namespace Save {
             
             var savefilePath = Path.Combine(mapDataSavesPath, "spaceshipDebris.json");
             
-            var spaceshipDebrisBehaviours = debrisContainer.GetComponentsInChildren<SpaceshipDebrisBehaviour>();
+            var spaceshipDebrisBehaviours = ObjectsReference.Instance.gameSave.savablesItemsContainer.GetComponentsInChildren<SpaceshipDebrisBehaviour>();
 
             spaceshipDebrisDataDictionnaryBySpaceshipType.Clear();
             
@@ -98,7 +93,7 @@ namespace Save {
                         spaceshipDebrisToSpawn, 
                         JsonHelper.FromStringToVector3(spaceshipDebrisData.spaceshipDebrisPosition),
                         JsonHelper.FromStringToQuaternion(spaceshipDebrisData.spaceshipDebrisRotation),
-                        debrisContainer
+                        ObjectsReference.Instance.gameSave.savablesItemsContainer
                     );
                     
                     spaceshipDebrisBehaviourInstance = spaceshipDebrisInstance.GetComponent<SpaceshipDebrisBehaviour>();
@@ -125,9 +120,7 @@ namespace Save {
         public void SpawnInitialSpaceshipDebris() {
             Instantiate(
                 ObjectsReference.Instance.worldData.initialSpaceshipDebrisOnWorld,
-                debrisContainer.transform.position,
-                debrisContainer.transform.rotation,
-                debrisContainer
+                ObjectsReference.Instance.gameSave.savablesItemsContainer
             );
         }
     }

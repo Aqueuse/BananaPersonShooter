@@ -39,9 +39,10 @@ namespace InGame.Player {
             bananaManData.activeIngredient = itemScriptableObject.ingredientsType;
             bananaManData.activeRawMaterial = itemScriptableObject.rawMaterialType;
             bananaManData.activeManufacturedItem = itemScriptableObject.manufacturedItemsType;
+            bananaManData.activeFood = itemScriptableObject.foodType;
             
             ObjectsReference.Instance.uiFlippers.SetDroppableSprite(itemScriptableObject.GetSprite());
-            ObjectsReference.Instance.inventoriesHelper.GetQuantity(itemScriptableObject);
+            ObjectsReference.Instance.uiFlippers.SetDroppableQuantity(itemScriptableObject);
         }
 
         public void GainHealth(BananaType bananaType) {
@@ -51,8 +52,11 @@ namespace InGame.Player {
                 
                 health += bananaData.healthBonus;
 
-                ObjectsReference.Instance.BananaManBananasInventory.RemoveQuantity(bananaType, 1);
-                ObjectsReference.Instance.bananaManRawMaterialInventory.AddQuantity(RawMaterialType.BANANA_PEEL, 1);
+                ObjectsReference.Instance.BananaManBananasInventory.RemoveQuantity(bananaManData.activeDroppableItem, 1);
+                ObjectsReference.Instance.bananaManRawMaterialInventory.AddQuantity(
+                    ObjectsReference.Instance.meshReferenceScriptableObject.
+                        rawMaterialPropertiesScriptableObjects[RawMaterialType.BANANA_PEEL], 1);
+                
                 SetBananaSkinHealth();
                 ObjectsReference.Instance.audioManager.PlayEffect(SoundEffectType.EAT_BANANA, 0);
             }

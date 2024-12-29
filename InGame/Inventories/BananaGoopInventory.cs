@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace InGame.Inventory {
+namespace InGame.Inventories {
     public class BananaGoopInventory : MonoBehaviour {
         public Dictionary<BananaEffect, int> bananaGoopInventory = new () {
             {BananaEffect.ATTRACTION, 0},

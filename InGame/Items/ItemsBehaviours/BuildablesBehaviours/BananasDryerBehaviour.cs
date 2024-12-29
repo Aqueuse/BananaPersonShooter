@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using InGame.Items.ItemsBehaviours.DroppedBehaviours;
 using InGame.Items.ItemsData.BuildablesData;
+using InGame.Items.ItemsProperties;
 using Newtonsoft.Json;
 using Save.Helpers;
 using UnityEngine;
@@ -11,6 +12,9 @@ namespace InGame.Items.ItemsBehaviours.BuildablesBehaviours {
         [SerializeField] private GameObject fabricPrefab;
         [SerializeField] private int conversionDuration;
 
+        [SerializeField] private ItemScriptableObject fabricScriptableObject;
+        [SerializeField] private ItemScriptableObject bananaPeelScriptableObject;
+        
         public List<BananaDryerSlot> slots;
         
         [SerializeField] private GameObject[] bananaPeel;
@@ -95,37 +99,53 @@ namespace InGame.Items.ItemsBehaviours.BuildablesBehaviours {
                     fabric[i].SetActive(false);
                     bananaPeel[i].SetActive(false);
 
-                    ObjectsReference.Instance.bananaManRawMaterialInventory.AddQuantity(RawMaterialType.FABRIC, 1);
-
-                    switch (slots[i].bananaEffect) {
-                        case BananaEffect.ATTRACTION:
-                            ObjectsReference.Instance.bananaManRawMaterialInventory.AddQuantity(RawMaterialType.YELLOW_DYE, 1);
-                            break;
-                        case BananaEffect.REPULSION:
-                            ObjectsReference.Instance.bananaManRawMaterialInventory.AddQuantity(RawMaterialType.GREEN_DYE, 1);
-                            break;
-                        case BananaEffect.SLOW:
-                            ObjectsReference.Instance.bananaManRawMaterialInventory.AddQuantity(RawMaterialType.BLUE_DYE, 1);
-                            break;
-                        case BananaEffect.FAST:
-                            ObjectsReference.Instance.bananaManRawMaterialInventory.AddQuantity(RawMaterialType.RED_DYE, 1);
-                            break;
-                    }
+                    Instantiate(
+                        fabricPrefab,
+                        fabric[i].transform.position - Vector3.forward,
+                        fabric[i].transform.rotation,
+                        ObjectsReference.Instance.gameSave.savablesItemsContainer
+                    );
+                    
+                    Instantiate(
+                        ObjectsReference.Instance.meshReferenceScriptableObject.DyePrefabByBananaEffect[colorants[i]],
+                        fabric[i].transform.position - Vector3.forward,
+                        fabric[i].transform.rotation,
+                        ObjectsReference.Instance.gameSave.savablesItemsContainer
+                    );
                     
                     break;
                 }
             }
         }
         
-        public void RetrieveRawMaterials() {
+        public override void RetrieveRawMaterials() {
+            base.RetrieveRawMaterials();
+            
             for (var i = 0; i < 20; i++) {
                 if (slots[i].hasFabric) {
-                    ObjectsReference.Instance.bananaManRawMaterialInventory.AddQuantity(RawMaterialType.FABRIC, 1);
+                    Instantiate(
+                        fabricScriptableObject.prefab,
+                        fabric[i].transform.position - Vector3.forward,
+                        fabric[i].transform.rotation,
+                        ObjectsReference.Instance.gameSave.savablesItemsContainer
+                    );
+                    
+                    Instantiate(
+                        ObjectsReference.Instance.meshReferenceScriptableObject.DyePrefabByBananaEffect[colorants[i]],
+                        fabric[i].transform.position - Vector3.forward,
+                        fabric[i].transform.rotation,
+                        ObjectsReference.Instance.gameSave.savablesItemsContainer
+                    );
                 }
 
                 else {
                     if (slots[i].hasBananaPeel) {
-                        ObjectsReference.Instance.bananaManRawMaterialInventory.AddQuantity(RawMaterialType.BANANA_PEEL, 1);
+                        Instantiate(
+                            bananaPeelScriptableObject.prefab,
+                            fabric[i].transform.position - Vector3.forward,
+                            fabric[i].transform.rotation,
+                            ObjectsReference.Instance.gameSave.savablesItemsContainer
+                        );
                     }
                 }
             }

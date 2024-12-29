@@ -11,7 +11,7 @@ namespace UI.InGame.MainPanel.Inventories {
         
         public void Activate() {
             if (ObjectsReference.Instance.gameManager.gameContext == GameContext.IN_GESTION_VIEW) return;
-
+            
             ObjectsReference.Instance.bananaMan.SetActiveDropped(itemScriptableObject);
             ObjectsReference.Instance.uiFlippers.SetDroppableItem(itemScriptableObject);
         }

@@ -7,8 +7,6 @@ using UnityEngine;
 
 namespace Save {
     public class BuildablesSave : MonoBehaviour {
-        public GameObject buildablesContainer;
-
         private string _savePath;
         
         private GameObject buildableToSpawn;
@@ -47,22 +45,11 @@ namespace Save {
         }
         
         private void RespawnBuildablesOnWorld() {
-            DestroyImmediate(buildablesContainer);
-
-            buildablesContainer = new GameObject("Buildables container") {
-                transform = {
-                    parent = transform.parent
-                }
-            };
-            
-            // TODO : really necessary to create buildablesDictionnary ?
-            var buildablesDictionnary = buildablesDataDictionaryByBuildableType;
-
-            foreach (var buildableList in buildablesDictionnary) {
+            foreach (var buildableList in buildablesDataDictionaryByBuildableType) {
                 foreach (var buildableString in buildableList.Value) {
                     buildableToSpawn = ObjectsReference.Instance.meshReferenceScriptableObject.buildablePrefabByBuildableType[buildableList.Key];
 
-                    buildableInstance = Instantiate(buildableToSpawn, buildablesContainer.transform, true);
+                    buildableInstance = Instantiate(buildableToSpawn, ObjectsReference.Instance.gameSave.savablesItemsContainer, true);
                     buildableInstance.GetComponent<BuildableBehaviour>().LoadSavedData(buildableString);
                 }
             }
@@ -94,10 +81,14 @@ namespace Save {
         }
 
         public void SpawnInitialBuildables() {
-            buildableInstance = Instantiate(ObjectsReference.Instance.worldData.initialBuildablesOnWorld, buildablesContainer.transform, true);
+            buildableInstance = Instantiate(
+                ObjectsReference.Instance.worldData.initialBuildablesOnWorld,
+                ObjectsReference.Instance.gameSave.savablesItemsContainer, 
+                true
+            );
             
-            buildableInstance.transform.position = buildablesContainer.transform.position;
-            buildableInstance.transform.rotation = buildablesContainer.transform.rotation;
+            buildableInstance.transform.position = ObjectsReference.Instance.gameSave.savablesItemsContainer.position;
+            buildableInstance.transform.rotation = ObjectsReference.Instance.gameSave.savablesItemsContainer.rotation;
         }
     }
 }

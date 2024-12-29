@@ -1,4 +1,4 @@
-using InGame.Inventory;
+using InGame.Inventories;
 using InGame.Items.ItemsProperties;
 using UI.InGame.Merchimps;
 using UnityEngine;

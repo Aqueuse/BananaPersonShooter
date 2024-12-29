@@ -12,15 +12,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6e11e44741351774ca1f8261e4d989f1, type: 3}
   m_Name: bench02NoBackProperties
   m_EditorClassIdentifier: 
-  gameObjectTag: 11
+  gameObjectTag: 6
   itemCategory: 1
   bananaType: 0
   droppedType: 0
   ingredientsType: 0
   manufacturedItemsType: 0
   rawMaterialType: 0
-  buildableType: 7
+  buildableType: 6
   foodType: 0
+  isAspirable: 0
   itemName:
   - bench
   - banc
@@ -33,7 +34,7 @@ MonoBehaviour:
   bitKongValue: 0
   rawMaterialsWithQuantity:
     list:
-    - key: 0
+    - key: {fileID: 11400000, guid: 9b2d672be4f975f49b3bd109607666ae, type: 2}
       value: 10
     keyCollision: 0
   buildablePrefab: {fileID: 6910336428813764717, guid: 1ce4fc0f5cb3ab94f9b6bff44b68706d, type: 3}

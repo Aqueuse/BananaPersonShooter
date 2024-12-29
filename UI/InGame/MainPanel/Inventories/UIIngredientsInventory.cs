@@ -1,4 +1,4 @@
-using InGame.Inventory;
+using InGame.Inventories;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -24,8 +24,6 @@ namespace UI.InGame.MainPanel.Inventories {
         }
         
         public void Activate() {
-            ObjectsReference.Instance.uInventoriesManager.lastFocusedInventory = DroppedType.INGREDIENTS;
-        
             inventoryPanelCanvasGroup.alpha = 1;
             inventoryPanelCanvasGroup.interactable = true;
             inventoryPanelCanvasGroup.blocksRaycasts = true;

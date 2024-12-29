@@ -50,8 +50,6 @@ namespace UI.InGame.MainPanel.Inventories {
         }
 
         public void Activate() {
-            ObjectsReference.Instance.uInventoriesManager.lastFocusedInventory = DroppedType.BLUEPRINT;
-        
             buildablePanelCanvasGroup.alpha = 1;
             buildablePanelCanvasGroup.interactable = true;
             buildablePanelCanvasGroup.blocksRaycasts = true;

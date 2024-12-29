@@ -7,8 +7,6 @@ using UnityEngine;
 
 namespace Save.Dropped {
     public class DroppedRawMaterialsSave : MonoBehaviour {
-        public GameObject rawMaterialsContainer;
-    
         private string _savePath;
 
         private GameObject rawMaterialToSpawn;
@@ -47,19 +45,11 @@ namespace Save.Dropped {
         }
 
         private void RespawnRawMaterialsOnWorld() {
-            DestroyImmediate(rawMaterialsContainer);
-
-            rawMaterialsContainer = new GameObject("RawMaterials container") {
-                transform = {
-                    parent = transform.parent
-                }
-            };
-
             foreach (var rawMaterialList in rawMaterialsDataDictionaryByRawMaterialType) {
                 foreach (var rawMaterialString in rawMaterialList.Value) {
                     rawMaterialToSpawn = ObjectsReference.Instance.meshReferenceScriptableObject.rawMaterialPrefabByRawMaterialType[rawMaterialList.Key];
                     
-                    rawMaterialInstance = Instantiate(rawMaterialToSpawn, rawMaterialsContainer.transform, true);
+                    rawMaterialInstance = Instantiate(rawMaterialToSpawn, ObjectsReference.Instance.gameSave.savablesItemsContainer, true);
                     rawMaterialInstance.GetComponent<RawMaterialBehaviour>().LoadSavedData(rawMaterialString);
                 }
             }
@@ -71,7 +61,7 @@ namespace Save.Dropped {
             
             var savefilePath = Path.Combine(mapDataSavesPath, "rawMaterials.json");
             
-            var rawMaterialBehaviours = FindObjectsByType<RawMaterialBehaviour>(FindObjectsSortMode.None);
+            var rawMaterialBehaviours = ObjectsReference.Instance.gameSave.savablesItemsContainer.GetComponentsInChildren<RawMaterialBehaviour>();
             
             rawMaterialsDataDictionaryByRawMaterialType.Clear();
 

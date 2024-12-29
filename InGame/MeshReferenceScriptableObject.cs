@@ -14,8 +14,10 @@ namespace InGame {
         public GenericDictionary<BuildableType, GameObject> buildablePrefabByBuildableType;
         public GenericDictionary<BananaType, GameObject> bananaPrefabByBananaType;
         public GenericDictionary<RawMaterialType, GameObject> rawMaterialPrefabByRawMaterialType;
+        public GenericDictionary<BananaEffect, GameObject> DyePrefabByBananaEffect;
         public GenericDictionary<IngredientsType, GameObject> ingredientPrefabByIngredientType;
         public GenericDictionary<ManufacturedItemsType, GameObject> manufacturedItemPrefabByManufacturedItemType;
+        public GenericDictionary<FoodType, GameObject> foodPrefabByFoodType;
         public GenericDictionary<MeteoriteType, GameObject> meteoritePrefabByMeteoriteType;
         
         public GenericDictionary<BuildableType, BuildablePropertiesScriptableObject> buildablePropertiesScriptableObjects;
@@ -24,6 +26,7 @@ namespace InGame {
         public GenericDictionary<ManufacturedItemsType, ItemScriptableObject> manufacturedItemsPropertiesScriptableObjects;
         public GenericDictionary<IngredientsType, ItemScriptableObject> ingredientsPropertiesScriptableObjects;
         public GenericDictionary<FoodType, ItemScriptableObject> foodPropertiesScriptableObjects;
+        public GenericDictionary<BananaEffect, ItemScriptableObject> rawMaterialPropertiesByBananaEffect;
         
         public GenericDictionary<MonkeyMenType, GameObject> monkeyMenPrefabByMonkeyMenType;
         public GenericDictionary<SpaceshipType, GameObject> spaceshipPrefabBySpaceshipType;
@@ -68,6 +71,8 @@ namespace InGame {
                     return rawMaterialPrefabByRawMaterialType[ObjectsReference.Instance.bananaMan.bananaManData.activeRawMaterial];
                 case DroppedType.MANUFACTURED_ITEMS:
                     return manufacturedItemPrefabByManufacturedItemType[ObjectsReference.Instance.bananaMan.bananaManData.activeManufacturedItem];
+                case DroppedType.FOOD:
+                    return foodPrefabByFoodType[ObjectsReference.Instance.bananaMan.bananaManData.activeFood];
             }
 
             return bananaPrefabByBananaType[BananaType.CAVENDISH];

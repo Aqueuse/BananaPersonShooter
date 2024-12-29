@@ -12,7 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b2e529ee924f2b6439b07656d252d9d6, type: 3}
   m_Name: BlueprintProperties
   m_EditorClassIdentifier: 
-  gameObjectTag: 30
   itemCategory: 14
   bananaType: 0
   droppedType: 4
@@ -20,6 +19,9 @@ MonoBehaviour:
   manufacturedItemsType: 0
   rawMaterialType: 0
   buildableType: 0
+  foodType: 0
+  isAspirable: 1
+  prefab: {fileID: 8400163770358360760, guid: ca6d579fa2b78d24591bc9ce5e889192, type: 3}
   itemName:
   - blueprint
   - plan de construction

@@ -7,6 +7,6 @@ namespace InGame.MiniGames.MarketingCampaignMiniGame {
         
         private bool isAdCampaignAvailable;
 
-        [SerializeField] private UIMarketingPanel uiMarketingPanel;
+        [SerializeField] private UICommunicationPanel uiCommunicationPanel;
     }
 }

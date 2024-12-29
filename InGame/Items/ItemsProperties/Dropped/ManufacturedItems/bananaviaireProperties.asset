@@ -12,7 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b2e529ee924f2b6439b07656d252d9d6, type: 3}
   m_Name: bananaviaireProperties
   m_EditorClassIdentifier: 
-  gameObjectTag: 26
   itemCategory: 11
   bananaType: 0
   droppedType: 3
@@ -20,6 +19,9 @@ MonoBehaviour:
   manufacturedItemsType: 3
   rawMaterialType: 0
   buildableType: 0
+  foodType: 0
+  isAspirable: 1
+  prefab: {fileID: 8283342476129932777, guid: bfea9fcbb9e807f4aa66d9f17f73dfeb, type: 3}
   itemName:
   - chickanana
   - bananaviaire

@@ -5,11 +5,16 @@ using InGame.SpaceTrafficControl;
 using Newtonsoft.Json;
 using Save.Dropped;
 using Save.Templates;
+using Tags;
 using UnityEngine;
 
 namespace Save {
     public class GameSave : MonoBehaviour {
         [SerializeField] private GameObject autoSaveBanana;
+        [SerializeField] private GameObject savablesItemsContainerPrefab;
+
+        public Transform savablesItemsContainer;
+        
         public string _appPath;
         public string gamePath;
         public string _savesPath;
@@ -19,10 +24,6 @@ namespace Save {
         
         private SpaceTrafficControlManager spaceTrafficControlManager;
         
-        public Transform chimpmensContainer;
-        public Transform spaceshipsContainer;
-        public Transform debrisContainer;
-
         public DataSave dataSave;
         public PlayerSave playerSave;
         public BuildablesSave buildablesSave;
@@ -30,6 +31,7 @@ namespace Save {
         public DroppedBananaSave droppedBananaSave;
         public DroppedIngredientsSave droppedIngredientsSave;
         public DroppedManufacturedItemsSave droppedManufacturedItemSave;
+        public DroppedFoodSave droppedFoodSave;
         public DroppedRawMaterialsSave droppedRawMaterialSave;
         
         public WorldSave worldSave;
@@ -82,6 +84,7 @@ namespace Save {
             droppedRawMaterialSave.SaveRawMaterialData(saveUuid);
             droppedIngredientsSave.SaveIngredientsData(saveUuid);
             droppedManufacturedItemSave.SaveManufacturedItemData(saveUuid);
+            droppedFoodSave.SaveFoodData(saveUuid);
 
             buildablesSave.SaveBuildablesData(saveUuid);
             spaceshipsSave.SaveSpaceships(saveUuid);
@@ -147,6 +150,10 @@ namespace Save {
             
             playerSave.LoadPlayer(saveUuid);
             worldSave.LoadWorld(saveUuid);
+            
+            Destroy(TagsManager.GetAllGameObjectsWithTag(GAME_OBJECT_TAG.SAVABLES_ITEMS_CONTAINER)[0].gameObject);
+            savablesItemsContainer = Instantiate(savablesItemsContainerPrefab).transform;
+
             buildablesSave.LoadBuildablesDataByUuid(saveUuid);
             spaceshipDebrisSave.LoadSpaceshipDebrisDataByUuid(saveUuid);
             
@@ -154,6 +161,7 @@ namespace Save {
             droppedRawMaterialSave.LoadRawMaterialDataByUuid(saveUuid);
             droppedIngredientsSave.LoadIngredientsDataByUuid(saveUuid);
             droppedManufacturedItemSave.LoadManufacturedItemDataByUuid(saveUuid);
+            droppedFoodSave.LoadFoodDataByUuid(saveUuid);
             
             spaceshipsSave.LoadpaceshipsData(saveUuid);
             monkeyMensSave.LoadMonkeyMens(saveUuid);

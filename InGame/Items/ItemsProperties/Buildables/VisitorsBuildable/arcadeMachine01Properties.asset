@@ -12,15 +12,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6e11e44741351774ca1f8261e4d989f1, type: 3}
   m_Name: arcadeMachine01Properties
   m_EditorClassIdentifier: 
-  gameObjectTag: 11
+  gameObjectTag: 6
   itemCategory: 1
   bananaType: 0
   droppedType: 0
   ingredientsType: 0
   manufacturedItemsType: 0
   rawMaterialType: 0
-  buildableType: 5
+  buildableType: 4
   foodType: 0
+  isAspirable: 0
   itemName:
   - arcade machine "Poney Kong"
   - borne d'arcade "Poney Kong"
@@ -37,9 +38,9 @@ MonoBehaviour:
   bitKongValue: 0
   rawMaterialsWithQuantity:
     list:
-    - key: 0
+    - key: {fileID: 11400000, guid: 9b2d672be4f975f49b3bd109607666ae, type: 2}
       value: 10
-    - key: 2
+    - key: {fileID: 11400000, guid: 4b687cabb474bba48b0d5ac27e2a6e26, type: 2}
       value: 5
     keyCollision: 0
   buildablePrefab: {fileID: 2994629068037613359, guid: 117919c6ff3ffc949999e3532ee9bf43, type: 3}

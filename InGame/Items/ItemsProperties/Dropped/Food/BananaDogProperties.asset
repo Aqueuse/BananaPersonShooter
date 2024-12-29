@@ -12,15 +12,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c30a47ee27690eb4298766a877f61d86, type: 3}
   m_Name: BananaDogProperties
   m_EditorClassIdentifier: 
-  gameObjectTag: 25
   itemCategory: 2
   bananaType: 0
-  droppedType: 0
+  droppedType: 5
   ingredientsType: 0
   manufacturedItemsType: 0
   rawMaterialType: 0
   buildableType: 0
   foodType: 0
+  isAspirable: 1
+  prefab: {fileID: 4155948541956591707, guid: f6a681db52ce03d4ebccb38b6c12305b, type: 3}
   itemName:
   - banana dog
   - banana dog

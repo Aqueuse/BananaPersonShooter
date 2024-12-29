@@ -12,7 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b2e529ee924f2b6439b07656d252d9d6, type: 3}
   m_Name: DyeBlueProperties
   m_EditorClassIdentifier: 
-  gameObjectTag: 19
   itemCategory: 17
   bananaType: 0
   droppedType: 1
@@ -20,6 +19,9 @@ MonoBehaviour:
   manufacturedItemsType: 0
   rawMaterialType: 9
   buildableType: 0
+  foodType: 0
+  isAspirable: 1
+  prefab: {fileID: 763401615645243554, guid: 93435de0459ed8c4b81df0726cf864e4, type: 3}
   itemName:
   - blue dye
   - colorant bleu

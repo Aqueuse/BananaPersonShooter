@@ -12,7 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b2e529ee924f2b6439b07656d252d9d6, type: 3}
   m_Name: DyeYellowProperties
   m_EditorClassIdentifier: 
-  gameObjectTag: 19
   itemCategory: 17
   bananaType: 0
   droppedType: 1
@@ -20,6 +19,9 @@ MonoBehaviour:
   manufacturedItemsType: 0
   rawMaterialType: 6
   buildableType: 0
+  foodType: 0
+  isAspirable: 1
+  prefab: {fileID: 1201240593057137609, guid: c7f4f11e52269c249b5798fcdd8cf036, type: 3}
   itemName:
   - yellow dye
   - colorant jaune

@@ -12,15 +12,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa23d2d3beaaadf47a677ba4423808b1, type: 3}
   m_Name: BlueprintsWorkstationProperties
   m_EditorClassIdentifier: 
-  gameObjectTag: 11
+  gameObjectTag: 6
   itemCategory: 1
   bananaType: 0
   droppedType: 0
   ingredientsType: 0
   manufacturedItemsType: 0
   rawMaterialType: 0
-  buildableType: 17
+  buildableType: 15
   foodType: 0
+  isAspirable: 0
   itemName:
   - study desk
   - "bureau d'\xE9tudes"
@@ -35,9 +36,9 @@ MonoBehaviour:
   bitKongValue: 0
   rawMaterialsWithQuantity:
     list:
-    - key: 0
+    - key: {fileID: 11400000, guid: 9b2d672be4f975f49b3bd109607666ae, type: 2}
       value: 10
-    - key: 5
+    - key: {fileID: 11400000, guid: 0e2734ecf336bf348aae83a1cbaf6771, type: 2}
       value: 2
     keyCollision: 0
   buildablePrefab: {fileID: 546991606061005580, guid: 1266f1a6b74a4074ab65ab8271d57705, type: 3}

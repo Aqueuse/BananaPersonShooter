@@ -7,8 +7,6 @@ using UnityEngine;
 
 namespace Save.Dropped {
     public class DroppedManufacturedItemsSave : MonoBehaviour {
-        public GameObject manufacturedItemsContainer;
-    
         private string _savePath;
 
         private GameObject manufacturedItemsToSpawn;
@@ -47,19 +45,11 @@ namespace Save.Dropped {
         }
 
         private void RespawnManufacturedItemsOnWorld() {
-            DestroyImmediate(manufacturedItemsContainer);
-
-            manufacturedItemsContainer = new GameObject("ManufacturedItems container") {
-                transform = {
-                    parent = transform.parent
-                }
-            };
-
             foreach (var manufacturedItemsList in manufacturedItemsDataDictionaryByManufacturedType) {
                 foreach (var manufacturedItemsString in manufacturedItemsList.Value) {
                     manufacturedItemsToSpawn = ObjectsReference.Instance.meshReferenceScriptableObject.manufacturedItemPrefabByManufacturedItemType[manufacturedItemsList.Key];
                     
-                    manufacturedItemsInstance = Instantiate(manufacturedItemsToSpawn, manufacturedItemsContainer.transform, true);
+                    manufacturedItemsInstance = Instantiate(manufacturedItemsToSpawn, ObjectsReference.Instance.gameSave.savablesItemsContainer, true);
                     manufacturedItemsInstance.GetComponent<BananaBehaviour>().LoadSavedData(manufacturedItemsString);
                 }
             }
@@ -71,7 +61,7 @@ namespace Save.Dropped {
             
             var savefilePath = Path.Combine(mapDataSavesPath, "manufacturedItems.json");
             
-            var manufacturedItemsBehaviours = FindObjectsByType<ManufacturedItemBehaviour>(FindObjectsSortMode.None);
+            var manufacturedItemsBehaviours = ObjectsReference.Instance.gameSave.savablesItemsContainer.GetComponentsInChildren<ManufacturedItemBehaviour>();
             
             manufacturedItemsDataDictionaryByManufacturedType.Clear();
 

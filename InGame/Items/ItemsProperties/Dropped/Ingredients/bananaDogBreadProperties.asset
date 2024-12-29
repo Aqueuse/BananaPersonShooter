@@ -12,7 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b2e529ee924f2b6439b07656d252d9d6, type: 3}
   m_Name: bananaDogBreadProperties
   m_EditorClassIdentifier: 
-  gameObjectTag: 20
   itemCategory: 5
   bananaType: 0
   droppedType: 2
@@ -20,6 +19,9 @@ MonoBehaviour:
   manufacturedItemsType: 0
   rawMaterialType: 0
   buildableType: 0
+  foodType: 0
+  isAspirable: 1
+  prefab: {fileID: 722175285427076385, guid: 241d0135ee976794b83d8da6059e10e1, type: 3}
   itemName:
   - banana dog bread
   - pain pour banana dog

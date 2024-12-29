@@ -1,4 +1,5 @@
 using InGame.Items.ItemsBehaviours.BuildablesBehaviours;
+using InGame.Items.ItemsProperties.Buildables.VisitorsBuildable;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -40,7 +41,9 @@ namespace InGame.Monkeys.Chimptouristes {
                     if (!CanReachBuildable(_navMeshAgent, buildable.ChimpTargetTransform.position)) return;
                     
                     foreach (var visitorNeed in monkeyMenBehaviour.sortedNeeds) {
-                        if (buildable.visitorsBuildablePropertiesScriptableObject.needType == visitorNeed.Key) {
+                        var buildableData = (VisitorsBuildablePropertiesScriptableObject)buildable.buildablePropertiesScriptableObject;
+                        
+                        if (buildableData.needType == visitorNeed.Key) {
                             touristBehaviour.actualNeed = visitorNeed.Key;
                             buildableFounded = buildable;
                             hasFoundBuildable = true;

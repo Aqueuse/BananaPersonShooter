@@ -3,37 +3,27 @@ using UnityEngine;
 
 namespace Tags {
     public enum GAME_OBJECT_TAG {
-        UNTAGGED,
         GLOBAL_CONTAINER,
         VEGETATION_MASK,
-        BANANA,
         PLAYER,
-        TELEPORTATION,
-        BUILD_UNVALID,
         LASER,
         DOME,
         SPACESHIP,
-        DOOR,
         BUILDABLE,
         DROPPED,
+        ACCESS_MANAGED,
         REGIME,
         MONKEY,
         MINI_CHIMP,
         CHIMPLOYEE,
         TOURIST,
-        COMMAND_ROOM_PANEL,
-        RAW_MATERIAL,
-        INGREDIENT,
-        ACCESS_MANAGED,
-        RETRIEVER_ROTATING_LOGO,
         PIRATE,
         MERCHANT,
-        FOOD,
-        MANUFACTURED_ITEM,
         CULTIVATOR,
         CHIMPMEN,
         WASTE,
-        BLUEPRINT
+        SAVABLES_ITEMS_CONTAINER,
+        ITEM_STACK
     }
 
     public class TagsManager : MonoSingleton<TagsManager> {

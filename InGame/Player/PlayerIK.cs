@@ -1,11 +1,12 @@
 using UnityEngine;
+using UnityEngine.Animations;
 using UnityEngine.Animations.Rigging;
 
 namespace InGame.Player {
     public class PlayerIK : MonoBehaviour {
-        [SerializeField] private Transform ikTargetLeftHand;
-        [SerializeField] private MultiAimConstraint headAimConstraint;
-        [SerializeField] private MultiAimConstraint backAimConstraint;
+        [SerializeField] private TwoBoneIKConstraint rightHandConstraint;
+        [SerializeField] private AimConstraint backAimConstraint;
+        [SerializeField] private LookAtConstraint headLookAtConstraint;
 
         private Animator _animator;
 
@@ -26,16 +27,17 @@ namespace InGame.Player {
             isRightFootGrounded = false;
 
             _footExtended = 0.1818f;
-            SetAimConstraint(false);
+
+            headLookAtConstraint.weight = 1;
         }
         
         public void SetAimConstraint(bool active) {
             if (active) {
-                headAimConstraint.weight = 1;
+                rightHandConstraint.weight = 1;
                 backAimConstraint.weight = 1;
             }
             else {
-                headAimConstraint.weight = 0;
+                rightHandConstraint.weight = 0;
                 backAimConstraint.weight = 0;
             }
         }
@@ -60,17 +62,6 @@ namespace InGame.Player {
 
             if (_rightFootDistanceToPlayerRoot >= _footExtended) {
                 isRightFootGrounded = false;
-            }
-            
-            if (ObjectsReference.Instance.bananaMan.isGrabingBananaGun) {
-                _animator.SetIKPositionWeight(AvatarIKGoal.LeftHand, 1);
-                _animator.SetIKRotationWeight(AvatarIKGoal.LeftHand, 1);
-
-                _animator.SetIKPosition(AvatarIKGoal.LeftHand, ikTargetLeftHand.position);
-                _animator.SetIKRotation(AvatarIKGoal.LeftHand, ikTargetLeftHand.rotation);
-            }
-            else {
-                _animator.SetIKPositionWeight(AvatarIKGoal.LeftHand, 0);
             }
         }
     }

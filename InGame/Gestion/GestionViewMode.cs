@@ -117,34 +117,34 @@ namespace InGame.Gestion {
 
         public void ValidateBuildable() {
             if (_activeGhost == null) return;
+            if (_activeGhostClass.GetGhostState() != GhostState.VALID) return;
+            
+            _buildable = Instantiate(
+                _activeGhostClass.buildablePropertiesScriptableObject.buildablePrefab,
+                _activeGhost.transform.position, rotation: _activeGhost.transform.rotation,
+                ObjectsReference.Instance.gameSave.savablesItemsContainer
+            );
 
-            if (_activeGhostClass.GetGhostState() == GhostState.VALID) {
-                _buildable = Instantiate(original: _activeGhostClass.buildablePropertiesScriptableObject.buildablePrefab,
-                    position: _activeGhost.transform.position, rotation: _activeGhost.transform.rotation);
+            var _craftingIngredients = _activeGhostClass.buildablePropertiesScriptableObject.rawMaterialsWithQuantity;
 
-                _buildable.transform.parent = ObjectsReference.Instance.gameSave.buildablesSave.buildablesContainer.transform;
-
-                var _craftingIngredients = _activeGhostClass.buildablePropertiesScriptableObject.rawMaterialsWithQuantity;
-
-                foreach (var craftingIngredient in _craftingIngredients) {
-                    ObjectsReference.Instance.bananaManRawMaterialInventory.RemoveQuantity(craftingIngredient.Key,
-                        craftingIngredient.Value);
+            foreach (var craftingIngredient in _craftingIngredients) {
+                ObjectsReference.Instance.bananaManRawMaterialInventory.RemoveQuantity(craftingIngredient.Key,
+                    craftingIngredient.Value);
                     
-                    ObjectsReference.Instance.uiQueuedMessages.RemoveFromInventory(
-                        ObjectsReference.Instance.meshReferenceScriptableObject.rawMaterialPropertiesScriptableObjects[craftingIngredient.Key], 
-                        craftingIngredient.Value
-                    );
-                    ObjectsReference.Instance.uiFlippers.RefreshActiveBuildableAvailability();
+                ObjectsReference.Instance.uiQueuedMessages.RemoveFromInventory(
+                    craftingIngredient.Key, 
+                    craftingIngredient.Value
+                );
+                ObjectsReference.Instance.uiFlippers.RefreshActiveBuildableAvailability();
 
-                }
-                
-                _buildable.GetComponent<BuildableBehaviour>().buildableGuid = Guid.NewGuid().ToString();
-                
-                _activeGhost.transform.position = ObjectsReference.Instance.ghostsReference.transform.position;
-                _activeGhost = null;
-                
-                viewModeContextType = ViewModeContextType.SCAN;
             }
+                
+            _buildable.GetComponent<BuildableBehaviour>().buildableGuid = Guid.NewGuid().ToString();
+                
+            _activeGhost.transform.position = ObjectsReference.Instance.ghostsReference.transform.position;
+            _activeGhost = null;
+                
+            viewModeContextType = ViewModeContextType.SCAN;
         }
 
         public void CancelBuild() {
@@ -155,7 +155,7 @@ namespace InGame.Gestion {
             if (targetedGameObject == null) return;
 
             if (targetedGameObject.TryGetComponent(out BuildableBehaviour buildableBehaviour)) {
-                if (!ObjectsReference.Instance.bananaManRawMaterialInventory.HasCraftingIngredients(buildableBehaviour.buildableType))
+                if (!ObjectsReference.Instance.bananaManRawMaterialInventory.HasCraftingIngredients(buildableBehaviour.buildablePropertiesScriptableObject))
                     return;
                 
                 var _craftingIngredients = ObjectsReference.Instance.meshReferenceScriptableObject.buildablePropertiesScriptableObjects[buildableBehaviour.buildableType].rawMaterialsWithQuantity;
@@ -164,7 +164,7 @@ namespace InGame.Gestion {
                     ObjectsReference.Instance.bananaManRawMaterialInventory.RemoveQuantity(craftingIngredient.Key, craftingIngredient.Value);
                     
                     ObjectsReference.Instance.uiQueuedMessages.RemoveFromInventory(
-                        ObjectsReference.Instance.meshReferenceScriptableObject.rawMaterialPropertiesScriptableObjects[craftingIngredient.Key], 
+                        craftingIngredient.Key, 
                         craftingIngredient.Value
                     );
                     ObjectsReference.Instance.uiFlippers.RefreshActiveBuildableAvailability();
@@ -179,7 +179,7 @@ namespace InGame.Gestion {
         public void harvest() {
             if (targetedGameObject == null) return;
 
-            ObjectsReference.Instance.scan.harvest(targetedGameObject.GetComponent<Tag>().itemScriptableObject);
+            ObjectsReference.Instance.build.harvest(targetedGameObject.GetComponent<Tag>().itemScriptableObject);
         }
     }
 }

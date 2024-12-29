@@ -206,15 +206,10 @@ namespace SharedInputs {
         }
 
         private static void PauseGame(InputAction.CallbackContext context) {
-            if (ObjectsReference.Instance.bananaMan.isGrabingBananaGun)
-                ObjectsReference.Instance.build.CancelBuild();
+            ObjectsReference.Instance.inputManager.SwitchContext(InputContext.UI);
 
-            else {
-                ObjectsReference.Instance.inputManager.SwitchContext(InputContext.UI);
-
-                ObjectsReference.Instance.gameManager.PauseGame();
-                ObjectsReference.Instance.uiManager.ShowGameMenu();
-            }
+            ObjectsReference.Instance.gameManager.PauseGame();
+            ObjectsReference.Instance.uiManager.ShowGameMenu();
         }
     }
 }

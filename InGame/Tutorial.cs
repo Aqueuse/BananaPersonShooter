@@ -22,8 +22,6 @@ namespace InGame {
 
             ObjectsReference.Instance.cinematiques.Play(CinematiqueType.NEW_GAME);
             
-            ObjectsReference.Instance.bananaGun.bananaGunInBack.SetActive(false);
-
             ObjectsReference.Instance.bananaMan.tutorialFinished = false;
             
             foreach (var accessManagedGameObject in TagsManager.GetAllGameObjectsWithTag(GAME_OBJECT_TAG.ACCESS_MANAGED)) {
@@ -46,7 +44,6 @@ namespace InGame {
             ObjectsReference.Instance.uInventoriesManager.ShowCurrentUIHelper();
             ObjectsReference.Instance.uiManager.SetActive(UICanvasGroupType.HUD_BANANAMAN, true);
             
-            ObjectsReference.Instance.bananaGun.bananaGunInBack.SetActive(true);
             ObjectsReference.Instance.bananaGunActionsSwitch.enabled = true;
             
             ObjectsReference.Instance.bananaMan.tutorialFinished = true;

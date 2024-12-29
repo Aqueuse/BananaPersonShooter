@@ -1,8 +1,8 @@
 using System.Collections.Generic;
-using UnityEngine;
+using InGame.Items.ItemsProperties;
 
-namespace InGame.Inventory {
-    public class BananasInventory : MonoBehaviour {
+namespace InGame.Inventories {
+    public class BananasInventory : Inventory {
         public Dictionary<BananaType, int> bananasInventory = new () {
             {BananaType.BARANGAN, 0},
             {BananaType.BLUE_JAVA, 0},
@@ -21,8 +21,12 @@ namespace InGame.Inventory {
             {BananaType.RINO_HORN, 0},
             {BananaType.TINDOK, 0}
         };
+
+        private BananaType bananaType;
         
-        public int AddQuantity(BananaType bananaType, int quantity) {
+        public override int AddQuantity(ItemScriptableObject itemScriptableObject, int quantity) {
+            bananaType = itemScriptableObject.bananaType;
+            
             bananasInventory.TryAdd(bananaType, 0);
             
             if (bananasInventory[bananaType] > 10000) return bananasInventory[bananaType];
@@ -32,11 +36,13 @@ namespace InGame.Inventory {
             return bananasInventory[bananaType];
         }
 
-        public int GetQuantity(BananaType bananaType) {
-            return bananasInventory[bananaType];
+        public override int GetQuantity(ItemScriptableObject itemScriptableObject) {
+            return bananasInventory[itemScriptableObject.bananaType];
         }
 
-        public int RemoveQuantity(BananaType bananaType, int quantity) {
+        public override int RemoveQuantity(ItemScriptableObject itemScriptableObject, int quantity) {
+            bananaType = itemScriptableObject.bananaType;
+            
             if (bananasInventory[bananaType] > quantity) {
                 bananasInventory[bananaType] -= quantity;
             }
@@ -48,7 +54,7 @@ namespace InGame.Inventory {
             return bananasInventory[bananaType];
         }
 
-        public void ResetInventory() {
+        public override void ResetInventory() {
             bananasInventory = new () {
                 {BananaType.BARANGAN, 0},
                 {BananaType.BLUE_JAVA, 0},

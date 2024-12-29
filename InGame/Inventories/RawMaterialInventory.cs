@@ -1,9 +1,11 @@
 ﻿using System.Collections.Generic;
+using InGame.Items.ItemsProperties;
 using InGame.Items.ItemsProperties.Buildables;
-using UnityEngine;
 
-namespace InGame.Inventory {
-    public class RawMaterialInventory : MonoBehaviour {
+namespace InGame.Inventories {
+    public class RawMaterialInventory : Inventory {
+        private RawMaterialType rawMaterialType;
+        
         public Dictionary<RawMaterialType, int> rawMaterialsInventory = new () {
             {RawMaterialType.ELECTRONIC, 0},
             {RawMaterialType.BANANA_PEEL, 0},
@@ -17,13 +19,19 @@ namespace InGame.Inventory {
             {RawMaterialType.BLUE_DYE, 0}
         };
         
-        public void AddQuantity(RawMaterialType rawMaterialType, int quantity) {
-            if (rawMaterialsInventory[rawMaterialType] > 10000) return;
+        public override int AddQuantity(ItemScriptableObject itemScriptableObject, int quantity) {
+            rawMaterialType = itemScriptableObject.rawMaterialType;
+            
+            if (rawMaterialsInventory[rawMaterialType] > 10000) return 9999;
 
             rawMaterialsInventory[rawMaterialType] += quantity;
+
+            return rawMaterialsInventory[rawMaterialType];
         }
         
-        public int RemoveQuantity(RawMaterialType rawMaterialType, int quantity) {
+        public override int RemoveQuantity(ItemScriptableObject itemScriptableObject, int quantity) {
+            rawMaterialType = itemScriptableObject.rawMaterialType;
+            
             if (rawMaterialsInventory[rawMaterialType] > quantity) {
                 rawMaterialsInventory[rawMaterialType] -= quantity;
             }
@@ -39,27 +47,17 @@ namespace InGame.Inventory {
             var _craftingIngredients = buildablePropertiesScriptableObject.rawMaterialsWithQuantity;
 
             foreach (var craftingIngredient in _craftingIngredients) {
-                if (rawMaterialsInventory[craftingIngredient.Key] < craftingIngredient.Value) return false;
+                if (rawMaterialsInventory[craftingIngredient.Key.rawMaterialType] < craftingIngredient.Value) return false;
             }
 
             return true;
         }
         
-        public bool HasCraftingIngredients(BuildableType buildableType) {
-            var _craftingIngredients = ObjectsReference.Instance.meshReferenceScriptableObject.buildablePropertiesScriptableObjects[buildableType].rawMaterialsWithQuantity;
-
-            foreach (var craftingIngredient in _craftingIngredients) {
-                if (rawMaterialsInventory[craftingIngredient.Key] < craftingIngredient.Value) return false;
-            }
-
-            return true;
-        }
-        
-        public int GetQuantity(RawMaterialType rawMaterialType) {
-            return rawMaterialsInventory[rawMaterialType];
+        public override int GetQuantity(ItemScriptableObject itemScriptableObject) {
+            return rawMaterialsInventory[itemScriptableObject.rawMaterialType];
         }
 
-        public void ResetInventory() {
+        public override void ResetInventory() {
             rawMaterialsInventory = new () {
                 {RawMaterialType.ELECTRONIC, 0},
                 {RawMaterialType.BANANA_PEEL, 0},

@@ -14,6 +14,7 @@ namespace Save {
         private readonly Dictionary<RawMaterialType, int> rawMaterialsInventory = new();
         private readonly Dictionary<ManufacturedItemsType, int> manufacturedItemsInventory = new();
         private readonly Dictionary<IngredientsType, int> ingredientsInventory = new();
+        private readonly Dictionary<FoodType, int> foodInventory = new();
 
         private BananaManSavedData bananaManSavedData;
         
@@ -28,10 +29,11 @@ namespace Save {
             LoadRawMaterialsInventory();
             LoadIngredientsInventory();
             LoadManufacturedItemsInventory();
+            LoadFoodInventory();
             
             LoadBananaManVitals();
             LoadPositionAndRotation();
-
+            
             LoadBananaGun();
             LoadActiveDroppable();
             LoadActiveBuildable();
@@ -89,6 +91,16 @@ namespace Save {
             ObjectsReference.Instance.bananaManManufacturedItemsInventory.manufacturedItemsInventory = manufacturedItemsInventory;
         }
 
+        private void LoadFoodInventory() {
+            bananaMan.bananaManData.activeFood = bananaManSavedData.activeFood;
+
+            foreach (var food in bananaManSavedData.foodInventory) {
+                foodInventory[(FoodType)Enum.Parse(typeof(FoodType), food.Key)] = food.Value;
+            }
+
+            ObjectsReference.Instance.bananaManFoodInventory.foodInventory = foodInventory;
+        }
+
         private void LoadBananaGun() {
             var bananagunMode = Enum.Parse<BananaGunMode>(bananaManSavedData.bananaGunMode);
             bananaMan.bananaGunMode = bananagunMode;
@@ -140,9 +152,6 @@ namespace Save {
         }
         
         private void LoadActiveBuildable() {
-            var buildableData = ObjectsReference.Instance.meshReferenceScriptableObject.buildablePropertiesScriptableObjects[
-                    bananaManSavedData.activeBuildable]; 
-
             bananaMan.bananaManData.activeBuildable = bananaManSavedData.activeBuildable;
             ObjectsReference.Instance.uiFlippers.RefreshActiveBuildableAvailability();
         }
@@ -155,12 +164,12 @@ namespace Save {
             bananaMan.tutorialFinished = bananaManSavedData.hasFinishedTutorial;
             
             if (bananaManSavedData.hasFinishedTutorial) {
-                ObjectsReference.Instance.bananaGun.bananaGunInBack.SetActive(true);
+                ObjectsReference.Instance.bananaGun.GrabBananaGun();
                 ObjectsReference.Instance.uiManager.SetActive(UICanvasGroupType.HUD_BANANAMAN, true);
             }
 
             else {
-                ObjectsReference.Instance.bananaGun.bananaGunInBack.SetActive(false);
+                ObjectsReference.Instance.bananaGun.UngrabBananaGun();
                 ObjectsReference.Instance.uiManager.SetActive(UICanvasGroupType.HUD_BANANAMAN, false);
                 ObjectsReference.Instance.uiCrosshairs.SetCrosshair(false);
             }
@@ -182,6 +191,9 @@ namespace Save {
             }
             foreach (var inventorySlot in ObjectsReference.Instance.bananaManManufacturedItemsInventory.manufacturedItemsInventory) {
                 bananaManSavedData.manufacturedInventory[inventorySlot.Key.ToString()] = inventorySlot.Value;
+            }
+            foreach (var inventorySlot in ObjectsReference.Instance.bananaManFoodInventory.foodInventory) {
+                bananaManSavedData.foodInventory[inventorySlot.Key.ToString()] = inventorySlot.Value;
             }
 
             bananaManSavedData.bananaGunMode = bananaMan.bananaGunMode.ToString();
@@ -207,6 +219,7 @@ namespace Save {
             bananaManSavedData.activeBuildable = bananaMan.bananaManData.activeBuildable;
             bananaManSavedData.activeIngredient = bananaMan.bananaManData.activeIngredient;
             bananaManSavedData.activeManufacturedItem = bananaMan.bananaManData.activeManufacturedItem;
+            bananaManSavedData.activeFood = bananaMan.bananaManData.activeFood;
 
             bananaManSavedData.bitKongQuantity = bananaMan.bananaManData.bitKongQuantity;
 

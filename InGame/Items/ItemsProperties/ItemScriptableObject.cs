@@ -1,11 +1,8 @@
-using Tags;
 using UnityEngine;
 
 namespace InGame.Items.ItemsProperties {
     [CreateAssetMenu (fileName = "Properties", menuName = "ScriptableObjects/itemPropertiesScriptableObject", order = 1)]
     public class ItemScriptableObject : ScriptableObject {
-        public GAME_OBJECT_TAG gameObjectTag;
-
         public ItemCategory itemCategory;
         
         public BananaType bananaType;
@@ -16,6 +13,9 @@ namespace InGame.Items.ItemsProperties {
         public BuildableType buildableType;
         public FoodType foodType;
 
+        public bool isAspirable;
+        public GameObject prefab;
+        
         public string[] itemName;
 
         public Sprite itemSprite;

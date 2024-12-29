@@ -1,5 +1,5 @@
 using Cinemachine;
-using InGame.Inventory;
+using InGame.Inventories;
 using UnityEngine;
 
 namespace InGame.MiniGames.SpaceTrafficControlMiniGame.Spaceships {

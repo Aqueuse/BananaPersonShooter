@@ -4,12 +4,12 @@ using UnityEngine;
 using UnityEngine.UI;
 
 namespace UI.InGame.MainPanel.Inventories {
-    public class UIBananasInventory : MonoBehaviour {
-        public BananasInventory associatedBananasInventory;
-        public GenericDictionary<BananaType, UInventorySlot> uInventorySlots;
+    public class UIFoodInventory : MonoBehaviour {
+        public FoodInventory associatedFoodInventory;
+        public GenericDictionary<FoodType, UInventorySlot> uInventorySlots;
         
         [SerializeField] private Transform inventoryContentTransform; 
-        
+    
         [SerializeField] private CanvasGroup inventoryPanelCanvasGroup;
         [SerializeField] private Image buttonImage;
         [SerializeField] private TextMeshProUGUI buttonText;
@@ -19,13 +19,11 @@ namespace UI.InGame.MainPanel.Inventories {
         public void RefreshUInventory() {
             foreach (var inventoryItem in uInventorySlots) {
                 inventoryItem.Value.GetComponent<UInventorySlot>()
-                    .SetQuantity(associatedBananasInventory.bananasInventory[inventoryItem.Key]);
+                    .SetQuantity(associatedFoodInventory.foodInventory[inventoryItem.Key]);
             }
         }
 
         public void Activate() {
-            ObjectsReference.Instance.uInventoriesManager.lastFocusedInventory = DroppedType.BANANA;
-        
             inventoryPanelCanvasGroup.alpha = 1;
             inventoryPanelCanvasGroup.interactable = true;
             inventoryPanelCanvasGroup.blocksRaycasts = true;
@@ -44,7 +42,7 @@ namespace UI.InGame.MainPanel.Inventories {
         }
         
         public void SelectFirstSlot() {
-            inventoryContentTransform.GetComponentsInChildren<UInventorySlot>()[0].GetComponent<UInventorySlot>().SelectInventorySlot();
+            inventoryContentTransform.GetComponentsInChildren<UInventorySlot>()[0].SelectInventorySlot();
         }
     }
 }

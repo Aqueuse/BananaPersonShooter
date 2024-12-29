@@ -7,8 +7,6 @@ using UnityEngine;
 
 namespace Save.Dropped {
     public class DroppedIngredientsSave : MonoBehaviour {
-        public GameObject IngredientsContainer;
-    
         private string _savePath;
 
         private GameObject ingredientToSpawn;
@@ -47,19 +45,11 @@ namespace Save.Dropped {
         }
 
         private void RespawnIngredientssOnWorld() {
-            DestroyImmediate(IngredientsContainer);
-
-            IngredientsContainer = new GameObject("Ingredients container") {
-                transform = {
-                    parent = transform.parent
-                }
-            };
-
             foreach (var ingredientsList in IngredientsDataDictionaryByIngredientsType) {
                 foreach (var ingredientString in ingredientsList.Value) {
                     ingredientToSpawn = ObjectsReference.Instance.meshReferenceScriptableObject.ingredientPrefabByIngredientType[ingredientsList.Key];
                     
-                    ingredientInstance = Instantiate(ingredientToSpawn, IngredientsContainer.transform, true);
+                    ingredientInstance = Instantiate(ingredientToSpawn, ObjectsReference.Instance.gameSave.savablesItemsContainer, true);
                     ingredientInstance.GetComponent<IngredientBehaviour>().LoadSavedData(ingredientString);
                 }
             }
@@ -71,7 +61,7 @@ namespace Save.Dropped {
             
             var savefilePath = Path.Combine(mapDataSavesPath, "ingredients.json");
             
-            var ingredientBehaviours = FindObjectsByType<IngredientBehaviour>(FindObjectsSortMode.None);
+            var ingredientBehaviours = ObjectsReference.Instance.gameSave.savablesItemsContainer.GetComponentsInChildren<IngredientBehaviour>();
             
             IngredientsDataDictionaryByIngredientsType.Clear();
 

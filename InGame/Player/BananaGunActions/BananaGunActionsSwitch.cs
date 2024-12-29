@@ -23,9 +23,6 @@ namespace InGame.Player.BananaGunActions {
         
         public void SwitchToBananaGunMode(BananaGunMode bananaGunMode) {
             ObjectsReference.Instance.bananaMan.bananaGunMode = bananaGunMode;
-
-            ObjectsReference.Instance.bananaGun.UngrabBananaGun();
-            ObjectsReference.Instance.build.CancelGhost();
             
             switch (bananaGunMode) {
                 case BananaGunMode.SHOOT:
@@ -85,9 +82,6 @@ namespace InGame.Player.BananaGunActions {
                 case BananaGunMode.SHOOT:
                     SwitchToBananaGunMode(BananaGunMode.BUILD);
                     break;
-                case BananaGunMode.IDLE:
-                    SwitchToBananaGunMode(BananaGunMode.SHOOT);
-                    break;
             }
         }
         
@@ -101,9 +95,6 @@ namespace InGame.Player.BananaGunActions {
                     break;
                 case BananaGunMode.SCAN:
                     SwitchToBananaGunMode(BananaGunMode.BUILD);
-                    break;
-                case BananaGunMode.IDLE:
-                    SwitchToBananaGunMode(BananaGunMode.SHOOT);
                     break;
             }
         }

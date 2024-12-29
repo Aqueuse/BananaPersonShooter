@@ -1,17 +1,21 @@
 ﻿using System.Collections.Generic;
-using UnityEngine;
+using InGame.Items.ItemsProperties;
 
-namespace InGame.Inventory {
-    public class ManufacturedItemsInventory : MonoBehaviour {
+namespace InGame.Inventories {
+    public class ManufacturedItemsInventory : Inventory {
         public Dictionary<ManufacturedItemsType, int> manufacturedItemsInventory = new () {
             {ManufacturedItemsType.SPACESHIP_TOY, 0},
             {ManufacturedItemsType.LAPINOU, 0},
             {ManufacturedItemsType.BANANARAIGNEE, 0},
             {ManufacturedItemsType.BANANAVIAIRE, 0}
         };
+
+        private ManufacturedItemsType manufacturedItemsType;
         
-        public void AddQuantity(ManufacturedItemsType manufacturedItemsType, int quantity) {
-            if (manufacturedItemsInventory[manufacturedItemsType] > 10000) return;
+        public override int AddQuantity(ItemScriptableObject itemScriptableObject, int quantity) {
+            manufacturedItemsType = itemScriptableObject.manufacturedItemsType;
+            
+            if (manufacturedItemsInventory[manufacturedItemsType] > 10000) return 9999;
 
             manufacturedItemsInventory[manufacturedItemsType] += quantity;
 
@@ -21,9 +25,13 @@ namespace InGame.Inventory {
             manufacturedItem.SetQuantity(manufacturedItemsInventory[manufacturedItemsType]);
 
             ObjectsReference.Instance.uiQueuedMessages.AddToInventory(manufacturedItem.itemScriptableObject, quantity);
+
+            return manufacturedItemsInventory[manufacturedItemsType];
         }
         
-        public int RemoveQuantity(ManufacturedItemsType manufacturedItemsType, int quantity) {
+        public override int RemoveQuantity(ItemScriptableObject itemScriptableObject, int quantity) {
+            manufacturedItemsType = itemScriptableObject.manufacturedItemsType;
+            
             if (manufacturedItemsInventory[manufacturedItemsType] > quantity) {
                 manufacturedItemsInventory[manufacturedItemsType] -= quantity;
             }
@@ -35,11 +43,13 @@ namespace InGame.Inventory {
             return manufacturedItemsInventory[manufacturedItemsType];
         }
 
-        public int GetQuantity(ManufacturedItemsType manufacturedItemsType) {
+        public override int GetQuantity(ItemScriptableObject itemScriptableObject) {
+            manufacturedItemsType = itemScriptableObject.manufacturedItemsType;
+            
             return manufacturedItemsInventory[manufacturedItemsType];
         }
 
-        public void ResetInventory() {
+        public override void ResetInventory() {
             manufacturedItemsInventory = new () {
                 {ManufacturedItemsType.SPACESHIP_TOY, 0},
                 {ManufacturedItemsType.LAPINOU, 0},

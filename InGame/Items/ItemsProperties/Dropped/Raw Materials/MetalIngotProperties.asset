@@ -12,7 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b2e529ee924f2b6439b07656d252d9d6, type: 3}
   m_Name: MetalIngotProperties
   m_EditorClassIdentifier: 
-  gameObjectTag: 19
   itemCategory: 17
   bananaType: 0
   droppedType: 1
@@ -20,6 +19,9 @@ MonoBehaviour:
   manufacturedItemsType: 0
   rawMaterialType: 0
   buildableType: 0
+  foodType: 0
+  isAspirable: 1
+  prefab: {fileID: 5471364762102479163, guid: 8f3a4dd667df2454f809833a1cb266c1, type: 3}
   itemName:
   - metal
   - "m\xE9tal"

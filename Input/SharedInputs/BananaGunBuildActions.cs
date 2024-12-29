@@ -4,64 +4,48 @@ using UnityEngine.InputSystem;
 
 namespace SharedInputs {
     public class BananaGunBuildActions : InputActions {
-        [SerializeField] private InputActionReference grabBananaGunActionReference;
+        [SerializeField] private InputActionReference buildActionReference;
+        [SerializeField] private InputActionReference unbuildActionReference;
+        
         [SerializeField] private InputActionReference rotateGhostActionReference;
         [SerializeField] private InputActionReference moveAwayCloserGhostActionReference;
-        [SerializeField] private InputActionReference confirmBuild;
-    
+
         [SerializeField] private Build build;
 
         private void OnEnable() {
-            grabBananaGunActionReference.action.Enable();
-            grabBananaGunActionReference.action.performed += GrabBananaGun;
-            grabBananaGunActionReference.action.canceled += UngrabBananaGun;
-        }
+            buildActionReference.action.Enable();
+            buildActionReference.action.performed += ConfirmBuild;
 
-        private void OnDisable() {
-            grabBananaGunActionReference.action.Disable();
-            grabBananaGunActionReference.action.performed -= GrabBananaGun;
-            grabBananaGunActionReference.action.canceled -= UngrabBananaGun;
-        }
+            unbuildActionReference.action.Enable();
+            unbuildActionReference.action.performed += RepairOrHarvest;
+            unbuildActionReference.action.canceled += StopRepairOrHarvest;
 
-        private void GrabBananaGun(InputAction.CallbackContext context) {
-            build.enabled = true;
-
-            ObjectsReference.Instance.uInventoriesManager.GetCurrentUIHelper().ShowBuildHelper();
-
-            ObjectsReference.Instance.bananaGun.GrabBananaGun();
-            build.SetActiveBuildable(ObjectsReference.Instance.bananaMan.bananaManData.activeBuildable);
-            build.ActivateGhost();
-            
             rotateGhostActionReference.action.Enable();
             rotateGhostActionReference.action.performed += RotateGhost;
 
             moveAwayCloserGhostActionReference.action.Enable();
             moveAwayCloserGhostActionReference.action.performed += MoveAwayCloserGhostTarget;
-        
-            confirmBuild.action.Enable();
-            confirmBuild.action.performed += ConfirmBuild;
         }
-    
-        private void UngrabBananaGun(InputAction.CallbackContext context) {
-            build.CancelGhost();
-            ObjectsReference.Instance.uInventoriesManager.GetCurrentUIHelper().ShowDefaultHelper();
 
-            ObjectsReference.Instance.bananaGun.UngrabBananaGun();
-
-            build.enabled = false;
+        private void OnDisable() {
+            buildActionReference.action.Disable();
+            buildActionReference.action.performed -= ConfirmBuild;
             
-            ObjectsReference.Instance.uiManager.SetActive(UICanvasGroupType.MAIN_PANEL, false);
-
-            rotateGhostActionReference.action.Disable();
-            rotateGhostActionReference.action.performed -= RotateGhost;
-
-            moveAwayCloserGhostActionReference.action.Disable();
-            moveAwayCloserGhostActionReference.action.performed -= MoveAwayCloserGhostTarget;
-        
-            confirmBuild.action.Disable();
-            confirmBuild.action.performed -= ConfirmBuild;
+            unbuildActionReference.action.Disable();
+            unbuildActionReference.action.performed -= RepairOrHarvest;
+            unbuildActionReference.action.canceled -= StopRepairOrHarvest;
         }
-    
+        
+        private void RepairOrHarvest(InputAction.CallbackContext context) {
+            build.isBuilding = false;
+            
+            build.RepairOrHarvest();
+        }
+
+        private void StopRepairOrHarvest(InputAction.CallbackContext context) {
+            build.isBuilding = true;
+        }
+        
         private void RotateGhost(InputAction.CallbackContext context) {
             if (ObjectsReference.Instance.bananaMan.bananaGunMode != BananaGunMode.BUILD) return;
             
@@ -108,7 +92,7 @@ namespace SharedInputs {
     
         private void ConfirmBuild(InputAction.CallbackContext callbackContext) {
             build.ValidateBuildable();
-            build.CancelGhost();
+            build.HideGhost();
         }
     }
 }

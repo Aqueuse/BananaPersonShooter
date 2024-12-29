@@ -135,7 +135,7 @@ namespace InGame.Monkeys.Chimpirates {
 
                     // can't copy directly from itemScriptableObject - Sadge ╯︿╰
                     foreach (var rawMaterial in rawMaterialsWithQuantity) {
-                        monkeyMenBehaviour.monkeyMenData.rawMaterialsInventory[rawMaterial.Key] = rawMaterial.Value;
+                        monkeyMenBehaviour.monkeyMenData.rawMaterialsInventory[rawMaterial.Key.rawMaterialType] = rawMaterial.Value;
                     }
                 }
             }

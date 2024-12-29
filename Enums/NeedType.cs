@@ -3,5 +3,6 @@ public enum NeedType {
     HUNGER,
     REST,
     KNOWLEDGE,
-    SOUVENIR
+    SOUVENIR,
+    NONE
 }

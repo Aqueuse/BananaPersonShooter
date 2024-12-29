@@ -12,7 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b2e529ee924f2b6439b07656d252d9d6, type: 3}
   m_Name: DyeRedProperties
   m_EditorClassIdentifier: 
-  gameObjectTag: 19
   itemCategory: 17
   bananaType: 0
   droppedType: 1
@@ -20,6 +19,9 @@ MonoBehaviour:
   manufacturedItemsType: 0
   rawMaterialType: 7
   buildableType: 0
+  foodType: 0
+  isAspirable: 1
+  prefab: {fileID: 4128786402390675246, guid: 720d1ff3e4de44547804fa91de7bafc6, type: 3}
   itemName:
   - red dye
   - colorant rouge

@@ -1,26 +1,32 @@
 ﻿using System.Collections.Generic;
-using UnityEngine;
+using InGame.Items.ItemsProperties;
 
-namespace InGame.Inventory {
-    public class IngredientsInventory : MonoBehaviour {
+namespace InGame.Inventories {
+    public class IngredientsInventory : Inventory {
         public Dictionary<IngredientsType, int> ingredientsInventory= new () {
             {IngredientsType.BANANA_DOG_BREAD, 0},   
             {IngredientsType.BANANA_WITHOUT_SKIN, 0}
         };
-        
-        public int AddQuantity(IngredientsType ingredientsType, int quantity) {
-            if (ingredientsInventory[ingredientsType] > 10000) return ingredientsInventory[ingredientsType];
+
+        private IngredientsType ingredientsType;
+
+        public override int AddQuantity(ItemScriptableObject itemScriptableObject, int quantity) {
+            ingredientsType = itemScriptableObject.ingredientsType;
             
+            if (ingredientsInventory[ingredientsType] > 10000) return ingredientsInventory[ingredientsType];
+
             ingredientsInventory[ingredientsType] += quantity;
 
             return ingredientsInventory[ingredientsType];
         }
-        
-        public int GetQuantity(IngredientsType ingredientsType) {
+
+        public override int GetQuantity(ItemScriptableObject itemScriptableObject) {
             return ingredientsInventory[ingredientsType];
         }
-        
-        public int RemoveQuantity(IngredientsType ingredientsType, int quantity) {
+
+        public override int RemoveQuantity(ItemScriptableObject itemScriptableObject, int quantity) {
+            ingredientsType = itemScriptableObject.ingredientsType;
+            
             if (ingredientsInventory[ingredientsType] > quantity) {
                 ingredientsInventory[ingredientsType] -= quantity;
                 return ingredientsInventory[ingredientsType];
@@ -30,7 +36,7 @@ namespace InGame.Inventory {
             return 0;
         }
 
-        public void ResetInventory() {
+        public override void ResetInventory() {
             ingredientsInventory= new () {
                 {IngredientsType.BANANA_DOG_BREAD, 0},   
                 {IngredientsType.BANANA_WITHOUT_SKIN, 0}

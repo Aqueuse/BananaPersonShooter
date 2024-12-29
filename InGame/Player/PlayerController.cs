@@ -189,17 +189,19 @@ namespace InGame.Player {
 
         private void OnCollisionStay(Collision other) {
             if (other.gameObject.layer != 7) return;
-
-            if (other.gameObject.GetComponent<Tag>().gameObjectTag == GAME_OBJECT_TAG.WASTE) {
-                other.gameObject.GetComponent<MeshCollider>().isTrigger = true;
-            }
             
-            else {
-                if (other.gameObject.GetComponent<Tag>().itemScriptableObject.buildableType == BuildableType.BUMPER) {
-                    other.gameObject.GetComponent<PlateformBehaviour>().Activate(GetComponentInParent<Rigidbody>(), 80000);
+            if (other.gameObject.TryGetComponent(out Tag tagComponent)) {
+                switch (tagComponent.gameObjectTag) {
+                    case GAME_OBJECT_TAG.WASTE:
+                        other.gameObject.GetComponent<MeshCollider>().isTrigger = true;
+                        break;
+                    case GAME_OBJECT_TAG.BUILDABLE:
+                        if (tagComponent.itemScriptableObject.buildableType == BuildableType.BUMPER) {
+                            other.gameObject.GetComponent<PlateformBehaviour>().Activate(_rigidbody, 80000);
+                        }
+                        break;
                 }
             }
-            
         }
     }
 }

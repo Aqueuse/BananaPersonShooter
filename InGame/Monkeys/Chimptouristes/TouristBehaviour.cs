@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using InGame.Items.ItemsBehaviours.BuildablesBehaviours;
+using InGame.Items.ItemsProperties.Buildables.VisitorsBuildable;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -128,12 +129,15 @@ namespace InGame.Monkeys.Chimptouristes {
 
                 if (distanceToDestination < 1f) {
                     monkeyMenBehaviour.monkeyMenData.touristState = TouristState.FILLING_NEED;
-                    if (buildableToReach.visitorsBuildablePropertiesScriptableObject.isAnimationLooping) {
+
+                    var buildableData = (VisitorsBuildablePropertiesScriptableObject)buildableToReach.buildablePropertiesScriptableObject;
+                    
+                    if (buildableData.isAnimationLooping) {
                         Invoke(nameof(FillNeed), 10);
                     }
 
                     _navMeshAgent.updateRotation = false;
-                    animator.SetTrigger(buildableToReach.visitorsBuildablePropertiesScriptableObject.animatorParameterToActivate);
+                    animator.SetTrigger(buildableData.animatorParameterToActivate);
                 }
             }
 
@@ -183,7 +187,9 @@ namespace InGame.Monkeys.Chimptouristes {
         }
 
         public void FillNeed() {
-            monkeyMenBehaviour.monkeyMenData.needs[buildableToReach.visitorsBuildablePropertiesScriptableObject.needType] -= buildableToReach.visitorsBuildablePropertiesScriptableObject.needValue;
+            var buildableData = (VisitorsBuildablePropertiesScriptableObject)buildableToReach.buildablePropertiesScriptableObject;
+            
+            monkeyMenBehaviour.monkeyMenData.needs[buildableData.needType] -= buildableData.needValue;
             visitedBuildables.Add(buildableToReach);
             buildableToReach.isVisitorTargeted = false;
             

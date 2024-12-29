@@ -12,7 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b2e529ee924f2b6439b07656d252d9d6, type: 3}
   m_Name: SiliceProperties
   m_EditorClassIdentifier: 
-  gameObjectTag: 19
   itemCategory: 17
   bananaType: 0
   droppedType: 1
@@ -20,6 +19,9 @@ MonoBehaviour:
   manufacturedItemsType: 0
   rawMaterialType: 5
   buildableType: 0
+  foodType: 0
+  isAspirable: 1
+  prefab: {fileID: 1103580827160311562, guid: bd60017071a86c04aa8202000fc02981, type: 3}
   itemName:
   - silica
   - silice

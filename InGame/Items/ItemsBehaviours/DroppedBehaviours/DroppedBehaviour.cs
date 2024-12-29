@@ -9,12 +9,39 @@ namespace InGame.Items.ItemsBehaviours.DroppedBehaviours {
         public string droppedGuid;
         public ItemScriptableObject itemScriptableObject;
 
+        private Rigidbody _rigidbody;
+        private Transform bananaGunTransform;
+        
         private void Start() {
+            _rigidbody = GetComponent<Rigidbody>();
+            
+            bananaGunTransform = ObjectsReference.Instance.bananaGun.bananaGunGameObject.transform; 
+            
             if(string.IsNullOrEmpty(droppedGuid)) {
                 droppedGuid = Guid.NewGuid().ToString();
             }
 
             Invoke(nameof(DestroyMe), 30);
+        }
+
+        private void FixedUpdate() {
+            if (!ObjectsReference.Instance.shoot.isAspiring) return;
+            
+            if (Vector3.Distance(transform.position, bananaGunTransform.position) <= 100) {
+                _rigidbody.velocity = 
+                    (bananaGunTransform.position - 
+                     transform.position) * 5;
+            }
+
+            if (Vector3.Distance(transform.position, bananaGunTransform.position) < 0.5f) {
+                ObjectsReference.Instance.bananaMan.bananaManData.
+                    inventoriesByDroppedType[itemScriptableObject.droppedType].
+                    AddQuantity(itemScriptableObject, 1);
+
+                ObjectsReference.Instance.uiFlippers.RefreshActiveDroppableQuantity();
+                
+                Destroy(gameObject);
+            }
         }
 
         private void OnCollisionEnter (Collision collision) {

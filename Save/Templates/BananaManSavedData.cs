@@ -68,6 +68,10 @@ namespace Save.Templates {
             {ManufacturedItemsType.BANANARAIGNEE.ToString(), 0},
             {ManufacturedItemsType.BANANAVIAIRE.ToString(), 0}
         };
+
+        public Dictionary<string, int> foodInventory = new() {
+            {FoodType.BANANA_DOG.ToString(), 0}
+        };
         
         public string bananaGunMode = BananaGunMode.SHOOT.ToString();
     }

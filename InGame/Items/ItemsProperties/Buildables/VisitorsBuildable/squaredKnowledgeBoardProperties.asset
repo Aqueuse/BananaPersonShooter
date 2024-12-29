@@ -12,15 +12,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6e11e44741351774ca1f8261e4d989f1, type: 3}
   m_Name: squaredKnowledgeBoardProperties
   m_EditorClassIdentifier: 
-  gameObjectTag: 11
+  gameObjectTag: 6
   itemCategory: 1
   bananaType: 0
   droppedType: 0
   ingredientsType: 0
   manufacturedItemsType: 0
   rawMaterialType: 0
-  buildableType: 11
+  buildableType: 10
   foodType: 0
+  isAspirable: 0
   itemName:
   - square information board
   - "panneau d'information carr\xE9"
@@ -33,7 +34,7 @@ MonoBehaviour:
   bitKongValue: 0
   rawMaterialsWithQuantity:
     list:
-    - key: 0
+    - key: {fileID: 11400000, guid: 9b2d672be4f975f49b3bd109607666ae, type: 2}
       value: 4
     keyCollision: 0
   buildablePrefab: {fileID: 831826108930951630, guid: 765ba6a4bec0c0b498e259570f1655eb, type: 3}

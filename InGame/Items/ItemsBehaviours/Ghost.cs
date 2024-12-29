@@ -1,5 +1,4 @@
 using InGame.Items.ItemsProperties.Buildables;
-using Tags;
 using UnityEngine;
 
 namespace InGame.Items.ItemsBehaviours {
@@ -10,15 +9,13 @@ namespace InGame.Items.ItemsBehaviours {
         private Material _ghostMaterial;
         
         private Material[] _buildableMaterials;
-        private GhostState _ghostState;
+        private GhostState _ghostState = GhostState.NOT_ENOUGH_MATERIALS;
 
         private void Start() {
             _meshRenderer = GetComponent<MeshRenderer>();
 
             _buildableMaterials = new []{_ghostMaterial};
             _ghostMaterial = _meshRenderer.materials[0];
-
-            _ghostState = GhostState.UNBUILDABLE;
         }
         
         public void SetGhostState(GhostState newGhostState) {
@@ -32,13 +29,7 @@ namespace InGame.Items.ItemsBehaviours {
         public GhostState GetGhostState() {
             return _ghostState;
         }
-
-        private void OnTriggerEnter(Collider other) {
-            if (TagsManager.Instance.HasTag(other.gameObject, GAME_OBJECT_TAG.BUILD_UNVALID)) {
-                SetGhostState(GhostState.UNBUILDABLE);
-            }
-        }
-
+        
         private void OnTriggerExit(Collider other) {
             if (!ObjectsReference.Instance.bananaManRawMaterialInventory.HasCraftingIngredients(buildablePropertiesScriptableObject)) {
                 SetGhostState(GhostState.NOT_ENOUGH_MATERIALS);

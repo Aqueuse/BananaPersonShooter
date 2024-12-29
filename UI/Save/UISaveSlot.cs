@@ -27,7 +27,6 @@ namespace UI.Save {
         public string saveUuid = "";
         
         public void Select() {
-            ObjectsReference.Instance.uiSave.selectedSaveSlot = this;
             ObjectsReference.Instance.uiSave.UnselectAll();
             
             SetActive(activatedMaskCanvasGroup, true);

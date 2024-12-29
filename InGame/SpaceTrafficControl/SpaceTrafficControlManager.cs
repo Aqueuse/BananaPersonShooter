@@ -46,22 +46,22 @@ namespace InGame.SpaceTrafficControl {
 
         public void AssignSpaceshipToHangar(int hangarNumber) {
             hangarAvailabilityByHangarNumber[hangarNumber] = false;
-            ObjectsReference.Instance.uIcommunication.RefreshHangarAvailability();
-            ObjectsReference.Instance.uIcommunication.RefreshCommunicationButton();
+            ObjectsReference.Instance.uiCommunicationPanel.RefreshHangarAvailability();
+            ObjectsReference.Instance.uiCommunicationPanel.RefreshCommunicationButton();
         }
 
         public void AssignToHangarFromCommunications(int hangarNumber) {
             // index are shifted in the UI because we start to count at 1 instead of 0
             ObjectsReference.Instance.spaceTrafficControlManager.AssignSpaceshipToHangar(hangarNumber);
-            ObjectsReference.Instance.uIcommunication.CloseCommunications(selectedSpaceship);
+            ObjectsReference.Instance.uiCommunicationPanel.CloseCommunications(selectedSpaceship);
             selectedSpaceship.GoToPath(hangarNumber);
         }
 
         public void FreeHangar(int hangarNumber) {
             hangarAvailabilityByHangarNumber[hangarNumber] = true;
             
-            ObjectsReference.Instance.uIcommunication.RefreshHangarAvailability();
-            ObjectsReference.Instance.uIcommunication.RefreshCommunicationButton();
+            ObjectsReference.Instance.uiCommunicationPanel.RefreshHangarAvailability();
+            ObjectsReference.Instance.uiCommunicationPanel.RefreshCommunicationButton();
         }
         
         public string GetUniqueSpaceshipName() {

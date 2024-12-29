@@ -12,7 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b2e529ee924f2b6439b07656d252d9d6, type: 3}
   m_Name: lapinouProperties
   m_EditorClassIdentifier: 
-  gameObjectTag: 26
   itemCategory: 11
   bananaType: 0
   droppedType: 3
@@ -20,6 +19,9 @@ MonoBehaviour:
   manufacturedItemsType: 2
   rawMaterialType: 0
   buildableType: 0
+  foodType: 0
+  isAspirable: 1
+  prefab: {fileID: 3495125514139879379, guid: a231baae94d01984d97474f9d0b2859f, type: 3}
   itemName:
   - bunny
   - lapinou

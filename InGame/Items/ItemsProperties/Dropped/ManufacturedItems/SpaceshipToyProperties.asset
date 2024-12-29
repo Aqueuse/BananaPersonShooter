@@ -12,7 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b2e529ee924f2b6439b07656d252d9d6, type: 3}
   m_Name: SpaceshipToyProperties
   m_EditorClassIdentifier: 
-  gameObjectTag: 26
   itemCategory: 11
   bananaType: 0
   droppedType: 3
@@ -20,6 +19,9 @@ MonoBehaviour:
   manufacturedItemsType: 0
   rawMaterialType: 0
   buildableType: 0
+  foodType: 0
+  isAspirable: 1
+  prefab: {fileID: 6249355738671945922, guid: 502c613b0a645ca4288363fed557c6ac, type: 3}
   itemName:
   - spaceship
   - vaisseau spatial

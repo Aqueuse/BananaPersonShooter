@@ -32,8 +32,7 @@ namespace InGame.MiniGames.SpaceTrafficControlMiniGame.Spaceships {
         }
 
         public void SpawnSpaceshipsWithAdCampaign() {
-            ObjectsReference.Instance.uiMarketingPanel.HideCampaignCreationTools();
-            ObjectsReference.Instance.commandRoomControlPanelsManager.UnfocusPanel(false);
+            ObjectsReference.Instance.uiCommunicationPanel.HideCampaignCreationTools();
 
             spaceships = ShuffleSpaceships(adCampaign.piratesNumber, adCampaign.touristsNumber, adCampaign.merchimpsNumber);
 
@@ -46,7 +45,7 @@ namespace InGame.MiniGames.SpaceTrafficControlMiniGame.Spaceships {
 
         public void RemoveGuestInCampaignCreator() {
             if (spaceships.Count == 0) {
-                ObjectsReference.Instance.uiMarketingPanel.ShowCampaignCreatorTools();
+                ObjectsReference.Instance.uiCommunicationPanel.ShowCampaignCreatorTools();
             }
 
             else {
@@ -74,7 +73,7 @@ namespace InGame.MiniGames.SpaceTrafficControlMiniGame.Spaceships {
                 ObjectsReference.Instance.meshReferenceScriptableObject.spaceshipPrefabBySpaceshipType[spaceshipType],
                 entryPoint,
                 Quaternion.identity,
-                ObjectsReference.Instance.gameSave.spaceshipsContainer);
+                ObjectsReference.Instance.gameSave.savablesItemsContainer);
             
             spaceship.transform.rotation = Quaternion.Euler((transform.position - entryPoint).normalized); 
 

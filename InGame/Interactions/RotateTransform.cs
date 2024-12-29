@@ -7,10 +7,10 @@ namespace InGame.Interactions {
 
         private Vector3 rotationEuler = Vector3.forward;
         private Quaternion rotation;
-
+        
         private void Start() {
             _elementToRotateTransform = transform;
-            Invoke(nameof(DestroyMe), 1.5f);
+            Invoke(nameof(DisableMe), 1.5f);
         }
 
         private void Update() {
@@ -22,8 +22,8 @@ namespace InGame.Interactions {
             _elementToRotateTransform.localRotation = rotation;
         }
 
-        private void DestroyMe() {
-            Destroy(this);
+        private void DisableMe() {
+            enabled = false;
         }
     }
 }

@@ -3,7 +3,6 @@ using UnityEngine;
 
 namespace InGame.Items.ItemsBehaviours {
     public enum GhostState {
-        UNBUILDABLE,
         NOT_ENOUGH_MATERIALS,
         VALID
     }

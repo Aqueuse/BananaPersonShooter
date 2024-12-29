@@ -12,7 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b2e529ee924f2b6439b07656d252d9d6, type: 3}
   m_Name: bananaWithoutSkinProperties
   m_EditorClassIdentifier: 
-  gameObjectTag: 20
   itemCategory: 5
   bananaType: 0
   droppedType: 2
@@ -20,6 +19,9 @@ MonoBehaviour:
   manufacturedItemsType: 0
   rawMaterialType: 0
   buildableType: 0
+  foodType: 0
+  isAspirable: 1
+  prefab: {fileID: 411935539367855736, guid: 9d652a2b607aeeb4eaab8f7bb713fcab, type: 3}
   itemName:
   - banana without skin
   - "banane \xE9pluch\xE9e"

@@ -18,7 +18,7 @@ namespace InGame.MiniGames.MarketingCampaignMiniGame {
             if (wordBoxes.Count < 6) {
                 wordBoxes.Add(adWordBox);
                 adWordBox.isInCurrentCampaign = true;
-                ObjectsReference.Instance.uiMarketingPanel.MoveAdWordBoxToCurrentCampaign(adWordBox);
+                ObjectsReference.Instance.uiCommunicationPanel.MoveAdWordBoxToCurrentCampaign(adWordBox);
                 
                 RefreshChimpsNumber();
             }
@@ -31,7 +31,7 @@ namespace InGame.MiniGames.MarketingCampaignMiniGame {
         
         public void RemoveAdWordBox(AdWordBox adWordBox) {
             wordBoxes.Remove(adWordBox);
-            ObjectsReference.Instance.uiMarketingPanel.MoveAdWordBoxToList(adWordBox);
+            ObjectsReference.Instance.uiCommunicationPanel.MoveAdWordBoxToList(adWordBox);
             
             RefreshChimpsNumber();
         }

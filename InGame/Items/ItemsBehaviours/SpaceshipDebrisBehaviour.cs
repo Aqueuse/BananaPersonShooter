@@ -61,7 +61,7 @@ namespace InGame.Items.ItemsBehaviours {
             
             ActiveEmission(laser.goopColor);
 
-            transform.parent = ObjectsReference.Instance.gameSave.debrisContainer.transform;
+            transform.parent = ObjectsReference.Instance.gameSave.savablesItemsContainer;
         }
         
         public void DestroyIfUnreachable() {

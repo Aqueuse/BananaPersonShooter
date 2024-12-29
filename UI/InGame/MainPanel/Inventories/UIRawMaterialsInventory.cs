@@ -1,4 +1,4 @@
-using InGame.Inventory;
+using InGame.Inventories;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -19,7 +19,7 @@ namespace UI.InGame.MainPanel.Inventories {
 
         public void RefreshUInventory() {
             foreach (var inventoryItem in uInventorySlots) {
-                inventoryItem.Value.SetQuantity(associatedRawMaterialInventory.GetQuantity(inventoryItem.Key));
+                inventoryItem.Value.SetQuantity(associatedRawMaterialInventory.GetQuantity(inventoryItem.Value.itemScriptableObject));
             }
         }
         
