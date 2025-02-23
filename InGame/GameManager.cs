@@ -1,9 +1,12 @@
 ﻿using System.Collections.Generic;
 using Cinemachine;
+using Tags;
 using UnityEngine;
 
 namespace InGame {
     public class GameManager : MonoBehaviour {
+        [SerializeField] private Color penumbraAmbientLightColor;
+        
         [SerializeField] public Camera cameraMain;
         [SerializeField] private CinemachineFreeLook playerCamera;
 
@@ -11,6 +14,7 @@ namespace InGame {
         
         [SerializeField] private GameObject startAnimations;
         [SerializeField] private List<GameObject> inGameGameObjects;
+        [SerializeField] private GameObject initialInteractables; // banana gun pieces
 
         public GameContext gameContext;
 
@@ -163,11 +167,44 @@ namespace InGame {
             
             ObjectsReference.Instance.gameSave.buildablesSave.SpawnInitialBuildables();
             ObjectsReference.Instance.gameSave.spaceshipDebrisSave.SpawnInitialSpaceshipDebris();
+            
+            Destroy(TagsManager.GetAllGameObjectsWithTag(GAME_OBJECT_TAG.INITAL_INTERACTABLES)[0].gameObject); 
+            Instantiate(initialInteractables);
 
             loadingScreen.SetActive(false);
-            Init();
 
-            ObjectsReference.Instance.tutorial.StartTutorial();
+            ObjectsReference.Instance.commandRoomControlPanelsManager.Init();
+            ObjectsReference.Instance.commandRoomControlPanelsManager.assembler.Init();
+
+            ObjectsReference.Instance.bananaGun.UngrabBananaGun();
+
+            ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.CROSSHAIRS].alpha = 1f;
+            ObjectsReference.Instance.uiCrosshairs.SetCrosshair(false);
+
+            ObjectsReference.Instance.uInventoriesManager.HideUIHelpers();
+            ObjectsReference.Instance.uiManager.SetActive(UICanvasGroupType.HUD_BANANAMAN, false);
+
+            ObjectsReference.Instance.uiManager.SetActive(UICanvasGroupType.BANANAGUN_HELPER_KEYBOARD, false);
+            ObjectsReference.Instance.uiManager.SetActive(UICanvasGroupType.BANANAGUN_HELPER_GAMEPAD, false);
+            ObjectsReference.Instance.bananaGunActionsSwitch.enabled = false;
+            
+            ObjectsReference.Instance.gameReset.ResetGameData();
+
+            ObjectsReference.Instance.inputManager.SwitchContext(InputContext.UI);
+
+            ObjectsReference.Instance.cinematiques.Play(CinematiqueType.NEW_GAME);
+            
+            ObjectsReference.Instance.bananaMan.tutorialFinished = false;
+            
+            foreach (var accessManagedGameObject in TagsManager.GetAllGameObjectsWithTag(GAME_OBJECT_TAG.ACCESS_MANAGED)) {
+                accessManagedGameObject.GetComponent<ManageAccess>().ForbidUsage();
+            }
+
+            ObjectsReference.Instance.commandRoomControlPanelsManager.chimployeeCommandRoom.SetTutorialChimployeeConfiguration();
+
+            RenderSettings.ambientLight = penumbraAmbientLightColor;
+            
+            Invoke(nameof(SaveInitialState), 20);
         }
         
         private void SwitchToInGameSettings() {
@@ -192,13 +229,16 @@ namespace InGame {
 
             ObjectsReference.Instance.audioManager.SetMusiqueAndAmbianceByRegion(RegionType.COROLLE);
             
-            Init();
-            loadingScreen.SetActive(false);
-        }
-
-        private void Init() {
             ObjectsReference.Instance.commandRoomControlPanelsManager.Init();
             ObjectsReference.Instance.commandRoomControlPanelsManager.assembler.Init();
+
+            ObjectsReference.Instance.bananaGun.GrabBananaGun();
+            
+            loadingScreen.SetActive(false);
+        }
+        
+        private void SaveInitialState() {
+            ObjectsReference.Instance.uiSave.CreateNewSave();
         }
     }
 }

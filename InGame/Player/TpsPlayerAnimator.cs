@@ -3,8 +3,6 @@ using UnityEngine.Animations.Rigging;
 
 namespace InGame.Player {
     public class TpsPlayerAnimator : MonoBehaviour {
-        [SerializeField] private Rig bananaManRig;
-        
         private Animator _playerAnimator;
 
         //Animation String IDs
@@ -46,13 +44,8 @@ namespace InGame.Player {
             _playerAnimator.SetBool(IsFallingFrontwardID, false);
         }
 
-        public void SetGrabbedBananaGunRigWeight(bool isGrabbing) {
-            if (isGrabbing) {
-                bananaManRig.weight = 1;
-            }
-            else {
-                bananaManRig.weight = 0;
-            }
+        public void SetBananaGunLayerWeight(bool active) {
+            _playerAnimator.SetLayerWeight(1, active ? 1 : 0);
         }
     }
 }

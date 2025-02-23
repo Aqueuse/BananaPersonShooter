@@ -1,12 +1,13 @@
+using System.Collections.Generic;
 using InGame.Interactions;
 using UI.InGame.CommandRoomControlPanels;
 using UnityEngine;
 
 namespace InGame.CommandRoomPanelControls {
     public class Assembler : MonoBehaviour {
-        [SerializeField] private GenericDictionary<GameObject, Transform> bananaGunPiecesRepairedPositionByBananaGunPieceGameObject;
+        [SerializeField] private List<GameObject> bananaGunRepairedPieces;
+        
         [SerializeField] private GameObject bananaGunRepaired;
-        [SerializeField] private GameObject bananaGunPieces;
         
         [SerializeField] private MeshRenderer assemblerZoneMeshRenderer;
 
@@ -17,55 +18,48 @@ namespace InGame.CommandRoomPanelControls {
 
         private AudioSource assemblerAudioSource;
 
-        private int bananaGunPiecesRepaired;
+        private int bananaGunPiecesRepairedQuantity;
         private static readonly int EmissionColor = Shader.PropertyToID("_emission_color");
         private static readonly int Emission = Shader.PropertyToID("_emission");
 
         public void Init() {
             assemblerAudioSource = GetComponent<AudioSource>();
             assemblerAudioSource.volume = ObjectsReference.Instance.audioManager.effectsLevel;
-
-            bananaGunPieces.SetActive(!ObjectsReference.Instance.bananaMan.tutorialFinished);
             assemblerSpotLight.enabled = !ObjectsReference.Instance.bananaMan.tutorialFinished;
         }
         
         private void OnTriggerEnter(Collider other) {
             if (other.TryGetComponent(out Grabbable grabbable)) {
                 if (grabbable.grabbablePieceType == GrabbablePieceType.BANANA_GUN) {
-                    if (bananaGunPiecesRepairedPositionByBananaGunPieceGameObject.ContainsKey(other.gameObject)) {
-                        assemblerAudioSource.pitch += 0.02f;
-                        SetAssemblerAudioVolume(ObjectsReference.Instance.audioManager.effectsLevel);
-                        if (!assemblerAudioSource.isPlaying) assemblerAudioSource.Play();
+                    assemblerAudioSource.pitch += 0.02f;
+                    SetAssemblerAudioVolume(ObjectsReference.Instance.audioManager.effectsLevel);
+                    if (!assemblerAudioSource.isPlaying) assemblerAudioSource.Play();
 
-                        assemblerZoneMeshRenderer.enabled = true;
-                        assemblerZoneMeshRenderer.material.SetColor(EmissionColor, activatedEmissionColor);
-                        assemblerZoneMeshRenderer.material.SetFloat(Emission, 1f);
+                    assemblerZoneMeshRenderer.enabled = true;
+                    assemblerZoneMeshRenderer.material.SetColor(EmissionColor, activatedEmissionColor);
+                    assemblerZoneMeshRenderer.material.SetFloat(Emission, 1f);
+                    
+                    ObjectsReference.Instance.grab.Release();
+                    
+                    bananaGunRepairedPieces[other.GetComponent<BananaGunPiece>().repairedPieceIndex].SetActive(true);
 
-                        var bananaGunPiece = other.gameObject;
+                    bananaGunPiecesRepairedQuantity = 0;
+                    foreach (var bananaGunRepairedPiece in bananaGunRepairedPieces) {
+                        if (bananaGunRepairedPiece.activeInHierarchy) bananaGunPiecesRepairedQuantity += 1;
+                    }
+                    
+                    Destroy(other.gameObject);
+                    
+                    uIassembler.SwitchToBananaGunReparationMode();
+                    uIassembler.SetBananaGunPiecesQuantity(bananaGunPiecesRepairedQuantity);
             
-                        ObjectsReference.Instance.grab.Release();
-                        bananaGunPiece.layer = 0;
-
-                        Destroy(bananaGunPiece.GetComponent<Rigidbody>());
-                        Destroy(bananaGunPiece.GetComponent<BoxCollider>());
-            
-                        bananaGunPiece.transform.position = bananaGunPiecesRepairedPositionByBananaGunPieceGameObject[bananaGunPiece].position;
-                        bananaGunPiece.transform.rotation = bananaGunPiecesRepairedPositionByBananaGunPieceGameObject[bananaGunPiece].rotation;
+                    if (bananaGunPiecesRepairedQuantity == bananaGunRepairedPieces.Count) {
+                        assemblerAudioSource.Stop();
+                        uIassembler.SwitchToIdleMode();
                         
-                        bananaGunPiecesRepaired += 1;
-                        if (uIassembler.assemblerMode != AssemblerMode.BANANA_GUN) uIassembler.SwitchToBananaGunReparationMode();
-                        uIassembler.SetBananaGunPiecesQuantity(bananaGunPiecesRepaired);
-                
-                        if (bananaGunPiecesRepaired == bananaGunPiecesRepairedPositionByBananaGunPieceGameObject.Count) {
-                            assemblerAudioSource.Stop();
-                            uIassembler.SwitchToIdleMode();
-                            
-                            DesactivateBananaGunPieces();
-                            bananaGunRepaired.SetActive(true);
-                            HideAssemblerActivatedZone();
-                            ObjectsReference.Instance.commandRoomControlPanelsManager.miniChimp.bubbleDialogue.SetBubbleDialogue(dialogueSet.REPAIRED_BANANA_GUN);
-                            ObjectsReference.Instance.commandRoomControlPanelsManager.miniChimp.bubbleDialogue.PlayDialogue();
-                        }
+                        DesactivateBananaGunPieces();
+                        bananaGunRepaired.SetActive(true);
+                        HideAssemblerActivatedZone();
                     }
                 }
             }
@@ -76,7 +70,9 @@ namespace InGame.CommandRoomPanelControls {
         }
 
         private void DesactivateBananaGunPieces() {
-            bananaGunPieces.SetActive(false);
+            foreach (var bananaGunRepairedPiece in bananaGunRepairedPieces) {
+                bananaGunRepairedPiece.SetActive(false);
+            }
         }
 
         private void SetAssemblerAudioVolume(float level) {

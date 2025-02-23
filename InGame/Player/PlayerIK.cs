@@ -4,6 +4,8 @@ using UnityEngine.Animations.Rigging;
 
 namespace InGame.Player {
     public class PlayerIK : MonoBehaviour {
+        [SerializeField] private Rig bananaManRig;
+        
         [SerializeField] private TwoBoneIKConstraint rightHandConstraint;
         [SerializeField] private AimConstraint backAimConstraint;
         [SerializeField] private LookAtConstraint headLookAtConstraint;
@@ -35,10 +37,16 @@ namespace InGame.Player {
             if (active) {
                 rightHandConstraint.weight = 1;
                 backAimConstraint.weight = 1;
+                backAimConstraint.constraintActive = true;
+                headLookAtConstraint.weight = 1;
+                headLookAtConstraint.constraintActive = true;
             }
             else {
                 rightHandConstraint.weight = 0;
                 backAimConstraint.weight = 0;
+                backAimConstraint.constraintActive = false;
+                headLookAtConstraint.weight = 0;
+                headLookAtConstraint.constraintActive = false;
             }
         }
 
@@ -62,6 +70,15 @@ namespace InGame.Player {
 
             if (_rightFootDistanceToPlayerRoot >= _footExtended) {
                 isRightFootGrounded = false;
+            }
+        }
+        
+        public void SetGrabbedBananaGunRigWeight(bool isGrabbing) {
+            if (isGrabbing) {
+                bananaManRig.weight = 1;
+            }
+            else {
+                bananaManRig.weight = 0;
             }
         }
     }

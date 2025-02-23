@@ -13,16 +13,18 @@ namespace InGame.Player {
             bananaGunGameObject.SetActive(true);
 
             ObjectsReference.Instance.bananaMan.GetComponent<PlayerIK>().SetAimConstraint(true);
-            ObjectsReference.Instance.bananaMan.tpsPlayerAnimator.SetGrabbedBananaGunRigWeight(true);
-            
+            ObjectsReference.Instance.bananaMan.GetComponent<PlayerIK>().SetGrabbedBananaGunRigWeight(true);
+            ObjectsReference.Instance.bananaMan.tpsPlayerAnimator.SetBananaGunLayerWeight(true);
+
             ObjectsReference.Instance.uiCrosshairs.SetCrosshair(true);
         }
-        
+
         public void UngrabBananaGun() {
             bananaGunGameObject.SetActive(false);
 
             ObjectsReference.Instance.bananaMan.GetComponent<PlayerIK>().SetAimConstraint(false);
-            ObjectsReference.Instance.bananaMan.tpsPlayerAnimator.SetGrabbedBananaGunRigWeight(false);
+            ObjectsReference.Instance.bananaMan.GetComponent<PlayerIK>().SetGrabbedBananaGunRigWeight(false);
+            ObjectsReference.Instance.bananaMan.tpsPlayerAnimator.SetBananaGunLayerWeight(false);
             
             ObjectsReference.Instance.uInventoriesManager.GetCurrentUIHelper().ShowDefaultHelper();
             

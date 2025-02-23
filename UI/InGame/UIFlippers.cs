@@ -15,7 +15,7 @@ namespace UI.InGame {
         [SerializeField] private RectTransform leftFlipperTransform;
         [SerializeField] private RectTransform middleFlipperTransform;
         [SerializeField] private RectTransform rightFlipperTransform;
-
+        
         private Vector3 leftFlipperNormalPosition;
         private Vector3 middleFlipperNormalPosition;
         private Vector3 rightFlipperNormalPosition;
@@ -36,6 +36,12 @@ namespace UI.InGame {
             rightFlipperNormalPosition = rightFlipperTransform.localPosition;
             rightFlipperUpPosition = rightFlipperNormalPosition;
             rightFlipperUpPosition.y += 55f;
+        }
+        
+        public void Init() {
+            droppedImage.sprite = null;
+            droppedQuantityText.text = "";
+            RefreshActiveBuildableAvailability();
         }
         
         public void UpLeftFlipper() {

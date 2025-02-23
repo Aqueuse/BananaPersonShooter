@@ -1,3 +1,4 @@
 public enum GrabbablePieceType {
-    BANANA_GUN
+    BANANA_GUN,
+    MESSAGE
 }

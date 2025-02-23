@@ -8,6 +8,8 @@ namespace InGame.Monkeys.Chimployees {
         [SerializeField] private Animator animator;
         [SerializeField] private UIFace uiFace;
         [SerializeField] private BubbleDialogue bubbleDialogue;
+        [SerializeField] private GameObject capsuleMessage;
+        
         private static readonly int isDead = Animator.StringToHash("isDead");
         private static readonly int isTyping = Animator.StringToHash("isTyping");
         
@@ -31,6 +33,8 @@ namespace InGame.Monkeys.Chimployees {
             enabled = false;
             bubbleDialogue.enabled = true;
             bubbleDialogue.EnableBubble();
+            
+            capsuleMessage.SetActive(false);
         }
 
         public void SetTutorialChimployeeConfiguration() {
@@ -40,6 +44,8 @@ namespace InGame.Monkeys.Chimployees {
 
             bubbleDialogue.DisableBubble();
             bubbleDialogue.enabled = false;
+            
+            capsuleMessage.SetActive(true);
         }
     }
 }

@@ -84,7 +84,6 @@ public class ObjectsReference : MonoSingleton<ObjectsReference> {
     [Space]
     public Cinematiques cinematiques;
     public Death death;
-    public Tutorial tutorial;
     
     [Header("Saving System")]
     public WorldData worldData;
