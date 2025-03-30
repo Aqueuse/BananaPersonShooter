@@ -1,4 +1,4 @@
-using System;
+using System.Collections.Generic;
 using Settings;
 using TMPro;
 using UnityEngine;
@@ -17,8 +17,8 @@ namespace UI {
 
         [SerializeField] private InputRebind[] inputRebinds;
         
-        [SerializeField] private Slider resolutionSlider;
-        [SerializeField] private TextMeshProUGUI resolutionText;
+        [SerializeField] private GameObject resolutionButtonPrefab;
+        [SerializeField] private TMP_Dropdown resolutionsDropdown;
         public Slider languageSlider;
         [SerializeField] private TextMeshProUGUI languageText;
 
@@ -26,8 +26,6 @@ namespace UI {
 
         [SerializeField] private Toggle horizontalCameraInversionToggle;
         [SerializeField] private Toggle verticalCameraInversionToggle;
-
-        [SerializeField] private Slider droppedFallSlider;
         
         [SerializeField] private Slider saveDelaySlider;
         [SerializeField] private TextMeshProUGUI saveDelayText;
@@ -59,8 +57,6 @@ namespace UI {
             verticalCameraInversionToggle.isOn = gameSettings.isCameraVerticallyInverted;
     
             ReflectLanguageSettingsOnUI(gameSettings.languageIndexSelected);
-
-            droppedFallSlider.value = Convert.ToInt32(gameSettings.areDroppedInSpaceFallingOnTheTrees);
             
             ReflectSaveDelayOnUI(Mathf.Abs(gameSettings.saveDelayMinute/60));
             
@@ -77,22 +73,28 @@ namespace UI {
         }
 
         public void ReflectResolutionSettingOnUI(int gameResolution) {
-            resolutionSlider.maxValue = Screen.resolutions.Length;
+            var availableResolutions = ObjectsReference.Instance.gameSettings.resolutions;
+
+            List<TMP_Dropdown.OptionData> resolutionsOptions = new List<TMP_Dropdown.OptionData>();
             
-            resolutionSlider.value = gameResolution;
-            
-            resolutionText.text = gameSettings.resolutions[gameResolution].ToString();
+            resolutionsDropdown.options.Clear();
+
+            foreach (var availableResolution in availableResolutions) {
+                resolutionsOptions.Add(new TMP_Dropdown.OptionData(availableResolution.ToString()));
+            }
+
+            resolutionsDropdown.AddOptions(resolutionsOptions);
+
+            resolutionsDropdown.SetValueWithoutNotify(gameResolution);
         }
 
         public void ReflectSaveDelayOnUI(int delay) {
-            var saveDelayMinute = delay*60;
-
             if (delay == 0) saveDelayText.text = LocalizationSettings.StringDatabase.GetLocalizedString("UI", "never");
             else {
-                saveDelayText.text = saveDelayMinute + "m";
+                saveDelayText.text = delay + "m";
             }
 
-            saveDelaySlider.value = saveDelayMinute;
+            saveDelaySlider.value = delay;
         }
 
         public void RefreshRebinds() {

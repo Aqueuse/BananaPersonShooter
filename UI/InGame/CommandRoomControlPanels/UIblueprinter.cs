@@ -7,7 +7,7 @@ namespace UI.InGame.CommandRoomControlPanels {
         BANANA_GUN
     }
 
-    public class UIassembler : MonoBehaviour {
+    public class UIblueprinter : MonoBehaviour {
         [SerializeField] private TextMeshPro basicText;
         [SerializeField] private TextMeshPro bananaGunReparationText;
         [SerializeField] private TextMeshPro bananaGunPiecesQuantityText;

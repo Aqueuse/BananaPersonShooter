@@ -26,6 +26,7 @@ MonoBehaviour:
   - electronic component
   - "composant \xE9lectronique"
   - "componente electr\xF3nico"
+  spriteAtlasIndex: 8
   itemSprite: {fileID: 21300000, guid: deab70e55ae84734faee3873ccc8f0c1, type: 3}
   itemDescription:
   - some useful components to create machines

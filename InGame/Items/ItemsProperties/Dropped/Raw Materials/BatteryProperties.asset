@@ -26,6 +26,7 @@ MonoBehaviour:
   - battery
   - batterie
   - "bater\xEDa"
+  spriteAtlasIndex: 6
   itemSprite: {fileID: 21300000, guid: d6cdcfa1c604c7948aa34dee667cc20d, type: 3}
   itemDescription:
   - a source of energy to power machines

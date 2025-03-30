@@ -26,6 +26,7 @@ MonoBehaviour:
   - green dye
   - colorant vert
   - tinte verde
+  spriteAtlasIndex: 2
   itemSprite: {fileID: 21300000, guid: 7cf61bb228b51a64b8964a68b947a7cc, type: 3}
   itemDescription:
   - enough dye to color a good amount of green fabric

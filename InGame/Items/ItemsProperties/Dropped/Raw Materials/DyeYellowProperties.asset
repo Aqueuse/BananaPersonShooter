@@ -26,6 +26,7 @@ MonoBehaviour:
   - yellow dye
   - colorant jaune
   - tinte amarillo
+  spriteAtlasIndex: 4
   itemSprite: {fileID: 21300000, guid: 627c9abbdb0592d4980acd6c50a36d2c, type: 3}
   itemDescription:
   - enough dye to color a good amount of yellow fabric

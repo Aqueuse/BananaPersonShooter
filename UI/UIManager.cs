@@ -70,7 +70,7 @@ namespace UI {
             isOnSubMenus = true;
             HideGameMenu();
             
-            ObjectsReference.Instance.uiOptionsMenu.SwitchToAudioVideoTab();
+            ObjectsReference.Instance.uiOptionsMenu.SwitchToAudioTab();
         }
         
         public void ShowCredits() {

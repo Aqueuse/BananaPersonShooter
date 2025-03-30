@@ -93,6 +93,12 @@ namespace UI.InGame.CommandRoomControlPanels {
             
             if (spaceshipMessage != null) spaceshipMessage.SetActive(false);
             
+            // TODO : replace with text and regex espacing
+            // cf solution found by perplexity
+            // Pour les caractères Unicode UTF-16 (format \uXXXX)
+            // string texteAvecUnicode = rawMaterial.Key.spriteAtlasIndex;
+            // var tokiPonaEscaped = Regex.Unescape(texteAvecUnicode);
+            
             spaceshipMessage = spaceshipMessagesByCharacterType
                 [spaceshipBehaviour.spaceshipData.characterType]
                 [spaceshipBehaviour.spaceshipData.communicationMessagePrefabIndex]; 

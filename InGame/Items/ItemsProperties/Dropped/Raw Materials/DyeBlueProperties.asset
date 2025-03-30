@@ -26,6 +26,7 @@ MonoBehaviour:
   - blue dye
   - colorant bleu
   - tinte azul
+  spriteAtlasIndex: 1
   itemSprite: {fileID: 21300000, guid: 906f6d528d82d3645aa3bedd2d452797, type: 3}
   itemDescription:
   - enough dye to color a good amount of red fabric

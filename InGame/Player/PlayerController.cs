@@ -1,4 +1,5 @@
-﻿using InGame.Items.ItemsBehaviours.BuildablesBehaviours;
+﻿using System;
+using InGame.Items.ItemsBehaviours.BuildablesBehaviours;
 using Tags;
 using UnityEngine;
 
@@ -195,6 +196,13 @@ namespace InGame.Player {
                     case GAME_OBJECT_TAG.WASTE:
                         other.gameObject.GetComponent<MeshCollider>().isTrigger = true;
                         break;
+                }
+            }
+        }
+
+        private void OnTriggerStay(Collider other) {
+            if (other.gameObject.TryGetComponent(out Tag tagComponent)) {
+                switch (tagComponent.gameObjectTag) {
                     case GAME_OBJECT_TAG.BUILDABLE:
                         if (tagComponent.itemScriptableObject.buildableType == BuildableType.BUMPER) {
                             other.gameObject.GetComponent<PlateformBehaviour>().Activate(_rigidbody, 80000);

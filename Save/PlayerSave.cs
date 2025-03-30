@@ -171,7 +171,6 @@ namespace Save {
             else {
                 ObjectsReference.Instance.bananaGun.UngrabBananaGun();
                 ObjectsReference.Instance.uiManager.SetActive(UICanvasGroupType.HUD_BANANAMAN, false);
-                ObjectsReference.Instance.uiCrosshairs.SetCrosshair(false);
             }
         }
 

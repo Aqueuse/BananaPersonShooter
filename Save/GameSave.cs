@@ -37,8 +37,6 @@ namespace Save {
         public WorldSave worldSave;
         public SpaceshipsSave spaceshipsSave;
         public monkeyMensSave monkeyMensSave;
-
-        public string currentSaveUuid;
         
         private void Start() {
             _appPath = Path.GetDirectoryName(Application.persistentDataPath);
@@ -71,10 +69,8 @@ namespace Save {
             }
         }
         
-        public void SaveGame(string saveUuid) {
-            var date = DateTime.ParseExact(DateTime.Now.ToString("U"), "U", CultureInfo.CurrentCulture).ToString(CultureInfo.CurrentCulture);
-
-            CreateSave(saveUuid, date);
+        public void SaveGame(string saveUuid, string saveName, string date) {
+            CreateSave(saveUuid, saveName, date);
 
             playerSave.SavePlayerByUuid(saveUuid);
             worldSave.SaveWorld(saveUuid);
@@ -105,7 +101,14 @@ namespace Save {
         
         public void AutoSave() {
             autoSaveBanana.SetActive(true);
-            SaveGame(currentSaveUuid);
+            
+            var date = DateTime.ParseExact(DateTime.Now.ToString("U"), "U", CultureInfo.CurrentCulture).ToString(CultureInfo.CurrentCulture);
+            
+            SaveGame("autosave", "autosave", date);
+            
+            // reflect on UI
+            ObjectsReference.Instance.uiSave.UpdateAutoSave(date);
+
             Invoke(nameof(HideAutoSaveBanana), 5);
         }
 
@@ -124,30 +127,8 @@ namespace Save {
         public string GetSavePathByUuid(string saveUuid) {
             return Path.Combine(_savesPath, saveUuid);
         }
-
-        public bool SaveExists(string saveuuid) {
-            return Directory.Exists(Path.Combine(_savesPath, saveuuid));
-        }
-
-        public void LoadLastSave() {
-            ObjectsReference.Instance.gameManager.loadingScreen.SetActive(true);
-            ObjectsReference.Instance.uiManager.SetActive(UICanvasGroupType.DEATH, false);
-            ObjectsReference.Instance.death.HideDeath();
-
-            if (currentSaveUuid == null) ObjectsReference.Instance.gameManager.ReturnHome();
-            else {
-                ObjectsReference.Instance.gameManager.Play(currentSaveUuid, false);
-            }
-        }   
-
+        
         public void LoadSave(string saveUuid) {
-            currentSaveUuid = saveUuid;
-            
-            if (!Directory.Exists(savePath)) {
-                var date = DateTime.ParseExact(DateTime.Now.ToString("U"), "U", CultureInfo.CurrentCulture);
-                CreateSave(saveUuid, date.ToString(CultureInfo.CurrentCulture));
-            }
-            
             playerSave.LoadPlayer(saveUuid);
             worldSave.LoadWorld(saveUuid);
             
@@ -169,10 +150,10 @@ namespace Save {
             ObjectsReference.Instance.gameSave.StartAutoSave();
         }
         
-        private void CreateSave(string saveUuid, string saveDate) {
+        private void CreateSave(string saveUuid, string saveName, string saveDate) {
             savePath = Path.Combine(_savesPath, saveUuid);
 
-            _savedData = new SavedData { uuid = saveUuid, saveName = "new save", lastSavedDate = saveDate };
+            _savedData = new SavedData { uuid = saveUuid, saveName = saveName, lastSavedDate = saveDate };
             
             if (!Directory.Exists(savePath)) {
                 Directory.CreateDirectory(savePath);
@@ -184,19 +165,23 @@ namespace Save {
             var jsonSaved = JsonConvert.SerializeObject(_savedData);
             var dataSavefilePath = Path.Combine(savePath, "data.json");
             File.WriteAllText(dataSavefilePath, jsonSaved);
+            
+            SaveCameraView(saveUuid);
         }
         
         private void SaveCameraView(string saveUuid) {
             var _savePath = Path.Combine(_savesPath, saveUuid);
             var screenshotFilePath = Path.Combine(_savePath, "screenshot.png");
 
+            var currentResolution = ObjectsReference.Instance.gameSettings.GetCurrentResolution();
+            
             var screenshotCamera = ObjectsReference.Instance.gameManager.cameraMain;
-            var screenTexture = new RenderTexture(150, 150, 16);
+            var screenTexture = new RenderTexture(currentResolution.width, currentResolution.height, 16);
             screenshotCamera.targetTexture = screenTexture;
             RenderTexture.active = screenTexture;
             screenshotCamera.Render();
-            var renderedTexture = new Texture2D(150, 150);
-            renderedTexture.ReadPixels(new Rect(0, 0, 150, 150), 0, 0);
+            var renderedTexture = new Texture2D(currentResolution.width, currentResolution.height);
+            renderedTexture.ReadPixels(new Rect(0, 0, currentResolution.width, currentResolution.height), 0, 0);
             RenderTexture.active = null;
             var byteArray = renderedTexture.EncodeToPNG();
             File.WriteAllBytes(screenshotFilePath, byteArray);

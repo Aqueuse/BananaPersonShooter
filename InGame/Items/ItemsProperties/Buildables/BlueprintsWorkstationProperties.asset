@@ -12,7 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa23d2d3beaaadf47a677ba4423808b1, type: 3}
   m_Name: BlueprintsWorkstationProperties
   m_EditorClassIdentifier: 
-  gameObjectTag: 6
   itemCategory: 1
   bananaType: 0
   droppedType: 0
@@ -22,10 +21,12 @@ MonoBehaviour:
   buildableType: 15
   foodType: 0
   isAspirable: 0
+  prefab: {fileID: 0}
   itemName:
   - study desk
   - "bureau d'\xE9tudes"
   - escritorio de estudio
+  spriteAtlasIndex: 0
   itemSprite: {fileID: 21300000, guid: f57e935e14c4361418ac0537735fb87f, type: 3}
   itemDescription:
   - "Installez vous ici pour \xE9tudier la science des bananes et d\xE9bloquer des
@@ -34,6 +35,7 @@ MonoBehaviour:
   - "Si\xE9ntate aqu\xED para estudiar la ciencia de los bananos y desbloquear planos
     de construcci\xF3n"
   bitKongValue: 0
+  buildableTabType: 5
   rawMaterialsWithQuantity:
     list:
     - key: {fileID: 11400000, guid: 9b2d672be4f975f49b3bd109607666ae, type: 2}

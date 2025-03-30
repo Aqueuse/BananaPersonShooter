@@ -10,7 +10,7 @@ namespace Tags {
         DOME,
         SPACESHIP,
         BUILDABLE,
-        INITAL_INTERACTABLES,
+        DROPPED,
         ACCESS_MANAGED,
         REGIME,
         MONKEY,

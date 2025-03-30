@@ -8,14 +8,14 @@ namespace UI.InGame {
     public class UIFlippers : MonoBehaviour {
         [SerializeField] private Image droppedImage;
         [SerializeField] private TextMeshProUGUI droppedQuantityText;
-        
+
         [SerializeField] private Image buildableImage;
         [SerializeField] private Image buildableBackgroundImage;
-        
+
         [SerializeField] private RectTransform leftFlipperTransform;
         [SerializeField] private RectTransform middleFlipperTransform;
         [SerializeField] private RectTransform rightFlipperTransform;
-        
+
         private Vector3 leftFlipperNormalPosition;
         private Vector3 middleFlipperNormalPosition;
         private Vector3 rightFlipperNormalPosition;
@@ -67,11 +67,12 @@ namespace UI.InGame {
             
             SetDroppableSprite(itemScriptableObject.GetSprite());
             SetDroppableQuantity(itemScriptableObject);
-            
         }
         
         public void SetDroppableSprite(Sprite droppedSprite) {
+            droppedImage.enabled = true;
             droppedImage.sprite = droppedSprite;
+            droppedImage.material.color = Color.white;
         }
 
         public void SetDroppableQuantity(ItemScriptableObject itemScriptableObject) {
@@ -82,8 +83,10 @@ namespace UI.InGame {
         }
         
         public void RefreshActiveDroppableQuantity() {
+            if (ObjectsReference.Instance.bananaMan.bananaManData.activeDroppableItem == null) return;
+            
             var quantity = ObjectsReference.Instance.bananaMan.bananaManData.GetActiveDroppableItemQuantity();
-
+            
             droppedQuantityText.text = quantity.ToString();
         }
         

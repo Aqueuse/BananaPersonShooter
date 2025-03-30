@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using Cinemachine;
 using UI;
@@ -22,7 +21,6 @@ namespace Settings {
         public bool isCameraVerticallyInverted;
         public bool isCameraHorizontallyInverted;
 
-        public bool areDroppedInSpaceFallingOnTheTrees;
         public int saveDelayMinute;
         public JsonPlayerPrefs prefs;
         private UISettings uiSettings;
@@ -90,7 +88,7 @@ namespace Settings {
             Screen.fullScreenMode = isFullscreen.Equals("True") ? FullScreenMode.ExclusiveFullScreen : FullScreenMode.Windowed;
             _fullScreenMode = Screen.fullScreenMode;
             QualitySettings.vSyncCount = isVsync.Equals("True") ? 1 : 0;
-
+            
             Screen.SetResolution(
                 resolutions[resolution].width,
                 resolutions[resolution].height,
@@ -100,8 +98,6 @@ namespace Settings {
             var languageIndexInt = prefs.GetInt("language");
             languageIndexSelected = languageIndexInt;
             LocalizationSettings.SelectedLocale = LocalizationSettings.AvailableLocales.Locales[languageIndexInt];
-            
-            areDroppedInSpaceFallingOnTheTrees = prefs.GetString("areDroppedInSpaceFallingOnTheTrees", "True").Equals("True");
             
             onSettingsLoadedCompleted?.Invoke();
         }
@@ -227,22 +223,20 @@ namespace Settings {
             prefs.Save();
         }
         
-        public void SetResolution(float gameResolution) {
+        public void SetResolution(int gameResolution) {
             if (ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.OPTIONS].alpha < 1) return;
-
-            var gameResolutionInt = (int)gameResolution;
-        
+            
             Screen.SetResolution(
-                resolutions[gameResolutionInt].width,
-                resolutions[gameResolutionInt].height,
+                resolutions[gameResolution].width,
+                resolutions[gameResolution].height,
                 _fullScreenMode,
                 Screen.currentResolution.refreshRate);
             
-            prefs.SetInt("resolution", gameResolutionInt);
+            prefs.SetInt("resolution", gameResolution);
             
             prefs.Save();
             
-            uiSettings.ReflectResolutionSettingOnUI(gameResolutionInt);
+            uiSettings.ReflectResolutionSettingOnUI(gameResolution);
         }
         
         public void SetLowerResolution() {
@@ -294,15 +288,6 @@ namespace Settings {
             prefs.Save();
         }
         
-        public void SetDroppedFall(float level) {
-            if (ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.OPTIONS].alpha < 1) return;
-
-            areDroppedInSpaceFallingOnTheTrees = Convert.ToBoolean((int)level);
-            prefs.SetString("areDroppedInSpaceFallingOnTheTrees", areDroppedInSpaceFallingOnTheTrees ? "True" : "False");
-            
-            prefs.Save();
-        }
-        
         public void SetSaveDelay(float delay) {
             if (ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.OPTIONS].alpha < 1) return;
 
@@ -340,6 +325,10 @@ namespace Settings {
         
             if (languageIndexSelected < Screen.resolutions.Length-1) languageIndexSelected++;
             Setlanguage(languageIndexSelected);
+        }
+
+        public Resolution GetCurrentResolution() {
+            return resolutions[resolution];
         }
     }
 }

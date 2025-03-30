@@ -63,7 +63,8 @@ namespace InGame.Player.BananaGunActions {
 
             if (Physics.Raycast(mainCamera.transform.position, mainCamera.transform.forward, out raycastHit, 2000, layerMask: GestionViewSelectableLayerMask)) {
                 targetedGameObject = raycastHit.transform.gameObject;
-                ObjectsReference.Instance.uInventoriesManager.GetCurrentUIHelper().ShowRetrieveConfirmation();
+                
+                ObjectsReference.Instance.uiCrosshairs.SetCrosshair(CrosshairType.DESTROY_BUILD);
             }
             else {
                 targetedGameObject = null;
@@ -160,9 +161,11 @@ namespace InGame.Player.BananaGunActions {
                 DestroyImmediate(targetedGameObject);
                 targetedGameObject = null;
                 
-                ObjectsReference.Instance.uInventoriesManager.GetCurrentUIHelper().HideRetrieveConfirmation();
+                ObjectsReference.Instance.uiCrosshairs.SetCrosshair(CrosshairType.DEFAULT);
+
                 ObjectsReference.Instance.audioManager.PlayEffect(SoundEffectType.TAKE_SOMETHING, 0);
 
+                ObjectsReference.Instance.uiFlippers.RefreshActiveBuildableAvailability();
                 ObjectsReference.Instance.uiFlippers.RefreshActiveDroppableQuantity();
 
                 ObjectsReference.Instance.build.setGhostColor();

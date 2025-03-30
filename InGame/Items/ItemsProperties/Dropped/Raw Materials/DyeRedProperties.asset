@@ -26,6 +26,7 @@ MonoBehaviour:
   - red dye
   - colorant rouge
   - tinte rojo
+  spriteAtlasIndex: 3
   itemSprite: {fileID: 21300000, guid: bfdaab794be87a240975474c41bb9408, type: 3}
   itemDescription:
   - enough dye to color a good amount of red fabric

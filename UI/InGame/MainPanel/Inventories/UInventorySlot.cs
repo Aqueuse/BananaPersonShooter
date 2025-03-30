@@ -17,7 +17,7 @@ namespace UI.InGame.MainPanel.Inventories {
         }
         
         public void SetDescriptionAndName() {
-            ObjectsReference.Instance.uInfobulle.SetDescriptionAndName(itemScriptableObject.GetName(), itemScriptableObject.GetDescription(), GetComponent<RectTransform>());
+            ObjectsReference.Instance.uiToolTipOnMouseHover.SetSlotInfo(itemScriptableObject, GetComponent<RectTransform>());
         }
         
         public void SelectInventorySlot() {

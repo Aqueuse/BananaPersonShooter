@@ -21,7 +21,8 @@ namespace InGame.Items.ItemsBehaviours.DroppedBehaviours {
                 droppedGuid = Guid.NewGuid().ToString();
             }
 
-            Invoke(nameof(DestroyMe), 30);
+            if (ObjectsReference.Instance.bananaMan.tutorialFinished)
+                Invoke(nameof(DestroyMe), 30);
         }
 
         private void FixedUpdate() {

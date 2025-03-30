@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using InGame.Items.ItemsBehaviours.DroppedBehaviours;
 using InGame.Items.ItemsData.BuildablesData;
-using InGame.Items.ItemsProperties;
 using Newtonsoft.Json;
 using Save.Helpers;
 using UnityEngine;
@@ -10,10 +9,9 @@ using UnityEngine;
 namespace InGame.Items.ItemsBehaviours.BuildablesBehaviours {
     public class BananasDryerBehaviour : BuildableBehaviour {
         [SerializeField] private GameObject fabricPrefab;
+        [SerializeField] private GameObject bananaPeelPrefab;
+        
         [SerializeField] private int conversionDuration;
-
-        [SerializeField] private ItemScriptableObject fabricScriptableObject;
-        [SerializeField] private ItemScriptableObject bananaPeelScriptableObject;
         
         public List<BananaDryerSlot> slots;
         
@@ -124,7 +122,7 @@ namespace InGame.Items.ItemsBehaviours.BuildablesBehaviours {
             for (var i = 0; i < 20; i++) {
                 if (slots[i].hasFabric) {
                     Instantiate(
-                        fabricScriptableObject.prefab,
+                        fabricPrefab,
                         fabric[i].transform.position - Vector3.forward,
                         fabric[i].transform.rotation,
                         ObjectsReference.Instance.gameSave.savablesItemsContainer
@@ -141,7 +139,7 @@ namespace InGame.Items.ItemsBehaviours.BuildablesBehaviours {
                 else {
                     if (slots[i].hasBananaPeel) {
                         Instantiate(
-                            bananaPeelScriptableObject.prefab,
+                            bananaPeelPrefab,
                             fabric[i].transform.position - Vector3.forward,
                             fabric[i].transform.rotation,
                             ObjectsReference.Instance.gameSave.savablesItemsContainer

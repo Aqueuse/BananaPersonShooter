@@ -4,7 +4,8 @@ using UnityEngine.UI;
 
 namespace UI.Menus {
     public enum OPTION_TAB {
-        AUDIO_VIDEO,
+        AUDIO,
+        VIDEO,
         KEYBOARD,
         GAMEPAD,
         GAMEPLAY,
@@ -24,7 +25,7 @@ namespace UI.Menus {
         private OPTION_TAB _selectedTab;
 
         private void Start() {
-            _selectedTab = OPTION_TAB.AUDIO_VIDEO;
+            _selectedTab = OPTION_TAB.AUDIO;
         }
 
         public void SetActivatedButton(Image buttonImage) {
@@ -49,12 +50,16 @@ namespace UI.Menus {
 
         public void Switch_to_Left_Tab() {
             switch (_selectedTab) {
-                case OPTION_TAB.AUDIO_VIDEO:
+                case OPTION_TAB.AUDIO:
                     Switch_to_Tab(OPTION_TAB.LANGUAGES);
+                    break;
+                
+                case OPTION_TAB.VIDEO:
+                    Switch_to_Tab(OPTION_TAB.AUDIO);
                     break;
 
                 case OPTION_TAB.KEYBOARD:
-                    Switch_to_Tab(OPTION_TAB.AUDIO_VIDEO);
+                    Switch_to_Tab(OPTION_TAB.VIDEO);
                     break;
 
                 case OPTION_TAB.GAMEPAD:
@@ -73,10 +78,14 @@ namespace UI.Menus {
         
         public void Switch_to_Right_Tab() {
             switch (_selectedTab) {
-                case OPTION_TAB.AUDIO_VIDEO:
+                case OPTION_TAB.AUDIO:
+                    Switch_to_Tab(OPTION_TAB.VIDEO);
+                    break;
+
+                case OPTION_TAB.VIDEO:
                     Switch_to_Tab(OPTION_TAB.KEYBOARD);
                     break;
-                
+
                 case OPTION_TAB.KEYBOARD:
                     Switch_to_Tab(OPTION_TAB.GAMEPAD);
                     break;
@@ -90,15 +99,19 @@ namespace UI.Menus {
                     break;
                 
                 case OPTION_TAB.LANGUAGES:
-                    Switch_to_Tab(OPTION_TAB.AUDIO_VIDEO);
+                    Switch_to_Tab(OPTION_TAB.AUDIO);
                     break;
             }
         }
 
-        public void SwitchToAudioVideoTab() {
-            Switch_to_Tab(OPTION_TAB.AUDIO_VIDEO);
+        public void SwitchToAudioTab() {
+            Switch_to_Tab(OPTION_TAB.AUDIO);
         }
-        
+
+        public void SwitchToVideoTab() {
+            Switch_to_Tab(OPTION_TAB.VIDEO);
+        }
+
         public void Switch_To_Keyboard_Tab() {
             Switch_to_Tab(OPTION_TAB.KEYBOARD);
         }

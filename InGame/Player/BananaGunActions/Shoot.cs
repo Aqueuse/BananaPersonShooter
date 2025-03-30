@@ -29,7 +29,8 @@ namespace InGame.Player.BananaGunActions {
             if (Physics.Raycast(mainCamera.transform.position, mainCamera.transform.forward, out raycastHit, 100, layerMask: GestionViewSelectableLayerMask)) {
                 if (raycastHit.transform.gameObject.GetComponent<Tag>().itemScriptableObject.isAspirable) {
                     targetedGameObject = raycastHit.transform.gameObject;
-                    ObjectsReference.Instance.uInventoriesManager.GetCurrentUIHelper().ShowRetrieveConfirmation();
+                    
+                    ObjectsReference.Instance.uiCrosshairs.SetCrosshair(CrosshairType.ASPIRE);
                 }
             }
             else {
@@ -59,6 +60,8 @@ namespace InGame.Player.BananaGunActions {
             ObjectsReference.Instance.bananaMan.bananaManData.RemoveActiveDroppableItemQuantity(1);
 
             ObjectsReference.Instance.audioManager.PlayEffect(SoundEffectType.THROW_BANANA, 0);
+            
+            ObjectsReference.Instance.uiFlippers.RefreshActiveBuildableAvailability();
             ObjectsReference.Instance.uiFlippers.RefreshActiveDroppableQuantity();
         }
 
@@ -113,7 +116,8 @@ namespace InGame.Player.BananaGunActions {
                     break;
             }
             
-            ObjectsReference.Instance.uInventoriesManager.GetCurrentUIHelper().HideRetrieveConfirmation();
+            ObjectsReference.Instance.uiCrosshairs.SetCrosshair(CrosshairType.DEFAULT);
+
             ObjectsReference.Instance.audioManager.PlayEffect(SoundEffectType.TAKE_SOMETHING, 0);
 
             ObjectsReference.Instance.uiFlippers.RefreshActiveDroppableQuantity();

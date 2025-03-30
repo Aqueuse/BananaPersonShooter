@@ -1,4 +1,3 @@
-using Tags;
 using UnityEngine;
 
 namespace InGame.Bananas.Regimes {

@@ -20,7 +20,7 @@ namespace UI.InGame.MainPanel {
 
         private void SwitchToBlock(MainBlockType mainBlockType) {
             if (lastFocusedBlock == MainBlockType.INVENTORIES)
-                ObjectsReference.Instance.uInfobulle.Hide();
+                ObjectsReference.Instance.uiToolTipOnMouseHover.Hide();
             
             foreach (var blockTab in mainCanvasGroupsByBlockTabType) {
                 SetActive(blockTab.Value, false);

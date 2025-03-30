@@ -22,9 +22,8 @@ namespace InGame.MainBlock {
             if (Physics.Raycast(ray, out raycastHit, Single.PositiveInfinity, layerMask: GestionViewSelectableLayerMask)) {
                 var itemData = raycastHit.transform.GetComponent<Tag>().itemScriptableObject;
                 
-                ObjectsReference.Instance.uInfobulle.SetDescriptionAndNameInWorldPosition(
-                    itemData.GetName(),
-                    itemData.GetDescription(),
+                ObjectsReference.Instance.uiToolTipOnMouseHover.SetDescriptionAndNameInWorldPosition(
+                    itemData,
                     Mouse.current.position.value
                     );
                 

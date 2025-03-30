@@ -15,8 +15,6 @@ namespace InGame.Interactions {
             if (ObjectsReference.Instance.gameManager.gameContext != GameContext.IN_GAME) return;
 
             if (Physics.Raycast(transform.position, transform.forward,  out var raycastHit, 10, itemsLayerMask)) {
-                Debug.Log(raycastHit.transform.gameObject);
-
                 if (raycastHit.transform.gameObject.GetComponent<UInteraction>() == null) return;
 
                 if (_interactedObject != null) _interactedObject.GetComponent<UInteraction>().Desactivate(); // magic ( ͡• ͜ʖ ͡• )

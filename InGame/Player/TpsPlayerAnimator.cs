@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using UnityEngine.Animations.Rigging;
 
 namespace InGame.Player {
     public class TpsPlayerAnimator : MonoBehaviour {

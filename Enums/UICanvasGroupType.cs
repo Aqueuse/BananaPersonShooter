@@ -7,7 +7,7 @@ public enum UICanvasGroupType {
     DEATH,
     HUD_BANANAMAN,
     INVENTORIES,
-    AUDIO_VIDEO_TAB,
+    AUDIO_TAB,
     KEYBOARD_TAB,
     GAMEPAD_TAB,
     GAMEPLAY_TAB,
@@ -24,5 +24,6 @@ public enum UICanvasGroupType {
     MERCHANT_INTERFACE,
     MAIN_PANEL,
     HUD_GESTION,
-    MAP
+    MAP,
+    VIDEO_TAB
 }

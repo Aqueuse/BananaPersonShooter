@@ -21,9 +21,8 @@ namespace UI.InGame.MainPanel.Inventories {
         }
         
         public void SetDescriptionAndName() {
-            ObjectsReference.Instance.uInfobulle.SetDescriptionAndName(
-                buildableScriptableObject.GetName(),
-                buildableScriptableObject.GetDescription(),
+            ObjectsReference.Instance.uiToolTipOnMouseHover.SetSlotInfo(
+                buildableScriptableObject,
                 GetComponent<RectTransform>());
         }
 

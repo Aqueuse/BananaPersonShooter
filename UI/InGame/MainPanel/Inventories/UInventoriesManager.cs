@@ -74,7 +74,7 @@ namespace UI.InGame.MainPanel.Inventories {
             }
 
             FocusInventory();
-            ObjectsReference.Instance.uInfobulle.Hide();
+            ObjectsReference.Instance.uiToolTipOnMouseHover.Hide();
 
             switch (droppedType) {
                 case DroppedType.BANANA:

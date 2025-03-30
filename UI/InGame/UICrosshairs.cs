@@ -3,23 +3,14 @@ using UnityEngine.UI;
 
 namespace UI.InGame {
     public class UICrosshairs : MonoBehaviour {
-        [SerializeField] private Image emptyHandCrosshairImage;
-        [SerializeField] private Image bananaGunCrosshairImage;
+        [SerializeField] private GenericDictionary<CrosshairType, Image> crosshairsByType;
         
-        public void SetCrosshair(bool hasBananaGun) {
-            if (hasBananaGun) {
-                bananaGunCrosshairImage.enabled = true;
-                emptyHandCrosshairImage.enabled = false;
+        public void SetCrosshair(CrosshairType crosshairType) {
+            foreach (var image in crosshairsByType) {
+                image.Value.enabled = false;
             }
-            else {
-                bananaGunCrosshairImage.enabled = false;
-                emptyHandCrosshairImage.enabled = true;
-            }
-        }
 
-        private void HideCrosshairs() {
-            bananaGunCrosshairImage.enabled = false;
-            emptyHandCrosshairImage.enabled = false;
+            crosshairsByType[crosshairType].enabled = true;
         }
     }
 }

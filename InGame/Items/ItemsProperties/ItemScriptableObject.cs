@@ -17,6 +17,7 @@ namespace InGame.Items.ItemsProperties {
         public GameObject prefab;
         
         public string[] itemName;
+        public int spriteAtlasIndex;
 
         public Sprite itemSprite;
         [Multiline] public string[] itemDescription;

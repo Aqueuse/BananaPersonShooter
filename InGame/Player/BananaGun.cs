@@ -15,8 +15,6 @@ namespace InGame.Player {
             ObjectsReference.Instance.bananaMan.GetComponent<PlayerIK>().SetAimConstraint(true);
             ObjectsReference.Instance.bananaMan.GetComponent<PlayerIK>().SetGrabbedBananaGunRigWeight(true);
             ObjectsReference.Instance.bananaMan.tpsPlayerAnimator.SetBananaGunLayerWeight(true);
-
-            ObjectsReference.Instance.uiCrosshairs.SetCrosshair(true);
         }
 
         public void UngrabBananaGun() {
@@ -27,8 +25,6 @@ namespace InGame.Player {
             ObjectsReference.Instance.bananaMan.tpsPlayerAnimator.SetBananaGunLayerWeight(false);
             
             ObjectsReference.Instance.uInventoriesManager.GetCurrentUIHelper().ShowDefaultHelper();
-            
-            ObjectsReference.Instance.uiCrosshairs.SetCrosshair(false);
         }
     }
 }

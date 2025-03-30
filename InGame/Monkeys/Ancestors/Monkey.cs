@@ -1,7 +1,5 @@
-﻿using InGame.Bananas;
-using InGame.Items.ItemsBehaviours.DroppedBehaviours;
+﻿using InGame.Items.ItemsBehaviours.DroppedBehaviours;
 using InGame.Items.ItemsProperties.Monkeys;
-using Tags;
 using UnityEngine;
 using UnityEngine.AI;
 

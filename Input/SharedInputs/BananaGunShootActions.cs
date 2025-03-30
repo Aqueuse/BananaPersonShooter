@@ -1,4 +1,3 @@
-using System;
 using InGame.Player;
 using InGame.Player.BananaGunActions;
 using Tags;
@@ -47,12 +46,10 @@ namespace SharedInputs {
                 return;
             
             shoot.LoadingGun();
-            ObjectsReference.Instance.uiCrosshairs.SetCrosshair(false);
         }
 
         private void CancelShoot(InputAction.CallbackContext callbackContext) {
             shoot.CancelThrow();
-            ObjectsReference.Instance.uiCrosshairs.SetCrosshair(false);
         }
 
         private void StartToAspire(InputAction.CallbackContext callbackContext) {

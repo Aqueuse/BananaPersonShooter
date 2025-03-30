@@ -67,6 +67,7 @@ public class ObjectsReference : MonoSingleton<ObjectsReference> {
     public IngredientsInventory bananaManIngredientsInventory;
     public ManufacturedItemsInventory bananaManManufacturedItemsInventory;
     public FoodInventory bananaManFoodInventory;
+    public BuildablesInventory bananaManBuildablesInventory;
 
     [Header("Gestion Mode")]
     public ScanWithMouseForDescription scanWithMouseForDescription;
@@ -102,7 +103,7 @@ public class ObjectsReference : MonoSingleton<ObjectsReference> {
     public UIManufacturedItemsInventory bananaManUiManufacturedItemsInventory;
     public UIFoodInventory bananaManUiFoodInventory;
     public UIBlueprintsInventory bananaManUiBlueprintsInventory;
-    public UInfobulle uInfobulle;
+    public UIToolTipOnMouseHover uiToolTipOnMouseHover;
     [Space]
     public UICrosshairs uiCrosshairs;
     public UIFace uiFace;

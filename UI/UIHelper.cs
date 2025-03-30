@@ -2,7 +2,6 @@ using UnityEngine;
 
 namespace UI {
     public class UIHelper : MonoBehaviour {
-        [SerializeField] private CanvasGroup retrieveConfirmationHelper;
         [SerializeField] private CanvasGroup placeHelper;
         [SerializeField] private CanvasGroup buildHelper;
 
@@ -20,20 +19,11 @@ namespace UI {
         
         public void ShowDefaultHelper() {
             buildHelper.alpha = 0;
-            retrieveConfirmationHelper.alpha = 0;
         }
 
         public void ShowBuildHelper() {
             buildHelper.alpha = 1;
             one_axe_buildHelper.alpha = 1;
-        }
-
-        public void ShowRetrieveConfirmation() {
-            retrieveConfirmationHelper.alpha = 1;
-        }
-
-        public void HideRetrieveConfirmation() {
-            retrieveConfirmationHelper.alpha = 0;
         }
         
         public void ShowNormalPlaceHelper() {

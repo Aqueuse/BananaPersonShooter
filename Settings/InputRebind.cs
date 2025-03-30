@@ -91,7 +91,7 @@ namespace Settings {
                 keyText.enabled = true;
             });
 
-            current_rebind.OnComplete(_ => {
+            current_rebind.OnComplete(rebindingOperation => {
                 inputActionReference.action.Enable();
 
                 rebindHelper.gameObject.SetActive(false);
@@ -112,16 +112,23 @@ namespace Settings {
         }
 
         private string GetLocalizedDisplayName() {
-            if (isComposite) {
-                var path = inputActionReference.ToInputAction().GetBindingDisplayString(compositeIndex);
-
-                return path;
+            if (controlScheme == ControlScheme.GAMEPAD) {
+                return inputActionReference.ToInputAction().GetBindingDisplayString(group:"Gamepad");
             }
 
-            if (controlScheme == ControlScheme.GAMEPAD)
-                return inputActionReference.ToInputAction().GetBindingDisplayString(group:"Gamepad");
+            if (controlScheme == ControlScheme.KEYBOARD) {
+                if (isComposite) {
+                    var path = inputActionReference.ToInputAction().GetBindingDisplayString(compositeIndex);
 
-            return inputActionReference.ToInputAction().GetBindingDisplayString(group:"Keyboard");
+                    return path;
+                }
+                
+                Debug.Log(inputActionReference.ToInputAction().GetBindingDisplayString(group:"Keyboard"));
+
+                return inputActionReference.ToInputAction().GetBindingDisplayString(group:"Keyboard");
+            }
+
+            return "";
         }
     }
 }

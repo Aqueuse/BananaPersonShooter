@@ -26,6 +26,7 @@ MonoBehaviour:
   - fabric
   - tissu
   - tela
+  spriteAtlasIndex: 7
   itemSprite: {fileID: 21300000, guid: e2bef5a6fa24bfd46bcdcd8ce877f2b0, type: 3}
   itemDescription:
   - 'a piece of fabric made from banana peel fibers '

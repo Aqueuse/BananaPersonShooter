@@ -1,5 +1,4 @@
 using System.Linq;
-using InGame.Items.ItemsProperties.Buildables;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -9,6 +8,11 @@ namespace UI.InGame.MainPanel.Inventories {
         public GenericDictionary<BuildableTabType, GenericDictionary<BuildableType, UIBlueprintSlot>> inventorySlotsByTabType;
         [SerializeField] private GenericDictionary<BuildableTabType, CanvasGroup> canvasGroupsByTabType;
 
+        [SerializeField] private GenericDictionary<BuildableTabType, GameObject> buttonsTabByTabType;
+        
+        // global slot reference for save and give blueprint (because we don't care of the tab then)
+        public GenericDictionary<BuildableType, UIBlueprintSlot> inventorySlotsByBuildableType;
+
         [SerializeField] private Transform buildablesContentTransform;
 
         [SerializeField] private CanvasGroup buildablePanelCanvasGroup;
@@ -17,14 +21,19 @@ namespace UI.InGame.MainPanel.Inventories {
 
         [SerializeField] private Color activatedColor;
 
-        private BuildablePropertiesScriptableObject buildableDataScriptableObject;
+        public void Allow(BuildableType buildableType) {
+            var buildableTabType = ObjectsReference.Instance.meshReferenceScriptableObject
+                .buildablePropertiesScriptableObjects[buildableType].buildableTabType;
 
+            // buttons are hidden by default, active them if there is at least one buildable slot allowed
+            buttonsTabByTabType[buildableTabType].SetActive(true);
+            
+            inventorySlotsByBuildableType[buildableType].gameObject.SetActive(true);
+        }
+        
         public void RefreshUInventory(BuildableTabType buildableTabType) {
             foreach (var blueprintItem in inventorySlotsByTabType[buildableTabType]) {
-                var uiBlueprintSlot = inventorySlotsByTabType [buildableTabType][blueprintItem.Key];    
-                buildableDataScriptableObject = blueprintItem.Value.buildableScriptableObject;
-                
-                uiBlueprintSlot.SetAvailability();
+                inventorySlotsByTabType [buildableTabType][blueprintItem.Key].SetAvailability();
             }
         }
 

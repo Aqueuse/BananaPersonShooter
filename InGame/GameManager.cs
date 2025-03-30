@@ -14,7 +14,6 @@ namespace InGame {
         
         [SerializeField] private GameObject startAnimations;
         [SerializeField] private List<GameObject> inGameGameObjects;
-        [SerializeField] private GameObject initialInteractables; // banana gun pieces
 
         public GameContext gameContext;
 
@@ -140,9 +139,7 @@ namespace InGame {
 
             ObjectsReference.Instance.playerController.canMove = false;
             ObjectsReference.Instance.bananaMan.SetBananaSkinHealth();
-
-            ObjectsReference.Instance.gameSave.currentSaveUuid = null;
-
+            
             ObjectsReference.Instance.bananaMan.transform.position = spawnPointsBySpawnType[SpawnPoint.HOME].position;
 
             ObjectsReference.Instance.gameSave.CancelAutoSave();
@@ -168,18 +165,13 @@ namespace InGame {
             ObjectsReference.Instance.gameSave.buildablesSave.SpawnInitialBuildables();
             ObjectsReference.Instance.gameSave.spaceshipDebrisSave.SpawnInitialSpaceshipDebris();
             
-            Destroy(TagsManager.GetAllGameObjectsWithTag(GAME_OBJECT_TAG.INITAL_INTERACTABLES)[0].gameObject); 
-            Instantiate(initialInteractables);
-
             loadingScreen.SetActive(false);
 
             ObjectsReference.Instance.commandRoomControlPanelsManager.Init();
-            ObjectsReference.Instance.commandRoomControlPanelsManager.assembler.Init();
 
             ObjectsReference.Instance.bananaGun.UngrabBananaGun();
 
             ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.CROSSHAIRS].alpha = 1f;
-            ObjectsReference.Instance.uiCrosshairs.SetCrosshair(false);
 
             ObjectsReference.Instance.uInventoriesManager.HideUIHelpers();
             ObjectsReference.Instance.uiManager.SetActive(UICanvasGroupType.HUD_BANANAMAN, false);
@@ -203,8 +195,6 @@ namespace InGame {
             ObjectsReference.Instance.commandRoomControlPanelsManager.chimployeeCommandRoom.SetTutorialChimployeeConfiguration();
 
             RenderSettings.ambientLight = penumbraAmbientLightColor;
-            
-            Invoke(nameof(SaveInitialState), 20);
         }
         
         private void SwitchToInGameSettings() {
@@ -215,7 +205,6 @@ namespace InGame {
             
             ObjectsReference.Instance.uiManager.SetActive(UICanvasGroupType.HUD_BANANAMAN, true);
             ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.CROSSHAIRS].alpha = 1f;
-            ObjectsReference.Instance.uiCrosshairs.SetCrosshair(false);
 
             ObjectsReference.Instance.uInventoriesManager.ShowCurrentUIHelper();
 
@@ -230,15 +219,10 @@ namespace InGame {
             ObjectsReference.Instance.audioManager.SetMusiqueAndAmbianceByRegion(RegionType.COROLLE);
             
             ObjectsReference.Instance.commandRoomControlPanelsManager.Init();
-            ObjectsReference.Instance.commandRoomControlPanelsManager.assembler.Init();
 
             ObjectsReference.Instance.bananaGun.GrabBananaGun();
             
             loadingScreen.SetActive(false);
-        }
-        
-        private void SaveInitialState() {
-            ObjectsReference.Instance.uiSave.CreateNewSave();
         }
     }
 }

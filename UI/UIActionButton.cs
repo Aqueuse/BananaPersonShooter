@@ -1,5 +1,6 @@
 using UI.Menus;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace UI {
@@ -31,6 +32,11 @@ namespace UI {
 
         public void Unselect() {
             backgroundImage.color = unactivatedColor;
+        }
+
+        public void Click() {
+            EventSystem.current.SetSelectedGameObject(gameObject);
+            Select();
         }
     }
 }

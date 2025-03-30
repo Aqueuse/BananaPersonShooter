@@ -162,6 +162,10 @@ namespace Audio {
             }
         }
 
+        public void Click() {
+            PlayEffect(SoundEffectType.BUTTON_INTERACTION, 0);
+        }
+        
         public void TestEffectLevel() {
             PlayEffect(SoundEffectType.BUTTON_INTERACTION, 0);
         }

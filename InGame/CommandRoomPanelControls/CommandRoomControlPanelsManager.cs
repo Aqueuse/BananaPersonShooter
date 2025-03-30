@@ -7,7 +7,7 @@ namespace InGame.CommandRoomPanelControls {
     public class CommandRoomControlPanelsManager : MonoBehaviour {
         [SerializeField] private GenericDictionary<CommandRoomPanelType, ManageAccess> manageAccessesByPanelType;
 
-        public Assembler assembler;
+        public Blueprinter blueprinter;
 
         public CinemachineVirtualCamera commandRoomVirtualCamera;
         [SerializeField] private GenericDictionary<CommandRoomPanelType, Transform> cameraTransformByPanelType;

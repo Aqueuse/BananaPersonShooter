@@ -46,6 +46,14 @@ MonoBehaviour:
       value: {fileID: 8871149111809520450, guid: f85b9b15c06ad954ea75694550a097ae, type: 3}
     - key: 15
       value: {fileID: 546991606061005580, guid: 1266f1a6b74a4074ab65ab8271d57705, type: 3}
+    - key: 16
+      value: {fileID: 521610399745423522, guid: 223a9c7d6a286db4795f23cdc7d2e424, type: 3}
+    - key: 17
+      value: {fileID: 7232110744316833779, guid: d2355272f6947a548acedc639200d8f2, type: 3}
+    - key: 18
+      value: {fileID: 166948197472706687, guid: 90dff2b214336d045baa604e18c09c4d, type: 3}
+    - key: 19
+      value: {fileID: 6313998393760481916, guid: ef551c50148312942a64fcc8fe035dcc, type: 3}
     keyCollision: 0
   bananaPrefabByBananaType:
     list:
@@ -240,6 +248,19 @@ MonoBehaviour:
       value: {fileID: 11400000, guid: ce213dc94fa53f746ab8e203fc42d870, type: 2}
     - key: 4
       value: {fileID: 11400000, guid: 6e11ba27491ce1846967ea1c2a08063b, type: 2}
+    keyCollision: 0
+  unlockedBuildablesByRawMaterialType:
+    list:
+    - key: 0
+      value: 000000000200000005000000060000000700000008000000
+    - key: 5
+      value: 13000000090000000a0000000b000000
+    - key: 2
+      value: 0c0000000d0000000f000000
+    - key: 1
+      value: 0100000004000000
+    - key: 3
+      value: 0e000000
     keyCollision: 0
   monkeyMenPrefabByMonkeyMenType:
     list:
