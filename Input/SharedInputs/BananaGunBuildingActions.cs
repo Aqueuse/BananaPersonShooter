@@ -3,23 +3,18 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 namespace SharedInputs {
-    public class BananaGunBuildActions : InputActions {
+    public class BananaGunBuildingActions : InputActions {
         [SerializeField] private InputActionReference buildActionReference;
-        [SerializeField] private InputActionReference unbuildActionReference;
         
         [SerializeField] private InputActionReference rotateGhostActionReference;
         [SerializeField] private InputActionReference moveAwayCloserGhostActionReference;
 
-        [SerializeField] private Build build;
+        [SerializeField] private BuildAction buildAction;
 
         private void OnEnable() {
             buildActionReference.action.Enable();
-            buildActionReference.action.performed += ConfirmBuild;
-
-            unbuildActionReference.action.Enable();
-            unbuildActionReference.action.performed += RepairOrHarvest;
-            unbuildActionReference.action.canceled += StopRepairOrHarvest;
-
+            buildActionReference.action.performed += Build;
+            
             rotateGhostActionReference.action.Enable();
             rotateGhostActionReference.action.performed += RotateGhost;
 
@@ -29,21 +24,13 @@ namespace SharedInputs {
 
         private void OnDisable() {
             buildActionReference.action.Disable();
-            buildActionReference.action.performed -= ConfirmBuild;
+            buildActionReference.action.performed -= Build;
             
-            unbuildActionReference.action.Disable();
-            unbuildActionReference.action.performed -= RepairOrHarvest;
-            unbuildActionReference.action.canceled -= StopRepairOrHarvest;
-        }
-        
-        private void RepairOrHarvest(InputAction.CallbackContext context) {
-            build.isBuilding = false;
+            rotateGhostActionReference.action.Disable();
+            rotateGhostActionReference.action.performed -= RotateGhost;
             
-            build.RepairOrHarvest();
-        }
-
-        private void StopRepairOrHarvest(InputAction.CallbackContext context) {
-            build.isBuilding = true;
+            moveAwayCloserGhostActionReference.action.Disable();
+            moveAwayCloserGhostActionReference.action.performed -= MoveAwayCloserGhostTarget;
         }
         
         private void RotateGhost(InputAction.CallbackContext context) {
@@ -52,47 +39,47 @@ namespace SharedInputs {
             var contextValue = context.ReadValue<Vector2>(); 
             
             if (contextValue.x < 0) {
-                build.RotateGhost(Vector3.up);
+                buildAction.RotateGhost(Vector3.up);
             }
 
             if (contextValue.x > 0) {
-                build.RotateGhost(Vector3.down);
+                buildAction.RotateGhost(Vector3.down);
             }
             
-            if (ObjectsReference.Instance.bananaMan.bananaManData.activeBuildable != BuildableType.BUMPER) return;
+            if (ObjectsReference.Instance.bottomSlots.GetSelectedSlot().buildableType != BuildableType.BUMPER) return;
 
             if (contextValue.y < 0) {
-                build.RotateGhost(Vector3.left);
+                buildAction.RotateGhost(Vector3.left);
             }
 
             if (contextValue.y > 0) {
-                build.RotateGhost(Vector3.right);
+                buildAction.RotateGhost(Vector3.right);
             }
         }
 
         private void MoveAwayCloserGhostTarget(InputAction.CallbackContext context) {
             if (ObjectsReference.Instance.bananaMan.bananaGunMode == BananaGunMode.BUILD) return;
 
-            var placementLocalPosition = build.buildablePlacementTransform.localPosition;
+            var placementLocalPosition = buildAction.buildablePlacementTransform.localPosition;
 
             if (context.ReadValue<Vector2>().y > 1) {
                 if (placementLocalPosition.z < 25) {
                     placementLocalPosition.z += 1f;
-                    build.buildablePlacementTransform.localPosition = placementLocalPosition;
+                    buildAction.buildablePlacementTransform.localPosition = placementLocalPosition;
                 }
             }
 
             if (context.ReadValue<Vector2>().y < 1) {
                 if (placementLocalPosition.z > 4) {
                     placementLocalPosition.z -= 1f;
-                    build.buildablePlacementTransform.localPosition = placementLocalPosition;
+                    buildAction.buildablePlacementTransform.localPosition = placementLocalPosition;
                 }
             }
         }
-    
-        private void ConfirmBuild(InputAction.CallbackContext callbackContext) {
-            build.ValidateBuildable();
-            build.HideGhost();
+
+        private void Build(InputAction.CallbackContext callbackContext) {
+            buildAction.PlaceBlueprint();
+            buildAction.HideGhost();
         }
     }
 }

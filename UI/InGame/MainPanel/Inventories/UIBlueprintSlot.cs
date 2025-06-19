@@ -7,13 +7,7 @@ namespace UI.InGame.MainPanel.Inventories {
         public BuildablePropertiesScriptableObject buildableScriptableObject;
 
         public void Activate() {
-            if (ObjectsReference.Instance.gameManager.gameContext == GameContext.IN_GESTION_VIEW) {
-                ObjectsReference.Instance.gestionViewMode.ActivateGhostByScriptableObject(buildableScriptableObject);
-            }
-
-            else {
-                ObjectsReference.Instance.bananaMan.SetActiveBuildable(buildableScriptableObject);
-            }
+            ObjectsReference.Instance.bottomSlots.SetSelectedSlot(buildableScriptableObject);
         }
         
         public void SelectInventorySlot() {
@@ -33,8 +27,6 @@ namespace UI.InGame.MainPanel.Inventories {
             GetComponentsInChildren<Image>()[1].sprite = isAvailable ? 
                 buildableScriptableObject.itemSprite : 
                 buildableScriptableObject.blueprintSprite;
-            
-            GetComponent<Image>().color = ObjectsReference.Instance.ghostsReference.GetUIColorByAvailability(isAvailable);
         }
     }
 }

@@ -32,7 +32,7 @@ namespace InGame.Inventories {
             else {
                 bananaGoopInventory[bananaEffect] = 0;
             }
-
+            
             return bananaGoopInventory[bananaEffect];
         }
 

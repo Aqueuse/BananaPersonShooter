@@ -12,7 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6e11e44741351774ca1f8261e4d989f1, type: 3}
   m_Name: thickKnowledgeBoardProperties
   m_EditorClassIdentifier: 
-  gameObjectTag: 6
   itemCategory: 1
   bananaType: 0
   droppedType: 0
@@ -21,17 +20,20 @@ MonoBehaviour:
   rawMaterialType: 0
   buildableType: 11
   foodType: 0
-  isAspirable: 0
+  isAspirable: 1
+  prefab: {fileID: 0}
   itemName:
   - modern information panel
   - panneau d'informations moderne
   - panel informativo moderno
+  spriteAtlasIndex: 0
   itemSprite: {fileID: 21300000, guid: 89264f61e9d35ec4e97d8c8d49636e49, type: 3}
   itemDescription:
   - a modern touchscreen information panel
   - "un panneau d'information moderne \xE0 \xE9cran tactile"
   - "un moderno panel de informaci\xF3n con pantalla t\xE1ctil"
   bitKongValue: 0
+  buildableTabType: 3
   rawMaterialsWithQuantity:
     list:
     - key: {fileID: 11400000, guid: 9b2d672be4f975f49b3bd109607666ae, type: 2}

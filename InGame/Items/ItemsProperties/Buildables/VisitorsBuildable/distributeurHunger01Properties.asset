@@ -12,7 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6e11e44741351774ca1f8261e4d989f1, type: 3}
   m_Name: distributeurHunger01Properties
   m_EditorClassIdentifier: 
-  gameObjectTag: 6
   itemCategory: 1
   bananaType: 0
   droppedType: 0
@@ -21,17 +20,20 @@ MonoBehaviour:
   rawMaterialType: 0
   buildableType: 13
   foodType: 0
-  isAspirable: 0
+  isAspirable: 1
+  prefab: {fileID: 0}
   itemName:
   - food dispenser
   - distributeur de nourriture
   - dispensador de comida
+  spriteAtlasIndex: 0
   itemSprite: {fileID: 21300000, guid: 9692636f0fab56f4098b88346b285666, type: 3}
   itemDescription:
   - not suitable for non-humanoid primates
   - "ne convient pas aux primates non humano\xEFdes"
   - no apto para primates no humanoides
   bitKongValue: 0
+  buildableTabType: 1
   rawMaterialsWithQuantity:
     list:
     - key: {fileID: 11400000, guid: 9b2d672be4f975f49b3bd109607666ae, type: 2}

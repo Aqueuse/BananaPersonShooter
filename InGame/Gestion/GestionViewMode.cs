@@ -1,8 +1,6 @@
 using System;
 using InGame.Items.ItemsBehaviours;
-using InGame.Items.ItemsBehaviours.BuildablesBehaviours;
 using InGame.Items.ItemsProperties.Buildables;
-using Tags;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -43,8 +41,6 @@ namespace InGame.Gestion {
 
         private Vector3 offsettedPosition;
         private Vector3 raycastHitPoint;
-
-        private GameObject _buildable;
         
         private void Start() {
             mainCamera = Camera.main;
@@ -86,14 +82,9 @@ namespace InGame.Gestion {
             viewModeContextType = ViewModeContextType.BUILD;
             
             if (ObjectsReference.Instance.bananaManRawMaterialInventory.HasCraftingIngredients(buildablePropertiesScriptableObject)) {
-                _activeGhostClass.SetGhostState(GhostState.VALID);
                 ObjectsReference.Instance.uInventoriesManager.GetCurrentUIHelper().ShowNormalPlaceHelper();
             }
-
-            else {
-                _activeGhostClass.SetGhostState(GhostState.NOT_ENOUGH_MATERIALS);
-            }
-
+            
             ghostRotationEuler = _activeGhost.transform.rotation.eulerAngles;
         }
         
@@ -117,9 +108,8 @@ namespace InGame.Gestion {
 
         public void ValidateBuildable() {
             if (_activeGhost == null) return;
-            if (_activeGhostClass.GetGhostState() != GhostState.VALID) return;
             
-            _buildable = Instantiate(
+            Instantiate(
                 _activeGhostClass.buildablePropertiesScriptableObject.buildablePrefab,
                 _activeGhost.transform.position, rotation: _activeGhost.transform.rotation,
                 ObjectsReference.Instance.gameSave.savablesItemsContainer
@@ -131,55 +121,18 @@ namespace InGame.Gestion {
                 ObjectsReference.Instance.bananaManRawMaterialInventory.RemoveQuantity(craftingIngredient.Key,
                     craftingIngredient.Value);
                     
-                ObjectsReference.Instance.uiQueuedMessages.RemoveFromInventory(
-                    craftingIngredient.Key, 
-                    craftingIngredient.Value
-                );
-                ObjectsReference.Instance.uiFlippers.RefreshActiveBuildableAvailability();
+                ObjectsReference.Instance.bottomSlots.RefreshSlotsQuantities();
 
             }
-                
-            _buildable.GetComponent<BuildableBehaviour>().buildableGuid = Guid.NewGuid().ToString();
-                
+            
             _activeGhost.transform.position = ObjectsReference.Instance.ghostsReference.transform.position;
             _activeGhost = null;
                 
             viewModeContextType = ViewModeContextType.SCAN;
         }
-
-        public void CancelBuild() {
-            CancelGhost();
-        }
         
-        public void RepairBuildable() {
-            if (targetedGameObject == null) return;
-
-            if (targetedGameObject.TryGetComponent(out BuildableBehaviour buildableBehaviour)) {
-                if (!ObjectsReference.Instance.bananaManRawMaterialInventory.HasCraftingIngredients(buildableBehaviour.buildablePropertiesScriptableObject))
-                    return;
-                
-                var _craftingIngredients = ObjectsReference.Instance.meshReferenceScriptableObject.buildablePropertiesScriptableObjects[buildableBehaviour.buildableType].rawMaterialsWithQuantity;
-
-                foreach (var craftingIngredient in _craftingIngredients) {
-                    ObjectsReference.Instance.bananaManRawMaterialInventory.RemoveQuantity(craftingIngredient.Key, craftingIngredient.Value);
-                    
-                    ObjectsReference.Instance.uiQueuedMessages.RemoveFromInventory(
-                        craftingIngredient.Key, 
-                        craftingIngredient.Value
-                    );
-                    ObjectsReference.Instance.uiFlippers.RefreshActiveBuildableAvailability();
-                }
-                
-                ObjectsReference.Instance.audioManager.PlayEffect(SoundEffectType.TAKE_SOMETHING, 0);
-                
-                buildableBehaviour.RepairBuildable();
-            }
-        }
-
         public void harvest() {
             if (targetedGameObject == null) return;
-
-            ObjectsReference.Instance.build.harvest(targetedGameObject.GetComponent<Tag>().itemScriptableObject);
         }
     }
 }

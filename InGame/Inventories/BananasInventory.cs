@@ -32,6 +32,8 @@ namespace InGame.Inventories {
             if (bananasInventory[bananaType] > 10000) return bananasInventory[bananaType];
             
             bananasInventory[bananaType] += quantity;
+            
+            ObjectsReference.Instance.bottomSlots.RefreshSlotsQuantities();
 
             return bananasInventory[bananaType];
         }
@@ -50,6 +52,8 @@ namespace InGame.Inventories {
             else {
                 bananasInventory[bananaType] = 0;
             }
+            
+            ObjectsReference.Instance.bottomSlots.RefreshSlotsQuantities();
 
             return bananasInventory[bananaType];
         }

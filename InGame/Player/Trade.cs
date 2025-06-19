@@ -3,10 +3,10 @@ using InGame.Items.ItemsProperties;
 using UI.InGame.Merchimps;
 using UnityEngine;
 
-namespace InGame.Player.BananaGunActions {
+namespace InGame.Player {
     public class Trade : MonoBehaviour {
         public MonkeyMenData monkeyMenData;
-        
+
         private BananaMan bananaMan;
         private UIMerchant uiMerchant;
 
@@ -20,7 +20,7 @@ namespace InGame.Player.BananaGunActions {
         public void Sell(ItemScriptableObject itemScriptableObject) {
             var quantityToSell = (int)uiMerchant.sellUiMerchantSliderMenu.quantitySlider.value;
             var bitkongValue = itemScriptableObject.bitKongValue * quantityToSell;
-            
+
             bananaMan.bananaManData.bitKongQuantity += bitkongValue;
             monkeyMenData.bitKongQuantity -= bitkongValue;
             ObjectsReference.Instance.uInventoriesManager.SetBitKongQuantity(bananaMan.bananaManData.bitKongQuantity);
@@ -81,8 +81,6 @@ namespace InGame.Player.BananaGunActions {
                     var ingredientItem = ObjectsReference.Instance.bananaManUiIngredientsInventory.uInventorySlots[ingredientType];
                     ingredientItem.gameObject.SetActive(true);
                     ingredientItem.SetQuantity(bananaQuantity);
-            
-                    ObjectsReference.Instance.uiQueuedMessages.AddToInventory(ingredientItem.itemScriptableObject, bananaQuantity);
                     
                     uiMerchant.merchantBuyUiIngredientsInventory.uInventorySlots[ingredientType].SetQuantity(newItemQuantity);
                     uiMerchant.merchantBuyUiIngredientsInventory.RefreshUInventory();

@@ -12,7 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6e11e44741351774ca1f8261e4d989f1, type: 3}
   m_Name: bench04WithBackProperties
   m_EditorClassIdentifier: 
-  gameObjectTag: 6
   itemCategory: 1
   bananaType: 0
   droppedType: 0
@@ -21,17 +20,20 @@ MonoBehaviour:
   rawMaterialType: 0
   buildableType: 8
   foodType: 0
-  isAspirable: 0
+  isAspirable: 1
+  prefab: {fileID: 0}
   itemName:
   - bench
   - banc
   - banco
+  spriteAtlasIndex: 0
   itemSprite: {fileID: 21300000, guid: 3c7352425fcd68c46aca38e0499b11c0, type: 3}
   itemDescription:
   - a garden bench in a particularly metallic wood
   - "un banc de jardin dans un bois particuli\xE8rement m\xE9tallique"
   - "un banco de jard\xEDn de madera especialmente met\xE1lica"
   bitKongValue: 0
+  buildableTabType: 2
   rawMaterialsWithQuantity:
     list:
     - key: {fileID: 11400000, guid: 9b2d672be4f975f49b3bd109607666ae, type: 2}

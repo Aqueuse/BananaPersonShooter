@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b2e529ee924f2b6439b07656d252d9d6, type: 3}
   m_Name: BlueprintProperties
   m_EditorClassIdentifier: 
-  itemCategory: 14
+  itemCategory: 4
   bananaType: 0
   droppedType: 4
   ingredientsType: 0
@@ -26,6 +26,7 @@ MonoBehaviour:
   - blueprint
   - plan de construction
   - cianotipo
+  spriteAtlasIndex: 0
   itemSprite: {fileID: 21300000, guid: b3e6459a6f2b05c4388273baa0dae3b9, type: 3}
   itemDescription:
   - the result of your construction study

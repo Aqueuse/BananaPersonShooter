@@ -57,6 +57,10 @@ namespace InGame.SpaceTrafficControl {
             selectedSpaceship.GoToPath(hangarNumber);
         }
 
+        public void RefuseSpaceship() {
+            ObjectsReference.Instance.uiCommunicationPanel.CloseCommunications(selectedSpaceship);
+        }
+
         public void FreeHangar(int hangarNumber) {
             hangarAvailabilityByHangarNumber[hangarNumber] = true;
             

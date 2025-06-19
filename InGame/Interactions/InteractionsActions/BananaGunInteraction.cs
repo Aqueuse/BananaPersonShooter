@@ -1,9 +1,10 @@
-using Tags;
 using UnityEngine;
 
 namespace InGame.Interactions.InteractionsActions {
     public class BananaGunInteraction : Interaction {
         public override void Activate(GameObject interactedGameObject) {
+            interactedGameObject.transform.parent.gameObject.SetActive(false);
+            
             ObjectsReference.Instance.commandRoomControlPanelsManager.blueprinter.CreateBlueprint(
                 new [] {
                     BuildableType.TELEPORTER_COROLLE, 
@@ -17,22 +18,13 @@ namespace InGame.Interactions.InteractionsActions {
             
             ObjectsReference.Instance.bananaGunActionsSwitch.enabled = true;
             
-            ObjectsReference.Instance.bananaMan.tutorialFinished = true;
-            
-            RenderSettings.ambientLight = Color.white; 
-            
             ObjectsReference.Instance.audioManager.SetMusiqueAndAmbianceByRegion(RegionType.COROLLE);
             
-            foreach (var accessManagedGameObject in TagsManager.GetAllGameObjectsWithTag(GAME_OBJECT_TAG.ACCESS_MANAGED)) {
-                accessManagedGameObject.GetComponent<ManageAccess>().AuthorizeUsage();
-            }
-
             ObjectsReference.Instance.gameSave.StartAutoSave();
 
             ObjectsReference.Instance.bananaGun.GrabBananaGun();
 
-            ObjectsReference.Instance.bananaGunActionsSwitch.SwitchToBananaGunMode(BananaGunMode.SCAN);
-            ObjectsReference.Instance.uiFlippers.Init();
+            ObjectsReference.Instance.bottomSlots.Init();
         }
     }
 }

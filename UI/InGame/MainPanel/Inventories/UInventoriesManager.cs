@@ -121,6 +121,10 @@ namespace UI.InGame.MainPanel.Inventories {
         public void SetBitKongQuantity(int bitkongQuantity) {
             bitkongQuantityText.text = bitkongQuantity + " BTK";
         }
+
+        public void ActivateBuildablesInventory() {
+            buttonImageByInventoryCategory[DroppedType.BLUEPRINT].gameObject.SetActive(true);
+        }
         
         public void SetActive(CanvasGroup canvasGroup, bool visible) {
             canvasGroup.alpha = visible ? 1 : 0;

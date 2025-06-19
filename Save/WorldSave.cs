@@ -35,6 +35,8 @@ namespace Save {
                     }
                 }
             }
+
+            ObjectsReference.Instance.worldData.stationLightSetting = savedWorldData.stationLightSetting;
         }
     
         public void SaveWorld(string saveUuid) {
@@ -48,6 +50,8 @@ namespace Save {
                 worldSavedData.monkeysSasietyTimerByMonkeyId.Add(monkey.monkeyId, (int)monkey.sasietyTimer);
             }
 
+            worldSavedData.stationLightSetting = worldData.stationLightSetting;
+            
             var jsonMapSaved = JsonConvert.SerializeObject(worldSavedData);
 
             File.WriteAllText(savefilePath, jsonMapSaved);

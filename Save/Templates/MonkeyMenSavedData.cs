@@ -8,12 +8,14 @@ namespace Save.Templates {
         public CharacterType characterType;
         
         public MonkeyMenType monkeyMenType;
-        public int appearanceScriptableObjectIndex;
+        public int prefabIndex;
+        public int colorSetIndex;
         
         public PirateState pirateState;
         public TouristState touristState;
     
-        public Dictionary<NeedType, int> needs;
+        public NeedType need;
+        public bool isSatisfied;
         public string destination;
 
         public Dictionary<RawMaterialType, int> rawMaterialsInventory;

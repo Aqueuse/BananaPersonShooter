@@ -205,7 +205,7 @@ namespace InGame.Player {
                 switch (tagComponent.gameObjectTag) {
                     case GAME_OBJECT_TAG.BUILDABLE:
                         if (tagComponent.itemScriptableObject.buildableType == BuildableType.BUMPER) {
-                            other.gameObject.GetComponent<PlateformBehaviour>().Activate(_rigidbody, 80000);
+                            other.gameObject.GetComponent<BumperBehaviour>().Activate(_rigidbody, 80000);
                         }
                         break;
                 }

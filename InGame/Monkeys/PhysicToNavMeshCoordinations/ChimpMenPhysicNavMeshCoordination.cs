@@ -1,4 +1,4 @@
-using InGame.Monkeys.Chimpirates;
+using InGame.Monkeys.Chimpvisitors;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -31,10 +31,6 @@ namespace InGame.Monkeys.PhysicToNavMeshCoordinations {
             _rigidbody.isKinematic = false;
             _rigidbody.useGravity = true;
             GetComponent<CapsuleCollider>().isTrigger = false;
-
-            GetComponent<PirateBehaviour>().monkeyMenBehaviour.monkeyMenData.pirateState = PirateState.PLATEFORM_INTERACTION;
-            
-            
         }
 
         public override void SwitchToNavMeshAgent() {
@@ -47,7 +43,6 @@ namespace InGame.Monkeys.PhysicToNavMeshCoordinations {
             animator.SetBool(isInAirAnimatorProperty, false);
 
             GetComponent<CapsuleCollider>().isTrigger = false;
-            GetComponent<PirateBehaviour>().monkeyMenBehaviour.monkeyMenData.pirateState = PirateState.GO_BACK_TO_TELEPORTER;
         }
     }
 }

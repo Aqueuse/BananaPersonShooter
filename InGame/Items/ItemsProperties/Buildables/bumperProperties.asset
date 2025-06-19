@@ -20,8 +20,8 @@ MonoBehaviour:
   rawMaterialType: 0
   buildableType: 0
   foodType: 0
-  isAspirable: 0
-  prefab: {fileID: 0}
+  isAspirable: 1
+  prefab: {fileID: 3266887563888322151, guid: ed6506629ba94dc48b84997bb6e1c79a, type: 3}
   itemName:
   - bumper
   - bumper
@@ -37,7 +37,7 @@ MonoBehaviour:
   rawMaterialsWithQuantity:
     list:
     - key: {fileID: 11400000, guid: 9b2d672be4f975f49b3bd109607666ae, type: 2}
-      value: 6
+      value: 2
     keyCollision: 0
   buildablePrefab: {fileID: 3266887563888322151, guid: ed6506629ba94dc48b84997bb6e1c79a, type: 3}
   blueprintSprite: {fileID: 21300000, guid: 54cbf7ccde7557f4688620b3f6e4071a, type: 3}

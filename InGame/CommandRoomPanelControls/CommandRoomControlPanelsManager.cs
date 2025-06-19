@@ -1,34 +1,17 @@
 using Cinemachine;
 using InGame.Monkeys.Chimployees;
-using InGame.Monkeys.Minichimps;
 using UnityEngine;
 
 namespace InGame.CommandRoomPanelControls {
     public class CommandRoomControlPanelsManager : MonoBehaviour {
-        [SerializeField] private GenericDictionary<CommandRoomPanelType, ManageAccess> manageAccessesByPanelType;
-
         public Blueprinter blueprinter;
 
         public CinemachineVirtualCamera commandRoomVirtualCamera;
         [SerializeField] private GenericDictionary<CommandRoomPanelType, Transform> cameraTransformByPanelType;
         [SerializeField] private GenericDictionary<CommandRoomPanelType, Transform> cameraFocusByPanelType;
 
-        public MiniChimp miniChimp;
         public ChimployeeCommandRoom chimployeeCommandRoom;
         public Transform chairLifeSimulatorTransform;
-        
-        public void Init() {
-            if (ObjectsReference.Instance.bananaMan.tutorialFinished) {
-                foreach (var manageAccess in manageAccessesByPanelType) {
-                    manageAccess.Value.AuthorizeUsage();
-                }
-            }
-            else {
-                foreach (var manageAccess in manageAccessesByPanelType) {
-                    manageAccess.Value.ForbidUsage();
-                }
-            }
-        }
         
         public void FocusPanel(int panelTypeEnum) {
             CommandRoomPanelType commandRoomPanelType = (CommandRoomPanelType)panelTypeEnum;

@@ -33,14 +33,14 @@ namespace Save {
             
             LoadBananaManVitals();
             LoadPositionAndRotation();
+
+            LoadSlots();
+            LoadActiveSlotIndex();
             
-            LoadBananaGun();
-            LoadActiveDroppable();
-            LoadActiveBuildable();
             LoadBitkongQuantity();
-            CheckTutorialFinished();
+            LoadDiscoveredMaterials();
         }
-        
+
         private static BananaManSavedData LoadPlayerByUuid(string saveUuid) {
             var savePath = Path.Combine(ObjectsReference.Instance.gameSave._savesPath, saveUuid);
             
@@ -52,8 +52,8 @@ namespace Save {
         }
         
         private void LoadBananasInventory() {
-            bananaMan.bananaManData.activeBanana = bananaManSavedData.activeBanana;
-
+            bananasInventory.Clear();
+            
             foreach (var banana in bananaManSavedData.bananaInventory) {
                 bananasInventory.Add((BananaType)Enum.Parse(typeof(BananaType), banana.Key), banana.Value);
             }
@@ -62,7 +62,7 @@ namespace Save {
         }
 
         private void LoadRawMaterialsInventory() {
-            bananaMan.bananaManData.activeRawMaterial = bananaManSavedData.activeRawMaterial;
+            rawMaterialsInventory.Clear();
             
             foreach (var rawMaterial in bananaManSavedData.rawMaterialsInventory) {
                 rawMaterialsInventory[(RawMaterialType)Enum.Parse(typeof(RawMaterialType), rawMaterial.Key)] = rawMaterial.Value;
@@ -72,8 +72,8 @@ namespace Save {
         }
 
         private void LoadIngredientsInventory() {
-            bananaMan.bananaManData.activeIngredient = bananaManSavedData.activeIngredient;
-
+            ingredientsInventory.Clear();
+            
             foreach (var ingredient in bananaManSavedData.ingredientsInventory) {
                 ingredientsInventory[(IngredientsType)Enum.Parse(typeof(IngredientsType), ingredient.Key)] = ingredient.Value;
             }
@@ -82,7 +82,7 @@ namespace Save {
         }
 
         private void LoadManufacturedItemsInventory() {
-            bananaMan.bananaManData.activeManufacturedItem = bananaManSavedData.activeManufacturedItem;
+            manufacturedItemsInventory.Clear();
             
             foreach (var manufacturedItem in bananaManSavedData.manufacturedInventory) {
                 manufacturedItemsInventory[(ManufacturedItemsType)Enum.Parse(typeof(ManufacturedItemsType), manufacturedItem.Key)] = manufacturedItem.Value;
@@ -92,19 +92,13 @@ namespace Save {
         }
 
         private void LoadFoodInventory() {
-            bananaMan.bananaManData.activeFood = bananaManSavedData.activeFood;
-
+            foodInventory.Clear();
+            
             foreach (var food in bananaManSavedData.foodInventory) {
                 foodInventory[(FoodType)Enum.Parse(typeof(FoodType), food.Key)] = food.Value;
             }
 
             ObjectsReference.Instance.bananaManFoodInventory.foodInventory = foodInventory;
-        }
-
-        private void LoadBananaGun() {
-            var bananagunMode = Enum.Parse<BananaGunMode>(bananaManSavedData.bananaGunMode);
-            bananaMan.bananaGunMode = bananagunMode;
-            ObjectsReference.Instance.bananaGunActionsSwitch.SwitchToBananaGunMode(bananaMan.bananaGunMode);
         }
         
         private void LoadBananaManVitals() {
@@ -120,60 +114,100 @@ namespace Save {
             var bananaManRotation = new Vector3(bananaManSavedData.xWorldRotation, bananaManSavedData.yWorldRotation, bananaManSavedData.zWorldRotation);
             bananaMan.transform.rotation = Quaternion.Euler(bananaManRotation);
         }
+        
+        // [0] ITEM_CATEGORY
+        // [1] BUILDABLE_TYPE
+        // [2] BANANA_TYPE
+        // [3] RAW_MATERIAL_TYPE
+        // [4] INGREDIENT_TYPE
+        // [5] FOOD_TYPE
+        // [6] MANUFACTURED_ITEM_TYPE
+        // [7] SlotIndex
+        
+        private void LoadSlots() {
+            foreach (var slot in bananaManSavedData.slots) {
+                var rawItemString = slot.Split("-");
 
-        private void LoadActiveDroppable() {
-            switch (bananaManSavedData.activeDroppable) {
-                case DroppedType.BANANA:
-                    ObjectsReference.Instance.bananaMan.bananaManData.activeDroppableItem =
-                        ObjectsReference.Instance.meshReferenceScriptableObject.bananasPropertiesScriptableObjects[
-                            bananaManSavedData.activeBanana];
-                    break;
-                case DroppedType.RAW_MATERIAL:
-                    ObjectsReference.Instance.bananaMan.bananaManData.activeDroppableItem =
-                        ObjectsReference.Instance.meshReferenceScriptableObject.rawMaterialPropertiesScriptableObjects[
-                            bananaManSavedData.activeRawMaterial];
-                    break;
-                case DroppedType.INGREDIENTS:
-                    ObjectsReference.Instance.bananaMan.bananaManData.activeDroppableItem =
-                        ObjectsReference.Instance.meshReferenceScriptableObject.ingredientsPropertiesScriptableObjects[
-                            bananaManSavedData.activeIngredient];
-                    break;
-                case DroppedType.MANUFACTURED_ITEMS:
-                    ObjectsReference.Instance.bananaMan.bananaManData.activeDroppableItem =
-                        ObjectsReference.Instance.meshReferenceScriptableObject.manufacturedItemsPropertiesScriptableObjects[
-                            bananaManSavedData.activeManufacturedItem];
-                    break;
-                case DroppedType.FOOD:
-                    ObjectsReference.Instance.bananaMan.bananaManData.activeDroppableItem =
-                        ObjectsReference.Instance.meshReferenceScriptableObject.foodPropertiesScriptableObjects[
-                            bananaManSavedData.activeFood];
-                    break;
+                ItemCategory itemCategory = Enum.Parse<ItemCategory>(rawItemString[0]);
+                int slotIndex = int.Parse(rawItemString[7]);
+                
+                switch (itemCategory) {
+                    case ItemCategory.BUILDABLE:
+                        var buildableType = Enum.Parse<BuildableType>(rawItemString[1]);
+                        
+                        ObjectsReference.Instance.bottomSlots.SetSlotByIndex(
+                            ObjectsReference.Instance.meshReferenceScriptableObject.buildablePropertiesScriptableObjects[buildableType],
+                            slotIndex
+                        );
+                        break;
+                    case ItemCategory.BANANA:
+                        var bananaType = Enum.Parse<BananaType>(rawItemString[2]);
+                        
+                        ObjectsReference.Instance.bottomSlots.SetSlotByIndex(
+                            ObjectsReference.Instance.meshReferenceScriptableObject.bananasPropertiesScriptableObjects[bananaType],
+                            slotIndex
+                        );
+                        break;
+                    case ItemCategory.RAW_MATERIAL:
+                        var rawMaterialType = Enum.Parse<RawMaterialType>(rawItemString[3]);
+                        
+                        ObjectsReference.Instance.bottomSlots.SetSlotByIndex(
+                            ObjectsReference.Instance.meshReferenceScriptableObject.rawMaterialPropertiesScriptableObjects[rawMaterialType],
+                            slotIndex
+                        );
+                        break;
+                    case ItemCategory.INGREDIENT:
+                        var ingredientsType = Enum.Parse<IngredientsType>(rawItemString[4]);
+                        
+                        ObjectsReference.Instance.bottomSlots.SetSlotByIndex(
+                            ObjectsReference.Instance.meshReferenceScriptableObject.ingredientsPropertiesScriptableObjects[ingredientsType],
+                            slotIndex
+                        );
+                        break;
+                    case ItemCategory.FOOD:
+                        var foodType = Enum.Parse<FoodType>(rawItemString[5]);
+                        
+                        ObjectsReference.Instance.bottomSlots.SetSlotByIndex(
+                            ObjectsReference.Instance.meshReferenceScriptableObject.foodPropertiesScriptableObjects[foodType],
+                            slotIndex
+                        );
+                        break;
+                    case ItemCategory.MANUFACTURED_ITEM:
+                        var manufacturedItemsType = Enum.Parse<ManufacturedItemsType>(rawItemString[6]);
+                        
+                        ObjectsReference.Instance.bottomSlots.SetSlotByIndex(
+                            ObjectsReference.Instance.meshReferenceScriptableObject.manufacturedItemsPropertiesScriptableObjects[manufacturedItemsType],
+                            slotIndex
+                        );
+                        break;
+                }
             }
         }
         
-        private void LoadActiveBuildable() {
-            bananaMan.bananaManData.activeBuildable = bananaManSavedData.activeBuildable;
-            ObjectsReference.Instance.uiFlippers.RefreshActiveBuildableAvailability();
+        private void LoadActiveSlotIndex() {
+            ObjectsReference.Instance.bottomSlots.activeSlotIndex = bananaManSavedData.activeSlotIndex;
+            ObjectsReference.Instance.bottomSlots.ActivateSlot(bananaManSavedData.activeSlotIndex);
         }
         
         private void LoadBitkongQuantity() {
             bananaMan.bananaManData.bitKongQuantity = bananaManSavedData.bitKongQuantity;
         }
         
-        private void CheckTutorialFinished() {
-            bananaMan.tutorialFinished = bananaManSavedData.hasFinishedTutorial;
+        private void LoadDiscoveredMaterials() {
+            bananaMan.bananaManData.discoveredRawMaterials.Clear();
             
-            if (bananaManSavedData.hasFinishedTutorial) {
-                ObjectsReference.Instance.bananaGun.GrabBananaGun();
-                ObjectsReference.Instance.uiManager.SetActive(UICanvasGroupType.HUD_BANANAMAN, true);
-            }
+            foreach (var discoveredRawMaterialString in bananaManSavedData.discoveredRawMaterials) {
+                RawMaterialType rawMaterialType = Enum.Parse<RawMaterialType>(discoveredRawMaterialString);
+                bananaMan.bananaManData.discoveredRawMaterials.Add(rawMaterialType);
 
-            else {
-                ObjectsReference.Instance.bananaGun.UngrabBananaGun();
-                ObjectsReference.Instance.uiManager.SetActive(UICanvasGroupType.HUD_BANANAMAN, false);
+                var buildablesToUnlock =
+                    ObjectsReference.Instance.meshReferenceScriptableObject.unlockedBuildablesByRawMaterialType[
+                        rawMaterialType];
+                
+                ObjectsReference.Instance.bananaManBuildablesInventory.UnlockBuildablesTier(buildablesToUnlock);    
             }
         }
-
+        
         public void SavePlayerByUuid(string saveUuid) {
             bananaManSavedData ??= new BananaManSavedData();
             
@@ -195,7 +229,6 @@ namespace Save {
                 bananaManSavedData.foodInventory[inventorySlot.Key.ToString()] = inventorySlot.Value;
             }
 
-            bananaManSavedData.bananaGunMode = bananaMan.bananaGunMode.ToString();
             bananaManSavedData.health = bananaMan.health; 
             bananaManSavedData.resistance = bananaMan.resistance;
 
@@ -210,22 +243,30 @@ namespace Save {
             bananaManSavedData.xWorldRotation = bananaManRotation.x;
             bananaManSavedData.yWorldRotation = bananaManRotation.y;
             bananaManSavedData.zWorldRotation = bananaManRotation.z;
-
-            bananaManSavedData.hasFinishedTutorial = bananaMan.tutorialFinished;
-
-            bananaManSavedData.activeDroppable = bananaMan.bananaManData.activeDropped;
-            bananaManSavedData.activeBanana = bananaMan.bananaManData.activeBanana;
-            bananaManSavedData.activeBuildable = bananaMan.bananaManData.activeBuildable;
-            bananaManSavedData.activeIngredient = bananaMan.bananaManData.activeIngredient;
-            bananaManSavedData.activeManufacturedItem = bananaMan.bananaManData.activeManufacturedItem;
-            bananaManSavedData.activeFood = bananaMan.bananaManData.activeFood;
-
+            
+            foreach (var discoveredRawMaterial in bananaMan.bananaManData.discoveredRawMaterials) {
+                bananaManSavedData.discoveredRawMaterials.Add(discoveredRawMaterial.ToString());
+            }
+            
+            SaveSlots();
+            bananaManSavedData.activeSlotIndex = ObjectsReference.Instance.bottomSlots.activeSlotIndex;
+            
             bananaManSavedData.bitKongQuantity = bananaMan.bananaManData.bitKongQuantity;
 
             var jsonbananaManSaved = JsonConvert.SerializeObject(bananaManSavedData);
         
             var savefilePath = Path.Combine(savePath, "player.json");
             File.WriteAllText(savefilePath, jsonbananaManSaved);
+        }
+
+        private void SaveSlots() {
+            bananaManSavedData.slots.Clear();
+            
+            foreach (var bottomSlot in ObjectsReference.Instance.bottomSlots.uiBottomSlots) {
+                if (bottomSlot.slotType is SlotType.DROP or SlotType.BUILD) {
+                    bananaManSavedData.slots.Add(bottomSlot.GenerateSavedData());
+                }
+            }
         }
     }
 }

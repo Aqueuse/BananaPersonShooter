@@ -2,9 +2,10 @@ using System;
 using System.Collections.Generic;
 using InGame.Items.ItemsBehaviours.BuildablesBehaviours;
 
-namespace InGame.Items.ItemsData.BuildablesData {
+namespace Save.Buildables {
     [Serializable]
-    public class BananasDryerData : BuildableData {
+    public class BananasDryerSavedData : BuildableSavedData {
         public List<BananaDryerSlot> bananaDryerSlots;
+        public Dictionary<RawMaterialType, int> materialsInSlots;
     }
 }

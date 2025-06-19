@@ -16,7 +16,7 @@ namespace Tags {
         MONKEY,
         MINI_CHIMP,
         CHIMPLOYEE,
-        TOURIST,
+        VISITOR,
         PIRATE,
         MERCHANT,
         CULTIVATOR,

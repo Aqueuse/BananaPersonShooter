@@ -15,5 +15,8 @@ public class DebugActions : InputActions {
     }
 
     private void F1Debug(InputAction.CallbackContext callbackContext) {
+        if (ObjectsReference.Instance.gameManager.gameContext == GameContext.IN_HOME) return;
+        
+        ObjectsReference.Instance.uiManager.ShowHideDebugPanel();
     }
 }

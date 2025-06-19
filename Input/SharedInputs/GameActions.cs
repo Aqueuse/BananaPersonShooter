@@ -16,15 +16,15 @@ namespace SharedInputs {
         private float rightRotateIncrementer;
         private float topRotateIncrementer;
         private float downRotateIncrementer;
-
+        
         public InputActionReference moveActionReference;
         public InputActionReference jumpActionReference;
         public InputActionReference runActionReference;
         public InputActionReference rollActionReference;
 
-        public InputActionReference grabActionReference;
-        public InputActionReference interactActionReference;
-    
+        public InputActionReference interactOrGrabActionReference;
+        public InputActionReference scrollSlotsActionReference;
+        
         public InputActionReference openGestionPanelActionReference;
         public InputActionReference openInventoryActionReference;
         public InputActionReference ShowHideMapActionReference;
@@ -65,13 +65,12 @@ namespace SharedInputs {
             rollActionReference.action.Enable();
             rollActionReference.action.performed += Roll;
 
-            interactActionReference.action.Enable();
-            interactActionReference.action.performed += Interact;
+            interactOrGrabActionReference.action.Enable();
+            interactOrGrabActionReference.action.performed += Interact;
 
-            grabActionReference.action.Enable();
-            grabActionReference.action.performed += Grab;
-            grabActionReference.action.canceled += Grab;
-        
+            scrollSlotsActionReference.action.Enable();
+            scrollSlotsActionReference.action.performed += ScrollSlots;
+            
             openGestionPanelActionReference.action.Enable();
             openGestionPanelActionReference.action.performed += ShowMainPanel;
             
@@ -99,13 +98,12 @@ namespace SharedInputs {
             rollActionReference.action.Disable();
             rollActionReference.action.performed -= Roll;
 
-            interactActionReference.action.Disable();
-            interactActionReference.action.performed -= Interact;
+            interactOrGrabActionReference.action.Disable();
+            interactOrGrabActionReference.action.performed -= Interact;
 
-            grabActionReference.action.Disable();
-            grabActionReference.action.performed -= Grab;
-            grabActionReference.action.canceled -= Grab;
-        
+            scrollSlotsActionReference.action.Disable();
+            scrollSlotsActionReference.action.performed -= ScrollSlots;
+            
             openGestionPanelActionReference.action.Disable();
             openGestionPanelActionReference.action.performed -= ShowMainPanel;
 
@@ -153,14 +151,22 @@ namespace SharedInputs {
         }
 
         private static void Grab(InputAction.CallbackContext context) {
-            if (ObjectsReference.Instance.bananaMan.bananaGunMode != BananaGunMode.SCAN) {
-                if (context.performed) ObjectsReference.Instance.grab.DoGrab(); 
-                if (context.canceled) ObjectsReference.Instance.grab.Release();
+            if (context.performed) ObjectsReference.Instance.grab.DoGrab(); 
+            if (context.canceled) ObjectsReference.Instance.grab.Release();
+        }
+
+        private void ScrollSlots(InputAction.CallbackContext context) {
+            if (context.ReadValue<Vector2>().y < 0) {
+                ObjectsReference.Instance.bottomSlots.SwitchToLeftSlot();
+            }
+
+            if (context.ReadValue<Vector2>().y > 0) {
+                ObjectsReference.Instance.bottomSlots.SwitchToRightSlot();
             }
         }
-    
+        
         private static void ShowMainPanel(InputAction.CallbackContext context) {
-            if (!ObjectsReference.Instance.bananaMan.tutorialFinished) return;
+            if (!ObjectsReference.Instance.bananaGun.bananaGunGameObject.activeInHierarchy) return;
             
             ObjectsReference.Instance.cameraPlayer.Set0Sensibility();
             ObjectsReference.Instance.inputManager.SwitchContext(InputContext.GESTION_PANEL);
@@ -172,7 +178,7 @@ namespace SharedInputs {
         }
 
         private static void ShowInventories(InputAction.CallbackContext context) {
-            if (!ObjectsReference.Instance.bananaMan.tutorialFinished) return;
+            if (!ObjectsReference.Instance.bananaGun.bananaGunGameObject.activeInHierarchy) return;
             
             ObjectsReference.Instance.cameraPlayer.Set0Sensibility();
             ObjectsReference.Instance.inputManager.SwitchContext(InputContext.GESTION_PANEL);

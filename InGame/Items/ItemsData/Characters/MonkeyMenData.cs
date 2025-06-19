@@ -7,24 +7,40 @@ namespace InGame.Items.ItemsData.Characters {
         public string uid;
         public string monkeyMenName;
         public CharacterType characterType;
-        public MonkeyMenType monkeyMenType;
 
-        public int appearanceScriptableObjectIndex;
+        // APPARENCE
+        public float textureRotation;
+        public int prefabIndex;
+        public int colorSetIndex;
         
-        public PirateState pirateState = PirateState.GO_TO_TELEPORTER;
-        public TouristState touristState = TouristState.GO_TO_TELEPORTER;
-
-        public GenericDictionary<NeedType, int> needs = new ();
+        public NeedType need;
+        public bool isSatisfied;
         public Vector3 destination;
+        
+        public Dictionary<RawMaterialType, int> rawMaterialsInventory = new() {
+            {RawMaterialType.ELECTRONIC, 0},
+            {RawMaterialType.BANANA_PEEL, 0},
+            {RawMaterialType.METAL, 0},
+            {RawMaterialType.FABRIC, 0},
+            {RawMaterialType.BATTERY, 0}
+        };
 
-        public Dictionary<RawMaterialType, int> rawMaterialsInventory;
-        public Dictionary<ManufacturedItemsType, int> manufacturedItemsInventory;
-        public Dictionary<IngredientsType, int> ingredientsInventory;
-        public Dictionary<BananaType, int> bananasInventory;
+        public Dictionary<IngredientsType, int> ingredientsInventory = new() {
+            {IngredientsType.BANANA_DOG_BREAD, 0},
+            {IngredientsType.BANANA_WITHOUT_SKIN, 0}
+        };
 
+        public Dictionary<ManufacturedItemsType, int> manufacturedItemsInventory = new() {
+            {ManufacturedItemsType.SPACESHIP_TOY, 0},
+            {ManufacturedItemsType.BANANARAIGNEE, 0},
+            {ManufacturedItemsType.LAPINOU, 0},
+            {ManufacturedItemsType.BANANAVIAIRE, 0}
+        };
+        
         public int bitKongQuantity;
 
         public string spaceshipGuid;
+        public Vector3 spaceshipPosition;
         public Vector3 position;
         public Quaternion rotation;
     }

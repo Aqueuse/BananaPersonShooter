@@ -71,10 +71,6 @@ namespace SharedInputs {
             if (viewContextType == ViewModeContextType.HARVEST) {
                 _gestionViewMode.harvest();
             }
-            
-            if (viewContextType == ViewModeContextType.REPAIR) {
-                _gestionViewMode.RepairBuildable();
-            }
         }
     }
 }

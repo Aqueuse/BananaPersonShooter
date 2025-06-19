@@ -33,7 +33,7 @@ namespace InGame.Interactions.InteractionsActions {
             var gameObjectsWithBuildableType = new List<GameObject>();
 
             foreach (var buildable in buildablesBehaviours) {
-                if (buildable.buildableType == buildableType) {
+                if (buildable.buildablePropertiesScriptableObject.buildableType == buildableType) {
                     gameObjectsWithBuildableType.Add(buildable.gameObject);
                 }
             }

@@ -1,11 +1,9 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using DG.Tweening;
 using InGame.Items.ItemsData;
-using InGame.Items.ItemsData.Characters;
 using InGame.MiniGames.SpaceTrafficControlMiniGame.projectiles;
-using InGame.Monkeys;
+using InGame.Monkeys.Chimpvisitors;
 using InGame.SpaceTrafficControl;
 using Save.Helpers;
 using Save.Templates;
@@ -17,7 +15,7 @@ namespace InGame.Items.ItemsBehaviours {
     public class SpaceshipBehaviour : MonoBehaviour {
         [SerializeField] private Transform _spaceshipTransform;
         public SpaceshipData spaceshipData;
-        public Transform chimpMensSpawnPoint;
+        public Transform visitorsSpawnPoint;
         
         [HideInInspector] public SpaceshipSavedData spaceshipSavedData;
 
@@ -25,8 +23,6 @@ namespace InGame.Items.ItemsBehaviours {
         private Vector3[] assignatedPathToHangar;
 
         private float _step;
-
-        public List<MonkeyMenBehaviour> travelers;
         
         private GameObject chimpmenInstance;
         
@@ -76,19 +72,9 @@ namespace InGame.Items.ItemsBehaviours {
             }
         }
         
-        private void OnTriggerEnter(Collider other) {
-            if (!TagsManager.Instance.HasTag(other.gameObject, GAME_OBJECT_TAG.LASER)) return;
-            
-            GetComponent<CapsuleCollider>().enabled = false;
-
-            foreach (var debrisBehaviour in gameObject.GetComponentsInChildren<SpaceshipDebrisBehaviour>()) {
-                debrisBehaviour.enabled = true;
-                debrisBehaviour.Init(other.GetComponent<Laser>());
-            }
-            
-            ObjectsReference.Instance.spaceshipsSpawner.RemoveGuestInCampaignCreator();
-
-            ObjectsReference.Instance.uiCommunicationPanel.CloseCommunications(this);
+        private void SpawnChimpmen() { 
+            var group = Instantiate(ObjectsReference.Instance.meshReferenceScriptableObject.groupPrefab);
+            group.GetComponent<GroupBehaviour>().SpawnMembers(ObjectsReference.Instance.meshReferenceScriptableObject.GetNextGroup());
         }
         
         private void OpenCommunications() {
@@ -158,44 +144,19 @@ namespace InGame.Items.ItemsBehaviours {
             ObjectsReference.Instance.spaceshipsSpawner.RemoveGuestInCampaignCreator();
             Destroy(gameObject);
         }
+        
+        private void OnTriggerEnter(Collider other) {
+            if (!TagsManager.Instance.HasTag(other.gameObject, GAME_OBJECT_TAG.LASER)) return;
+            
+            GetComponent<CapsuleCollider>().enabled = false;
 
-        private void SpawnChimpmen() {
-            spaceshipData.monkeyMenToSpawn -= 1;
-
-            if (spaceshipData.monkeyMenToSpawn <= 0) {
-                CancelInvoke(nameof(SpawnChimpmen));
-                return;
+            foreach (var debrisBehaviour in gameObject.GetComponentsInChildren<SpaceshipDebrisBehaviour>()) {
+                debrisBehaviour.enabled = true;
+                debrisBehaviour.Init(other.GetComponent<Laser>());
             }
             
-            var monkeyMenData = new MonkeyMenData {
-                uid = Guid.NewGuid().ToString(),
-                monkeyMenName = "suzanne",
-                characterType = spaceshipData.characterType,
-                monkeyMenType = MonkeyMenType.ADULT_BIG,
-                appearanceScriptableObjectIndex = 0,
-                spaceshipGuid = spaceshipData.spaceshipGuid,
-                needs = new GenericDictionary<NeedType, int> {
-                    {NeedType.FUN, Random.Range(1, 6)},
-                    { NeedType.HUNGER, Random.Range(1, 6)},
-                    { NeedType.REST, Random.Range(1, 6)},
-                    { NeedType.KNOWLEDGE, Random.Range(1, 6)},
-                    { NeedType.SOUVENIR, Random.Range(1, 6)}
-                },
-                destination = ObjectsReference.Instance.gameManager.spawnPointsBySpawnType[SpawnPoint.TP_HANGARS].position
-            };
-            
-            var monkeyMen = Instantiate(
-                ObjectsReference.Instance.meshReferenceScriptableObject.monkeyMenPrefabByMonkeyMenType[monkeyMenData.monkeyMenType], 
-                chimpMensSpawnPoint.position, Quaternion.identity,
-                ObjectsReference.Instance.gameSave.savablesItemsContainer
-            );
-
-            var monkeyMenBehaviour = monkeyMen.GetComponent<MonkeyMenBehaviour>();
-            monkeyMenBehaviour.monkeyMenData = monkeyMenData;
-            
-            monkeyMenBehaviour.associatedSpaceshipBehaviour = this;
-            
-            monkeyMenBehaviour.Init();
+            ObjectsReference.Instance.spaceshipsSpawner.RemoveGuestInCampaignCreator();
+            ObjectsReference.Instance.uiCommunicationPanel.CloseCommunications(this);
         }
         
         public void LoadSavedData(SpaceshipSavedData spaceshipSavedData) {

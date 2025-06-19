@@ -79,16 +79,5 @@ namespace Save {
                 buildablesDataDictionaryByBuildableType.Add(buildableType, new List<string>{ buildableData });
             }
         }
-
-        public void SpawnInitialBuildables() {
-            buildableInstance = Instantiate(
-                ObjectsReference.Instance.worldData.initialBuildablesOnWorld,
-                ObjectsReference.Instance.gameSave.savablesItemsContainer, 
-                true
-            );
-            
-            buildableInstance.transform.position = ObjectsReference.Instance.gameSave.savablesItemsContainer.position;
-            buildableInstance.transform.rotation = ObjectsReference.Instance.gameSave.savablesItemsContainer.rotation;
-        }
     }
 }

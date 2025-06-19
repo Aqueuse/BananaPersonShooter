@@ -6,9 +6,7 @@ using UnityEngine;
 namespace InGame.CommandRoomPanelControls {
     public class Absorbatron : MonoBehaviour {
         private CannonsManager cannonsManager;
-
-        public List<RawMaterialType> discoveredRawMaterials;
-
+        
         private void Start() {
             cannonsManager = ObjectsReference.Instance.cannonsManager;
         }
@@ -28,11 +26,11 @@ namespace InGame.CommandRoomPanelControls {
             if (other.gameObject.TryGetComponent<DroppedBehaviour>(out var droppedBehaviour)) {
                 var rawMaterial = droppedBehaviour.itemScriptableObject.rawMaterialType;
                 
-                if (discoveredRawMaterials.Contains(rawMaterial)) return;
-                discoveredRawMaterials.Add(rawMaterial);
+                if (ObjectsReference.Instance.bananaMan.bananaManData.discoveredRawMaterials.Contains(rawMaterial)) return;
+                ObjectsReference.Instance.bananaMan.bananaManData.discoveredRawMaterials.Add(rawMaterial);
                 
                 var buildablesToUnlock = ObjectsReference.Instance.meshReferenceScriptableObject.unlockedBuildablesByRawMaterialType[rawMaterial];
-
+    
                 ObjectsReference.Instance.commandRoomControlPanelsManager.blueprinter.CreateBlueprint(buildablesToUnlock);
                 
                 Destroy(other.gameObject);

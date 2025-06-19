@@ -1,6 +1,4 @@
-﻿using InGame.Items.ItemsProperties;
-using InGame.Items.ItemsProperties.Buildables;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace InGame.Player {
     public class BananaMan : MonoBehaviour {
@@ -13,46 +11,26 @@ namespace InGame.Player {
 
         public bool isGrabingBananaGun;
         public BananaGunMode bananaGunMode;
-        
+
         private const float _maxHealth = 100;
         public float health;
         public float resistance;
         private static readonly int CutoffHeight = Shader.PropertyToID("Cutoff_Height");
-
-        public bool tutorialFinished;
         
         private void Start() {
             tpsPlayerAnimator = GetComponentInChildren<Animator>().GetComponent<TpsPlayerAnimator>();
             faceCanvasRenderer.SetMesh(facePlane.GetComponent<MeshFilter>().mesh);
         }
         
-        public void SetActiveBuildable(BuildablePropertiesScriptableObject buildablePropertiesScriptableObject) {
-            bananaManData.activeBuildable = buildablePropertiesScriptableObject.buildableType;
-            
-            ObjectsReference.Instance.build.SetActiveBuildable(buildablePropertiesScriptableObject.buildableType);
-            ObjectsReference.Instance.uiFlippers.RefreshActiveBuildableAvailability();
-        }
-
-        public void SetActiveDropped(ItemScriptableObject itemScriptableObject) {
-            bananaManData.activeDropped = itemScriptableObject.droppedType;
-            bananaManData.activeBanana = itemScriptableObject.bananaType;
-            bananaManData.activeIngredient = itemScriptableObject.ingredientsType;
-            bananaManData.activeRawMaterial = itemScriptableObject.rawMaterialType;
-            bananaManData.activeManufacturedItem = itemScriptableObject.manufacturedItemsType;
-            bananaManData.activeFood = itemScriptableObject.foodType;
-            
-            ObjectsReference.Instance.uiFlippers.SetDroppableSprite(itemScriptableObject.GetSprite());
-            ObjectsReference.Instance.uiFlippers.SetDroppableQuantity(itemScriptableObject);
-        }
-
-        public void GainHealth(BananaType bananaType) {
+        // TODO : move to a foodBehaviour and change to foodType
+        public void EatFood(BananaType bananaType) {
             if (ObjectsReference.Instance.BananaManBananasInventory.bananasInventory[bananaType] > 0 & health < _maxHealth) {
                 var bananaData =
                     ObjectsReference.Instance.meshReferenceScriptableObject.bananasPropertiesScriptableObjects[bananaType];
                 
                 health += bananaData.healthBonus;
 
-                ObjectsReference.Instance.BananaManBananasInventory.RemoveQuantity(bananaManData.activeDroppableItem, 1);
+                //ObjectsReference.Instance.BananaManBananasInventory.RemoveQuantity(bananaManData.activeDroppableItem, 1);
                 ObjectsReference.Instance.bananaManRawMaterialInventory.AddQuantity(
                     ObjectsReference.Instance.meshReferenceScriptableObject.
                         rawMaterialPropertiesScriptableObjects[RawMaterialType.BANANA_PEEL], 1);

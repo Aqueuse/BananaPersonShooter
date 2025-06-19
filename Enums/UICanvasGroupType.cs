@@ -25,5 +25,7 @@ public enum UICanvasGroupType {
     MAIN_PANEL,
     HUD_GESTION,
     MAP,
-    VIDEO_TAB
+    VIDEO_TAB,
+    DEBUG_PANEL,
+    MISSING_MATERIALS_PANEL
 }

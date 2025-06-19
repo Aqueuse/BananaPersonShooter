@@ -12,7 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6e11e44741351774ca1f8261e4d989f1, type: 3}
   m_Name: bench03WithBackProperties
   m_EditorClassIdentifier: 
-  gameObjectTag: 6
   itemCategory: 1
   bananaType: 0
   droppedType: 0
@@ -21,17 +20,20 @@ MonoBehaviour:
   rawMaterialType: 0
   buildableType: 7
   foodType: 0
-  isAspirable: 0
+  isAspirable: 1
+  prefab: {fileID: 0}
   itemName:
   - bench
   - banc
   - banco
+  spriteAtlasIndex: 0
   itemSprite: {fileID: 21300000, guid: 80787bab489e5c04d91d3529b1097b7b, type: 3}
   itemDescription:
   - a simple imitation wood bench with back
   - un simple banc imitation bois avec un dossier
   - "un banco sencillo de imitaci\xF3n de madera con respaldo"
   bitKongValue: 0
+  buildableTabType: 2
   rawMaterialsWithQuantity:
     list:
     - key: {fileID: 11400000, guid: 9b2d672be4f975f49b3bd109607666ae, type: 2}

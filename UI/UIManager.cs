@@ -176,6 +176,27 @@ namespace UI {
             ObjectsReference.Instance.mainCamera.SwitchToBananaManView();
         }
         
+        public void ShowHideDebugPanel() {
+            if (canvasGroupsByUICanvasType[UICanvasGroupType.DEBUG_PANEL].alpha == 0) {
+                ObjectsReference.Instance.inputManager.SwitchContext(InputContext.UI);
+
+                ObjectsReference.Instance.cameraPlayer.Set0Sensibility();
+                ObjectsReference.Instance.playerController.canMove = false;
+                
+                SetActive(UICanvasGroupType.DEBUG_PANEL, true);
+                
+            }
+
+            else {
+                ObjectsReference.Instance.inputManager.SwitchContext(InputContext.GAME);
+
+                ObjectsReference.Instance.cameraPlayer.SetNormalSensibility();
+                ObjectsReference.Instance.playerController.canMove = true;
+
+                SetActive(UICanvasGroupType.DEBUG_PANEL, false);
+            }
+        }
+        
         public void SetActive(UICanvasGroupType uiCanvasGroupType, bool visible) {
             var canvasGroup = canvasGroupsByUICanvasType[uiCanvasGroupType];
 

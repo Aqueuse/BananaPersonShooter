@@ -12,13 +12,14 @@ namespace InGame.CommandRoomPanelControls {
         
         public void CreateBlueprint(BuildableType[] buildableToGive) {
             Instantiate(
-                blueprintPrefab, 
+                blueprintPrefab,
                 new Vector3(
                     blueprintSpawnTransform.position.x,
                     blueprintSpawnTransform.position.y,
                     blueprintSpawnTransform.position.z
                 ), 
-                blueprintSpawnTransform.rotation
+                blueprintSpawnTransform.rotation,
+                ObjectsReference.Instance.gameSave.savablesItemsContainer
             ).GetComponent<BlueprintBehaviour>().associatedBuildables = buildableToGive;
         }
     }

@@ -156,6 +156,14 @@ MonoBehaviour:
       value: {fileID: 11400000, guid: c8531ad48c3b026449c217f3e61edded, type: 2}
     - key: 15
       value: {fileID: 11400000, guid: 12d023e99d504f54895a73a374a58e60, type: 2}
+    - key: 16
+      value: {fileID: 11400000, guid: 121e9085ee2ff2f43b9b3108a2fedf53, type: 2}
+    - key: 17
+      value: {fileID: 11400000, guid: 661b64b3f75cc1548af6d0c737594990, type: 2}
+    - key: 18
+      value: {fileID: 11400000, guid: e44789ed1ed76304ba9af37c08d264e2, type: 2}
+    - key: 19
+      value: {fileID: 11400000, guid: a49ab2068a705494f8ea180371e2b32b, type: 2}
     keyCollision: 0
   bananasPropertiesScriptableObjects:
     list:
@@ -252,7 +260,7 @@ MonoBehaviour:
   unlockedBuildablesByRawMaterialType:
     list:
     - key: 0
-      value: 000000000200000005000000060000000700000008000000
+      value: 000000000200000005000000060000000700000008000000100000001100000012000000
     - key: 5
       value: 13000000090000000a0000000b000000
     - key: 2
@@ -360,6 +368,8 @@ MonoBehaviour:
     - key: 9
       value: {fileID: 763401615645243554, guid: 93435de0459ed8c4b81df0726cf864e4, type: 3}
     keyCollision: 0
+  blueprintBuildableMaterial: {fileID: 2100000, guid: b8da26aaedae11e4d8addf9d6540ac14, type: 2}
+  completedBuildableMaterial: {fileID: 2100000, guid: 0005989f96942fa4eba8c72f27762e89, type: 2}
   chimpMensAppearanceScriptableObjects:
   - {fileID: 11400000, guid: 44ad37bdc9abad848a97b3e460db3c74, type: 2}
   - {fileID: 11400000, guid: 1bb85762dbf90d64aadb800b083365b1, type: 2}

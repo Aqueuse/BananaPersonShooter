@@ -20,8 +20,8 @@ MonoBehaviour:
   rawMaterialType: 0
   buildableType: 1
   foodType: 0
-  isAspirable: 0
-  prefab: {fileID: 0}
+  isAspirable: 1
+  prefab: {fileID: 637136286764793117, guid: fe03facf4bdab3f4e8e3d03d49cef23d, type: 3}
   itemName:
   - banana dryer
   - "s\xE9choir \xE0 bananes"

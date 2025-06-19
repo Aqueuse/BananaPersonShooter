@@ -17,8 +17,6 @@ namespace UI.Save {
         }
 
         public void Unselect() {
-//            ObjectsReference.Instance.uiSave.selectedSaveSlot = null;
-
             ObjectsReference.Instance.uiSave.HideThumbnail();
             
             ObjectsReference.Instance.uiSave.HideOptions();

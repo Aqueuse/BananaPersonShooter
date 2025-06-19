@@ -4,5 +4,5 @@ public enum NeedType {
     REST,
     KNOWLEDGE,
     SOUVENIR,
-    NONE
+    PILLAGE
 }

@@ -30,12 +30,14 @@ namespace InGame {
         [Space]
         public GenericDictionary<RawMaterialType, BuildableType[]> unlockedBuildablesByRawMaterialType;
         [Space]
-        public GenericDictionary<MonkeyMenType, GameObject> monkeyMenPrefabByMonkeyMenType;
+        public List<GameObject> monkeyMenPrefabs;
         public GenericDictionary<SpaceshipType, GameObject> spaceshipPrefabBySpaceshipType;
         [Space]
         public GenericDictionary<SpaceshipType, List<GameObject>> spaceshipDebrisBySpaceshipType;
         public GenericDictionary<BananaEffect, Color> bananaGoopColorByEffectType;
         public GenericDictionary<RawMaterialType, GameObject> prefabByRawMaterialType;
+        public Material blueprintBuildableMaterial;
+        public Material completedBuildableMaterial;
         [Space]
         public List<MonkeyMenPropertiesScriptableObject> chimpMensAppearanceScriptableObjects;
         
@@ -44,15 +46,23 @@ namespace InGame {
         public GenericDictionary<CharacterType, LocalizedString> genericDescriptionByCharacterType;
         [Space]
         public GenericDictionary<CharacterType, Sprite> itemPreviewByCharacterType;
+        public GameObject groupPrefab;
+        public GroupScriptableObject[] groupsScriptableObjects;
         [Space]
         public GameObject teleportDownVFXPrefab;
 
-        public GameObject GetRandomChimpmen() {
-            var chimpmenTypes = Enum.GetValues(typeof(MonkeyMenType));
+        private ItemScriptableObject activeItem;
+        
+        public GroupScriptableObject GetNextGroup() {
+            if (ObjectsReference.Instance.worldData.lastVisitorGroup >= groupsScriptableObjects.Length) {
+                ObjectsReference.Instance.worldData.lastVisitorGroup = 0;
+            }
 
-            var randomChimpmenType = chimpmenTypes.GetValue(Random.Range(0, chimpmenTypes.Length - 1));
-            
-            return monkeyMenPrefabByMonkeyMenType[(MonkeyMenType)randomChimpmenType];
+            else {
+                ObjectsReference.Instance.worldData.lastVisitorGroup += 1;
+            }
+
+            return groupsScriptableObjects[ObjectsReference.Instance.worldData.lastVisitorGroup];
         }
 
         public static SpaceshipType GetRandomSpaceshipType() {
@@ -62,17 +72,19 @@ namespace InGame {
         }
 
         public GameObject GetActiveDroppablePrefab() {
-            switch (ObjectsReference.Instance.bananaMan.bananaManData.activeDropped) {
+            activeItem = ObjectsReference.Instance.bottomSlots.GetSelectedSlot(); 
+            
+            switch (activeItem.droppedType) {
                 case DroppedType.BANANA:
-                    return bananaPrefabByBananaType[ObjectsReference.Instance.bananaMan.bananaManData.activeBanana];
+                    return bananaPrefabByBananaType[activeItem.bananaType];
                 case DroppedType.INGREDIENTS:
-                    return ingredientPrefabByIngredientType[ObjectsReference.Instance.bananaMan.bananaManData.activeIngredient];
+                    return ingredientPrefabByIngredientType[activeItem.ingredientsType];
                 case DroppedType.RAW_MATERIAL:
-                    return rawMaterialPrefabByRawMaterialType[ObjectsReference.Instance.bananaMan.bananaManData.activeRawMaterial];
+                    return rawMaterialPrefabByRawMaterialType[activeItem.rawMaterialType];
                 case DroppedType.MANUFACTURED_ITEMS:
-                    return manufacturedItemPrefabByManufacturedItemType[ObjectsReference.Instance.bananaMan.bananaManData.activeManufacturedItem];
+                    return manufacturedItemPrefabByManufacturedItemType[activeItem.manufacturedItemsType];
                 case DroppedType.FOOD:
-                    return foodPrefabByFoodType[ObjectsReference.Instance.bananaMan.bananaManData.activeFood];
+                    return foodPrefabByFoodType[activeItem.foodType];
             }
 
             return bananaPrefabByBananaType[BananaType.CAVENDISH];

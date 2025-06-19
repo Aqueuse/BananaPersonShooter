@@ -19,6 +19,7 @@ using Settings;
 using SharedInputs;
 using UI;
 using UI.InGame;
+using UI.InGame.BuildingMaterialMissingPanel;
 using UI.InGame.CommandRoomControlPanels;
 using UI.InGame.MainPanel;
 using UI.InGame.MainPanel.Inventories;
@@ -48,9 +49,11 @@ public class ObjectsReference : MonoSingleton<ObjectsReference> {
     public BananaMan bananaMan;
     public PlayerController playerController;
     public BananaGun bananaGun;
-    public Scan scan;
-    public Build build;
-    public Shoot shoot;
+    public BottomSlots bottomSlots;
+    public BuildAction buildAction;
+    public ShootAction shootAction;
+    public AspireAction aspireAction;
+    public ScanAction scanAction;
     public Grab grab;
     public Trade trade;
     public Interact interact;
@@ -96,6 +99,7 @@ public class ObjectsReference : MonoSingleton<ObjectsReference> {
     [Space]
     public UInventoriesManager uInventoriesManager;
     public UiMainPanel uiMainPanel;
+    public UIMissingMaterialBuildingPanel uiMissingMaterialBuildingPanel;
     [Space] 
     public UIBananasInventory bananaManUiBananasInventory;
     public UIRawMaterialsInventory bananaManUIRawMaterialsInventory;
@@ -105,7 +109,6 @@ public class ObjectsReference : MonoSingleton<ObjectsReference> {
     public UIBlueprintsInventory bananaManUiBlueprintsInventory;
     public UIToolTipOnMouseHover uiToolTipOnMouseHover;
     [Space]
-    public UICrosshairs uiCrosshairs;
     public UIFace uiFace;
     public UIQueuedMessages uiQueuedMessages;
     public UIHomeMenu uiHomeMenu;
@@ -116,9 +119,8 @@ public class ObjectsReference : MonoSingleton<ObjectsReference> {
     public UISettings uiSettings;
     [Space]
     public UICommunicationPanel uiCommunicationPanel;
+    public UIgestionPanel uIgestionPanel;
     public UICannons uiCannons;
     public UIMonkeyMensReception uiTouristReception;
     public UIMerchant uiMerchant;
-    [Space]
-    public UIFlippers uiFlippers;
 }

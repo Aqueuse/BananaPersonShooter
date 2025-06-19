@@ -1,6 +1,7 @@
 using System;
+using InGame.Items.ItemsBehaviours.BuildablesBehaviours;
 using InGame.Items.ItemsProperties;
-using InGame.Monkeys.Chimpirates;
+using InGame.Monkeys.Chimpvisitors;
 using Tags;
 using UnityEngine;
 
@@ -21,12 +22,12 @@ namespace InGame.Items.ItemsBehaviours.DroppedBehaviours {
                 droppedGuid = Guid.NewGuid().ToString();
             }
 
-            if (ObjectsReference.Instance.bananaMan.tutorialFinished)
+            if (itemScriptableObject.droppedType != DroppedType.BLUEPRINT)
                 Invoke(nameof(DestroyMe), 30);
         }
 
         private void FixedUpdate() {
-            if (!ObjectsReference.Instance.shoot.isAspiring) return;
+            if (!ObjectsReference.Instance.aspireAction.isAspiring) return;
             
             if (Vector3.Distance(transform.position, bananaGunTransform.position) <= 100) {
                 _rigidbody.velocity = 
@@ -34,21 +35,33 @@ namespace InGame.Items.ItemsBehaviours.DroppedBehaviours {
                      transform.position) * 5;
             }
 
-            if (Vector3.Distance(transform.position, bananaGunTransform.position) < 0.5f) {
-                ObjectsReference.Instance.bananaMan.bananaManData.
-                    inventoriesByDroppedType[itemScriptableObject.droppedType].
-                    AddQuantity(itemScriptableObject, 1);
+            if (Vector3.Distance(transform.position, bananaGunTransform.position) < 0.7f) {
+                if (itemScriptableObject.droppedType == DroppedType.BLUEPRINT) {
+                    BlueprintBehaviour blueprintBehaviour = (BlueprintBehaviour)this;
+                    
+                    ObjectsReference.Instance.bananaManBuildablesInventory.UnlockBuildablesTier(blueprintBehaviour.associatedBuildables);
+                }
 
-                ObjectsReference.Instance.uiFlippers.RefreshActiveDroppableQuantity();
+                else {
+                    ObjectsReference.Instance.bananaMan.bananaManData.
+                        inventoriesByDroppedType[itemScriptableObject.droppedType].
+                        AddQuantity(itemScriptableObject, 1);
+
+                    ObjectsReference.Instance.bottomSlots.RefreshSlotsQuantities();
+                }
                 
                 Destroy(gameObject);
             }
         }
+        
+        private void OnTriggerEnter (Collider collider) {
+            // TODO : make tourists and pirates flee the same way
+            if (TagsManager.Instance.HasTag(collider.gameObject, GAME_OBJECT_TAG.VISITOR)) {
+                collider.transform.GetComponent<VisitorBehaviour>().Flee();
+            }
 
-        private void OnCollisionEnter (Collision collision) {
-            // TODO : make tourists flee the same way
-            if (TagsManager.Instance.HasTag(collision.gameObject, GAME_OBJECT_TAG.PIRATE)) {
-                collision.transform.GetComponent<PirateBehaviour>().Flee();
+            if (TagsManager.Instance.HasTag(collider.gameObject, GAME_OBJECT_TAG.BUILDABLE)) {
+                collider.gameObject.GetComponent<BuildableBehaviour>().TryAbsorbeRawMaterial(this);
             }
         }
 

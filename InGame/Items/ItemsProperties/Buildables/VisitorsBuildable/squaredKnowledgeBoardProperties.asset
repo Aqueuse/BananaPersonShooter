@@ -12,7 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6e11e44741351774ca1f8261e4d989f1, type: 3}
   m_Name: squaredKnowledgeBoardProperties
   m_EditorClassIdentifier: 
-  gameObjectTag: 6
   itemCategory: 1
   bananaType: 0
   droppedType: 0
@@ -21,17 +20,20 @@ MonoBehaviour:
   rawMaterialType: 0
   buildableType: 10
   foodType: 0
-  isAspirable: 0
+  isAspirable: 1
+  prefab: {fileID: 0}
   itemName:
   - square information board
   - "panneau d'information carr\xE9"
   - "tablero de informaci\xF3n cuadrado"
+  spriteAtlasIndex: 0
   itemSprite: {fileID: 21300000, guid: 94f686e809882d54cad821a982480ed5, type: 3}
   itemDescription:
   - often found naturally in forests
   - "souvent rencontr\xE9 \xE0 l'\xE9tat naturel dans les for\xEAts"
   - A menudo se encuentra naturalmente en los bosques.
   bitKongValue: 0
+  buildableTabType: 3
   rawMaterialsWithQuantity:
     list:
     - key: {fileID: 11400000, guid: 9b2d672be4f975f49b3bd109607666ae, type: 2}

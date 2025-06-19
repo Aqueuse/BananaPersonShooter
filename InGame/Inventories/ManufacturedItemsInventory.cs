@@ -18,13 +18,8 @@ namespace InGame.Inventories {
             if (manufacturedItemsInventory[manufacturedItemsType] > 10000) return 9999;
 
             manufacturedItemsInventory[manufacturedItemsType] += quantity;
-
-            var manufacturedItem = ObjectsReference.Instance.bananaManUiManufacturedItemsInventory.uInventorySlots[manufacturedItemsType];
             
-            manufacturedItem.gameObject.SetActive(true);
-            manufacturedItem.SetQuantity(manufacturedItemsInventory[manufacturedItemsType]);
-
-            ObjectsReference.Instance.uiQueuedMessages.AddToInventory(manufacturedItem.itemScriptableObject, quantity);
+            ObjectsReference.Instance.bottomSlots.RefreshSlotsQuantities();
 
             return manufacturedItemsInventory[manufacturedItemsType];
         }
@@ -39,6 +34,8 @@ namespace InGame.Inventories {
             else {
                 manufacturedItemsInventory[manufacturedItemsType] = 0;
             }
+            
+            ObjectsReference.Instance.bottomSlots.RefreshSlotsQuantities();
 
             return manufacturedItemsInventory[manufacturedItemsType];
         }

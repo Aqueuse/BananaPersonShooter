@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using InGame.Items.ItemsBehaviours;
 using InGame.Items.ItemsData;
 using Newtonsoft.Json;
@@ -118,6 +119,14 @@ namespace Save {
         }
 
         public void SpawnInitialSpaceshipDebris() {
+            var initialDebris = ObjectsReference.Instance.gameSave.savablesItemsContainer.GetComponentsInChildren<Transform>();
+
+            if (initialDebris.Length > 1) {
+                for (var i = 1; i < initialDebris.Length; i++) {
+                    Destroy(initialDebris[i].gameObject);
+                }
+            }
+            
             Instantiate(
                 ObjectsReference.Instance.worldData.initialSpaceshipDebrisOnWorld,
                 ObjectsReference.Instance.gameSave.savablesItemsContainer

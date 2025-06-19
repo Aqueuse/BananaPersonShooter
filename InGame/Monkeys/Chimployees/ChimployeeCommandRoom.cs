@@ -12,9 +12,11 @@ namespace InGame.Monkeys.Chimployees {
         
         private static readonly int isDead = Animator.StringToHash("isDead");
         private static readonly int isTyping = Animator.StringToHash("isTyping");
+
+        [SerializeField] private Transform initialChimployeeTransform;
         
         private void Start() {
-            if (ObjectsReference.Instance.bananaMan.tutorialFinished) {
+            if (ObjectsReference.Instance.bananaGun.bananaGunGameObject.activeInHierarchy) {
                 SetNormalChimployeeConfiguration();
             }
             else {
@@ -38,6 +40,9 @@ namespace InGame.Monkeys.Chimployees {
         }
 
         public void SetTutorialChimployeeConfiguration() {
+            chimployeeTransform.position = initialChimployeeTransform.position;
+            chimployeeTransform.rotation = initialChimployeeTransform.rotation;
+
             uiFace.Die(true);
             animator.SetBool(isDead, true);
             animator.SetBool(isTyping, false);

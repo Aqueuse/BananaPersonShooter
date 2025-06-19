@@ -166,7 +166,7 @@ namespace UI.InGame.Merchimps {
         }
 
         public void RefreshBitkongQuantities() {
-            merchantBitKongQuantityTextMeshProUGUI.text = merchimpBehaviour.monkeyMenBehaviour.monkeyMenData.bitKongQuantity + " BTK";
+            merchantBitKongQuantityTextMeshProUGUI.text = merchimpBehaviour.monkeyMenData.bitKongQuantity + " BTK";
             bananaManBitKongQuantityTextMeshProUGUI.text = ObjectsReference.Instance.bananaMan.bananaManData.bitKongQuantity + " BTK";
         }
     }

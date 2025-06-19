@@ -1,101 +1,25 @@
-using SharedInputs;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace InGame.Player.BananaGunActions {
     public class BananaGunActionsSwitch : MonoBehaviour {
-        [SerializeField] private BananaGunShootActions bananaGunShootActions;
-        [SerializeField] private BananaGunScanActions bananaGunScanActions;
-        [SerializeField] private BananaGunBuildActions bananaGunBuildActions;
-        
-        private Shoot shoot;
-        private Scan scan;
-        private Build build;
-
-        private BananaMan bananaMan;
-
-        private void Start() {
-            shoot = ObjectsReference.Instance.shoot;
-            scan = ObjectsReference.Instance.scan;
-            build = ObjectsReference.Instance.build;
-
-            bananaMan = ObjectsReference.Instance.bananaMan;
-        }
+        [SerializeField] private GenericDictionary<BananaGunMode, List<MonoBehaviour>> actionsByBananaGunMode;
         
         public void SwitchToBananaGunMode(BananaGunMode bananaGunMode) {
-            ObjectsReference.Instance.bananaMan.bananaGunMode = bananaGunMode;
+            foreach (var action in actionsByBananaGunMode[ObjectsReference.Instance.bananaMan.bananaGunMode]) {
+                action.enabled = false;
+            }
             
-            switch (bananaGunMode) {
-                case BananaGunMode.SHOOT:
-                    bananaGunShootActions.enabled = true;
-                    bananaGunScanActions.enabled = false;
-                    bananaGunBuildActions.enabled = false;
-                    
-                    shoot.enabled = true;
-                    scan.enabled = false;
-                    build.enabled = false;
-                    
-                    ObjectsReference.Instance.uiFlippers.UpLeftFlipper();
-                    break;
-                case BananaGunMode.SCAN:
-                    bananaGunShootActions.enabled = false;
-                    bananaGunScanActions.enabled = true;
-                    bananaGunBuildActions.enabled = false;
+            ObjectsReference.Instance.bananaMan.bananaGunMode = bananaGunMode;
 
-                    shoot.enabled = false;
-                    scan.enabled = false; // do not directly active scan, wait until banana gun is grabbed to raycast
-                    build.enabled = false;
-
-                    ObjectsReference.Instance.uiFlippers.UpMiddleFlipper();
-                    break;
-                case BananaGunMode.BUILD:
-                    bananaGunShootActions.enabled = false;
-                    bananaGunScanActions.enabled = false;
-                    bananaGunBuildActions.enabled = true;
-
-                    shoot.enabled = false;
-                    scan.enabled = false;
-                    build.enabled = true;
-                    
-                    ObjectsReference.Instance.uiFlippers.UpRightFlipper();
-                    break;
+            foreach (var action in actionsByBananaGunMode[bananaGunMode]) {
+                action.enabled = true;
             }
         }
 
         public void DesactiveBananaGun() {
-            bananaGunShootActions.enabled = false;
-            bananaGunScanActions.enabled = false;
-            bananaGunBuildActions.enabled = false;
-
-            shoot.enabled = false;
-            scan.enabled = false;
-            build.enabled = false;
-        }
-
-        public void SwitchToLeftMode() {
-            switch (bananaMan.bananaGunMode) {
-                case BananaGunMode.BUILD:
-                    SwitchToBananaGunMode(BananaGunMode.SCAN);
-                    break;
-                case BananaGunMode.SCAN:
-                    SwitchToBananaGunMode(BananaGunMode.SHOOT);
-                    break;
-                case BananaGunMode.SHOOT:
-                    SwitchToBananaGunMode(BananaGunMode.BUILD);
-                    break;
-            }
-        }
-        
-        public void SwitchToRightMode() {
-            switch (bananaMan.bananaGunMode) {
-                case BananaGunMode.BUILD:
-                    SwitchToBananaGunMode(BananaGunMode.SHOOT);
-                    break;
-                case BananaGunMode.SHOOT:
-                    SwitchToBananaGunMode(BananaGunMode.SCAN);
-                    break;
-                case BananaGunMode.SCAN:
-                    SwitchToBananaGunMode(BananaGunMode.BUILD);
-                    break;
+            foreach (var action in actionsByBananaGunMode[ObjectsReference.Instance.bananaMan.bananaGunMode]) {
+                action.enabled = false;
             }
         }
     }

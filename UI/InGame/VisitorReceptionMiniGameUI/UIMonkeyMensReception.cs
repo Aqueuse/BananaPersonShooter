@@ -1,5 +1,5 @@
 using InGame.MiniGames.MonkeyMensReceptionMiniGame;
-using InGame.Monkeys;
+using InGame.Monkeys.Chimpvisitors;
 using UnityEngine;
 
 namespace UI.InGame.VisitorReceptionMiniGameUI {
@@ -14,25 +14,25 @@ namespace UI.InGame.VisitorReceptionMiniGameUI {
         public void RefreshUIWaintingList() {
             var visitorsButtonList = ScrollListContent.GetComponentsInChildren<UIVisitorReceptionButton>();
 
-            noMonkeyMensInWaitingLineGameObject.SetActive(monkeyMensReception.monkeyMensInWaitingLine.Count == 0);
+            noMonkeyMensInWaitingLineGameObject.SetActive(monkeyMensReception.VisitorsInWaitingLine.Count == 0);
 
             foreach (var uiVisitorReceptionButton in visitorsButtonList) {
                 Destroy(uiVisitorReceptionButton.gameObject);
             }
 
-            foreach (var visitorInWaitingList in monkeyMensReception.monkeyMensInWaitingLine) {
+            foreach (var visitorInWaitingList in monkeyMensReception.VisitorsInWaitingLine) {
                 var visitorButton = Instantiate(monkeyMensReceptionButton, ScrollListContent);
-                visitorButton.GetComponent<UIVisitorReceptionButton>().monkeyMenBehaviour = visitorInWaitingList;
+                visitorButton.GetComponent<UIVisitorReceptionButton>().VisitorBehaviour = visitorInWaitingList;
             }
         }
         
-        public void AcceptVisitor(MonkeyMenBehaviour monkeyMenBehaviour) {
-            monkeyMensReception.AcceptChimpmenInStation(monkeyMenBehaviour);
+        public void AcceptVisitor(VisitorBehaviour visitorBehaviour) {
+            monkeyMensReception.AcceptVisitorInStation(visitorBehaviour);
             RefreshUIWaintingList();
         }
 
-        public void RefuseVisitor(MonkeyMenBehaviour monkeyMenBehaviour) {
-            monkeyMensReception.RemoveVisitor(monkeyMenBehaviour);
+        public void RefuseVisitor(VisitorBehaviour visitorBehaviour) {
+            monkeyMensReception.RemoveVisitor(visitorBehaviour);
             RefreshUIWaintingList();
         }
     }

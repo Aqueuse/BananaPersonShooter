@@ -82,10 +82,11 @@ namespace UI.Save {
         
         #region Rename
         public void ShowRenamePanel() {
+            renameInputField.text = selectedSaveSlot.saveName.text;
             SetActive(renamePanelCanvasGroup, true);
         }
         
-        public void HideRenamePanel() {
+        private void HideRenamePanel() {
             SetActive(renamePanelCanvasGroup, false);
         }
 

@@ -4,7 +4,7 @@ namespace Save.Templates {
     public class BananaManSavedData {
         public float health = 100;
         public float resistance = 100;
-        
+
         public float xWorldPosition;
         public float yWorldPosition;
         public float zworldPosition;
@@ -13,18 +13,15 @@ namespace Save.Templates {
         public float yWorldRotation = 0;
         public float zWorldRotation = 0;
 
-        public DroppedType activeDroppable = DroppedType.BANANA;
-        public BananaType activeBanana = BananaType.CAVENDISH;
-        public RawMaterialType activeRawMaterial = RawMaterialType.METAL;
-        public IngredientsType activeIngredient = IngredientsType.BANANA_DOG_BREAD;
-        public ManufacturedItemsType activeManufacturedItem = ManufacturedItemsType.SPACESHIP_TOY;
-        public BuildableType activeBuildable = BuildableType.BUMPER;
-        public FoodType activeFood = FoodType.BANANA_DOG;
-        
+        public List<string> slots = new ();
+        public int activeSlotIndex;
+
         public int bitKongQuantity;
-        
+
         public bool hasFinishedTutorial = false;
-        
+
+        public List<string> discoveredRawMaterials = new();
+
         public Dictionary<string, int> bananaInventory = new() {
             {BananaType.BARANGAN.ToString(), 0},
             {BananaType.BLUE_JAVA.ToString(), 0},
@@ -43,7 +40,7 @@ namespace Save.Templates {
             {BananaType.RINO_HORN.ToString(), 0},
             {BananaType.TINDOK.ToString(), 0}
         };
-        
+
         public Dictionary<string, int> rawMaterialsInventory = new() {
             {RawMaterialType.ELECTRONIC.ToString(), 0},
             {RawMaterialType.BANANA_PEEL.ToString(), 0},
@@ -72,7 +69,5 @@ namespace Save.Templates {
         public Dictionary<string, int> foodInventory = new() {
             {FoodType.BANANA_DOG.ToString(), 0}
         };
-        
-        public string bananaGunMode = BananaGunMode.SHOOT.ToString();
     }
 }

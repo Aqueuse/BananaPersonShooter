@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
 using InGame.Items.ItemsBehaviours.DroppedBehaviours;
-using InGame.Items.ItemsData.BuildablesData;
 using Newtonsoft.Json;
+using Save.Buildables;
 using Save.Helpers;
 using UnityEngine;
 
@@ -22,7 +22,7 @@ namespace InGame.Items.ItemsBehaviours.BuildablesBehaviours {
 
         private int bananaPeelsQuantity;
         
-        private void Init() {
+        private void InitSlots() {
             for (var i = 0; i < 20; i++) {
                 if (slots[i].hasBananaPeel) {
                     PutBanana(i, slots[i].bananaEffect);
@@ -116,8 +116,8 @@ namespace InGame.Items.ItemsBehaviours.BuildablesBehaviours {
             }
         }
         
-        public override void RetrieveRawMaterials() {
-            base.RetrieveRawMaterials();
+        public override void TryRetrieveOneRawMaterial() {
+            base.TryRetrieveOneRawMaterial();
             
             for (var i = 0; i < 20; i++) {
                 if (slots[i].hasFabric) {
@@ -153,6 +153,7 @@ namespace InGame.Items.ItemsBehaviours.BuildablesBehaviours {
         
         private void OnCollisionEnter(Collision other) {
             if (other.gameObject.layer != 7) return;
+            if (buildableData.buildableState == BuildableState.BLUEPRINT) return;
 
             if (other.gameObject.TryGetComponent<BananaBehaviour>(out var bananaBehaviour)) {
                 var bananaPeelPlaced = TryToPutBananaPeel(bananaBehaviour.bananasPropertiesScriptableObject.bananaEffect);
@@ -162,34 +163,37 @@ namespace InGame.Items.ItemsBehaviours.BuildablesBehaviours {
         }
         
         public override void GenerateSaveData() {
-            if(string.IsNullOrEmpty(buildableGuid)) {
-                buildableGuid = Guid.NewGuid().ToString();
+            if(string.IsNullOrEmpty(buildableData.buildableGuid)) {
+                buildableData.buildableGuid = Guid.NewGuid().ToString();
             }
             
-            var bananasDryerData = new BananasDryerData {
-                buildableGuid = buildableGuid,
-                buildableType = buildableType,
-                isBreaked = isBreaked,
+            var bananasDryerData = new BananasDryerSavedData {
+                buildableGuid = buildableData.buildableGuid,
+                buildableType = buildablePropertiesScriptableObject.buildableType,
+                buildableState = buildableData.buildableState,
+                buildingMaterials = buildableData.buildingMaterials,
                 buildablePosition = JsonHelper.FromVector3ToString(transform.position),
-                buildableRotation = JsonHelper.FromQuaternionToString(transform.rotation),
-                bananaDryerSlots = slots
+                buildableRotation = JsonHelper.FromQuaternionToString(transform.rotation)
             };
 
             ObjectsReference.Instance.gameSave.buildablesSave.AddBuildableToBuildableDictionnary(BuildableType.BANANA_DRYER, JsonConvert.SerializeObject(bananasDryerData));
         }
 
         public override void LoadSavedData(string stringifiedJson) {
-            var bananasDryerData = JsonConvert.DeserializeObject<BananasDryerData>(stringifiedJson);
+            var bananasDryerData = JsonConvert.DeserializeObject<BananasDryerSavedData>(stringifiedJson);
 
-            buildableGuid = bananasDryerData.buildableGuid;
-            buildableType = bananasDryerData.buildableType;
-            isBreaked = bananasDryerData.isBreaked;
+            buildableData.buildableGuid = bananasDryerData.buildableGuid;
+            buildableData.buildableState = bananasDryerData.buildableState;
+            buildableData.buildingMaterials = bananasDryerData.buildingMaterials;
+            
+            buildableData.
+            
             transform.position = JsonHelper.FromStringToVector3( bananasDryerData.buildablePosition);
             transform.rotation = JsonHelper.FromStringToQuaternion(bananasDryerData.buildableRotation);
 
             slots = bananasDryerData.bananaDryerSlots;
             
-            Init();
+            InitSlots();
         }
     }
 }

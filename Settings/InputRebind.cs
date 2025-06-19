@@ -123,8 +123,6 @@ namespace Settings {
                     return path;
                 }
                 
-                Debug.Log(inputActionReference.ToInputAction().GetBindingDisplayString(group:"Keyboard"));
-
                 return inputActionReference.ToInputAction().GetBindingDisplayString(group:"Keyboard");
             }
 

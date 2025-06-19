@@ -19,7 +19,7 @@ namespace InGame.Items.ItemsBehaviours {
         public void GrabBananas() {
             if (regimeStade != RegimeStade.MATURE) return;
             
-            if (ObjectsReference.Instance.shoot.IsTargetingMe(transform)) {
+            if (ObjectsReference.Instance.aspireAction.IsTargetingMe(transform)) {
                 ThrowBananas();
             }
         }

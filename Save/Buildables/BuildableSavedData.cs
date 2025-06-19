@@ -1,12 +1,16 @@
 using System;
+using System.Collections.Generic;
 
-namespace InGame.Items.ItemsData.BuildablesData {
+namespace Save.Buildables {
     [Serializable]
-    public class BuildableData {
+    public class BuildableSavedData {
         public string buildableGuid;
         public BuildableType buildableType;
         public bool isBreaked;
         public string buildablePosition;
         public string buildableRotation;
+
+        public BuildableState buildableState;
+        public Dictionary<RawMaterialType, int> buildingMaterials;
     }
 }

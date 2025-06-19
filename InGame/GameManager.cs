@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Cinemachine;
-using Tags;
+using DG.Tweening;
+using InGame.Items.ItemsBehaviours;
 using UnityEngine;
 
 namespace InGame {
@@ -14,22 +15,21 @@ namespace InGame {
         
         [SerializeField] private GameObject startAnimations;
         [SerializeField] private List<GameObject> inGameGameObjects;
+        [SerializeField] private GameObject bananaGun;
 
         public GameContext gameContext;
 
         public GenericDictionary<SpawnPoint, Transform> spawnPointsBySpawnType;
+        public List<DOTweenPath> mapsDotweenPaths;
         
         private Vector3 _bananaManRotation;
         private Transform _bananaManTransform;
-
-        private GameManager gameManager;
         
         private void Start() {
             gameContext = GameContext.IN_HOME;
             RenderSettings.ambientLight = Color.white;
 
             _bananaManTransform = ObjectsReference.Instance.bananaMan.transform;
-            gameManager = ObjectsReference.Instance.gameManager;
         }
 
         public void Prepare_New_Game() {
@@ -53,14 +53,11 @@ namespace InGame {
             ObjectsReference.Instance.playerController.StopPlayer();
             
             if (isNewGame) {
-                ObjectsReference.Instance.bananaMan.tutorialFinished = false;
                 SwitchToNewGameSettings();
             }
 
             else {
                 ObjectsReference.Instance.gameSave.LoadSave(saveUuid);
-
-                ObjectsReference.Instance.bananaMan.tutorialFinished = true;
                 SwitchToInGameSettings();
             }
             
@@ -112,7 +109,7 @@ namespace InGame {
             
             SwitchToHomeSettings();
 
-            gameManager.loadingScreen.SetActive(false);
+            loadingScreen.SetActive(false);
         }
 
         private void SwitchToHomeSettings() {
@@ -125,7 +122,7 @@ namespace InGame {
             Cursor.visible = true;
             Cursor.lockState = CursorLockMode.None;
 
-            gameManager.gameContext = GameContext.IN_HOME;
+            gameContext = GameContext.IN_HOME;
 
             ObjectsReference.Instance.uiManager.HideGameMenu();
             ObjectsReference.Instance.uiManager.ShowHomeMenu();
@@ -162,12 +159,9 @@ namespace InGame {
 
             _bananaManTransform.rotation = Quaternion.Euler(_bananaManRotation);
             
-            ObjectsReference.Instance.gameSave.buildablesSave.SpawnInitialBuildables();
             ObjectsReference.Instance.gameSave.spaceshipDebrisSave.SpawnInitialSpaceshipDebris();
             
             loadingScreen.SetActive(false);
-
-            ObjectsReference.Instance.commandRoomControlPanelsManager.Init();
 
             ObjectsReference.Instance.bananaGun.UngrabBananaGun();
 
@@ -186,15 +180,11 @@ namespace InGame {
 
             ObjectsReference.Instance.cinematiques.Play(CinematiqueType.NEW_GAME);
             
-            ObjectsReference.Instance.bananaMan.tutorialFinished = false;
-            
-            foreach (var accessManagedGameObject in TagsManager.GetAllGameObjectsWithTag(GAME_OBJECT_TAG.ACCESS_MANAGED)) {
-                accessManagedGameObject.GetComponent<ManageAccess>().ForbidUsage();
-            }
-
             ObjectsReference.Instance.commandRoomControlPanelsManager.chimployeeCommandRoom.SetTutorialChimployeeConfiguration();
 
-            RenderSettings.ambientLight = penumbraAmbientLightColor;
+            bananaGun.SetActive(true);
+            
+            SwitchToNightLightSetting();
         }
         
         private void SwitchToInGameSettings() {
@@ -209,7 +199,7 @@ namespace InGame {
             ObjectsReference.Instance.uInventoriesManager.ShowCurrentUIHelper();
 
             ObjectsReference.Instance.inputManager.SwitchContext(InputContext.GAME);
-            gameManager.gameContext = GameContext.IN_GAME;
+            gameContext = GameContext.IN_GAME;
 
             ObjectsReference.Instance.uiManager.HideGameMenu();
             ObjectsReference.Instance.uiManager.HideHomeMenu();
@@ -218,11 +208,15 @@ namespace InGame {
 
             ObjectsReference.Instance.audioManager.SetMusiqueAndAmbianceByRegion(RegionType.COROLLE);
             
-            ObjectsReference.Instance.commandRoomControlPanelsManager.Init();
-
             ObjectsReference.Instance.bananaGun.GrabBananaGun();
             
+            ObjectsReference.Instance.uIgestionPanel.SwitchLight(ObjectsReference.Instance.worldData.stationLightSetting == 1 ? 1 : 0);
+
             loadingScreen.SetActive(false);
+        }
+        
+        public void SwitchToNightLightSetting() {
+            RenderSettings.ambientLight = penumbraAmbientLightColor;
         }
     }
 }

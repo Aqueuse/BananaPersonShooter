@@ -20,8 +20,8 @@ MonoBehaviour:
   rawMaterialType: 0
   buildableType: 2
   foodType: 0
-  isAspirable: 0
-  prefab: {fileID: 0}
+  isAspirable: 1
+  prefab: {fileID: 5196617759513621631, guid: fdc0a3f945f15074a968af548517735b, type: 3}
   itemName:
   - ticket booth
   - guichet

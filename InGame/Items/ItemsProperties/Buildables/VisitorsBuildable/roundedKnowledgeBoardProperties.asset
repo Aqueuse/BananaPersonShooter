@@ -12,7 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6e11e44741351774ca1f8261e4d989f1, type: 3}
   m_Name: roundedKnowledgeBoardProperties
   m_EditorClassIdentifier: 
-  gameObjectTag: 6
   itemCategory: 1
   bananaType: 0
   droppedType: 0
@@ -21,17 +20,20 @@ MonoBehaviour:
   rawMaterialType: 0
   buildableType: 9
   foodType: 0
-  isAspirable: 0
+  isAspirable: 1
+  prefab: {fileID: 0}
   itemName:
   - rounded information sign
   - panneau d'information arrondi
   - "se\xF1al de informaci\xF3n redondeada"
+  spriteAtlasIndex: 0
   itemSprite: {fileID: 21300000, guid: 0758442a12117e7439254c96d6606068, type: 3}
   itemDescription:
   - typical of public gardens
   - typique des jardins publics
   - "t\xEDpico de los jardines p\xFAblicos"
   bitKongValue: 0
+  buildableTabType: 3
   rawMaterialsWithQuantity:
     list:
     - key: {fileID: 11400000, guid: 9b2d672be4f975f49b3bd109607666ae, type: 2}

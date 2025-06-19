@@ -17,6 +17,8 @@ namespace InGame.Inventories {
             if (foodInventory[foodType] > 10000) return foodInventory[foodType];
             
             foodInventory[foodType] += quantity;
+            
+            ObjectsReference.Instance.bottomSlots.RefreshSlotsQuantities();
 
             return foodInventory[foodType];
         }
@@ -35,6 +37,8 @@ namespace InGame.Inventories {
             else {
                 foodInventory[foodType] = 0;
             }
+
+            ObjectsReference.Instance.bottomSlots.RefreshSlotsQuantities();
 
             return foodInventory[foodType];
         }

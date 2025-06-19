@@ -5,6 +5,9 @@ namespace Save.Templates {
         public Dictionary<string, int> monkeysSasietyTimerByMonkeyId = new();
         public Dictionary<string, string> monkeysPositionByMonkeyId = new();
 
+        public int stationLightSetting;
+        public int lastVisitorGroup;
+        
         public Dictionary<string, int> bananaCannonInventory = new Dictionary<string, int>() {
             { BananaType.BARANGAN.ToString(), 0 },
             { BananaType.BLUE_JAVA.ToString(), 0 },

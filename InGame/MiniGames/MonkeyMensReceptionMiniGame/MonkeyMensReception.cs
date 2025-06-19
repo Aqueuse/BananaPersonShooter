@@ -1,50 +1,43 @@
 using System.Collections.Generic;
-using InGame.Monkeys;
-using InGame.Monkeys.Chimpirates;
-using InGame.Monkeys.Chimptouristes;
+using InGame.Monkeys.Chimpvisitors;
 using UnityEngine;
 
 namespace InGame.MiniGames.MonkeyMensReceptionMiniGame {
     public class MonkeyMensReception : MonoSingleton<MonkeyMensReception> {
-        public LinkedList<MonkeyMenBehaviour> monkeyMensInWaitingLine = new();
+        public LinkedList<VisitorBehaviour> VisitorsInWaitingLine = new();
         
         [SerializeField] private Transform waitingListStart;
         
-        public void AddMonkeyMensInWaitingLine(MonkeyMenBehaviour monkeyMenBehaviour) {
+        public void AddMonkeyMensInWaitingLine(VisitorBehaviour monkeyMenBehaviour) {
             var newChimpmenPosition = waitingListStart.position;
-            newChimpmenPosition.z += 1f * monkeyMensInWaitingLine.Count;
+            newChimpmenPosition.z += 1f * VisitorsInWaitingLine.Count;
             
-            monkeyMensInWaitingLine.AddLast(monkeyMenBehaviour);
+            VisitorsInWaitingLine.AddLast(monkeyMenBehaviour);
             
             ObjectsReference.Instance.uiTouristReception.RefreshUIWaintingList();
 
             ShrinkMonkeyMensWaitingLine();
         }
 
-        public void RemoveVisitor(MonkeyMenBehaviour monkeyMenToRemove) {
-            monkeyMensInWaitingLine.Remove(monkeyMenToRemove);
+        public void RemoveVisitor(VisitorBehaviour monkeyMenToRemove) {
+            VisitorsInWaitingLine.Remove(monkeyMenToRemove);
             
             Destroy(monkeyMenToRemove);
 
             ShrinkMonkeyMensWaitingLine();
         }
 
-        public void AcceptChimpmenInStation(MonkeyMenBehaviour monkeyMenToAccept) {
-            monkeyMensInWaitingLine.Remove(monkeyMenToAccept);
-
-            if (monkeyMenToAccept.monkeyMenData.characterType == CharacterType.TOURIST) {
-                monkeyMenToAccept.GetComponent<TouristBehaviour>().StartVisiting();
-            }
-
-            if (monkeyMenToAccept.monkeyMenData.characterType == CharacterType.PIRATE) {
-                monkeyMenToAccept.GetComponent<PirateBehaviour>().StartPiracy();
-            }
-
+        public void AcceptVisitorInStation(VisitorBehaviour visitorToAccept) {
+            VisitorsInWaitingLine.Remove(visitorToAccept);
+            
+            // TODO : merge pirateBehaviour with visitorBehaviour : pirates have only a need PILLAGE (they just want
+            // to break buildables, no other need 
+            
             ShrinkMonkeyMensWaitingLine();
         }
 
         private void ShrinkMonkeyMensWaitingLine() {
-            for (var i = 0; i < monkeyMensInWaitingLine.Count; i++) {
+            for (var i = 0; i < VisitorsInWaitingLine.Count; i++) {
                 var newMonkeyMenPosition = waitingListStart.position;
                 newMonkeyMenPosition.z += 1f * i;
             }
