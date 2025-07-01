@@ -32,7 +32,11 @@ public class InputManager : MonoBehaviour {
     public void SwitchBackToGame() {
         ObjectsReference.Instance.gameManager.gameContext = GameContext.IN_GAME;
         SwitchContext(InputContext.GAME);
-
+        
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
+        ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.CROSSHAIRS].alpha = 1;
+        
         ObjectsReference.Instance.cameraPlayer.SetNormalSensibility();
 
         ObjectsReference.Instance.bananaGunActionsSwitch.gameObject.SetActive(true);

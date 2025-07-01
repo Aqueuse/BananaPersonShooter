@@ -5,7 +5,7 @@ namespace SharedInputs {
     public class UiActions : InputActions {
         [SerializeField] private InputActionReference cancelActionReference;
         [SerializeField] private InputActionReference pointerActionReference;
-        [SerializeField] private InputActionReference hideMainPanelActionReference;
+        [SerializeField] private InputActionReference hideInGameUIPanelActionReference;
         [SerializeField] private InputActionReference hideInventoriesActionReference;
         
         private void OnEnable() {
@@ -17,8 +17,8 @@ namespace SharedInputs {
             
             pointerActionReference.action.Enable();
             
-            hideMainPanelActionReference.action.Enable();
-            hideMainPanelActionReference.action.performed += HideMainPanel;
+            hideInGameUIPanelActionReference.action.Enable();
+            hideInGameUIPanelActionReference.action.performed += HideInGameUIPanel;
             
             hideInventoriesActionReference.action.Enable();
             hideInventoriesActionReference.action.performed += HideInventories;
@@ -30,8 +30,8 @@ namespace SharedInputs {
 
             pointerActionReference.action.Disable();
             
-            hideMainPanelActionReference.action.Disable();
-            hideMainPanelActionReference.action.performed -= HideMainPanel;
+            hideInGameUIPanelActionReference.action.Disable();
+            hideInGameUIPanelActionReference.action.performed -= HideInGameUIPanel;
             
             hideInventoriesActionReference.action.Disable();
             hideInventoriesActionReference.action.performed -= HideInventories;
@@ -60,15 +60,18 @@ namespace SharedInputs {
             }
         }
 
-        private void HideMainPanel(InputAction.CallbackContext context) {
-            if (ObjectsReference.Instance.gameManager.gameContext == GameContext.IN_MAIN_PANEL) {
-                ObjectsReference.Instance.uiManager.HideMainPanel();
+        private void HideInGameUIPanel(InputAction.CallbackContext context) {
+            if (ObjectsReference.Instance.gameManager.gameContext == GameContext.IN_GAME_UI_PANEL) {
+                ObjectsReference.Instance.uiManager.SetActive(UICanvasGroupType.MAIN_PANEL, false);
+                ObjectsReference.Instance.uiManager.SetActive(UICanvasGroupType.MERCHANT_INTERFACE, false);
+                ObjectsReference.Instance.inputManager.SwitchBackToGame();
             }
         }
         
         private void HideInventories(InputAction.CallbackContext context) {
-            if (ObjectsReference.Instance.gameManager.gameContext == GameContext.IN_MAIN_PANEL) {
-                ObjectsReference.Instance.uiManager.HideMainPanel();
+            if (ObjectsReference.Instance.gameManager.gameContext == GameContext.IN_GAME_UI_PANEL) {
+                ObjectsReference.Instance.uiManager.SetActive(UICanvasGroupType.MAIN_PANEL, false);
+                ObjectsReference.Instance.inputManager.SwitchBackToGame();
             }
         }
     }

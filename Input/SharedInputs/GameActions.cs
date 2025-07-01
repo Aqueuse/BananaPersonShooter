@@ -170,7 +170,7 @@ namespace SharedInputs {
             
             ObjectsReference.Instance.cameraPlayer.Set0Sensibility();
             ObjectsReference.Instance.inputManager.SwitchContext(InputContext.GESTION_PANEL);
-            ObjectsReference.Instance.gameManager.gameContext = GameContext.IN_MAIN_PANEL;
+            ObjectsReference.Instance.gameManager.gameContext = GameContext.IN_GAME_UI_PANEL;
 
             ObjectsReference.Instance.bananaGunActionsSwitch.gameObject.SetActive(false);
 
@@ -182,7 +182,7 @@ namespace SharedInputs {
             
             ObjectsReference.Instance.cameraPlayer.Set0Sensibility();
             ObjectsReference.Instance.inputManager.SwitchContext(InputContext.GESTION_PANEL);
-            ObjectsReference.Instance.gameManager.gameContext = GameContext.IN_MAIN_PANEL;
+            ObjectsReference.Instance.gameManager.gameContext = GameContext.IN_GAME_UI_PANEL;
             
             ObjectsReference.Instance.bananaGunActionsSwitch.gameObject.SetActive(false);
 

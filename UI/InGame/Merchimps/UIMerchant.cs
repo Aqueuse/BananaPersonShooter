@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using InGame.Items.ItemsData.Characters;
 using InGame.Monkeys.Merchimps;
 using TMPro;
@@ -32,11 +33,32 @@ namespace UI.InGame.Merchimps {
 
         [SerializeField] private Color activatedColor;
 
-        public void InitializeInventories(MonkeyMenData monkeyMenData) {
-            ObjectsReference.Instance.trade.monkeyMenData = monkeyMenData;
+        public void InitializeInventories() {
+            merchimpBehaviour.monkeyMenData.manufacturedItemsInventory =
+                new Dictionary<ManufacturedItemsType, int> {
+                    { ManufacturedItemsType.BANANARAIGNEE, 1 },
+                    { ManufacturedItemsType.BANANAVIAIRE, 1 },
+                    { ManufacturedItemsType.LAPINOU, 1 },
+                    { ManufacturedItemsType.SPACESHIP_TOY, 1 }
+                };
+
+            merchimpBehaviour.monkeyMenData.ingredientsInventory =
+                new Dictionary<IngredientsType, int> {
+                    { IngredientsType.BANANA_DOG_BREAD, 1 },
+                    { IngredientsType.BANANA_WITHOUT_SKIN, 1 }
+                };
+
+            ObjectsReference.Instance.trade.monkeyMenData = merchimpBehaviour.monkeyMenData;
+
+            merchantBuyUiIngredientsInventory.associatedIngredientsInventory = merchimpBehaviour.ingredientsInventory;
+            merchantBuyUiManufacturedItemsInventory.associatedManufacturedItemsInventory = merchimpBehaviour.manufacturedItemsInventory;
+            merchantBuyUIRawMaterialsInventory.associatedRawMaterialInventory = merchimpBehaviour.rawMaterialInventory;
+
+            merchantSellUiIngredientsInventory.associatedIngredientsInventory = merchimpBehaviour.ingredientsInventory;
+            merchantSellUiManufacturedItemsInventory.associatedManufacturedItemsInventory = merchimpBehaviour.manufacturedItemsInventory;
             
-            merchantBuyUiIngredientsInventory.associatedIngredientsInventory.ingredientsInventory = monkeyMenData.ingredientsInventory;
-            merchantBuyUiManufacturedItemsInventory.associatedManufacturedItemsInventory.manufacturedItemsInventory = monkeyMenData.manufacturedItemsInventory;
+            merchantBuyUiIngredientsInventory.associatedIngredientsInventory.ingredientsInventory = merchimpBehaviour.monkeyMenData.ingredientsInventory;
+            merchantBuyUiManufacturedItemsInventory.associatedManufacturedItemsInventory.manufacturedItemsInventory = merchimpBehaviour.monkeyMenData.manufacturedItemsInventory;
             
             RefreshMerchantInventories();
             RefreshBitkongQuantities();

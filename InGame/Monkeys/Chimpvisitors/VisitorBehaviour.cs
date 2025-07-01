@@ -7,6 +7,7 @@ using Save.Templates;
 using Tags;
 using UnityEngine;
 using UnityEngine.AI;
+using Random = UnityEngine.Random;
 
 namespace InGame.Monkeys.Chimpvisitors {
     public class VisitorBehaviour : MonoBehaviour {
@@ -76,24 +77,30 @@ namespace InGame.Monkeys.Chimpvisitors {
         
         private GroupBehaviour _groupBehaviour;
         
-        public void Init(GroupBehaviour groupBehaviour, MonkeyMenData monkeyMenData) {
+        public void Init(GroupBehaviour groupBehaviour, MonkeyMenData monkeyMenData, string associatedSpaceshipGuid, Vector3 spawnPoint) {
             _groupBehaviour = groupBehaviour;
+            monkeyMenData.spaceshipGuid = associatedSpaceshipGuid;
 
             associatedSpaceshipBehaviour =
                 ObjectsReference.Instance.spaceTrafficControlManager.spaceshipBehavioursByGuid[monkeyMenData.spaceshipGuid];
             
-            SetColors(monkeyMenData.colorSetIndex);
+            SetColors(monkeyMenData.propertiesIndex);
 
             navMeshAgent.updatePosition = false;
             navMeshAgent.updateRotation = true;
 
             navMeshAgent.velocity = new Vector3(1, 1, 1);
+
+            var stateInfo = animator.GetCurrentAnimatorStateInfo(0);
+            animator.Play(stateInfo.fullPathHash, 0, Random.Range(0,1f));
             
-            Vector3 spawnOffset = new Vector3(Random.Range(-1f, 1f), 0, Random.Range(-1f, 1f));
-            Vector3 spawnTarget = transform.position + spawnOffset;
-            navMeshAgent.Warp(spawnTarget);
+            navMeshAgent.Warp(spawnPoint);
         }
-        
+
+        private void Update() {
+            SynchronizeAnimatorAndAgent();
+        }
+
         public void OnNeedDetected(GameObject gameObject) {
             if (!isFollowingGroup) return;
             if (monkeyMenData.isSatisfied) return;
@@ -119,7 +126,7 @@ namespace InGame.Monkeys.Chimpvisitors {
             
             if (!_groupBehaviour.members.Contains(this)) 
                 _groupBehaviour.members.Add(this);
-            SetDestination(_groupBehaviour.groupNextDestination);
+            SetDestination(_groupBehaviour.transform.position);
         }
         
         public void SetDestination(Vector3 destination) {
@@ -127,18 +134,18 @@ namespace InGame.Monkeys.Chimpvisitors {
         }
         
         public bool HasArrivedToDestination() {
-            if (navMeshAgent.pathPending || navMeshAgent.remainingDistance > _groupBehaviour.members.Count)
+            if (navMeshAgent.pathPending || navMeshAgent.remainingDistance > 2f)
                 return false;
 
             // S'il croit être arrivé mais continue de glisser
-            if (navMeshAgent.hasPath && navMeshAgent.velocity.sqrMagnitude > 0.05f)
+            if (navMeshAgent.hasPath && navMeshAgent.velocity.sqrMagnitude > 0.1f)
                 return false;
 
             return true;
         }
 
-        public bool CheckIsArrivedToGate() {
-            if (navMeshAgent.pathPending || navMeshAgent.remainingDistance < 1) {
+        public bool CheckIsArrivedToSpaceship() {
+            if (navMeshAgent.pathPending || navMeshAgent.remainingDistance < 2f) {
                 return true;
             }
             
@@ -168,7 +175,7 @@ namespace InGame.Monkeys.Chimpvisitors {
 
                     itemToDrop =
                         Instantiate(
-                            ObjectsReference.Instance.meshReferenceScriptableObject.prefabByRawMaterialType[itemInInventory.Key],
+                            ObjectsReference.Instance.meshReferenceScriptableObject.rawMaterialPrefabByRawMaterialType[itemInInventory.Key],
                             spawnPosition,
                             Quaternion.identity);
                     itemToDrop.GetComponent<Rigidbody>().AddExplosionForce(explosionForce, explositionCenterPosition, 10);
@@ -207,7 +214,7 @@ namespace InGame.Monkeys.Chimpvisitors {
             }
         }
 
-        public void SynchronizeAnimatorAndAgent() {
+        private void SynchronizeAnimatorAndAgent() {
             _worldDeltaPosition = navMeshAgent.nextPosition - transform.position;
 
             // Map 'worldDeltaPosition' to local space
@@ -233,7 +240,7 @@ namespace InGame.Monkeys.Chimpvisitors {
         private void SetColors(int index) {
             var monkeyMenMaterial = meshRenderer.material;
 
-            colorPreset = ObjectsReference.Instance.meshReferenceScriptableObject.chimpMensAppearanceScriptableObjects[index].colorSets;
+            colorPreset = ObjectsReference.Instance.meshReferenceScriptableObject.visitorsAppearanceScriptableObjects[index].colorSets;
             
             monkeyMenMaterial.SetColor(color00, colorPreset[0]);
             monkeyMenMaterial.SetColor(color01, colorPreset[1]);
@@ -266,7 +273,7 @@ namespace InGame.Monkeys.Chimpvisitors {
                 uid = monkeyMenData.uid,
                 name = monkeyMenData.monkeyMenName,
                 prefabIndex = monkeyMenData.prefabIndex,
-                colorSetIndex = monkeyMenData.colorSetIndex,
+                colorSetIndex = monkeyMenData.propertiesIndex,
                 destination = JsonHelper.FromVector3ToString(monkeyMenData.destination),
                 spaceshipGuid = monkeyMenData.spaceshipGuid,
                 position = JsonHelper.FromVector3ToString(transform.position),

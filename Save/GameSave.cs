@@ -36,7 +36,6 @@ namespace Save {
         
         public WorldSave worldSave;
         public SpaceshipsSave spaceshipsSave;
-        public GroupsSave groupsSave;
         
         private void Start() {
             _appPath = Path.GetDirectoryName(Application.persistentDataPath);
@@ -84,7 +83,6 @@ namespace Save {
 
             buildablesSave.SaveBuildablesData(saveUuid);
             spaceshipsSave.SaveSpaceships(saveUuid);
-            groupsSave.SaveGroups(saveUuid);
             
             SaveCameraView(saveUuid);
             
@@ -145,7 +143,6 @@ namespace Save {
             droppedFoodSave.LoadFoodDataByUuid(saveUuid);
             
             spaceshipsSave.LoadpaceshipsData(saveUuid);
-            GroupsSave.LoadGroups(saveUuid);
             
             ObjectsReference.Instance.gameSave.StartAutoSave();
         }

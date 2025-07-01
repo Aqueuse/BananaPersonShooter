@@ -112,25 +112,6 @@ namespace UI {
             
             ObjectsReference.Instance.miniChimpDialoguesManager.ResetDialogue();
         }
-
-        public void HideMainPanel() {
-            if (ObjectsReference.Instance.gameManager.gameContext == GameContext.IN_GESTION_VIEW) {
-                SetActive(UICanvasGroupType.MAIN_PANEL, false);
-            }
-
-            else {
-                SetActive(UICanvasGroupType.MAIN_PANEL, false);
-                
-                ObjectsReference.Instance.inputManager.SwitchContext(InputContext.GAME);
-                ObjectsReference.Instance.gameManager.gameContext = GameContext.IN_GAME;
-                
-                Cursor.visible = false;
-                Cursor.lockState = CursorLockMode.Locked;
-                ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.CROSSHAIRS].alpha = 1;
-                
-                ObjectsReference.Instance.inputManager.SwitchBackToGame();
-            }
-        }
         
         public void ShowInventory() {
             SetActive(UICanvasGroupType.MAIN_PANEL, true);

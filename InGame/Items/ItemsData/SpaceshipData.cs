@@ -1,3 +1,6 @@
+using System.Collections.Generic;
+using InGame.Items.ItemsData.Characters;
+using InGame.Monkeys.Chimpvisitors;
 using UnityEngine;
 
 namespace InGame.Items.ItemsData {
@@ -9,10 +12,14 @@ namespace InGame.Items.ItemsData {
 
         public CharacterType characterType;
         public SpaceshipType spaceshipType;
+        
+        public List<MonkeyMenData> monkeyMenDatas;
+
+        public GroupTravelState groupTravelState;
+        public SpawnPoint[] guichetsMapsToVisit;
+        public Vector3[] mapPointInterests;
 
         public int assignatedHangar;
-
-        public int monkeyMenToSpawn;
 
         public Vector3 arrivalPosition;
         

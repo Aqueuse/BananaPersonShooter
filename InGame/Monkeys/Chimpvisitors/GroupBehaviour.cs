@@ -1,5 +1,7 @@
 using System.Collections.Generic;
-using DG.Tweening;
+using System.Linq;
+using InGame.Items.ItemsBehaviours;
+using InGame.Items.ItemsData.Characters;
 using InGame.Items.ItemsProperties.Characters;
 using Save.Helpers;
 using Save.Templates;
@@ -10,40 +12,151 @@ using Random = UnityEngine.Random;
 namespace InGame.Monkeys.Chimpvisitors {
     public class GroupBehaviour : MonoBehaviour {
         private GroupScriptableObject _groupScriptableObject;
+        private string associatedSpaceshipGuid;
         
         public List<VisitorBehaviour> members = new ();
-        public Vector3 groupNextDestination;
+        public Vector3 spaceshipVisitorsSpawnPoint;
         
-        [SerializeField] private DOTweenPath doTweenPath;
-        private int dotweenPathIndex;
-        private int currentSegmentIndex;
+        public GroupTravelState groupTravelState = GroupTravelState.GO_TO_COROLLE_CENTER;
         
-        public void SpawnMembers(GroupScriptableObject groupScriptableObject) {
-            _groupScriptableObject = groupScriptableObject;
-
-            dotweenPathIndex = Random.Range(0, ObjectsReference.Instance.gameManager.mapsDotweenPaths.Count);
-            doTweenPath = ObjectsReference.Instance.gameManager.mapsDotweenPaths[dotweenPathIndex];
+        public Stack<SpawnPoint> mapsGuichetToVisit = new ();
+        public Stack<Vector3> mapPointsOfInterests;
+        private GuichetBehaviour nextGuichet;
+        
+        private Vector3 corolleCenter;
+        private Vector3 hangarsCenter;
+        
+        private void Start() {
+            // search if at least a map is open
+            // if only one map is open, pick it
+            // if at least two maps are open, pick them randomly
             
-            foreach (var member in groupScriptableObject.members) {
-                if (NavMesh.SamplePosition(doTweenPath.wps[0], out NavMeshHit hit, 1.0f, NavMesh.AllAreas)) {
-                
-                    var visitor = Instantiate(ObjectsReference.Instance.meshReferenceScriptableObject.monkeyMenPrefabs[member.prefabIndex], hit.position, Quaternion.identity).GetComponent<VisitorBehaviour>();
-                    visitor.Init(this, member);
-                    members.Add(visitor);
-                }
-                else {
-                    Debug.LogWarning($"Impossible de placer un membre du groupe {groupScriptableObject.name} sur le NavMesh !");
+            GoToCorolleCenter();
+            
+        }
+
+        private void Update() {
+            if (groupTravelState == GroupTravelState.START_VISIT) {
+                if (HasGroupReachedMe()) {
+                    mapsGuichetToVisit = ChooseMapsToExplore();
+
+                    if (mapsGuichetToVisit.Count == 0) {
+                        groupTravelState = GroupTravelState.GO_BACK_TO_SPACESHIP;
+                        transform.position = spaceshipVisitorsSpawnPoint;
+                    }
+                    
+                    else {
+                        ShuffleMapsGuichetToVisit();
+                        groupTravelState = GroupTravelState.GO_EXPLORE_MAP;
+                    }
                 }
             }
+
+            if (groupTravelState == GroupTravelState.GO_TO_COROLLE_CENTER) {
+                if (HasGroupReachedMe()) {
+                    if (mapsGuichetToVisit.Count == 0) {
+                        groupTravelState = GroupTravelState.GO_BACK_TO_SPACESHIP;
+                        transform.position = spaceshipVisitorsSpawnPoint;
+                    }
+
+                    else {
+                        groupTravelState = GroupTravelState.GO_EXPLORE_MAP;
+                        nextGuichet = ObjectsReference.Instance.guichetsToMap[mapsGuichetToVisit.Pop()];
+                        
+                        foreach (var member in members) {
+                            nextGuichet.visitorsToWatch.Add(member);
+                        }
+
+                        mapPointsOfInterests = nextGuichet.GiveToRandomPointsOfInterest();
+                    }
+                }
+            }
+
+            if (groupTravelState == GroupTravelState.GO_EXPLORE_MAP && HasGroupReachedMe()) {
+                if (mapPointsOfInterests.Count == 0) {
+                    groupTravelState = GroupTravelState.GO_TO_COROLLE_CENTER;
+                    GoToCorolleCenter();
+                }
+
+                else {
+                    transform.position = mapPointsOfInterests.Pop();
+                }
+            }
+
+            if (groupTravelState == GroupTravelState.GO_BACK_TO_SPACESHIP) {
+                checkArrivalToSpaceship();
+            }
+        }
+
+        private Stack<SpawnPoint> ChooseMapsToExplore() {
+            var guichetsToVisit = new List<SpawnPoint>();
             
-            transform.position = doTweenPath.wps[0];
-            InvokeRepeating(nameof(CheckGroupArrival), 0.1f, 0.2f);
+            foreach (var guichetBehaviour in ObjectsReference.Instance.guichetsToMap) {
+                if (guichetBehaviour.Value.isOpen) guichetsToVisit.Add(guichetBehaviour.Key);
+            }
+            
+            return new Stack<SpawnPoint>(guichetsToVisit);
+        }
+
+        private void GoToCorolleCenter() {
+            transform.position = ObjectsReference.Instance.gameManager.spawnPointsBySpawnType[SpawnPoint.TP_COROLLE].position;
+        }
+        
+        private bool HasGroupReachedMe() {
+            return members.All(
+                memberBehaviour => !(Vector3.Distance(transform.position, memberBehaviour.transform.position) > 1f)
+            );
+        }
+
+        private void checkArrivalToSpaceship() {
+            // we miss someone, probably gone feeding a need, will wait
+            if (members.Count != _groupScriptableObject.members.Count) return;
+            
+            foreach (var memberBehaviour in members) {
+                if (!memberBehaviour.CheckIsArrivedToSpaceship()) {
+                    return;
+                }
+            }
+
+            // everyone is here ?
+            foreach (var memberBehaviour in members) {
+                Destroy(memberBehaviour.gameObject);
+            }
+
+            ObjectsReference.Instance.spaceTrafficControlManager.spaceshipBehavioursByGuid[associatedSpaceshipGuid]
+                .spaceshipData.travelState = TravelState.TRAVEL_BACK_ON_ELEVATOR;
+
+            Destroy(gameObject); // Bye bye !
+        }
+        
+        public void SpawnMembers(List<MonkeyMenData> members, string associatedSpaceshipGuid) {
+            this.associatedSpaceshipGuid = associatedSpaceshipGuid;
+            
+            var spawnPoint = ObjectsReference.Instance.spaceTrafficControlManager
+                .spaceshipBehavioursByGuid[associatedSpaceshipGuid].visitorsSpawnPoint.position;
+            
+            foreach (var member in members) {
+                if (NavMesh.SamplePosition(spawnPoint, out NavMeshHit hit, 1.0f, NavMesh.AllAreas)) {
+                
+                    var visitor = Instantiate(
+                        ObjectsReference.Instance.meshReferenceScriptableObject.monkeyMenPrefabs[member.prefabIndex], 
+                        hit.position,
+                        Quaternion.identity).GetComponent<VisitorBehaviour>();
+                    
+                    visitor.Init(this, member, associatedSpaceshipGuid, hit.position);
+                    this.members.Add(visitor);
+                }
+                else {
+                    Debug.LogWarning("Impossible de placer un membre du groupe sur le NavMesh !");
+                }
+            }
+
+            groupTravelState = GroupTravelState.START_VISIT;
+            transform.position = ObjectsReference.Instance.gameManager.spawnPointsBySpawnType[SpawnPoint.TP_COROLLE]
+                .position;
         }
 
         private void RespawnMembers(GroupSavedData groupSavedData) {
-            dotweenPathIndex = groupSavedData.dotweenPathIndex;
-            currentSegmentIndex = groupSavedData.currentSegmentIndex;
-            
             foreach (var visitorSavedData in groupSavedData.visitorsSavedDatas) {
                 var visitorInstance = Instantiate(
                     original: ObjectsReference.Instance.meshReferenceScriptableObject.monkeyMenPrefabs[visitorSavedData.prefabIndex],
@@ -56,77 +169,18 @@ namespace InGame.Monkeys.Chimpvisitors {
             }
         }
         
-        private Vector3 ThrowExplorationPalet() {
-            currentSegmentIndex++;
+        private void ShuffleMapsGuichetToVisit() {
+            var mapsCount = mapsGuichetToVisit.Count;
 
-            // the loop is completed / back to the gate
-            if (currentSegmentIndex >= doTweenPath.wps.Count) {
-                CancelInvoke(nameof(CheckGroupArrival));
-                InvokeRepeating(nameof(checkArrivalToGate), 0.1f, 0.2f);
-                
-                return doTweenPath.wps[0];
-            }
+            var mapsToVisitList = mapsGuichetToVisit.ToList();
             
-            Vector3 start = doTweenPath.wps[currentSegmentIndex-1];
-            Vector3 end = doTweenPath.wps[currentSegmentIndex];
-            
-            // Interpolation aléatoire sur le segment
-            return Vector3.Lerp(start, end, Random.Range(0.01f, 0.99f));
-        }
-        
-        public void CheckGroupArrival() {
-            foreach (var memberBehaviour in members) {
-                if (!memberBehaviour.HasArrivedToDestination())
-                    return;
-            }
-            
-            groupNextDestination = ThrowExplorationPalet();
-            transform.position = groupNextDestination;
-            
-            foreach (var memberBehaviour in members) {
-                memberBehaviour.SetDestination(groupNextDestination);
-            }
-        }
-
-        private void checkArrivalToGate() {
-            // we miss someone, probably gone feeding a need, will wait
-            if (members.Count != _groupScriptableObject.members.Count) return;
-            
-            foreach (var memberBehaviour in members) {
-                if (!memberBehaviour.CheckIsArrivedToGate()) {
-                    return;
-                }
+            while (mapsCount > 1) {
+                mapsCount--;
+                int randomRange = Random.Range(0, mapsCount + 1);
+                (mapsToVisitList[randomRange], mapsToVisitList[mapsCount]) = (mapsToVisitList[mapsCount], mapsToVisitList[randomRange]);
             }
 
-            // everyone is here ? Okay, bye bye station !
-            foreach (var memberBehaviour in members) {
-                Destroy(memberBehaviour.gameObject);
-            }
-            
-            CancelInvoke(nameof(checkArrivalToGate));
-            Destroy(gameObject);
-        }
-
-        public GroupSavedData GenerateSaveData() {
-            var groupMonkeyMenSavedData = new List<MonkeyMenSavedData>();
-            
-            foreach (var visitorBehaviour in members) {
-                groupMonkeyMenSavedData.Add(visitorBehaviour.GenerateSavedData());
-            }
-
-            return new GroupSavedData {
-                dotweenPathIndex = dotweenPathIndex,
-                currentSegmentIndex = currentSegmentIndex,
-                visitorsSavedDatas = groupMonkeyMenSavedData
-            };
-        }
-
-        public void LoadSaveData(GroupSavedData groupSavedData) {
-            RespawnMembers(groupSavedData);
-            
-            // refresh after eventually removing unpopulated spaceships
-            ObjectsReference.Instance.uiCommunicationPanel.RefreshCommunicationButton();
-            ObjectsReference.Instance.uiCommunicationPanel.RefreshHangarAvailability();
+            mapsGuichetToVisit = new Stack<SpawnPoint>(mapsToVisitList);
         }
     }
 }

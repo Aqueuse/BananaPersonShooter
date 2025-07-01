@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Audio;
 using Cameras;
 using InGame;
@@ -44,6 +45,7 @@ public class ObjectsReference : MonoSingleton<ObjectsReference> {
     public SpaceTrafficControlManager spaceTrafficControlManager;
     public SpaceshipsSpawner spaceshipsSpawner;
     public CannonsManager cannonsManager;
+    public GenericDictionary<SpawnPoint, GuichetBehaviour> guichetsToMap;
 
     [Header("Banana Man")]
     public BananaMan bananaMan;

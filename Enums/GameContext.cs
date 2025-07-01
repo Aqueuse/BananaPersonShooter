@@ -6,5 +6,5 @@ public enum GameContext {
     IN_GAME_MENU,
     DEAD,
     IN_COMMAND_ROOM_PANEL,
-    IN_MAIN_PANEL
+    IN_GAME_UI_PANEL
 }

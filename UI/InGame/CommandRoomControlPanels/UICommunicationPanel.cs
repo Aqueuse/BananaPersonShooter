@@ -42,9 +42,6 @@ namespace UI.InGame.CommandRoomControlPanels {
         public GenericDictionary<CharacterType, List<GameObject>> spaceshipMessagesByCharacterType;
         
         private GameObject spaceshipMessage;
-
-        
-        
         
         public void MoveAdWordBoxToCurrentCampaign(AdWordBox adWordBox) {
             adWordBox.transform.SetParent(currentCampaignContainer);

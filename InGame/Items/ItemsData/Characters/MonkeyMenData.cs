@@ -11,7 +11,7 @@ namespace InGame.Items.ItemsData.Characters {
         // APPARENCE
         public float textureRotation;
         public int prefabIndex;
-        public int colorSetIndex;
+        public int propertiesIndex;
         
         public NeedType need;
         public bool isSatisfied;

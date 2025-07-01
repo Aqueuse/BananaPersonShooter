@@ -31,15 +31,16 @@ namespace InGame {
         public GenericDictionary<RawMaterialType, BuildableType[]> unlockedBuildablesByRawMaterialType;
         [Space]
         public List<GameObject> monkeyMenPrefabs;
+        public GameObject merchimpPrefab;
         public GenericDictionary<SpaceshipType, GameObject> spaceshipPrefabBySpaceshipType;
         [Space]
         public GenericDictionary<SpaceshipType, List<GameObject>> spaceshipDebrisBySpaceshipType;
         public GenericDictionary<BananaEffect, Color> bananaGoopColorByEffectType;
-        public GenericDictionary<RawMaterialType, GameObject> prefabByRawMaterialType;
         public Material blueprintBuildableMaterial;
         public Material completedBuildableMaterial;
         [Space]
-        public List<MonkeyMenPropertiesScriptableObject> chimpMensAppearanceScriptableObjects;
+        public List<MonkeyMenPropertiesScriptableObject> visitorsAppearanceScriptableObjects;
+        public List<MonkeyMenPropertiesScriptableObject> merchimpsAppearanceScriptableObjects;
         
         // since pirate are now mutable in visitor, merchant, or cultivator, they need to switch their item description
         public GenericDictionary<CharacterType, LocalizedString> genericNameByCharacterType;
@@ -54,12 +55,10 @@ namespace InGame {
         private ItemScriptableObject activeItem;
         
         public GroupScriptableObject GetNextGroup() {
-            if (ObjectsReference.Instance.worldData.lastVisitorGroup >= groupsScriptableObjects.Length) {
-                ObjectsReference.Instance.worldData.lastVisitorGroup = 0;
-            }
+            ObjectsReference.Instance.worldData.lastVisitorGroup += 1;
 
-            else {
-                ObjectsReference.Instance.worldData.lastVisitorGroup += 1;
+            if (ObjectsReference.Instance.worldData.lastVisitorGroup > groupsScriptableObjects.Length-1) {
+                ObjectsReference.Instance.worldData.lastVisitorGroup = 0;
             }
 
             return groupsScriptableObjects[ObjectsReference.Instance.worldData.lastVisitorGroup];
@@ -88,6 +87,10 @@ namespace InGame {
             }
 
             return bananaPrefabByBananaType[BananaType.CAVENDISH];
+        }
+
+        public int GetRandomMerchimpPropertiesIndex() {
+            return Random.Range(0, merchimpsAppearanceScriptableObjects.Count - 1);
         }
     }
 }

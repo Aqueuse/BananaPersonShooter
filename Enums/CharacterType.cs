@@ -1,10 +1,9 @@
 public enum CharacterType {
      MINI_CHIMP,
      CHIMPLOYEE,
-     TOURIST,
-     PIRATE,
+     VISITOR,
+     CULTIVATOR,
      BANANA_MAN,
      MERCHIMP,
-     MONKEY,
-     CULTIVATOR
+     MONKEY
 }

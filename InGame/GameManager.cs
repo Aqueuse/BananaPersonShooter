@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using Cinemachine;
 using DG.Tweening;
-using InGame.Items.ItemsBehaviours;
 using UnityEngine;
 
 namespace InGame {
@@ -20,7 +19,6 @@ namespace InGame {
         public GameContext gameContext;
 
         public GenericDictionary<SpawnPoint, Transform> spawnPointsBySpawnType;
-        public List<DOTweenPath> mapsDotweenPaths;
         
         private Vector3 _bananaManRotation;
         private Transform _bananaManTransform;

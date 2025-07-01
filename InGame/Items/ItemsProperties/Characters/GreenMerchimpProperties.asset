@@ -12,7 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a634d13752d8e747a8df59dc3be8b04, type: 3}
   m_Name: GreenMerchimpProperties
   m_EditorClassIdentifier: 
-  gameObjectTag: 24
   itemCategory: 10
   bananaType: 0
   droppedType: 0
@@ -20,7 +19,11 @@ MonoBehaviour:
   manufacturedItemsType: 0
   rawMaterialType: 0
   buildableType: 0
+  foodType: 0
+  isAspirable: 0
+  prefab: {fileID: 3712416262764098679, guid: 67cae77bbe79e3244b1efb786fb76bff, type: 3}
   itemName: []
+  spriteAtlasIndex: 0
   itemSprite: {fileID: 21300000, guid: 2924b75915460054e85a962a99916060, type: 3}
   itemDescription: []
   bitKongValue: 0

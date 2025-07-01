@@ -1,3 +1,8 @@
+using System.Collections.Generic;
+using InGame.Items.ItemsData.Characters;
+using InGame.Monkeys.Chimpvisitors;
+using UnityEngine;
+
 namespace Save.Templates {
     public class SpaceshipSavedData {
         public string spaceshipGuid;
@@ -10,10 +15,14 @@ namespace Save.Templates {
         
         public CharacterType characterType;
         public SpaceshipType spaceshipType;
+        
+        public List<MonkeyMenData> monkeyMenDatas;
 
+        public GroupTravelState groupTravelState;
+        public SpawnPoint[] guichetsMapsToVisit;
+        public Vector3[] mapPointInterests;
+        
         public int hangarNumber;
-
-        public int monkeyMenToSpawn;
 
         public string spaceshipPosition;
         public string spaceshipRotation;

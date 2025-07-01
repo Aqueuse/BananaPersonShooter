@@ -34,7 +34,7 @@ namespace InGame.MiniGames.SpaceTrafficControlMiniGame.Spaceships {
         public void SpawnSpaceshipsWithAdCampaign() {
             ObjectsReference.Instance.uiCommunicationPanel.HideCampaignCreationTools();
 
-            spaceships = ShuffleSpaceships(adCampaign.piratesNumber, adCampaign.touristsNumber, adCampaign.merchimpsNumber);
+            spaceships = ShuffleSpaceships(adCampaign.piratesNumber + adCampaign.touristsNumber, adCampaign.merchimpsNumber);
 
             foreach (var spaceship in spaceships) {
                 spacechipsQueue.Enqueue(spaceship);
@@ -69,29 +69,31 @@ namespace InGame.MiniGames.SpaceTrafficControlMiniGame.Spaceships {
 
             var spaceshipType = MeshReferenceScriptableObject.GetRandomSpaceshipType();
 
-            var spaceship = Instantiate(
-                ObjectsReference.Instance.meshReferenceScriptableObject.spaceshipPrefabBySpaceshipType[spaceshipType],
-                entryPoint,
-                Quaternion.identity,
-                ObjectsReference.Instance.gameSave.savablesItemsContainer);
+            var spaceshipBehaviour = SpawnSpaceship(spaceshipType, entryPoint, Quaternion.identity);
             
-            spaceship.transform.rotation = Quaternion.Euler((transform.position - entryPoint).normalized); 
-
-            spaceshipBehaviourInstance = spaceship.GetComponent<SpaceshipBehaviour>();
-            spaceshipBehaviourInstance.Init(arrivalPoint, characterType, spaceshipType);
+            spaceshipBehaviour.Init(arrivalPoint, characterType, spaceshipType);
+            spaceshipBehaviour.OpenCommunications(characterType);
             
-            ObjectsReference.Instance.spaceTrafficControlManager.spaceshipBehavioursByGuid.Add(spaceshipBehaviourInstance.spaceshipData.spaceshipGuid, spaceship.GetComponent<SpaceshipBehaviour>());
+            ObjectsReference.Instance.spaceTrafficControlManager.spaceshipBehavioursByGuid.Add(spaceshipBehaviour.spaceshipData.spaceshipGuid, spaceshipBehaviour);
         }
 
-        private List<CharacterType> ShuffleSpaceships(int pirateSpaceshipsQuantity, int visitorsSpaceshipsQuantity, int merchantsSpaceshipsQuantity) {
+        public SpaceshipBehaviour SpawnSpaceship(SpaceshipType spaceshipType, Vector3 position, Quaternion rotation) {
+            var spaceship = Instantiate(
+                ObjectsReference.Instance.meshReferenceScriptableObject.spaceshipPrefabBySpaceshipType[spaceshipType],
+                position,
+                rotation,
+                ObjectsReference.Instance.gameSave.savablesItemsContainer);
+            
+            spaceship.transform.rotation = Quaternion.Euler((transform.position - entryPoint).normalized);
+
+            return spaceship.GetComponent<SpaceshipBehaviour>();
+        }
+
+        private List<CharacterType> ShuffleSpaceships(int visitorsSpaceshipsQuantity, int merchantsSpaceshipsQuantity) {
             spaceships.Clear();
-
-            for (var i = 0; i < pirateSpaceshipsQuantity; i++) {
-                spaceships.Add(CharacterType.PIRATE);
-            }
-
+            
             for (var i = 0; i < visitorsSpaceshipsQuantity; i++) {
-                spaceships.Add(CharacterType.TOURIST);
+                spaceships.Add(CharacterType.VISITOR);
             }
 
             for (var i = 0; i < merchantsSpaceshipsQuantity; i++) {

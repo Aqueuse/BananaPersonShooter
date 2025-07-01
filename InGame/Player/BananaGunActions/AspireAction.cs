@@ -25,6 +25,8 @@ namespace InGame.Player.BananaGunActions {
         
         private void Update() {
             if (Physics.Raycast(mainCamera.transform.position, mainCamera.transform.forward, out raycastHit, 100, layerMask: GestionViewSelectableLayerMask)) {
+                Debug.Log(raycastHit.transform.gameObject);
+                
                 if (raycastHit.transform.gameObject.GetComponent<Tag>().itemScriptableObject.isAspirable) {
                     targetedGameObject = raycastHit.transform.gameObject;
                 }
