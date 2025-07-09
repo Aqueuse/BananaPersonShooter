@@ -48,22 +48,35 @@ namespace InGame {
         [Space]
         public GenericDictionary<CharacterType, Sprite> itemPreviewByCharacterType;
         public GameObject groupPrefab;
-        public GroupScriptableObject[] groupsScriptableObjects;
+        
+        public GroupScriptableObject[] visitorsGroupsScriptableObjects;
+        public GroupScriptableObject[] merchimpsGroupsScriptableObjects;
+        
         [Space]
         public GameObject teleportDownVFXPrefab;
 
         private ItemScriptableObject activeItem;
         
-        public GroupScriptableObject GetNextGroup() {
+        public GroupScriptableObject GetNextVisitorGroup() {
             ObjectsReference.Instance.worldData.lastVisitorGroup += 1;
 
-            if (ObjectsReference.Instance.worldData.lastVisitorGroup > groupsScriptableObjects.Length-1) {
+            if (ObjectsReference.Instance.worldData.lastVisitorGroup > visitorsGroupsScriptableObjects.Length-1) {
                 ObjectsReference.Instance.worldData.lastVisitorGroup = 0;
             }
 
-            return groupsScriptableObjects[ObjectsReference.Instance.worldData.lastVisitorGroup];
+            return visitorsGroupsScriptableObjects[ObjectsReference.Instance.worldData.lastVisitorGroup];
         }
+        
+        public GroupScriptableObject GetNextMerchimpGroup() {
+            ObjectsReference.Instance.worldData.lastMerchimpGroup += 1;
 
+            if (ObjectsReference.Instance.worldData.lastMerchimpGroup > merchimpsGroupsScriptableObjects.Length-1) {
+                ObjectsReference.Instance.worldData.lastMerchimpGroup = 0;
+            }
+
+            return merchimpsGroupsScriptableObjects[ObjectsReference.Instance.worldData.lastMerchimpGroup];
+        }
+        
         public static SpaceshipType GetRandomSpaceshipType() {
             var spaceshipTypes = Enum.GetValues(typeof(SpaceshipType));
 

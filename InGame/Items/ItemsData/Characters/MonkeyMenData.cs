@@ -9,9 +9,8 @@ namespace InGame.Items.ItemsData.Characters {
         public CharacterType characterType;
 
         // APPARENCE
-        public float textureRotation;
         public int prefabIndex;
-        public int propertiesIndex;
+        public Color[] colorsSet;
         
         public NeedType need;
         public bool isSatisfied;
@@ -40,8 +39,5 @@ namespace InGame.Items.ItemsData.Characters {
         public int bitKongQuantity;
 
         public string spaceshipGuid;
-        public Vector3 spaceshipPosition;
-        public Vector3 position;
-        public Quaternion rotation;
     }
 }

@@ -1,7 +1,7 @@
 using InGame.Monkeys.Chimpvisitors;
 using UnityEngine;
 
-namespace UI.InGame.VisitorReceptionMiniGameUI {
+namespace UI.InGame.Guichet {
     public class UIVisitorReceptionButton : MonoBehaviour {
         // TODO : Feed with visitor Data
         [HideInInspector] public VisitorBehaviour VisitorBehaviour;

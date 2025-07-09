@@ -2,8 +2,8 @@ using InGame.MiniGames.MonkeyMensReceptionMiniGame;
 using InGame.Monkeys.Chimpvisitors;
 using UnityEngine;
 
-namespace UI.InGame.VisitorReceptionMiniGameUI {
-    public class UIMonkeyMensReception : MonoBehaviour {
+namespace UI.InGame.Guichet {
+    public class UIGuichet : MonoBehaviour {
         [SerializeField] private MonkeyMensReception monkeyMensReception;
         
         [SerializeField] private GameObject monkeyMensReceptionButton;

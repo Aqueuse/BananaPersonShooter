@@ -16,7 +16,7 @@ namespace Save.Templates {
         public CharacterType characterType;
         public SpaceshipType spaceshipType;
         
-        public List<MonkeyMenData> monkeyMenDatas;
+        public List<MonkeyMenSavedData> MonkeyMenSavedDatas;
 
         public GroupTravelState groupTravelState;
         public SpawnPoint[] guichetsMapsToVisit;

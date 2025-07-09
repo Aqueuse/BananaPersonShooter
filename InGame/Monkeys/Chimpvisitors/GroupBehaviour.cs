@@ -1,10 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using InGame.Items.ItemsBehaviours;
-using InGame.Items.ItemsData.Characters;
 using InGame.Items.ItemsProperties.Characters;
-using Save.Helpers;
-using Save.Templates;
 using UnityEngine;
 using UnityEngine.AI;
 using Random = UnityEngine.Random;
@@ -129,7 +126,7 @@ namespace InGame.Monkeys.Chimpvisitors {
             Destroy(gameObject); // Bye bye !
         }
         
-        public void SpawnMembers(List<MonkeyMenData> members, string associatedSpaceshipGuid) {
+        public void SpawnMembers(List<MonkeyMenPropertiesScriptableObject> members, string associatedSpaceshipGuid) {
             this.associatedSpaceshipGuid = associatedSpaceshipGuid;
             
             var spawnPoint = ObjectsReference.Instance.spaceTrafficControlManager
@@ -154,19 +151,6 @@ namespace InGame.Monkeys.Chimpvisitors {
             groupTravelState = GroupTravelState.START_VISIT;
             transform.position = ObjectsReference.Instance.gameManager.spawnPointsBySpawnType[SpawnPoint.TP_COROLLE]
                 .position;
-        }
-
-        private void RespawnMembers(GroupSavedData groupSavedData) {
-            foreach (var visitorSavedData in groupSavedData.visitorsSavedDatas) {
-                var visitorInstance = Instantiate(
-                    original: ObjectsReference.Instance.meshReferenceScriptableObject.monkeyMenPrefabs[visitorSavedData.prefabIndex],
-                    position: JsonHelper.FromStringToVector3(visitorSavedData.position),
-                    rotation: JsonHelper.FromStringToQuaternion(visitorSavedData.rotation),
-                    parent: ObjectsReference.Instance.gameSave.savablesItemsContainer
-                );
-
-                visitorInstance.GetComponent<VisitorBehaviour>().LoadSavedData(visitorSavedData);
-            }
         }
         
         private void ShuffleMapsGuichetToVisit() {

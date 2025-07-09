@@ -1,6 +1,7 @@
 using InGame.Items.ItemsBehaviours;
 using InGame.Items.ItemsBehaviours.BuildablesBehaviours;
 using InGame.Items.ItemsData.Characters;
+using InGame.Items.ItemsProperties.Characters;
 using InGame.Monkeys.PhysicToNavMeshCoordinations;
 using Save.Helpers;
 using Save.Templates;
@@ -11,18 +12,19 @@ using Random = UnityEngine.Random;
 
 namespace InGame.Monkeys.Chimpvisitors {
     public class VisitorBehaviour : MonoBehaviour {
-        [SerializeField] private SkinnedMeshRenderer meshRenderer;
-
         public MonkeyMenData monkeyMenData;
 
         [SerializeField] private Transform _transform;
+        [SerializeField] private SkinnedMeshRenderer meshRenderer;
         [SerializeField] private Rigidbody _rigidbody;
         [SerializeField] private Animator animator;
         [SerializeField] private NavMeshAgent navMeshAgent;
+        
         [SerializeField] private OrganicRaycast organicRaycast;
-
         [SerializeField] private SpriteRenderer headSprite;
         
+        [SerializeField] private float explosionForce;
+
         private static readonly int VelocityX = Animator.StringToHash("XVelocity");
         private static readonly int VelocityZ = Animator.StringToHash("ZVelocity");
         private static readonly int ShouldMove = Animator.StringToHash("shouldMove");
@@ -49,10 +51,7 @@ namespace InGame.Monkeys.Chimpvisitors {
         private static readonly int color22 = Shader.PropertyToID("_Color22");
 
         private Color[] colorPreset;
-
-        [SerializeField] private Animator _animator;
-        [SerializeField] private float explosionForce;
-
+        
         // synchronize navmeshagent with animator
         private static readonly int startBreakingAnimatorProperty = Animator.StringToHash("break");
         private static readonly int isInAirAnimatorProperty = Animator.StringToHash("isInAir");
@@ -77,14 +76,14 @@ namespace InGame.Monkeys.Chimpvisitors {
         
         private GroupBehaviour _groupBehaviour;
         
-        public void Init(GroupBehaviour groupBehaviour, MonkeyMenData monkeyMenData, string associatedSpaceshipGuid, Vector3 spawnPoint) {
+        public void Init(GroupBehaviour groupBehaviour, MonkeyMenPropertiesScriptableObject monkeyMenProperties, string associatedSpaceshipGuid, Vector3 spawnPoint) {
             _groupBehaviour = groupBehaviour;
             monkeyMenData.spaceshipGuid = associatedSpaceshipGuid;
 
             associatedSpaceshipBehaviour =
                 ObjectsReference.Instance.spaceTrafficControlManager.spaceshipBehavioursByGuid[monkeyMenData.spaceshipGuid];
             
-            SetColors(monkeyMenData.propertiesIndex);
+            SetColors(monkeyMenProperties.colorSets);
 
             navMeshAgent.updatePosition = false;
             navMeshAgent.updateRotation = true;
@@ -129,7 +128,7 @@ namespace InGame.Monkeys.Chimpvisitors {
             SetDestination(_groupBehaviour.transform.position);
         }
         
-        public void SetDestination(Vector3 destination) {
+        private void SetDestination(Vector3 destination) {
             navMeshAgent.SetDestination(destination);
         }
         
@@ -154,8 +153,8 @@ namespace InGame.Monkeys.Chimpvisitors {
         
         // 🍌 Banana ! Σ(っ °Д °;)っ
         public void Flee() {
-            _animator.SetBool(isInAirAnimatorProperty, false);
-            _animator.SetLayerWeight(1, 1);
+            animator.SetBool(isInAirAnimatorProperty, false);
+            animator.SetLayerWeight(1, 1);
             
             if (monkeyMenData.need == NeedType.PILLAGE) DropPartOfInventory();
             
@@ -237,26 +236,34 @@ namespace InGame.Monkeys.Chimpvisitors {
             animator.SetFloat(VelocityZ, _velocity.y);
         }
         
-        private void SetColors(int index) {
+        private void SetColors(Color[] colorsSet) {
             var monkeyMenMaterial = meshRenderer.material;
-
-            colorPreset = ObjectsReference.Instance.meshReferenceScriptableObject.visitorsAppearanceScriptableObjects[index].colorSets;
             
-            monkeyMenMaterial.SetColor(color00, colorPreset[0]);
-            monkeyMenMaterial.SetColor(color01, colorPreset[1]);
-            monkeyMenMaterial.SetColor(color02, colorPreset[2]);
-            monkeyMenMaterial.SetColor(color10, colorPreset[3]);
-            monkeyMenMaterial.SetColor(color11, colorPreset[4]);
-            monkeyMenMaterial.SetColor(color12, colorPreset[5]);
-            monkeyMenMaterial.SetColor(color20, colorPreset[6]);
-            monkeyMenMaterial.SetColor(color21, colorPreset[7]);
-            monkeyMenMaterial.SetColor(color22, colorPreset[8]);
+            monkeyMenMaterial.SetColor(color00, colorsSet[0]);
+            monkeyMenMaterial.SetColor(color01, colorsSet[1]);
+            monkeyMenMaterial.SetColor(color02, colorsSet[2]);
+            monkeyMenMaterial.SetColor(color10, colorsSet[3]);
+            monkeyMenMaterial.SetColor(color11, colorsSet[4]);
+            monkeyMenMaterial.SetColor(color12, colorsSet[5]);
+            monkeyMenMaterial.SetColor(color20, colorsSet[6]);
+            monkeyMenMaterial.SetColor(color21, colorsSet[7]);
+            monkeyMenMaterial.SetColor(color22, colorsSet[8]);
 
             meshRenderer.material = monkeyMenMaterial;
         }
 
         public void LoadSavedData(MonkeyMenSavedData monkeyMenSavedData) {
-            SetColors(monkeyMenSavedData.colorSetIndex);
+            monkeyMenData.colorsSet = monkeyMenSavedData.colorsSet;
+            monkeyMenData.characterType = monkeyMenSavedData.characterType;
+            monkeyMenData.bitKongQuantity = monkeyMenSavedData.bitKongQuantity;
+            monkeyMenData.destination = JsonHelper.FromStringToVector3(monkeyMenSavedData.destination);
+            monkeyMenData.isSatisfied = monkeyMenSavedData.isSatisfied;
+
+            monkeyMenData.ingredientsInventory = monkeyMenSavedData.ingredientsInventory;
+            monkeyMenData.manufacturedItemsInventory = monkeyMenSavedData.manufacturedItemsInventory;
+            monkeyMenData.rawMaterialsInventory = monkeyMenSavedData.rawMaterialsInventory;
+
+            SetColors(monkeyMenSavedData.colorsSet);
 
             associatedSpaceshipBehaviour =
                 ObjectsReference.Instance.spaceTrafficControlManager.spaceshipBehavioursByGuid[
@@ -273,7 +280,7 @@ namespace InGame.Monkeys.Chimpvisitors {
                 uid = monkeyMenData.uid,
                 name = monkeyMenData.monkeyMenName,
                 prefabIndex = monkeyMenData.prefabIndex,
-                colorSetIndex = monkeyMenData.propertiesIndex,
+                colorsSet = monkeyMenData.colorsSet,
                 destination = JsonHelper.FromVector3ToString(monkeyMenData.destination),
                 spaceshipGuid = monkeyMenData.spaceshipGuid,
                 position = JsonHelper.FromVector3ToString(transform.position),

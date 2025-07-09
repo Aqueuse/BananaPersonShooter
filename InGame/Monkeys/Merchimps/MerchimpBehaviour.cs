@@ -2,6 +2,7 @@ using InGame.Inventories;
 using InGame.Items.ItemsBehaviours;
 using InGame.Items.ItemsData.Characters;
 using InGame.Items.ItemsProperties;
+using InGame.Items.ItemsProperties.Characters;
 using Save.Helpers;
 using Save.Templates;
 using UI.InGame.Merchimps;
@@ -38,6 +39,8 @@ namespace InGame.Monkeys.Merchimps {
         private ManufacturedItemsInventory bananaManManufacturedItemsInventory;
         private IngredientsInventory bananaManIngredientsInventory;
 
+        private int waitTimer;
+
         public void Start() {
             bananaManBananasInventory = ObjectsReference.Instance.BananaManBananasInventory;
             bananaManManufacturedItemsInventory = ObjectsReference.Instance.bananaManManufacturedItemsInventory;
@@ -46,14 +49,12 @@ namespace InGame.Monkeys.Merchimps {
             StartWaitingTimer();
         }
 
-        public void Init(int propertiesIndex, SpaceshipBehaviour spaceshipBehaviour) {
-            monkeyMenData.propertiesIndex = propertiesIndex;
+        public void Init(MonkeyMenPropertiesScriptableObject monkeyMenPropertiesScriptableObject, SpaceshipBehaviour spaceshipBehaviour) {
+            monkeyMenData.colorsSet = monkeyMenPropertiesScriptableObject.colorSets;
             associatedSpaceshipBehaviour = spaceshipBehaviour;
             
-            SetColors(propertiesIndex);
+            SetColors(monkeyMenData.colorsSet);
         }
-        
-        private int waitTimer;
         
         private void StartWaitingTimer() {
             uiMerchantWaitTimer.SetTimer(120);
@@ -102,26 +103,26 @@ namespace InGame.Monkeys.Merchimps {
             return 0;
         }
 
-        private void SetColors(int index) {
+        private void SetColors(Color[] colorsSet) {
             var monkeyMenMaterial = meshRenderer.material;
-
-            colorPreset = ObjectsReference.Instance.meshReferenceScriptableObject.merchimpsAppearanceScriptableObjects[index].colorSets;
             
-            monkeyMenMaterial.SetColor(color00, colorPreset[0]);
-            monkeyMenMaterial.SetColor(color01, colorPreset[1]);
-            monkeyMenMaterial.SetColor(color02, colorPreset[2]);
-            monkeyMenMaterial.SetColor(color10, colorPreset[3]);
-            monkeyMenMaterial.SetColor(color11, colorPreset[4]);
-            monkeyMenMaterial.SetColor(color12, colorPreset[5]);
-            monkeyMenMaterial.SetColor(color20, colorPreset[6]);
-            monkeyMenMaterial.SetColor(color21, colorPreset[7]);
-            monkeyMenMaterial.SetColor(color22, colorPreset[8]);
+            monkeyMenMaterial.SetColor(color00, colorsSet[0]);
+            monkeyMenMaterial.SetColor(color01, colorsSet[1]);
+            monkeyMenMaterial.SetColor(color02, colorsSet[2]);
+            monkeyMenMaterial.SetColor(color10, colorsSet[3]);
+            monkeyMenMaterial.SetColor(color11, colorsSet[4]);
+            monkeyMenMaterial.SetColor(color12, colorsSet[5]);
+            monkeyMenMaterial.SetColor(color20, colorsSet[6]);
+            monkeyMenMaterial.SetColor(color21, colorsSet[7]);
+            monkeyMenMaterial.SetColor(color22, colorsSet[8]);
 
             meshRenderer.material = monkeyMenMaterial;
         }
         
         public void LoadSavedData(MonkeyMenSavedData monkeyMenSavedData) {
-            SetColors(monkeyMenSavedData.colorSetIndex);
+            monkeyMenData.colorsSet = monkeyMenSavedData.colorsSet;
+            
+            SetColors(monkeyMenSavedData.colorsSet);
 
             associatedSpaceshipBehaviour =
                 ObjectsReference.Instance.spaceTrafficControlManager.spaceshipBehavioursByGuid[
@@ -138,7 +139,7 @@ namespace InGame.Monkeys.Merchimps {
                 uid = monkeyMenData.uid,
                 name = monkeyMenData.monkeyMenName,
                 prefabIndex = monkeyMenData.prefabIndex,
-                colorSetIndex = monkeyMenData.propertiesIndex,
+                colorsSet = monkeyMenData.colorsSet,
                 destination = JsonHelper.FromVector3ToString(monkeyMenData.destination),
                 spaceshipGuid = monkeyMenData.spaceshipGuid,
                 position = JsonHelper.FromVector3ToString(transform.position),

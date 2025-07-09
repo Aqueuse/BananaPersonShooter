@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using DG.Tweening;
 using InGame.Items.ItemsData;
-using InGame.Items.ItemsData.Characters;
+using InGame.Items.ItemsProperties.Characters;
 using InGame.MiniGames.SpaceTrafficControlMiniGame.projectiles;
 using InGame.Monkeys.Chimpvisitors;
 using InGame.Monkeys.Merchimps;
@@ -66,35 +66,71 @@ namespace InGame.Items.ItemsBehaviours {
             }
         }
         
-        private void SpawnChimpmen(List<MonkeyMenData> monkeyMenDatas, string associatedSpaceshipGuid) {
-            var group = Instantiate(
+        private void SpawnVisitors(GroupScriptableObject groupScriptableObject, string associatedSpaceshipGuid) {
+            if (groupScriptableObject.members.Count == 1 && groupScriptableObject.members[0].characterType == CharacterType.MERCHIMP) {
+                var merchimp = Instantiate(
+                    ObjectsReference.Instance.meshReferenceScriptableObject.merchimpPrefab,
+                    merchimpSpawnPoint.position,
+                    merchimpSpawnPoint.rotation,
+                    null
+                ).GetComponent<MerchimpBehaviour>();
+            
+                merchimp.Init(
+                    groupScriptableObject.members[0],
+                    this
+                );
+            }
+
+            else {
+                var group = Instantiate(
+                    ObjectsReference.Instance.meshReferenceScriptableObject.groupPrefab,
+                    visitorsSpawnPoint.position,
+                    Quaternion.identity,
+                    null
+                ).GetComponent<GroupBehaviour>();
+                
+                group.SpawnMembers(groupScriptableObject.members, associatedSpaceshipGuid);
+
+                associatedGroupBehaviour = group;
+                group.spaceshipVisitorsSpawnPoint = visitorsSpawnPoint.position;
+            }
+
+        }
+
+        private void RespawnVisitors(List<MonkeyMenSavedData> groupMembers) {
+            if (groupMembers.Count == 1 && groupMembers[0].characterType == CharacterType.MERCHIMP) {
+                var merchimp = Instantiate(
+                    ObjectsReference.Instance.meshReferenceScriptableObject.merchimpPrefab,
+                    merchimpSpawnPoint.position,
+                    merchimpSpawnPoint.rotation,
+                    null
+                ).GetComponent<MerchimpBehaviour>();
+            
+                merchimp.LoadSavedData(groupMembers[0]);
+            }
+
+            else {
+                var group = Instantiate(
                     ObjectsReference.Instance.meshReferenceScriptableObject.groupPrefab,
                     ObjectsReference.Instance.gameManager.spawnPointsBySpawnType[SpawnPoint.TP_HANGARS].position,
                     Quaternion.identity,
                     null
                 ).GetComponent<GroupBehaviour>();
                 
-                group.SpawnMembers(monkeyMenDatas, associatedSpaceshipGuid);
+                foreach (var member in groupMembers) {
+                    var visitorInstance = Instantiate(
+                        original: ObjectsReference.Instance.meshReferenceScriptableObject.monkeyMenPrefabs[member.prefabIndex],
+                        position: JsonHelper.FromStringToVector3(member.position),
+                        rotation: JsonHelper.FromStringToQuaternion(member.rotation),
+                        parent: ObjectsReference.Instance.gameSave.savablesItemsContainer
+                    );
 
-                spaceshipData.monkeyMenDatas = monkeyMenDatas;
+                    visitorInstance.GetComponent<VisitorBehaviour>().LoadSavedData(member);
+                }
+
                 associatedGroupBehaviour = group;
                 group.spaceshipVisitorsSpawnPoint = visitorsSpawnPoint.position;
-        }
-
-        private void SpawnMerchimp() {
-            var merchimp = Instantiate(
-                ObjectsReference.Instance.meshReferenceScriptableObject.merchimpPrefab,
-                merchimpSpawnPoint.position,
-                merchimpSpawnPoint.rotation,
-                null
-            ).GetComponent<MerchimpBehaviour>();
-            
-            merchimp.Init(
-                ObjectsReference.Instance.meshReferenceScriptableObject.GetRandomMerchimpPropertiesIndex(),
-                this
-            );
-
-            spaceshipData.monkeyMenDatas = new List<MonkeyMenData> { merchimp.monkeyMenData };
+            }
         }
         
         public void OpenCommunications(CharacterType characterType) {
@@ -116,16 +152,12 @@ namespace InGame.Items.ItemsBehaviours {
                 spaceshipDebrisBehaviour.enabled = false;
             }
 
-            if (spaceshipData.characterType == CharacterType.MERCHIMP) {
-                SpawnMerchimp();
-            }
-
-            else {
-                SpawnChimpmen(
-                    ObjectsReference.Instance.meshReferenceScriptableObject.GetNextGroup().members,
-                    spaceshipData.spaceshipGuid
-                );
-            }
+            SpawnVisitors(
+                spaceshipData.characterType == CharacterType.MERCHIMP
+                    ? ObjectsReference.Instance.meshReferenceScriptableObject.GetNextMerchimpGroup()
+                    : ObjectsReference.Instance.meshReferenceScriptableObject.GetNextVisitorGroup(),
+                spaceshipData.spaceshipGuid
+            );
         }
         
         public void StopWaiting() {
@@ -233,7 +265,6 @@ namespace InGame.Items.ItemsBehaviours {
             spaceshipData.travelState = spaceshipSavedData.travelState;
             spaceshipData.assignatedHangar = spaceshipSavedData.hangarNumber;
             
-            spaceshipData.monkeyMenDatas = spaceshipSavedData.monkeyMenDatas;
             spaceshipData.groupTravelState = spaceshipSavedData.groupTravelState;
             spaceshipData.guichetsMapsToVisit = spaceshipSavedData.guichetsMapsToVisit;
             spaceshipData.mapPointInterests = spaceshipSavedData.mapPointInterests;
@@ -247,16 +278,7 @@ namespace InGame.Items.ItemsBehaviours {
             if (spaceshipData.travelState == TravelState.WAIT_IN_STATION) {
                 ObjectsReference.Instance.spaceTrafficControlManager.AssignSpaceshipToHangar(spaceshipData.assignatedHangar);
 
-                if (spaceshipData.characterType == CharacterType.MERCHIMP) {
-                    SpawnMerchimp();
-                }
-
-                else {
-                    SpawnChimpmen(
-                        spaceshipSavedData.monkeyMenDatas,
-                        spaceshipData.spaceshipGuid
-                    );
-                }
+                RespawnVisitors(spaceshipSavedData.MonkeyMenSavedDatas);
             }
 
             if (spaceshipData.travelState == TravelState.GO_TO_PATH) {
@@ -303,13 +325,20 @@ namespace InGame.Items.ItemsBehaviours {
                 travelState = spaceshipData.travelState,
                 arrivalPoint = JsonHelper.FromVector3ToString(spaceshipData.arrivalPosition),
                 hangarNumber = spaceshipData.assignatedHangar,
-                monkeyMenDatas = spaceshipData.monkeyMenDatas
             };
 
             if (associatedGroupBehaviour) {
                 spaceshipSavedData.guichetsMapsToVisit = associatedGroupBehaviour.mapsGuichetToVisit.ToArray();
                 spaceshipSavedData.groupTravelState = associatedGroupBehaviour.groupTravelState;
                 spaceshipSavedData.mapPointInterests = associatedGroupBehaviour.mapPointsOfInterests.ToArray();
+
+                List<MonkeyMenSavedData> monkeyMenSavedDatas = new List<MonkeyMenSavedData>();
+                
+                foreach (var visitorBehaviour in associatedGroupBehaviour.members) {
+                    monkeyMenSavedDatas.Add(visitorBehaviour.GenerateSavedData());
+                }
+
+                spaceshipSavedData.MonkeyMenSavedDatas = monkeyMenSavedDatas;
             }
         }
     }

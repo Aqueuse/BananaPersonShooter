@@ -17,6 +17,7 @@ namespace InGame.Items.ItemsData {
 
         public int stationLightSetting;
         public int lastVisitorGroup;
+        public int lastMerchimpGroup;
         
         public int GetDroppedQuantityInWorld() {
             return FindObjectsByType<SpaceshipDebrisBehaviour>(FindObjectsSortMode.None).Length;

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace Save.Templates {
     // use to save monkeyMens
@@ -9,7 +10,7 @@ namespace Save.Templates {
         
         public MonkeyMenType monkeyMenType;
         public int prefabIndex;
-        public int colorSetIndex;
+        public Color[] colorsSet;
         
         public PirateState pirateState;
         public TouristState touristState;

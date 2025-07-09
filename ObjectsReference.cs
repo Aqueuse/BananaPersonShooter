@@ -22,10 +22,10 @@ using UI;
 using UI.InGame;
 using UI.InGame.BuildingMaterialMissingPanel;
 using UI.InGame.CommandRoomControlPanels;
+using UI.InGame.Guichet;
 using UI.InGame.MainPanel;
 using UI.InGame.MainPanel.Inventories;
 using UI.InGame.Merchimps;
-using UI.InGame.VisitorReceptionMiniGameUI;
 using UI.Menus;
 using UI.Save;
 using UnityEngine;
@@ -123,6 +123,6 @@ public class ObjectsReference : MonoSingleton<ObjectsReference> {
     public UICommunicationPanel uiCommunicationPanel;
     public UIgestionPanel uIgestionPanel;
     public UICannons uiCannons;
-    public UIMonkeyMensReception uiTouristReception;
+    public UIGuichet uiTouristReception;
     public UIMerchant uiMerchant;
 }

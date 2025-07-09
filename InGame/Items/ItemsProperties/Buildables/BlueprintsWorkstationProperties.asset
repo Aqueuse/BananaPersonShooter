@@ -18,7 +18,7 @@ MonoBehaviour:
   ingredientsType: 0
   manufacturedItemsType: 0
   rawMaterialType: 0
-  buildableType: 15
+  buildableType: 14
   foodType: 0
   isAspirable: 1
   prefab: {fileID: 546991606061005580, guid: 1266f1a6b74a4074ab65ab8271d57705, type: 3}

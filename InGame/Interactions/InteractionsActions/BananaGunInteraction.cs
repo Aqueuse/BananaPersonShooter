@@ -5,14 +5,6 @@ namespace InGame.Interactions.InteractionsActions {
         public override void Activate(GameObject interactedGameObject) {
             interactedGameObject.transform.parent.gameObject.SetActive(false);
             
-            ObjectsReference.Instance.commandRoomControlPanelsManager.blueprinter.CreateBlueprint(
-                new [] {
-                    BuildableType.TELEPORTER_COROLLE, 
-                    BuildableType.TELEPORTER_HANGARS, 
-                    BuildableType.TELEPORTER_COMMAND_ROOM
-                }
-            );
-
             ObjectsReference.Instance.uInventoriesManager.ShowCurrentUIHelper();
             ObjectsReference.Instance.uiManager.SetActive(UICanvasGroupType.HUD_BANANAMAN, true);
             
