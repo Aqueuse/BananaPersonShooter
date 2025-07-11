@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using Cinemachine;
-using DG.Tweening;
 using UnityEngine;
 
 namespace InGame {
@@ -208,7 +207,7 @@ namespace InGame {
             
             ObjectsReference.Instance.bananaGun.GrabBananaGun();
             
-            ObjectsReference.Instance.uIgestionPanel.SwitchLight(ObjectsReference.Instance.worldData.stationLightSetting == 1 ? 1 : 0);
+            ObjectsReference.Instance.uiGestionPanel.SwitchLight(ObjectsReference.Instance.worldData.stationLightSetting == 1 ? 1 : 0);
 
             loadingScreen.SetActive(false);
         }

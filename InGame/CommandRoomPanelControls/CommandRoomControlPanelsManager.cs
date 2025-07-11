@@ -1,4 +1,3 @@
-using Cinemachine;
 using InGame.Monkeys.Chimployees;
 using UnityEngine;
 
@@ -6,7 +5,6 @@ namespace InGame.CommandRoomPanelControls {
     public class CommandRoomControlPanelsManager : MonoBehaviour {
         public Blueprinter blueprinter;
 
-        public CinemachineVirtualCamera commandRoomVirtualCamera;
         [SerializeField] private GenericDictionary<CommandRoomPanelType, Transform> cameraTransformByPanelType;
         [SerializeField] private GenericDictionary<CommandRoomPanelType, Transform> cameraFocusByPanelType;
 
@@ -24,9 +22,9 @@ namespace InGame.CommandRoomPanelControls {
                 ObjectsReference.Instance.uiManager.SetActive(UICanvasGroupType.HUD_GESTION, false);
             }
 
-            commandRoomVirtualCamera.Follow = cameraTransformByPanelType[commandRoomPanelType].transform;
-            commandRoomVirtualCamera.LookAt = cameraFocusByPanelType[commandRoomPanelType].transform;
-            commandRoomVirtualCamera.Priority = 200;
+            ObjectsReference.Instance.uiInGameVirtualCamera.Follow = cameraTransformByPanelType[commandRoomPanelType].transform;
+            ObjectsReference.Instance.uiInGameVirtualCamera.LookAt = cameraFocusByPanelType[commandRoomPanelType].transform;
+            ObjectsReference.Instance.uiInGameVirtualCamera.Priority = 200;
 
             ObjectsReference.Instance.cameraPlayer.Set0Sensibility();
             ObjectsReference.Instance.playerController.canMove = false;
@@ -55,7 +53,7 @@ namespace InGame.CommandRoomPanelControls {
         }
         
         public void UnfocusPanel(bool isOnUI) {
-            commandRoomVirtualCamera.Priority = 0;
+            ObjectsReference.Instance.uiInGameVirtualCamera.Priority = 0;
 
             ObjectsReference.Instance.uiManager.SetActive(UICanvasGroupType.HUD_BANANAMAN, true);
 

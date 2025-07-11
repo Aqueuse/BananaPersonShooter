@@ -1,6 +1,6 @@
-using System.Collections.Generic;
 using Audio;
 using Cameras;
+using Cinemachine;
 using InGame;
 using InGame.CommandRoomPanelControls;
 using InGame.Dialogues;
@@ -10,8 +10,9 @@ using InGame.Inventories;
 using InGame.Items.ItemsBehaviours;
 using InGame.Items.ItemsData;
 using InGame.MainBlock;
-using InGame.MiniGames.MarketingCampaignMiniGame;
-using InGame.MiniGames.SpaceTrafficControlMiniGame.Spaceships;
+using InGame.MiniGames.Guichets;
+using InGame.MiniGames.MarketingCampaign;
+using InGame.MiniGames.SpaceTrafficControl.Spaceships;
 using InGame.Player;
 using InGame.Player.BananaGunActions;
 using InGame.SpaceTrafficControl;
@@ -22,7 +23,6 @@ using UI;
 using UI.InGame;
 using UI.InGame.BuildingMaterialMissingPanel;
 using UI.InGame.CommandRoomControlPanels;
-using UI.InGame.Guichet;
 using UI.InGame.MainPanel;
 using UI.InGame.MainPanel.Inventories;
 using UI.InGame.Merchimps;
@@ -45,7 +45,7 @@ public class ObjectsReference : MonoSingleton<ObjectsReference> {
     public SpaceTrafficControlManager spaceTrafficControlManager;
     public SpaceshipsSpawner spaceshipsSpawner;
     public CannonsManager cannonsManager;
-    public GenericDictionary<SpawnPoint, GuichetBehaviour> guichetsToMap;
+    public GenericDictionary<SpawnPoint, Guichet> guichetsToMap;
 
     [Header("Banana Man")]
     public BananaMan bananaMan;
@@ -84,6 +84,7 @@ public class ObjectsReference : MonoSingleton<ObjectsReference> {
     [Header("Cameras")]
     public MainCamera mainCamera;
     public CameraPlayer cameraPlayer;
+    public CinemachineVirtualCamera uiInGameVirtualCamera;
     public CameraGestionDragRotate gestionDragCamera;
     public CameraGestionRelativeMove gestionRelativeMoveCamera;
     public FootStepSurfaceDetector footStepSurfaceDetector;
@@ -121,8 +122,8 @@ public class ObjectsReference : MonoSingleton<ObjectsReference> {
     public UISettings uiSettings;
     [Space]
     public UICommunicationPanel uiCommunicationPanel;
-    public UIgestionPanel uIgestionPanel;
+    public UIgestionPanel uiGestionPanel;
     public UICannons uiCannons;
-    public UIGuichet uiTouristReception;
+    public UIGuichet uiGuichet;
     public UIMerchant uiMerchant;
 }

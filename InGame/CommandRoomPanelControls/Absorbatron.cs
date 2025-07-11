@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using InGame.Items.ItemsBehaviours.DroppedBehaviours;
-using InGame.MiniGames.SpaceTrafficControlMiniGame.Spaceships;
+using InGame.MiniGames.SpaceTrafficControl.Spaceships;
 using UnityEngine;
 
 namespace InGame.CommandRoomPanelControls {

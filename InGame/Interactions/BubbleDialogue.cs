@@ -4,6 +4,7 @@ using System.Linq;
 using Audio.Data;
 using TMPro;
 using UI.InGame;
+using UI.InGame.Interactions;
 using UnityEngine;
 using UnityEngine.Localization;
 using UnityEngine.Localization.Components;

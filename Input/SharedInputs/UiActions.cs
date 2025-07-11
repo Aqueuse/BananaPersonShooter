@@ -57,6 +57,10 @@ namespace SharedInputs {
                 case GameContext.IN_COMMAND_ROOM_PANEL:
                     ObjectsReference.Instance.commandRoomControlPanelsManager.UnfocusPanel(false);
                     break;
+                
+                case GameContext.IN_GAME_UI_PANEL:
+                    ObjectsReference.Instance.uiGuichet.activatedGuichet.CloseGuichet();
+                    break;
             }
         }
 

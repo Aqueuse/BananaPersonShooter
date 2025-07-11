@@ -1,7 +1,7 @@
-using InGame.MiniGames.SpaceTrafficControlMiniGame.projectiles;
+using InGame.MiniGames.SpaceTrafficControl.projectiles;
 using UnityEngine;
 
-namespace InGame.MiniGames.SpaceTrafficControlMiniGame.Spaceships {
+namespace InGame.MiniGames.SpaceTrafficControl.Spaceships {
     public class Cannon : MonoBehaviour {
         [SerializeField] private Transform socleTransform;
         [SerializeField] private Transform cannonTransform;

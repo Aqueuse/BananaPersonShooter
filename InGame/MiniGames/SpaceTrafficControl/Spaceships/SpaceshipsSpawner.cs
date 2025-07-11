@@ -1,10 +1,10 @@
 using System.Collections.Generic;
 using InGame.Items.ItemsBehaviours;
-using InGame.MiniGames.MarketingCampaignMiniGame;
+using InGame.MiniGames.MarketingCampaign;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-namespace InGame.MiniGames.SpaceTrafficControlMiniGame.Spaceships {
+namespace InGame.MiniGames.SpaceTrafficControl.Spaceships {
     public class SpaceshipsSpawner : MonoBehaviour {
         private AdCampaign adCampaign;
 

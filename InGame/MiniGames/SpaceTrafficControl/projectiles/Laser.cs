@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace InGame.MiniGames.SpaceTrafficControlMiniGame.projectiles {
+namespace InGame.MiniGames.SpaceTrafficControl.projectiles {
     public class Laser : MonoBehaviour {
         [SerializeField] private MeshRenderer projectileRenderer;
         public Transform attractionPoint;

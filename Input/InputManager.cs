@@ -14,13 +14,6 @@ public class InputManager : MonoBehaviour {
         }
     }
     
-    // for some actions, UI need to also be activated (for navigation)
-    public void AlsoActivateUIinputActions() {
-        foreach (var inputAction in inputActionsByInputContext[InputContext.UI]) {
-            inputAction.enabled = true;
-        }
-    }
-    
     private void DisableAllInputs() {
         foreach (var inputActionArray in inputActionsByInputContext) {
             foreach (var inputAction in inputActionArray.Value) {

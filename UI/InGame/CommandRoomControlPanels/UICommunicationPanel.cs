@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using InGame.Items.ItemsBehaviours;
-using InGame.MiniGames.MarketingCampaignMiniGame;
+using InGame.MiniGames.MarketingCampaign;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;

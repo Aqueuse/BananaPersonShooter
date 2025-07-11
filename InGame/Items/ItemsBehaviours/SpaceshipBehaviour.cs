@@ -4,7 +4,7 @@ using System.Linq;
 using DG.Tweening;
 using InGame.Items.ItemsData;
 using InGame.Items.ItemsProperties.Characters;
-using InGame.MiniGames.SpaceTrafficControlMiniGame.projectiles;
+using InGame.MiniGames.SpaceTrafficControl.projectiles;
 using InGame.Monkeys.Chimpvisitors;
 using InGame.Monkeys.Merchimps;
 using InGame.SpaceTrafficControl;

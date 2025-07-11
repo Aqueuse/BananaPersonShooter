@@ -2,7 +2,7 @@ using Cinemachine;
 using InGame.Inventories;
 using UnityEngine;
 
-namespace InGame.MiniGames.SpaceTrafficControlMiniGame.Spaceships {
+namespace InGame.MiniGames.SpaceTrafficControl.Spaceships {
     public class CannonsManager : MonoBehaviour {
         [Header("mini game camera")]
         [SerializeField] private CinemachineVirtualCamera miniGameVirtualCamera;

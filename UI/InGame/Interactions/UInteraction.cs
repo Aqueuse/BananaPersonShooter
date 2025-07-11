@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-namespace UI.InGame {
+namespace UI.InGame.Interactions {
     public class UInteraction : MonoBehaviour {
         [SerializeField] private List<TextMeshPro> interactionTexts;
 

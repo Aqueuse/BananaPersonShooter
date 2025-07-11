@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
-using InGame.Items.ItemsBehaviours;
 using InGame.Items.ItemsProperties.Characters;
+using InGame.MiniGames.Guichets;
 using UnityEngine;
 using UnityEngine.AI;
 using Random = UnityEngine.Random;
@@ -18,7 +18,7 @@ namespace InGame.Monkeys.Chimpvisitors {
         
         public Stack<SpawnPoint> mapsGuichetToVisit = new ();
         public Stack<Vector3> mapPointsOfInterests;
-        private GuichetBehaviour nextGuichet;
+        private Guichet nextGuichet;
         
         private Vector3 corolleCenter;
         private Vector3 hangarsCenter;
@@ -64,7 +64,7 @@ namespace InGame.Monkeys.Chimpvisitors {
                             nextGuichet.visitorsToWatch.Add(member);
                         }
 
-                        mapPointsOfInterests = nextGuichet.GiveToRandomPointsOfInterest();
+                        mapPointsOfInterests = nextGuichet.GiveTwoRandomPointsOfInterest();
                     }
                 }
             }

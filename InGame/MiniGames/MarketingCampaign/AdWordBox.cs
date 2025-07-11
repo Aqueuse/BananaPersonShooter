@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace InGame.MiniGames.MarketingCampaignMiniGame {
+namespace InGame.MiniGames.MarketingCampaign {
     public class AdWordBox : MonoBehaviour {
         public int touristsWeight;
         public int piratesWeight;

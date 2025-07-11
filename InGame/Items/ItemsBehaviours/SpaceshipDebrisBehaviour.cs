@@ -1,6 +1,6 @@
 using System;
 using InGame.Items.ItemsData;
-using InGame.MiniGames.SpaceTrafficControlMiniGame.projectiles;
+using InGame.MiniGames.SpaceTrafficControl.projectiles;
 using Newtonsoft.Json;
 using Save.Helpers;
 using UnityEngine;

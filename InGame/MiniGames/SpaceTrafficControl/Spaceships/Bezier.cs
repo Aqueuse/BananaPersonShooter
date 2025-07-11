@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace InGame.MiniGames.SpaceTrafficControlMiniGame.Spaceships {
+namespace InGame.MiniGames.SpaceTrafficControl.Spaceships {
     public class Bezier {
         private readonly Vector3[] points;
         private readonly int count;

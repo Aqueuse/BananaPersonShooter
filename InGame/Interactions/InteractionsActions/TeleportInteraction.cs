@@ -1,4 +1,5 @@
 using UI.InGame;
+using UI.InGame.Interactions;
 using UnityEngine;
 
 namespace InGame.Interactions.InteractionsActions {

@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-namespace InGame.MiniGames.MarketingCampaignMiniGame {
+namespace InGame.MiniGames.MarketingCampaign {
     public class AdCampaign : MonoBehaviour {
         public int touristsNumber;
         public int piratesNumber;
