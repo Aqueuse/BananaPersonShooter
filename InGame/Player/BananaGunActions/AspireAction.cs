@@ -9,7 +9,7 @@ namespace InGame.Player.BananaGunActions {
 
     public class AspireAction : MonoBehaviour {
         [SerializeField] private LayerMask GestionViewSelectableLayerMask;
-        [SerializeField] private Camera mainCamera;
+        [SerializeField] private Camera bananaManCamera;
 
         public bool isAspiring;
 
@@ -24,7 +24,7 @@ namespace InGame.Player.BananaGunActions {
         private RaycastHit raycastHit;
         
         private void Update() {
-            if (Physics.Raycast(mainCamera.transform.position, mainCamera.transform.forward, out raycastHit, 100, layerMask: GestionViewSelectableLayerMask)) {
+            if (Physics.Raycast(bananaManCamera.transform.position, bananaManCamera.transform.forward, out raycastHit, 100, layerMask: GestionViewSelectableLayerMask)) {
                 if (raycastHit.transform.gameObject.GetComponent<Tag>().itemScriptableObject.isAspirable) {
                     targetedGameObject = raycastHit.transform.gameObject;
                 }
@@ -97,7 +97,7 @@ namespace InGame.Player.BananaGunActions {
             
             ObjectsReference.Instance.audioManager.PlayEffect(SoundEffectType.TAKE_SOMETHING, 0);
 
-            ObjectsReference.Instance.bottomSlots.RefreshSlotsQuantities();
+            ObjectsReference.Instance.bottomSlotsManager.RefreshSlotsQuantities();
         }
 
         public void CancelAspire() {

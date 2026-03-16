@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using Settings;
 using TMPro;
 using UnityEngine;
@@ -12,20 +11,16 @@ namespace UI {
         [SerializeField] private Slider effectsLevelSlider;
         [SerializeField] private Slider voicesLevelSlider;
 
-        [SerializeField] private Toggle fullScreenToggle;
+        [SerializeField] private TMP_Dropdown windowStyleDropdown;
         [SerializeField] private Toggle vsyncToggle;
 
         [SerializeField] private InputRebind[] inputRebinds;
         
-        [SerializeField] private GameObject resolutionButtonPrefab;
-        [SerializeField] private TMP_Dropdown resolutionsDropdown;
         public Slider languageSlider;
         [SerializeField] private TextMeshProUGUI languageText;
 
-        [SerializeField] private Slider lookSensibilitySlider;
-
-        [SerializeField] private Toggle horizontalCameraInversionToggle;
-        [SerializeField] private Toggle verticalCameraInversionToggle;
+        [SerializeField] private Slider horizontalLookSensibilitySlider;
+        [SerializeField] private Slider verticalLookSensibilitySlider;
         
         [SerializeField] private Slider saveDelaySlider;
         [SerializeField] private TextMeshProUGUI saveDelayText;
@@ -46,16 +41,13 @@ namespace UI {
             effectsLevelSlider.value = ObjectsReference.Instance.audioManager.effectsLevel*10;
             voicesLevelSlider.value = ObjectsReference.Instance.audioManager.voicesLevel;
 
-            fullScreenToggle.isOn = gameSettings.isFullscreen.Equals("True");
             vsyncToggle.isOn = gameSettings.isVsync.Equals("True");
             
-            ReflectResolutionSettingOnUI(gameSettings.resolution);
+            ReflectResolutionSettingOnUI(gameSettings.windowStyle);
 
-            lookSensibilitySlider.value = gameSettings.lookSensibility;
-
-            horizontalCameraInversionToggle.isOn = gameSettings.isCameraHorizontallyInverted;
-            verticalCameraInversionToggle.isOn = gameSettings.isCameraVerticallyInverted;
-    
+            horizontalLookSensibilitySlider.value = gameSettings.horizontalLookSensibility;
+            verticalLookSensibilitySlider.value = gameSettings.verticalLookSensibility;
+            
             ReflectLanguageSettingsOnUI(gameSettings.languageIndexSelected);
             
             ReflectSaveDelayOnUI(Mathf.Abs(gameSettings.saveDelayMinute/60));
@@ -72,26 +64,14 @@ namespace UI {
             languageText.text = _languagesValues[languageIndexInt];
         }
 
-        public void ReflectResolutionSettingOnUI(int gameResolution) {
-            var availableResolutions = ObjectsReference.Instance.gameSettings.resolutions;
-
-            List<TMP_Dropdown.OptionData> resolutionsOptions = new List<TMP_Dropdown.OptionData>();
-            
-            resolutionsDropdown.options.Clear();
-
-            foreach (var availableResolution in availableResolutions) {
-                resolutionsOptions.Add(new TMP_Dropdown.OptionData(availableResolution.ToString()));
-            }
-
-            resolutionsDropdown.AddOptions(resolutionsOptions);
-
-            resolutionsDropdown.SetValueWithoutNotify(gameResolution);
+        private void ReflectResolutionSettingOnUI(int windowStyleIndex) {
+            windowStyleDropdown.SetValueWithoutNotify(windowStyleIndex);
         }
 
         public void ReflectSaveDelayOnUI(int delay) {
             if (delay == 0) saveDelayText.text = LocalizationSettings.StringDatabase.GetLocalizedString("UI", "never");
             else {
-                saveDelayText.text = delay + "m";
+                saveDelayText.text = delay + "mn";
             }
 
             saveDelaySlider.value = delay;

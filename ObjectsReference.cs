@@ -1,6 +1,5 @@
 using Audio;
 using Cameras;
-using Cinemachine;
 using InGame;
 using InGame.CommandRoomPanelControls;
 using InGame.Dialogues;
@@ -51,7 +50,7 @@ public class ObjectsReference : MonoSingleton<ObjectsReference> {
     public BananaMan bananaMan;
     public PlayerController playerController;
     public BananaGun bananaGun;
-    public BottomSlots bottomSlots;
+    public BottomSlotsManager bottomSlotsManager;
     public BuildAction buildAction;
     public ShootAction shootAction;
     public AspireAction aspireAction;
@@ -60,7 +59,7 @@ public class ObjectsReference : MonoSingleton<ObjectsReference> {
     public Trade trade;
     public Interact interact;
     [Space]
-    public GameActions keyboardGameActions;
+    public GameActions gameActions;
     public UiActions keyboardUiActions;
     public BananaGunActionsSwitch bananaGunActionsSwitch;
     [Space]
@@ -82,9 +81,9 @@ public class ObjectsReference : MonoSingleton<ObjectsReference> {
     public GestionViewMode gestionViewMode;
     
     [Header("Cameras")]
-    public MainCamera mainCamera;
+    public CamerasManager camerasManager;
     public CameraPlayer cameraPlayer;
-    public CinemachineVirtualCamera uiInGameVirtualCamera;
+    public Camera uiInGameVirtualCamera;
     public CameraGestionDragRotate gestionDragCamera;
     public CameraGestionRelativeMove gestionRelativeMoveCamera;
     public FootStepSurfaceDetector footStepSurfaceDetector;

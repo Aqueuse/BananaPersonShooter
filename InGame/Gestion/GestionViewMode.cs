@@ -121,7 +121,7 @@ namespace InGame.Gestion {
                 ObjectsReference.Instance.bananaManRawMaterialInventory.RemoveQuantity(craftingIngredient.Key,
                     craftingIngredient.Value);
                     
-                ObjectsReference.Instance.bottomSlots.RefreshSlotsQuantities();
+                ObjectsReference.Instance.bottomSlotsManager.RefreshSlotsQuantities();
 
             }
             

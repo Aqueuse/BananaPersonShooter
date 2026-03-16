@@ -135,7 +135,7 @@ namespace Save {
                     case ItemCategory.BUILDABLE:
                         var buildableType = Enum.Parse<BuildableType>(rawItemString[1]);
                         
-                        ObjectsReference.Instance.bottomSlots.SetSlotByIndex(
+                        ObjectsReference.Instance.bottomSlotsManager.SetSlotByIndex(
                             ObjectsReference.Instance.meshReferenceScriptableObject.buildablePropertiesScriptableObjects[buildableType],
                             slotIndex
                         );
@@ -143,7 +143,7 @@ namespace Save {
                     case ItemCategory.BANANA:
                         var bananaType = Enum.Parse<BananaType>(rawItemString[2]);
                         
-                        ObjectsReference.Instance.bottomSlots.SetSlotByIndex(
+                        ObjectsReference.Instance.bottomSlotsManager.SetSlotByIndex(
                             ObjectsReference.Instance.meshReferenceScriptableObject.bananasPropertiesScriptableObjects[bananaType],
                             slotIndex
                         );
@@ -151,7 +151,7 @@ namespace Save {
                     case ItemCategory.RAW_MATERIAL:
                         var rawMaterialType = Enum.Parse<RawMaterialType>(rawItemString[3]);
                         
-                        ObjectsReference.Instance.bottomSlots.SetSlotByIndex(
+                        ObjectsReference.Instance.bottomSlotsManager.SetSlotByIndex(
                             ObjectsReference.Instance.meshReferenceScriptableObject.rawMaterialPropertiesScriptableObjects[rawMaterialType],
                             slotIndex
                         );
@@ -159,7 +159,7 @@ namespace Save {
                     case ItemCategory.INGREDIENT:
                         var ingredientsType = Enum.Parse<IngredientsType>(rawItemString[4]);
                         
-                        ObjectsReference.Instance.bottomSlots.SetSlotByIndex(
+                        ObjectsReference.Instance.bottomSlotsManager.SetSlotByIndex(
                             ObjectsReference.Instance.meshReferenceScriptableObject.ingredientsPropertiesScriptableObjects[ingredientsType],
                             slotIndex
                         );
@@ -167,7 +167,7 @@ namespace Save {
                     case ItemCategory.FOOD:
                         var foodType = Enum.Parse<FoodType>(rawItemString[5]);
                         
-                        ObjectsReference.Instance.bottomSlots.SetSlotByIndex(
+                        ObjectsReference.Instance.bottomSlotsManager.SetSlotByIndex(
                             ObjectsReference.Instance.meshReferenceScriptableObject.foodPropertiesScriptableObjects[foodType],
                             slotIndex
                         );
@@ -175,7 +175,7 @@ namespace Save {
                     case ItemCategory.MANUFACTURED_ITEM:
                         var manufacturedItemsType = Enum.Parse<ManufacturedItemsType>(rawItemString[6]);
                         
-                        ObjectsReference.Instance.bottomSlots.SetSlotByIndex(
+                        ObjectsReference.Instance.bottomSlotsManager.SetSlotByIndex(
                             ObjectsReference.Instance.meshReferenceScriptableObject.manufacturedItemsPropertiesScriptableObjects[manufacturedItemsType],
                             slotIndex
                         );
@@ -185,8 +185,8 @@ namespace Save {
         }
         
         private void LoadActiveSlotIndex() {
-            ObjectsReference.Instance.bottomSlots.activeSlotIndex = bananaManSavedData.activeSlotIndex;
-            ObjectsReference.Instance.bottomSlots.ActivateSlot(bananaManSavedData.activeSlotIndex);
+            ObjectsReference.Instance.bottomSlotsManager.activeSlotIndex = bananaManSavedData.activeSlotIndex;
+            ObjectsReference.Instance.bottomSlotsManager.ActivateSlot(bananaManSavedData.activeSlotIndex);
         }
         
         private void LoadBitkongQuantity() {
@@ -249,7 +249,7 @@ namespace Save {
             }
             
             SaveSlots();
-            bananaManSavedData.activeSlotIndex = ObjectsReference.Instance.bottomSlots.activeSlotIndex;
+            bananaManSavedData.activeSlotIndex = ObjectsReference.Instance.bottomSlotsManager.activeSlotIndex;
             
             bananaManSavedData.bitKongQuantity = bananaMan.bananaManData.bitKongQuantity;
 
@@ -262,7 +262,7 @@ namespace Save {
         private void SaveSlots() {
             bananaManSavedData.slots.Clear();
             
-            foreach (var bottomSlot in ObjectsReference.Instance.bottomSlots.uiBottomSlots) {
+            foreach (var bottomSlot in ObjectsReference.Instance.bottomSlotsManager.uiBottomSlots) {
                 if (bottomSlot.slotType is SlotType.DROP or SlotType.BUILD) {
                     bananaManSavedData.slots.Add(bottomSlot.GenerateSavedData());
                 }

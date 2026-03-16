@@ -46,7 +46,7 @@ namespace SharedInputs {
                 buildAction.RotateGhost(Vector3.down);
             }
             
-            if (ObjectsReference.Instance.bottomSlots.GetSelectedSlot().buildableType != BuildableType.BUMPER) return;
+            if (ObjectsReference.Instance.bottomSlotsManager.GetSelectedSlot().buildableType != BuildableType.BUMPER) return;
 
             if (contextValue.y < 0) {
                 buildAction.RotateGhost(Vector3.left);

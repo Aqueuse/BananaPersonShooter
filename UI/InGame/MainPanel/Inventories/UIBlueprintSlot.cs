@@ -7,7 +7,7 @@ namespace UI.InGame.MainPanel.Inventories {
         public BuildablePropertiesScriptableObject buildableScriptableObject;
 
         public void Activate() {
-            ObjectsReference.Instance.bottomSlots.SetSelectedSlot(buildableScriptableObject);
+            ObjectsReference.Instance.bottomSlotsManager.SetSelectedSlot(buildableScriptableObject);
         }
         
         public void SelectInventorySlot() {

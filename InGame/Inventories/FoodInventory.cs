@@ -18,7 +18,7 @@ namespace InGame.Inventories {
             
             foodInventory[foodType] += quantity;
             
-            ObjectsReference.Instance.bottomSlots.RefreshSlotsQuantities();
+            ObjectsReference.Instance.bottomSlotsManager.RefreshSlotsQuantities();
 
             return foodInventory[foodType];
         }
@@ -38,7 +38,7 @@ namespace InGame.Inventories {
                 foodInventory[foodType] = 0;
             }
 
-            ObjectsReference.Instance.bottomSlots.RefreshSlotsQuantities();
+            ObjectsReference.Instance.bottomSlotsManager.RefreshSlotsQuantities();
 
             return foodInventory[foodType];
         }

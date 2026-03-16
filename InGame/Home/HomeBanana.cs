@@ -1,11 +1,9 @@
-using Audio;
 using UnityEngine;
 
 namespace InGame.Home {
     public class HomeBanana : MonoBehaviour {
         [SerializeField] private GameObject bananaSkin;
         [SerializeField] private MeshRenderer bananaMeshRenderer;
-        [SerializeField] private PlayWithRandomPitch bananaSplash;
         
         [SerializeField] private LayerMask bananaSplashLayerMask;
 
@@ -18,9 +16,6 @@ namespace InGame.Home {
                 // trasnformation en peau de banane
                 bananaMeshRenderer.enabled = false;
                 bananaSkin.SetActive(true);
-                
-                Invoke(nameof(DestroyMe), 10);
-                return;
             }
             
             Invoke(nameof(DestroyMe), 10);

@@ -1,4 +1,3 @@
-using Cinemachine;
 using UnityEngine;
 using UnityEngine.Video;
 
@@ -10,17 +9,16 @@ namespace InGame {
         [SerializeField] private Material transparentVideoMaterial;
 
         [SerializeField] private GameObject skipCinematiqueGameObject;
+        [SerializeField] private Camera _cinematiqueCamera;
 
         private VideoPlayer _cinematiqueVideoPlayer;
         private MeshRenderer _meshRenderer;
-        private CinemachineVirtualCamera _cinematiqueCamera;
 
         private CinematiqueType cinematiqueType;
 
         private void Start() {
             _cinematiqueVideoPlayer = GetComponentInChildren<VideoPlayer>();
             _meshRenderer = GetComponentInChildren<MeshRenderer>();
-            _cinematiqueCamera = GetComponentInChildren<CinemachineVirtualCamera>();
 
             RenderTexture.active = _cinematiqueVideoPlayer.targetTexture;
             GL.Clear(true, true, Color.black);
@@ -40,7 +38,7 @@ namespace InGame {
             ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.CROSSHAIRS].alpha = 0f;
             ObjectsReference.Instance.gameManager.gameContext = GameContext.IN_CINEMATIQUE;
 
-            _cinematiqueCamera.Priority = 200;
+            _cinematiqueCamera.enabled = true;
             _meshRenderer.material = playedCinematiqueType == CinematiqueType.DEATH ? transparentVideoMaterial : videoMaterial;
 
             _cinematiqueVideoPlayer.clip = cinematiquesVideoClipsByType[playedCinematiqueType];
@@ -60,7 +58,7 @@ namespace InGame {
         }
 
         public void Skip() {
-            _cinematiqueCamera.Priority = 3;
+            _cinematiqueCamera.enabled = false;
 
             skipCinematiqueGameObject.SetActive(false);
 
@@ -73,7 +71,6 @@ namespace InGame {
             ObjectsReference.Instance.inputManager.SwitchContext(InputContext.GAME);
             ObjectsReference.Instance.gameManager.gameContext = GameContext.IN_GAME;
 
-            ObjectsReference.Instance.cameraPlayer.Return_back_To_Player();
             ObjectsReference.Instance.cameraPlayer.SetNormalSensibility();
 
             ObjectsReference.Instance.playerController.canMove = true;

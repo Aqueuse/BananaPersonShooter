@@ -1,5 +1,4 @@
-﻿using System;
-using InGame.Items.ItemsBehaviours.BuildablesBehaviours;
+﻿using InGame.Items.ItemsBehaviours.BuildablesBehaviours;
 using Tags;
 using UnityEngine;
 
@@ -48,9 +47,7 @@ namespace InGame.Player {
             _animator = GetComponent<Animator>();
             _capsuleCollider = GetComponent<CapsuleCollider>();
             _tpsPlayerAnimatorScript = gameObject.GetComponent<TpsPlayerAnimator>();
-
-            if (Camera.main != null) mainCameraTransform = Camera.main.transform;
-
+            
             _capsuleCollider.material.dynamicFriction = 1;
             _capsuleCollider.material.staticFriction = 1;
 
@@ -67,9 +64,9 @@ namespace InGame.Player {
             _cameraRotation.w = mainCameraTransform.rotation.w;
             _cameraRotation = _cameraRotation.normalized;
                 
-            _rawInputMovement.x = ObjectsReference.Instance.keyboardGameActions.move.x;
+            _rawInputMovement.x = ObjectsReference.Instance.gameActions.move.x;
             _rawInputMovement.y = 0;
-            _rawInputMovement.z = ObjectsReference.Instance.keyboardGameActions.move.y; // Y en input => Z pour le player (forward)
+            _rawInputMovement.z = ObjectsReference.Instance.gameActions.move.y; // Y en input => Z pour le player (forward)
                 
             _rawInputMovement = Vector3.ClampMagnitude(_rawInputMovement, 1); // clamp the speed in diagonal
             
@@ -115,8 +112,8 @@ namespace InGame.Player {
             }
             
             // cap max velocity
-            if (_rigidbody.velocity.magnitude > 21) {
-                _rigidbody.velocity = Vector3.ClampMagnitude(_rigidbody.velocity, 21);
+            if (_rigidbody.linearVelocity.magnitude > 21) {
+                _rigidbody.linearVelocity = Vector3.ClampMagnitude(_rigidbody.linearVelocity, 21);
             }
 
             // end jump
@@ -166,13 +163,13 @@ namespace InGame.Player {
             canMove = false;
             speed = 0;
             _tpsPlayerAnimatorScript.UpdateMovementAnimation(0, 0);
-            _rigidbody.velocity = Vector3.zero;
+            _rigidbody.linearVelocity = Vector3.zero;
         }
 
         public void ResetPlayer() {
             speed = BaseMovementSpeed;
             _tpsPlayerAnimatorScript.UpdateMovementAnimation(0, 0);
-            _rigidbody.velocity = Vector3.zero;
+            _rigidbody.linearVelocity = Vector3.zero;
         }
 
         private bool IsOnSlope() {

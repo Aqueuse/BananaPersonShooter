@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using InGame.Items.ItemsBehaviours;
 using InGame.Items.ItemsProperties.Monkeys;
 using InGame.Monkeys.Ancestors;
 using InGame.Monkeys.Chimpvisitors;
@@ -18,9 +17,5 @@ namespace InGame.Items.ItemsData {
         public int stationLightSetting;
         public int lastVisitorGroup;
         public int lastMerchimpGroup;
-        
-        public int GetDroppedQuantityInWorld() {
-            return FindObjectsByType<SpaceshipDebrisBehaviour>(FindObjectsSortMode.None).Length;
-        }
     }
 }

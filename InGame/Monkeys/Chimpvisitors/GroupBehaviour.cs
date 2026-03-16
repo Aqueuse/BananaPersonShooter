@@ -24,12 +24,7 @@ namespace InGame.Monkeys.Chimpvisitors {
         private Vector3 hangarsCenter;
         
         private void Start() {
-            // search if at least a map is open
-            // if only one map is open, pick it
-            // if at least two maps are open, pick them randomly
-            
             GoToCorolleCenter();
-            
         }
 
         private void Update() {

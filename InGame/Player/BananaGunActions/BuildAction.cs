@@ -12,7 +12,7 @@ namespace InGame.Player.BananaGunActions {
         private Regime regimeClass;
 
         [SerializeField] private LayerMask buildingLayerMask;
-        [SerializeField] private Camera mainCamera;
+        [SerializeField] private Camera bananaManCamera;
         
         [SerializeField] private GhostsReference ghostsReference;
 
@@ -35,19 +35,19 @@ namespace InGame.Player.BananaGunActions {
         }
 
         private void Update() {
-            ray = mainCamera.ScreenPointToRay(Mouse.current.position.value);
+            ray = bananaManCamera.ScreenPointToRay(Mouse.current.position.value);
 
             _activeGhost.transform.position = ObjectsReference.Instance.buildAction.buildablePlacementTransform.position;
 
-            var distance = Vector3.Distance(mainCamera.transform.position, _activeGhost.transform.position);
+            var distance = Vector3.Distance(bananaManCamera.transform.position, _activeGhost.transform.position);
                 
             if (Physics.Raycast(ray, out raycastHit, distance, layerMask:buildingLayerMask)) {
                 _activeGhost.transform.position = raycastHit.point;
             }
         }
 
-        public void SetActiveBuildable(BuildableType buildableType) {
-            this.buildableType = buildableType;
+        public void SetActiveBuildable(BuildableType activeBuildableType) {
+            buildableType = activeBuildableType;
             ActivateGhost();
         }
 

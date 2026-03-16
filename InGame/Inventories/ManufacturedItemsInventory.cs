@@ -19,7 +19,7 @@ namespace InGame.Inventories {
 
             manufacturedItemsInventory[manufacturedItemsType] += quantity;
             
-            ObjectsReference.Instance.bottomSlots.RefreshSlotsQuantities();
+            ObjectsReference.Instance.bottomSlotsManager.RefreshSlotsQuantities();
 
             return manufacturedItemsInventory[manufacturedItemsType];
         }
@@ -35,7 +35,7 @@ namespace InGame.Inventories {
                 manufacturedItemsInventory[manufacturedItemsType] = 0;
             }
             
-            ObjectsReference.Instance.bottomSlots.RefreshSlotsQuantities();
+            ObjectsReference.Instance.bottomSlotsManager.RefreshSlotsQuantities();
 
             return manufacturedItemsInventory[manufacturedItemsType];
         }

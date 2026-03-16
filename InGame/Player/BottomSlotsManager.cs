@@ -3,7 +3,7 @@ using UI.InGame.BottomSlotsPanel;
 using UnityEngine;
 
 namespace InGame.Player {
-    public class BottomSlots : MonoBehaviour {
+    public class BottomSlotsManager : MonoBehaviour {
         [SerializeField] private Color activeSlotColor;
         [SerializeField] private Color unactiveSlotColor;
         
@@ -66,6 +66,10 @@ namespace InGame.Player {
 
         public void SetSlotByIndex(ItemScriptableObject itemScriptableObject, int index) {
             uiBottomSlots[index].SetSlot(itemScriptableObject);
+        }
+
+        public bool IsActiveSlotUnassigned() {
+            return activeSlot.itemScriptableObject == null;
         }
         
         public void RefreshSlotsQuantities() {

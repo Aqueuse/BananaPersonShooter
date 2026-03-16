@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Save.Templates;
 using UnityEngine;
 using UnityEngine.AI;
@@ -24,6 +25,9 @@ namespace Save {
             
             ResetMonkeysSasiety();
             ResetMonkeysPositions();
+
+            ResetCanonsBananaGoopQuantities();
+            ResetCanonsRotations();
         }
 
         private static void ResetInventories() {
@@ -45,12 +49,12 @@ namespace Save {
         }
 
         private static void ResetSlots() {
-            foreach (var bottomSlot in ObjectsReference.Instance.bottomSlots.uiBottomSlots) {
+            foreach (var bottomSlot in ObjectsReference.Instance.bottomSlotsManager.uiBottomSlots) {
                 bottomSlot.ResetSlot();
             }
             
-            ObjectsReference.Instance.bottomSlots.ActivateSlot(0);
-            ObjectsReference.Instance.bottomSlots.activeSlotIndex = 0;
+            ObjectsReference.Instance.bottomSlotsManager.ActivateSlot(0);
+            ObjectsReference.Instance.bottomSlotsManager.activeSlotIndex = 0;
         }
 
         private static void ResetDiscoveredMaterials() {
@@ -68,6 +72,21 @@ namespace Save {
             foreach (var monkey in ObjectsReference.Instance.worldData.monkeys) {
                 monkey.monkeyPropertiesScriptableObject.lastPosition = monkey.monkeyPropertiesScriptableObject.initialPosition;
                 monkey.GetComponent<NavMeshAgent>().Warp(monkey.monkeyPropertiesScriptableObject.initialPosition);
+            }
+        }
+
+        private static void ResetCanonsBananaGoopQuantities() {
+            ObjectsReference.Instance.cannonsManager.bananaGoopInventory.bananaGoopInventory = new Dictionary<BananaEffect, int> { 
+                { BananaEffect.ATTRACTION, 0 },
+                { BananaEffect.REPULSION, 0 },
+                { BananaEffect.SLOW, 0 },
+                { BananaEffect.FAST, 0 }
+            };
+        }
+
+        private static void ResetCanonsRotations() {
+            foreach (var cannon in ObjectsReference.Instance.cannonsManager.cannonsByRegionType) {
+                cannon.Value.ResetRotation();
             }
         }
     }

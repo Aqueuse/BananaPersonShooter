@@ -84,7 +84,7 @@ namespace InGame {
         }
 
         public GameObject GetActiveDroppablePrefab() {
-            activeItem = ObjectsReference.Instance.bottomSlots.GetSelectedSlot(); 
+            activeItem = ObjectsReference.Instance.bottomSlotsManager.GetSelectedSlot(); 
             
             switch (activeItem.droppedType) {
                 case DroppedType.BANANA:

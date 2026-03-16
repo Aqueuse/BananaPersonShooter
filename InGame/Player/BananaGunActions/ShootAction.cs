@@ -31,7 +31,7 @@ namespace InGame.Player.BananaGunActions {
 
             ObjectsReference.Instance.audioManager.PlayEffect(SoundEffectType.THROW_BANANA, 0);
             
-            ObjectsReference.Instance.bottomSlots.RefreshSlotsQuantities();
+            ObjectsReference.Instance.bottomSlotsManager.RefreshSlotsQuantities();
         }
         
     }

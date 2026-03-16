@@ -4,6 +4,7 @@ using UnityEngine.InputSystem;
 
 namespace SharedInputs {
     public class GameActions : InputActions {
+        public Vector2 look;
         public Vector2 move;
         public Vector2 scrollSlotsValue;
 
@@ -16,6 +17,8 @@ namespace SharedInputs {
         private float rightRotateIncrementer;
         private float topRotateIncrementer;
         private float downRotateIncrementer;
+        
+        public InputActionReference lookActionReference;
         
         public InputActionReference moveActionReference;
         public InputActionReference jumpActionReference;
@@ -50,7 +53,11 @@ namespace SharedInputs {
             ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.CROSSHAIRS].alpha = 1;
             
             ObjectsReference.Instance.bananaGunActionsSwitch.gameObject.SetActive(true);
-
+            
+            lookActionReference.action.Enable();
+            lookActionReference.action.performed += Look;
+            lookActionReference.action.canceled += Look;
+            
             moveActionReference.action.Enable();
             moveActionReference.action.performed += Move;
             moveActionReference.action.canceled += Move;
@@ -85,6 +92,10 @@ namespace SharedInputs {
         }
 
         private void OnDisable() {
+            lookActionReference.action.Disable();
+            lookActionReference.action.performed -= Look;
+            lookActionReference.action.canceled -= Look;
+
             jumpActionReference.action.Disable();
             jumpActionReference.action.performed -= Jump;
 
@@ -117,6 +128,11 @@ namespace SharedInputs {
             pauseGameActionReference.action.performed -= PauseGame;
         }
 
+        private void Look(InputAction.CallbackContext context) {
+            look.y = context.ReadValue<Vector2>().x;
+            look.x = context.ReadValue<Vector2>().y;
+        }
+        
         private void Move(InputAction.CallbackContext context) {
             if (!_playerController.canMove) move = Vector2.zero;
 
@@ -157,11 +173,11 @@ namespace SharedInputs {
 
         private void ScrollSlots(InputAction.CallbackContext context) {
             if (context.ReadValue<Vector2>().y < 0) {
-                ObjectsReference.Instance.bottomSlots.SwitchToLeftSlot();
+                ObjectsReference.Instance.bottomSlotsManager.SwitchToLeftSlot();
             }
 
             if (context.ReadValue<Vector2>().y > 0) {
-                ObjectsReference.Instance.bottomSlots.SwitchToRightSlot();
+                ObjectsReference.Instance.bottomSlotsManager.SwitchToRightSlot();
             }
         }
         

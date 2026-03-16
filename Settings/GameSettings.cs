@@ -1,5 +1,4 @@
 using System.Collections;
-using Cinemachine;
 using UI;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -9,24 +8,20 @@ using UnityEngine.Rendering;
 namespace Settings {
     public class GameSettings : MonoBehaviour {
         public InputActionAsset inputActionAsset;
-        [SerializeField] private CinemachineFreeLook playerCamera;
 
         public string isFullscreen;
-        public int resolution;
         public string isVsync;
 
         public int languageIndexSelected;
-        public float lookSensibility;
+        public float horizontalLookSensibility = 2.7f;
+        public float verticalLookSensibility = 1.9f;
 
-        public bool isCameraVerticallyInverted;
-        public bool isCameraHorizontallyInverted;
-
+        public int windowStyle;
+        
         public int saveDelayMinute;
         public JsonPlayerPrefs prefs;
         private UISettings uiSettings;
-        private FullScreenMode _fullScreenMode;
-        public Resolution[] resolutions;
-
+        
         private delegate void OnSettingsLoadedCompleted();
         private event OnSettingsLoadedCompleted onSettingsLoadedCompleted;
         
@@ -35,8 +30,6 @@ namespace Settings {
             onSettingsLoadedCompleted += uiSettings.ReflectAllSettingsOnUI;
             
             Application.targetFrameRate = 60; // fix the framerate to prevent crash on some GPU
-
-            resolutions = Screen.resolutions;
             
             // 1 = match monitor refresh rate. 0 = Don't use vsync: use targetFrameRate instead.
             QualitySettings.vSyncCount = 0;
@@ -55,20 +48,15 @@ namespace Settings {
             ObjectsReference.Instance.audioManager.effectsLevel = prefs.GetFloat("effectsLevel", 0.5f);
             ObjectsReference.Instance.audioManager.ambianceLevel = prefs.GetFloat("ambianceLevel", 0.5f);
             
-            isFullscreen = prefs.GetString("isFullscreen", "False");
+            windowStyle = prefs.GetInt("windowStyle", 1);
             isVsync = prefs.GetString("isVSync", "True");
-            resolution = prefs.GetInt("resolution");
-            
-            if (resolution > Screen.resolutions.Length) resolution = 0;
             
             if (prefs.HasKey("inputBindings")) {
                 inputActionAsset.LoadBindingOverridesFromJson(prefs.GetString("inputBindings"));
             }
             
-            lookSensibility = prefs.GetFloat("LookSensibility", 0.6f);
-            
-            isCameraVerticallyInverted = prefs.GetString("isCameraVerticalAxisInverted", "False").Equals("True");
-            isCameraHorizontallyInverted = prefs.GetString("isCameraHorizontalAxisInverted", "False").Equals("True");
+            horizontalLookSensibility = prefs.GetFloat("HorizontalLookSensibility", 2.7f);
+            verticalLookSensibility = prefs.GetFloat("VerticalLookSensibility", 1.9f);
             
             saveDelayMinute = prefs.GetInt("saveDelay", 300);
             
@@ -79,21 +67,8 @@ namespace Settings {
             ObjectsReference.Instance.audioManager.SetVolume(AudioSourcesType.AMBIANCE, ObjectsReference.Instance.audioManager.ambianceLevel);
             ObjectsReference.Instance.audioManager.SetVolume(AudioSourcesType.EFFECT, ObjectsReference.Instance.audioManager.effectsLevel);
             
-            playerCamera.m_YAxis.m_InvertInput = !isCameraVerticallyInverted; // Cinemachine is naturally inverted
-            playerCamera.m_XAxis.m_InvertInput = isCameraHorizontallyInverted; // Cinemachine is naturally inverted
-            
-            playerCamera.m_YAxis.m_MaxSpeed = lookSensibility;
-            playerCamera.m_XAxis.m_MaxSpeed = lookSensibility * 400;
-            
-            Screen.fullScreenMode = isFullscreen.Equals("True") ? FullScreenMode.ExclusiveFullScreen : FullScreenMode.Windowed;
-            _fullScreenMode = Screen.fullScreenMode;
+            Screen.fullScreenMode = windowStyle == 0 ? FullScreenMode.Windowed : FullScreenMode.FullScreenWindow;
             QualitySettings.vSyncCount = isVsync.Equals("True") ? 1 : 0;
-            
-            Screen.SetResolution(
-                resolutions[resolution].width,
-                resolutions[resolution].height,
-                _fullScreenMode,
-                Screen.currentResolution.refreshRate);
             
             var languageIndexInt = prefs.GetInt("language");
             languageIndexSelected = languageIndexInt;
@@ -203,13 +178,23 @@ namespace Settings {
             prefs.Save();
         }
         
-        public void ToggleFullscreen(bool isGameFullscreen) {
+        public void SetWindowStyle(int windowStyleIndex) {
             if (ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.OPTIONS].alpha < 1) return;
 
-            Screen.fullScreenMode = isGameFullscreen ? FullScreenMode.ExclusiveFullScreen : FullScreenMode.Windowed;
-            _fullScreenMode = Screen.fullScreenMode;
-        
-            prefs.SetString("isFullscreen", isGameFullscreen ? "True" : "False");
+            windowStyle = windowStyleIndex;
+            
+            switch (windowStyle) {
+                case 0:
+                    Screen.fullScreenMode = FullScreenMode.Windowed;
+                    Screen.fullScreen = false;
+                    break;
+                case 1:
+                    Screen.fullScreenMode = FullScreenMode.FullScreenWindow;
+                    Screen.fullScreen = true;
+                    break;
+            }
+            
+            prefs.SetInt("windowStyle", windowStyle);
             prefs.Save();
         }
         
@@ -223,36 +208,6 @@ namespace Settings {
             prefs.Save();
         }
         
-        public void SetResolution(int gameResolution) {
-            if (ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.OPTIONS].alpha < 1) return;
-            
-            Screen.SetResolution(
-                resolutions[gameResolution].width,
-                resolutions[gameResolution].height,
-                _fullScreenMode,
-                Screen.currentResolution.refreshRate);
-            
-            prefs.SetInt("resolution", gameResolution);
-            
-            prefs.Save();
-            
-            uiSettings.ReflectResolutionSettingOnUI(gameResolution);
-        }
-        
-        public void SetLowerResolution() {
-            if (ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.OPTIONS].alpha < 1) return;
-
-            if (resolution > 0) resolution--;
-            SetResolution(resolution);
-        }
-        
-        public void SetHigherResolution() {
-            if (ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.OPTIONS].alpha < 1) return;
-
-            if (resolution < LocalizationSettings.AvailableLocales.Locales.Count-1) resolution++;
-            SetResolution(resolution);
-        }
-
         public void SetKeysBinding() {
             if (ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.OPTIONS].alpha < 1) return;
             
@@ -260,34 +215,24 @@ namespace Settings {
             prefs.Save();
         }
         
-        public void SetLookSensibility(float sensibility) {
+        public void SetHorizontalLookSensibility(float sensibility) {
             if (ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.OPTIONS].alpha < 1) return;
 
-            playerCamera.m_YAxis.m_MaxSpeed = sensibility;
-            playerCamera.m_XAxis.m_MaxSpeed = sensibility * 400;
-
-            lookSensibility = sensibility;
-            prefs.SetFloat("LookSensibility", lookSensibility);
-        }
-        
-        public void InverseCameraVerticalAxis(bool isCameraInverted) {
-            if (ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.OPTIONS].alpha < 1) return;
-
-            playerCamera.m_YAxis.m_InvertInput = !isCameraInverted; // Cinemachine is naturally inverted
-            prefs.SetString("isCameraVerticalAxisInverted", isCameraInverted.ToString());
-        
+            horizontalLookSensibility = sensibility;
+            
+            prefs.SetFloat("HorizontalLookSensibility", horizontalLookSensibility);
             prefs.Save();
         }
-        
-        public void InverseCameraHorizontalAxis(bool isCameraInverted) {
+
+        public void SetVerticalLookSensibility(float sensibility) {
             if (ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.OPTIONS].alpha < 1) return;
 
-            playerCamera.m_XAxis.m_InvertInput = isCameraInverted; // Cinemachine is naturally inverted
-            prefs.SetString("isCameraHorizontalAxisInverted", isCameraInverted.ToString());
-        
+            verticalLookSensibility = sensibility;
+            
+            prefs.SetFloat("VerticalLookSensibility", verticalLookSensibility);
             prefs.Save();
         }
-        
+
         public void SetSaveDelay(float delay) {
             if (ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.OPTIONS].alpha < 1) return;
 
@@ -325,10 +270,6 @@ namespace Settings {
         
             if (languageIndexSelected < Screen.resolutions.Length-1) languageIndexSelected++;
             Setlanguage(languageIndexSelected);
-        }
-
-        public Resolution GetCurrentResolution() {
-            return resolutions[resolution];
         }
     }
 }

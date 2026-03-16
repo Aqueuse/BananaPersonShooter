@@ -8,23 +8,35 @@ namespace Save.Templates {
         public int stationLightSetting;
         public int lastVisitorGroup;
         
-        public Dictionary<string, int> bananaCannonInventory = new Dictionary<string, int>() {
-            { BananaType.BARANGAN.ToString(), 0 },
-            { BananaType.BLUE_JAVA.ToString(), 0 },
-            { BananaType.BURRO.ToString(), 0 },
-            { BananaType.CAVENDISH.ToString(), 0 },
-            { BananaType.GOLD_FINGER.ToString(), 0 },
-            { BananaType.GROS_MICHEL.ToString(), 0 },
-            { BananaType.LADY_FINGER.ToString(), 0 },
-            { BananaType.MATOKE.ToString(), 0 },
-            { BananaType.MUSA_VELUTINA.ToString(), 0 },
-            { BananaType.NANJANGUD.ToString(), 0 },
-            { BananaType.PISANG_RAJA.ToString(), 0 },
-            { BananaType.PLANTAIN.ToString(), 0 },
-            { BananaType.PRAYING_HANDS.ToString(), 0 },
-            { BananaType.RED.ToString(), 0 },
-            { BananaType.RINO_HORN.ToString(), 0 },
-            { BananaType.TINDOK.ToString(), 0 }
+        public Dictionary<string, int> bananaGoopCannonInventory = new Dictionary<string, int>() {
+            { BananaEffect.ATTRACTION .ToString(), 0 },
+            { BananaEffect.REPULSION.ToString(), 0 },
+            { BananaEffect.SLOW.ToString(), 0 },
+            { BananaEffect.FAST.ToString(), 0 }
+        };
+
+        public RegionType activeCannonRegion;
+
+        public Dictionary<string, float> cannonsSocleYRotation = new Dictionary<string, float>() {
+            { RegionType.MAP01.ToString(), 0 },
+            { RegionType.MAP02.ToString(), 0 },
+            { RegionType.MAP03.ToString(), 0 },
+            { RegionType.MAP04.ToString(), 0 },
+            { RegionType.MAP05.ToString(), 0 },
+            { RegionType.MAP06.ToString(), 0 },
+            { RegionType.MAP07.ToString(), 0 },
+            { RegionType.MAP08.ToString(), 0 }
+        };
+        
+        public Dictionary<string, float> cannonsXRotation = new Dictionary<string, float>() {
+            { RegionType.MAP01.ToString(), 0 },
+            { RegionType.MAP02.ToString(), 0 },
+            { RegionType.MAP03.ToString(), 0 },
+            { RegionType.MAP04.ToString(), 0 },
+            { RegionType.MAP05.ToString(), 0 },
+            { RegionType.MAP06.ToString(), 0 },
+            { RegionType.MAP07.ToString(), 0 },
+            { RegionType.MAP08.ToString(), 0 }
         };
     }
 }

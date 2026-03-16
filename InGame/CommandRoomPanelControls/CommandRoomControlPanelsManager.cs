@@ -22,12 +22,14 @@ namespace InGame.CommandRoomPanelControls {
                 ObjectsReference.Instance.uiManager.SetActive(UICanvasGroupType.HUD_GESTION, false);
             }
 
-            ObjectsReference.Instance.uiInGameVirtualCamera.Follow = cameraTransformByPanelType[commandRoomPanelType].transform;
-            ObjectsReference.Instance.uiInGameVirtualCamera.LookAt = cameraFocusByPanelType[commandRoomPanelType].transform;
-            ObjectsReference.Instance.uiInGameVirtualCamera.Priority = 200;
-
             ObjectsReference.Instance.cameraPlayer.Set0Sensibility();
+            ObjectsReference.Instance.cameraPlayer.DeactivateCamera();
             ObjectsReference.Instance.playerController.canMove = false;
+
+            ObjectsReference.Instance.uiInGameVirtualCamera.transform.position = cameraTransformByPanelType[commandRoomPanelType].transform.position;
+            ObjectsReference.Instance.uiInGameVirtualCamera.transform.rotation = cameraFocusByPanelType[commandRoomPanelType].transform.rotation;
+            ObjectsReference.Instance.uiInGameVirtualCamera.enabled = true;
+
             
             ObjectsReference.Instance.bananaGunActionsSwitch.gameObject.SetActive(false);
             
@@ -53,9 +55,13 @@ namespace InGame.CommandRoomPanelControls {
         }
         
         public void UnfocusPanel(bool isOnUI) {
-            ObjectsReference.Instance.uiInGameVirtualCamera.Priority = 0;
+            ObjectsReference.Instance.uiInGameVirtualCamera.enabled = false;
+            ObjectsReference.Instance.cameraPlayer.ActivateCamera();
+            Cursor.visible = false;
+            Cursor.lockState = CursorLockMode.Locked;
 
-            ObjectsReference.Instance.uiManager.SetActive(UICanvasGroupType.HUD_BANANAMAN, true);
+            if (ObjectsReference.Instance.bananaGun.bananaGunGameObject.activeInHierarchy)
+                ObjectsReference.Instance.uiManager.SetActive(UICanvasGroupType.HUD_BANANAMAN, true);
 
             if (!isOnUI) {
                 ObjectsReference.Instance.gameManager.gameContext = GameContext.IN_GAME;

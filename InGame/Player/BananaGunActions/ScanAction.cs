@@ -12,14 +12,14 @@ namespace InGame.Player.BananaGunActions {
         private Mesh _targetedGameObjectMesh;
         private BananaType _targetType;
 
-        [SerializeField] private Camera mainCamera;
+        [SerializeField] private Camera bananaManCamera;
         
         private Tag gameObjectTagClass;
         
         private RaycastHit raycastHit;
 
         private void Update() {
-            if (Physics.Raycast(mainCamera.transform.position, mainCamera.transform.forward, out raycastHit, 2000, layerMask: GestionViewSelectableLayerMask)) {
+            if (Physics.Raycast(bananaManCamera.transform.position, bananaManCamera.transform.forward, out raycastHit, 2000, layerMask: GestionViewSelectableLayerMask)) {
                 targetedGameObject = raycastHit.transform.gameObject;
 
                 var targetedGameObjectTag = targetedGameObject.GetComponent<Tag>().gameObjectTag;

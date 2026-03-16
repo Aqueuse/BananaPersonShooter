@@ -1,13 +1,10 @@
 ﻿using System.Collections.Generic;
-using Cinemachine;
+using Cameras;
 using UnityEngine;
 
 namespace InGame {
     public class GameManager : MonoBehaviour {
         [SerializeField] private Color penumbraAmbientLightColor;
-        
-        [SerializeField] public Camera cameraMain;
-        [SerializeField] private CinemachineFreeLook playerCamera;
 
         public GameObject loadingScreen;
         
@@ -40,9 +37,6 @@ namespace InGame {
             Cursor.visible = false;
             Cursor.lockState = CursorLockMode.Locked;
             loadingScreen.SetActive(true);
-
-            cameraMain.clearFlags = CameraClearFlags.Skybox;
-            playerCamera.Priority = 10;
             
             ObjectsReference.Instance.uiManager.HideHomeMenu();
 
@@ -103,7 +97,7 @@ namespace InGame {
 
             // prevent banana man to fall while loading scene
             ObjectsReference.Instance.playerController.StopPlayer();
-            
+
             SwitchToHomeSettings();
 
             loadingScreen.SetActive(false);
@@ -140,6 +134,8 @@ namespace InGame {
 
             ObjectsReference.Instance.inputManager.SwitchContext(InputContext.HOME);
             ObjectsReference.Instance.keyboardUiActions.enabled = true;
+            
+            ObjectsReference.Instance.camerasManager.Switch_To_Camera_View(CameraModeType.HOME_VIEW);
         }
 
         private void SwitchToNewGameSettings() {
@@ -182,6 +178,8 @@ namespace InGame {
             bananaGun.SetActive(true);
             
             SwitchToNightLightSetting();
+            
+            ObjectsReference.Instance.camerasManager.Switch_To_Camera_View(CameraModeType.PLAYER_VIEW);
         }
         
         private void SwitchToInGameSettings() {
@@ -200,14 +198,14 @@ namespace InGame {
 
             ObjectsReference.Instance.uiManager.HideGameMenu();
             ObjectsReference.Instance.uiManager.HideHomeMenu();
-
-            ObjectsReference.Instance.cameraPlayer.Return_back_To_Player();
-
+            
             ObjectsReference.Instance.audioManager.SetMusiqueAndAmbianceByRegion(RegionType.COROLLE);
             
             ObjectsReference.Instance.bananaGun.GrabBananaGun();
             
             ObjectsReference.Instance.uiGestionPanel.SwitchLight(ObjectsReference.Instance.worldData.stationLightSetting == 1 ? 1 : 0);
+
+            ObjectsReference.Instance.camerasManager.Switch_To_Camera_View(CameraModeType.PLAYER_VIEW);
 
             loadingScreen.SetActive(false);
         }

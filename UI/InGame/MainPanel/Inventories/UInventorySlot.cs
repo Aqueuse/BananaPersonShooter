@@ -12,7 +12,7 @@ namespace UI.InGame.MainPanel.Inventories {
         public void Activate() {
             if (ObjectsReference.Instance.gameManager.gameContext == GameContext.IN_GESTION_VIEW) return;
             
-            ObjectsReference.Instance.bottomSlots.SetSelectedSlot(itemScriptableObject);
+            ObjectsReference.Instance.bottomSlotsManager.SetSelectedSlot(itemScriptableObject);
         }
         
         public void SetDescriptionAndName() {

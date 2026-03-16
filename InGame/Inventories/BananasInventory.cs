@@ -33,8 +33,6 @@ namespace InGame.Inventories {
             
             bananasInventory[bananaType] += quantity;
             
-            ObjectsReference.Instance.bottomSlots.RefreshSlotsQuantities();
-
             return bananasInventory[bananaType];
         }
 
@@ -53,7 +51,7 @@ namespace InGame.Inventories {
                 bananasInventory[bananaType] = 0;
             }
             
-            ObjectsReference.Instance.bottomSlots.RefreshSlotsQuantities();
+            ObjectsReference.Instance.bottomSlotsManager.RefreshSlotsQuantities();
 
             return bananasInventory[bananaType];
         }

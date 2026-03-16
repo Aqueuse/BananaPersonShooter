@@ -12,7 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ba85d6524e282641b17d10c0c8e8bf7, type: 3}
   m_Name: GorillaMonkeyProperties
   m_EditorClassIdentifier: 
-  gameObjectTag: 14
   itemCategory: 8
   bananaType: 0
   droppedType: 0
@@ -20,10 +19,14 @@ MonoBehaviour:
   manufacturedItemsType: 0
   rawMaterialType: 0
   buildableType: 0
+  foodType: 0
+  isAspirable: 0
+  prefab: {fileID: 0}
   itemName:
   - gorilla
   - gorille
   - gorila
+  spriteAtlasIndex: 0
   itemSprite: {fileID: 21300000, guid: 75af67bf906e07b42b81bd2fd8624a11, type: 3}
   itemDescription:
   - "Kelsa\xEFk, king of the jungle"
@@ -34,5 +37,5 @@ MonoBehaviour:
   monkeyId: gorilla
   happiness: 0
   sasietyTimer: 120
-  lastPosition: {x: -2043.09, y: 125.51, z: -4427}
-  initialPosition: {x: -2043.09, y: 125.51, z: -4427}
+  lastPosition: {x: -1568.5701, y: 111.879, z: -2857.5498}
+  initialPosition: {x: -1568.5701, y: 111.879, z: -2857.5498}

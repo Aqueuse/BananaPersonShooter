@@ -14,13 +14,13 @@ namespace InGame.Player {
         public ItemScriptableObject activeItemScriptableObject;
         
         public int GetActiveSlotItemQuantity() {
-            activeItemScriptableObject = ObjectsReference.Instance.bottomSlots.GetSelectedSlot(); 
+            activeItemScriptableObject = ObjectsReference.Instance.bottomSlotsManager.GetSelectedSlot(); 
             
             return inventoriesByDroppedType[activeItemScriptableObject.droppedType].GetQuantity(activeItemScriptableObject);
         }
 
         public void RemoveActiveSlotItemQuantity(int quantity) {
-            activeItemScriptableObject = ObjectsReference.Instance.bottomSlots.GetSelectedSlot(); 
+            activeItemScriptableObject = ObjectsReference.Instance.bottomSlotsManager.GetSelectedSlot(); 
 
             inventoriesByDroppedType[activeItemScriptableObject.droppedType].RemoveQuantity(activeItemScriptableObject, quantity);
         }

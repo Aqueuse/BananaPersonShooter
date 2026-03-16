@@ -46,9 +46,9 @@ namespace SharedInputs {
 
         private void Update() {
             ObjectsReference.Instance.cannonsManager.activeCannon.Rotate(
-                rotateCannonActionReference.action.ReadValue<Vector2>().x,
-                rotateCannonActionReference.action.ReadValue<Vector2>().y
-            );
+                rotateCannonActionReference.action.ReadValue<Vector2>().x * ObjectsReference.Instance.gameSettings.horizontalLookSensibility / 5,
+                rotateCannonActionReference.action.ReadValue<Vector2>().y * ObjectsReference.Instance.gameSettings.verticalLookSensibility / 5
+            ); 
         }
 
         private void SwitchToCannonLeft(InputAction.CallbackContext context) {

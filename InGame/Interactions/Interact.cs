@@ -3,7 +3,7 @@ using UI.InGame.Interactions;
 using UnityEngine;
 
 namespace InGame.Interactions {
-    /// interaction manager instance is located in the main camera
+    /// interaction manager instance is located in the banana man camera
     
     public class Interact : MonoBehaviour {
         [SerializeField] private LayerMask interactLayerMask;

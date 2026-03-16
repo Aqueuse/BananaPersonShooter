@@ -20,6 +20,8 @@ namespace InGame.Items.ItemsBehaviours {
         
         public Transform visitorsSpawnPoint;
         public Transform merchimpSpawnPoint;
+
+        [SerializeField] private GameObject distantDot;
         
         [HideInInspector] public SpaceshipSavedData spaceshipSavedData;
 
@@ -185,6 +187,8 @@ namespace InGame.Items.ItemsBehaviours {
         }
 
         private void MoveOnElevatorToHangar() {
+            distantDot.SetActive(false); // TODO : remove when the overlay on the cannon camera is done 
+            
             ConvertToSolidSpaceship();
 
             transform.DOPath(
@@ -208,6 +212,8 @@ namespace InGame.Items.ItemsBehaviours {
             
             spaceshipData.travelState = TravelState.LEAVES_THE_REGION;
             spaceshipData.arrivalPosition.y = -10f;
+            
+            distantDot.SetActive(true);  // TODO : remove when the overlay on the cannon camera is done
         }
 
         private void LeaveRegion() {

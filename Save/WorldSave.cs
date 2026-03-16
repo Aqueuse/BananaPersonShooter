@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using InGame.Items.ItemsData;
 using Newtonsoft.Json;
@@ -35,8 +36,22 @@ namespace Save {
                     }
                 }
             }
+            
+            foreach (var bananaGoop in savedWorldData.bananaGoopCannonInventory) {
+                ObjectsReference.Instance.cannonsManager.bananaGoopInventory.bananaGoopInventory[Enum.Parse<BananaEffect>(bananaGoop.Key)] = bananaGoop.Value;
+            }
+            
+            foreach (var cannon in ObjectsReference.Instance.cannonsManager.cannonsByRegionType) {
+                cannon.Value.SetRotation(
+                    savedWorldData.cannonsSocleYRotation[cannon.Key.ToString()],
+                    savedWorldData.cannonsXRotation[cannon.Key.ToString()]
+                );
+            }
 
             ObjectsReference.Instance.worldData.stationLightSetting = savedWorldData.stationLightSetting;
+            
+            ObjectsReference.Instance.uiCannons.RefreshBananaGoopsQuantity();
+            ObjectsReference.Instance.cannonsManager.ActivateCannon(savedWorldData.activeCannonRegion);
         }
     
         public void SaveWorld(string saveUuid) {
@@ -50,6 +65,19 @@ namespace Save {
                 worldSavedData.monkeysSasietyTimerByMonkeyId.Add(monkey.monkeyId, (int)monkey.sasietyTimer);
             }
 
+            foreach (var bananaGoop in ObjectsReference.Instance.cannonsManager.bananaGoopInventory.bananaGoopInventory) {
+                worldSavedData.bananaGoopCannonInventory[bananaGoop.Key.ToString()] = bananaGoop.Value;
+            }
+
+            worldSavedData.activeCannonRegion = ObjectsReference.Instance.cannonsManager.activeCannonRegion;
+            
+            foreach (var cannon in ObjectsReference.Instance.cannonsManager.cannonsByRegionType) {
+                (float, float) rotationsCanon = cannon.Value.GetRotation();
+
+                worldSavedData.cannonsSocleYRotation[cannon.Key.ToString()] = rotationsCanon.Item1;
+                worldSavedData.cannonsXRotation[cannon.Key.ToString()] = rotationsCanon.Item2;
+            }
+            
             worldSavedData.stationLightSetting = worldData.stationLightSetting;
             
             var jsonMapSaved = JsonConvert.SerializeObject(worldSavedData);

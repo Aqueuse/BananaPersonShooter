@@ -28,7 +28,7 @@ namespace Tags {
 
     public class TagsManager : MonoSingleton<TagsManager> {
         public GameObject GetFirstGameObjectWithTag(GAME_OBJECT_TAG myTag) {
-            var gameObjects = FindObjectsOfType<Tag>();
+            var gameObjects = FindObjectsByType<Tag>(FindObjectsInactive.Include, FindObjectsSortMode.None);
 
             foreach (var objectTag in gameObjects) {
                 if (objectTag.gameObjectTag == myTag) return objectTag.gameObject;
@@ -48,7 +48,7 @@ namespace Tags {
         }
 
         public static List<GameObject> GetAllGameObjectsWithTag(GAME_OBJECT_TAG myTag) {
-            var gameObjects = FindObjectsOfType<Tag>();
+            var gameObjects = FindObjectsByType<Tag>(FindObjectsInactive.Include, FindObjectsSortMode.None);
 
             var gameObjectsWithTag = new List<GameObject>();
             

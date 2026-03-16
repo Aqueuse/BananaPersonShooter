@@ -26,7 +26,7 @@ namespace InGame.Inventories {
 
             rawMaterialsInventory[rawMaterialType] += quantity;
 
-            ObjectsReference.Instance.bottomSlots.RefreshSlotsQuantities();
+            ObjectsReference.Instance.bottomSlotsManager.RefreshSlotsQuantities();
             
             return rawMaterialsInventory[rawMaterialType];
         }

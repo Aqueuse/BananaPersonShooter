@@ -16,7 +16,7 @@ namespace InGame.Interactions.InteractionsActions {
 
             ObjectsReference.Instance.bananaGun.GrabBananaGun();
 
-            ObjectsReference.Instance.bottomSlots.Init();
+            ObjectsReference.Instance.bottomSlotsManager.Init();
         }
     }
 }

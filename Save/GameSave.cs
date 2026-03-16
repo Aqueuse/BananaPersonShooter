@@ -170,9 +170,10 @@ namespace Save {
             var _savePath = Path.Combine(_savesPath, saveUuid);
             var screenshotFilePath = Path.Combine(_savePath, "screenshot.png");
 
-            var currentResolution = ObjectsReference.Instance.gameSettings.GetCurrentResolution();
+            var currentResolution = Screen.currentResolution;
             
-            var screenshotCamera = ObjectsReference.Instance.gameManager.cameraMain;
+            var screenshotCamera = ObjectsReference.Instance.camerasManager.screenshotCamera;
+            screenshotCamera.enabled = true;
             var screenTexture = new RenderTexture(currentResolution.width, currentResolution.height, 16);
             screenshotCamera.targetTexture = screenTexture;
             RenderTexture.active = screenTexture;
@@ -183,6 +184,7 @@ namespace Save {
             var byteArray = renderedTexture.EncodeToPNG();
             File.WriteAllBytes(screenshotFilePath, byteArray);
             screenshotCamera.targetTexture = null;
+            screenshotCamera.enabled = false;
         }
         
         public SavedData GetSavedByUuid(string saveUuid) {

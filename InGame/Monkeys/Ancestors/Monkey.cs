@@ -36,7 +36,6 @@ namespace InGame.Monkeys.Ancestors {
 
         public void SearchForBananaManBananas() {
             smelledBananasOnBananaMan = true;
-            ObjectsReference.Instance.uiQueuedMessages.AddMessage("the monkey smelled bananas !");
         }
 
         private void Feed(float addedBananaValue) {

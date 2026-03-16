@@ -41,7 +41,7 @@ namespace InGame.Interactions {
             itemsLayer = LayerMask.NameToLayer("Interaction");
             uInteraction = GetComponent<UInteraction>();
 
-            _cameraTransform = ObjectsReference.Instance.mainCamera.transform;
+            _cameraTransform = ObjectsReference.Instance.camerasManager.transform;
             _bananaManTransform = ObjectsReference.Instance.bananaMan.transform;
         }
 

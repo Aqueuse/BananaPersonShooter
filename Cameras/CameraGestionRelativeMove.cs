@@ -16,13 +16,13 @@ namespace Cameras {
         }
 
         private void Update() {
-            relativeMovement = (movement.y * ObjectsReference.Instance.mainCamera.transform.forward + movement.x * ObjectsReference.Instance.mainCamera.transform.right).normalized;
+            relativeMovement = (movement.y * ObjectsReference.Instance.camerasManager.transform.forward + movement.x * ObjectsReference.Instance.camerasManager.transform.right).normalized;
 
             _transform.position += relativeMovement * (moveSpeed * Time.deltaTime);
         }
         
-        public void MoveWithKeyboard(Vector2 movement) {
-            this.movement = movement;
+        public void MoveWithKeyboard(Vector2 keyboardMovement) {
+            movement = keyboardMovement;
         }
         
         public void CancelMove() {

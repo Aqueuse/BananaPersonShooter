@@ -9,6 +9,7 @@ namespace InGame.CommandRoomPanelControls {
         
         private void Start() {
             cannonsManager = ObjectsReference.Instance.cannonsManager;
+            cannonsManager.bananaGoopInventory.AddQuantity(BananaEffect.ATTRACTION, 1000); // TODO : remove before build
         }
 
         private void OnCollisionEnter(Collision other) {

@@ -30,7 +30,7 @@ namespace InGame.Items.ItemsBehaviours.DroppedBehaviours {
             if (!ObjectsReference.Instance.aspireAction.isAspiring) return;
             
             if (Vector3.Distance(transform.position, bananaGunTransform.position) <= 100) {
-                _rigidbody.velocity = 
+                _rigidbody.linearVelocity = 
                     (bananaGunTransform.position - 
                      transform.position) * 5;
             }
@@ -46,8 +46,13 @@ namespace InGame.Items.ItemsBehaviours.DroppedBehaviours {
                     ObjectsReference.Instance.bananaMan.bananaManData.
                         inventoriesByDroppedType[itemScriptableObject.droppedType].
                         AddQuantity(itemScriptableObject, 1);
+                    
+                    // check active slot in bottom slots pannel
+                    // if active slot = unassigned, then assign the current dropped Type
+                    if (ObjectsReference.Instance.bottomSlotsManager.IsActiveSlotUnassigned())
+                        ObjectsReference.Instance.bottomSlotsManager.SetSelectedSlot(itemScriptableObject);
 
-                    ObjectsReference.Instance.bottomSlots.RefreshSlotsQuantities();
+                    ObjectsReference.Instance.bottomSlotsManager.RefreshSlotsQuantities();
                 }
                 
                 Destroy(gameObject);

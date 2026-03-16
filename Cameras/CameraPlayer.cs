@@ -1,46 +1,63 @@
-using Cinemachine;
 using UnityEngine;
 
 namespace Cameras {
     public class CameraPlayer : MonoBehaviour {
-        [SerializeField] private CinemachineFreeLook bananaManCamera;
-        private CinemachineCameraOffset _bananaManCameraOffset;
+        [SerializeField] private Camera bananaManCamera;
+        [SerializeField] private Transform lookAtTarget;
+        [SerializeField] private Transform Xrotation;
+        [SerializeField] private Transform Yrotation;
 
-        private void Start() {
-            _bananaManCameraOffset = bananaManCamera.GetComponentInChildren<CinemachineCameraOffset>();
+        public float yCameraLimitUp = -0.17f;
+        public float yCameraLimitbottom = 0.09f;
+        
+        private bool canRotate;
+        
+        private void Update() {
+            if (!canRotate) return;
+
+            transform.position = lookAtTarget.position;
+            
+            Xrotation.rotation *= Quaternion.Euler(new Vector3(
+                0, 
+                ObjectsReference.Instance.gameActions.look.y * ObjectsReference.Instance.gameSettings.horizontalLookSensibility, 
+                0)
+            );
+
+            Yrotation.rotation *= Quaternion.Euler(new Vector3(
+                ObjectsReference.Instance.gameActions.look.x * ObjectsReference.Instance.gameSettings.verticalLookSensibility,
+                0,
+                0));
+
+            if (Yrotation.localRotation.x > yCameraLimitUp || Yrotation.localRotation.x < yCameraLimitbottom) {
+                Yrotation.rotation *= Quaternion.Euler(new Vector3(
+                    -ObjectsReference.Instance.gameActions.look.x * ObjectsReference.Instance.gameSettings.verticalLookSensibility,
+                    0,
+                    0));
+            }
         }
         
-        public void Return_back_To_Player() {
-            bananaManCamera.ForceCameraPosition (
-                new Vector3(0.0053f,-5.9258f,-0.2389f),
-                new Quaternion(0.00127450912f,-0.997444868f,0.0690134689f,-0.0184203554f)
-            );
-        }
-
         public void Set0Sensibility() {
-            bananaManCamera.m_YAxis.m_MaxSpeed = 0;
-            bananaManCamera.m_XAxis.m_MaxSpeed = 0;
+            canRotate = false;
         }
 
         public void SetNormalSensibility() {
-            bananaManCamera.m_YAxis.m_MaxSpeed = ObjectsReference.Instance.gameSettings.lookSensibility;
-            bananaManCamera.m_XAxis.m_MaxSpeed = ObjectsReference.Instance.gameSettings.lookSensibility * 400;
+            canRotate = true;
         }
         
         public void ZoomCamera() {
-            if (_bananaManCameraOffset.m_Offset.z > 1.73f) return;
-            
-            if (_bananaManCameraOffset.m_Offset.z <= 1.73f) {
-                _bananaManCameraOffset.m_Offset.z += 0.1f;
-            }
+            bananaManCamera.transform.position += Vector3.forward * 0.1f;
         }
         
         public void DezoomCamera() {
-            if (_bananaManCameraOffset.m_Offset.z < 0f) return;
-            
-            if (_bananaManCameraOffset.m_Offset.z >= 0f) {
-                _bananaManCameraOffset.m_Offset.z -= 0.1f;
-            }
+            bananaManCamera.transform.position -= Vector3.forward * 0.1f;
+        }
+
+        public void ActivateCamera() {
+            bananaManCamera.enabled = true;
+        }
+        
+        public void DeactivateCamera() {
+            bananaManCamera.enabled = false;
         }
     }
 }

@@ -56,7 +56,7 @@ namespace InGame.Items.ItemsBehaviours {
 
             if (laser.bananaEffect == BananaEffect.ATTRACTION) {
                 bananaEffect = BananaEffect.ATTRACTION;
-                effectSource = laser.attractionPoint.position;
+                effectSource = laser.transform.position;
             }
             
             ActiveEmission(laser.goopColor);

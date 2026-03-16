@@ -1,18 +1,16 @@
-using Cinemachine;
 using InGame.Inventories;
 using UnityEngine;
 
 namespace InGame.MiniGames.SpaceTrafficControl.Spaceships {
     public class CannonsManager : MonoBehaviour {
         [Header("mini game camera")]
-        [SerializeField] private CinemachineVirtualCamera miniGameVirtualCamera;
         [SerializeField] private Transform cameraCannonTransform;
         [SerializeField] private Camera cameraCannon;
 
         [Header("game")]
-        [SerializeField] private GenericDictionary<RegionType, Cannon> cannonsByRegionType;
-
-        private RegionType _activeRegion = RegionType.MAP01;
+        public GenericDictionary<RegionType, Cannon> cannonsByRegionType;
+        
+        public RegionType activeCannonRegion = RegionType.MAP01;
         [HideInInspector] public Cannon activeCannon;
 
         public BananaEffect activeBananaGoop = BananaEffect.ATTRACTION;
@@ -20,7 +18,7 @@ namespace InGame.MiniGames.SpaceTrafficControl.Spaceships {
         
         public float minRotationY;
         public float maxRotationY;
-        
+
         ///////////////////
 
         private readonly RegionType[] scenesToRotateBeetween = {
@@ -35,29 +33,27 @@ namespace InGame.MiniGames.SpaceTrafficControl.Spaceships {
         };
 
         private int rotationIndex;
-    
+
         private Vector3 _targetPosition;
-        
+
         public void ShowLaserOnActivatedRegion() {
-            cannonsByRegionType[_activeRegion].ShowLaser();
+            cannonsByRegionType[activeCannonRegion].ShowLaser();
         }
-        
+
         public void HideLaserOnActivatedRegion() {
-            cannonsByRegionType[_activeRegion].HideLaser();
+            cannonsByRegionType[activeCannonRegion].HideLaser();
         }
         
-        private void ActivateCannon(RegionType regionType) {
+        public void ActivateCannon(RegionType regionType) {
             ObjectsReference.Instance.cameraPlayer.Set0Sensibility();
             ObjectsReference.Instance.playerController.canMove = false;
             ObjectsReference.Instance.bananaMan.GetComponent<Rigidbody>().isKinematic = true;
             
-            _activeRegion = regionType;
-            activeCannon = cannonsByRegionType[_activeRegion];
+            activeCannonRegion = regionType;
+            activeCannon = cannonsByRegionType[activeCannonRegion];
             
             activeCannon.PositionneCamera(cameraCannonTransform);
             activeCannon.SetCannon(activeBananaGoop);
-            
-            miniGameVirtualCamera.Priority = 100;
             
             Cursor.visible = false;
             Cursor.lockState = CursorLockMode.Locked;
@@ -69,30 +65,25 @@ namespace InGame.MiniGames.SpaceTrafficControl.Spaceships {
             rotationIndex = (rotationIndex - 1) % scenesToRotateBeetween.Length;
             if (rotationIndex < 0) rotationIndex = scenesToRotateBeetween.Length-1;
 
-            _activeRegion = scenesToRotateBeetween[rotationIndex];
+            activeCannonRegion = scenesToRotateBeetween[rotationIndex];
 
-            ActivateCannon(_activeRegion);
+            ActivateCannon(activeCannonRegion);
         }
 
         public void SwitchToRightCannon() {
             rotationIndex = (rotationIndex + 1) % scenesToRotateBeetween.Length;
-            _activeRegion = scenesToRotateBeetween[rotationIndex];
+            activeCannonRegion = scenesToRotateBeetween[rotationIndex];
             
-            ActivateCannon(_activeRegion);
+            ActivateCannon(activeCannonRegion);
         }
 
         public void SwitchToCannon(RegionType regionType) {
-            _activeRegion = regionType;
-            ActivateCannon(_activeRegion);
+            activeCannonRegion = regionType;
+            ActivateCannon(activeCannonRegion);
         }
 
         public void SwitchToLastCannon() {
-            SwitchToCannon(_activeRegion);
-        }
-
-        public void UnfocusCannons() {
-            Cursor.visible = true;
-            Cursor.lockState = CursorLockMode.None;
+            SwitchToCannon(activeCannonRegion);
         }
         
         public void ZoomCamera(float zoomLevel) {

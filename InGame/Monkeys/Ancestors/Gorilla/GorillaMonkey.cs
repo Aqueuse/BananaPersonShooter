@@ -88,7 +88,8 @@ namespace InGame.Monkeys.Ancestors.Gorilla {
             // Update velocity if time advances
             if (Time.deltaTime > 1e-5f) _velocity = _smoothDeltaPosition / Time.deltaTime;
 
-            _shouldMove = _velocity.magnitude > 0.5f & _navMeshAgent.remainingDistance > _navMeshAgent.radius;
+            if (_navMeshAgent.isOnNavMesh)
+                _shouldMove = _velocity.magnitude > 0.5f & _navMeshAgent.remainingDistance > _navMeshAgent.radius;
 
             // Update animation parameters
             _animator.SetBool(ShouldMove, _shouldMove);

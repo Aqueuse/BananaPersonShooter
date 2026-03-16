@@ -17,15 +17,16 @@ namespace InGame.MiniGames.Guichets {
         [SerializeField] private Transform waitingListStart;
 
         public void OpenGuichet() {
-            // change camera look at and follow to cameraTransform
-            ObjectsReference.Instance.uiInGameVirtualCamera.Follow = cameraFollow;
-            ObjectsReference.Instance.uiInGameVirtualCamera.LookAt = cameraLookAt;
-            ObjectsReference.Instance.uiInGameVirtualCamera.Priority = 200;
-
             ObjectsReference.Instance.cameraPlayer.Set0Sensibility();
+            ObjectsReference.Instance.cameraPlayer.DeactivateCamera();
             ObjectsReference.Instance.playerController.canMove = false;
-            
             ObjectsReference.Instance.bananaGunActionsSwitch.gameObject.SetActive(false);
+
+            // change camera look at and follow to cameraTransform
+            ObjectsReference.Instance.uiInGameVirtualCamera.transform.position = cameraFollow.position;
+            ObjectsReference.Instance.uiInGameVirtualCamera.transform.rotation = cameraLookAt.rotation;
+            ObjectsReference.Instance.uiInGameVirtualCamera.enabled = true;
+
             
             ObjectsReference.Instance.gameManager.gameContext = GameContext.IN_GAME_UI_PANEL;
 
@@ -49,10 +50,9 @@ namespace InGame.MiniGames.Guichets {
 
         public void CloseGuichet() {
             // change camera look at and follow to bananaMan camera transform
-            ObjectsReference.Instance.uiInGameVirtualCamera.Follow = cameraFollow;
-            ObjectsReference.Instance.uiInGameVirtualCamera.LookAt = cameraLookAt;
-            ObjectsReference.Instance.uiInGameVirtualCamera.Priority = 0;
-
+            ObjectsReference.Instance.uiInGameVirtualCamera.enabled = false;
+            
+            ObjectsReference.Instance.cameraPlayer.ActivateCamera();
             ObjectsReference.Instance.cameraPlayer.SetNormalSensibility();
             ObjectsReference.Instance.playerController.canMove = true;
 

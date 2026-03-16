@@ -36,7 +36,7 @@ namespace InGame.Interactions {
 
         private void FixedUpdate() {
             if (isGrabbing) {
-                grabbedRigidbody.velocity = (grabbableTarget.position - grabbableObject.transform.position) * 10;
+                grabbedRigidbody.linearVelocity = (grabbableTarget.position - grabbableObject.transform.position) * 10;
             }
         }
 
@@ -59,7 +59,7 @@ namespace InGame.Interactions {
 
             grabbedRigidbody = grabbableObject.GetComponent<Rigidbody>();
             grabbedRigidbody.useGravity = true;
-            grabbedRigidbody.velocity = Vector3.zero;
+            grabbedRigidbody.linearVelocity = Vector3.zero;
 
             grabbableClass.uInteraction.Desactivate();
             grabbableObject = null;

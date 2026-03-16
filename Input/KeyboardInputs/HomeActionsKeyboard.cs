@@ -31,21 +31,21 @@ namespace KeyboardInputs {
 
         private void launchBanana(InputAction.CallbackContext context) {
             if (!ObjectsReference.Instance.uiManager.isOnSubMenus) {
-                var ray = ObjectsReference.Instance.gameManager.cameraMain.ScreenPointToRay(Mouse.current.position.value);
+                var ray = ObjectsReference.Instance.camerasManager.homeCamera.ScreenPointToRay(Mouse.current.position.value);
                 var direction = ray.GetPoint(1) - ray.GetPoint(0);
                 var spawnedBanana = Instantiate(bananaPrefab, ray.GetPoint(2), Quaternion.LookRotation(direction));
                 spawnedBanana.transform.parent = startAnimations; 
-                spawnedBanana.GetComponent<Rigidbody>().velocity = spawnedBanana.transform.forward * 10f;
+                spawnedBanana.GetComponent<Rigidbody>().linearVelocity = spawnedBanana.transform.forward * 10f;
             }
         }
 
         private void launchBananaWithMagicTrail(InputAction.CallbackContext context) {
             if (!ObjectsReference.Instance.uiManager.isOnSubMenus) {
-                var ray = ObjectsReference.Instance.gameManager.cameraMain.ScreenPointToRay(Mouse.current.position.value);
+                var ray = ObjectsReference.Instance.camerasManager.homeCamera.ScreenPointToRay(Mouse.current.position.value);
                 var direction = ray.GetPoint(1) - ray.GetPoint(0);
                 var spawnedBanana = Instantiate(bananaPrefab, ray.GetPoint(2), Quaternion.LookRotation(direction));
                 spawnedBanana.AddComponent<TrailRendererRandom>();
-                spawnedBanana.GetComponent<Rigidbody>().velocity = spawnedBanana.transform.forward * 10f;
+                spawnedBanana.GetComponent<Rigidbody>().linearVelocity = spawnedBanana.transform.forward * 10f;
             }
         }
     }

@@ -1,9 +1,9 @@
 public enum FootStepType {
-    LEAVES,
-    SAND,
-    WOOD,
-    ROCK,
-    WATER,
-    DIRT,
-    SNOW
+    LEAVES = 0,
+    SAND = 1,
+    WOOD = 2,
+    ROCK = 3,
+    WATER = 4,
+    DIRT = 5,
+    SNOW = 6
 }

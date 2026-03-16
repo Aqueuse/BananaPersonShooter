@@ -112,6 +112,11 @@ namespace UI {
             
             ObjectsReference.Instance.miniChimpDialoguesManager.ResetDialogue();
         }
+
+        public void HideMainPanel() {
+            SetActive(UICanvasGroupType.MAIN_PANEL, false);
+            ObjectsReference.Instance.inputManager.SwitchBackToGame();
+        }
         
         public void ShowInventory() {
             SetActive(UICanvasGroupType.MAIN_PANEL, true);
@@ -141,7 +146,7 @@ namespace UI {
             ObjectsReference.Instance.gestionViewMode.enabled = true;
             ObjectsReference.Instance.inputManager.SwitchContext(InputContext.GESTION_VIEW);
 
-            ObjectsReference.Instance.mainCamera.SwitchToGestionView();
+            ObjectsReference.Instance.camerasManager.SwitchToGestionView();
         }
 
         private void SwitchToBananaManView() {
@@ -154,7 +159,7 @@ namespace UI {
             SetActive(UICanvasGroupType.HUD_GESTION, false);
             SetActive(UICanvasGroupType.HUD_BANANAMAN, true);
             
-            ObjectsReference.Instance.mainCamera.SwitchToBananaManView();
+            ObjectsReference.Instance.camerasManager.SwitchToBananaManView();
         }
         
         public void ShowHideDebugPanel() {
