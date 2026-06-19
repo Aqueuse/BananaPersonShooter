@@ -258,9 +258,9 @@ MonoBehaviour:
   - {fileID: 3712416262764098679, guid: 3c9fe1e6c7d8e104ea042cf69c432d8e, type: 3}
   - {fileID: 4678706193726590205, guid: b3bed1772589e4b4896f4203e1875161, type: 3}
   - {fileID: 4105020054301876144, guid: 8593ee20421a62b49ace9aa5f85a3f49, type: 3}
-  - {fileID: 8356104136304494337, guid: ce40f0e25ced7c54f96cc81471935890, type: 3}
-  - {fileID: 6946366932135003459, guid: 6afb32b9502215845ad0de2c2e0e1a9d, type: 3}
   merchimpPrefab: {fileID: 3712416262764098679, guid: 67cae77bbe79e3244b1efb786fb76bff, type: 3}
+  chimpvisitorsColorPresets:
+  - {fileID: 11400000, guid: 68004e6488ca05e46be2422a67cc92b0, type: 2}
   spaceshipPrefabBySpaceshipType:
     list:
     - key: 0
@@ -320,6 +320,32 @@ MonoBehaviour:
       - {fileID: 828287830434580389, guid: e935ae57996b0e042a53fc4bd2c0a072, type: 3}
       - {fileID: 2845954426801856481, guid: 540f158e125a0724f9a3d9932cee78f4, type: 3}
     keyCollision: 0
+  rawMaterialSpawnProbability:
+    list:
+    - key: 0
+      value: 0
+    - key: 1
+      value: 5
+    - key: 2
+      value: 0
+    - key: 3
+      value: 3
+    - key: 5
+      value: 3
+    keyCollision: 0
+  rawMaterialSpawnMaxQuantity:
+    list:
+    - key: 0
+      value: 10
+    - key: 1
+      value: 1
+    - key: 2
+      value: 5
+    - key: 3
+      value: 5
+    - key: 5
+      value: 3
+    keyCollision: 0
   bananaGoopColorByEffectType:
     list:
     - key: 1
@@ -333,116 +359,11 @@ MonoBehaviour:
     keyCollision: 0
   blueprintBuildableMaterial: {fileID: 2100000, guid: b8da26aaedae11e4d8addf9d6540ac14, type: 2}
   completedBuildableMaterial: {fileID: 2100000, guid: 0005989f96942fa4eba8c72f27762e89, type: 2}
-  visitorsAppearanceScriptableObjects:
-  - {fileID: 11400000, guid: 44ad37bdc9abad848a97b3e460db3c74, type: 2}
-  - {fileID: 11400000, guid: 44ad37bdc9abad848a97b3e460db3c74, type: 2}
-  merchimpsAppearanceScriptableObjects:
-  - {fileID: 11400000, guid: ed9214feab23c4047a62048a4ffe3454, type: 2}
   genericNameByCharacterType:
-    list:
-    - key: 1
-      value:
-        m_TableReference:
-          m_TableCollectionName: GUID:feaac8a96a44d904190f4f7b1a2228fe
-        m_TableEntryReference:
-          m_KeyId: 65833736464764928
-          m_Key: 
-        m_FallbackState: 0
-        m_WaitForCompletion: 0
-        m_LocalVariables: []
-    - key: 2
-      value:
-        m_TableReference:
-          m_TableCollectionName: GUID:feaac8a96a44d904190f4f7b1a2228fe
-        m_TableEntryReference:
-          m_KeyId: 172697667539308544
-          m_Key: 
-        m_FallbackState: 0
-        m_WaitForCompletion: 0
-        m_LocalVariables: []
-    - key: 3
-      value:
-        m_TableReference:
-          m_TableCollectionName: GUID:3784dd5a526735b4481fe89425012681
-        m_TableEntryReference:
-          m_KeyId: 176198448586428416
-          m_Key: 
-        m_FallbackState: 0
-        m_WaitForCompletion: 0
-        m_LocalVariables: []
-    - key: 5
-      value:
-        m_TableReference:
-          m_TableCollectionName: GUID:feaac8a96a44d904190f4f7b1a2228fe
-        m_TableEntryReference:
-          m_KeyId: 194486850549190656
-          m_Key: 
-        m_FallbackState: 0
-        m_WaitForCompletion: 0
-        m_LocalVariables: []
-    - key: 7
-      value:
-        m_TableReference:
-          m_TableCollectionName: GUID:3784dd5a526735b4481fe89425012681
-        m_TableEntryReference:
-          m_KeyId: 176198803630067712
-          m_Key: 
-        m_FallbackState: 0
-        m_WaitForCompletion: 0
-        m_LocalVariables: []
-    keyCollision: 0
+  - Richard
+  - Valentine
   genericDescriptionByCharacterType:
-    list:
-    - key: 1
-      value:
-        m_TableReference:
-          m_TableCollectionName: GUID:3784dd5a526735b4481fe89425012681
-        m_TableEntryReference:
-          m_KeyId: 176195606429569024
-          m_Key: 
-        m_FallbackState: 0
-        m_WaitForCompletion: 0
-        m_LocalVariables: []
-    - key: 2
-      value:
-        m_TableReference:
-          m_TableCollectionName: GUID:3784dd5a526735b4481fe89425012681
-        m_TableEntryReference:
-          m_KeyId: 176195273724792832
-          m_Key: 
-        m_FallbackState: 0
-        m_WaitForCompletion: 0
-        m_LocalVariables: []
-    - key: 3
-      value:
-        m_TableReference:
-          m_TableCollectionName: GUID:3784dd5a526735b4481fe89425012681
-        m_TableEntryReference:
-          m_KeyId: 176199134044753920
-          m_Key: 
-        m_FallbackState: 0
-        m_WaitForCompletion: 0
-        m_LocalVariables: []
-    - key: 5
-      value:
-        m_TableReference:
-          m_TableCollectionName: GUID:3784dd5a526735b4481fe89425012681
-        m_TableEntryReference:
-          m_KeyId: 176195189708689408
-          m_Key: 
-        m_FallbackState: 0
-        m_WaitForCompletion: 0
-        m_LocalVariables: []
-    - key: 7
-      value:
-        m_TableReference:
-          m_TableCollectionName: GUID:3784dd5a526735b4481fe89425012681
-        m_TableEntryReference:
-          m_KeyId: 176195749778296832
-          m_Key: 
-        m_FallbackState: 0
-        m_WaitForCompletion: 0
-        m_LocalVariables: []
+    list: []
     keyCollision: 0
   itemPreviewByCharacterType:
     list:
@@ -457,9 +378,6 @@ MonoBehaviour:
     - key: 7
       value: {fileID: 21300000, guid: f9561b45af7be5c488081861f8458307, type: 3}
     keyCollision: 0
-  groupPrefab: {fileID: 5093112681230339048, guid: 47830b1602c46d7408bd7169848dc766, type: 3}
-  groupsScriptableObjects:
-  - {fileID: 11400000, guid: 748709d9196920243947404552f75f45, type: 2}
   teleportDownVFXPrefab: {fileID: 769205495170742538, guid: f0372db31013f424f91d374d6897ccd5, type: 3}
   references:
     version: 2

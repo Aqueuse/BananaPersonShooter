@@ -1,21 +1,22 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using DG.Tweening;
 using InGame.Items.ItemsData;
-using InGame.Items.ItemsProperties.Characters;
+using InGame.Items.ItemsData.Characters;
 using InGame.MiniGames.SpaceTrafficControl.projectiles;
 using InGame.Monkeys.Chimpvisitors;
-using InGame.Monkeys.Merchimps;
 using InGame.SpaceTrafficControl;
 using Save.Helpers;
 using Save.Templates;
 using Tags;
 using UnityEngine;
+using UnityEngine.Splines;
+using Object = System.Object;
+using Random = UnityEngine.Random;
 
 namespace InGame.Items.ItemsBehaviours {
     public class SpaceshipBehaviour : MonoBehaviour {
         [SerializeField] private Transform _spaceshipTransform;
+        [SerializeField] private SplineAnimate _splineAnimate;
         public SpaceshipData spaceshipData;
         
         public Transform visitorsSpawnPoint;
@@ -24,13 +25,19 @@ namespace InGame.Items.ItemsBehaviours {
         [SerializeField] private GameObject distantDot;
         
         [HideInInspector] public SpaceshipSavedData spaceshipSavedData;
-
-        private DOTweenPath pathBeetweenSpaceAndHangar;
-        private Vector3[] assignatedPathToHangar;
+        
+        private Spline currentSplineToFollow;
 
         private float _step;
+        
+        private List<MonkeyMenData> visitorsMonkeyMenDatas = new List<MonkeyMenData>();
+        private List<VisitorBehaviour> visitorsBehaviours = new List<VisitorBehaviour>();
 
-        private GroupBehaviour associatedGroupBehaviour;
+        private GameObject visitor;
+
+        private void OnEnable() {
+            _splineAnimate.Completed += ChangeTravelState;
+        }
         
         // Generate spaceship Data for new spaceship
         public void Init(Vector3 arrivalPoint, CharacterType characterType, SpaceshipType spaceshipType) {
@@ -43,98 +50,35 @@ namespace InGame.Items.ItemsBehaviours {
         }
         
         private void Update() {
-            if (spaceshipData.travelState == TravelState.GO_TO_PATH) {
-                _step = SpaceshipData._propulsionSpeed * 4 * Time.deltaTime;
+            switch (spaceshipData.travelState) {
+                case TravelState.FREE_FLIGHT or TravelState.LEAVES_THE_REGION:
+                    _step = SpaceshipData._propulsionSpeed * Time.deltaTime;
+                    _spaceshipTransform.position = Vector3.MoveTowards(_spaceshipTransform.position, spaceshipData.arrivalPosition, _step);
+                    _spaceshipTransform.LookAt(spaceshipData.arrivalPosition, Vector3.up);
+                    
+                    if (Vector3.Distance(transform.position, spaceshipData.arrivalPosition) < 10) LeaveRegion();
 
-                _spaceshipTransform.position = Vector3.MoveTowards(_spaceshipTransform.position, assignatedPathToHangar[0], _step);
-                _spaceshipTransform.LookAt(assignatedPathToHangar[0], Vector3.up);
-
-                if (Vector3.Distance(transform.position, assignatedPathToHangar[0]) < 10) {
-                    spaceshipData.travelState = TravelState.TRAVEL_ON_PATH;
-                    MoveToElevator();
-                }
-            }
-
-            if (spaceshipData.travelState == TravelState.FREE_FLIGHT | spaceshipData.travelState == TravelState.LEAVES_THE_REGION) {
-                _step = SpaceshipData._propulsionSpeed * Time.deltaTime;
-            
-                _spaceshipTransform.position = Vector3.MoveTowards(_spaceshipTransform.position, spaceshipData.arrivalPosition, _step);
-            
-                _spaceshipTransform.LookAt(spaceshipData.arrivalPosition, Vector3.up);
-                
-                if (Vector3.Distance(transform.position, spaceshipData.arrivalPosition) < 10) {
-                    LeaveRegion();
-                }
+                    break;
             }
         }
         
-        private void SpawnVisitors(GroupScriptableObject groupScriptableObject, string associatedSpaceshipGuid) {
-            if (groupScriptableObject.members.Count == 1 && groupScriptableObject.members[0].characterType == CharacterType.MERCHIMP) {
-                var merchimp = Instantiate(
-                    ObjectsReference.Instance.meshReferenceScriptableObject.merchimpPrefab,
-                    merchimpSpawnPoint.position,
-                    merchimpSpawnPoint.rotation,
-                    null
-                ).GetComponent<MerchimpBehaviour>();
-            
-                merchimp.Init(
-                    groupScriptableObject.members[0],
-                    this
-                );
-            }
-
-            else {
-                var group = Instantiate(
-                    ObjectsReference.Instance.meshReferenceScriptableObject.groupPrefab,
-                    visitorsSpawnPoint.position,
-                    Quaternion.identity,
-                    null
-                ).GetComponent<GroupBehaviour>();
-                
-                group.SpawnMembers(groupScriptableObject.members, associatedSpaceshipGuid);
-
-                associatedGroupBehaviour = group;
-                group.spaceshipVisitorsSpawnPoint = visitorsSpawnPoint.position;
-            }
-
-        }
-
-        private void RespawnVisitors(List<MonkeyMenSavedData> groupMembers) {
-            if (groupMembers.Count == 1 && groupMembers[0].characterType == CharacterType.MERCHIMP) {
-                var merchimp = Instantiate(
-                    ObjectsReference.Instance.meshReferenceScriptableObject.merchimpPrefab,
-                    merchimpSpawnPoint.position,
-                    merchimpSpawnPoint.rotation,
-                    null
-                ).GetComponent<MerchimpBehaviour>();
-            
-                merchimp.LoadSavedData(groupMembers[0]);
-            }
-
-            else {
-                var group = Instantiate(
-                    ObjectsReference.Instance.meshReferenceScriptableObject.groupPrefab,
-                    ObjectsReference.Instance.gameManager.spawnPointsBySpawnType[SpawnPoint.TP_HANGARS].position,
-                    Quaternion.identity,
-                    null
-                ).GetComponent<GroupBehaviour>();
-                
-                foreach (var member in groupMembers) {
-                    var visitorInstance = Instantiate(
-                        original: ObjectsReference.Instance.meshReferenceScriptableObject.monkeyMenPrefabs[member.prefabIndex],
-                        position: JsonHelper.FromStringToVector3(member.position),
-                        rotation: JsonHelper.FromStringToQuaternion(member.rotation),
-                        parent: ObjectsReference.Instance.gameSave.savablesItemsContainer
-                    );
-
-                    visitorInstance.GetComponent<VisitorBehaviour>().LoadSavedData(member);
-                }
-
-                associatedGroupBehaviour = group;
-                group.spaceshipVisitorsSpawnPoint = visitorsSpawnPoint.position;
+        private void ChangeTravelState() {
+            switch (spaceshipData.travelState) {
+                case TravelState.TRAVEL_ON_SPACE_PATH:
+                    TravelOnElevatorPath();
+                    spaceshipData.travelState = TravelState.TRAVEL_ON_ELEVATOR_PATH;
+                    break;
+                case TravelState.TRAVEL_ON_ELEVATOR_PATH:
+                    WaitInStation();
+                    spaceshipData.travelState = TravelState.WAIT_IN_STATION;
+                    break;
+                case TravelState.TRAVEL_BACK_ON_ELEVATOR_PATH:
+                    TravelBackToSpace();
+                    spaceshipData.travelState = TravelState.LEAVES_THE_REGION;
+                    break;
             }
         }
-        
+
         public void OpenCommunications(CharacterType characterType) {
             var systemRandom = new System.Random();
 
@@ -144,67 +88,123 @@ namespace InGame.Items.ItemsBehaviours {
 
             ObjectsReference.Instance.uiCommunicationPanel.AddNewCommunication(this);
         }
+        
+        public void TravelOnSpacePath(int hangarNumber) {
+            spaceshipData.travelState = TravelState.TRAVEL_ON_SPACE_PATH;
+            spaceshipData.assignatedHangar = hangarNumber;
 
-        public void WaitInStation() {
+            // move space_path spline first knot position to the spaceship to get a fuild travel
+            var BezierKnot = new BezierKnot { Position = transform.position };
+            ObjectsReference.Instance.spaceTrafficControlManager.spacePaths[spaceshipData.assignatedHangar].Spline[0] = BezierKnot;
+            
+            _splineAnimate.Container =
+                ObjectsReference.Instance.spaceTrafficControlManager.spacePaths[spaceshipData.assignatedHangar]; 
+            
+            _splineAnimate.Play();
+        }
+        
+        private void TravelOnElevatorPath() {
+            _splineAnimate.Container = ObjectsReference.Instance.spaceTrafficControlManager.elevatorPaths[spaceshipData.assignatedHangar];
+            _splineAnimate.Alignment = SplineAnimate.AlignmentMode.SplineObject;
+
+            _splineAnimate.Duration = 5;
+            
+            _splineAnimate.Restart(true);
+
+            distantDot.GetComponent<SpriteRenderer>().enabled = false; // TODO : remove when the overlay on the cannon camera is done 
+        }
+        
+        private void WaitInStation() {
             spaceshipData.travelState = TravelState.WAIT_IN_STATION;
 
             ConvertToSolidSpaceship();
+
+            switch (spaceshipData.characterType) {
+                case CharacterType.MERCHIMP:
+                    SpawnMerchimp();
+                    break;
+                case CharacterType.VISITOR:
+                    SpawnVisitors();
+                    break;
+            }
+        }
+
+        private void SpawnVisitors() {
+            // TODO : create randomized list of monkeyMens 
+            var visitorsQuantity = Random.Range(2, 5);
+
+            for (int i = 0; i < visitorsQuantity; i++) {
+                var monkeyMenData = new MonkeyMenData {
+                    uid = Guid.NewGuid().ToString(),
+                    monkeyMenName = ObjectsReference.Instance.meshReferenceScriptableObject.GetRandomChimpmenName(),
+                    characterType = CharacterType.VISITOR,
+                    prefabIndex = 0,
+                    colorsSet = ObjectsReference.Instance.meshReferenceScriptableObject.GetRandomChimpenColorsPreset(),
+                    need = NeedType.FUN,
+                    isSatisfied = false,
+                    destination = default,
+                    rawMaterialsInventory = new Dictionary<RawMaterialType, int>(),
+                    ingredientsInventory = new Dictionary<IngredientsType, int>(),
+                    manufacturedItemsInventory = new Dictionary<ManufacturedItemsType, int>(),
+                    bitKongQuantity = 0,
+                    spaceshipGuid = spaceshipData.spaceshipGuid
+                };
+
+                visitor = Instantiate(
+                    ObjectsReference.Instance.meshReferenceScriptableObject.monkeyMenPrefabs[monkeyMenData.prefabIndex],
+                    visitorsSpawnPoint.position,
+                    Quaternion.identity,
+                    null
+                );
+
+                visitorsBehaviours.Add(visitor.GetComponent<VisitorBehaviour>());
+                visitor.GetComponent<VisitorBehaviour>().Init(monkeyMenData, visitorsSpawnPoint.position);
+            }
+        }
+        
+        private void SpawnMerchimp() {}
+        
+        private void ConvertToSolidSpaceship() {
+            GetComponent<CapsuleCollider>().enabled = false;
             
             foreach (var spaceshipDebrisBehaviour in GetComponentsInChildren<SpaceshipDebrisBehaviour>()) {
                 spaceshipDebrisBehaviour.enabled = false;
+                spaceshipDebrisBehaviour.GetComponent<MeshCollider>().isTrigger = false;
             }
-
-            SpawnVisitors(
-                spaceshipData.characterType == CharacterType.MERCHIMP
-                    ? ObjectsReference.Instance.meshReferenceScriptableObject.GetNextMerchimpGroup()
-                    : ObjectsReference.Instance.meshReferenceScriptableObject.GetNextVisitorGroup(),
-                spaceshipData.spaceshipGuid
-            );
         }
         
+        private void RespawnVisitors(List<MonkeyMenSavedData> groupMembers) {
+            foreach (var member in groupMembers) {
+                var visitorInstance = Instantiate(
+                    original: ObjectsReference.Instance.meshReferenceScriptableObject.monkeyMenPrefabs[member.prefabIndex],
+                    position: JsonHelper.FromStringToVector3(member.position),
+                    rotation: JsonHelper.FromStringToQuaternion(member.rotation),
+                    parent: ObjectsReference.Instance.gameSave.savablesItemsContainer
+                );
+                visitorInstance.GetComponent<VisitorBehaviour>().LoadSavedData(member);
+            }
+        }
+
         public void StopWaiting() {
             ObjectsReference.Instance.spaceTrafficControlManager.FreeHangar(spaceshipData.assignatedHangar);
             ObjectsReference.Instance.uiCommunicationPanel.RefreshHangarAvailability();
             
-            spaceshipData.travelState = TravelState.TRAVEL_BACK_ON_ELEVATOR;
-            TravelBackOnElevator();
+            spaceshipData.travelState = TravelState.TRAVEL_BACK_ON_ELEVATOR_PATH;
+            TravelBackOnElevatorPath();
         }
         
-        public void GoToPath(int hangarNumber) {
-            spaceshipData.assignatedHangar = hangarNumber;
-            assignatedPathToHangar = ObjectsReference.Instance.spaceTrafficControlManager.pathsToHangars[spaceshipData.assignatedHangar];
+        private void TravelBackOnElevatorPath() {
+            ObjectsReference.Instance.spaceTrafficControlManager.FreeHangar(spaceshipData.assignatedHangar);
+            ObjectsReference.Instance.uiCommunicationPanel.RefreshHangarAvailability();
+            ObjectsReference.Instance.spaceshipsSpawner.RemoveGuestInCampaignCreator();
+            ObjectsReference.Instance.uiCommunicationPanel.RefreshCommunicationQuantityButton();
 
-            spaceshipData.travelState = TravelState.GO_TO_PATH;
-        }
-        
-        private void MoveToElevator() {
-            spaceshipData.travelState = TravelState.TRAVEL_ON_PATH;
+            ObjectsReference.Instance.spaceTrafficControlManager.elevatorPaths[spaceshipData.assignatedHangar].ReverseFlow(0);
+
+            _splineAnimate.Container =
+                ObjectsReference.Instance.spaceTrafficControlManager.elevatorPaths[spaceshipData.assignatedHangar];
             
-            transform.DOPath(
-                ObjectsReference.Instance.spaceTrafficControlManager.pathsToHangars[spaceshipData.assignatedHangar],
-                20,
-                PathType.CatmullRom).SetLookAt(SpaceshipData.lookAtRotation).SetEase(Ease.Linear).OnComplete(MoveOnElevatorToHangar);
-        }
-
-        private void MoveOnElevatorToHangar() {
-            distantDot.SetActive(false); // TODO : remove when the overlay on the cannon camera is done 
-            
-            ConvertToSolidSpaceship();
-
-            transform.DOPath(
-                ObjectsReference.Instance.spaceTrafficControlManager.elevatorsPaths[spaceshipData.assignatedHangar],
-                20,
-                PathType.CatmullRom).SetLookAt(
-                ObjectsReference.Instance.gameManager.spawnPointsBySpawnType[SpawnPoint.SPACESHIP_HANGARS],
-                stableZRotation:true).OnComplete(WaitInStation);
-        }
-
-        private void TravelBackOnElevator() {
-            var reversePathFromHangarToElevator = ObjectsReference.Instance.spaceTrafficControlManager.elevatorsPaths[spaceshipData.assignatedHangar].Reverse().ToArray(); 
-
-            transform.DOPath(reversePathFromHangarToElevator,
-                20,
-                PathType.CatmullRom).OnComplete(TravelBackToSpace);
+            _splineAnimate.Play();
         }
 
         private void TravelBackToSpace() {
@@ -217,26 +217,13 @@ namespace InGame.Items.ItemsBehaviours {
         }
 
         private void LeaveRegion() {
-            ObjectsReference.Instance.uiCommunicationPanel.CloseCommunications(this);
-            ObjectsReference.Instance.spaceTrafficControlManager.FreeHangar(spaceshipData.assignatedHangar);
-            
             ObjectsReference.Instance.spaceTrafficControlManager.spaceshipBehavioursByGuid.Remove(spaceshipData.spaceshipGuid);
-
-            ObjectsReference.Instance.uiCommunicationPanel.RefreshHangarAvailability();
-            ObjectsReference.Instance.uiCommunicationPanel.RefreshCommunicationButton();
-            ObjectsReference.Instance.spaceshipsSpawner.RemoveGuestInCampaignCreator();
             Destroy(gameObject);
-        }
-
-        private void ConvertToSolidSpaceship() {
-            GetComponent<CapsuleCollider>().enabled = false;
             
-            foreach (var spaceshipDebrisBehaviour in GetComponentsInChildren<SpaceshipDebrisBehaviour>()) {
-                spaceshipDebrisBehaviour.enabled = false;
-                spaceshipDebrisBehaviour.GetComponent<MeshCollider>().isTrigger = false;
-            }
+            ObjectsReference.Instance.uiCommunicationPanel.CloseCommunications(this);
+            ObjectsReference.Instance.uiCommunicationPanel.RefreshCommunicationQuantityButton();
         }
-
+        
         private void ConvertToExplodableSpaceship() {
             GetComponent<CapsuleCollider>().enabled = true;
             
@@ -260,57 +247,45 @@ namespace InGame.Items.ItemsBehaviours {
             ObjectsReference.Instance.uiCommunicationPanel.CloseCommunications(this);
         }
         
-        public void LoadSavedData(SpaceshipSavedData spaceshipSavedData) {
-            spaceshipData.spaceshipGuid = spaceshipSavedData.spaceshipGuid;
-            spaceshipData.spaceshipName = spaceshipSavedData.spaceshipName;
-            spaceshipData.arrivalPosition = JsonHelper.FromStringToVector3(spaceshipSavedData.arrivalPoint);
-            spaceshipData.characterType = spaceshipSavedData.characterType;
-            spaceshipData.spaceshipType = spaceshipSavedData.spaceshipType;
-            spaceshipData.communicationMessagePrefabIndex = spaceshipSavedData.communicationMessagePrefabIndex;
-            spaceshipData.spaceshipUIcolor = JsonHelper.FromStringToColor(spaceshipSavedData.uiColor);
-            spaceshipData.travelState = spaceshipSavedData.travelState;
-            spaceshipData.assignatedHangar = spaceshipSavedData.hangarNumber;
+        public void LoadSavedData(SpaceshipSavedData spaceshipSavedDataToLoad) {
+            spaceshipData.spaceshipGuid = spaceshipSavedDataToLoad.spaceshipGuid;
+            spaceshipData.spaceshipName = spaceshipSavedDataToLoad.spaceshipName;
+            spaceshipData.arrivalPosition = JsonHelper.FromStringToVector3(spaceshipSavedDataToLoad.arrivalPoint);
+            spaceshipData.characterType = spaceshipSavedDataToLoad.characterType;
+            spaceshipData.spaceshipType = spaceshipSavedDataToLoad.spaceshipType;
+            spaceshipData.communicationMessagePrefabIndex = spaceshipSavedDataToLoad.communicationMessagePrefabIndex;
+            spaceshipData.spaceshipUIcolor = JsonHelper.FromStringToColor(spaceshipSavedDataToLoad.uiColor);
+            spaceshipData.travelState = spaceshipSavedDataToLoad.travelState;
+            spaceshipData.assignatedHangar = spaceshipSavedDataToLoad.hangarNumber;
             
-            spaceshipData.groupTravelState = spaceshipSavedData.groupTravelState;
-            spaceshipData.guichetsMapsToVisit = spaceshipSavedData.guichetsMapsToVisit;
-            spaceshipData.mapPointInterests = spaceshipSavedData.mapPointInterests;
+            spaceshipData.groupTravelState = spaceshipSavedDataToLoad.groupTravelState;
+            spaceshipData.guichetsMapsToVisit = spaceshipSavedDataToLoad.guichetsMapsToVisit;
+            spaceshipData.mapPointInterests = spaceshipSavedDataToLoad.mapPointInterests;
 
-            this.spaceshipSavedData = spaceshipSavedData;
+            this.spaceshipSavedData = spaceshipSavedDataToLoad;
 
-            ObjectsReference.Instance.spaceTrafficControlManager.spaceshipBehavioursByGuid.Add(
-                spaceshipData.spaceshipGuid, 
-                this);
-
-            if (spaceshipData.travelState == TravelState.WAIT_IN_STATION) {
-                ObjectsReference.Instance.spaceTrafficControlManager.AssignSpaceshipToHangar(spaceshipData.assignatedHangar);
-
-                RespawnVisitors(spaceshipSavedData.MonkeyMenSavedDatas);
-            }
-
-            if (spaceshipData.travelState == TravelState.GO_TO_PATH) {
-                GoToPath(spaceshipData.assignatedHangar);
-            }
-        
-            if (spaceshipData.travelState == TravelState.TRAVEL_ON_PATH) {
-                MoveToElevator();
-            }
-        
-            if (spaceshipData.travelState == TravelState.TRAVEL_ON_ELEVATOR) {
-                MoveOnElevatorToHangar();
-            }
-        
-            if (spaceshipData.travelState == TravelState.TRAVEL_BACK_ON_ELEVATOR) {
-                spaceshipData.travelState = TravelState.LEAVES_THE_REGION;
-                transform.position = new Vector3(transform.position.x, -10f, transform.position.z);
-                spaceshipData.arrivalPosition.y = -10f;
-            }
-
-            if (spaceshipData.travelState == TravelState.LEAVES_THE_REGION) {
-                spaceshipData.arrivalPosition.y = -10f;
-            }
-
-            if (spaceshipData.travelState == TravelState.FREE_FLIGHT | spaceshipData.travelState == TravelState.LEAVES_THE_REGION) {
-                ObjectsReference.Instance.uiCommunicationPanel.AddNewCommunication(this);
+            ObjectsReference.Instance.spaceTrafficControlManager.spaceshipBehavioursByGuid.Add(spaceshipData.spaceshipGuid, this);
+            
+            switch (spaceshipData.travelState) {
+                case TravelState.FREE_FLIGHT:
+                    ObjectsReference.Instance.uiCommunicationPanel.AddNewCommunication(this);
+                    break;
+                case TravelState.TRAVEL_ON_SPACE_PATH:
+                    TravelOnSpacePath(spaceshipData.assignatedHangar);
+                    break;
+                case TravelState.TRAVEL_ON_ELEVATOR_PATH:
+                    TravelOnElevatorPath();
+                    break;
+                case TravelState.WAIT_IN_STATION:
+                    ObjectsReference.Instance.spaceTrafficControlManager.AssignSpaceshipToHangar(spaceshipData.assignatedHangar);
+                    RespawnVisitors(spaceshipSavedDataToLoad.MonkeyMenSavedDatas);
+                    break;
+                case TravelState.TRAVEL_BACK_ON_ELEVATOR_PATH:
+                    TravelBackOnElevatorPath();
+                    break;
+                case TravelState.LEAVES_THE_REGION:
+                    spaceshipData.arrivalPosition.y = -10f;
+                    break;
             }
         }
 
@@ -333,14 +308,10 @@ namespace InGame.Items.ItemsBehaviours {
                 hangarNumber = spaceshipData.assignatedHangar,
             };
 
-            if (associatedGroupBehaviour) {
-                spaceshipSavedData.guichetsMapsToVisit = associatedGroupBehaviour.mapsGuichetToVisit.ToArray();
-                spaceshipSavedData.groupTravelState = associatedGroupBehaviour.groupTravelState;
-                spaceshipSavedData.mapPointInterests = associatedGroupBehaviour.mapPointsOfInterests.ToArray();
-
+            if (spaceshipData.characterType == CharacterType.VISITOR) {
                 List<MonkeyMenSavedData> monkeyMenSavedDatas = new List<MonkeyMenSavedData>();
                 
-                foreach (var visitorBehaviour in associatedGroupBehaviour.members) {
+                foreach (var visitorBehaviour in visitorsBehaviours) {
                     monkeyMenSavedDatas.Add(visitorBehaviour.GenerateSavedData());
                 }
 

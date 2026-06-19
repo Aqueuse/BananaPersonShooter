@@ -17,9 +17,7 @@ namespace InGame.MiniGames.SpaceTrafficControl.Spaceships {
         
         private GameObject _spaceshipInstance;
         private SpaceshipBehaviour spaceshipBehaviourInstance;
-
-        private Vector3 spaceshipSpawnerPosition;
-
+        
         private Vector3 entryPoint;
         private Vector3 arrivalPoint;
 
@@ -61,9 +59,9 @@ namespace InGame.MiniGames.SpaceTrafficControl.Spaceships {
 
             var randomPositionInCircle = Random.insideUnitCircle.normalized * 6000;
 
-            entryPoint = new Vector3(spaceshipPosition.x + randomPositionInCircle.x, 2631f, spaceshipPosition.z +randomPositionInCircle.y);
-            arrivalPoint = (spaceshipSpawnerPosition - entryPoint).normalized * 4000;
-            arrivalPoint.y = 2631f;
+            entryPoint = transform.position  + new Vector3(randomPositionInCircle.x, 0, randomPositionInCircle.y);
+            arrivalPoint = (transform.position - entryPoint).normalized * 4000;
+            arrivalPoint.y = transform.position.y;
 
             var characterType = spacechipsQueue.Dequeue();
 
@@ -75,9 +73,10 @@ namespace InGame.MiniGames.SpaceTrafficControl.Spaceships {
             spaceshipBehaviour.OpenCommunications(characterType);
             
             ObjectsReference.Instance.spaceTrafficControlManager.spaceshipBehavioursByGuid.Add(spaceshipBehaviour.spaceshipData.spaceshipGuid, spaceshipBehaviour);
+            ObjectsReference.Instance.uiCommunicationPanel.RefreshCommunicationQuantityButton();
         }
 
-        public SpaceshipBehaviour SpawnSpaceship(SpaceshipType spaceshipType, Vector3 position, Quaternion rotation) {
+        private SpaceshipBehaviour SpawnSpaceship(SpaceshipType spaceshipType, Vector3 position, Quaternion rotation) {
             var spaceship = Instantiate(
                 ObjectsReference.Instance.meshReferenceScriptableObject.spaceshipPrefabBySpaceshipType[spaceshipType],
                 position,

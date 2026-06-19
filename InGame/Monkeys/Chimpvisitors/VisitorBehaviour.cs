@@ -1,7 +1,6 @@
 using InGame.Items.ItemsBehaviours;
 using InGame.Items.ItemsBehaviours.BuildablesBehaviours;
 using InGame.Items.ItemsData.Characters;
-using InGame.Items.ItemsProperties.Characters;
 using InGame.Monkeys.PhysicToNavMeshCoordinations;
 using Save.Helpers;
 using Save.Templates;
@@ -74,16 +73,14 @@ namespace InGame.Monkeys.Chimpvisitors {
         private VisitorBuildableBehaviour _visitorBuildableBehaviour;
         public bool isFollowingGroup;
         
-        private GroupBehaviour _groupBehaviour;
         
-        public void Init(GroupBehaviour groupBehaviour, MonkeyMenPropertiesScriptableObject monkeyMenProperties, string associatedSpaceshipGuid, Vector3 spawnPoint) {
-            _groupBehaviour = groupBehaviour;
-            monkeyMenData.spaceshipGuid = associatedSpaceshipGuid;
+        public void Init(MonkeyMenData associatedMonkeyMenData, Vector3 spawnPoint) {
+            monkeyMenData = associatedMonkeyMenData;
 
             associatedSpaceshipBehaviour =
                 ObjectsReference.Instance.spaceTrafficControlManager.spaceshipBehavioursByGuid[monkeyMenData.spaceshipGuid];
             
-            SetColors(monkeyMenProperties.colorSets);
+            SetColors(monkeyMenData.colorsSet);
 
             navMeshAgent.updatePosition = false;
             navMeshAgent.updateRotation = true;
@@ -100,32 +97,27 @@ namespace InGame.Monkeys.Chimpvisitors {
             SynchronizeAnimatorAndAgent();
         }
 
-        public void OnNeedDetected(GameObject gameObject) {
+        public void OnNeedDetected(GameObject needSource) {
             if (!isFollowingGroup) return;
             if (monkeyMenData.isSatisfied) return;
             
-            var needLocation = gameObject.transform.GetComponent<VisitorBuildableBehaviour>();
+            var needLocation = needSource.transform.GetComponent<VisitorBuildableBehaviour>();
 
             if (needLocation.need != monkeyMenData.need) return;
             if (needLocation.isOccupied) return;
             
             organicRaycast.enabled = false;
-            _groupBehaviour.members.Remove(this);
 
             isFollowingGroup = false;
 
             needLocation.enabled = true;
             needLocation.PrepareOccupation(navMeshAgent, monkeyMenData.need == NeedType.PILLAGE);
-            SetDestination(gameObject.transform.position);
+            SetDestination(needSource.transform.position);
         }
         
         public void FinishSatisfyNeed() {
             monkeyMenData.isSatisfied = true;
             isFollowingGroup = true;
-            
-            if (!_groupBehaviour.members.Contains(this)) 
-                _groupBehaviour.members.Add(this);
-            SetDestination(_groupBehaviour.transform.position);
         }
         
         private void SetDestination(Vector3 destination) {

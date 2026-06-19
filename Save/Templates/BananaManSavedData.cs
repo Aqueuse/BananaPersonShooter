@@ -17,11 +17,7 @@ namespace Save.Templates {
         public int activeSlotIndex;
 
         public int bitKongQuantity;
-
-        public bool hasFinishedTutorial = false;
-
-        public List<string> discoveredRawMaterials = new();
-
+        
         public Dictionary<string, int> bananaInventory = new() {
             {BananaType.BARANGAN.ToString(), 0},
             {BananaType.BLUE_JAVA.ToString(), 0},

@@ -9,7 +9,7 @@ using UnityEngine;
 namespace Save {
     public class PlayerSave : MonoBehaviour {
         private BananaMan bananaMan;
-        
+
         private readonly Dictionary<BananaType, int> bananasInventory = new();
         private readonly Dictionary<RawMaterialType, int> rawMaterialsInventory = new();
         private readonly Dictionary<ManufacturedItemsType, int> manufacturedItemsInventory = new();
@@ -17,7 +17,7 @@ namespace Save {
         private readonly Dictionary<FoodType, int> foodInventory = new();
 
         private BananaManSavedData bananaManSavedData;
-        
+
         private void Start() {
             bananaMan = ObjectsReference.Instance.bananaMan;
         }
@@ -38,7 +38,6 @@ namespace Save {
             LoadActiveSlotIndex();
             
             LoadBitkongQuantity();
-            LoadDiscoveredMaterials();
         }
 
         private static BananaManSavedData LoadPlayerByUuid(string saveUuid) {
@@ -193,21 +192,6 @@ namespace Save {
             bananaMan.bananaManData.bitKongQuantity = bananaManSavedData.bitKongQuantity;
         }
         
-        private void LoadDiscoveredMaterials() {
-            bananaMan.bananaManData.discoveredRawMaterials.Clear();
-            
-            foreach (var discoveredRawMaterialString in bananaManSavedData.discoveredRawMaterials) {
-                RawMaterialType rawMaterialType = Enum.Parse<RawMaterialType>(discoveredRawMaterialString);
-                bananaMan.bananaManData.discoveredRawMaterials.Add(rawMaterialType);
-
-                var buildablesToUnlock =
-                    ObjectsReference.Instance.meshReferenceScriptableObject.unlockedBuildablesByRawMaterialType[
-                        rawMaterialType];
-                
-                ObjectsReference.Instance.bananaManBuildablesInventory.UnlockBuildablesTier(buildablesToUnlock);    
-            }
-        }
-        
         public void SavePlayerByUuid(string saveUuid) {
             bananaManSavedData ??= new BananaManSavedData();
             
@@ -233,35 +217,31 @@ namespace Save {
             bananaManSavedData.resistance = bananaMan.resistance;
 
             var bananaManPosition = bananaMan.transform.position;
-            
+
             bananaManSavedData.xWorldPosition = bananaManPosition.x;
             bananaManSavedData.yWorldPosition = bananaManPosition.y;
             bananaManSavedData.zworldPosition = bananaManPosition.z;
 
             var bananaManRotation = bananaMan.transform.rotation.eulerAngles;
-            
+
             bananaManSavedData.xWorldRotation = bananaManRotation.x;
             bananaManSavedData.yWorldRotation = bananaManRotation.y;
             bananaManSavedData.zWorldRotation = bananaManRotation.z;
-            
-            foreach (var discoveredRawMaterial in bananaMan.bananaManData.discoveredRawMaterials) {
-                bananaManSavedData.discoveredRawMaterials.Add(discoveredRawMaterial.ToString());
-            }
-            
+
             SaveSlots();
             bananaManSavedData.activeSlotIndex = ObjectsReference.Instance.bottomSlotsManager.activeSlotIndex;
-            
+
             bananaManSavedData.bitKongQuantity = bananaMan.bananaManData.bitKongQuantity;
 
             var jsonbananaManSaved = JsonConvert.SerializeObject(bananaManSavedData);
-        
+
             var savefilePath = Path.Combine(savePath, "player.json");
             File.WriteAllText(savefilePath, jsonbananaManSaved);
         }
 
         private void SaveSlots() {
             bananaManSavedData.slots.Clear();
-            
+
             foreach (var bottomSlot in ObjectsReference.Instance.bottomSlotsManager.uiBottomSlots) {
                 if (bottomSlot.slotType is SlotType.DROP or SlotType.BUILD) {
                     bananaManSavedData.slots.Add(bottomSlot.GenerateSavedData());

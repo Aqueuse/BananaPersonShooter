@@ -1,8 +1,8 @@
-using InGame.Items.ItemsProperties.Characters;
+using InGame.Items.ItemsData.Characters;
 using UnityEngine;
 
 namespace InGame.Monkeys.Chimployees {
     public class Chimployee : MonoBehaviour {
-        public MonkeyMenPropertiesScriptableObject chimployeePropertiesScriptableObject;
+        public MonkeyMenData monkeyMenData;
     }
 }

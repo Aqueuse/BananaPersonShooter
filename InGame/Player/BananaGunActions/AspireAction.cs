@@ -1,7 +1,7 @@
 ﻿using InGame.Items;
 using InGame.Items.ItemsBehaviours;
 using InGame.Items.ItemsBehaviours.BuildablesBehaviours;
-using InGame.Items.ItemsProperties.Dropped;
+using InGame.Items.ItemsProperties.Dropped.Debris;
 using Tags;
 using UnityEngine;
 
@@ -17,6 +17,7 @@ namespace InGame.Player.BananaGunActions {
         public GAME_OBJECT_TAG gameObjectTag;
         
         private Regime regimeClass;
+        WastePropertiesScriptableObject debrisScriptableObject;
         
         public GameObject targetedGameObject;
         
@@ -61,16 +62,15 @@ namespace InGame.Player.BananaGunActions {
                 
                 case GAME_OBJECT_TAG.WASTE:
                     targetedGameObject.GetComponent<MeshCollider>().enabled = false;
-                    
-                    var _wastePropertiesScriptableObject = 
-                        (WastePropertiesScriptableObject)gameObjectTagClass.itemScriptableObject;
 
                     var spawnPosition = targetedGameObject.transform.position;
+
+                    debrisScriptableObject = (WastePropertiesScriptableObject)targetedGameObject.GetComponent<Tag>().itemScriptableObject;
                     
-                    foreach (var droppedRawMaterialIngredient in _wastePropertiesScriptableObject.rawMaterialsWithQuantity) {
-                        for (int i = 0; i < droppedRawMaterialIngredient.Value; i++) {
+                    foreach (var rawMaterial in debrisScriptableObject.rawMaterialsWithQuantity) {
+                        for (int i = 0; i < rawMaterial.Value; i++) {
                             Instantiate(
-                                droppedRawMaterialIngredient.Key.prefab,
+                                ObjectsReference.Instance.meshReferenceScriptableObject.rawMaterialPrefabByRawMaterialType[rawMaterial.Key.rawMaterialType],
                                 spawnPosition,
                                 Quaternion.identity,
                                 ObjectsReference.Instance.gameSave.savablesItemsContainer

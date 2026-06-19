@@ -15,7 +15,5 @@ namespace InGame.Items.ItemsData {
         public List<MonkeyPropertiesScriptableObject> monkeysData;
 
         public int stationLightSetting;
-        public int lastVisitorGroup;
-        public int lastMerchimpGroup;
     }
 }

@@ -2,7 +2,6 @@ using InGame.Inventories;
 using InGame.Items.ItemsBehaviours;
 using InGame.Items.ItemsData.Characters;
 using InGame.Items.ItemsProperties;
-using InGame.Items.ItemsProperties.Characters;
 using Save.Helpers;
 using Save.Templates;
 using UI.InGame.Merchimps;
@@ -49,11 +48,11 @@ namespace InGame.Monkeys.Merchimps {
             StartWaitingTimer();
         }
 
-        public void Init(MonkeyMenPropertiesScriptableObject monkeyMenPropertiesScriptableObject, SpaceshipBehaviour spaceshipBehaviour) {
-            monkeyMenData.colorsSet = monkeyMenPropertiesScriptableObject.colorSets;
+        public void Init(MonkeyMenData associatedMonkeyMenData, SpaceshipBehaviour spaceshipBehaviour) {
+            monkeyMenData = associatedMonkeyMenData;
             associatedSpaceshipBehaviour = spaceshipBehaviour;
             
-            SetColors(monkeyMenData.colorsSet);
+            SetColors(associatedMonkeyMenData.colorsSet);
         }
         
         private void StartWaitingTimer() {

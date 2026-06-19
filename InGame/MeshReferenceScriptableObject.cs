@@ -2,8 +2,8 @@ using System;
 using System.Collections.Generic;
 using InGame.Items.ItemsProperties;
 using InGame.Items.ItemsProperties.Buildables;
-using InGame.Items.ItemsProperties.Characters;
 using InGame.Items.ItemsProperties.Dropped.Bananas;
+using InGame.Monkeys.Chimpvisitors;
 using UnityEngine;
 using UnityEngine.Localization;
 using Random = UnityEngine.Random;
@@ -32,50 +32,28 @@ namespace InGame {
         [Space]
         public List<GameObject> monkeyMenPrefabs;
         public GameObject merchimpPrefab;
+        [SerializeField] private VisitorColorPresetScriptableObject[] chimpvisitorsColorPresets;
+        
         public GenericDictionary<SpaceshipType, GameObject> spaceshipPrefabBySpaceshipType;
         [Space]
         public GenericDictionary<SpaceshipType, List<GameObject>> spaceshipDebrisBySpaceshipType;
+        public GenericDictionary<RawMaterialType, int> rawMaterialSpawnProbability;
+        public GenericDictionary<RawMaterialType, int> rawMaterialSpawnMaxQuantity;
+        
         public GenericDictionary<BananaEffect, Color> bananaGoopColorByEffectType;
         public Material blueprintBuildableMaterial;
         public Material completedBuildableMaterial;
-        [Space]
-        public List<MonkeyMenPropertiesScriptableObject> visitorsAppearanceScriptableObjects;
-        public List<MonkeyMenPropertiesScriptableObject> merchimpsAppearanceScriptableObjects;
         
         // since pirate are now mutable in visitor, merchant, or cultivator, they need to switch their item description
-        public GenericDictionary<CharacterType, LocalizedString> genericNameByCharacterType;
-        public GenericDictionary<CharacterType, LocalizedString> genericDescriptionByCharacterType;
+        public List<string> genericNameByCharacterType;
+        public GenericDictionary<CharacterType,LocalizedString> genericDescriptionByCharacterType;
         [Space]
         public GenericDictionary<CharacterType, Sprite> itemPreviewByCharacterType;
-        public GameObject groupPrefab;
-        
-        public GroupScriptableObject[] visitorsGroupsScriptableObjects;
-        public GroupScriptableObject[] merchimpsGroupsScriptableObjects;
         
         [Space]
         public GameObject teleportDownVFXPrefab;
 
         private ItemScriptableObject activeItem;
-        
-        public GroupScriptableObject GetNextVisitorGroup() {
-            ObjectsReference.Instance.worldData.lastVisitorGroup += 1;
-
-            if (ObjectsReference.Instance.worldData.lastVisitorGroup > visitorsGroupsScriptableObjects.Length-1) {
-                ObjectsReference.Instance.worldData.lastVisitorGroup = 0;
-            }
-
-            return visitorsGroupsScriptableObjects[ObjectsReference.Instance.worldData.lastVisitorGroup];
-        }
-        
-        public GroupScriptableObject GetNextMerchimpGroup() {
-            ObjectsReference.Instance.worldData.lastMerchimpGroup += 1;
-
-            if (ObjectsReference.Instance.worldData.lastMerchimpGroup > merchimpsGroupsScriptableObjects.Length-1) {
-                ObjectsReference.Instance.worldData.lastMerchimpGroup = 0;
-            }
-
-            return merchimpsGroupsScriptableObjects[ObjectsReference.Instance.worldData.lastMerchimpGroup];
-        }
         
         public static SpaceshipType GetRandomSpaceshipType() {
             var spaceshipTypes = Enum.GetValues(typeof(SpaceshipType));
@@ -102,8 +80,12 @@ namespace InGame {
             return bananaPrefabByBananaType[BananaType.CAVENDISH];
         }
 
-        public int GetRandomMerchimpPropertiesIndex() {
-            return Random.Range(0, merchimpsAppearanceScriptableObjects.Count - 1);
+        public string GetRandomChimpmenName() {
+            return genericNameByCharacterType[Random.Range(0, genericNameByCharacterType.Count - 1)];
+        }
+
+        public Color[] GetRandomChimpenColorsPreset() {
+            return chimpvisitorsColorPresets[0].colors;
         }
     }
 }

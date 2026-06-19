@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using InGame.Items.ItemsBehaviours;
 using InGame.MiniGames.MarketingCampaign;
 using TMPro;
@@ -78,7 +79,7 @@ namespace UI.InGame.CommandRoomControlPanels {
             spaceshipButton.GetComponentInChildren<TextMeshProUGUI>().text = spaceshipBehaviour.spaceshipData.spaceshipName;
             spaceshipButton.GetComponent<Image>().color = spaceshipBehaviour.spaceshipData.spaceshipUIcolor;
             
-            RefreshCommunicationButton();
+            RefreshCommunicationQuantityButton();
         }
         
         public void ShowCommunicationMessage(SpaceshipBehaviour spaceshipBehaviour) {
@@ -91,7 +92,6 @@ namespace UI.InGame.CommandRoomControlPanels {
             if (spaceshipMessage != null) spaceshipMessage.SetActive(false);
             
             // TODO : replace with text and regex espacing
-            // cf solution found by perplexity
             // Pour les caractères Unicode UTF-16 (format \uXXXX)
             // string texteAvecUnicode = rawMaterial.Key.spriteAtlasIndex;
             // var tokiPonaEscaped = Regex.Unescape(texteAvecUnicode);
@@ -104,14 +104,10 @@ namespace UI.InGame.CommandRoomControlPanels {
             messagePlaceholder.SetActive(false);
         }
         
-        public void CloseCommunicationsFromUI() {
-            CloseCommunications(ObjectsReference.Instance.spaceTrafficControlManager.selectedSpaceship);
-        }
-
         public void CloseCommunications(SpaceshipBehaviour spaceshipBehaviour) {
             foreach (var uIcommunication in spaceshipsListContainer.GetComponentsInChildren<UIcommunication>()) {
                 if (uIcommunication.associatedSpaceshipBehaviour == spaceshipBehaviour) {
-                    Destroy(uIcommunication.gameObject); 
+                    Destroy(uIcommunication.gameObject);
                 }
             }
 
@@ -122,7 +118,7 @@ namespace UI.InGame.CommandRoomControlPanels {
             if (spaceshipMessage != null) spaceshipMessage.SetActive(false);
             messagePlaceholder.SetActive(true);
             
-            RefreshCommunicationButton();
+            RefreshCommunicationQuantityButton();
         }
         
         public void RefreshHangarAvailability() {
@@ -139,12 +135,12 @@ namespace UI.InGame.CommandRoomControlPanels {
             }
         }
 
-        public void RefreshCommunicationButton() {
-            var communicationsQuantity = spaceshipsListContainer.GetComponentsInChildren<UIcommunication>().Length;
+        public void RefreshCommunicationQuantityButton() {
+            var communicationsOpenNumber = ObjectsReference.Instance.spaceTrafficControlManager.spaceshipBehavioursByGuid.Count(spaceshipBehaviour => spaceshipBehaviour.Value.spaceshipData.travelState == TravelState.FREE_FLIGHT);
 
-            communicationButtonImage.color = communicationsQuantity > 0 ? hangarUnavailableColor : hangarAvailableColor;
+            communicationButtonImage.color = communicationsOpenNumber > 0 ? hangarUnavailableColor : hangarAvailableColor;
 
-            communicationButtonQuantity.text = "(" + communicationsQuantity + ")";
+            communicationButtonQuantity.text = "(" + communicationsOpenNumber + ")";
         }
         
         public void SwitchToAdCampaignTab() {
