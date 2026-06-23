@@ -35,11 +35,14 @@ namespace UI {
             SetActive(UICanvasGroupType.CREDITS, false);
 
             SetActive(UICanvasGroupType.HOME_MENU, false);
+            
             isOnSubMenus = false;
         }
 
         public void ShowLoadMenu() {
+            SetActive(UICanvasGroupType.LOAD_BOTTOM_PANEL, false);
             SetActive(UICanvasGroupType.LOAD, true);
+            
             SetActive(UICanvasGroupType.OPTIONS, false);
             SetActive(UICanvasGroupType.CREDITS, false);
             SetActive(UICanvasGroupType.HOME_MENU, false);

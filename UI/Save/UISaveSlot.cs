@@ -8,7 +8,7 @@ namespace UI.Save {
         public string saveUuid = "";
         public string savedDate;
 
-        public void Click() {
+        public void SelectSaveSlot() {
             ObjectsReference.Instance.uiSave.selectedSaveSlot = this;
             
             ObjectsReference.Instance.uiSave.UpdateThumbail(savedDate);
@@ -16,7 +16,7 @@ namespace UI.Save {
             ObjectsReference.Instance.uiSave.ShowOptions(saveUuid == "autosave");
         }
 
-        public void Unselect() {
+        public void UnselectSaveSlot() {
             ObjectsReference.Instance.uiSave.HideThumbnail();
             
             ObjectsReference.Instance.uiSave.HideOptions();

@@ -46,8 +46,6 @@ namespace KeyboardInputs {
         private void Move(InputAction.CallbackContext callbackContext) {
             var movement2D = callbackContext.ReadValue<Vector2>();
             var movement = new Vector3(-movement2D.x, 0, -movement2D.y); 
-        
-            _miniMap.Move(movement);
         }
     }
 }

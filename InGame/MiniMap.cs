@@ -3,16 +3,17 @@ using UnityEngine;
 namespace InGame {
     public class MiniMap : MonoBehaviour {
         [SerializeField] private Camera miniMapCamera;
-        [SerializeField] private Transform miniMapCameraTransform;
-        
-        public void Move(Vector3 movement) {
-            // keep it on a max distance from the center
-            miniMapCameraTransform.position += movement;
-            
-            if (Vector3.Distance(ObjectsReference.Instance.commandRoomControlPanelsManager.transform.position,
-                    miniMapCameraTransform.position) > 5000) {
-                miniMapCameraTransform.position -= movement;
-            }
+        [SerializeField] private Quaternion miniMapCameraRotation;
+
+        private Vector3 cameraPosition;
+
+        private void Update() {
+            transform.rotation = miniMapCameraRotation;
+
+            cameraPosition = ObjectsReference.Instance.bananaMan.transform.position;
+            cameraPosition.y = 2720;
+
+            transform.position = cameraPosition;
         }
 
         public void Zoom() {
