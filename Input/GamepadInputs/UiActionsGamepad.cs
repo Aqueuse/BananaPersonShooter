@@ -7,9 +7,6 @@ namespace GamepadInputs {
         [SerializeField] private InputActionReference SwitchToRightOptionPanel;
 
         private void OnEnable() {
-            Cursor.visible = true;
-            Cursor.lockState = CursorLockMode.None;
-
             SwitchToLeftOptionPanel.action.Enable();
             SwitchToLeftOptionPanel.action.performed += Scroll_Left_Options_Tab;
 

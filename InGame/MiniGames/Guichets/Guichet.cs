@@ -17,25 +17,12 @@ namespace InGame.MiniGames.Guichets {
         [SerializeField] private Transform waitingListStart;
 
         public void OpenGuichet() {
-            ObjectsReference.Instance.cameraPlayer.Set0Sensibility();
-            ObjectsReference.Instance.cameraPlayer.DeactivateCamera();
-            ObjectsReference.Instance.playerController.canMove = false;
-            ObjectsReference.Instance.bananaGunActionsSwitch.gameObject.SetActive(false);
-
             // change camera look at and follow to cameraTransform
             ObjectsReference.Instance.uiInGameVirtualCamera.transform.position = cameraFollow.position;
             ObjectsReference.Instance.uiInGameVirtualCamera.transform.rotation = cameraLookAt.rotation;
             ObjectsReference.Instance.uiInGameVirtualCamera.enabled = true;
-
             
             ObjectsReference.Instance.gameManager.gameContext = GameContext.IN_GAME_UI_PANEL;
-
-            ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.CROSSHAIRS].alpha = 0;
-
-            Cursor.visible = true;
-            Cursor.lockState = CursorLockMode.None;
-            
-            // switch to UI (desactive banana man etc)
             ObjectsReference.Instance.inputManager.SwitchContext(InputContext.UI);
             
             // show Guichet UI
@@ -52,18 +39,8 @@ namespace InGame.MiniGames.Guichets {
             // change camera look at and follow to bananaMan camera transform
             ObjectsReference.Instance.uiInGameVirtualCamera.enabled = false;
             
-            ObjectsReference.Instance.cameraPlayer.ActivateCamera();
-            ObjectsReference.Instance.cameraPlayer.SetNormalSensibility();
-            ObjectsReference.Instance.playerController.canMove = true;
-
-            ObjectsReference.Instance.bananaGunActionsSwitch.gameObject.SetActive(true);
-
             ObjectsReference.Instance.gameManager.gameContext = GameContext.IN_GAME;
-
-            ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.CROSSHAIRS].alpha = 1;
-
-            Cursor.visible = false;
-            Cursor.lockState = CursorLockMode.Locked;
+            ObjectsReference.Instance.bananaMan.SetToPlayable();
 
             // switch to banana man
             ObjectsReference.Instance.inputManager.SwitchContext(InputContext.GAME);

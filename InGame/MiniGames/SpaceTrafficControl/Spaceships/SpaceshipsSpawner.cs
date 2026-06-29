@@ -57,10 +57,10 @@ namespace InGame.MiniGames.SpaceTrafficControl.Spaceships {
                 return;
             }
 
-            var randomPositionInCircle = Random.insideUnitCircle.normalized * 6000;
+            var randomPositionInCircle = Random.insideUnitCircle.normalized * 3000;
 
             entryPoint = transform.position  + new Vector3(randomPositionInCircle.x, 0, randomPositionInCircle.y);
-            arrivalPoint = (transform.position - entryPoint).normalized * 4000;
+            arrivalPoint = (transform.position - entryPoint).normalized * 3000;
             arrivalPoint.y = transform.position.y;
 
             var characterType = spacechipsQueue.Dequeue();

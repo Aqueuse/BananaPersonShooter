@@ -21,23 +21,16 @@ namespace InGame.CommandRoomPanelControls {
             if (ObjectsReference.Instance.gameManager.gameContext == GameContext.IN_GESTION_VIEW) {
                 ObjectsReference.Instance.uiManager.SetActive(UICanvasGroupType.HUD_GESTION, false);
             }
-
-            ObjectsReference.Instance.cameraPlayer.Set0Sensibility();
-            ObjectsReference.Instance.cameraPlayer.DeactivateCamera();
-            ObjectsReference.Instance.playerController.canMove = false;
-
+            
+            ObjectsReference.Instance.bananaMan.SetToNotPlayable();
+            
             ObjectsReference.Instance.uiInGameVirtualCamera.transform.position = cameraTransformByPanelType[commandRoomPanelType].transform.position;
             ObjectsReference.Instance.uiInGameVirtualCamera.transform.rotation = cameraFocusByPanelType[commandRoomPanelType].transform.rotation;
             ObjectsReference.Instance.uiInGameVirtualCamera.enabled = true;
-
-            
-            ObjectsReference.Instance.bananaGunActionsSwitch.gameObject.SetActive(false);
             
             ObjectsReference.Instance.inputManager.SwitchContext(InputContext.UI);
             ObjectsReference.Instance.gameManager.gameContext = GameContext.IN_COMMAND_ROOM_PANEL;
-
-            ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.CROSSHAIRS].alpha = 0;
-
+            
             if (commandRoomPanelType == CommandRoomPanelType.SPACE_TRAFFIC_CONTROL) {
                 Cursor.visible = false;
                 Cursor.lockState = CursorLockMode.Locked;

@@ -1,4 +1,3 @@
-using InGame.Monkeys.Chimpvisitors;
 using UnityEngine;
 using UnityEngine.AI;
 

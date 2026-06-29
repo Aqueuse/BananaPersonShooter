@@ -12,13 +12,10 @@ namespace InGame.Player {
                 ObjectsReference.Instance.bananaMan.tpsPlayerAnimator.FallFrontward();
                 ObjectsReference.Instance.playerController.StopPlayer();
                 
-                ObjectsReference.Instance.bananaMan.GetComponent<Rigidbody>().isKinematic = true;
                 ObjectsReference.Instance.audioManager.PlayEffect(SoundEffectType.BANANASPLASH, 0);
-
-                Cursor.visible = true;
-                Cursor.lockState = CursorLockMode.None;
-                ObjectsReference.Instance.cameraPlayer.Set0Sensibility();
-
+                
+                ObjectsReference.Instance.bananaMan.SetToNotPlayable();
+                
                 ObjectsReference.Instance.uiManager.SetActive(UICanvasGroupType.DEATH, true);
 
                 deathPlaneMeshRenderer.enabled = true;

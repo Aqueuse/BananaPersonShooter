@@ -93,8 +93,7 @@ namespace InGame {
         
         public void ReturnHome() {
             ObjectsReference.Instance.inputManager.SwitchContext(InputContext.UI);
-            ObjectsReference.Instance.bananaGunActionsSwitch.DesactiveBananaGun();
-
+            
             // prevent banana man to fall while loading scene
             ObjectsReference.Instance.playerController.StopPlayer();
 
@@ -104,28 +103,24 @@ namespace InGame {
         }
 
         private void SwitchToHomeSettings() {
+            ObjectsReference.Instance.bananaMan.SetToNotPlayable();
+
             startAnimations.SetActive(true);
             
             foreach (var inGameGameObject in inGameGameObjects) {
                 inGameGameObject.SetActive(false);
             }
             
-            Cursor.visible = true;
-            Cursor.lockState = CursorLockMode.None;
-
             gameContext = GameContext.IN_HOME;
 
             ObjectsReference.Instance.uiManager.HideGameMenu();
             ObjectsReference.Instance.uiManager.ShowHomeMenu();
 
             ObjectsReference.Instance.uiManager.SetActive(UICanvasGroupType.HUD_BANANAMAN, false);
-            ObjectsReference.Instance.uiManager.SetActive(UICanvasGroupType.CROSSHAIRS, false);
-
-            ObjectsReference.Instance.cameraPlayer.Set0Sensibility();
-
+            ObjectsReference.Instance.uiManager.HideCrosshairs();
+            
             RenderSettings.ambientLight = Color.white;
 
-            ObjectsReference.Instance.playerController.canMove = false;
             ObjectsReference.Instance.bananaMan.SetBananaSkinHealth();
             
             ObjectsReference.Instance.bananaMan.transform.position = spawnPointsBySpawnType[SpawnPoint.HOME].position;
@@ -158,7 +153,7 @@ namespace InGame {
 
             ObjectsReference.Instance.bananaGun.UngrabBananaGun();
 
-            ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.CROSSHAIRS].alpha = 1f;
+            ObjectsReference.Instance.uiManager.ShowCrosshairs();
 
             ObjectsReference.Instance.uInventoriesManager.HideUIHelpers();
             ObjectsReference.Instance.uiManager.SetActive(UICanvasGroupType.HUD_BANANAMAN, false);
@@ -189,7 +184,7 @@ namespace InGame {
             }
             
             ObjectsReference.Instance.uiManager.SetActive(UICanvasGroupType.HUD_BANANAMAN, true);
-            ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.CROSSHAIRS].alpha = 1f;
+            ObjectsReference.Instance.uiManager.ShowCrosshairs();
 
             ObjectsReference.Instance.uInventoriesManager.ShowCurrentUIHelper();
 

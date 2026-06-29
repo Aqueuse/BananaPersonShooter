@@ -7,9 +7,7 @@ namespace InGame.Items.ItemsProperties.Dropped.Bananas {
 
         public float healthBonus;
         public float resistanceBonus;
-
-        public BananaEffect bananaEffect;
-
-        public Color bananaColor;
+        
+        public BananaColor bananaColor;
     }
 }

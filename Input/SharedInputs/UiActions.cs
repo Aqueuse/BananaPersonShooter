@@ -9,9 +9,6 @@ namespace SharedInputs {
         [SerializeField] private InputActionReference hideInventoriesActionReference;
         
         private void OnEnable() {
-            Cursor.visible = true;
-            Cursor.lockState = CursorLockMode.None;
-
             cancelActionReference.action.Enable();
             cancelActionReference.action.performed += Escape;
             
@@ -59,7 +56,9 @@ namespace SharedInputs {
                     break;
                 
                 case GameContext.IN_GAME_UI_PANEL:
-                    ObjectsReference.Instance.uiGuichet.activatedGuichet.CloseGuichet();
+                    if (ObjectsReference.Instance.uiGuichet.activatedGuichet != null)
+                        ObjectsReference.Instance.uiGuichet.activatedGuichet.CloseGuichet();
+                    ObjectsReference.Instance.uiManager.HideBigMap();
                     break;
             }
         }

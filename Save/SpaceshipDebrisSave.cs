@@ -101,7 +101,6 @@ namespace Save {
                     spaceshipDebrisBehaviourInstance.prefabIndex = spaceshipDebrisData.prefabIndex;
                     spaceshipDebrisBehaviourInstance.spaceshipType = spaceshipDebrisData.spaceshipType;
                     spaceshipDebrisBehaviourInstance.isInSpace = spaceshipDebrisData.isInSpace;
-                    spaceshipDebrisBehaviourInstance.bananaEffect = spaceshipDebrisData.bananaEffect;
                     spaceshipDebrisBehaviourInstance.effectSource =
                         JsonHelper.FromStringToVector3(spaceshipDebrisData.effectSourcePosition);
 

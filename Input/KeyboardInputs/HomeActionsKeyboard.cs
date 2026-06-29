@@ -11,9 +11,6 @@ namespace KeyboardInputs {
         [SerializeField] private Transform startAnimations;
         
         private void OnEnable() {
-            Cursor.visible = true;
-            Cursor.lockState = CursorLockMode.None;
-            
             launchBananaInputActionReference.action.Enable();
             launchBananaInputActionReference.action.performed += launchBanana;
             

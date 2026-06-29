@@ -35,7 +35,7 @@ namespace InGame {
             _cinematiqueVideoPlayer.enabled = true;
             skipCinematiqueGameObject.SetActive(true);
 
-            ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.CROSSHAIRS].alpha = 0f;
+            ObjectsReference.Instance.uiManager.HideCrosshairs();
             ObjectsReference.Instance.gameManager.gameContext = GameContext.IN_CINEMATIQUE;
 
             _cinematiqueCamera.enabled = true;
@@ -66,7 +66,7 @@ namespace InGame {
 
             Cursor.visible = false;
             Cursor.lockState = CursorLockMode.Locked;
-            ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.CROSSHAIRS].alpha = 1f;
+            ObjectsReference.Instance.uiManager.ShowCrosshairs();
 
             ObjectsReference.Instance.inputManager.SwitchContext(InputContext.GAME);
             ObjectsReference.Instance.gameManager.gameContext = GameContext.IN_GAME;

@@ -1,4 +1,3 @@
-using InGame.Inventories;
 using UnityEngine;
 
 namespace InGame.MiniGames.SpaceTrafficControl.Spaceships {
@@ -13,8 +12,7 @@ namespace InGame.MiniGames.SpaceTrafficControl.Spaceships {
         public RegionType activeCannonRegion = RegionType.MAP01;
         [HideInInspector] public Cannon activeCannon;
 
-        public BananaEffect activeBananaGoop = BananaEffect.ATTRACTION;
-        public BananaGoopInventory bananaGoopInventory;
+        public int bananaGoopQuantity;
         
         public float minRotationY;
         public float maxRotationY;
@@ -53,7 +51,6 @@ namespace InGame.MiniGames.SpaceTrafficControl.Spaceships {
             activeCannon = cannonsByRegionType[activeCannonRegion];
             
             activeCannon.PositionneCamera(cameraCannonTransform);
-            activeCannon.SetCannon(activeBananaGoop);
             
             Cursor.visible = false;
             Cursor.lockState = CursorLockMode.Locked;

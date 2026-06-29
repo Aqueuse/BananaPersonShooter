@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using InGame.Items.ItemsBehaviours.DroppedBehaviours;
 using InGame.MiniGames.SpaceTrafficControl.Spaceships;
 using UnityEngine;
@@ -9,15 +8,14 @@ namespace InGame.CommandRoomPanelControls {
         
         private void Start() {
             cannonsManager = ObjectsReference.Instance.cannonsManager;
-            cannonsManager.bananaGoopInventory.AddQuantity(BananaEffect.ATTRACTION, 1000); // TODO : remove before build
+            cannonsManager.bananaGoopQuantity += 1000; // TODO : remove before build
         }
 
         private void OnCollisionEnter(Collision other) {
             if (other.gameObject.layer != 7) return;
 
             if (other.gameObject.TryGetComponent<BananaBehaviour>(out var bananaBehaviour)) {
-                cannonsManager.bananaGoopInventory.AddQuantity(
-                    bananaBehaviour.bananasPropertiesScriptableObject.bananaEffect, 1);
+                cannonsManager.bananaGoopQuantity += 1;
                 ObjectsReference.Instance.uiCannons.RefreshBananaGoopsQuantity();
                 
                 Destroy(other.gameObject);

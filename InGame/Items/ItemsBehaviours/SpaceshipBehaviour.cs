@@ -10,12 +10,10 @@ using Save.Templates;
 using Tags;
 using UnityEngine;
 using UnityEngine.Splines;
-using Object = System.Object;
 using Random = UnityEngine.Random;
 
 namespace InGame.Items.ItemsBehaviours {
     public class SpaceshipBehaviour : MonoBehaviour {
-        [SerializeField] private Transform _spaceshipTransform;
         [SerializeField] private SplineAnimate _splineAnimate;
         public SpaceshipData spaceshipData;
         
@@ -53,8 +51,8 @@ namespace InGame.Items.ItemsBehaviours {
             switch (spaceshipData.travelState) {
                 case TravelState.FREE_FLIGHT or TravelState.LEAVES_THE_REGION:
                     _step = SpaceshipData._propulsionSpeed * Time.deltaTime;
-                    _spaceshipTransform.position = Vector3.MoveTowards(_spaceshipTransform.position, spaceshipData.arrivalPosition, _step);
-                    _spaceshipTransform.LookAt(spaceshipData.arrivalPosition, Vector3.up);
+                    transform.position = Vector3.MoveTowards(transform.position, spaceshipData.arrivalPosition, _step);
+                    transform.LookAt(spaceshipData.arrivalPosition, Vector3.up);
                     
                     if (Vector3.Distance(transform.position, spaceshipData.arrivalPosition) < 10) LeaveRegion();
 

@@ -15,7 +15,6 @@ namespace InGame.Items.ItemsBehaviours {
         public bool isInSpace;
 
         public Vector3 effectSource;
-        public BananaEffect bananaEffect;
 
         private Rigidbody _rigidbody;
         private Material _material;
@@ -32,8 +31,6 @@ namespace InGame.Items.ItemsBehaviours {
         }
 
         private void Update() {
-            if (bananaEffect != BananaEffect.ATTRACTION) return;
-
             transform.position = Vector3.MoveTowards(transform.position, effectSource, 200 * Time.deltaTime);
 
             if (Vector3.Distance(transform.position, effectSource) < 10) {
@@ -45,7 +42,6 @@ namespace InGame.Items.ItemsBehaviours {
                 GetComponent<MeshCollider>().isTrigger = false;
 
                 isInSpace = false;
-                bananaEffect = BananaEffect.NONE;
                 DeactivateEmission();
             }
         }
@@ -53,14 +49,7 @@ namespace InGame.Items.ItemsBehaviours {
         public void Init(Laser laser) {
             isInSpace = true;
             DestroyIfUnreachable();
-
-            if (laser.bananaEffect == BananaEffect.ATTRACTION) {
-                bananaEffect = BananaEffect.ATTRACTION;
-                effectSource = laser.transform.position;
-            }
             
-            ActiveEmission(laser.goopColor);
-
             transform.parent = ObjectsReference.Instance.gameSave.savablesItemsContainer;
         }
         
@@ -91,7 +80,6 @@ namespace InGame.Items.ItemsBehaviours {
                 prefabIndex = prefabIndex,
                 spaceshipType = spaceshipType,
                 isInSpace = isInSpace,
-                bananaEffect = bananaEffect,
                 effectSourcePosition = JsonHelper.FromVector3ToString(effectSource)
             };
 

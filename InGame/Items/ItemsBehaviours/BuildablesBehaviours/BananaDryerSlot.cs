@@ -6,6 +6,6 @@ namespace InGame.Items.ItemsBehaviours.BuildablesBehaviours {
         public bool hasBananaPeel;
         public bool hasFabric;
         public float timer;
-        public BananaEffect bananaEffect;
+        public BananaColor bananaColor;
     }
 }

@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using InGame.Items.ItemsData.Characters;
 using InGame.Monkeys.Merchimps;
 using TMPro;
 using UI.InGame.MainPanel.Inventories;

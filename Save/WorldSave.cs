@@ -1,4 +1,3 @@
-using System;
 using System.IO;
 using InGame.Items.ItemsData;
 using Newtonsoft.Json;
@@ -37,9 +36,7 @@ namespace Save {
                 }
             }
             
-            foreach (var bananaGoop in savedWorldData.bananaGoopCannonInventory) {
-                ObjectsReference.Instance.cannonsManager.bananaGoopInventory.bananaGoopInventory[Enum.Parse<BananaEffect>(bananaGoop.Key)] = bananaGoop.Value;
-            }
+            ObjectsReference.Instance.cannonsManager.bananaGoopQuantity = savedWorldData.bananaGoopQuantity;
             
             foreach (var cannon in ObjectsReference.Instance.cannonsManager.cannonsByRegionType) {
                 cannon.Value.SetRotation(
@@ -65,10 +62,8 @@ namespace Save {
                 worldSavedData.monkeysSasietyTimerByMonkeyId.Add(monkey.monkeyId, (int)monkey.sasietyTimer);
             }
 
-            foreach (var bananaGoop in ObjectsReference.Instance.cannonsManager.bananaGoopInventory.bananaGoopInventory) {
-                worldSavedData.bananaGoopCannonInventory[bananaGoop.Key.ToString()] = bananaGoop.Value;
-            }
-
+            worldSavedData.bananaGoopQuantity = ObjectsReference.Instance.cannonsManager.bananaGoopQuantity;
+            
             worldSavedData.activeCannonRegion = ObjectsReference.Instance.cannonsManager.activeCannonRegion;
             
             foreach (var cannon in ObjectsReference.Instance.cannonsManager.cannonsByRegionType) {

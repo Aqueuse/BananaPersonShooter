@@ -14,7 +14,7 @@ namespace InGame {
         public GenericDictionary<BuildableType, GameObject> buildablePrefabByBuildableType;
         public GenericDictionary<BananaType, GameObject> bananaPrefabByBananaType;
         public GenericDictionary<RawMaterialType, GameObject> rawMaterialPrefabByRawMaterialType;
-        public GenericDictionary<BananaEffect, GameObject> DyePrefabByBananaEffect;
+        public GenericDictionary<BananaColor, GameObject> DyePrefabByBananaColor;
         public GenericDictionary<IngredientsType, GameObject> ingredientPrefabByIngredientType;
         public GenericDictionary<ManufacturedItemsType, GameObject> manufacturedItemPrefabByManufacturedItemType;
         public GenericDictionary<FoodType, GameObject> foodPrefabByFoodType;
@@ -26,7 +26,7 @@ namespace InGame {
         public GenericDictionary<ManufacturedItemsType, ItemScriptableObject> manufacturedItemsPropertiesScriptableObjects;
         public GenericDictionary<IngredientsType, ItemScriptableObject> ingredientsPropertiesScriptableObjects;
         public GenericDictionary<FoodType, ItemScriptableObject> foodPropertiesScriptableObjects;
-        public GenericDictionary<BananaEffect, ItemScriptableObject> rawMaterialPropertiesByBananaEffect;
+        public GenericDictionary<BananaColor, ItemScriptableObject> rawMaterialPropertiesByBananaColor;
         [Space]
         public GenericDictionary<RawMaterialType, BuildableType[]> unlockedBuildablesByRawMaterialType;
         [Space]
@@ -40,7 +40,6 @@ namespace InGame {
         public GenericDictionary<RawMaterialType, int> rawMaterialSpawnProbability;
         public GenericDictionary<RawMaterialType, int> rawMaterialSpawnMaxQuantity;
         
-        public GenericDictionary<BananaEffect, Color> bananaGoopColorByEffectType;
         public Material blueprintBuildableMaterial;
         public Material completedBuildableMaterial;
         

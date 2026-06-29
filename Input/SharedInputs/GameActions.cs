@@ -30,7 +30,7 @@ namespace SharedInputs {
         
         public InputActionReference openGestionPanelActionReference;
         public InputActionReference openInventoryActionReference;
-        public InputActionReference ShowHideMapActionReference;
+        public InputActionReference ShowBigMapActionReference;
 
         public InputActionReference pauseGameActionReference;
 
@@ -50,7 +50,7 @@ namespace SharedInputs {
             ObjectsReference.Instance.playerController.canMove = true;
             ObjectsReference.Instance.bananaMan.GetComponent<Rigidbody>().isKinematic = false;
 
-            ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.CROSSHAIRS].alpha = 1;
+            ObjectsReference.Instance.uiManager.ShowCrosshairs();
             
             ObjectsReference.Instance.bananaGunActionsSwitch.gameObject.SetActive(true);
             
@@ -84,8 +84,8 @@ namespace SharedInputs {
             openInventoryActionReference.action.Enable();
             openInventoryActionReference.action.performed += ShowInventories;
             
-            ShowHideMapActionReference.action.Enable();
-            ShowHideMapActionReference.action.performed += ShowHideMap;
+            ShowBigMapActionReference.action.Enable();
+            ShowBigMapActionReference.action.performed += ShowBigMap;
             
             pauseGameActionReference.action.Enable();
             pauseGameActionReference.action.performed += PauseGame;
@@ -121,8 +121,8 @@ namespace SharedInputs {
             openInventoryActionReference.action.Disable();
             openInventoryActionReference.action.performed -= ShowInventories;
             
-            ShowHideMapActionReference.action.Disable();
-            ShowHideMapActionReference.action.performed -= ShowHideMap;
+            ShowBigMapActionReference.action.Disable();
+            ShowBigMapActionReference.action.performed -= ShowBigMap;
             
             pauseGameActionReference.action.Disable();
             pauseGameActionReference.action.performed -= PauseGame;
@@ -205,8 +205,15 @@ namespace SharedInputs {
             ObjectsReference.Instance.uiManager.ShowInventory();
         }
 
-        private static void ShowHideMap(InputAction.CallbackContext context) {
-            ObjectsReference.Instance.uiManager.ShowHideMap();
+        private void ShowBigMap(InputAction.CallbackContext context) {
+            ObjectsReference.Instance.cameraPlayer.Set0Sensibility();
+            ObjectsReference.Instance.inputManager.SwitchContext(InputContext.UI);
+            ObjectsReference.Instance.gameManager.gameContext = GameContext.IN_GAME_UI_PANEL;
+            
+            ObjectsReference.Instance.bananaGunActionsSwitch.gameObject.SetActive(false);
+            
+            ObjectsReference.Instance.uiManager.HideCrosshairs();
+            ObjectsReference.Instance.uiManager.ShowBigMap();
         }
         
         private void ZoomDezoomCamera(InputAction.CallbackContext context) {

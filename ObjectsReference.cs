@@ -76,7 +76,7 @@ public class ObjectsReference : MonoSingleton<ObjectsReference> {
     [Header("Gestion Mode")]
     public ScanWithMouseForDescription scanWithMouseForDescription;
     public MiniChimpDialoguesManager miniChimpDialoguesManager;
-    public MiniMap miniMap;
+    public Map map;
     [Space]
     public GestionViewMode gestionViewMode;
     
@@ -99,6 +99,7 @@ public class ObjectsReference : MonoSingleton<ObjectsReference> {
     [Header("UI")]
     public UIManager uiManager;
     [Space]
+    public UICrosshairs uICrosshairs;
     public UInventoriesManager uInventoriesManager;
     public UiMainPanel uiMainPanel;
     public UIMissingMaterialBuildingPanel uiMissingMaterialBuildingPanel;

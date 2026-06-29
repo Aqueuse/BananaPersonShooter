@@ -5,6 +5,10 @@ using UnityEngine.EventSystems;
 namespace UI {
     public class UIManager : MonoBehaviour {
         public GenericDictionary<UICanvasGroupType, CanvasGroup> canvasGroupsByUICanvasType;
+        
+        [SerializeField] private Material MiniMapSpritesMaterial;
+        private static readonly int sizeMultiplier = Shader.PropertyToID("_SizeMultiplier");
+
         public bool isOnSubMenus;
         
         private void Start() {
@@ -103,12 +107,21 @@ namespace UI {
         public void HideGameMenu() {
             SetActive(UICanvasGroupType.GAME_MENU, false);
         }
-        
-        public void ShowHideMap() {
-            canvasGroupsByUICanvasType[UICanvasGroupType.MAP].alpha = 
-                canvasGroupsByUICanvasType[UICanvasGroupType.MAP].alpha == 0 ? 0.6f : 0f;
+
+        public void ShowBigMap() {
+            canvasGroupsByUICanvasType[UICanvasGroupType.BIG_MAP].alpha = 0.99f;
+            canvasGroupsByUICanvasType[UICanvasGroupType.MINI_MAP].alpha = 0f;
+
+            MiniMapSpritesMaterial.SetFloat(sizeMultiplier, 1);
         }
-        
+
+        public void HideBigMap() {
+            canvasGroupsByUICanvasType[UICanvasGroupType.BIG_MAP].alpha = 0;
+            canvasGroupsByUICanvasType[UICanvasGroupType.MINI_MAP].alpha = 1f;
+            
+            MiniMapSpritesMaterial.SetFloat(sizeMultiplier, 10);
+        }
+
         public void ShowMainPanel() {
             SetActive(UICanvasGroupType.MAIN_PANEL, true);
             ObjectsReference.Instance.uiMainPanel.SwitchToLastFocusedBlock();
@@ -140,11 +153,7 @@ namespace UI {
             SetActive(UICanvasGroupType.HUD_BANANAMAN, false);
             SetActive(UICanvasGroupType.HUD_GESTION, true);
             
-            ObjectsReference.Instance.bananaGunActionsSwitch.DesactiveBananaGun();
-
-            Cursor.visible = true;
-            Cursor.lockState = CursorLockMode.None;
-            ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.CROSSHAIRS].alpha = 0;
+            ObjectsReference.Instance.bananaMan.SetToNotPlayable();
             
             ObjectsReference.Instance.gestionViewMode.enabled = true;
             ObjectsReference.Instance.inputManager.SwitchContext(InputContext.GESTION_VIEW);
@@ -161,7 +170,9 @@ namespace UI {
 
             SetActive(UICanvasGroupType.HUD_GESTION, false);
             SetActive(UICanvasGroupType.HUD_BANANAMAN, true);
-            
+
+            ObjectsReference.Instance.bananaMan.SetToPlayable();
+
             ObjectsReference.Instance.camerasManager.SwitchToBananaManView();
         }
         
@@ -173,7 +184,6 @@ namespace UI {
                 ObjectsReference.Instance.playerController.canMove = false;
                 
                 SetActive(UICanvasGroupType.DEBUG_PANEL, true);
-                
             }
 
             else {
@@ -185,7 +195,15 @@ namespace UI {
                 SetActive(UICanvasGroupType.DEBUG_PANEL, false);
             }
         }
-        
+
+        public void ShowCrosshairs() {
+            SetActive(UICanvasGroupType.CROSSHAIRS, true);
+        }
+
+        public void HideCrosshairs() {
+            SetActive(UICanvasGroupType.CROSSHAIRS, false);
+        }
+
         public void SetActive(UICanvasGroupType uiCanvasGroupType, bool visible) {
             var canvasGroup = canvasGroupsByUICanvasType[uiCanvasGroupType];
 

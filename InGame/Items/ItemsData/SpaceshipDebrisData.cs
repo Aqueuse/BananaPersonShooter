@@ -10,7 +10,6 @@ namespace InGame.Items.ItemsData {
         public int prefabIndex;
 
         public bool isInSpace;
-        public BananaEffect bananaEffect;
         public string effectSourcePosition;
     }
 }

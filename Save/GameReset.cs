@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using Save.Templates;
 using UnityEngine;
 using UnityEngine.AI;
@@ -26,7 +25,7 @@ namespace Save {
             ResetMonkeysSasiety();
             ResetMonkeysPositions();
 
-            ResetCanonsBananaGoopQuantities();
+            ResetCanonsBananaGoopQuantity();
             ResetCanonsRotations();
         }
 
@@ -75,13 +74,8 @@ namespace Save {
             }
         }
 
-        private static void ResetCanonsBananaGoopQuantities() {
-            ObjectsReference.Instance.cannonsManager.bananaGoopInventory.bananaGoopInventory = new Dictionary<BananaEffect, int> { 
-                { BananaEffect.ATTRACTION, 0 },
-                { BananaEffect.REPULSION, 0 },
-                { BananaEffect.SLOW, 0 },
-                { BananaEffect.FAST, 0 }
-            };
+        private static void ResetCanonsBananaGoopQuantity() {
+            ObjectsReference.Instance.cannonsManager.bananaGoopQuantity = 0;
         }
 
         private static void ResetCanonsRotations() {

@@ -19,16 +19,7 @@ namespace SharedInputs {
         }
 
         private void OnEnable() {
-            ObjectsReference.Instance.cameraPlayer.Set0Sensibility();
-
-            ObjectsReference.Instance.playerController.canMove = false;
-            ObjectsReference.Instance.bananaMan.GetComponent<Rigidbody>().isKinematic = true;
-
-            Cursor.visible = true;
-            Cursor.lockState = CursorLockMode.None;
-
-            ObjectsReference.Instance.playerController.canMove = false;
-            ObjectsReference.Instance.bananaMan.GetComponent<Rigidbody>().isKinematic = true;
+            ObjectsReference.Instance.bananaMan.SetToNotPlayable();
             
             leftClickInputActionReference.action.Enable();
             leftClickInputActionReference.action.performed += ContextualLeftClick;

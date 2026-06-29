@@ -50,5 +50,39 @@ namespace InGame.Player {
         public void SetBananaSkinHealth() {
             bodyMeshRenderer.materials[0].SetFloat(CutoffHeight, (_maxHealth-health)/100);
         }
+
+        public void SetToPlayable() {
+            ObjectsReference.Instance.cameraPlayer.ActivateCamera();
+            ObjectsReference.Instance.cameraPlayer.SetNormalSensibility();
+            
+            ObjectsReference.Instance.playerController.canMove = true;
+
+            ObjectsReference.Instance.playerController.canMove = true;
+            ObjectsReference.Instance.bananaMan.GetComponent<Rigidbody>().isKinematic = false;
+
+            ObjectsReference.Instance.bananaGunActionsSwitch.gameObject.SetActive(true);
+            
+            ObjectsReference.Instance.uiManager.ShowCrosshairs();
+
+            Cursor.visible = false;
+            Cursor.lockState = CursorLockMode.Locked;
+        }
+
+
+        public void SetToNotPlayable() {
+            ObjectsReference.Instance.cameraPlayer.Set0Sensibility();
+            ObjectsReference.Instance.cameraPlayer.DeactivateCamera();
+            ObjectsReference.Instance.bananaGunActionsSwitch.DesactiveBananaGun();
+            
+            ObjectsReference.Instance.playerController.canMove = false;
+            ObjectsReference.Instance.bananaGunActionsSwitch.gameObject.SetActive(false);
+            
+            ObjectsReference.Instance.bananaMan.GetComponent<Rigidbody>().isKinematic = true;
+
+            ObjectsReference.Instance.uiManager.HideCrosshairs();
+
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.None;
+        }
     }
 }

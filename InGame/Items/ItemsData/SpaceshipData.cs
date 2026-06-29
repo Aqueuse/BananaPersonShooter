@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using InGame.Items.ItemsData.Characters;
-using InGame.Monkeys.Chimpvisitors;
 using UnityEngine;
 
 namespace InGame.Items.ItemsData {

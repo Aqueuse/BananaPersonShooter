@@ -18,22 +18,22 @@ namespace InGame.Items.ItemsBehaviours.BuildablesBehaviours {
         [SerializeField] private GameObject[] bananaPeel;
         [SerializeField] private GameObject[] fabric;
         
-        private readonly BananaEffect[] colorants = new BananaEffect[20];
+        private readonly BananaColor[] colorants = new BananaColor[20];
 
         private int bananaPeelsQuantity;
         
         private void InitSlots() {
             for (var i = 0; i < 20; i++) {
                 if (slots[i].hasBananaPeel) {
-                    PutBanana(i, slots[i].bananaEffect);
-                    colorants[i] = slots[i].bananaEffect;
+                    PutBanana(i, slots[i].bananaColor);
+                    colorants[i] = slots[i].bananaColor;
                     
                     bananaPeelsQuantity += 1;
                 }
                 
                 else if (slots[i].hasFabric) {
                     SetFabric(i);
-                    colorants[i] = slots[i].bananaEffect;
+                    colorants[i] = slots[i].bananaColor;
                 }
             }
         }
@@ -56,10 +56,10 @@ namespace InGame.Items.ItemsBehaviours.BuildablesBehaviours {
             }
         }
 
-        private bool TryToPutBananaPeel(BananaEffect bananaEffect) {
+        private bool TryToPutBananaPeel(BananaColor bananaColor) {
             for (var i = 0; i < 20; i++) {
                 if (!slots[i].hasFabric && !slots[i].hasBananaPeel) {
-                    PutBanana(i, bananaEffect);
+                    PutBanana(i, bananaColor);
                     return true;
                 }
             }
@@ -67,14 +67,14 @@ namespace InGame.Items.ItemsBehaviours.BuildablesBehaviours {
             return false;
         }
 
-        private void PutBanana(int slotIndex, BananaEffect bananaColor) {
+        private void PutBanana(int slotIndex, BananaColor bananaColor) {
             slots[slotIndex].hasBananaPeel = true;
             
             bananaPeel[slotIndex].SetActive(true);
             
-            slots[slotIndex].bananaEffect = bananaColor;
+            slots[slotIndex].bananaColor = bananaColor;
             slots[slotIndex].timer = conversionDuration;
-            colorants[slotIndex] = slots[slotIndex].bananaEffect;
+            colorants[slotIndex] = slots[slotIndex].bananaColor;
             
             bananaPeelsQuantity += 1;
         }
@@ -105,7 +105,7 @@ namespace InGame.Items.ItemsBehaviours.BuildablesBehaviours {
                     );
                     
                     Instantiate(
-                        ObjectsReference.Instance.meshReferenceScriptableObject.DyePrefabByBananaEffect[colorants[i]],
+                        ObjectsReference.Instance.meshReferenceScriptableObject.DyePrefabByBananaColor[colorants[i]],
                         fabric[i].transform.position - Vector3.forward,
                         fabric[i].transform.rotation,
                         ObjectsReference.Instance.gameSave.savablesItemsContainer
@@ -129,7 +129,7 @@ namespace InGame.Items.ItemsBehaviours.BuildablesBehaviours {
                     );
                     
                     Instantiate(
-                        ObjectsReference.Instance.meshReferenceScriptableObject.DyePrefabByBananaEffect[colorants[i]],
+                        ObjectsReference.Instance.meshReferenceScriptableObject.DyePrefabByBananaColor[colorants[i]],
                         fabric[i].transform.position - Vector3.forward,
                         fabric[i].transform.rotation,
                         ObjectsReference.Instance.gameSave.savablesItemsContainer
@@ -156,7 +156,7 @@ namespace InGame.Items.ItemsBehaviours.BuildablesBehaviours {
             if (buildableData.buildableState == BuildableState.BLUEPRINT) return;
 
             if (other.gameObject.TryGetComponent<BananaBehaviour>(out var bananaBehaviour)) {
-                var bananaPeelPlaced = TryToPutBananaPeel(bananaBehaviour.bananasPropertiesScriptableObject.bananaEffect);
+                var bananaPeelPlaced = TryToPutBananaPeel(bananaBehaviour.bananasPropertiesScriptableObject.bananaColor);
                 
                 if (bananaPeelPlaced) Destroy(other.gameObject);
             }

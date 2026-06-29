@@ -4,12 +4,10 @@ using UnityEngine;
 namespace UI.InGame.CommandRoomControlPanels {
     public class UICannons : MonoBehaviour {
         [SerializeField] private TextMeshProUGUI noBananaText;
-        [SerializeField] private GenericDictionary<BananaEffect, TextMeshProUGUI> slidersByBananaGoopType;
+        [SerializeField] private TextMeshProUGUI bananaQuantityText;
         
         public void RefreshBananaGoopsQuantity() {
-            foreach (var bananaGoop in ObjectsReference.Instance.cannonsManager.bananaGoopInventory.bananaGoopInventory) {
-                slidersByBananaGoopType[bananaGoop.Key].text = bananaGoop.Value.ToString();
-            }
+            bananaQuantityText.text = ObjectsReference.Instance.cannonsManager.bananaGoopQuantity.ToString();
         }
     }
 }

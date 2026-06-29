@@ -7,14 +7,9 @@ namespace Save.Templates {
 
         public int stationLightSetting;
         public int lastVisitorGroup;
-        
-        public Dictionary<string, int> bananaGoopCannonInventory = new Dictionary<string, int>() {
-            { BananaEffect.ATTRACTION .ToString(), 0 },
-            { BananaEffect.REPULSION.ToString(), 0 },
-            { BananaEffect.SLOW.ToString(), 0 },
-            { BananaEffect.FAST.ToString(), 0 }
-        };
 
+        public int bananaGoopQuantity;
+        
         public RegionType activeCannonRegion;
 
         public Dictionary<string, float> cannonsSocleYRotation = new Dictionary<string, float>() {
