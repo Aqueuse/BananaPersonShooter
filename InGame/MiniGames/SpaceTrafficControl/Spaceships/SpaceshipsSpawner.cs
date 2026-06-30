@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using InGame.Items.ItemsBehaviours;
-using InGame.MiniGames.MarketingCampaign;
+using InGame.MiniGames.Communications;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -26,12 +26,10 @@ namespace InGame.MiniGames.SpaceTrafficControl.Spaceships {
             spaceships = new List<CharacterType>();
             spacechipsQueue = new Queue<CharacterType>();
             
-            adCampaign = ObjectsReference.Instance.adMarketingCampaignManager.adCampaign;
+            adCampaign = ObjectsReference.Instance.communicationsManager.adCampaign;
         }
 
         public void SpawnSpaceshipsWithAdCampaign() {
-            ObjectsReference.Instance.uiCommunicationPanel.HideCampaignCreationTools();
-
             spaceships = ShuffleSpaceships(adCampaign.piratesNumber + adCampaign.touristsNumber, adCampaign.merchimpsNumber);
 
             foreach (var spaceship in spaceships) {
@@ -42,11 +40,7 @@ namespace InGame.MiniGames.SpaceTrafficControl.Spaceships {
         }
 
         public void RemoveGuestInCampaignCreator() {
-            if (spaceships.Count == 0) {
-                ObjectsReference.Instance.uiCommunicationPanel.ShowCampaignCreatorTools();
-            }
-
-            else {
+            if (spaceships.Count > 0) {
                 spaceships.RemoveAt(0);
             }
         }
@@ -73,7 +67,7 @@ namespace InGame.MiniGames.SpaceTrafficControl.Spaceships {
             spaceshipBehaviour.OpenCommunications(characterType);
             
             ObjectsReference.Instance.spaceTrafficControlManager.spaceshipBehavioursByGuid.Add(spaceshipBehaviour.spaceshipData.spaceshipGuid, spaceshipBehaviour);
-            ObjectsReference.Instance.uiCommunicationPanel.RefreshCommunicationQuantityButton();
+            ObjectsReference.Instance.communicationsManager.RefreshCommunicationQuantityButton();
         }
 
         private SpaceshipBehaviour SpawnSpaceship(SpaceshipType spaceshipType, Vector3 position, Quaternion rotation) {

@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-namespace InGame.MiniGames.MarketingCampaign {
+namespace InGame.MiniGames.Communications {
     public class AdCampaign : MonoBehaviour {
         public int touristsNumber;
         public int piratesNumber;
@@ -18,7 +18,7 @@ namespace InGame.MiniGames.MarketingCampaign {
             if (wordBoxes.Count < 6) {
                 wordBoxes.Add(adWordBox);
                 adWordBox.isInCurrentCampaign = true;
-                ObjectsReference.Instance.uiCommunicationPanel.MoveAdWordBoxToCurrentCampaign(adWordBox);
+                ObjectsReference.Instance.uiCampaignCreatorPanel.MoveAdWordBoxToCurrentCampaign(adWordBox);
                 
                 RefreshChimpsNumber();
             }
@@ -31,7 +31,7 @@ namespace InGame.MiniGames.MarketingCampaign {
         
         public void RemoveAdWordBox(AdWordBox adWordBox) {
             wordBoxes.Remove(adWordBox);
-            ObjectsReference.Instance.uiCommunicationPanel.MoveAdWordBoxToList(adWordBox);
+            ObjectsReference.Instance.uiCampaignCreatorPanel.MoveAdWordBoxToList(adWordBox);
             
             RefreshChimpsNumber();
         }

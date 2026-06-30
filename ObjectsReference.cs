@@ -9,12 +9,12 @@ using InGame.Inventories;
 using InGame.Items.ItemsBehaviours;
 using InGame.Items.ItemsData;
 using InGame.MainBlock;
+using InGame.MiniGames.Communications;
 using InGame.MiniGames.Guichets;
-using InGame.MiniGames.MarketingCampaign;
+using InGame.MiniGames.SpaceTrafficControl;
 using InGame.MiniGames.SpaceTrafficControl.Spaceships;
 using InGame.Player;
 using InGame.Player.BananaGunActions;
-using InGame.SpaceTrafficControl;
 using Save;
 using Settings;
 using SharedInputs;
@@ -40,10 +40,11 @@ public class ObjectsReference : MonoSingleton<ObjectsReference> {
 
     [Header("Mini Games")]
     public CommandRoomControlPanelsManager commandRoomControlPanelsManager;
-    public AdMarketingCampaignManager adMarketingCampaignManager;
+    public CommunicationsManager communicationsManager;
     public SpaceTrafficControlManager spaceTrafficControlManager;
     public SpaceshipsSpawner spaceshipsSpawner;
     public CannonsManager cannonsManager;
+    public AspirationCone aspirationCone;
     public GenericDictionary<SpawnPoint, Guichet> guichetsToMap;
 
     [Header("Banana Man")]
@@ -122,6 +123,7 @@ public class ObjectsReference : MonoSingleton<ObjectsReference> {
     public UISettings uiSettings;
     [Space]
     public UICommunicationPanel uiCommunicationPanel;
+    public UICampaignCreatorPanel uiCampaignCreatorPanel;
     public UIgestionPanel uiGestionPanel;
     public UICannons uiCannons;
     public UIGuichet uiGuichet;

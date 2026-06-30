@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace Behaviours {
+namespace NoddleFlow.Behaviours {
     public class WaitForSecondsBlockExecutor : AiBlockExecutor {
         public string secondsVariableUuid;
         

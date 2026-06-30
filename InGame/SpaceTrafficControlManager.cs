@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.Splines;
 using Random = UnityEngine.Random;
 
-namespace InGame.SpaceTrafficControl {
+namespace InGame {
     public class SpaceTrafficControlManager : MonoBehaviour {
         public GenericDictionary<string, SpaceshipBehaviour> spaceshipBehavioursByGuid;
         public GenericDictionary<int, bool> hangarAvailabilityByHangarNumber;
@@ -29,7 +29,7 @@ namespace InGame.SpaceTrafficControl {
         public void AssignSpaceshipToHangar(int hangarNumber) {
             hangarAvailabilityByHangarNumber[hangarNumber] = false;
             ObjectsReference.Instance.uiCommunicationPanel.RefreshHangarAvailability();
-            ObjectsReference.Instance.uiCommunicationPanel.RefreshCommunicationQuantityButton();
+            ObjectsReference.Instance.communicationsManager.RefreshCommunicationQuantityButton();
         }
 
         public void AssignToHangarFromCommunications(int hangarNumber) {
@@ -47,7 +47,7 @@ namespace InGame.SpaceTrafficControl {
             hangarAvailabilityByHangarNumber[hangarNumber] = true;
             
             ObjectsReference.Instance.uiCommunicationPanel.RefreshHangarAvailability();
-            ObjectsReference.Instance.uiCommunicationPanel.RefreshCommunicationQuantityButton();
+            ObjectsReference.Instance.communicationsManager.RefreshCommunicationQuantityButton();
         }
         
         public string GetUniqueSpaceshipName() {

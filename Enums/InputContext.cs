@@ -4,5 +4,6 @@ public enum InputContext {
     CANNONS,
     HOME,
     GESTION_VIEW,
-    GESTION_PANEL
+    GESTION_PANEL,
+    MAP
 }

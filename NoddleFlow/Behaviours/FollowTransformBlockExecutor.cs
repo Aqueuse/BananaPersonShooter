@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.AI;
 
-namespace Behaviours {
+namespace NoddleFlow.Behaviours {
     public class FollowTransformBlockExecutor : AiBlockExecutor {
         public string aiTargetUuid;
         public string aiAgentUuid;

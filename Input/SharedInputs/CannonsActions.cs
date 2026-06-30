@@ -2,12 +2,14 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 namespace SharedInputs {
-    public class CannonsPanelActions : InputActions {
+    public class CannonsActions : InputActions {
         [SerializeField] private InputActionReference switchToLeftCannonActionReference;
         [SerializeField] private InputActionReference switchToRightCannonActionReference;
 
         [SerializeField] private InputActionReference shootActionReference;
         [SerializeField] private InputActionReference rotateCannonActionReference;
+        
+        [SerializeField] private InputActionReference aspireActionReference;
 
         [SerializeField] private InputActionReference zoomActionReference;
 
@@ -19,8 +21,11 @@ namespace SharedInputs {
             switchToRightCannonActionReference.action.performed += SwitchToCannonRight;
             
             shootActionReference.action.Enable();
-            shootActionReference.action.performed += ShowLaser;
-            shootActionReference.action.canceled += HideLaser; 
+            shootActionReference.action.performed += ShootLaser;
+
+            aspireActionReference.action.Enable();
+            aspireActionReference.action.performed += AspireDebris;
+            aspireActionReference.action.canceled += StopAspireDebris;
 
             rotateCannonActionReference.action.Enable();
             
@@ -36,7 +41,11 @@ namespace SharedInputs {
             switchToRightCannonActionReference.action.performed -= SwitchToCannonRight;
             
             shootActionReference.action.Disable();
-            shootActionReference.action.performed -= ShowLaser;
+            shootActionReference.action.performed -= ShootLaser;
+
+            aspireActionReference.action.Disable();
+            aspireActionReference.action.performed -= AspireDebris;
+            aspireActionReference.action.canceled -= StopAspireDebris;
 
             rotateCannonActionReference.action.Disable();
             
@@ -59,12 +68,16 @@ namespace SharedInputs {
             ObjectsReference.Instance.cannonsManager.SwitchToRightCannon();
         }
         
-        private void ShowLaser(InputAction.CallbackContext context) {
-            ObjectsReference.Instance.cannonsManager.ShowLaserOnActivatedRegion();
+        private void ShootLaser(InputAction.CallbackContext context) {
+            ObjectsReference.Instance.cannonsManager.ShootLaserOnActivatedRegion();
         }
 
-        private void HideLaser(InputAction.CallbackContext context) {
-            ObjectsReference.Instance.cannonsManager.HideLaserOnActivatedRegion();
+        private void AspireDebris(InputAction.CallbackContext context) {
+            ObjectsReference.Instance.cannonsManager.AspireDebris();
+        }
+        
+        private void StopAspireDebris(InputAction.CallbackContext context) {
+            ObjectsReference.Instance.cannonsManager.StopAspireDebris();
         }
 
         private void Zoom(InputAction.CallbackContext context) {

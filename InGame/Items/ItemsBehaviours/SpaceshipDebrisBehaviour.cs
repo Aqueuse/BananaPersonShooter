@@ -13,24 +13,21 @@ namespace InGame.Items.ItemsBehaviours {
         public int prefabIndex;
 
         public bool isInSpace;
+        public bool isAttracted;
 
         public Vector3 effectSource;
 
-        private Rigidbody _rigidbody;
-        private Material _material;
-
-        private static readonly int emissionProperty = Shader.PropertyToID("_emission");
-        private static readonly int emissionColorProperty = Shader.PropertyToID("_emission_color");
+        [SerializeField] private Rigidbody _rigidbody;
 
         private void Awake() {
-            _rigidbody = GetComponent<Rigidbody>();
-
             if(string.IsNullOrEmpty(spaceshipDebrisGuid)) {
                 spaceshipDebrisGuid = Guid.NewGuid().ToString();
             }
         }
 
         private void Update() {
+            if (!isAttracted) return;
+            
             transform.position = Vector3.MoveTowards(transform.position, effectSource, 200 * Time.deltaTime);
 
             if (Vector3.Distance(transform.position, effectSource) < 10) {
@@ -42,7 +39,7 @@ namespace InGame.Items.ItemsBehaviours {
                 GetComponent<MeshCollider>().isTrigger = false;
 
                 isInSpace = false;
-                DeactivateEmission();
+                isAttracted = false;
             }
         }
 
@@ -59,17 +56,6 @@ namespace InGame.Items.ItemsBehaviours {
 
         private void DestroyMe() {
             if (isInSpace) Destroy(gameObject);
-        }
-        
-        private void ActiveEmission(Color emissionColor) {
-            _material = GetComponent<MeshRenderer>().materials[0];
-
-            _material.SetFloat(emissionProperty, 1);
-            _material.SetColor(emissionColorProperty, emissionColor);
-        }
-
-        private void DeactivateEmission() {
-            _material.SetFloat(emissionProperty, 0);
         }
 
         public void GenerateSpaceshipDebrisData() {
@@ -89,7 +75,9 @@ namespace InGame.Items.ItemsBehaviours {
         }
         
         private void OnCollisionEnter(Collision other) {
-            if (other.gameObject.layer == 0 && !isInSpace) {
+            if (isInSpace) return;
+            
+            if (other.gameObject.layer == 11 | other.gameObject.layer == 0) {
                 _rigidbody.useGravity = false;
                 _rigidbody.isKinematic = true;
             }

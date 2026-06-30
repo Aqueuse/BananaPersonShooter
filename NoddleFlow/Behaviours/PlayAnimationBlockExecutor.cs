@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using UnityEngine;
 
-namespace Behaviours {
+namespace NoddleFlow.Behaviours {
     /// <summary>
     /// AI block responsible for playing an animation via an Animator trigger, then waiting
     /// for the animation to finish before resuming the sequence.

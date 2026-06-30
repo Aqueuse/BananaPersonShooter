@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
 
-public class AiTarget : MonoBehaviour {
-    public string uuid;
+namespace NoddleFlow {
+    public class AiTarget : MonoBehaviour {
+        public string uuid;
+    }
 }

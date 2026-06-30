@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace InGame.MiniGames.SpaceTrafficControl.Spaceships {
+namespace InGame.MiniGames.SpaceTrafficControl {
     public class CannonsManager : MonoBehaviour {
         [Header("mini game camera")]
         [SerializeField] private Transform cameraCannonTransform;
@@ -17,9 +17,13 @@ namespace InGame.MiniGames.SpaceTrafficControl.Spaceships {
         public float minRotationY;
         public float maxRotationY;
 
+        [SerializeField] private GameObject aspirationCone;
+        [SerializeField] private GameObject spirale;
+        [SerializeField] private GameObject mireImage;
+        
         ///////////////////
 
-        private readonly RegionType[] scenesToRotateBeetween = {
+        private readonly RegionType[] regionsToRotateBeetween = {
             RegionType.MAP01,
             RegionType.MAP02,
             RegionType.MAP03,
@@ -34,12 +38,21 @@ namespace InGame.MiniGames.SpaceTrafficControl.Spaceships {
 
         private Vector3 _targetPosition;
 
-        public void ShowLaserOnActivatedRegion() {
+        public void ShootLaserOnActivatedRegion() {
+            spirale.SetActive(true);
+            aspirationCone.SetActive(true);
+            
             cannonsByRegionType[activeCannonRegion].ShowLaser();
         }
 
-        public void HideLaserOnActivatedRegion() {
-            cannonsByRegionType[activeCannonRegion].HideLaser();
+        public void AspireDebris() {
+            spirale.SetActive(true);
+            aspirationCone.SetActive(true);
+        }
+
+        public void StopAspireDebris() {
+            spirale.SetActive(false);
+            aspirationCone.SetActive(false);
         }
         
         public void ActivateCannon(RegionType regionType) {
@@ -57,19 +70,21 @@ namespace InGame.MiniGames.SpaceTrafficControl.Spaceships {
             
             ObjectsReference.Instance.uiCannons.RefreshBananaGoopsQuantity();
         }
+        
+        
 
         public void SwitchToLeftCannon() {
-            rotationIndex = (rotationIndex - 1) % scenesToRotateBeetween.Length;
-            if (rotationIndex < 0) rotationIndex = scenesToRotateBeetween.Length-1;
+            rotationIndex = (rotationIndex - 1) % regionsToRotateBeetween.Length;
+            if (rotationIndex < 0) rotationIndex = regionsToRotateBeetween.Length-1;
 
-            activeCannonRegion = scenesToRotateBeetween[rotationIndex];
+            activeCannonRegion = regionsToRotateBeetween[rotationIndex];
 
             ActivateCannon(activeCannonRegion);
         }
 
         public void SwitchToRightCannon() {
-            rotationIndex = (rotationIndex + 1) % scenesToRotateBeetween.Length;
-            activeCannonRegion = scenesToRotateBeetween[rotationIndex];
+            rotationIndex = (rotationIndex + 1) % regionsToRotateBeetween.Length;
+            activeCannonRegion = regionsToRotateBeetween[rotationIndex];
             
             ActivateCannon(activeCannonRegion);
         }

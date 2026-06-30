@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace InGame.MiniGames.MarketingCampaign {
+namespace InGame.MiniGames.Communications {
     public class AdWordBox : MonoBehaviour {
         public int touristsWeight;
         public int piratesWeight;
@@ -10,11 +10,11 @@ namespace InGame.MiniGames.MarketingCampaign {
 
         public void Activate() {
             if (isInCurrentCampaign) {
-                ObjectsReference.Instance.adMarketingCampaignManager.adCampaign.RemoveAdWordBox(this);
+                ObjectsReference.Instance.communicationsManager.adCampaign.RemoveAdWordBox(this);
                 isInCurrentCampaign = false;
             }
             else {
-                ObjectsReference.Instance.adMarketingCampaignManager.adCampaign.TryAddWordToCampaign(this);
+                ObjectsReference.Instance.communicationsManager.adCampaign.TryAddWordToCampaign(this);
             }
         }
     }

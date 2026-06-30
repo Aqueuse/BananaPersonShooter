@@ -1,7 +1,7 @@
 using InGame.MiniGames.SpaceTrafficControl.projectiles;
 using UnityEngine;
 
-namespace InGame.MiniGames.SpaceTrafficControl.Spaceships {
+namespace InGame.MiniGames.SpaceTrafficControl {
     public class Cannon : MonoBehaviour {
         [SerializeField] private Transform socleTransform;
         [SerializeField] private Transform cannonTransform;
@@ -33,6 +33,7 @@ namespace InGame.MiniGames.SpaceTrafficControl.Spaceships {
 
         public void ShowLaser() {
             _laser.gameObject.SetActive(true);
+            // todo : replace with a launch laser
             
             InvokeRepeating(nameof(ConsumeBanana), 0, 2);
         }
@@ -40,12 +41,6 @@ namespace InGame.MiniGames.SpaceTrafficControl.Spaceships {
         private void ConsumeBanana() {
             ObjectsReference.Instance.cannonsManager.bananaGoopQuantity -= 1;
             ObjectsReference.Instance.uiCannons.RefreshBananaGoopsQuantity();
-        }
-
-        public void HideLaser() {
-            _laser.gameObject.SetActive(false);
-            
-            CancelInvoke(nameof(ConsumeBanana));
         }
         
         public void PositionneCamera(Transform cameraTransform) {

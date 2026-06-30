@@ -206,13 +206,11 @@ namespace SharedInputs {
         }
 
         private void ShowBigMap(InputAction.CallbackContext context) {
-            ObjectsReference.Instance.cameraPlayer.Set0Sensibility();
-            ObjectsReference.Instance.inputManager.SwitchContext(InputContext.UI);
+            ObjectsReference.Instance.bananaMan.SetToNotPlayable();
+            
+            ObjectsReference.Instance.inputManager.SwitchContext(InputContext.MAP);
             ObjectsReference.Instance.gameManager.gameContext = GameContext.IN_GAME_UI_PANEL;
             
-            ObjectsReference.Instance.bananaGunActionsSwitch.gameObject.SetActive(false);
-            
-            ObjectsReference.Instance.uiManager.HideCrosshairs();
             ObjectsReference.Instance.uiManager.ShowBigMap();
         }
         

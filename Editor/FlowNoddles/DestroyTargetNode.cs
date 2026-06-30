@@ -1,7 +1,8 @@
 using System;
 using System.Collections.Generic;
-using Behaviours;
 using Editor.FlowNoddles.variables;
+using NoddleFlow;
+using NoddleFlow.Behaviours;
 using Unity.GraphToolkit.Editor;
 using UnityEngine;
 

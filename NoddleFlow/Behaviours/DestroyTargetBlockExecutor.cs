@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace Behaviours {
+namespace NoddleFlow.Behaviours {
     public class DestroyTargetBlockExecutor : AiBlockExecutor {
         public string targetUuid;
 

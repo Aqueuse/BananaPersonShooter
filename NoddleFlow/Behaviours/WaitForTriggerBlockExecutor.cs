@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace Behaviours {
+namespace NoddleFlow.Behaviours {
     public class WaitForTriggerBlockExecutor : AiBlockExecutor {
         public string triggeringBoolUuid;
 

@@ -4,7 +4,6 @@ using InGame.Items.ItemsData;
 using InGame.Items.ItemsData.Characters;
 using InGame.MiniGames.SpaceTrafficControl.projectiles;
 using InGame.Monkeys.Chimpvisitors;
-using InGame.SpaceTrafficControl;
 using Save.Helpers;
 using Save.Templates;
 using Tags;
@@ -195,7 +194,7 @@ namespace InGame.Items.ItemsBehaviours {
             ObjectsReference.Instance.spaceTrafficControlManager.FreeHangar(spaceshipData.assignatedHangar);
             ObjectsReference.Instance.uiCommunicationPanel.RefreshHangarAvailability();
             ObjectsReference.Instance.spaceshipsSpawner.RemoveGuestInCampaignCreator();
-            ObjectsReference.Instance.uiCommunicationPanel.RefreshCommunicationQuantityButton();
+            ObjectsReference.Instance.communicationsManager.RefreshCommunicationQuantityButton();
 
             ObjectsReference.Instance.spaceTrafficControlManager.elevatorPaths[spaceshipData.assignatedHangar].ReverseFlow(0);
 
@@ -219,7 +218,6 @@ namespace InGame.Items.ItemsBehaviours {
             Destroy(gameObject);
             
             ObjectsReference.Instance.uiCommunicationPanel.CloseCommunications(this);
-            ObjectsReference.Instance.uiCommunicationPanel.RefreshCommunicationQuantityButton();
         }
         
         private void ConvertToExplodableSpaceship() {

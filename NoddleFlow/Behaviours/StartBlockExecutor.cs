@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace Behaviours {
+namespace NoddleFlow.Behaviours {
     public class StartBlockExecutor : AiBlockExecutor {
         public override async Task Execute(GraphExecutor graphExecutor) {
             await Task.Delay(10);

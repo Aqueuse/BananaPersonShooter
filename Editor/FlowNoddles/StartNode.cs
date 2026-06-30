@@ -1,5 +1,6 @@
 using System;
-using Behaviours;
+using NoddleFlow;
+using NoddleFlow.Behaviours;
 using Unity.GraphToolkit.Editor;
 using UnityEngine;
 
