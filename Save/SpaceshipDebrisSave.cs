@@ -101,8 +101,6 @@ namespace Save {
                     spaceshipDebrisBehaviourInstance.prefabIndex = spaceshipDebrisData.prefabIndex;
                     spaceshipDebrisBehaviourInstance.spaceshipType = spaceshipDebrisData.spaceshipType;
                     spaceshipDebrisBehaviourInstance.isInSpace = spaceshipDebrisData.isInSpace;
-                    spaceshipDebrisBehaviourInstance.effectSource =
-                        JsonHelper.FromStringToVector3(spaceshipDebrisData.effectSourcePosition);
 
                     if (spaceshipDebrisBehaviourInstance.isInSpace) {
                         var spaceshipDebrisRigidbody = spaceshipDebrisInstance.AddComponent<Rigidbody>();

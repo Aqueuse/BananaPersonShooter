@@ -1,3 +1,5 @@
+using InGame.MiniGames.SpaceTrafficControl.projectiles;
+using InGame.Pools;
 using UnityEngine;
 
 namespace InGame.MiniGames.SpaceTrafficControl {
@@ -12,6 +14,7 @@ namespace InGame.MiniGames.SpaceTrafficControl {
         public RegionType activeCannonRegion = RegionType.MAP01;
         [HideInInspector] public Cannon activeCannon;
 
+        [SerializeField] private LaserPool laserPool;
         public int bananaGoopQuantity;
         
         public float minRotationY;
@@ -38,13 +41,19 @@ namespace InGame.MiniGames.SpaceTrafficControl {
 
         private Vector3 _targetPosition;
 
-        public void ShootLaserOnActivatedRegion() {
-            spirale.SetActive(true);
-            aspirationCone.SetActive(true);
-            
-            cannonsByRegionType[activeCannonRegion].ShowLaser();
-        }
+        private GameObject laser;
 
+        public void ShootLaserOnActivatedRegion() {
+            laser = laserPool.GetPooledLaser();
+
+            laser.transform.position = cannonsByRegionType[activeCannonRegion].launcherTransform.position;
+            laser.transform.rotation = cannonsByRegionType[activeCannonRegion].launcherTransform.rotation;
+            laser.GetComponent<Laser>().enabled = true;
+            
+            ObjectsReference.Instance.cannonsManager.bananaGoopQuantity -= 1;
+            ObjectsReference.Instance.uiCannons.RefreshBananaGoopsQuantity();
+        }
+        
         public void AspireDebris() {
             spirale.SetActive(true);
             aspirationCone.SetActive(true);
@@ -71,8 +80,6 @@ namespace InGame.MiniGames.SpaceTrafficControl {
             ObjectsReference.Instance.uiCannons.RefreshBananaGoopsQuantity();
         }
         
-        
-
         public void SwitchToLeftCannon() {
             rotationIndex = (rotationIndex - 1) % regionsToRotateBeetween.Length;
             if (rotationIndex < 0) rotationIndex = regionsToRotateBeetween.Length-1;

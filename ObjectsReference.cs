@@ -44,7 +44,6 @@ public class ObjectsReference : MonoSingleton<ObjectsReference> {
     public SpaceTrafficControlManager spaceTrafficControlManager;
     public SpaceshipsSpawner spaceshipsSpawner;
     public CannonsManager cannonsManager;
-    public AspirationCone aspirationCone;
     public GenericDictionary<SpawnPoint, Guichet> guichetsToMap;
 
     [Header("Banana Man")]

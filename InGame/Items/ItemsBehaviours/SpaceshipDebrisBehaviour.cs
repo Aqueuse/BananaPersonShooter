@@ -1,6 +1,5 @@
 using System;
 using InGame.Items.ItemsData;
-using InGame.MiniGames.SpaceTrafficControl.projectiles;
 using Newtonsoft.Json;
 using Save.Helpers;
 using UnityEngine;
@@ -14,11 +13,13 @@ namespace InGame.Items.ItemsBehaviours {
 
         public bool isInSpace;
         public bool isAttracted;
-
-        public Vector3 effectSource;
-
+        
         [SerializeField] private Rigidbody _rigidbody;
-
+        
+        [SerializeField] private MeshRenderer _meshRenderer;
+        private static readonly int sizeMultiplier = Shader.PropertyToID("_SizeMultiplier");
+        private static readonly int Emission = Shader.PropertyToID("_Emission");
+        
         private void Awake() {
             if(string.IsNullOrEmpty(spaceshipDebrisGuid)) {
                 spaceshipDebrisGuid = Guid.NewGuid().ToString();
@@ -28,9 +29,13 @@ namespace InGame.Items.ItemsBehaviours {
         private void Update() {
             if (!isAttracted) return;
             
-            transform.position = Vector3.MoveTowards(transform.position, effectSource, 200 * Time.deltaTime);
-
-            if (Vector3.Distance(transform.position, effectSource) < 10) {
+            transform.position = Vector3.MoveTowards(transform.position, ObjectsReference.Instance.cannonsManager.activeCannon.launcherTransform.position, 200 * Time.deltaTime);
+            
+            
+            if (Vector3.Distance(transform.position, ObjectsReference.Instance.cannonsManager.activeCannon.launcherTransform.position) < 10) {
+                _meshRenderer.material.SetFloat(sizeMultiplier, 1f);
+                _meshRenderer.material.SetFloat(Emission, 0f);
+                
                 _rigidbody.useGravity = true;
                 _rigidbody.isKinematic = false;
 
@@ -43,8 +48,14 @@ namespace InGame.Items.ItemsBehaviours {
             }
         }
 
-        public void Init(Laser laser) {
+        public void Init() {
             isInSpace = true;
+            _meshRenderer.material.SetFloat(sizeMultiplier, 10);
+            _meshRenderer.material.SetFloat(Emission, 1f);
+            
+            _rigidbody.AddExplosionForce(5f, transform.position, 5f);
+            _rigidbody.AddTorque(transform.position, ForceMode.Impulse);
+
             DestroyIfUnreachable();
             
             transform.parent = ObjectsReference.Instance.gameSave.savablesItemsContainer;
@@ -65,8 +76,7 @@ namespace InGame.Items.ItemsBehaviours {
                 spaceshipDebrisRotation = JsonHelper.FromQuaternionToString(transform.rotation),
                 prefabIndex = prefabIndex,
                 spaceshipType = spaceshipType,
-                isInSpace = isInSpace,
-                effectSourcePosition = JsonHelper.FromVector3ToString(effectSource)
+                isInSpace = isInSpace
             };
 
             ObjectsReference.Instance.gameSave.spaceshipDebrisSave.AddSpaceshipDebrisToSpaceshipDebrisDictionnary(

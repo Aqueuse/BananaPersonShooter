@@ -23,7 +23,6 @@ namespace InGame.Items.ItemsData {
         public Vector3 arrivalPosition;
         
         public const float lookAtRotation = 0.01f;
-        public const float _propulsionSpeed = 100f;
 
         public TravelState travelState;
     }

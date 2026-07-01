@@ -15,7 +15,8 @@ namespace InGame.Items.ItemsBehaviours {
     public class SpaceshipBehaviour : MonoBehaviour {
         [SerializeField] private SplineAnimate _splineAnimate;
         public SpaceshipData spaceshipData;
-        
+        [SerializeField] private float _propulsionSpeed = 100f;
+
         public Transform visitorsSpawnPoint;
         public Transform merchimpSpawnPoint;
 
@@ -49,7 +50,7 @@ namespace InGame.Items.ItemsBehaviours {
         private void Update() {
             switch (spaceshipData.travelState) {
                 case TravelState.FREE_FLIGHT or TravelState.LEAVES_THE_REGION:
-                    _step = SpaceshipData._propulsionSpeed * Time.deltaTime;
+                    _step = _propulsionSpeed * Time.deltaTime;
                     transform.position = Vector3.MoveTowards(transform.position, spaceshipData.arrivalPosition, _step);
                     transform.LookAt(spaceshipData.arrivalPosition, Vector3.up);
                     
@@ -230,17 +231,19 @@ namespace InGame.Items.ItemsBehaviours {
         }
         
         private void OnTriggerEnter(Collider other) {
+            Debug.Log(other.name);
+            
             if (!TagsManager.Instance.HasTag(other.gameObject, GAME_OBJECT_TAG.LASER)) return;
             
-            GetComponent<CapsuleCollider>().enabled = false;
-
             foreach (var debrisBehaviour in gameObject.GetComponentsInChildren<SpaceshipDebrisBehaviour>()) {
                 debrisBehaviour.enabled = true;
-                debrisBehaviour.Init(other.GetComponent<Laser>());
+                debrisBehaviour.Init();
             }
             
             ObjectsReference.Instance.spaceshipsSpawner.RemoveGuestInCampaignCreator();
             ObjectsReference.Instance.uiCommunicationPanel.CloseCommunications(this);
+            ObjectsReference.Instance.spaceTrafficControlManager.spaceshipBehavioursByGuid.Remove(spaceshipData.spaceshipGuid);
+            Destroy(gameObject);
         }
         
         public void LoadSavedData(SpaceshipSavedData spaceshipSavedDataToLoad) {
@@ -258,7 +261,7 @@ namespace InGame.Items.ItemsBehaviours {
             spaceshipData.guichetsMapsToVisit = spaceshipSavedDataToLoad.guichetsMapsToVisit;
             spaceshipData.mapPointInterests = spaceshipSavedDataToLoad.mapPointInterests;
 
-            this.spaceshipSavedData = spaceshipSavedDataToLoad;
+            spaceshipSavedData = spaceshipSavedDataToLoad;
 
             ObjectsReference.Instance.spaceTrafficControlManager.spaceshipBehavioursByGuid.Add(spaceshipData.spaceshipGuid, this);
             

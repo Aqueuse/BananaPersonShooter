@@ -10,6 +10,5 @@ namespace InGame.Items.ItemsData {
         public int prefabIndex;
 
         public bool isInSpace;
-        public string effectSourcePosition;
     }
 }

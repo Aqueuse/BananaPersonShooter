@@ -5,7 +5,7 @@ namespace InGame.MiniGames.SpaceTrafficControl {
     public class Cannon : MonoBehaviour {
         [SerializeField] private Transform socleTransform;
         [SerializeField] private Transform cannonTransform;
-        [SerializeField] private Transform launcherTransform;
+        public Transform launcherTransform;
 
         [SerializeField] private Transform initialCannonTransform;
 
@@ -13,9 +13,7 @@ namespace InGame.MiniGames.SpaceTrafficControl {
 
         private Vector3 socleRotation;
         private Vector3 cannonRotation;
-    
-        public Laser _laser;
-
+        
         public void Rotate(float x, float y) {
             cannonRotation.x -= y;
 
@@ -29,18 +27,6 @@ namespace InGame.MiniGames.SpaceTrafficControl {
 
             socleRotation.y = x;
             socleTransform.Rotate(socleRotation * ObjectsReference.Instance.cannonsManager.GetCameraCannonFieldOfView()/20);
-        }
-
-        public void ShowLaser() {
-            _laser.gameObject.SetActive(true);
-            // todo : replace with a launch laser
-            
-            InvokeRepeating(nameof(ConsumeBanana), 0, 2);
-        }
-
-        private void ConsumeBanana() {
-            ObjectsReference.Instance.cannonsManager.bananaGoopQuantity -= 1;
-            ObjectsReference.Instance.uiCannons.RefreshBananaGoopsQuantity();
         }
         
         public void PositionneCamera(Transform cameraTransform) {

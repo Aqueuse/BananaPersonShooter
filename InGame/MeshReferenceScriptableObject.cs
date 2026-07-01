@@ -28,8 +28,6 @@ namespace InGame {
         public GenericDictionary<FoodType, ItemScriptableObject> foodPropertiesScriptableObjects;
         public GenericDictionary<BananaColor, ItemScriptableObject> rawMaterialPropertiesByBananaColor;
         [Space]
-        public GenericDictionary<RawMaterialType, BuildableType[]> unlockedBuildablesByRawMaterialType;
-        [Space]
         public List<GameObject> monkeyMenPrefabs;
         public GameObject merchimpPrefab;
         [SerializeField] private VisitorColorPresetScriptableObject[] chimpvisitorsColorPresets;
