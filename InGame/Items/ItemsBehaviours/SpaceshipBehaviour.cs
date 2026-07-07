@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using InGame.Items.ItemsData;
 using InGame.Items.ItemsData.Characters;
-using InGame.MiniGames.SpaceTrafficControl.projectiles;
 using InGame.Monkeys.Chimpvisitors;
 using Save.Helpers;
 using Save.Templates;
@@ -231,8 +230,6 @@ namespace InGame.Items.ItemsBehaviours {
         }
         
         private void OnTriggerEnter(Collider other) {
-            Debug.Log(other.name);
-            
             if (!TagsManager.Instance.HasTag(other.gameObject, GAME_OBJECT_TAG.LASER)) return;
             
             foreach (var debrisBehaviour in gameObject.GetComponentsInChildren<SpaceshipDebrisBehaviour>()) {

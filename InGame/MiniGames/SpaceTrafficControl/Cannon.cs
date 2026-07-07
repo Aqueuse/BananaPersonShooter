@@ -1,4 +1,3 @@
-using InGame.MiniGames.SpaceTrafficControl.projectiles;
 using UnityEngine;
 
 namespace InGame.MiniGames.SpaceTrafficControl {

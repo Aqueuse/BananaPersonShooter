@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using TMPro;
+using Tweaks;
+using UI;
 using UnityEngine;
 
 namespace InGame.MiniGames.Communications {
@@ -13,7 +15,7 @@ namespace InGame.MiniGames.Communications {
         [SerializeField] private TextMeshProUGUI merchimpsNumberText;
         
         public List<AdWordBox> wordBoxes;
-
+        
         public void TryAddWordToCampaign(AdWordBox adWordBox) {
             if (wordBoxes.Count < 6) {
                 wordBoxes.Add(adWordBox);
@@ -55,6 +57,14 @@ namespace InGame.MiniGames.Communications {
             touristsNumberText.text = touristsNumber.ToString();
             piratesNumberText.text = piratesNumber.ToString();
             merchimpsNumberText.text = merchimpsNumber.ToString();
+
+            if (wordBoxes.Count == 0) {
+                ObjectsReference.Instance.communicationsManager.HideAdCampaignControlButtons();
+            }
+
+            else {
+                ObjectsReference.Instance.communicationsManager.ShowAdCampaignControlButtons();
+            }
         }
     }
 }

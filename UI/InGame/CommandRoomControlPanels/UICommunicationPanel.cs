@@ -10,7 +10,7 @@ namespace UI.InGame.CommandRoomControlPanels {
         [SerializeField] private CanvasGroup answersListCanvasGroup;
         [SerializeField] private CanvasGroup messagePlaceholderCanvasGroup;
 
-        [SerializeField] private Transform spaceshipsListContainer;
+        public Transform spaceshipsListContainer;
 
         [SerializeField] private GameObject spaceshipButtonPrefab;
 

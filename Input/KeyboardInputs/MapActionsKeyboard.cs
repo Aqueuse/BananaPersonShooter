@@ -7,6 +7,8 @@ namespace KeyboardInputs {
         [SerializeField] private InputActionReference dragMoveActionReference;
         [SerializeField] private InputActionReference deltaMouseActionReference;
 
+        [SerializeField] private InputActionReference zoomDezoomActionReference;
+
         private Map _map;
 
         private bool isDragging;
@@ -18,11 +20,17 @@ namespace KeyboardInputs {
         private void OnEnable() {
             dragMoveActionReference.action.Enable();
             dragMoveActionReference.action.performed += StartToDrag;
+            
+            zoomDezoomActionReference.action.Enable();
+            zoomDezoomActionReference.action.performed += ZoomDezoom;
         }
 
         private void OnDisable() {
             dragMoveActionReference.action.Disable();
             dragMoveActionReference.action.performed -= StartToDrag;
+            
+            zoomDezoomActionReference.action.Disable();
+            zoomDezoomActionReference.action.performed -= ZoomDezoom;
         }
 
         private void StartToDrag(InputAction.CallbackContext callbackContext) {
@@ -47,6 +55,15 @@ namespace KeyboardInputs {
             var movement2D = callbackContext.ReadValue<Vector2>();
             var movement = new Vector3(-movement2D.x, 0, -movement2D.y);
             _map.Drag(movement);
+        }
+
+        private void ZoomDezoom(InputAction.CallbackContext callbackContext) {
+            if (callbackContext.ReadValue<float>() > 0) {
+                _map.Zoom();
+            }
+            else {
+                _map.Dezoom();   
+            }
         }
     }
 }
