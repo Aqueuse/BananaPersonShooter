@@ -27,7 +27,7 @@ namespace KeyboardInputs {
         }
 
         private void launchBanana(InputAction.CallbackContext context) {
-            if (!ObjectsReference.Instance.uiManager.isOnSubMenus) {
+            if (ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.HOME_MENU].alpha > 0) {
                 var ray = ObjectsReference.Instance.camerasManager.homeCamera.ScreenPointToRay(Mouse.current.position.value);
                 var direction = ray.GetPoint(1) - ray.GetPoint(0);
                 var spawnedBanana = Instantiate(bananaPrefab, ray.GetPoint(2), Quaternion.LookRotation(direction));
@@ -37,7 +37,7 @@ namespace KeyboardInputs {
         }
 
         private void launchBananaWithMagicTrail(InputAction.CallbackContext context) {
-            if (!ObjectsReference.Instance.uiManager.isOnSubMenus) {
+            if (ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.HOME_MENU].alpha > 0) {
                 var ray = ObjectsReference.Instance.camerasManager.homeCamera.ScreenPointToRay(Mouse.current.position.value);
                 var direction = ray.GetPoint(1) - ray.GetPoint(0);
                 var spawnedBanana = Instantiate(bananaPrefab, ray.GetPoint(2), Quaternion.LookRotation(direction));

@@ -19,6 +19,7 @@ using Save;
 using Settings;
 using SharedInputs;
 using UI;
+using UI.Global;
 using UI.InGame;
 using UI.InGame.BuildingMaterialMissingPanel;
 using UI.InGame.CommandRoomControlPanels;
@@ -60,7 +61,6 @@ public class ObjectsReference : MonoSingleton<ObjectsReference> {
     public Interact interact;
     [Space]
     public GameActions gameActions;
-    public UiActions keyboardUiActions;
     public BananaGunActionsSwitch bananaGunActionsSwitch;
     [Space]
     public GhostsReference ghostsReference;
@@ -89,7 +89,6 @@ public class ObjectsReference : MonoSingleton<ObjectsReference> {
     public FootStepSurfaceDetector footStepSurfaceDetector;
     [Space]
     public Cinematiques cinematiques;
-    public Death death;
     
     [Header("Saving System")]
     public WorldData worldData;
@@ -98,11 +97,20 @@ public class ObjectsReference : MonoSingleton<ObjectsReference> {
     
     [Header("UI")]
     public UIManager uiManager;
+    public UIGlobal uIGlobal;
+    public UiGameMenu uIGameMenu;
+    public UIDebug uIDebug;
+    [Space]
+    public UIOptionsMenu uiOptionsMenu;
+    public UICredits uiCredits;
+    public UISave uiSave;
+    public UISettings uiSettings;
     [Space]
     public UICrosshairs uICrosshairs;
     public UInventoriesManager uInventoriesManager;
     public UiMainPanel uiMainPanel;
     public UIMissingMaterialBuildingPanel uiMissingMaterialBuildingPanel;
+    public UIQueuedMessages uiQueuedMessages;
     [Space] 
     public UIBananasInventory bananaManUiBananasInventory;
     public UIRawMaterialsInventory bananaManUIRawMaterialsInventory;
@@ -113,13 +121,6 @@ public class ObjectsReference : MonoSingleton<ObjectsReference> {
     public UIToolTipOnMouseHover uiToolTipOnMouseHover;
     [Space]
     public UIFace uiFace;
-    public UIQueuedMessages uiQueuedMessages;
-    public UIHomeMenu uiHomeMenu;
-    public UiGameMenu uiGameMenu;
-    public UIOptionsMenu uiOptionsMenu;
-    public UICredits uiCredits;
-    public UISave uiSave;
-    public UISettings uiSettings;
     [Space]
     public UICommunicationPanel uiCommunicationPanel;
     public UICampaignCreatorPanel uiCampaignCreatorPanel;
@@ -127,4 +128,5 @@ public class ObjectsReference : MonoSingleton<ObjectsReference> {
     public UICannons uiCannons;
     public UIGuichet uiGuichet;
     public UIMerchant uiMerchant;
+    public UIMap uIMap;
 }

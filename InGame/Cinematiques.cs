@@ -35,8 +35,8 @@ namespace InGame {
             _cinematiqueVideoPlayer.enabled = true;
             skipCinematiqueGameObject.SetActive(true);
 
-            ObjectsReference.Instance.uiManager.HideCrosshairs();
-            ObjectsReference.Instance.gameManager.gameContext = GameContext.IN_CINEMATIQUE;
+            ObjectsReference.Instance.uICrosshairs.HideCrosshairs();
+            ObjectsReference.Instance.gameManager.gameContext = GameContext.CINEMATIQUE;
 
             _cinematiqueCamera.enabled = true;
             _meshRenderer.material = playedCinematiqueType == CinematiqueType.DEATH ? transparentVideoMaterial : videoMaterial;
@@ -66,10 +66,10 @@ namespace InGame {
 
             Cursor.visible = false;
             Cursor.lockState = CursorLockMode.Locked;
-            ObjectsReference.Instance.uiManager.ShowCrosshairs();
+            ObjectsReference.Instance.uICrosshairs.ShowCrosshairs();
 
             ObjectsReference.Instance.inputManager.SwitchContext(InputContext.GAME);
-            ObjectsReference.Instance.gameManager.gameContext = GameContext.IN_GAME;
+            ObjectsReference.Instance.gameManager.gameContext = GameContext.BANANAMAN_CONTROL;
 
             ObjectsReference.Instance.cameraPlayer.SetNormalSensibility();
 

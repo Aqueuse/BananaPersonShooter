@@ -20,7 +20,7 @@ namespace InGame {
         private Transform _bananaManTransform;
         
         private void Start() {
-            gameContext = GameContext.IN_HOME;
+            gameContext = GameContext.HOME;
             RenderSettings.ambientLight = Color.white;
 
             _bananaManTransform = ObjectsReference.Instance.bananaMan.transform;
@@ -31,14 +31,14 @@ namespace InGame {
         }
 
         public void Play(string saveUuid, bool isNewGame) {
-            ObjectsReference.Instance.uiManager.HideHomeMenu();
+            ObjectsReference.Instance.uIGlobal.HideHomeMenu();
             ObjectsReference.Instance.uiManager.SetActive(UICanvasGroupType.HUD_BANANAMAN, false);
 
             Cursor.visible = false;
             Cursor.lockState = CursorLockMode.Locked;
             loadingScreen.SetActive(true);
             
-            ObjectsReference.Instance.uiManager.HideHomeMenu();
+            ObjectsReference.Instance.uIGlobal.HideHomeMenu();
 
             // prevent banana man to fall while loading scene
             ObjectsReference.Instance.playerController.StopPlayer();
@@ -63,13 +63,13 @@ namespace InGame {
             
             ObjectsReference.Instance.bananaGunActionsSwitch.DesactiveBananaGun();
             
-            if (gameContext == GameContext.IN_GAME) {
+            if (gameContext == GameContext.BANANAMAN_CONTROL) {
                 foreach (var monkey in ObjectsReference.Instance.worldData.monkeys) {
                     monkey.PauseMonkey();
                 }
             }
 
-            gameContext = GameContext.IN_GAME_MENU;
+            gameContext = GameContext.GAME_MENU;
         }
 
         public void UnpauseGame() {
@@ -78,13 +78,13 @@ namespace InGame {
 
             ObjectsReference.Instance.bananaGunActionsSwitch.SwitchToBananaGunMode(ObjectsReference.Instance.bananaMan.bananaGunMode);
             
-            if (gameContext == GameContext.IN_GAME_MENU) {
+            if (gameContext == GameContext.GAME_MENU) {
                 foreach (var monkey in ObjectsReference.Instance.worldData.monkeys) {
                     monkey.UnpauseMonkey();
                 }
             }
 
-            gameContext = GameContext.IN_GAME;
+            gameContext = GameContext.BANANAMAN_CONTROL;
         }
 
         public void Quit() {
@@ -111,13 +111,13 @@ namespace InGame {
                 inGameGameObject.SetActive(false);
             }
             
-            gameContext = GameContext.IN_HOME;
+            gameContext = GameContext.HOME;
 
-            ObjectsReference.Instance.uiManager.HideGameMenu();
-            ObjectsReference.Instance.uiManager.ShowHomeMenu();
+            ObjectsReference.Instance.uIGameMenu.HideGameMenu();
+            ObjectsReference.Instance.uIGlobal.ShowHomeMenu();
 
             ObjectsReference.Instance.uiManager.SetActive(UICanvasGroupType.HUD_BANANAMAN, false);
-            ObjectsReference.Instance.uiManager.HideCrosshairs();
+            ObjectsReference.Instance.uICrosshairs.HideCrosshairs();
             
             RenderSettings.ambientLight = Color.white;
 
@@ -128,7 +128,6 @@ namespace InGame {
             ObjectsReference.Instance.gameSave.CancelAutoSave();
 
             ObjectsReference.Instance.inputManager.SwitchContext(InputContext.HOME);
-            ObjectsReference.Instance.keyboardUiActions.enabled = true;
             
             ObjectsReference.Instance.camerasManager.Switch_To_Camera_View(CameraModeType.HOME_VIEW);
         }
@@ -153,7 +152,7 @@ namespace InGame {
 
             ObjectsReference.Instance.bananaGun.UngrabBananaGun();
 
-            ObjectsReference.Instance.uiManager.ShowCrosshairs();
+            ObjectsReference.Instance.uICrosshairs.ShowCrosshairs();
 
             ObjectsReference.Instance.uInventoriesManager.HideUIHelpers();
             ObjectsReference.Instance.uiManager.SetActive(UICanvasGroupType.HUD_BANANAMAN, false);
@@ -184,15 +183,15 @@ namespace InGame {
             }
             
             ObjectsReference.Instance.uiManager.SetActive(UICanvasGroupType.HUD_BANANAMAN, true);
-            ObjectsReference.Instance.uiManager.ShowCrosshairs();
+            ObjectsReference.Instance.uICrosshairs.ShowCrosshairs();
 
             ObjectsReference.Instance.uInventoriesManager.ShowCurrentUIHelper();
 
             ObjectsReference.Instance.inputManager.SwitchContext(InputContext.GAME);
-            gameContext = GameContext.IN_GAME;
+            gameContext = GameContext.BANANAMAN_CONTROL;
 
-            ObjectsReference.Instance.uiManager.HideGameMenu();
-            ObjectsReference.Instance.uiManager.HideHomeMenu();
+            ObjectsReference.Instance.uIGameMenu.HideGameMenu();
+            ObjectsReference.Instance.uIGlobal.HideHomeMenu();
             
             ObjectsReference.Instance.audioManager.SetMusiqueAndAmbianceByRegion(RegionType.COROLLE);
             

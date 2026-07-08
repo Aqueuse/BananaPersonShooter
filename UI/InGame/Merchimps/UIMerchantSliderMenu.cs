@@ -29,7 +29,7 @@ namespace UI.InGame.Merchimps {
         }
         
         public void SetCostValue(float sliderValue) {
-            if (ObjectsReference.Instance.gameManager.gameContext == GameContext.IN_HOME) return;
+            if (ObjectsReference.Instance.gameManager.gameContext == GameContext.HOME) return;
 
             if (merchimpBehaviour.activeItemScriptableObject == null) return;
             

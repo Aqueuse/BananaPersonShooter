@@ -14,11 +14,11 @@ namespace InGame.CommandRoomPanelControls {
         public void FocusPanel(int panelTypeEnum) {
             CommandRoomPanelType commandRoomPanelType = (CommandRoomPanelType)panelTypeEnum;
             
-            if (ObjectsReference.Instance.gameManager.gameContext == GameContext.IN_GAME) {
+            if (ObjectsReference.Instance.gameManager.gameContext == GameContext.BANANAMAN_CONTROL) {
                 ObjectsReference.Instance.uiManager.SetActive(UICanvasGroupType.HUD_BANANAMAN, false);
             }
 
-            if (ObjectsReference.Instance.gameManager.gameContext == GameContext.IN_GESTION_VIEW) {
+            if (ObjectsReference.Instance.gameManager.gameContext == GameContext.GESTION_VIEW) {
                 ObjectsReference.Instance.uiManager.SetActive(UICanvasGroupType.HUD_GESTION, false);
             }
             
@@ -29,7 +29,7 @@ namespace InGame.CommandRoomPanelControls {
             ObjectsReference.Instance.uiInGameVirtualCamera.enabled = true;
             
             ObjectsReference.Instance.inputManager.SwitchContext(InputContext.UI);
-            ObjectsReference.Instance.gameManager.gameContext = GameContext.IN_COMMAND_ROOM_PANEL;
+            ObjectsReference.Instance.gameManager.gameContext = GameContext.COMMAND_ROOM_PANEL;
             
             if (commandRoomPanelType == CommandRoomPanelType.SPACE_TRAFFIC_CONTROL) {
                 Cursor.visible = false;
@@ -57,7 +57,7 @@ namespace InGame.CommandRoomPanelControls {
                 ObjectsReference.Instance.uiManager.SetActive(UICanvasGroupType.HUD_BANANAMAN, true);
 
             if (!isOnUI) {
-                ObjectsReference.Instance.gameManager.gameContext = GameContext.IN_GAME;
+                ObjectsReference.Instance.gameManager.gameContext = GameContext.BANANAMAN_CONTROL;
                 ObjectsReference.Instance.inputManager.SwitchContext(InputContext.GAME);
             }
         }

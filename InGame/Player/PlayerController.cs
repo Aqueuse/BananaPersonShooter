@@ -55,7 +55,7 @@ namespace InGame.Player {
         }
         
         private void FixedUpdate() {
-            if (ObjectsReference.Instance.gameManager.gameContext != GameContext.IN_GAME) return;
+            if (ObjectsReference.Instance.gameManager.gameContext != GameContext.BANANAMAN_CONTROL) return;
 
             // ugly but opti
             _cameraRotation.x = 0;

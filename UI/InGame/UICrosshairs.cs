@@ -12,5 +12,13 @@ namespace UI.InGame {
 
             crosshairsByType[crosshairType].enabled = true;
         }
+        
+        public void ShowCrosshairs() {
+            ObjectsReference.Instance.uiManager.SetActive(UICanvasGroupType.CROSSHAIRS, true);
+        }
+
+        public void HideCrosshairs() {
+            ObjectsReference.Instance.uiManager.SetActive(UICanvasGroupType.CROSSHAIRS, false);
+        }
     }
 }

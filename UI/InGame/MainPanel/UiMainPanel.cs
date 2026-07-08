@@ -12,7 +12,19 @@ namespace UI.InGame.MainPanel {
         private void Start() {
             uInventoriesManager = ObjectsReference.Instance.uInventoriesManager;
         }
+        
+        public void ShowMainPanel() {
+            ObjectsReference.Instance.uiManager.SetActive(UICanvasGroupType.MAIN_PANEL, true);
+            ObjectsReference.Instance.uiMainPanel.SwitchToLastFocusedBlock();
+            
+            ObjectsReference.Instance.miniChimpDialoguesManager.ResetDialogue();
+        }
 
+        public void HideMainPanel() {
+            ObjectsReference.Instance.uiManager.SetActive(UICanvasGroupType.MAIN_PANEL, false);
+            ObjectsReference.Instance.inputManager.SwitchBackToGame();
+        }
+        
         public void SwitchToDialogue() { SwitchToBlock(MainBlockType.DIALOGUE); }
         public void SwitchToInventories() { SwitchToBlock(MainBlockType.INVENTORIES); }
         public void SwitchToCommandRoom() { SwitchToBlock(MainBlockType.COMMAND_ROOM); }
@@ -71,8 +83,13 @@ namespace UI.InGame.MainPanel {
             }
         }
 
-        public void SwitchToLastFocusedBlock() {
+        private void SwitchToLastFocusedBlock() {
             SwitchToBlock(lastFocusedBlock);
+        }
+        
+        public void ShowInventory() {
+            ObjectsReference.Instance.uiManager.SetActive(UICanvasGroupType.MAIN_PANEL, true);
+            ObjectsReference.Instance.uInventoriesManager.OpenInventories();
         }
     
         public void SetActive(CanvasGroup canvasGroup, bool visible) {

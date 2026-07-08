@@ -12,7 +12,7 @@ namespace InGame.Interactions {
         private InteractionType interactedInteractionType;      
 
         private void Update() {
-            if (ObjectsReference.Instance.gameManager.gameContext != GameContext.IN_GAME) return;
+            if (ObjectsReference.Instance.gameManager.gameContext != GameContext.BANANAMAN_CONTROL) return;
             
             if (Physics.Raycast(transform.position, transform.forward,  out var raycastHit, 10, interactLayerMask)) {
                 if (raycastHit.transform.gameObject.GetComponent<UInteraction>() == null) return;

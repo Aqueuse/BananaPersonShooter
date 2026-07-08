@@ -1,8 +1,10 @@
 ﻿using TMPro;
+using Tweaks;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-namespace UI.Menus {
+namespace UI.InGame {
     public class UiGameMenu : MonoBehaviour {
         [SerializeField] private Color activatedColor;
         [SerializeField] private Color unactivatedColor;
@@ -18,9 +20,23 @@ namespace UI.Menus {
             _gameMenuButtons = GetComponentsInChildren<Image>();
         }
 
+        public void ShowGameMenu() {
+            HideSubmenus();
+            UITweaks.SetCanvasGroupActif(ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.GAME_MENU], true);
+            EventSystem.current.SetSelectedGameObject(firstSelectedGameObject);
+        }
+
+        public void HideGameMenu() {
+            UITweaks.SetCanvasGroupActif(ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.GAME_MENU], false);
+        }
+        
+        public void ReturnToMainMenu() {
+            ShowGameMenu();
+        }
+        
         public void ReturnToGame() {
             ObjectsReference.Instance.gameManager.UnpauseGame();
-            ObjectsReference.Instance.uiManager.HideGameMenu();
+            HideGameMenu();
 
             ObjectsReference.Instance.inputManager.SwitchContext(InputContext.GAME);
         }
@@ -43,6 +59,12 @@ namespace UI.Menus {
             }
             
             SetActivatedButton(_gameMenuButtons[_selectedButton]);
+        }
+
+        private static void HideSubmenus() {
+            UITweaks.SetCanvasGroupActif(ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.LOAD], false);
+            UITweaks.SetCanvasGroupActif(ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.OPTIONS], false);
+            UITweaks.SetCanvasGroupActif(ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.CREDITS], false);
         }
 
         public void SetActivatedButton(Image buttonImage) {

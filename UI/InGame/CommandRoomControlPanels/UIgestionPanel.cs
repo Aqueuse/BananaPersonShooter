@@ -31,7 +31,7 @@ namespace UI.InGame.CommandRoomControlPanels {
         }
 
         public void SwitchLight(float lightValue) {
-            if (ObjectsReference.Instance.gameManager.gameContext == GameContext.IN_HOME) return;
+            if (ObjectsReference.Instance.gameManager.gameContext == GameContext.HOME) return;
             
             if (lightValue < 1) {
                 lightSlider.value = 0;

@@ -32,7 +32,21 @@ namespace UI.InGame.Merchimps {
 
         [SerializeField] private Color activatedColor;
 
-        public void InitializeInventories() {
+        public void ShowMerchant(MerchimpBehaviour activeMerchimpBehaviour) {
+            ObjectsReference.Instance.uiManager.SetActive(UICanvasGroupType.MERCHANT_INTERFACE, true);
+
+            ObjectsReference.Instance.uiMerchant.merchimpBehaviour = activeMerchimpBehaviour; 
+            
+            InitializeInventories();
+            RefreshBitkongQuantities();
+            Switch_to_Sell_inventory();
+        }
+
+        public void HideMerchant() {
+            
+        }
+        
+        private void InitializeInventories() {
             merchimpBehaviour.monkeyMenData.manufacturedItemsInventory =
                 new Dictionary<ManufacturedItemsType, int> {
                     { ManufacturedItemsType.BANANARAIGNEE, 1 },
@@ -136,7 +150,7 @@ namespace UI.InGame.Merchimps {
             return buyUiMerchantSliderMenu.isActiveAndEnabled | sellUiMerchantSliderMenu.isActiveAndEnabled;
         }
         
-        public void RefreshMerchantInventories() {
+        private void RefreshMerchantInventories() {
             merchantSellUiIngredientsInventory.RefreshUInventory();
             merchantSellUiManufacturedItemsInventory.RefreshUInventory();
             

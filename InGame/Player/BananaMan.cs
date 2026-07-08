@@ -39,14 +39,7 @@ namespace InGame.Player {
                 ObjectsReference.Instance.audioManager.PlayEffect(SoundEffectType.EAT_BANANA, 0);
             }
         }
-
-        public void TakeDamage(float damageAccount) {
-            health -= damageAccount;
-            SetBananaSkinHealth();
-            
-            if (health <= 0) ObjectsReference.Instance.death.Die();
-        }
-
+        
         public void SetBananaSkinHealth() {
             bodyMeshRenderer.materials[0].SetFloat(CutoffHeight, (_maxHealth-health)/100);
         }
@@ -62,7 +55,7 @@ namespace InGame.Player {
 
             ObjectsReference.Instance.bananaGunActionsSwitch.gameObject.SetActive(true);
             
-            ObjectsReference.Instance.uiManager.ShowCrosshairs();
+            ObjectsReference.Instance.uICrosshairs.ShowCrosshairs();
 
             Cursor.visible = false;
             Cursor.lockState = CursorLockMode.Locked;
@@ -79,7 +72,7 @@ namespace InGame.Player {
             
             ObjectsReference.Instance.bananaMan.GetComponent<Rigidbody>().isKinematic = true;
 
-            ObjectsReference.Instance.uiManager.HideCrosshairs();
+            ObjectsReference.Instance.uICrosshairs.HideCrosshairs();
 
             Cursor.visible = true;
             Cursor.lockState = CursorLockMode.None;

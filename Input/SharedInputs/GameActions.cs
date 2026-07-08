@@ -50,7 +50,7 @@ namespace SharedInputs {
             ObjectsReference.Instance.playerController.canMove = true;
             ObjectsReference.Instance.bananaMan.GetComponent<Rigidbody>().isKinematic = false;
 
-            ObjectsReference.Instance.uiManager.ShowCrosshairs();
+            ObjectsReference.Instance.uICrosshairs.ShowCrosshairs();
             
             ObjectsReference.Instance.bananaGunActionsSwitch.gameObject.SetActive(true);
             
@@ -186,11 +186,11 @@ namespace SharedInputs {
             
             ObjectsReference.Instance.cameraPlayer.Set0Sensibility();
             ObjectsReference.Instance.inputManager.SwitchContext(InputContext.GESTION_PANEL);
-            ObjectsReference.Instance.gameManager.gameContext = GameContext.IN_GAME_UI_PANEL;
+            ObjectsReference.Instance.gameManager.gameContext = GameContext.GESTION_VIEW;
 
             ObjectsReference.Instance.bananaGunActionsSwitch.gameObject.SetActive(false);
 
-            ObjectsReference.Instance.uiManager.ShowMainPanel();
+            ObjectsReference.Instance.uiMainPanel.ShowMainPanel();
         }
 
         private static void ShowInventories(InputAction.CallbackContext context) {
@@ -198,20 +198,20 @@ namespace SharedInputs {
             
             ObjectsReference.Instance.cameraPlayer.Set0Sensibility();
             ObjectsReference.Instance.inputManager.SwitchContext(InputContext.GESTION_PANEL);
-            ObjectsReference.Instance.gameManager.gameContext = GameContext.IN_GAME_UI_PANEL;
+            ObjectsReference.Instance.gameManager.gameContext = GameContext.MAIN_PANEL;
             
             ObjectsReference.Instance.bananaGunActionsSwitch.gameObject.SetActive(false);
 
-            ObjectsReference.Instance.uiManager.ShowInventory();
+            ObjectsReference.Instance.uiMainPanel.ShowInventory();
         }
 
         private void ShowBigMap(InputAction.CallbackContext context) {
             ObjectsReference.Instance.bananaMan.SetToNotPlayable();
             
             ObjectsReference.Instance.inputManager.SwitchContext(InputContext.MAP);
-            ObjectsReference.Instance.gameManager.gameContext = GameContext.IN_GAME_UI_PANEL;
+            ObjectsReference.Instance.gameManager.gameContext = GameContext.BIGMAP;
             
-            ObjectsReference.Instance.uiManager.ShowBigMap();
+            ObjectsReference.Instance.uIMap.ShowBigMap();
         }
         
         private void ZoomDezoomCamera(InputAction.CallbackContext context) {
@@ -236,7 +236,7 @@ namespace SharedInputs {
             ObjectsReference.Instance.inputManager.SwitchContext(InputContext.UI);
 
             ObjectsReference.Instance.gameManager.PauseGame();
-            ObjectsReference.Instance.uiManager.ShowGameMenu();
+            ObjectsReference.Instance.uIGameMenu.ShowGameMenu();
         }
     }
 }

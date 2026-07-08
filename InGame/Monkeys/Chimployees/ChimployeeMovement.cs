@@ -37,7 +37,7 @@ namespace InGame.Monkeys.Chimployees {
         }
 
         private void Update() {
-            if (ObjectsReference.Instance.gameManager.gameContext == GameContext.IN_GAME) {
+            if (ObjectsReference.Instance.gameManager.gameContext == GameContext.BANANAMAN_CONTROL) {
                 SynchronizeAnimatorAndAgent();
             }
         }

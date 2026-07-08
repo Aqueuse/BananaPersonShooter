@@ -22,7 +22,7 @@ namespace InGame.MiniGames.Guichets {
             ObjectsReference.Instance.uiInGameVirtualCamera.transform.rotation = cameraLookAt.rotation;
             ObjectsReference.Instance.uiInGameVirtualCamera.enabled = true;
             
-            ObjectsReference.Instance.gameManager.gameContext = GameContext.IN_GAME_UI_PANEL;
+            ObjectsReference.Instance.gameManager.gameContext = GameContext.GUICHET;
             ObjectsReference.Instance.inputManager.SwitchContext(InputContext.UI);
             
             // show Guichet UI
@@ -39,7 +39,7 @@ namespace InGame.MiniGames.Guichets {
             // change camera look at and follow to bananaMan camera transform
             ObjectsReference.Instance.uiInGameVirtualCamera.enabled = false;
             
-            ObjectsReference.Instance.gameManager.gameContext = GameContext.IN_GAME;
+            ObjectsReference.Instance.gameManager.gameContext = GameContext.BANANAMAN_CONTROL;
             ObjectsReference.Instance.bananaMan.SetToPlayable();
 
             // switch to banana man

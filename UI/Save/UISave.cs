@@ -144,7 +144,7 @@ namespace UI.Save {
             renameButton.gameObject.SetActive(!isAutosave);
             deleteButton.gameObject.SetActive(!isAutosave);
             
-            saveButton.gameObject.SetActive(ObjectsReference.Instance.gameManager.gameContext != GameContext.IN_HOME); 
+            saveButton.gameObject.SetActive(ObjectsReference.Instance.gameManager.gameContext != GameContext.HOME); 
             
             SetActive(bottomPanelCanvasGroup, true);
         }

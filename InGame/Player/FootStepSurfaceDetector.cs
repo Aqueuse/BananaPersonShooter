@@ -17,7 +17,7 @@ namespace InGame.Player {
 		public int footstepGridSize = 3;
 		
 		private void FixedUpdate() {
-			if (ObjectsReference.Instance.gameManager.gameContext != GameContext.IN_GAME) return;
+			if (ObjectsReference.Instance.gameManager.gameContext != GameContext.BANANAMAN_CONTROL) return;
 
 			if (Physics.Raycast(origin: raycastOrigin.position, direction: Vector3.down, out RaycastHit raycastHit, maxDistance: 2, layerMask: surfacesLayerMask)) {
 				footStepType = CheckFootstepType(raycastHit.textureCoord);

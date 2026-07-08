@@ -25,7 +25,7 @@ public class InputManager : MonoBehaviour {
     public void SwitchBackToGame() {
         SwitchContext(InputContext.GAME);
         
-        ObjectsReference.Instance.gameManager.gameContext = GameContext.IN_GAME;
+        ObjectsReference.Instance.gameManager.gameContext = GameContext.BANANAMAN_CONTROL;
         ObjectsReference.Instance.bananaMan.SetToPlayable();
     }
 }

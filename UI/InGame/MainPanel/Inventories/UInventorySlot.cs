@@ -10,7 +10,7 @@ namespace UI.InGame.MainPanel.Inventories {
         [SerializeField] private TextMeshProUGUI quantityText;
         
         public void Activate() {
-            if (ObjectsReference.Instance.gameManager.gameContext == GameContext.IN_GESTION_VIEW) return;
+            if (ObjectsReference.Instance.gameManager.gameContext == GameContext.GESTION_VIEW) return;
             
             ObjectsReference.Instance.bottomSlotsManager.SetSelectedSlot(itemScriptableObject);
         }
