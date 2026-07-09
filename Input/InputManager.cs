@@ -1,12 +1,8 @@
 using UnityEngine;
 
 public class InputManager : MonoBehaviour {
-    public InputContext inputContext;
-    
     [SerializeField] private GenericDictionary<InputContext, InputActions[]> inputActionsByInputContext;
     public void SwitchContext(InputContext newInputContext) {
-        inputContext = newInputContext;
-        
         DisableAllInputs();
 
         foreach (var inputAction in inputActionsByInputContext[newInputContext]) {

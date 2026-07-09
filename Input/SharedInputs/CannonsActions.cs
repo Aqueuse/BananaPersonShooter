@@ -13,6 +13,8 @@ namespace SharedInputs {
 
         [SerializeField] private InputActionReference zoomActionReference;
 
+        [SerializeField] private InputActionReference escapeCannonActionReference;
+
         private void OnEnable() {
             switchToLeftCannonActionReference.action.Enable();
             switchToLeftCannonActionReference.action.performed += SwitchToCannonLeft;
@@ -31,6 +33,9 @@ namespace SharedInputs {
             
             zoomActionReference.action.Enable();
             zoomActionReference.action.performed += Zoom;
+            
+            escapeCannonActionReference.action.Enable();
+            escapeCannonActionReference.action.performed += EscapeCannon;
         }
 
         private void OnDisable() {
@@ -51,6 +56,9 @@ namespace SharedInputs {
             
             zoomActionReference.action.Disable();
             zoomActionReference.action.performed -= Zoom;
+            
+            escapeCannonActionReference.action.Disable();
+            escapeCannonActionReference.action.performed -= EscapeCannon;
         }
 
         private void Update() {
@@ -82,6 +90,11 @@ namespace SharedInputs {
 
         private void Zoom(InputAction.CallbackContext context) {
             ObjectsReference.Instance.cannonsManager.ZoomCamera(context.ReadValue<float>());
+        }
+        
+        private void EscapeCannon(InputAction.CallbackContext context) {
+            ObjectsReference.Instance.commandRoomControlPanelsManager.UnfocusPanel(false);
+            ObjectsReference.Instance.inputManager.SwitchBackToGame();
         }
     }
 }

@@ -28,7 +28,7 @@ namespace InGame.CommandRoomPanelControls {
             ObjectsReference.Instance.uiInGameVirtualCamera.transform.rotation = cameraFocusByPanelType[commandRoomPanelType].transform.rotation;
             ObjectsReference.Instance.uiInGameVirtualCamera.enabled = true;
             
-            ObjectsReference.Instance.inputManager.SwitchContext(InputContext.UI);
+            ObjectsReference.Instance.inputManager.SwitchContext(InputContext.COMMAND_ROOM_PANEL);
             ObjectsReference.Instance.gameManager.gameContext = GameContext.COMMAND_ROOM_PANEL;
             
             if (commandRoomPanelType == CommandRoomPanelType.SPACE_TRAFFIC_CONTROL) {
@@ -50,6 +50,7 @@ namespace InGame.CommandRoomPanelControls {
         public void UnfocusPanel(bool isOnUI) {
             ObjectsReference.Instance.uiInGameVirtualCamera.enabled = false;
             ObjectsReference.Instance.cameraPlayer.ActivateCamera();
+            
             Cursor.visible = false;
             Cursor.lockState = CursorLockMode.Locked;
 

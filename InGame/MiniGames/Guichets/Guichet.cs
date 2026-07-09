@@ -23,7 +23,7 @@ namespace InGame.MiniGames.Guichets {
             ObjectsReference.Instance.uiInGameVirtualCamera.enabled = true;
             
             ObjectsReference.Instance.gameManager.gameContext = GameContext.GUICHET;
-            ObjectsReference.Instance.inputManager.SwitchContext(InputContext.UI);
+            ObjectsReference.Instance.inputManager.SwitchContext(InputContext.GUICHET);
             
             // show Guichet UI
             ObjectsReference.Instance.uiManager.SetActive(UICanvasGroupType.GUICHET, true);

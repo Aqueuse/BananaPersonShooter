@@ -78,6 +78,7 @@ namespace UI.Save {
         
         public void Load() {
             ObjectsReference.Instance.gameManager.Play(selectedSaveSlot.saveUuid, false);
+            ObjectsReference.Instance.uiManager.SetActive(UICanvasGroupType.LOAD, false);
         }
         
         #region Rename

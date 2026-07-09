@@ -185,8 +185,8 @@ namespace SharedInputs {
             if (!ObjectsReference.Instance.bananaGun.bananaGunGameObject.activeInHierarchy) return;
             
             ObjectsReference.Instance.cameraPlayer.Set0Sensibility();
-            ObjectsReference.Instance.inputManager.SwitchContext(InputContext.GESTION_PANEL);
-            ObjectsReference.Instance.gameManager.gameContext = GameContext.GESTION_VIEW;
+            ObjectsReference.Instance.inputManager.SwitchContext(InputContext.MAIN_PANEL);
+            ObjectsReference.Instance.gameManager.gameContext = GameContext.MAIN_PANEL;
 
             ObjectsReference.Instance.bananaGunActionsSwitch.gameObject.SetActive(false);
 
@@ -197,7 +197,7 @@ namespace SharedInputs {
             if (!ObjectsReference.Instance.bananaGun.bananaGunGameObject.activeInHierarchy) return;
             
             ObjectsReference.Instance.cameraPlayer.Set0Sensibility();
-            ObjectsReference.Instance.inputManager.SwitchContext(InputContext.GESTION_PANEL);
+            ObjectsReference.Instance.inputManager.SwitchContext(InputContext.MAIN_PANEL);
             ObjectsReference.Instance.gameManager.gameContext = GameContext.MAIN_PANEL;
             
             ObjectsReference.Instance.bananaGunActionsSwitch.gameObject.SetActive(false);
@@ -233,7 +233,7 @@ namespace SharedInputs {
         }
 
         private static void PauseGame(InputAction.CallbackContext context) {
-            ObjectsReference.Instance.inputManager.SwitchContext(InputContext.UI);
+            ObjectsReference.Instance.inputManager.SwitchContext(InputContext.GAME_MENU);
 
             ObjectsReference.Instance.gameManager.PauseGame();
             ObjectsReference.Instance.uIGameMenu.ShowGameMenu();

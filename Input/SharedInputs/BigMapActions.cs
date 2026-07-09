@@ -6,11 +6,17 @@ namespace SharedInputs {
         [SerializeField] private InputActionReference hideBigMapActionReference;
         
         private void OnEnable() {
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.None;
+
             hideBigMapActionReference.action.Enable();
             hideBigMapActionReference.action.performed += HideBigMap;
         }
 
         private void OnDisable() {
+            Cursor.visible = false;
+            Cursor.lockState = CursorLockMode.Locked;
+
             hideBigMapActionReference.action.Disable();
             hideBigMapActionReference.action.performed -= HideBigMap;
         }

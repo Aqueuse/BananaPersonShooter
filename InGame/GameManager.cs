@@ -92,7 +92,7 @@ namespace InGame {
         }
         
         public void ReturnHome() {
-            ObjectsReference.Instance.inputManager.SwitchContext(InputContext.UI);
+            ObjectsReference.Instance.inputManager.SwitchContext(InputContext.GAME_MENU);
             
             // prevent banana man to fall while loading scene
             ObjectsReference.Instance.playerController.StopPlayer();
@@ -162,9 +162,7 @@ namespace InGame {
             ObjectsReference.Instance.bananaGunActionsSwitch.enabled = false;
             
             ObjectsReference.Instance.gameReset.ResetGameData();
-
-            ObjectsReference.Instance.inputManager.SwitchContext(InputContext.UI);
-
+            
             ObjectsReference.Instance.cinematiques.Play(CinematiqueType.NEW_GAME);
             
             ObjectsReference.Instance.commandRoomControlPanelsManager.chimployeeCommandRoom.SetTutorialChimployeeConfiguration();
@@ -174,6 +172,7 @@ namespace InGame {
             SwitchToNightLightSetting();
             
             ObjectsReference.Instance.camerasManager.Switch_To_Camera_View(CameraModeType.PLAYER_VIEW);
+            ObjectsReference.Instance.inputManager.SwitchContext(InputContext.GAME);
         }
         
         private void SwitchToInGameSettings() {
@@ -187,8 +186,9 @@ namespace InGame {
 
             ObjectsReference.Instance.uInventoriesManager.ShowCurrentUIHelper();
 
-            ObjectsReference.Instance.inputManager.SwitchContext(InputContext.GAME);
             gameContext = GameContext.BANANAMAN_CONTROL;
+
+            ObjectsReference.Instance.inputManager.SwitchContext(InputContext.GAME);
 
             ObjectsReference.Instance.uIGameMenu.HideGameMenu();
             ObjectsReference.Instance.uIGlobal.HideHomeMenu();

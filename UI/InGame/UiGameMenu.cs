@@ -1,5 +1,4 @@
 ﻿using TMPro;
-using Tweaks;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -21,13 +20,14 @@ namespace UI.InGame {
         }
 
         public void ShowGameMenu() {
-            HideSubmenus();
-            UITweaks.SetCanvasGroupActif(ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.GAME_MENU], true);
+            ObjectsReference.Instance.uiManager.SetActive(UICanvasGroupType.HUD_BANANAMAN, false);
+            ObjectsReference.Instance.uiManager.SetActive(UICanvasGroupType.GAME_MENU, true);
             EventSystem.current.SetSelectedGameObject(firstSelectedGameObject);
         }
 
         public void HideGameMenu() {
-            UITweaks.SetCanvasGroupActif(ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.GAME_MENU], false);
+            ObjectsReference.Instance.uiManager.SetActive(UICanvasGroupType.HUD_BANANAMAN, true);
+            ObjectsReference.Instance.uiManager.SetActive(UICanvasGroupType.GAME_MENU, false);
         }
         
         public void ReturnToMainMenu() {
@@ -62,9 +62,9 @@ namespace UI.InGame {
         }
 
         private static void HideSubmenus() {
-            UITweaks.SetCanvasGroupActif(ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.LOAD], false);
-            UITweaks.SetCanvasGroupActif(ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.OPTIONS], false);
-            UITweaks.SetCanvasGroupActif(ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.CREDITS], false);
+            ObjectsReference.Instance.uiManager.SetActive(UICanvasGroupType.LOAD, false);
+            ObjectsReference.Instance.uiManager.SetActive(UICanvasGroupType.OPTIONS, false);
+            ObjectsReference.Instance.uiManager.SetActive(UICanvasGroupType.CREDITS, false);
         }
 
         public void SetActivatedButton(Image buttonImage) {

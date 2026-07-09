@@ -1,9 +1,13 @@
 public enum InputContext {
     GAME,
-    UI,
+    GAME_MENU,
     CANNONS,
     HOME,
     GESTION_VIEW,
     GESTION_PANEL,
-    MAP
+    MAP,
+    MAIN_PANEL,
+    MERCHANT,
+    GUICHET,
+    COMMAND_ROOM_PANEL
 }

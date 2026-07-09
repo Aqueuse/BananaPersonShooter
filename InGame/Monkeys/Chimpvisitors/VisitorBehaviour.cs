@@ -52,7 +52,6 @@ namespace InGame.Monkeys.Chimpvisitors {
         private Color[] colorPreset;
         
         // synchronize navmeshagent with animator
-        private static readonly int startBreakingAnimatorProperty = Animator.StringToHash("break");
         private static readonly int isInAirAnimatorProperty = Animator.StringToHash("isInAir");
 
         private Vector3 randomDirection;
@@ -71,8 +70,6 @@ namespace InGame.Monkeys.Chimpvisitors {
         private GameObject itemToDrop;
         
         private VisitorBuildableBehaviour _visitorBuildableBehaviour;
-        public bool isFollowingGroup;
-        
         
         public void Init(MonkeyMenData associatedMonkeyMenData, Vector3 spawnPoint) {
             monkeyMenData = associatedMonkeyMenData;
@@ -98,7 +95,6 @@ namespace InGame.Monkeys.Chimpvisitors {
         }
 
         public void OnNeedDetected(GameObject needSource) {
-            if (!isFollowingGroup) return;
             if (monkeyMenData.isSatisfied) return;
             
             var needLocation = needSource.transform.GetComponent<VisitorBuildableBehaviour>();
@@ -107,9 +103,7 @@ namespace InGame.Monkeys.Chimpvisitors {
             if (needLocation.isOccupied) return;
             
             organicRaycast.enabled = false;
-
-            isFollowingGroup = false;
-
+            
             needLocation.enabled = true;
             needLocation.PrepareOccupation(navMeshAgent, monkeyMenData.need == NeedType.PILLAGE);
             SetDestination(needSource.transform.position);
@@ -117,7 +111,6 @@ namespace InGame.Monkeys.Chimpvisitors {
         
         public void FinishSatisfyNeed() {
             monkeyMenData.isSatisfied = true;
-            isFollowingGroup = true;
         }
         
         private void SetDestination(Vector3 destination) {

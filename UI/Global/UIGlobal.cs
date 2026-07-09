@@ -42,7 +42,7 @@ namespace UI.Global {
         
         public void ShowLoadMenu() {
             HideSubmenus();
-            UITweaks.SetCanvasGroupActif(ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.LOAD], true);
+            ObjectsReference.Instance.uiManager.SetActive(UICanvasGroupType.LOAD, true);
             
             if (ObjectsReference.Instance.gameManager.gameContext == GameContext.GAME_MENU) {
                 ObjectsReference.Instance.uiSave.newSaveButton.SetActive(true);
@@ -60,15 +60,13 @@ namespace UI.Global {
             ObjectsReference.Instance.gameSettings.LoadSettings();
             
             HideSubmenus();
-            UITweaks.SetCanvasGroupActif(ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.OPTIONS], true);
-            
+            ObjectsReference.Instance.uiManager.SetActive(UICanvasGroupType.OPTIONS, true);
             ObjectsReference.Instance.uiOptionsMenu.SwitchToAudioTab();
         }
         
         public void ShowCredits() {
             HideSubmenus();
-            UITweaks.SetCanvasGroupActif(ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.CREDITS], true);
-            
+            ObjectsReference.Instance.uiManager.SetActive(UICanvasGroupType.CREDITS, true);
             EventSystem.current.SetSelectedGameObject(ObjectsReference.Instance.uiCredits.firstSelectedGameObject);
         }
         
@@ -77,10 +75,10 @@ namespace UI.Global {
         }
         
         private void HideSubmenus() {
-            UITweaks.SetCanvasGroupActif(ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.LOAD], false);
-            UITweaks.SetCanvasGroupActif(ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.OPTIONS], false);
-            UITweaks.SetCanvasGroupActif(ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.CREDITS], false);
-            UITweaks.SetCanvasGroupActif(ObjectsReference.Instance.uiManager.canvasGroupsByUICanvasType[UICanvasGroupType.HOME_MENU], false);
+            ObjectsReference.Instance.uiManager.SetActive(UICanvasGroupType.LOAD, false);
+            ObjectsReference.Instance.uiManager.SetActive(UICanvasGroupType.OPTIONS, false);
+            ObjectsReference.Instance.uiManager.SetActive(UICanvasGroupType.CREDITS, false);
+            ObjectsReference.Instance.uiManager.SetActive(UICanvasGroupType.HOME_MENU, false);
         }
         
         public void GoToDiscord() {

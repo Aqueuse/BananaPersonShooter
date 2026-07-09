@@ -6,11 +6,17 @@ namespace SharedInputs {
         [SerializeField] private InputActionReference hideMainPanelActionReference;
         
         private void OnEnable() {
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.None;
+
             hideMainPanelActionReference.action.Enable();
             hideMainPanelActionReference.action.performed += HideMainPanel;
         }
 
         private void OnDisable() {
+            Cursor.visible = false;
+            Cursor.lockState = CursorLockMode.Locked;
+
             hideMainPanelActionReference.action.Disable();
             hideMainPanelActionReference.action.performed -= HideMainPanel;
         }

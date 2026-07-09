@@ -6,11 +6,17 @@ namespace SharedInputs {
         [SerializeField] private InputActionReference hideMerchantUIActionReference;
         
         private void OnEnable() {
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.None;
+
             hideMerchantUIActionReference.action.Enable();
             hideMerchantUIActionReference.action.performed += HideMerchantUI;
         }
 
         private void OnDisable() {
+            Cursor.visible = false;
+            Cursor.lockState = CursorLockMode.Locked;
+
             hideMerchantUIActionReference.action.Disable();
             hideMerchantUIActionReference.action.performed -= HideMerchantUI;
         }

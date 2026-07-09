@@ -10,7 +10,7 @@ namespace InGame.Interactions.InteractionsActions {
             
             ObjectsReference.Instance.uiMerchant.ShowMerchant(interactedGameObject.transform.parent.parent.GetComponent<MerchimpBehaviour>());
             
-            ObjectsReference.Instance.inputManager.SwitchContext(InputContext.UI);
+            ObjectsReference.Instance.inputManager.SwitchContext(InputContext.MERCHANT);
         }
     }
     
