@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace UI.InGame.MiniChimpView {
+namespace UI.InGame.GestionView {
     public class UIBuildables : MonoBehaviour {
         [SerializeField] private GenericDictionary<BuildableCategory, GameObject> buildablesSubMenuByBuildablesType;
 

@@ -6,7 +6,7 @@ using UnityEngine.AI;
 namespace InGame.Items.ItemsBehaviours.BuildablesBehaviours {
     public class VisitorBuildableBehaviour : BuildableBehaviour {
         public NeedType need;
-        public bool willBeBreaked;
+        public bool willBeBroken;
         public bool isOccupied;
         public float occupationDuration;
 
@@ -32,10 +32,10 @@ namespace InGame.Items.ItemsBehaviours.BuildablesBehaviours {
             return true;
         }
 
-        public void PrepareOccupation(NavMeshAgent navMeshAgent, bool willBeBreaked) {
+        public void PrepareOccupation(NavMeshAgent navMeshAgent, bool BuildableWillBeBroken) {
             occupyingNavmeshAgent = navMeshAgent;
             isOccupied = true;
-            this.willBeBreaked = willBeBreaked;
+            willBeBroken = BuildableWillBeBroken;
         }
 
         private void Occupy() {
@@ -44,12 +44,12 @@ namespace InGame.Items.ItemsBehaviours.BuildablesBehaviours {
 
         public void FreeLocation() {
             try {
-                if (willBeBreaked) {
+                if (willBeBroken) {
                     // TODO : give some materials to the pirate
                     // TODO : return to state blueprint
                 }
 
-                occupyingNavmeshAgent.GetComponent<VisitorBehaviour>().FinishSatisfyNeed();
+                occupyingNavmeshAgent.GetComponent<VisitorStateMachine>().FinishSatisfyNeed();
 
                 isOccupied = false;
                 enabled = false;

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace UI {
+namespace Tweaks {
     public enum FadeState {
         FadeIn,
         FadeOut

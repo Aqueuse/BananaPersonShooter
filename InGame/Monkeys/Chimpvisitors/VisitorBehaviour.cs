@@ -12,14 +12,14 @@ using Random = UnityEngine.Random;
 namespace InGame.Monkeys.Chimpvisitors {
     public class VisitorBehaviour : MonoBehaviour {
         public MonkeyMenData monkeyMenData;
+        public NavMeshAgent navMeshAgent;
 
         [SerializeField] private Transform _transform;
         [SerializeField] private SkinnedMeshRenderer meshRenderer;
         [SerializeField] private Rigidbody _rigidbody;
-        [SerializeField] private Animator animator;
-        [SerializeField] private NavMeshAgent navMeshAgent;
+        public Animator animator;
+        [SerializeField] private VisitorStateMachine _visitorStateMachine;
         
-        [SerializeField] private OrganicRaycast organicRaycast;
         [SerializeField] private SpriteRenderer headSprite;
         
         [SerializeField] private float explosionForce;
@@ -39,15 +39,15 @@ namespace InGame.Monkeys.Chimpvisitors {
         
         [HideInInspector] public SpaceshipBehaviour associatedSpaceshipBehaviour;
 
-        private static readonly int color00 = Shader.PropertyToID("_Color00");
-        private static readonly int color01 = Shader.PropertyToID("_Color01");
-        private static readonly int color02 = Shader.PropertyToID("_Color02");
-        private static readonly int color10 = Shader.PropertyToID("_Color10");
-        private static readonly int color11 = Shader.PropertyToID("_Color11");
-        private static readonly int color12 = Shader.PropertyToID("_Color12");
-        private static readonly int color20 = Shader.PropertyToID("_Color20");
-        private static readonly int color21 = Shader.PropertyToID("_Color21");
-        private static readonly int color22 = Shader.PropertyToID("_Color22");
+        private static readonly int Color00 = Shader.PropertyToID("_Color00");
+        private static readonly int Color01 = Shader.PropertyToID("_Color01");
+        private static readonly int Color02 = Shader.PropertyToID("_Color02");
+        private static readonly int Color10 = Shader.PropertyToID("_Color10");
+        private static readonly int Color11 = Shader.PropertyToID("_Color11");
+        private static readonly int Color12 = Shader.PropertyToID("_Color12");
+        private static readonly int Color20 = Shader.PropertyToID("_Color20");
+        private static readonly int Color21 = Shader.PropertyToID("_Color21");
+        private static readonly int Color22 = Shader.PropertyToID("_Color22");
 
         private Color[] colorPreset;
         
@@ -93,27 +93,8 @@ namespace InGame.Monkeys.Chimpvisitors {
         private void Update() {
             SynchronizeAnimatorAndAgent();
         }
-
-        public void OnNeedDetected(GameObject needSource) {
-            if (monkeyMenData.isSatisfied) return;
-            
-            var needLocation = needSource.transform.GetComponent<VisitorBuildableBehaviour>();
-
-            if (needLocation.need != monkeyMenData.need) return;
-            if (needLocation.isOccupied) return;
-            
-            organicRaycast.enabled = false;
-            
-            needLocation.enabled = true;
-            needLocation.PrepareOccupation(navMeshAgent, monkeyMenData.need == NeedType.PILLAGE);
-            SetDestination(needSource.transform.position);
-        }
         
-        public void FinishSatisfyNeed() {
-            monkeyMenData.isSatisfied = true;
-        }
-        
-        private void SetDestination(Vector3 destination) {
+        public void SetDestination(Vector3 destination) {
             navMeshAgent.SetDestination(destination);
         }
         
@@ -126,14 +107,6 @@ namespace InGame.Monkeys.Chimpvisitors {
                 return false;
 
             return true;
-        }
-
-        public bool CheckIsArrivedToSpaceship() {
-            if (navMeshAgent.pathPending || navMeshAgent.remainingDistance < 2f) {
-                return true;
-            }
-            
-            return false;
         }
         
         // 🍌 Banana ! Σ(っ °Д °;)っ
@@ -168,10 +141,6 @@ namespace InGame.Monkeys.Chimpvisitors {
 
             monkeyMenData.rawMaterialsInventory.Clear();
         }
-
-        private void GoBackToSpaceship() {
-            monkeyMenData.destination = associatedSpaceshipBehaviour.visitorsSpawnPoint.position;
-        }
         
         private void OnTriggerEnter(Collider other) {
             if (other.gameObject.layer != 7) return;
@@ -189,7 +158,9 @@ namespace InGame.Monkeys.Chimpvisitors {
             if (other.gameObject.layer != 11) return;
 
             GetComponent<ChimpMenPhysicNavMeshCoordination>().SwitchToNavMeshAgent();
-            GoBackToSpaceship();
+            
+            SetDestination(associatedSpaceshipBehaviour.visitorsSpawnPoint.position);
+            _visitorStateMachine.touristState = TouristState.GO_BACK_TO_SPACESHIP;
         }
         
         private void OnAnimatorMove() {
@@ -224,15 +195,15 @@ namespace InGame.Monkeys.Chimpvisitors {
         private void SetColors(Color[] colorsSet) {
             var monkeyMenMaterial = meshRenderer.material;
             
-            monkeyMenMaterial.SetColor(color00, colorsSet[0]);
-            monkeyMenMaterial.SetColor(color01, colorsSet[1]);
-            monkeyMenMaterial.SetColor(color02, colorsSet[2]);
-            monkeyMenMaterial.SetColor(color10, colorsSet[3]);
-            monkeyMenMaterial.SetColor(color11, colorsSet[4]);
-            monkeyMenMaterial.SetColor(color12, colorsSet[5]);
-            monkeyMenMaterial.SetColor(color20, colorsSet[6]);
-            monkeyMenMaterial.SetColor(color21, colorsSet[7]);
-            monkeyMenMaterial.SetColor(color22, colorsSet[8]);
+            monkeyMenMaterial.SetColor(Color00, colorsSet[0]);
+            monkeyMenMaterial.SetColor(Color01, colorsSet[1]);
+            monkeyMenMaterial.SetColor(Color02, colorsSet[2]);
+            monkeyMenMaterial.SetColor(Color10, colorsSet[3]);
+            monkeyMenMaterial.SetColor(Color11, colorsSet[4]);
+            monkeyMenMaterial.SetColor(Color12, colorsSet[5]);
+            monkeyMenMaterial.SetColor(Color20, colorsSet[6]);
+            monkeyMenMaterial.SetColor(Color21, colorsSet[7]);
+            monkeyMenMaterial.SetColor(Color22, colorsSet[8]);
 
             meshRenderer.material = monkeyMenMaterial;
         }

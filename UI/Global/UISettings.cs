@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.Localization.Settings;
 using UnityEngine.UI;
 
-namespace UI {
+namespace UI.Global {
     public class UISettings : MonoBehaviour {
         [SerializeField] private Slider musicLevelSlider;
         [SerializeField] private Slider ambianceLevelSlider;
