@@ -4,6 +4,7 @@ using InGame.Items.ItemsProperties;
 using InGame.Items.ItemsProperties.Buildables;
 using InGame.Items.ItemsProperties.Dropped.Bananas;
 using InGame.Monkeys.Chimpvisitors;
+using InGame.WorldMaps;
 using UnityEngine;
 using UnityEngine.Localization;
 using Random = UnityEngine.Random;
@@ -27,7 +28,8 @@ namespace InGame {
         public GenericDictionary<IngredientsType, ItemScriptableObject> ingredientsPropertiesScriptableObjects;
         public GenericDictionary<FoodType, ItemScriptableObject> foodPropertiesScriptableObjects;
         public GenericDictionary<BananaColor, ItemScriptableObject> rawMaterialPropertiesByBananaColor;
-        [Space]
+        [Space] 
+        public List<WorldMap> worldMaps;
         public List<GameObject> monkeyMenPrefabs;
         public GameObject merchimpPrefab;
         [SerializeField] private VisitorColorPresetScriptableObject[] chimpvisitorsColorPresets;
@@ -49,7 +51,7 @@ namespace InGame {
         
         [Space]
         public GameObject teleportDownVFXPrefab;
-
+        
         private ItemScriptableObject activeItem;
         
         public static SpaceshipType GetRandomSpaceshipType() {

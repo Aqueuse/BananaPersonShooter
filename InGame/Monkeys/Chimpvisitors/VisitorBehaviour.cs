@@ -88,6 +88,8 @@ namespace InGame.Monkeys.Chimpvisitors {
             animator.Play(stateInfo.fullPathHash, 0, Random.Range(0,1f));
             
             navMeshAgent.Warp(spawnPoint);
+            
+            _visitorStateMachine.goToTheCorolleCenter();
         }
 
         private void Update() {

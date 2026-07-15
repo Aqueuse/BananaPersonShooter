@@ -1,89 +1,93 @@
-﻿using InGame.Items.ItemsBehaviours.BuildablesBehaviours;
+﻿using System.Collections.Generic;
+using InGame.Items.ItemsBehaviours.BuildablesBehaviours;
 using InGame.Items.ItemsProperties.Buildables.VisitorsBuildable;
+using InGame.WorldMaps;
 using UnityEngine;
 
 namespace InGame.Monkeys.Chimpvisitors {
     public class VisitorStateMachine : MonoBehaviour {
         [SerializeField] private VisitorBehaviour visitorBehaviour;
-        public TouristState touristState;
-        
         public SearchBuildableToUse searchBuildableToUse;
+
+        public TouristState touristState;
+        private WorldMap chosenWorldMapToVisit;
+        
         private BuildableBehaviour buildableToReach;
 
         private void Update() {
             if (visitorBehaviour.HasArrivedToDestination()) {
                 if (touristState == TouristState.GO_TO_COROLLE_CENTER) {
+                    touristState = TouristState.SEARCH_NEED;
                     searchNeedToFill();
                 }
 
                 if (touristState == TouristState.GO_FILL_NEED) {
                     touristState = TouristState.FILLING_NEED;
-                    PlayNeedAnimation();
+                    FillNeed();
                 }
                 
                 if (touristState == TouristState.GO_TO_WAITING_LINE) {
-                    
+                    touristState = TouristState.IN_WAITING_LINE;
+
                 }
 
                 if (touristState == TouristState.GO_TO_ENDMAP) {
-                    
+                    touristState = TouristState.GO_BACK_TO_SPACESHIP;
+
                 }
 
                 if (touristState == TouristState.GO_BACK_TO_SPACESHIP) {
-                     visitorBehaviour.monkeyMenData.destination = visitorBehaviour.associatedSpaceshipBehaviour.visitorsSpawnPoint.position;
-                     visitorBehaviour.SetDestination(visitorBehaviour.monkeyMenData.destination);
+                    // remove the visitor from the game
                 }
             }
-            
         }
 
-        private void goToTheCorolleCenter() {
+        public void goToTheCorolleCenter() {
             visitorBehaviour.SetDestination(ObjectsReference.Instance.gameManager.spawnPointsBySpawnType[SpawnPoint.TP_COROLLE].position);
         }
         
         private void searchNeedToFill() {
             searchBuildableToUse.enabled = true;
         }
+        
+        public void searchMapToVisit() {
+            List<WorldMap> mapsOpen = new List<WorldMap>();
+            
+            // search all maps with a guichet open, choose one random
+            foreach (var worldMap in ObjectsReference.Instance.meshReferenceScriptableObject.worldMaps) {
+                if (worldMap.associatedGuichet.isOpen)
+                    mapsOpen.Add(worldMap);
+            }
+            
+            if (mapsOpen.Count == 0)
+                goBackToSpaceship();
 
-        private void goFillNeed() {
-            visitorBehaviour.SetDestination(buildableToReach.transform.position);
+            else {
+                chosenWorldMapToVisit = mapsOpen[Random.Range(0, mapsOpen.Count - 1)];
+                goToGuichetWaitingLine(chosenWorldMapToVisit);
+            }
+
+            // if no map open, go back to spaceship
         }
         
-        private void searchMapToVisit() {
-            
-        }
-        
-        private void goToGuichetWaitingLine() {
-            
+        private void goToGuichetWaitingLine(WorldMap chosenWorldMap) {
+            visitorBehaviour.SetDestination(chosenWorldMap.associatedGuichet.waitingListStart.position);
+            touristState = TouristState.GO_TO_WAITING_LINE;
         }
 
-        private void visitMap() {
-            
+        // called from Guichet if visitor is accepted
+        public void visitMap() {
+            visitorBehaviour.SetDestination(chosenWorldMapToVisit.mapEndPoint.position);
+            touristState = TouristState.GO_TO_ENDMAP;
         }
         
         private void goBackToSpaceship() {
-            
+            visitorBehaviour.monkeyMenData.destination = visitorBehaviour.associatedSpaceshipBehaviour.visitorsSpawnPoint.position;
+            visitorBehaviour.SetDestination(visitorBehaviour.monkeyMenData.destination);
         }
-
-        // go to the center of the corolle to look at the map
-
+        
         // look around to see if their is a need to be fulfilled by a buildable
-        public void NeedDetected(GameObject needSource) {
-            if (visitorBehaviour.monkeyMenData.isSatisfied) return;
-            
-            var needLocation = needSource.transform.GetComponent<VisitorBuildableBehaviour>();
-
-            if (needLocation.need != visitorBehaviour.monkeyMenData.need) return;
-            if (needLocation.isOccupied) return;
-            
-            searchBuildableToUse.enabled = false;
-            
-            needLocation.enabled = true;
-            needLocation.PrepareOccupation(visitorBehaviour.navMeshAgent, visitorBehaviour.monkeyMenData.need == NeedType.PILLAGE);
-            visitorBehaviour.SetDestination(needSource.transform.position);
-        }
-
-        public void PlayNeedAnimation() {
+        private void PlayNeedAnimation() {
             var buildableData = (VisitorsBuildablePropertiesScriptableObject)buildableToReach.buildablePropertiesScriptableObject;
                     
             if (buildableData.isAnimationLooping) {
@@ -94,25 +98,18 @@ namespace InGame.Monkeys.Chimpvisitors {
             visitorBehaviour.animator.SetTrigger(buildableData.animatorParameterToActivate);
         }
         
-        // else choose a random map and go to the corresponding guichet
-
-        // follow the path of the map
-
-        // go back to the spaceship
         public void FillNeed() {
-            var buildableData = (VisitorsBuildablePropertiesScriptableObject)buildableToReach.buildablePropertiesScriptableObject;
-            
             buildableToReach.isVisitorTargeted = false;
             
-            searchBuildableToUse.enabled = true;
+            PlayNeedAnimation();
 
             visitorBehaviour.navMeshAgent.updateRotation = true;
-            touristState = TouristState.GO_TO_COROLLE_CENTER;
         }
         
         public void FinishSatisfyNeed() {
             visitorBehaviour.monkeyMenData.isSatisfied = true;
+            touristState = TouristState.SEARCH_MAP_TO_VISIT;
+            searchMapToVisit();
         }
-
     }
 }

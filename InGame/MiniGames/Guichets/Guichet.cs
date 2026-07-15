@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace InGame.MiniGames.Guichets {
     public class Guichet : MonoBehaviour {
+        public Transform waitingListStart;
         [SerializeField] private Transform barrierTransform;
         
         [SerializeField] private Transform cameraFollow;
@@ -12,9 +13,7 @@ namespace InGame.MiniGames.Guichets {
         public bool isOpen;
         
         public List<VisitorBehaviour> visitorsToWatch;
-        public Transform mapPointOfInterestCenter;
         
-        [SerializeField] private Transform waitingListStart;
 
         public void OpenGuichet() {
             // change camera look at and follow to cameraTransform
@@ -55,19 +54,6 @@ namespace InGame.MiniGames.Guichets {
             barrierTransform.localRotation = Quaternion.Euler(0, 0, 135f);
         }
         
-        public Stack<Vector3> GiveTwoRandomPointsOfInterest() {
-            mapPointOfInterestCenter.rotation = Quaternion.Euler(0, 0, 0);
-            
-            List<Vector3> points = new List<Vector3>();
-            
-            for (int i = 0; i < 2; i++) {
-                mapPointOfInterestCenter.Rotate(Vector3.left, Random.Range(0, 270));
-                points.Add(mapPointOfInterestCenter.position + Vector3.forward * 15);
-            }
-
-            return new Stack<Vector3>(points);
-        }
-        
         public void SellTicket() {
             
         }
@@ -76,7 +62,7 @@ namespace InGame.MiniGames.Guichets {
             
         }
 
-        public void TryToRecrute() {
+        public void TryToRecruit() {
             
         }
     }
